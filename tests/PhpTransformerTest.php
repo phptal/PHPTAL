@@ -125,6 +125,11 @@ class PhpTransformerTest extends PHPUnit2_Framework_TestCase
     {
         $this->assertEquals('($test)?true:false', $this->t->transform('(test)?true:false'));
     }
+
+    function testInstanceOf()
+    {
+        $this->assertEquals('$test instanceOf Foo', $this->t->transform('test instanceOf Foo'));
+    }
 }
 
 ?>

@@ -54,6 +54,33 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
         ob_end_clean();
         $this->assertEquals('', $c);
     }
+
+    function testRepositorySingle()
+    {
+        $tpl = new PHPTAL('phptal.01.html');
+        $tpl->setTemplateRepository('input');
+        $tpl->setOutputMode(PHPTAL_XML);
+        $res = $tpl->execute();
+        $this->assertEquals('<dummy/>', $res);
+    }
+
+    function testRepositorySingleWithSlash()
+    {
+        $tpl = new PHPTAL('phptal.01.html');
+        $tpl->setTemplateRepository('input/');
+        $tpl->setOutputMode(PHPTAL_XML);
+        $res = $tpl->execute();
+        $this->assertEquals('<dummy/>', $res);
+    }
+
+    function testRepositoryMuliple()
+    {
+        $tpl = new PHPTAL('phptal.01.html');
+        $tpl->setTemplateRepository(array('bar', 'input/'));
+        $tpl->setOutputMode(PHPTAL_XML);
+        $res = $tpl->execute();
+        $this->assertEquals('<dummy/>', $res);
+    }
 }
         
 ?>

@@ -80,6 +80,7 @@ class PHPTAL_PhpTransformer
         $len = strlen($str);
         $inString = false;
         $backslashed = false;
+        $instanceOf = false;
         $eval = false;
 
         for ($i = 0; $i <= $len; $i++) {
@@ -194,6 +195,15 @@ class PHPTAL_PhpTransformer
                         $var = substr( $str, $mark, $i-$mark );
                         if (strtolower($var) == 'true' || strtolower($var) == 'false') {
                             $result .= $var;
+                        }
+                        else if (strtolower($var) == 'instanceof'){
+                            $result .= $var;
+                            $instanceOf = true;
+                        }
+                        else if ($instanceOf){
+                            // last was instanceof, this var is a class name
+                            $result .= $var;
+                            $instanceOf = false;
                         }
                         else {
                             $result .= $this->prefix . $var;
