@@ -112,6 +112,7 @@ class PHPTAL_Defs
 
         'PHPTAL:TALES'       => self::SURROUND,
         'PHPTAL:DEBUG'       => self::SURROUND,
+        'PHPTAL:ID'          => self::SURROUND,
     );
 
     /**
@@ -135,26 +136,28 @@ class PHPTAL_Defs
         'TAL:ON-ERROR'       => 2,    // surround
         'I18N:DOMAIN'        => 3,    // surround
 
-        'TAL:DEFINE'         => 4,    // replace
+        'TAL:DEFINE'         => 4,    // surround/replace
         
         'I18N:NAME'          => 5,    // replace
         'I18N:TRANSLATE'     => 5,    // content
 
         'TAL:CONDITION'      => 6,    // surround
 
-        'TAL:REPEAT'         => 7,    // surround
+        'PHPTAL:ID'          => 7,    // surround
 
-        'TAL:ATTRIBUTES'     => 8,    // replace
-        'TAL:REPLACE'        => 8,    // replace
-        'METAL:USE-MACRO'    => 8,    // replace
-        'METAL:DEFINE-SLOT'  => 8,    // replace
-        'METAL:FILL-SLOT'    => 8,    // replace
+        'TAL:REPEAT'         => 8,    // surround
 
-        'I18N:ATTRIBUTES'    => 9,    // replace
+        'TAL:ATTRIBUTES'     => 9,    // replace
+        'TAL:REPLACE'        => 9,    // replace
+        'METAL:USE-MACRO'    => 9,    // replace
+        'METAL:DEFINE-SLOT'  => 9,    // replace
+        'METAL:FILL-SLOT'    => 9,    // replace
 
-        'TAL:CONTENT'        => 10,   // content
+        'I18N:ATTRIBUTES'    => 10,   // replace
 
-        'TAL:COMMENT'        => 11,    // surround
+        'TAL:CONTENT'        => 11,   // content
+
+        'TAL:COMMENT'        => 12,   // surround
     );
 
 

@@ -155,6 +155,19 @@ class PHPTAL
         $this->_postfilter = $filter;
     }
 
+    public function addTrigger($id, PHPTAL_Trigger $trigger)
+    {
+        $this->_triggers[$id] = $trigger;
+    }
+
+    public function getTrigger($id)
+    {
+        if (array_key_exists($id, $this->_triggers)){
+            return $this->_triggers[$id];
+        }
+        return null;
+    }
+
     public function __set($varname, $value)
     {
         $this->_context->__set($varname, $value);
@@ -354,6 +367,7 @@ class PHPTAL
     private $_repositories = array();
     private $_errors = array();
     private $_context;
+    private $_triggers = array();
     
     private $_translator = null;
     public $__file = false;

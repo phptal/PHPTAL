@@ -23,31 +23,23 @@
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_PHPTAL_TALES extends PHPTAL_Attribute
+class PHPTAL_Attribute_PHPTAL_ID extends PHPTAL_Attribute
 {
     public function start()
     {
-        $mode = trim($this->expression);
-        $mode = strtolower($mode);
-        
-        if ($mode == '' || $mode == 'default') 
-            $mode = 'tales';
-        
-        if ($mode != 'php' && $mode != 'tales') {
-            $err = "Unsuppported TALES mode %s";
-            $err = sprintf($err, $mode);
-            throw new Exception($err);            
-        }
-        
-        $this->_oldMode = $this->tag->generator->setTalesMode( $mode );
+        $id = $this->expression;
+        $code = '$trigger = $tpl->getTrigger("%s")';
+        $code = sprintf($code, str_replace('"', '\\\"', $id));
+        $this->tag->generator->pushCode($code);
+        $this->tag->generator->doIf('$trigger && $trigger->start($tpl) == PHPTAL_Trigger::PROCEED');
     }
 
     public function end()
     {
-        $this->tag->generator->setTalesMode( $this->_oldMode );
+        $this->tag->generator->doEnd();
+        $code = 'if ($trigger) $trigger->end($tpl)';
+        $this->tag->generator->pushCode($code);
     }
-
-    private $_oldMode;
 }
 
 ?>

@@ -3,14 +3,7 @@
 
                                   To do list.
 
-i18n:*
-[ ] domain
-[ ] source
-[ ] target
-[ ] attributes
+Interfaces:
+[ ]  cache -- trigger
 
-interfaces:
-[ ]  cache
-[/]  translationservice
-[ ]  resolver 
 

@@ -1,7 +1,7 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 //  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
+//  Copyright (c) 2004 Laurent Bedubourg
 //  
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
@@ -20,34 +20,14 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-/**
- * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- */
-class PHPTAL_Attribute_PHPTAL_TALES extends PHPTAL_Attribute
+interface PHPTAL_Trigger
 {
-    public function start()
-    {
-        $mode = trim($this->expression);
-        $mode = strtolower($mode);
-        
-        if ($mode == '' || $mode == 'default') 
-            $mode = 'tales';
-        
-        if ($mode != 'php' && $mode != 'tales') {
-            $err = "Unsuppported TALES mode %s";
-            $err = sprintf($err, $mode);
-            throw new Exception($err);            
-        }
-        
-        $this->_oldMode = $this->tag->generator->setTalesMode( $mode );
-    }
+    const SKIPTAG = 1;
+    const PROCEED = 2;
 
-    public function end()
-    {
-        $this->tag->generator->setTalesMode( $this->_oldMode );
-    }
+    public function start($tpl);
 
-    private $_oldMode;
+    public function end($tpl);
 }
 
 ?>
