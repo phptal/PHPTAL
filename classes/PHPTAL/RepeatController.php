@@ -26,6 +26,48 @@
  */
 class PHPTAL_RepeatController
 {
+    public $source;
+    public $index;
+    public $number;
+    public $start;
+    public $end;
+    public $length;
+    public $even;
+    public $odd;
+
+    public function __construct( $source )
+    {
+        $this->source = $source;
+        $this->index = -1;
+        $this->number = 0;
+        $this->start = true;
+        $this->end = false;
+        $this->length = $this->_size();
+    }
+
+    public function key()
+    {
+        if (!isset($this->_keys)){
+            $this->_keys = array_keys($this->source);
+        }
+        return $this->_keys[$this->index];
+    }
+
+    private function _size()
+    {
+        $iterable = $this->source;
+        if (is_array($iterable)) 
+            return count($iterable);
+        if (is_string($iterable))
+            return strlen($iterable);
+        if (is_object($iterable) && method_exists($iterable, 'size')) 
+            return $iterable->size();
+        if (is_object($iterable) && method_exists($iterable, 'length')) 
+            return $iterable->length();
+        return 0;        
+    }
+
+    private $_keys;
 }
 
 ?>

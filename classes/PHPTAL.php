@@ -60,7 +60,8 @@ class PHPTAL
         if (defined('PHPTAL_TEMPLATE_REPOSITORY')){
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
-        $this->_repeat = new PHPTAL_RepeatController();
+        // $this->_repeat = new PHPTAL_RepeatController();
+        $this->_repeat = new stdClass;
     }
 
     public function __clone()
@@ -84,7 +85,8 @@ class PHPTAL
             $this->prepare();
         }
         
-        $this->_repeat = new PHPTAL_RepeatController();
+        $this->_repeat = new stdClass;
+        // $this->_repeat = new PHPTAL_RepeatController();
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
         $res = $templateFunction($this);
@@ -387,19 +389,6 @@ function phptal_exists( $tpl, $path )
     $res = phptal_path($tpl, $path, true);
     $tpl->noThrow(false);
     return !is_null($res);
-}
-
-function phptal_repeat_size( $iterable )
-{
-    if (is_array($iterable)) 
-        return count($iterable);
-    if (is_string($iterable))
-        return strlen($iterable);
-    if (is_object($iterable) && method_exists($iterable, 'size')) 
-        return $iterable->size();
-    if (is_object($iterable) && method_exists($iterable, 'length')) 
-        return $iterable->length();
-    return 0;
 }
 
 ?>

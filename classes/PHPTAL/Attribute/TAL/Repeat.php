@@ -71,16 +71,9 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
 
         $this->tag->generator->pushCode('$__repeat__ = $tpl->repeat()');
         $this->tag->generator->pushCode('if (!isset($tpl->'.$this->varName.')) $tpl->'.$this->varName.' = false');
-        $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController()', $this->varName);
+        $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController(%s)', $this->varName, $code);
         $this->tag->generator->pushCode($init);
-        
-        $this->setRepeatVar('source', $code);
-        $this->setRepeatVar('index', '-1');
-        $this->setRepeatVar('number', '0');
-        $this->setRepeatVar('start', 'true');
-        $this->setRepeatVar('end', 'false');
-        $this->setRepeatVar('length', 'phptal_repeat_size('.$this->repeatVar('source').')');
-        
+       
         $this->tag->generator->doForeach('$tpl->'.$this->varName, $this->repeatVar('source'));
         
         $this->setRepeatVar('index', $this->repeatVar('index').'+1');

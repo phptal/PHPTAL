@@ -39,6 +39,7 @@ require_once 'PHPTAL/Attribute/PHPTAL/Tales.php';
 require_once 'PHPTAL/Attribute/I18N/Translate.php';
 require_once 'PHPTAL/Attribute/I18N/Name.php';
 require_once 'PHPTAL/Attribute/I18N/Domain.php';
+require_once 'PHPTAL/Attribute/I18N/Attributes.php';
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>

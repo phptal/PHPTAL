@@ -4,12 +4,13 @@
                                   To do list.
 
 i18n:*
-[ ]  domain
-[ ]  translate
-[ ]  name
+[ ] domain
+[ ] source
+[ ] target
+[ ] attributes
 
 interfaces:
 [ ]  cache
-[ ]  translationservice
+[/]  translationservice
 [ ]  resolver 
 

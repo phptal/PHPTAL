@@ -42,6 +42,24 @@
 //
 class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
 {
+    public function start()
+    {
+        // split attributes to translate
+        // foreach attribute
+        //   if the translation key is specified 
+        //      we use it and replace the tag attribute with the result of
+        //      the translation
+        //   else if the attribute is overwritten by tal:attributes
+        //      we translate the result of tal:attributes
+        //   else if the attribute has a default value
+        //      we use this default value as the translation key
+        //   else
+        //      unable to translate the attribute
+    }
+   
+    public function end()
+    {
+    }
 }
 
 ?>
