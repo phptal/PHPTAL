@@ -2,7 +2,7 @@
 
 PHPTAL - PHP Template Attribute Language
 Author: Laurent Bedubourg <lbedubourg@motion-twin.com>
-Date: 2004-12-22
+Date: 2005-03-06
 
 
 ABOUT
@@ -22,10 +22,13 @@ ABOUT
   PHPTAL is freely distributed under the LGPL license, it is developped 
   and maintained by Laurent Bedubourg (lbedubourg@motion-twin.com).
 
-  This document is a first documentation about PHPTAL usage for both php
-  developpers and template designers. It's not complete yet as i 
-  certainly forgot a lot of things, please send me requests and notes.  
-  And 'please' be patient with my style, i'm not a natural english 
+  This document is a second documentation about PHPTAL usage for both 
+  php developpers and template designers. 
+  
+  It's not complete as i certainly forgot a lot of things, please send 
+  me requests and notes.  
+  
+  And 'please' be patient with my style, i'm still not a natural english 
   speaker.
 
 
@@ -228,6 +231,62 @@ INSTALLATION
 TEMPLATE LANGUAGE
 *****************
 
+  This section describes TAL and its extensions. It mainly targets 
+  template designers but must be read by PHP integrators as well.
+
+  Attributes priority
+  ===================
+
+  It is important to note that the order of declaration of attributes is 
+  irrevelant.
+
+  For example,
+
+    <span tal:define="usersList application/listUsers" 
+          tal:condition="somecondition"
+          tal:repeat="user usersList"
+    >...</span>
+
+  Is EXACTLY the same as 
+
+    <span tal:repeat="user usersList"
+          tal:condition="somecondition"
+          tal:define="usersList application/listUsers" 
+    >...</span>
+
+  Priority is the same as described by TAL specifications:
+
+  1. define
+  2. condition
+  3. repeat
+  4. content or replace
+  5. attributes
+  6. omit-tag
+
+  Because PHPTAL implements METAL and I18N, this list is completed as 
+  follow :
+
+    1.  phptal:debug
+    2.  phptal:tales
+    3.  phptal:omit-tag (not exactly the same but same effect)
+    4.  metal:define-macro
+    5.  tal:on-error
+    6.  i18n:domain
+    7.  tal:define
+    8.  i18n:name
+    9.  i18n:translate
+    10. tal:condition
+    11. phptal:id
+    12. tal:repeat
+    13. tal:attributes
+    14. tal:replace
+    15. metal:use-macro
+    16. metal:define-slot
+    17. metal:fill-slot
+    18. i18n:attributes
+    19. tal:content
+    20. tal:comment
+
   TAL namespace
   =============
 
@@ -257,6 +316,34 @@ TEMPLATE LANGUAGE
   
     <span tal:define="hello string:hello $fname welcome on this page" />
 
+  Small trick which uses output buffers :
+
+    <span tal:define="hello">hello ${fname} welcome on this page</span>
+
+  You may also use tal:define with other attributes, it will be executed
+  before any other attributes.
+
+  In above examples, the span tag won't show up because it has nor 
+  printable content nor attributes. Even the last example do not show 
+  the message because the 'hello' variable grab it.
+
+  On the contrary
+
+    <span tal:define="hello string:hello ${fname} welcome on this page"
+          tal:content="hello"
+    />
+  
+  Will both set the hello variable and print it.
+
+  BUT the following is irregular because tal:define will execute the
+  content of the node before affectation and tal:content IS the content
+  of the node and just ignore whatever is inside the span. Thus hello 
+  won't be defined and an exception will be thrown
+
+    <span tal:define="hello" tal:content="hello">
+    hello ${fname} welcome on this page
+    </span>
+  
 
   tal:condition
   -------------
@@ -271,6 +358,21 @@ TEMPLATE LANGUAGE
     <span tal:condition="not: identified"> 
       Please login before accessing this page 
     </span>
+
+  If the php backend does not provide your templates with enough 
+  methods, you will often have to failback to php for special 
+  conditions:
+
+    <span tal:comment="show only if more than five items in the cart" 
+          tal:condition="php: cart.countItems() GT 5">...</span>
+
+  This may put too much logic inside the template and it is somtimes 
+  preferable to provide boolean attributes or accessible methods to the 
+  template:
+
+    <span tal:condition="cart/hasMoreThanFiveItems">...</span>
+    
+    <span tal:condition="fullfillNumerousItems">...</span>
 
 
   tal:repeat
@@ -303,6 +405,26 @@ TEMPLATE LANGUAGE
                          resource (index otherwise)
 
   "item" depends of the receiver variable defined in tal:repeat expression.
+
+  The most common usage of tal:repeat is some SQL database result.  
+  Providing you use a library implementing the Iterator PHP interface :
+
+    <table>
+      <head>
+        <tr>
+          <th>Position</th>
+          <th>Player</th>
+          <th>Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr tal:repeat="ranking playersRanking">
+          <td tal:content="ranking/position"/>
+          <td tal:content="ranking/player"/>
+          <td tal:content="ranking/score"/>
+        </tr>
+      </tbody>
+    </table>
 
 
   tal:omit-tag
@@ -400,6 +522,33 @@ TEMPLATE LANGUAGE
     <a href="http://www.google.com" 
        title="google search engine">the google search engine</a>
 
+  A somewhat complicated example involving tal:repeat :
+
+    <tr tal:repeat="ranking playerRankings"
+        tal:attribute="class php: repeat.ranking.odd ? 'odd' : false">
+        ...
+    </tr>
+
+  The php: modifier will be explained later, basically if the line is 
+  odd tr will have a class attribute with "odd" as value, otherwise, no 
+  class attribute will be set.
+
+  The "condition ? then : else" is a regular PHP expression which must 
+  be used with parcimony but has proven to be usefull on more than one 
+  occasion.
+
+  A better way to achieve the same result would be to ask your PHP coder
+  to create a custom modifier for your need (see PHP integration / 
+  custom modifiers) which would be used as follow :
+
+    <tr tal:repeat="ranking playerRankings"
+        tal:attribute="class css-odd-if-true:repeat/ranking/odd">
+        ...
+    </tr>
+
+  The modifier would returns "odd" if repeat/ranking/odd is true, false 
+  otherwise.
+
   
   tal:on-error
   ------------
@@ -426,7 +575,7 @@ TEMPLATE LANGUAGE
   ===============
 
   METAL stands for 'Macro Extension for TAL'. This namespace, supported 
-  by PHPTAL allow template designers to define and call xml/xhtml 
+  by PHPTAL, allow template designers to define and call xml/xhtml 
   macros.
 
   
@@ -445,7 +594,8 @@ TEMPLATE LANGUAGE
 
       <div>
       Last modified : 
-      <span tal:content="mdate">page modification date</span> </div>
+      <span tal:content="mdate">page modification date</span>
+      </div>
     </div>
 
   Macros inherit from caller dictionnary. In the above example, the 
@@ -460,8 +610,8 @@ TEMPLATE LANGUAGE
 
     <span 
       tal:comment="main_menu template requires 'mdate' variable"
-      tal:define="mdate page/last_modified" /> 
-    <span metal:use-macro="main_menu" />
+      tal:define="mdate page/last_modified" 
+      metal:use-macro="main_menu"  />
 
   You can refer external macros defined in other templates specifying 
   the template source file.
@@ -886,7 +1036,6 @@ PHP INTEGRATION
   customize PHPTAL behavious for simple and advanced usage.
 
   - Defines : list of PHPTAL defines and defines influencing PHPTAL
-  - PHPTAL : the main PHPTAL class
   - PHPTAL_Filter  : filtering template sources and PHPTAL output
   - PHPTAL_Trigger : creating triggers for phptal:id
   - PHPTAL_TranslationService : replacing the builtin gettext support 
@@ -935,14 +1084,6 @@ PHP INTEGRATION
   can use sub folders to organize your template designers work. It's 
   just a shortcut which will allow you to reference templates without 
   specifying the real path but their relative path in the repository.
-
-
-  class PHPTAL
-  ============
-
-  This is the main class that allow you to interact with PHPTAL. Here 
-  are presented main PHPTAL methods. More methods will be explained in 
-  'interfaces' chapters as their usage is related to these interfaces.
 
 
   interface PHPTAL_Filter
@@ -1270,52 +1411,54 @@ PHP INTEGRATION
 Creating custom expression modifiers
 ====================================
 
-PHPTAL comes with some basic expression modifiers (not:, exists:, string:,
-php:, path:).
+ PHPTAL comes with some basic expression modifiers (not:, exists:, 
+ string:, php:, path:).
 
-These modifiers are defined by ZPT specifications but PHPTALES can be
-extended with your own modifiers to manipulate strings, date, money numbers,
-objects, whatever...
+  These modifiers are defined by ZPT specifications but PHPTALES can be
+  extended with your own modifiers to manipulate strings, date, money 
+  numbers, objects, whatever...
 
-The aim of a modifier is to return some PHP code that will be included in
-the template php source.
+  The aim of a modifier is to return some PHP code that will be included 
+  in the template php source.
 
-Modifiers are used at parse time, if you change the behaviour of a
-modifier, you'll have to delete generated php files. 
+  Modifiers are used at parse time, if you change the behaviour of a
+  modifier, you'll have to delete generated php files. 
 
-Please note that modifiers produced code mustn't echo data !
+  Please note that modifiers produced code mustn't echo data !
 
-Any php function starting with "phptal_tales_" is usuable as a modifier.
+  Any php function starting with "phptal_tales_" is usuable as a 
+  modifier.
 
-Modifiers takes two arguments:
-- $src : the source string after the "modifier:" keyword
-- $nothrow : a boolean which tells if exceptions may be thrown or not by
-  phptal_path() resolution. This boolean must be propagated whenever you
-  call another phptal_tales_* modifier in your own modifier
+  Modifiers takes two arguments:
+  - $src : the source string after the "modifier:" keyword
+  - $nothrow : a boolean which tells if exceptions may be thrown or not 
+    by phptal_path() resolution. This boolean must be propagated 
+    whenever you call another phptal_tales_* modifier in your own 
+    modifier
 
-For example, in the following TAL template,
+  For example, in the following TAL template,
 
     <span tal:replace="some-modifier: my/path/value"/>
 
-The src argument will be "my/path/value" and the $nothrow boolean will be
-false because tal:replace requires the path to be fully resolvable.
+  The src argument will be "my/path/value" and the $nothrow boolean will 
+  be false because tal:replace requires the path to be fully resolvable.
 
-An expression like :
+  An expression like :
 
     <span tal:replace="some-modifier: my/path/value | other/path"/>
 
-Will use 2 modifiers :
+  Will use 2 modifiers :
 
   - some-modifier: with "my/path/value" as $src argument and $nothrow set to 
   true because an alternative exists
   - path: with "other/path" as $src and $nothrow set to false, because in 
   case the alternative is not found, tal:replace will be in trouble.
 
-Please note that path: is the implicit modifier used when no other modifier 
-is specified.
+  Please note that path: is the implicit modifier used when no other 
+  modifier is specified.
 
-Modifiers can use other modifiers to generate sub php code. The below exemple
-show this.
+  Modifiers can use other modifiers to generate sub php code. The below 
+  exemple show this.
 
     //
     // This modifier will return a money formated string (XXX.XX)

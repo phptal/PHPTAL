@@ -70,6 +70,4 @@ class TalesTest extends PHPUnit2_Framework_TestCase
     }
 }
 
-
-
 ?>
