@@ -48,7 +48,9 @@ abstract class PHPTAL_XmlParser
     // exceptions error messages
     const ERR_CHARS_BEFORE_DOC_START = 
         "Characters found before the begining of the document !";
-
+    const ERR_EXPECT_VALUE_QUOTE =
+        "Unexpected '%s' character, expecting attribute single or double quote";
+        
     const BOM_STR = "\xef\xbb\xbf";
     
     public function __construct() 
@@ -252,10 +254,17 @@ abstract class PHPTAL_XmlParser
                     break;
 
                 case self::ST_ATTR_VALUE:
-                    if ($c == '"' or $c == '\'') {
+                    if (self::isWhiteChar($c)){
+                    }
+                    else if ($c == '"' or $c == '\'') {
                         $quoteStyle = $c;
                         $state = self::ST_ATTR_QUOTE;
                         $mark = $i+1; // mark attribute real value start
+                    }
+                    else {
+                        $err = self::ERR_EXPECT_VALUE_QUOTE;
+                        $err = sprintf($err, $c);                            
+                        $this->raiseError($err);
                     }
                     break;
 

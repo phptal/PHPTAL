@@ -26,7 +26,7 @@ require_once 'PHPTAL/CodeGenerator.php';
 
 class ParserTest extends PHPUnit2_Framework_TestCase 
 {
-    function testParseSimpleDocument()
+    public function testParseSimpleDocument()
     {
         $generator = new PHPTAL_CodeGenerator();
         $parser = new PHPTAL_Parser( $generator );
@@ -35,7 +35,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
         $this->assertEquals(5, count($tree->children[2]->children));
     }
 
-    function testByteOrderMark()
+    public function testByteOrderMark()
     {
         $generator = new PHPTAL_CodeGenerator();
         $parser = new PHPTAL_Parser( $generator );
@@ -45,6 +45,17 @@ class ParserTest extends PHPUnit2_Framework_TestCase
         }
         catch (Exception $e){
             $this->assertTrue(false);
+        }
+    }
+
+    public function testBadAttribute(){
+        try {
+            $generator = new PHPTAL_CodeGenerator();
+            $parser = new PHPTAL_Parser( $generator );
+            $parser->parseFile('input/parser.03.xml');
+        }
+        catch (Exception $e){
+            $this->assertTrue( preg_match('/attribute single or double quote/', $e->getMessage()) );
         }
     }
 }
