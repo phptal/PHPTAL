@@ -95,5 +95,16 @@
       <dc:date>2005-03-22</dc:date>
     </item>
 
+    <item>
+      <title>PHPTAL manual v1 released</title>
+      <link>http://phptal.motion-twin.com/manuals.html</link>
+      <description>
+      The new PHPTAL for PHP5 manual is available. Corrections, remarks and
+      translations are welcome. 
+      </description>
+      <dc:creator>Laurent Bedubourg</dc:creator>
+      <dc:date>2005-03-27</dc:date>
+    </item>
+
   </channel>
 </rss>
