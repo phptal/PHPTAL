@@ -148,6 +148,16 @@ class PHPTAL
         $this->_encoding = $enc; 
     }
 
+    public function setTranslator( $t )
+    {
+        $this->_translator = $t;
+    }
+
+    public function getTranslator()
+    {
+        return $this->_translator;
+    }
+
     public function noThrow( $bool )
     {
         $this->_nothrow = $bool;
@@ -297,6 +307,7 @@ class PHPTAL
     private $_slotsStack = array();
     private $_encoding = 'UTF-8';    
     private $_nothrow = false;
+    private $_translator = null;
 }
 
 

@@ -36,6 +36,10 @@ require_once 'PHPTAL/Attribute/METAL/FillSlot.php';
 
 require_once 'PHPTAL/Attribute/PHPTAL/Tales.php';
 
+require_once 'PHPTAL/Attribute/I18N/Translate.php';
+require_once 'PHPTAL/Attribute/I18N/Name.php';
+require_once 'PHPTAL/Attribute/I18N/Domain.php';
+
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
