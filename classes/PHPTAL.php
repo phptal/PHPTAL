@@ -110,6 +110,7 @@ class PHPTAL
 
     public function prepare()
     {
+        $this->findTemplate();
         $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.php';
         if (defined('PHPTAL_FORCE_REPARSE') ||
             !file_exists($this->_codeFile) || 
