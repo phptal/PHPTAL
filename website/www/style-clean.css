@@ -65,6 +65,7 @@ margin-bottom: -2em;
 }
 #menu ul, #menu li {
 list-style: none;
+padding: 0px;
 }
 #menu li {
 display: inline;
