@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<xs:schema
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://xml.phptal.org"
+xmlns="http://xml.phptal.org/metal"
+elementFormDefault="qualified">
+  <xs:attribute name="define-macro" type="xs:string"/>
+  <xs:attribute name="define-slot" type="xs:string"/>
+  <xs:attribute name="use-macro" type="xs:string"/>
+  <xs:attribute name="use-slot" type="xs:string"/>
+</xs:schema>

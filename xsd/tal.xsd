@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<xs:schema
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://xml.phptal.org"
+xmlns="http://xml.phptal.org/tal"
+elementFormDefault="qualified">
+  <xs:attribute name="content"    type="xs:string"/>
+  <xs:attribute name="replace"    type="xs:string"/>
+  <xs:attribute name="comment"    type="xs:string"/>
+  <xs:attribute name="attributes" type="xs:string"/>
+  <xs:attribute name="condition"  type="xs:string"/>
+  <xs:attribute name="repeat"     type="xs:string"/>
+  <xs:attribute name="omit-tag"   type="xs:string"/>
+  <xs:attribute name="on-error"   type="xs:string"/>
+</xs:schema>

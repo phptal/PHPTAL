@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<xs:schema
+xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="http://xml.phptal.org"
+xmlns="http://xml.phptal.org/phptal"
+elementFormDefault="qualified">
+  <xs:attribute name="debug" type="xs:string"/>
+  <xs:attribute name="tales" type="xs:string"/>
+  <xs:attribute name="id"    type="xs:string"/>
+</xs:schema>
