@@ -369,10 +369,13 @@ function phptal_path( $base, $path, $nothrow=false )
 
 function phptal_exists( $tpl, $path )
 {
+    // special note: this method may requires to be extended to a full
+    // phptal_path() sibling to avoid calling latest path part if it is a
+    // method or a function...
     $tpl->noThrow(true);
     $res = phptal_path($tpl, $path, true);
     $tpl->noThrow(false);
-    return $res;
+    return !is_null($res);
 }
 
 function phptal_repeat_size( $iterable )
