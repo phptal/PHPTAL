@@ -77,6 +77,7 @@ class TalAttributesTest extends PHPUnit2_Framework_TestCase
     {
         $tpl = new PHPTAL('input/tal-attributes.06.html');
         $tpl->href = "http://www.test.com/?foo=bar&buz=biz&<thisissomething";
+        $tpl->title = 'bla bla <blabla>';
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-attributes.06.html');
