@@ -258,7 +258,7 @@ class PHPTAL_CodeGenerator
     public function doEcho( $code, $replaceInString=true )
     {
         $this->flush();
-        $this->pushHtml( "<?php echo htmlentities( $code, ENT_COMPAT, '$this->_encoding' ) ?>", $replaceInString );
+        $this->pushHtml( "<?php echo htmlspecialchars( $code, ENT_QUOTES, '$this->_encoding' ) ?>", $replaceInString );
     }
 
     public function pushHtml( $html, $replaceInString=true )
@@ -271,17 +271,26 @@ class PHPTAL_CodeGenerator
 
     public function pushString( $str )
     {
-        $str = htmlentities($str, ENT_COMPAT, $this->_encoding);
-
-        // string may contains &nbsp; and other stuff which should not be
-        // encoded here, thus we restore them keeping characters encoding
-        // conversion given by $this->_encoding
-        $str = str_replace('&amp;', '&', $str);
-        
-        $str = $this->_replaceInStringExpression($str);
-        
         $this->flushCode();
-        array_push( $this->_htmlBuffer, $str );
+        
+        while (preg_match('/^(.*?)(\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
+            list(,$before,$expression,$after) = $m;
+            
+            $before = htmlspecialchars($before, ENT_QUOTES, $this->_encoding);
+            $before = str_replace('&amp;', '&', $before);
+            array_push($this->_htmlBuffer, $before);
+
+            $expression = $this->_replaceInStringExpression($expression);
+            array_push($this->_htmlBuffer, $expression);
+
+            $str = $after;
+        }
+        
+        if ($str){
+            $str = htmlspecialchars($str, ENT_QUOTES, $this->_encoding);
+            $str = str_replace('&amp;', '&', $str);
+            array_push($this->_htmlBuffer, $str);
+        }
     }
 
     public function pushCode( $codeLine ) 
@@ -324,7 +333,7 @@ class PHPTAL_CodeGenerator
         if ($this->_talesMode == 'tales'){
             return preg_replace(
                 '/\$\{([a-z0-9\/_]+)\}/ism', 
-                '<?php echo htmlentities( phptal_path($ctx, \'$1\'), ENT_COMPAT, \''.$this->_encoding.'\' ) ?>',
+                '<?php echo htmlspecialchars( phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' ) ?>',
                 $src);
         }
 
@@ -339,7 +348,7 @@ class PHPTAL_CodeGenerator
         while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
             list($ori, $exp) = $m;
             $php  = phptal_tales_php($exp);
-            $repl = '<?php echo htmlentities( %s , ENT_COMPAT, \'%s\') ?>';
+            $repl = '<?php echo htmlspecialchars( %s , ENT_QUOTES, \'%s\') ?>';
             $repl = sprintf($repl, $php, $this->_encoding);
             $src  = str_replace($ori, $repl, $src);
         }

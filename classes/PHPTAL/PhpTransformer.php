@@ -300,6 +300,7 @@ class PHPTAL_PhpTransformer
                     break;
             }
         }
+
         return trim($result);
     }
 

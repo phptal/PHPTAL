@@ -76,6 +76,13 @@ class PhpTransformerTest extends PHPUnit2_Framework_TestCase
                             $this->t->transform("'my string\' still in string'"));
     }
 
+    function testStringParams()
+    {
+        $this->assertEquals('strtolower(\'AAA\')', 
+                            $this->t->transform('strtolower(\'AAA\')')
+                           );
+    }
+
     function testEvals()
     {
         $this->assertEquals('$$a', $this->t->transform('$a'));

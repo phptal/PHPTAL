@@ -77,7 +77,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     {
         $value = gettext($key);
         if ($htmlencode){
-            $value = htmlentities($value, ENT_COMPAT, $this->_encoding);
+            $value = htmlspecialchars($value, ENT_QUOTES, $this->_encoding);
         }
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src,$var) = $m;

@@ -79,7 +79,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         }
         else {
             $type = '_ATT_';
-            $code = sprintf('$_ATT_%s = htmlentities(%s, ENT_COMPAT, \'%s\')', $this->getVarName($attribute), $code, $this->tag->generator->getEncoding());
+            $code = sprintf('$_ATT_%s = htmlspecialchars(%s, ENT_QUOTES, \'%s\')', $this->getVarName($attribute), $code, $this->tag->generator->getEncoding());
             $this->tag->generator->pushCode( $code );
         }
         $this->tag->attributes[ $attribute ] = 
@@ -138,7 +138,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
             else {
                 $this->tag->generator->doElseIf($condition);
             }
-            $code = sprintf('%s = \' %s="\'.htmlentities(%s, ENT_COMPAT, \'%s\').\'"\'', $attkey, $attribute, $attkey, $this->tag->generator->getEncoding());
+            $code = sprintf('%s = \' %s="\'.htmlspecialchars(%s, ENT_QUOTES, \'%s\').\'"\'', $attkey, $attribute, $attkey, $this->tag->generator->getEncoding());
             $this->tag->generator->pushCode($code);                
         }
        
