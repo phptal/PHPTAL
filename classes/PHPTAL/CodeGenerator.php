@@ -318,12 +318,20 @@ class PHPTAL_CodeGenerator
                 $src);
         }
 
+        while (preg_match('/\${structure ([^\}]+)\}/ism', $src, $m)){
+            list($ori, $exp) = $m;
+            $php  = phptal_tales_php($exp);
+            $repl = '<?php echo %s; ?>';
+            $repl = sprintf($repl, $php);
+            $src  = str_replace($ori, $repl, $src);
+        }
+        
         while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
             list($ori, $exp) = $m;
             $php  = phptal_tales_php($exp);
             $repl = '<?php echo htmlentities( %s , ENT_COMPAT, \'%s\') ?>';
             $repl = sprintf($repl, $php, $this->_encoding);
-            $src = str_replace($ori, $repl, $src);
+            $src  = str_replace($ori, $repl, $src);
         }
         return $src;
     }

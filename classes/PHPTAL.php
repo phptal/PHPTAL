@@ -315,8 +315,6 @@ class PHPTAL
 
     private function findTemplate()
     {//{{{
-        $path = $this->_realPath;
-        if (file_exists($path)) return;
         foreach ($this->_repositories as $repository){
             $f = $repository . PHPTAL_PATH_SEP . $this->_realPath;
             if (file_exists($f)){
@@ -324,6 +322,8 @@ class PHPTAL
                 return;
             }
         }
+        $path = $this->_realPath;
+        if (file_exists($path)) return;
         $err = 'Unable to locate template file %s';
         $err = sprintf($err, $this->_realPath);
         throw new Exception($err);
