@@ -5,7 +5,7 @@
 
 body {
 font-family: sans-serif;
-font-size: 0.8em;
+font-size: 0.9em;
 margin-left: 70px;
 }
 
@@ -59,9 +59,9 @@ background-color: inherit;
 }
 
 #menu {
-height: 50px;
 padding-top: 15px;
 text-align: center;
+margin-bottom: -2em;
 }
 #menu ul, #menu li {
 list-style: none;
@@ -71,7 +71,7 @@ display: inline;
 }
 #menu li a {
 font-weight: bold;
-font-size: 1.5em;
+font-size: 1.3em;
 padding: 0px 10px 0px 10px;
 color: #777;
 text-decoration: none;
@@ -85,11 +85,12 @@ color: #000;
 
 body  h1 {
 font-size: 3em;
+margin-top: 1.5em;
 padding-bottom: 10px;
 text-align: right;
 }
 body  h2 {
-margin-top: 10px;
+margin-top: 1.5em;
 font-size: 1.3em;
 background-color: #333;
 background-color: #8e864e;
@@ -112,8 +113,7 @@ margin-left: 20px;
 }
 
 code {
-color: #833;
-color: #8e864e;
+color: #6e662e;
 }
 
 a {
@@ -126,11 +126,11 @@ border: 0px solid #000;
 }
 
 acronym {
-color: #8e864e;
+color: #6e662e;
 }
 
 abbr {
-color: #8e864e;
+color: #6e662e;
 }
 
 #footer {
