@@ -13,8 +13,16 @@
 
     <revhistory>
       <revision>
+        <revnumber>v1.1</revnumber>
+        <date>2005-03-29</date>
+        <authorinitials>lb</authorinitials>
+        <revremark>Added section about PHPTAL class</revremark>
+      </revision>
+    </revhistory>
+    <revhistory>
+      <revision>
         <revnumber>v1.0</revnumber>
-        <date>2000-12-30</date>
+        <date>2005-03-27</date>
         <authorinitials>lb</authorinitials>
         <revremark>Converted draft to docbook</revremark>
       </revision>
