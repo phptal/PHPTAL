@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_0_7');
+define('PHPTAL_VERSION', '1_0_8');
 
 //{{{OS RELATED DEFINES
 if (substr(PHP_OS,0,3) == 'WIN'){
@@ -502,7 +502,7 @@ function phptal_path( $base, $path, $nothrow=false )
     $parts   = split('/', $path);
     $current = true;
 
-    while ($current = array_shift($parts)){
+    while (($current = array_shift($parts)) !== null){
         // object handling
         if (is_object($base)){
             // look for method
@@ -556,7 +556,7 @@ function phptal_path( $base, $path, $nothrow=false )
         // array handling
         if (is_array($base)) {
             // key or index
-            if (array_key_exists($current, $base)){
+            if (array_key_exists((string)$current, $base)){
                 $base = $base[$current];
                 continue;
             }
