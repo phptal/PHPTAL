@@ -63,7 +63,19 @@
       - Important fix regarding attributes execution priority
       </description>
       <dc:creator>Laurent Bedubourg</dc:creator>
-      <dc:date>2005-03-03</dc:date>    
+      <dc:date>2005-03-15</dc:date>    
+    </item>
+
+    <item> 
+      <title>PHPTAL 1.0.6</title>
+      <link>http://phptal.motion-twin.com</link>
+      <description>
+      - fixed empty tags (link, input, ...) with XML output
+      - minor PHP transformer optimisations
+      - xml parser stricter about attribute value quotes
+      </description>
+      <dc:creator>Laurent Bedubourg</dc:creator>
+      <dc:date>2005-03-21</dc:date>
     </item>
 
   </channel>
