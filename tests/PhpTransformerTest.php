@@ -94,6 +94,9 @@ class PhpTransformerTest extends PHPUnit2_Framework_TestCase
     {
         $this->assertEquals('MyClass::method()', $this->t->transform('MyClass::method()'));
         $this->assertEquals('MyClass::CONSTANT', $this->t->transform('MyClass::CONSTANT'));
+        $this->assertEquals('MyClass::CONSTANT_UNDER', $this->t->transform('MyClass::CONSTANT_UNDER'));
+        $this->assertEquals('MyClass::CONSTANT_UNDER6', $this->t->transform('MyClass::CONSTANT_UNDER6'));
+        $this->assertEquals('MyClass::ConsTant', $this->t->transform('MyClass::ConsTant'));
         $this->assertEquals('MyClass::$static', $this->t->transform('MyClass::$static'));
         $this->assertEquals('MyClass::$static->foo()', $this->t->transform('MyClass::$static.foo()'));
     }
