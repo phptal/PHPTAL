@@ -1,0 +1,12 @@
+<html>
+  <span tal:content="string:first text" />
+  <span xmlns:foo="http://xml.zope.org/namespaces/tal">
+    <span foo:content="string:some text" />
+    <span 
+      xmlns:foo="http://xml.zope.org/namespaces/metal"
+      foo:define-macro="somemacro">
+     macro content
+    </span>
+  </span>
+  <span tal:content="string:other text" />
+</html>

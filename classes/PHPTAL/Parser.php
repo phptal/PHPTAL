@@ -24,6 +24,7 @@ require_once 'PHPTAL/Defs.php';
 require_once 'PHPTAL/Node.php';
 require_once 'PHPTAL/XmlParser.php';
 require_once 'PHPTAL/Tales.php';
+require_once 'PHPTAL/XmlnsState.php';
 
 /**
  * Template parser.
@@ -42,11 +43,17 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     public function __construct( $codeGenerator )
     {
         $this->_codeGenerator = $codeGenerator;
+        $this->_xmlns = new PHPTAL_XmlnsState();
     }
 
     public function getGenerator()
     {
         return $this->_codeGenerator;
+    }
+
+    public function getXmlnsState()
+    {
+        return $this->_xmlns;
     }
 
     public function setPreFilter($filter)
@@ -102,8 +109,10 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     
     public function onElementStart($name, $attributes)
     {
+        $this->_xmlns = PHPTAL_XmlnsState::newElement($this->_xmlns, $attributes);
+        
         foreach ($attributes as $key=>$value) {
-            if (!PHPTAL_Defs::isValidAttribute($key)) {
+            if (!$this->_xmlns->isValidAttribute($key)) {
                 $err = sprintf( self::ERR_UNSUPPORTED_ATTRIBUTE, $key );
                 $this->raiseError($err);
             }
@@ -122,6 +131,7 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
             $this->raiseError($err);
         }
         $this->_current = array_pop($this->_stack);        
+        $this->_xmlns = $this->_current->xmlns;
     }
     
     public function onElementData($data)
@@ -141,6 +151,7 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     private $_current;
     private $_codeGenerator;
     private $_prefilter = null;
+    private $_xmlns;
 }
 
 ?>

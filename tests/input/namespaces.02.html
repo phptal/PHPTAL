@@ -1,0 +1,11 @@
+<html>
+  <span tal:content="string:first text" />
+  <span xmlns:foo="http://xml.zope.org/namespaces/tal">
+    <span foo:content="string:some text" />
+    <span xmlns:bar="http://xml.zope.org/namespaces/tal">
+      <span foo:content="string:some text" />
+      <span bar:content="string:some text" />
+    </span>
+  </span>
+  <span tal:content="string:other text" />
+</html>

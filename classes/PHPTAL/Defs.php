@@ -82,6 +82,13 @@ class PHPTAL_Defs
      */
     static $NAMESPACES = array('TAL', 'METAL', 'I18N', 'PHPTAL');
 
+    static $XMLNS = array(
+        'http://xml.zope.org/namespaces/tal'    => 'TAL',
+        'http://xml.zope.org/namespaces/metal'  => 'METAL',
+        'http://xml.zope.org/namespaces/i18n'   => 'I18N',
+        'http://xml.zope.org/namespaces/phptal' => 'PHPTAL'
+    );
+
     /**
      * This dictionary contains ALL known PHPTAL attributes. Unknown attributes 
      * will be echoed in result as xhtml/xml ones.
@@ -261,15 +268,11 @@ class PHPTAL_Defs
      *
      * @return bool
      */
-    static function isHandledXmlNs( $att )
+    static function isHandledXmlNs( $att, $value )
     {
         $att = strtolower($att);
-        return ($att == 'xmlns:tal' ||
-                $att == 'xmlns:metal' ||
-                $att == 'xmlns:i18n' ||
-                $att == 'xmlns:phptal' ||
-                $att == 'xmlns:php'
-                );
+        return array_key_exists($value, self::$XMLNS) 
+            && substr($att, 0, 6) == 'xmlns:';
     }
 }
 

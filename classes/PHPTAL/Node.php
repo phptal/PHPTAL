@@ -1,7 +1,7 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 //  
-//  Copyright (c) 2004 Laurent Bedubourg
+//  Copyright (c) 2004-2005 Laurent Bedubourg
 //  
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
@@ -34,12 +34,18 @@ abstract class PHPTAL_Node
     public $line;
     public $parser;
     public $generator;
+    /** 
+     * XMLNS aliases propagated from parent nodes and defined by this node
+     * attributes.
+     */
+    public $xmlns;
 
     public function __construct( $parser )
     {
         $this->parser = $parser;
         $this->generator = $parser->getGenerator();
         $this->line = $parser->getLineNumber();
+        $this->xmlns = $parser->getXmlnsState();
     }
 
     public abstract function generate();
@@ -257,7 +263,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
             list(,$ns) = $m;
             $attributes = array();
             foreach ($this->attributes as $key=>$value) {
-                if (PHPTAL_Defs::isValidAttribute("$ns:$key")) {
+                if ($this->xmlns->isValidAttribute("$ns:$key")) {
                     $attributes["$ns:$key"] = $value;
                 }
                 else {
@@ -274,9 +280,9 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         $this->talAttributes = array();
         foreach ($this->attributes as $key=>$value) {
             // remove handled xml namespaces
-            if (PHPTAL_Defs::isHandledXmlNs($key)){
+            if (PHPTAL_Defs::isHandledXmlNs($key,$value)){
             }
-            else if (PHPTAL_Defs::isPhpTalAttribute($key)) {
+            else if ($this->xmlns->isPhpTalAttribute($key)) {
                 $this->talAttributes[$key] = $value;
             }
             else if (PHPTAL_Defs::isBooleanAttribute($key)) {
@@ -293,13 +299,15 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     {
         $result = array();
         foreach ($this->talAttributes as $key=>$exp) {
-            $pos = PHPTAL_Defs::$RULES_ORDER[ strtoupper($key) ];
+            $pos = $this->xmlns->getAttributePriority($key);
             if (array_key_exists($pos, $result)) {
                 $err = sprintf(self::ERR_ATTRIBUTES_CONFLICT, 
                                $this->name, $this->line, $key, $result[$pos]->name);
                 throw new Exception($err);
             }
-            $result[$pos] = PHPTAL_Attribute::createAttribute( $this, $key, $exp );
+            $result[$pos] = PHPTAL_Attribute::createAttribute(
+                $this, $this->xmlns->unAliasAttribute($key), $exp 
+            );
         }
 
         $this->talHandlers = $result;
