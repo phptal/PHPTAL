@@ -2,6 +2,25 @@
   <body metal:fill-slot="content" tal:omit-tag="">
 
     <h1 id="news">News</h1>
+    
+	<div class="pon">
+	  <h2>PHPTAL 1.0.4</h2>
+	  <div class="date">2005-03-03</div>
+	  <div class="content">
+	    <p>
+		ChangeLog:
+		</p>
+
+		<ul>
+		  <li>Byte Order Mark removed from templates sources (still requires 
+          some tests)</li>
+          <li>Replaced <code>htmlentities()</code> usage by
+          <code>htmlspecialchars()</code></li>
+          <li>Added <code>PHPTAL::setTemplate()</code> methods which allow
+          later template source selection.</li>
+		</ul>
+	  </div>
+	</div>
 
 	<div class="pon">
 	  <h2>PHPTAL 1.0.3</h2>
