@@ -57,11 +57,6 @@ class PHPTAL_PhpTransformer
 
     public static function transform( $str, $prefix='$' )
     {
-        // replace not ne and lt gt, etc...
-        $str = preg_replace(self::$TranslationMatches, 
-                            self::$TranslationReplaces, 
-                            $str);
-
         $state = self::ST_NONE;
         $result = "";
         $i = 0;
@@ -179,18 +174,27 @@ class PHPTAL_PhpTransformer
                     }
                     else {
                         $var = substr( $str, $mark, $i-$mark );
-                        if (strtolower($var) == 'true' || strtolower($var) == 'false' || strtolower($var) == 'null') {
+                        $low = strtolower($var);
+                        // boolean and null
+                        if ($low == 'true' || $low == 'false' || $low == 'null') {
                             $result .= $var;
                         }
-                        else if (strtolower($var) == 'instanceof'){
+                        // lt, gt, ge, eq, ...
+                        else if (array_key_exists($low, self::$TranslationTable)){
+                            $result .= self::$TranslationTable[$low];
+                        }
+                        // instanceof keyword
+                        else if ($low == 'instanceof'){
                             $result .= $var;
                             $instanceOf = true;
                         }
+                        // previous was instanceof
                         else if ($instanceOf){
                             // last was instanceof, this var is a class name
                             $result .= $var;
                             $instanceOf = false;
                         }
+                        // regular variable
                         else {
                             $result .= $prefix . $var;
                         }
@@ -291,13 +295,6 @@ class PHPTAL_PhpTransformer
         return trim($result);
     }
 
-    // Automatically called by the inclusion/requirements of this file
-    public static function initStatics()
-    {
-        self::$TranslationMatches = array_keys(self::$TranslationTable);
-        self::$TranslationReplaces = array_values(self::$TranslationTable);
-    }
-
     private static function isAlpha( $c )
     {
         $c = strtolower($c);
@@ -310,20 +307,16 @@ class PHPTAL_PhpTransformer
     }
 
     private static $TranslationTable = array(
-        '/\bnot\b/i' => '!', 
-        '/\bne\b/i'  => '!=', 
-        '/\band\b/i' => '&&',
-        '/\bor\b/i'  => '||',
-        '/\blt\b/i'  => '<',
-        '/\bgt\b/i'  => '>',
-        '/\bge\b/i'  => '>=',
-        '/\ble\b/i'  => '<=',
-        '/\beq\b/i'  => '==',
+        'not' => '!', 
+        'ne'  => '!=', 
+        'and' => '&&',
+        'or'  => '||',
+        'lt'  => '<',
+        'gt'  => '>',
+        'ge'  => '>=',
+        'le'  => '<=',
+        'eq'  => '==',
     );
-    private static $TranslationMatches = null;
-    private static $TranslationReplaces = null;
 }
-
-PHPTAL_PhpTransformer::initStatics();
 
 ?>

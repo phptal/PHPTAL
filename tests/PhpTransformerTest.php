@@ -133,6 +133,14 @@ class PhpTransformerTest extends PHPUnit2_Framework_TestCase
     {
         $this->assertEquals('$test instanceOf Foo', PHPTAL_PhpTransformer::transform('test instanceOf Foo'));
     }
+
+    function testTransformInString()
+    {
+        $src = '"do not tranform this ge string lt eq"';
+        $this->assertEquals($src, PHPTAL_PhpTransformer::transform($src));
+        $src = "'do not tranform this ge string lt eq'";
+        $this->assertEquals($src, PHPTAL_PhpTransformer::transform($src));
+    }
 }
 
 ?>
