@@ -44,11 +44,32 @@
 pear install {downloadedfile}
 </pre>
 
+  <p>
+  Later, you can update the installed library using :
+  </p>
+
+<pre>
+pear ugprade {newdownloadedfile}
+</pre>
       
     <h2>PHPTAL for PHP5</h2>
 
     <h3>PEAR installation</h3>
-      
+
+  <p>
+    The latest release of PHPTAL is always reachable at
+    <a href="http://phptal.motion-twin.com/latest.tar.gz">latest.tar.gz</a>, the following will work :
+  </p>
+
+<pre>
+pear install <a href="http://phptal.motion-twin.com/latest.tar.gz">http://phptal.motion-twin.com/latest.tar.gz</a>
+pear upgrade <a href="http://phptal.motion-twin.com/latest.tar.gz">http://phptal.motion-twin.com/latest.tar.gz</a>
+</pre>
+
+  <p>
+    You can also install a specific release of PHPTAL using real urls :
+  </p>
+
 <pre>
 pear install <a href="files/PHPTAL-${VERSION}.tar.gz">http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz</a>
 </pre>
