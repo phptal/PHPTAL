@@ -1,4 +1,4 @@
-/* PHPTAL website stylesheet 
+/* PHPTAL website uggly stylesheet 
  *
  * Author: Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -20,6 +20,7 @@ letter-spacing: 3px;
 }
 #header h1 {
 letter-spacing: 10px;
+border: 0px;
 }
 #header h1 a {
 text-decoration: none;
@@ -27,15 +28,13 @@ text-decoration: none;
 #header h2 {
 font-style: italic;
 font-size: 0.8em;
+color: #000;
 }
 
-body > h1, body > h2, body > h3, body > h4{
-}
-
-body > h1 {
+body  h1 {
 border-bottom: 5px solid #000;
 }
-body > h2 {
+body  h2 {
 font-size: 1.5em;
 color: #777;
 }

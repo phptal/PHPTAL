@@ -1,6 +1,6 @@
 <html metal:use-macro="page.html/main">
   <tal:block 
-    define="VERSION string:1.0.0;
+    define="VERSION string:1.0.1;
             MAILING string:http://lists.motion-twin.com/mailman/listinfo/phptal;
             SUBVERS string:https://svn.motion-twin.com/phptal"
   />
@@ -37,7 +37,7 @@
 
     <div class="pon">
       <h2>PHPTAL hosted on motion-twin.com</h2>
-      <div class="date">2005-02-16</div>
+      <div class="date">2005-02-25</div>
       <div class="content">
         <p>
         As planed some times ago, i moved PHPTAL on one of my company's
@@ -45,16 +45,17 @@
         </p>
         
         <p>
-        This will allow me to do more frequent updates and releases.
+        Expect more frequent updates and releases.
         </p>
 
         <p>
-        Also changes : 
+        Also changed : 
         </p>
 
         <ul>
           <li><a href="${SUBVERS}">PHPTAL subversion repository</a></li>
           <li><a href="${MAILING}">PHPTAL mailing list</a></li>
+		  <li><a href="${rsshref}">PHPTAL RSS feed</a></li>
         </ul>
       </div>
     </div>
@@ -68,8 +69,8 @@
 
     <p>
     <em>PHPTAL</em> is a <abbr title="PHP Hyper Processor">PHP</abbr>
-    implementation of <abbr title="Zope Page Templates">ZPT</abbr>. To be
-    short, PHPTAL is a XHTML template library for PHP.
+    implementation of <abbr title="Zope Page Templates">ZPT</abbr> work.
+	To be short, PHPTAL is a XML/XHTML template library for PHP.
     </p>
 
     <p>
@@ -90,7 +91,9 @@
 <div id="item">
   <div id="title">
     <?php if ($value->hasDate()): ?><?=$value->getDate()?><?php endif; ?>
-    <a href="<?= $value->getUrl() ?>"><?= htmlentities($value->getTitle()) ?></a>
+    <a href="<?= $value->getUrl() ?>"><?= 
+		htmlentities($value->getTitle()) 
+	?></a>
   </div>
   <div id="content">
     <?= htmlentities($value->getContent()) ?>
@@ -200,7 +203,7 @@
 
     <h2>PHP4</h2>
     <p>
-    The PHPTAL manual [<a href="phptal.php4.manual/index.html">online</a>]
+    The PHPTAL manual [<a href="manual/php4/index.html">online</a>]
     </p>
     
     <!-- 
@@ -211,8 +214,9 @@
     <h1 id="download">Downloads</h1>
 
     <p>
-    The Sql package is licensed under the terms of the LGPL (GNU LESSER 
-    GENERAL PUBLIC LICENSE) contained in the COPYING file of this package.
+    The PHPTAL library is licensed under the terms of the 
+	<a href="http://www.gnu.org/licenses/lgpl.txt">GNU LESSER GENERAL PUBLIC LICENSE</a>
+	contained in the COPYING file of this package.
     </p>
 
     <p>
@@ -242,9 +246,14 @@
     worth the time you will spend on it.
     </p>
 
+	<p>
+	The usual way of installing packages with pear is : 
+	</p>
+
 <pre>
-pear install {downloaded-filename}.tar.gz
+pear install {downloadedfile}
 </pre>
+
       
     <h2>PHPTAL for PHP5</h2>
       
@@ -253,6 +262,10 @@ pear install {downloaded-filename}.tar.gz
         <a href="files/PHPTAL-${VERSION}.tar.gz">PHPTAL-${VERSION}.tar.gz</a>
       </li>
     </ul>
+
+<pre>
+pear install http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz
+</pre>
 
     <h2>PHPTAL for PHP4</h2>
                     

@@ -25,9 +25,9 @@ interface PHPTAL_Trigger
     const SKIPTAG = 1;
     const PROCEED = 2;
 
-    public function start($tpl);
+    public function start($id, $tpl);
 
-    public function end($tpl);
+    public function end($id, $tpl);
 }
 
 ?>

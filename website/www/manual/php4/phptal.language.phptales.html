@@ -1,0 +1,433 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>PHPTALES</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Template language"
+HREF="phptal.language.html"><LINK
+REL="PREVIOUS"
+TITLE="*:BLOCK"
+HREF="phptal.language.block.html"><LINK
+REL="NEXT"
+TITLE="PHP Integration "
+HREF="phpapi.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phptal.language.block.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Template language</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phpapi.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES"
+>PHPTALES</A
+></H1
+><P
+>&#13;PHPTALES is the expression syntax used inside tal, metal, phptal attributes.
+From above exemples, you should have seen some of PHPTALES examples (string:,
+php:, not:, ...). This chapter describe the usage of PHPTALES in templates.&#13;</P
+><P
+>&#13;Important: never user double quotes (&quot;) in expressions, only single ones
+(') are allowed. Never user &lt; or &gt; characters, they break XML and will
+cause PHPTAL to fail parsing the source.&#13;</P
+><P
+>&#13;The value of a TAL attribute may contain more than one expression (ex:
+tal:define), in which case each expression must be separated from the
+next one with a ';' character.&#13;</P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.PATHES"
+>Accessing variables</A
+></H2
+><P
+>&#13;Inside the template or inside expression strings, you can refer to a context
+variable using its path in the form
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>$path/to/my/variable</I
+></SPAN
+> or
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>$&lcub;path/to/my/variable&rcub;</I
+></SPAN
+>&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;h1&#62;${document/title}&#60;/h1&#62;
+&#60;span tal:replace="string:welcome ${user/name}, 
+      this page has been readed ${page/countRead} times"/&#62; </PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.CONDITIONALS"
+>Conditional statements</A
+></H2
+><P
+>&#13;As <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>&lt;</I
+></SPAN
+> and <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>&gt;</I
+></SPAN
+> are not allowed,
+PHPTAL provides some good old text equivalent comparision operators.&#13;</P
+><P
+>&#13;These statements will mostly appear in tal:condition attributes, and in php:
+expressions.&#13;</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.STRING"
+>string:</A
+></H2
+><P
+>&#13;As expressions are separated by a '<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>;</I
+></SPAN
+>' character, and as
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>$</I
+></SPAN
+> mark the start of a path, you must use
+'<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>;;</I
+></SPAN
+>' when you want to insert a real
+'<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>;</I
+></SPAN
+>' character in your string and
+'<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>$$</I
+></SPAN
+>' when you want to insert a real
+'<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>$</I
+></SPAN
+>' character in a string or in the template.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;span tal:replace="string:this is a $$100 page"/&#62;
+string:foo $bar baz       &#60;!-- will replace $bar --&#62; 
+string:foo $$bar baz      &#60;!-- no interpolation --&#62; 
+string:foo ; php:doFoo()  &#60;!-- two different expressions --&#62; string:foo ;; php:doFoo() &#60;!-- only string --&#62;</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.PHP"
+>php:</A
+></H2
+><P
+>&#13;This expression evaluate what follows as a regular php expression except that
+'-&gt;' are replaced by dots '.' and variable names does not need to be
+prefixed with a dollar '$' sign.&#13;</P
+><P
+>&#13;A dot '.' separated from the rest of expression by spaces is assumed to be a
+concatenation sign.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>php:htmlentities(foo)
+php:'string $varReplaced'
+php:'string ${some/path/to/var}'
+php:NOT foo OR (bar GT baz)
+php:a + b
+php:array('a', 'b', 'c')
+php:range(0, 90)
+php:foo . a.b.c(e) . htmlentities(SomeClass::staticMethod()) </PRE
+><P
+>&#13;php: should be used with care and won't be needed in 80&percnt; or templates
+but some times you will need to invoke some php special method to be sure a
+user is logged or to retrieve a specific heavy data depending on some
+conditions and dynamically inside the template.&#13;</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.NOT"
+>not:</A
+></H2
+><P
+>&#13;This expression is a boolean one, usefull in tal:condition statements. &#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;span tal:condition="not: logged"&#62;not logged&#60;/span&#62;</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.EXISTS"
+>exists:</A
+></H2
+><P
+>&#13;This expression is a boolean expression, it will returns true if the path
+specified after it exists of not.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;span tal:condition="exists: user/preferences"    
+      tal:content="user/preferences"&#62; 
+user preferences here if defined 
+&#60;/span&#62;</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.DEFAULT"
+>default</A
+></H2
+><P
+>&#13;This is not an expression but a keyword allowing template designers to keep the
+content of a tag as an alternative value if an error occurs or if something is
+not defined.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;span tal:define="myVar path/to/possible/var | default"&#62; 
+default my var value 
+&#60;/span&#62;
+
+&#60;span tal:content="some/var | other/path | default"&#62; 
+no some/var and no other/path found here 
+&#60;/span&#62;</PRE
+><P
+>&#13;Above examples introduce the '|' characters that allow the definition of
+alternatives for defines or prints. See next paragraph.&#13;</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.CHAINS"
+>Expression chains</A
+></H2
+><P
+>&#13;A chain of expression is a list of expressions separated by '|' character.&#13;</P
+><P
+>&#13;While evaluating expressions separated by '|', PHPTAL will stop its evaluation
+when an expression value is not null and no error was raised while evaluating
+the expression.&#13;</P
+><P
+>&#13;As a <SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>string:</I
+></SPAN
+> expression is always true,
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>string:</I
+></SPAN
+> always terminate an expression chain whatever
+expression may follows. &#13;</P
+><P
+>&#13;You can use php: expressions inside expression chains as any other expression.&#13;</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTALES.STRUCTURE"
+>structure</A
+></H2
+><P
+>&#13;This is not an expression but a keyword.&#13;</P
+><P
+>&#13;While printing variables inside PHPTAL templates, you certainly remark that
+PHPTAL encode each variable to ensure the validity of the output document. &#13;</P
+><P
+>&#13;Sometimes, you may use HTML/XML variables that must be echoed as is.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;h1 tal:content="structure document/title"/&#62; 
+&#60;span tal:replace="structure document/content"/&#62;</PRE
+><P
+>&#13;In above examples, we assume that
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>$document-&gt;title</I
+></SPAN
+> and
+<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>$document-&gt;content</I
+></SPAN
+> are variables that contains
+preformated html that must be echoed as is.&#13;</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phptal.language.block.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phpapi.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>*:BLOCK</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="phptal.language.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PHP Integration</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

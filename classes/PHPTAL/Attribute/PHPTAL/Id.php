@@ -25,19 +25,24 @@
  */
 class PHPTAL_Attribute_PHPTAL_ID extends PHPTAL_Attribute
 {
+    private $id;
+    
     public function start()
     {
-        $id = $this->expression;
+        $this->id = str_replace('"', '\\\"', $this->expression);
         $code = '$trigger = $tpl->getTrigger("%s")';
-        $code = sprintf($code, str_replace('"', '\\\"', $id));
+        $code = sprintf($code, $this->id);
         $this->tag->generator->pushCode($code);
-        $this->tag->generator->doIf('$trigger && $trigger->start($tpl) == PHPTAL_Trigger::PROCEED');
+        $code = '$trigger && $trigger->start("%s", $tpl) == PHPTAL_Trigger::PROCEED';
+        $code = sprintf($code, $this->id);
+        $this->tag->generator->doIf($code);
     }
 
     public function end()
     {
         $this->tag->generator->doEnd();
-        $code = 'if ($trigger) $trigger->end($tpl)';
+        $code = 'if ($trigger) $trigger->end("%s", $tpl)';
+        $code = sprintf($code, $this->id);
         $this->tag->generator->pushCode($code);
     }
 }

@@ -1,0 +1,261 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>interface PHPTAL_SourceLocator</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PHP Integration "
+HREF="phpapi.html"><LINK
+REL="PREVIOUS"
+TITLE="interface PHPTAL_SourceResolver"
+HREF="phptal.sourceresolver.html"><LINK
+REL="NEXT"
+TITLE="interface PHPTAL_I18N"
+HREF="phptal.i18n.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phptal.sourceresolver.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>PHP Integration</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phptal.i18n.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="PHPTAL.SOURCELOCATOR"
+>interface PHPTAL_SourceLocator</A
+></H1
+><P
+>This kind of object is returned by a PHPTAL_SsourceLocator
+implementation. </P
+><P
+>The aim of this object is to provide an access to a template source 
+wherever the source is situated.</P
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN516"
+></A
+><P
+><B
+>Example 5. SourceLocator implementation</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>class DBLocator extends PHPTAL_SourceLocator
+{
+    var $_id;
+    var $_lastModified;
+    var $_data;
+    var $_isValid = false;
+    var $_path;
+    
+    function DBLocator($path)
+    {
+        $this-&#62;_path = $path;
+        $id  = substr($path, 5);
+        $res = mysql_query("SELECT * FROM Template WHERE id=$id");
+        $val = mysql_fetch_array($res);
+        if ($val) {
+            $this-&#62;_id = $id;
+            $this-&#62;_lastModified = $val['last_modified'];
+            $this-&#62;_data = $val['data'];
+            $this-&#62;_isValid = true;
+        }
+    }
+
+    function isValid()
+    {
+        return $this-&#62;_isValid;
+    }
+    
+    function realPath()
+    {
+        return $this-&#62;_path;
+    }
+
+    function lastModified()
+    {
+        return $this-&#62;_lastModified;
+    }
+        
+    function data()
+    {
+        return $this-&#62;_data;
+    }
+}</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.SOURCELOCATOR.REALPATH"
+>method realPath</A
+></H2
+><P
+>This method must return the unique template path.</P
+><P
+>The result of this method is used to generate a unique md5 value which
+represents the template php function name produced by PHPTAL for this source.</P
+><P
+>Return</P
+><P
+>string : the unique absolute path to this source</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.SOURCELOCATOR.LASTMODIFIED"
+>method lastModified</A
+></H2
+><P
+>This method return the source last modified time.</P
+><P
+>The result is compared to php intermediate code generation time to decide
+whether or no this source has to be parsed again. </P
+><P
+>Return</P
+><P
+>int : time stamp</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.SOURCELOCATOR.DATA"
+>method data</A
+></H2
+><P
+>This method must return the template source.</P
+><P
+>This method is invoqued if the template source has to be parsed or
+reparsed. </P
+><P
+>Return</P
+><P
+>string : the template source</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phptal.sourceresolver.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phptal.i18n.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>interface PHPTAL_SourceResolver</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="phpapi.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>interface PHPTAL_I18N</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

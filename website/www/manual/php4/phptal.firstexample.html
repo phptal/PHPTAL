@@ -1,0 +1,264 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>First example </TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="Why you should use PHPTAL"
+HREF="phptal.whyusingit.html"><LINK
+REL="NEXT"
+TITLE="Installation"
+HREF="phptal.install.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="ARTICLE"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phptal.whyusingit.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phptal.install.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="ARTICLE"
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="PHPTAL.FIRSTEXAMPLE"
+>First example</A
+></H1
+><HR></DIV
+><P
+>&#13;To get a first impression about PHPTAL usage, a first simple example is better
+than many words.&#13;</P
+><P
+>&#13;Your template is a valid xml/html document (with a root entity). Here a file
+named '<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>my_template_file.html</I
+></SPAN
+>'.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;?xml version="1.0"?&#62; 
+&#60;html&#62;
+&#60;head&#62;
+  &#60;title tal:content="title"&#62;
+  place for the page title
+  &#60;/title&#62;
+&#60;/head&#62;
+&#60;body&#62;
+  &#60;h1 tal:content="title"&#62;sample title&#60;/h1&#62;
+  &#60;table&#62;
+  &#60;tr&#62;
+    &#60;td&#62;name&#60;/td&#62;
+    &#60;td&#62;phone&#60;/td&#62;
+  &#60;/tr&#62;
+  &#60;tr tal:repeat="item result"&#62; 
+    &#60;td tal:content="item/name"&#62;item name&#60;/td&#62;
+    &#60;td tal:content="item/phone"&#62;item phone&#60;/td&#62;
+  &#60;/tr&#62;
+  &#60;tr tal:replace=""&#62; 
+    &#60;td&#62;sample name&#60;/td&#62;
+    &#60;td&#62;sample phone&#60;/td&#62;
+  &#60;/tr&#62;
+  &#60;tr tal:replace=""&#62;
+    &#60;td&#62;sample name&#60;/td&#62;
+    &#60;td&#62;sample phone&#60;/td&#62;
+  &#60;/tr&#62;
+&#60;/table&#62;
+&#60;/body&#62; 
+&#60;/html&#62;</PRE
+><P
+>&#13;In php, you just have to include the PHPTAL library and maybe configure a few
+variables to customize the template system.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;?php 
+require_once "PHPTAL.php";
+
+// create a new template object 
+$template = new PHPTAL("my_template_file.html");
+
+// the Person class 
+class Person 
+{ 
+    var $name; 
+    var $phone;
+    function Person($name, $phone) 
+    { 
+        $this-&#62;name = $name; 
+        $this-&#62;phone = $phone; 
+    } 
+};
+
+// let's create an array of objects for test purpose 
+$result = array(); 
+$result[] = new Person("foo", "01-344-121-021"); 
+$result[] = new Person("bar", "05-999-165-541"); 
+$result[] = new Person("baz", "01-389-321-024"); 
+$result[] = new Person("buz", "05-321-378-654");
+
+// put some data into the template context
+$template-&#62;set("title", "the title value");
+$template-&#62;set("result", $result);
+
+// execute template
+$res = $template-&#62;execute();
+// result may be an error
+if (PEAR::isError($res)) {
+    echo $res-&#62;toString(), "\n";
+} else {
+    echo $res;
+}
+
+?&#62;</PRE
+><P
+>&#13;If you execute the php script, you will obtain something similar to what
+follows.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;?xml version="1.0"?&#62; 
+&#60;html&#62;
+  &#60;head&#62;
+    &#60;title&#62;the title value&#60;/title&#62;
+  &#60;/head&#62;
+  &#60;body&#62;
+    &#60;h1&#62;the title value&#60;/h1&#62;
+    &#60;table&#62; 
+    &#60;tr&#62;
+      &#60;td&#62;name&#60;/td&#62;
+      &#60;td&#62;phone&#60;/td&#62;
+    &#60;/tr&#62;
+    &#60;tr&#62;
+      &#60;td&#62;foo&#60;/td&#62;
+      &#60;td&#62;01-344-121-021&#60;/td&#62;
+    &#60;/tr&#62;&#60;tr&#62; &#60;td&#62;bar&#60;/td&#62;
+      &#60;td&#62;05-999-165-541&#60;/td&#62;
+    &#60;/tr&#62;&#60;tr&#62; &#60;td&#62;baz&#60;/td&#62;
+      &#60;td&#62;01-389-321-024&#60;/td&#62;
+    &#60;/tr&#62;&#60;tr&#62; &#60;td&#62;buz&#60;/td&#62;
+      &#60;td&#62;05-321-378-654&#60;/td&#62;
+    &#60;/tr&#62;
+    &#60;/table&#62;
+  &#60;/body&#62;
+&#60;/html&#62;</PRE
+><P
+>&#13;Well, i assume you don't mind 'too' much about cariage returns in the html code
+:) If so, take a look at output filtering to find a way to clean the html
+PHPTAL produce.&#13;</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phptal.whyusingit.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phptal.install.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>Why you should use PHPTAL</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>Installation</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>*:BLOCK</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Template language"
+HREF="phptal.language.html"><LINK
+REL="PREVIOUS"
+TITLE="PHPTAL"
+HREF="phptal.language.phptal.html"><LINK
+REL="NEXT"
+TITLE="PHPTALES"
+HREF="phptal.language.phptales.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phptal.language.phptal.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Template language</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phptal.language.phptales.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.BLOCK"
+>*:BLOCK</A
+></H1
+><P
+>&#13;<SPAN
+CLASS="emphasis"
+><I
+CLASS="EMPHASIS"
+>*:block</I
+></SPAN
+> is a syntax sugar for elements which contains
+many tal attributes and which are not to be echoed. &#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#13;&#60;tal:block define="myvar string:Some value"/&#62;
+
+is the same as :
+
+&#60;span tal:define="myvar string:Some value"/&#62;
+
+
+&#60;tal:block condition="someCondition" repeat="item someRepeat"&#62;
+  &#60;div metal:use-macro="x"/&#62;
+&#60;/tal:block&#62;
+
+is the same as :
+
+&#60;div tal:omit-tag="" 
+     tal:condition="someCondition" 
+     tal:repeat="item someRepeat"&#62;
+  &#60;div metal:use-macro="x"/&#62;
+&#60;/div&#62;&#13;</PRE
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phptal.language.phptal.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phptal.language.phptales.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PHPTAL</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="phptal.language.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>PHPTALES</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>Why you should use PHPTAL</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="PREVIOUS"
+TITLE="About"
+HREF="phptal.about.html"><LINK
+REL="NEXT"
+TITLE="First example "
+HREF="phptal.firstexample.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="ARTICLE"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phptal.about.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+></TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phptal.firstexample.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="ARTICLE"
+><DIV
+CLASS="TITLEPAGE"
+><H1
+CLASS="TITLE"
+><A
+NAME="PHPTAL.WHYUSINGIT"
+>Why you should use PHPTAL</A
+></H1
+><HR></DIV
+><P
+>&#13;XML/HTML templates exists to separate logic from presentation in web services.
+This separation brings more than one benefits in its luggage.
+
+<P
+></P
+><UL
+><LI
+><P
+>better application design</P
+></LI
+><LI
+><P
+>easier task repartition</P
+></LI
+><LI
+><P
+>better maintainability</P
+></LI
+><LI
+><P
+>web skins</P
+></LI
+></UL
+></P
+><P
+>&#13;Most template systems uses &lt;? ?&gt;, &lt;&percnt; &percnt;&gt; or
+&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt; tags to find their marks. It allow easier
+template system development but that doesn't really help template designers.&#13;</P
+><P
+>&#13;The idea behind TAL is to allow WYSIWYG template edition with sample rendering
+without stranges tags everywhere. That's why TAL work on xml attributes in
+stead of markup tags.&#13;</P
+><P
+>&#13;If you already worked with a simple template system, you must have viewed
+something looking like :
+
+<PRE
+CLASS="PROGRAMLISTING"
+>&#60;table&#62;
+  &#60;%loop myarray as myitem %&#62;
+  &#60;tr&#62; 
+    &#60;td&#62;&#60;% myitem %&#62;&#60;/td&#62;
+  &#60;/tr&#62;
+  &#60;%/loop%&#62; 
+&#60;/table&#62;</PRE
+></P
+><P
+>&#13;Well with phptal you now can do :
+
+<PRE
+CLASS="PROGRAMLISTING"
+>&#60;table&#62; 
+&#60;tr tal:repeat="myitem myarray"&#62;
+  &#60;td tal:content="myitem"&#62;
+  text replaced by the item value
+  &#60;/td&#62;
+  &#60;td tal:replace=""&#62;sample 1&#60;/td&#62; 
+  &#60;td tal:replace=""&#62;sample 2&#60;/td&#62; 
+  &#60;td tal:replace=""&#62;sample 3&#60;/td&#62; 
+&#60;/tr&#62; 
+&#60;/table&#62;</PRE
+></P
+><P
+>&#13;In WYSIWYG mode, the above code will render correctly with samples text and you
+can present it to your clients even if the code required to get 'myarray'
+values doesn't exist yet.&#13;</P
+><P
+>&#13;Another big advantage of PHPTAL is that you benefit from more than 2 years of
+ZOPE community experiences, documentation, examples, help. PHPTAL rely on this
+community to provide its users a great amount of knowledge.&#13;</P
+><P
+>&#13;PHPTAL is designed to be as customizable as possible for advanced developpers
+and performance eaters systems but still easy to use for beginers with a
+comfortable and simple default behaviour.&#13;</P
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phptal.about.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phptal.firstexample.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>About</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+>&nbsp;</TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>First example</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,268 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>interface PHPTAL_I18N</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PHP Integration "
+HREF="phpapi.html"><LINK
+REL="PREVIOUS"
+TITLE="interface PHPTAL_SourceLocator"
+HREF="phptal.sourcelocator.html"><LINK
+REL="NEXT"
+TITLE="interface Iterator"
+HREF="x569.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phptal.sourcelocator.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>PHP Integration</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="x569.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="PHPTAL.I18N"
+>interface PHPTAL_I18N</A
+></H1
+><P
+>I18N stands for 'internationalisation', PHPTAL default translation system
+is based on the GetText package. This interface allow you to replace the
+default translation system by yourself.</P
+><P
+></P
+><P
+><B
+>methods list</B
+></P
+><UL
+><LI
+><P
+>void <A
+HREF="phptal.i18n.html#PHPTAL.I18N.SET"
+>set</A
+>($varName, $value)</P
+></LI
+><LI
+><P
+>string <A
+HREF="phptal.i18n.html#PHPTAL.I18N.TRANSLATE"
+>translate</A
+>($key)</P
+></LI
+></UL
+><DIV
+CLASS="EXAMPLE"
+><A
+NAME="AEN548"
+></A
+><P
+><B
+>Example 6. I18N implementation</B
+></P
+><PRE
+CLASS="PROGRAMLISTING"
+>class MyTranslateSystem extends PHPTAL_I18N
+{
+    var $_context = array();
+    
+    function set($varName, $value)
+    {
+        $this-&#62;_context[$varName] = $value;
+    }
+
+    function translate($value)
+    {
+        // interpolate variables
+        while (preg_match('/\$\{(.*?)\}/sm', $value, $m)) {
+            list($src, $var) = $m;
+            $varValue = $this-&#62;_context[$var];
+            $value = str_replace($src, $varValue, $value);
+        }
+        
+        // reverse translated string so austrian people can read it :)
+        $result = "";
+        for ($i = strlen($value); $i &#62;= 0; $i--) {
+            $result .= $value[$i]; 
+        }
+        return $result;
+    }
+}
+
+$tpl = PHPTAL('myfile.html');
+
+$tpl-&#62;setTranslator(new MyTranslateSystem());</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.I18N.SET"
+>method set</A
+></H2
+><P
+>PHPTAL will call this method whenever a i18n:name attribute is used. Your
+translation system must store these values until the translate method is
+called. </P
+><P
+>Parameters</P
+><P
+></P
+><UL
+><LI
+><P
+>string $varName : the variable name</P
+></LI
+><LI
+><P
+>string $value : the variable value</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.I18N.TRANSLATE"
+>method translate</A
+></H2
+><P
+>This method must returns the translated value of $key interpolating
+${XXX} with previously set variables.  </P
+><P
+>Parameters</P
+><P
+></P
+><UL
+><LI
+><P
+>string $key : key or string to translate</P
+></LI
+></UL
+><P
+>Return</P
+><P
+>string : the translated value</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phptal.sourcelocator.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="x569.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>interface PHPTAL_SourceLocator</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="phpapi.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>interface Iterator</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

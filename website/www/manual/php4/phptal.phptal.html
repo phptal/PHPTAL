@@ -1,0 +1,403 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>class PHPTAL </TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="PHP Integration "
+HREF="phpapi.html"><LINK
+REL="PREVIOUS"
+TITLE="PHP Integration "
+HREF="phpapi.html"><LINK
+REL="NEXT"
+TITLE="interface PHPTAL_Cache"
+HREF="phptal.cache.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phpapi.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>PHP Integration</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phptal.cache.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL"
+>class PHPTAL</A
+></H1
+><P
+>&#13;This is the main class that allow you to interact with PHPTAL. Here are
+presented main PHPTAL methods. More methods will be explained in 'interfaces'
+chapters as their usage is related to these interfaces.&#13;</P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.CONSTRUCTOR"
+>constructor</A
+></H2
+><P
+>&#13;This is the default PHPTAL constructor.&#13;</P
+><P
+>&#13;Parameters&#13;</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;string $file : the template file, absolute path or path relative to
+repository 
+
+  </P
+></LI
+><LI
+><P
+>&#13;string $repository (optional) : templates application root path 
+
+  </P
+></LI
+><LI
+><P
+>&#13;string $php_cache_dir (optional) : path where intermediate php files
+should be created
+
+  </P
+></LI
+></UL
+><P
+>&#13;Examples&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>// simple template creation 
+$tpl = new PHPTAL('/path/to/templates/mypage.html');
+
+// creation with a repository 
+$tpl = new PHPTAL('mypage.html', '/path/to/templates/');
+
+// creation with a repository and a intermediate code destination
+$tpl = new PHPTAL('mypage.html', '/path/to/templates/', '/tmp/phptal/');</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.SET"
+>method set</A
+></H2
+><P
+>&#13;This method set a variable into the template execution context.&#13;</P
+><P
+>&#13;Parameters&#13;</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;string $variableName : the variable name &#13;</P
+></LI
+><LI
+><P
+>&#13;mixed $value : the variable value&#13;</P
+></LI
+></UL
+><P
+>&#13;Examples&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>// push a string into the template context 
+$tpl-&#62;set("myString", "this is my string value");
+
+// put a number into the template context 
+$tpl-&#62;set("myNumber", 10);
+
+// put an object into the template context 
+$tpl-&#62;set("anObject", new MyObject());
+
+// put an array into the template context 
+$tpl-&#62;set("anArray", array(1,2,3,4));</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.SETREF"
+>method setRef</A
+></H2
+><P
+>&#13;This method set a variable by reference, into the template execution context.
+You should use this method in stead of set() whenever you have to pass an
+object or an existing variable to the template. This prevent your variable to
+be duplicated in your script.&#13;</P
+><P
+>&#13;Parameters&#13;</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;string $variableName : the variable name 
+
+  </P
+></LI
+><LI
+><P
+>&#13;mixed $value : an existing variable reference
+
+  </P
+></LI
+></UL
+><P
+>&#13;Example&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>// add an existing variable to the template without duplication 
+$tpl-&#62;setRef("myVariable", $myVar);</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.SETALL"
+>method setAll</A
+></H2
+><P
+>&#13;This method replace the template context with an whole new associative array.&#13;</P
+><P
+>&#13;Parameters&#13;</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;hashtable $hash : the associative array of name/value pair
+
+  </P
+></LI
+></UL
+><P
+>&#13;Example&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>// create new associative array 
+$newContext = array("myVar" =&#62; "someValue", "other" =&#62; 10);
+// set the new context 
+$tpl-&#62;setAll($newContext);</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.SETOUTPUTMETHOD"
+>method setOutputMethod</A
+></H2
+><P
+>&#13;This method specify the output format of template execution result. By default
+template ouputs XHTML, this means, some browser criticals tags like IMG or BR
+that mustn't contain data are rewrote by PHPTAL to ensure correct page
+rendering. If you want to ouput real XML with an XHTML input, you should use
+this method with PHPTAL_XML parameter.&#13;</P
+><P
+>&#13;There's no need to call this method if you want output regular XHTML.&#13;</P
+><P
+>&#13;Parameter&#13;</P
+><P
+></P
+><UL
+><LI
+><P
+>&#13;int $mode : PHPTAL_XML
+
+  </P
+></LI
+></UL
+><P
+>&#13;Example&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>// explicitely output XML 
+$tpl-&#62;setOutputMethod(PHPTAL_XML);</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.ISVALID"
+>method isValid</A
+></H2
+><P
+>&#13;This method tells if the template source was found. Originaly named
+'fileExists()', this method is now called 'isValid()', as template sources can
+be retrieved not only from the file system (see PHPTAL_SourceResolver and
+PHPTAL_SourceLocator).&#13;</P
+><P
+>&#13;Returns&#13;</P
+><P
+>&#13;boolean : true if template source is found and valid false otherwise.&#13;</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.REALPATH"
+>method realPath</A
+></H2
+><P
+>&#13;This method returns the real template source path as returned by the
+PHPTAL_SourceLocator in use. The default behavour is to return the absolute
+template file path on the file system. &#13;</P
+><P
+>&#13;Returns&#13;</P
+><P
+>&#13;string : the absolute template source path&#13;</P
+><P
+>&#13;Throws&#13;</P
+><P
+>&#13;FileNotFound if source resolvers was not able to locate template&#13;</P
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.PHPTAL.EXECUTE"
+>method execute</A
+></H2
+><P
+>&#13;This method 'execute' the template with the given context and return the
+resulting XML/XHTML.&#13;</P
+><P
+>&#13;Returns&#13;</P
+><P
+>&#13;string : the template execution result.&#13;</P
+><P
+>&#13;Throws&#13;</P
+><P
+>&#13;FileNotFound, PHPTAL_ParseError, PHPTAL_ExpressionError, GetText_Error&#13;</P
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phpapi.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phptal.cache.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>PHP Integration</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="phpapi.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>interface PHPTAL_Cache</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<HTML
+><HEAD
+><TITLE
+>PHPTAL</TITLE
+><META
+NAME="GENERATOR"
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"><LINK
+REL="HOME"
+TITLE="PHPTAL - PHP Template Attribute Language"
+HREF="index.html"><LINK
+REL="UP"
+TITLE="Template language"
+HREF="phptal.language.html"><LINK
+REL="PREVIOUS"
+TITLE="I18N"
+HREF="phptal.language.i18n.html"><LINK
+REL="NEXT"
+TITLE="*:BLOCK"
+HREF="phptal.language.block.html"><LINK
+REL="STYLESHEET"
+TYPE="text/css"
+HREF="stylesheet.css"></HEAD
+><BODY
+CLASS="SECTION"
+BGCOLOR="#FFFFFF"
+TEXT="#000000"
+LINK="#0000FF"
+VLINK="#840084"
+ALINK="#0000FF"
+><DIV
+CLASS="NAVHEADER"
+><TABLE
+SUMMARY="Header navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TH
+COLSPAN="3"
+ALIGN="center"
+>PHPTAL - PHP Template Attribute Language</TH
+></TR
+><TR
+><TD
+WIDTH="10%"
+ALIGN="left"
+VALIGN="bottom"
+><A
+HREF="phptal.language.i18n.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="80%"
+ALIGN="center"
+VALIGN="bottom"
+>Template language</TD
+><TD
+WIDTH="10%"
+ALIGN="right"
+VALIGN="bottom"
+><A
+HREF="phptal.language.block.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+></TABLE
+><HR
+ALIGN="LEFT"
+WIDTH="100%"></DIV
+><DIV
+CLASS="SECTION"
+><H1
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTAL"
+>PHPTAL</A
+></H1
+><P
+>&#13;These attributes are not defined in TAL specifications but should make the like
+of template designers easier for some kind of jobs. I made aliases to these
+attributes so you can use tal:include or tal:src-include instead of
+phptal:include and phptal:src-include. &#13;</P
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTAL.INCLUDE"
+>phptal:include</A
+></H2
+><P
+>&#13;This attribute include and evaluate an external template in the current one.
+The included template inherit from current template context (variables).&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;span phptal:include="string:path/to/some/file.html"/&#62;</PRE
+></DIV
+><DIV
+CLASS="SECTION"
+><H2
+CLASS="SECTION"
+><A
+NAME="PHPTAL.LANGUAGE.PHPTAL.SRC-INCLUDE"
+>phptal:src-include</A
+></H2
+><P
+>&#13;This attribute include the content of a file without interpreting it.&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;pre phptal:src-include="string:somepage.html"&#62;
+here is included the content of somepage.html 
+&#60;/pre&#62;</PRE
+><P
+>&#13;If you attempt to use this attribute with not well formated source, you will
+break your XML/XHTML page format, phptal:src-include assume the page you try to
+include is a well formatted XML file.&#13;</P
+><P
+>&#13;If you just want to include the source of an unknown format file (programming
+language source for instance), you can do as follow :&#13;</P
+><PRE
+CLASS="PROGRAMLISTING"
+>&#60;!-- first define a variable which receive the file content --&#62; 
+&#60;span tal:define="myvar"&#62; 
+  &#60;span phptal:src-include="string:somepath.html"/&#62; 
+&#60;/span&#62;
+
+&#60;!-- then echoing the variable, with htmlencode it --&#62; 
+&#60;pre tal:content="myvar"/&#62;</PRE
+></DIV
+></DIV
+><DIV
+CLASS="NAVFOOTER"
+><HR
+ALIGN="LEFT"
+WIDTH="100%"><TABLE
+SUMMARY="Footer navigation table"
+WIDTH="100%"
+BORDER="0"
+CELLPADDING="0"
+CELLSPACING="0"
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+><A
+HREF="phptal.language.i18n.html"
+ACCESSKEY="P"
+>Prev</A
+></TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="index.html"
+ACCESSKEY="H"
+>Home</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+><A
+HREF="phptal.language.block.html"
+ACCESSKEY="N"
+>Next</A
+></TD
+></TR
+><TR
+><TD
+WIDTH="33%"
+ALIGN="left"
+VALIGN="top"
+>I18N</TD
+><TD
+WIDTH="34%"
+ALIGN="center"
+VALIGN="top"
+><A
+HREF="phptal.language.html"
+ACCESSKEY="U"
+>Up</A
+></TD
+><TD
+WIDTH="33%"
+ALIGN="right"
+VALIGN="top"
+>*:BLOCK</TD
+></TR
+></TABLE
+></DIV
+></BODY
+></HTML
+>

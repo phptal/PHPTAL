@@ -29,7 +29,7 @@ class MyTrigger implements PHPTAL_Trigger
     public $useCache = false;
     private $_cache  = false;
     
-    public function start($tpl)
+    public function start($id, $tpl)
     {
         if ($this->_cache){
             $this->useCache = true;
@@ -41,7 +41,7 @@ class MyTrigger implements PHPTAL_Trigger
         return PHPTAL_Trigger::PROCEED;
     }
     
-    public function end($tpl)
+    public function end($id, $tpl)
     {
         if ($this->_cache == null){
             $this->_cache = ob_get_contents();

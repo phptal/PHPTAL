@@ -1,0 +1,91 @@
+body 
+{
+	padding-top: 0em;
+	margin-top: 0em;
+	margin-left: 40px;
+	margin-right: 40px;
+	background-position: top left;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+
+	text-align: justify;
+	font-family: Arial, Helvetica;
+}
+
+h1.title 
+{
+	font-size: 20pt;
+	font-weight: bold;
+	color: #000;
+	margin: 0px 0px 20px 0px;
+	padding: 0px 0px 0px 0px;
+}
+
+a
+{
+	color: #700;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+a:hover
+{
+	background-color: #700;
+	color: #FFF;
+	font-weight: bold;
+}
+
+div.floatingMenu 
+{
+	margin-top: 0em;
+	margin-left:0em; 
+	padding: 0em 0em 0em 0em; 
+	padding-left: 20px;
+	float: right;
+	position: right;
+}
+
+div.floatingMenu h4
+{
+	margin-bottom: 5px;
+	padding-bottom: 0px;
+	text-decoration: underline;
+}
+
+div.pageContent
+{
+/*	margin-right: 6em; */
+}
+
+div.copyright
+{
+	font-size: 10pt;
+	text-align: center;
+}
+
+div.themeSelect
+{
+	padding-top: 40px;
+	font-size: 12px;
+	text-align: center;	
+}
+
+code
+{
+    font-size: 14px;
+    color: #005;
+    font-weight: bold;
+}
+
+pre
+{
+    font-family: courier, news;
+    font-weight: normal;
+    font-size: 12px;
+    border: 1px dotted #008;
+    background: #EEE;
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 20px;
+}

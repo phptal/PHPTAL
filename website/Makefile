@@ -3,7 +3,12 @@ all:
 
 deploy:
 	cleanup
-	rsync -avz --rsh="ssh -l lbedubourg -p 222" www/ lbedubourg@motion-twin.com:www/
-	ssh -p 222 lbedubourg@motion-twin.com "find www -type d | xargs chmod 755"
-	ssh -p 222 lbedubourg@motion-twin.com "find www -type f | xargs chmod 644"
-
+	rsync -avz \
+	--exclude=".svn" \
+	--exclude="files/.svn" \
+	--exclude="files/old/.svn" \
+	--exclude="*~" \
+	--exclude=".*.swp" \
+	--rsh="ssh -l phptal" www/ phptal@phptal.motiontwin.com:www/
+	ssh phptal@phptal.motiontwin.com "find www -type d | xargs chmod 755"
+	ssh phptal@phptal.motiontwin.com "find www -type f | xargs chmod 644"
