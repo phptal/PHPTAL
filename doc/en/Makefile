@@ -2,6 +2,8 @@ XMLTO=/usr/bin/xmlto
 PARMS=-m config.xsl
 BOOK=book.xml
 
+.PHONY:split onepage plaintext
+
 all:split onepage plaintext
 
 split:
