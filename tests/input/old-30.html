@@ -1,0 +1,12 @@
+<root>
+    <tal:block define="foo string:my foo string; true php:true" />
+    <tal:block replace="foo"/>
+    
+    <tal:block condition="true">true</tal:block>
+
+    <metal:block define-macro="test">
+        test macro content
+    </metal:block>
+
+    <metal:block use-macro="test"/>
+</root>

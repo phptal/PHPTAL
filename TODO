@@ -1,0 +1,30 @@
+                                  ___________                                  
+                                  P H P T A L
+
+                                  To do list.
+
+tal:*
+[x]  comment
+[x]  replace
+[x]  content
+[x]  define         
+[x]  condition
+[x]  attributes
+[x]  repeat
+[x]  on-error
+
+metal:*
+[x]  define-macro
+[x]  use-macro
+[x]  define-slot
+[x]  fill-slot
+
+i18n:*
+[ ]  domain
+[ ]  translate
+[ ]  name
+
+
+phptal:tales="mode"
+[X]
+

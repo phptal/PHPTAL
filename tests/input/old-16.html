@@ -1,0 +1,56 @@
+<html>
+
+    Value not touched
+    <input type="text" name="test1" value="passed" 
+      tal:attributes="value value | default"/>
+    
+    No value :
+    <input type="text" name="test2" 
+      tal:attributes="value value | default"/>
+    
+    Name and empty value :
+    <input type="text" name="test3" value=""
+      tal:attributes="value value | default;
+                      name  name  | default;"/>
+                      
+    No name and no value :
+    <input type="text" 
+      tal:attributes="value value | default;
+                      name  name  | default;"/>
+
+
+                      
+    <span tal:define="name 'test'; value 'passed2'" />
+
+    
+
+    Value replaced by passed2 :
+    <input type="text" name="test1" value="passed" 
+      tal:attributes="value value | default"/>
+    
+    Value set to passed2 :
+    <input type="text" name="test2" 
+      tal:attributes="value value | default"/>
+    
+    Name replaced by test and value by passed2 :
+    <input type="text" name="test3" value=""
+      tal:attributes="value value | default;
+                      name  name  | default;"/>
+                      
+    Value set to passed2 and name to test :
+    <input type="text" 
+      tal:attributes="name  name  | default;
+                      value value | default;"/>
+    
+
+    <span tal:comment="Redefine for new test" 
+          tal:define="name 'test'; value nothing"/>
+                      
+
+    Value not touched name set to test :
+    <input type="text" value="stay"
+      tal:attributes="value value | default;
+                      name  name  | default;"/>
+    
+</html>
+

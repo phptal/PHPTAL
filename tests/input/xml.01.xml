@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE HTML ...>
+<html>
+  <head>
+    <style type="text/css">
+    <![CDATA[
+    .foo {
+      background-color: #000;
+    }
+    ]]>
+    </style>
+  </head>
+  <body>
+    <?php echo "prout"; ?>
+    <h1>my title</h1>
+    <a href="foo.html" title="bar">foo</a>
+    <pre>
+    This is my pre formated content
+       This is my pre formated content
+          This is my pre formated content
+    </pre>
+    <!-- this is some comment
+      -- another one
+      -- yet another
+      -->
+  </body>
+</html>

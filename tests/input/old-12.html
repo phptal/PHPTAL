@@ -1,0 +1,9 @@
+<html>
+    <div metal:define-macro="test">
+        <span tal:replace="myparam"/>
+    </div>
+
+    <div metal:use-macro="test">
+        <span tal:define="myparam string:some test text"/>
+    </div>
+</html>

@@ -1,0 +1,11 @@
+<root>
+  <test>
+  This is some test which 
+  should accept < and > characters 
+  within text nodes.
+  </test>
+  <test>
+  This only works if the "<" is separated from some [a-z0-9] 
+  character, otherwise, a node start is assumed.
+  </test>
+</root>

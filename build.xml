@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+
+<project name="PHPTAL" basedir="." default="main">
+  <property name="version" value="1.1"/>
+  <property name="build.base.dir" value="build"/>
+  <property name="pkgname" value="${phing.project.name}-${version}"/>
+  <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
+
+  <fileset dir="classes" id="classes">
+    <include name="**"/>
+  </fileset>
+  <fileset dir="classes" id="lib-entry">
+    <include name="PHPTAL.php"/>
+  </fileset>
+  <fileset dir="classes/PHPTAL" id="lib-classes">
+    <include name="**"/>
+  </fileset>
+
+  <fileset dir="docs" id="docs">
+    <include name="**"/>
+  </fileset>
+
+  <target name="main" if="version" depends="versioncheck">
+    <phingcall target="test"/>
+    <phingcall target="build"/>
+    <phingcall target="pear-package"/>
+    <phingcall target="tar"/>
+  </target>
+
+  <target name="doc">
+    <php expression="`phpdoc -d classes -t doc -p`"/>
+  </target>
+
+  <target name="test">
+    <php expression="include 'tests/run-tests.php'"/>
+  </target>
+  
+  <target name="versioncheck" unless="version">
+    <echo message="-[version not specified]----------------------"/>
+    <echo message="Please specify version for this package."/>
+    <echo message=" "/>
+    <echo message="Or rerun phing using : "/>
+    <echo message="phing -Dversion=1.2.3b2"/>
+    <echo message="----------------------------------------------"/>
+    <input propertyname="version" promptChar=":">Version</input>
+    <property name="pkgname" value="${phing.project.name}-${version}" override="true"/>
+    <property name="build.src.dir" value="${build.base.dir}/${pkgname}" override="true"/>
+  </target>
+
+  <target name="build">
+    <delete dir="${build.base.dir}"/>
+    <copy todir="${build.src.dir}">
+      <fileset refid="lib-entry"/>
+      <fileset refid="lib-classes"/>
+      <fileset refid="docs"/>
+    </copy>
+  </target>
+
+  <target name="pear-package">
+    <pearpkg 
+      name="${phing.project.name}" 
+      dir="${build.src.dir}" 
+      destfile="${build.base.dir}/package.xml">
+      <fileset refid="lib-entry"/>
+      <fileset refid="lib-classes"/>
+      <fileset refid="docs"/>
+
+      <option name="notes">Zope Page Template implementation for PHP5</option>
+      <option name="description">Zope Page Template implementation for PHP5</option>
+      <option name="summary">PHPTAL for PHP5 supports tal, metal and i18n namespaces</option>
+      <option name="version" value="${version}"/>
+      <option name="state" value="beta"/>
+
+      <mapping name="installexceptions">  
+        <element key="PHPTAL.php" value="/"/>
+      </mapping>
+
+      <mapping name="maintainers">
+        <element>
+          <element key="handle" value="lbedubourg"/>
+          <element key="name" value="Laurent Bedubourg"/>
+          <element key="email" value="lbedubourg@motion-twin.com"/>
+          <element key="role" value="lead"/>
+        </element>
+      </mapping>
+
+      <mapping name="exceptions">
+        <element key="README" value="doc"/>
+        <element key="COPYING" value="doc"/>
+      </mapping>
+
+      <mapping name="dir_roles">  
+        <element key="text" value="doc"/>
+      </mapping>
+
+    </pearpkg>
+  </target>
+
+  <target name="tar">
+    <property name="tarfile" value="${build.base.dir}/${pkgname}.tar.gz"/>
+    <delete file="${tarfile}"/>
+    <tar destfile="${tarfile}" basedir="${build.base.dir}"/>
+  </target>
+
+</project>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<html>
+  <head>
+    <title>test document</title>
+  </head>
+  <body>
+    <h1>test document</h1>
+    <a href="http://phptal.sf.net">phptal</a>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+<span>
+
+<span tal:define="errorMessage">
+  <div class="error">An error occured, please retry</div>
+</span>
+
+<span tal:on-error="structure errorMessage">
+  <span tal:content="dummy/throwException"/>
+</span>
+
+</span>

@@ -1,0 +1,21 @@
+<div>
+  <div metal:define-macro="test1">
+    1:<span metal:define-slot="value">a value should go here</span>
+  </div>
+
+  <div metal:define-macro="test2">
+    2:<span metal:define-slot="value">a value should go here</span>
+    2:<span metal:define-slot="valuebis">another here</span>
+  </div>
+
+  <div metal:use-macro="test1">
+    <div metal:fill-slot="valuebis">xyz</div>
+    <div metal:fill-slot="value"  tal:omit-tag="">
+      <div metal:use-macro="test2">
+      <span metal:fill-slot="value">foo bar baz</span>
+      </div>
+    </div> 
+  </div>
+  
+</div>
+

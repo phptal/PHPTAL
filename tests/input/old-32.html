@@ -1,0 +1,9 @@
+<div metal:define-macro="recursion_macro">
+  <h1 tal:content="object/title">the object title</h1>
+  <div tal:repeat="object object/children">
+    <div metal:use-macro="recursion_macro"/>
+  </div>
+</div>
+
+<div metal:use-macro="recursion_macro"/>
+

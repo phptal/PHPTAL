@@ -1,0 +1,11 @@
+<html>
+Test expression with strange indentation :
+<span tal:replace="
+myVar 	|	 
+        my/other/var 
+	|		php:false
+                 |foo|bar|
+		
+                |'ok the string | passed'
+         | default" />
+</html>

@@ -1,0 +1,33 @@
+<span tal:omit-tag="" tal:comment="this tag head and foot are removed from result">
+
+<span tal:comment="set some data" 
+      tal:define="a string:a;
+                  b string:b;
+                  c string:c;"/>
+<span tal:define="a">prout</span>
+
+<span tal:content="a"/>
+<span tal:content="b"/>
+<span tal:content="c"/>
+
+   
+<!-- test attributes -->
+<a href="http://www.google.fr" 
+   tal:attributes="href a; title a;"
+   tal:content="c"
+>should be c</a>
+
+<a href="http://www.example.fr" 
+   tal:attributes="href string:http://www.pearfr.com">foo</a>
+
+<!-- test if -->
+<div tal:condition="php: c EQ 'c'">c == c</div>
+
+This should be equal to 'prout' : <div tal:replace="a"/>
+
+<div tal:on-error="string:error produced here correctly handled"><span tal:replace="unkown_path"/></div>
+
+<div tal:repeat="item php:array('a','b','c','d')">
+    <span tal:replace="repeat/item/index"/>: <span tal:content="item"/>
+</div>
+</span>

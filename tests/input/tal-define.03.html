@@ -1,0 +1,5 @@
+<span>
+  <span tal:define="foo bar | baz | string:hello; bar unknown | foo"/>
+  <span tal:content="foo"/>
+  <span tal:content="bar"/>
+</span>

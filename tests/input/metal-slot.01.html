@@ -1,0 +1,17 @@
+<div>
+  <div metal:define-macro="test">
+    <div metal:define-slot="alternative">
+       This is my alternative text which is shown when alternative slot is not filled
+    </div>
+  </div>
+
+  <div metal:use-macro="test">
+    <div metal:fill-slot="alternative">
+       I don't want the alternative
+    </div>
+  </div>
+
+  <div metal:use-macro="test">
+     I want the alternative
+  </div>
+</div>
