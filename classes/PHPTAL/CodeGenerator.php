@@ -40,6 +40,16 @@ class PHPTAL_CodeGenerator
         return $this->_result;
     }
 
+    public function setOutputMode($mode)
+    {
+        $this->_outputMode = $mode;
+    }
+    
+    public function getOutputMode()
+    {
+        return $this->_outputMode;
+    }
+
     public function setDocType( $dt )
     {
         $this->_doctype = $dt;
@@ -271,6 +281,7 @@ class PHPTAL_CodeGenerator
         array_push( $this->_codeBuffer, $codeLine );
     }
 
+
     private function indentSpaces() 
     { 
         return str_pad('', $this->_indent * 4); 
@@ -307,6 +318,7 @@ class PHPTAL_CodeGenerator
     private $_functionPrefix = "";
     private $_doctype = "";
     private $_encoding;
+    private $_outputMode;
 }
 
 ?>

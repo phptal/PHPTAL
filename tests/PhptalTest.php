@@ -28,6 +28,7 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
     function test01()
     {
         $tpl = new PHPTAL('input/phptal.01.html');
+        $tpl->setOutputMode(PHPTAL_XML);
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);
     }

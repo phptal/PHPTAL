@@ -149,7 +149,9 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         $this->generator->pushHtml('<'.$this->name);
         $this->generateAttributes();
 
-        if (PHPTAL_Defs::isEmptyTag($this->name) || !$this->hasContent()){
+        // if (PHPTAL_Defs::isEmptyTag($this->name) || !$this->hasContent()){
+        if (PHPTAL_Defs::isEmptyTag($this->name) ||
+            (!$this->hasContent() && $this->generator->getOutputMode() == PHPTAL_XML)){
             $this->generator->pushHtml('/>');
         }
         else {
@@ -207,7 +209,9 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     {
         if ($this->headFootDisabled) return;
         if (PHPTAL_Defs::isEmptyTag($this->name)) return;
-        if ($this->hasContent() == false) return;
+        if (!$this->hasContent() && $this->generator->getOutputMode() == PHPTAL_XML){
+            return;
+        }
 
         if ($this->headFootPrintCondition) {
             $this->generator->doIf($this->headFootPrintCondition);

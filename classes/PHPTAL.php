@@ -24,7 +24,8 @@ if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
 }
 define('PHPTAL_VERSION', '1_0_0');
-
+define('PHPTAL_XHTML',1);
+define('PHPTAL_XML', 2);
 
 require_once 'PHPTAL/RepeatController.php';
 
@@ -67,6 +68,11 @@ class PHPTAL
     public function __clone()
     {
         $this->_repeat = clone($this->_repeat);
+    }
+
+    public function setOutputMode( $mode=PHPTAL_XHTML )
+    {
+        $this->_outputMode = $mode;
     }
 
     public function setTemplateRepository( $rep )
@@ -256,6 +262,7 @@ class PHPTAL
         require_once 'PHPTAL/Parser.php';
         require_once 'PHPTAL/CodeGenerator.php';
         $generator = new PHPTAL_CodeGenerator($this->_encoding);
+        $generator->setOutputMode($this->_outputMode);
         $parser = new PHPTAL_Parser($generator);
         $tree = $parser->parseFile($this->_realPath);
 
@@ -310,6 +317,7 @@ class PHPTAL
     private $_encoding = 'UTF-8';    
     private $_nothrow = false;
     private $_translator = null;
+    private $_outputMode = PHPTAL_XHTML;
 }
 
 
