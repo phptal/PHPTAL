@@ -354,12 +354,20 @@ function phptal_path( $base, $path, $nothrow=false )
         if (isset($base->$current)) 
             return $path ? phptal_path($base->$current, $path, $nothrow) : $base->$current;
 
-        // if __get() exists, we use it 
-        //   unless __isset() exists and tell us not to do so
-        if (method_exists($base, '__get') && (!method_exists($base, '__isset') || $base->__isset($current))){
-            $result = $base->$current;
-            if (!is_null($result))
-                return $path ? phptal_path($result, $path, $nothrow) : $result;
+        if (method_exists($base, '__get')){
+            if (method_exists($base, '__isset')){
+                // if __isset() tell us the variable exists, then we believe it
+                if ($base->__isset($current)){
+                    $result = $base->$current;
+                    return $path ? phptal_path($result, $path, $nothrow) : $result;
+                }
+            }
+            else {
+                // just give it a try and discard the __get() result if null
+                $result = $base->$current;
+                if (!is_null($result))
+                    return $path ? phptal_path($result, $path, $nothrow) : $result;
+            }
         }
 
         // variable does not exists but overload of __call exists, we assume it
