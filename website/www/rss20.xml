@@ -1,0 +1,17 @@
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>PHPTAL - Template Attribute Language for PHP</title>
+    <link>http://phptal.motion-twin.com</link>
+    <description>PHPTAL Is the PHP Implementation of TAL/TALES/METAL/I18N</description>
+    <language>en-us</language>
+
+    <item>
+      <title>Opening of this rss feed</title>
+      <link>http://phptal.motion-twin.com</link>
+      <description>Openining of the rss feed.</description>
+      <dc:creator>Laurent Bedubourg</dc:creator>
+      <dc:date>2005-02-25</dc:date>    
+    </item>
+
+  </channel>
+</rss>

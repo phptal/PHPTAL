@@ -1,0 +1,313 @@
+<html metal:use-macro="page.html/main">
+  <tal:block 
+    define="VERSION string:1.0.0;
+            MAILING string:http://lists.motion-twin.com/mailman/listinfo/phptal;
+            SUBVERS string:https://svn.motion-twin.com/phptal"
+  />
+  <head>
+    <tal:block 
+    define="description string:The PHPTAL package, an implementation of TAL, METAL, I18N (the ZPT project) for PHP;
+            keywords    string:PHPTAL TAL METAL I18N ZPT XHTML HTML PHP template;
+            title       string:PHPTAL :: Template Attribute Language for PHP;
+            rsstitle    string:PHPTAL - news;
+            rsshref     string:/rss20.xml;"
+    />
+  </head>
+  <body metal:fill-slot="content" tal:omit-tag="">
+
+    <div id="header">
+    <h1>PHPTAL</h1>
+    <h2>Template Attribute Language for PHP</h2>
+    </div>
+    
+    <ul>
+      <li><a href="#news">News</a></li>
+      <li><a href="#intro">Introduction</a></li>
+      <li><a href="#manuals">Manuals</a></li>
+      <li><a href="#download">Download</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <!-- 
+    ###################################################################
+    NEWS
+    ###################################################################
+    -->
+    <h1 id="news">News</h1>
+
+    <div class="pon">
+      <h2>PHPTAL hosted on motion-twin.com</h2>
+      <div class="date">2005-02-16</div>
+      <div class="content">
+        <p>
+        As planed some times ago, i moved PHPTAL on one of my company's
+        servers.
+        </p>
+        
+        <p>
+        This will allow me to do more frequent updates and releases.
+        </p>
+
+        <p>
+        Also changes : 
+        </p>
+
+        <ul>
+          <li><a href="${SUBVERS}">PHPTAL subversion repository</a></li>
+          <li><a href="${MAILING}">PHPTAL mailing list</a></li>
+        </ul>
+      </div>
+    </div>
+      
+    <!-- 
+    ###################################################################
+    INTRODUCTION
+    ###################################################################
+    -->
+    <h1 id="intro">Introduction</h1>
+
+    <p>
+    <em>PHPTAL</em> is a <abbr title="PHP Hyper Processor">PHP</abbr>
+    implementation of <abbr title="Zope Page Templates">ZPT</abbr>. To be
+    short, PHPTAL is a XHTML template library for PHP.
+    </p>
+
+    <p>
+    While most web developpers continue to use ASP/JSP/PHP tags as the
+    core language of their templates, the Zope community came with a
+    refreshing idea named <abbr title="Template attribute
+    language">TAL</abbr>. The idea was to move presentation actions 
+    inside XHTML attributes instead of using plain tags or elements.
+    </p>
+
+    <p>
+    Let's start with a simple PHP exemple (usually reproduceable in ASP/JSP):
+    </p>
+
+<pre>
+<!--code
+<?php foreach ($values as $value): ?>
+<div id="item">
+  <div id="title">
+    <?php if ($value->hasDate()): ?><?=$value->getDate()?><?php endif; ?>
+    <a href="<?= $value->getUrl() ?>"><?= htmlentities($value->getTitle()) ?></a>
+  </div>
+  <div id="content">
+    <?= htmlentities($value->getContent()) ?>
+  </div>
+</div>
+<?php endforeach; >
+-->
+</pre>
+
+
+    <p>
+    Let's have a look at the TAL way:
+    </p>
+
+<pre>
+<!--code
+<div id="item" tal:repeat="value values">
+  <div id="item">
+    <span tal:condition="value/hasDate" tal:replace="value/getDate"/>
+    <a tal:attributes="href value/getUrl" tal:content="value/getTitle"/>
+  </div>
+  <div id="content" tal:content="value/getContent"/>
+</div>
+-->
+</pre>
+
+    <p>
+    Now it's up to you to choose which version you prefer. Of course those
+    <code>tal:condition</code>, <code>tal:replace</code> and
+    <code>tal:repeat</code> may looks strange when begining with TAL.
+    </p>
+
+    <p>
+    Just for fun let's modify this example :
+    </p>
+
+<pre>
+<!--code
+<div id="item" tal:repeat="value values">
+  <div id="item">
+    <span tal:condition="value/hasDate" tal:replace="value/getDate">
+      2005-01-28
+    </span>
+    <a href="sample.html" 
+      tal:attributes="href value/getUrl" 
+      tal:content="value/getTitle">
+      My item title
+    </a>
+  </div>
+  <div id="content" tal:content="value/getContent">
+    This is a sample content which is replaced by the
+    real content when the template is run with real
+    data.
+  </span>
+</div>
+-->
+</pre>
+      
+    <p>
+    Some PHPTAL advantages and features :
+    </p>
+
+    <ul>
+      <li>enforce the separation between logic and presentation (the holy
+      grail),</li>
+      <li>warn you if you forgot to close an html tag or marlformed your
+      template,</li>
+      <li>no more htmlentities,</li>
+      <li>quite clean and readable templates,</li>
+      <li>ability to insert sample text inside template to preview template
+      result without PHP backend,</li>
+      <li>integrates quite well with WYSIWYG HTML editors,</li>
+      <li>data abstraction using xpath like system,</li>
+      <li>cool html macro system,</li>
+      <li>integrated internationalization system,</li>
+      <li>ability to replace xpath system with php expressions,</li>
+      <li>nearly no speed loss (PHP5 with php expression mode active).</li>
+      <li>template source filter interface</li>
+      <li>more than four years of ZPT community support (see <a
+      href="http://zope.org">zope websize</a>)</li>
+    </ul>
+
+    <p>
+    Some PHPTAL drawbacks :
+    </p>
+
+    <ul>
+      <li>a dependency for your application,</li>
+      <li>some tal, metal, i18n and phptal attributes to understand,</li>
+      <li>you'll have to produce clean XHTML.</li>
+    </ul>
+
+
+    <!-- 
+    ###################################################################
+    MANUALS
+    ###################################################################
+    -->
+    <h1 id="manuals">Manuals</h1>
+
+    <h2>PHP5</h2>
+
+    <p>
+    The PHPTAL manual [not available yet]
+    </p>
+
+
+    <h2>PHP4</h2>
+    <p>
+    The PHPTAL manual [<a href="phptal.php4.manual/index.html">online</a>]
+    </p>
+    
+    <!-- 
+    ###################################################################
+    DOWNLOADS
+    ###################################################################
+    -->
+    <h1 id="download">Downloads</h1>
+
+    <p>
+    The Sql package is licensed under the terms of the LGPL (GNU LESSER 
+    GENERAL PUBLIC LICENSE) contained in the COPYING file of this package.
+    </p>
+
+    <p>
+    From now on prefer using the PHP5 version of PHPTAL (works only with PHP5). 
+    </p>
+      
+    <p>
+    PHP5 is stable and usually smarter than PHP4. We use it in my company on complex production websites 
+    (intensively used) without any problem. 
+    </p>
+
+    <p>
+    A free <a href="http://eaccelerator.sf.net">PHP5 accelerator</a> is also working 
+    well with PHP5.
+    </p> 
+      
+    <p>
+    Please forget PHP4.
+    </p>
+
+    <h2>Installation procedure</h2>
+
+    <p>
+    You'd better have the <a href="http://pear.php.net">PEAR</a> utility installed to use 
+    these packages, if you don't know PEAR (as too many PHP programmers), 
+    you should take the time to learn about it and how to use it. It really 
+    worth the time you will spend on it.
+    </p>
+
+<pre>
+pear install {downloaded-filename}.tar.gz
+</pre>
+      
+    <h2>PHPTAL for PHP5</h2>
+      
+    <ul>
+      <li>
+        <a href="files/PHPTAL-${VERSION}.tar.gz">PHPTAL-${VERSION}.tar.gz</a>
+      </li>
+    </ul>
+
+    <h2>PHPTAL for PHP4</h2>
+                    
+    <p>
+    You will need to download and install packages contained in <a
+    href="files/old/">this directory</a>.
+    </p>
+
+    <h2>Subversion repository</h2>
+
+    <p>
+    You can access latest PHPTAL source code using subversion. Using this code in 
+    production is risky.
+    </p>
+
+<pre>
+svn co https://svn.motion-twin.com/phptal/trunk phptal
+</pre>
+
+    <p>
+    If you are willing to send me patches, please use <code>svn diff</code> to 
+    easier the communication.
+    </p>
+
+    <!-- 
+    ###################################################################
+    CONTACT
+    ###################################################################
+    -->
+    <h1 id="contact">Contact</h1>
+    
+    <h2>Support</h2>
+
+    <p>
+    Please join the <a
+    href="${MAILING}">PHPTAL mailing
+    list</a> to post errors, problems and anything related to PHPTAL.
+    </p>
+
+    <p>
+    An <a href="rss20.xml">RSS feed</a> is also available and will be 
+    updated for each PHPTAL release.
+    </p>
+      
+    <h2>Author</h2>
+
+    <p>
+    PHPTAL is developped and maintained by 
+    <a href="mailto:lbedubourg@motion-twin.com">Laurent B&eacute;dubourg</a>.
+    </p>
+
+    <p>
+    PHPTAL is hosted by <a href="http://www.motion-twin.com">MotionTwin</a> 
+    (my french company, which develop "fun" gaming / community websites). 
+    </p>
+
+  </body>
+</html>
