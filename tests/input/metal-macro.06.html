@@ -1,0 +1,7 @@
+<html phptal:tales="php">
+  <div metal:define-macro="test1">1</div>
+  <div metal:define-macro="test2">2</div>
+
+  <div metal:use-macro="test${call.first}"/>
+  <div metal:use-macro="test${call.second}"/>
+</html>
