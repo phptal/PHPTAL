@@ -19,6 +19,7 @@
   </fileset>
 
   <fileset dir="docs" id="docs">
+
     <include name="**"/>
     <exclude name="**/.svn/**"/>
   </fileset>

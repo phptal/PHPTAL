@@ -106,7 +106,7 @@ class PHPTAL
 
     public function executeMacro($path)
     {
-        if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/', $path, $m)){
+        if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
         }
 
