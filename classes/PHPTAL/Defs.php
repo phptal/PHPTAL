@@ -130,30 +130,31 @@ class PHPTAL_Defs
         
         'TAL:OMIT-TAG'       => 0,    // surround -> $tag->disableHeadFootPrint()
 
-        'TAL:ON-ERROR'       => 1,    // surround
-        'I18N:DOMAIN'        => 2,    // surround
-
-        'TAL:DEFINE'         => 3,    // replace
+        'METAL:DEFINE-MACRO' => 1,    // surround
         
-        'METAL:DEFINE-MACRO' => 4,    // surround
-        'I18N:NAME'          => 4,    // replace
-        'I18N:TRANSLATE'     => 4,    // content
+        'TAL:ON-ERROR'       => 2,    // surround
+        'I18N:DOMAIN'        => 3,    // surround
 
-        'TAL:CONDITION'      => 5,    // surround
+        'TAL:DEFINE'         => 4,    // replace
+        
+        'I18N:NAME'          => 5,    // replace
+        'I18N:TRANSLATE'     => 5,    // content
 
-        'TAL:REPEAT'         => 6,    // surround
+        'TAL:CONDITION'      => 6,    // surround
 
-        'TAL:ATTRIBUTES'     => 7,    // replace
-        'TAL:REPLACE'        => 7,    // replace
-        'METAL:USE-MACRO'    => 7,    // replace
-        'METAL:DEFINE-SLOT'  => 7,    // replace
-        'METAL:FILL-SLOT'    => 7,    // replace
+        'TAL:REPEAT'         => 7,    // surround
 
-        'I18N:ATTRIBUTES'    => 8,    // replace
+        'TAL:ATTRIBUTES'     => 8,    // replace
+        'TAL:REPLACE'        => 8,    // replace
+        'METAL:USE-MACRO'    => 8,    // replace
+        'METAL:DEFINE-SLOT'  => 8,    // replace
+        'METAL:FILL-SLOT'    => 8,    // replace
 
-        'TAL:CONTENT'        => 9,    // content
+        'I18N:ATTRIBUTES'    => 9,    // replace
 
-        'TAL:COMMENT'        => 10,    // surround
+        'TAL:CONTENT'        => 10,   // content
+
+        'TAL:COMMENT'        => 11,    // surround
     );
 
 
