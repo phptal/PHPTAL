@@ -56,6 +56,11 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
         return $this->_xmlns;
     }
 
+    public function stripComments($b)
+    {
+        $this->_stripComments = $b;
+    }
+
     public function setPreFilter($filter)
     {
         $this->_prefilter = $filter;
@@ -139,6 +144,13 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
         $node = new PHPTAL_NodeText($this, $data);
         array_push($this->_current->children, $node);
     }
+
+    public function onComment($data)
+    {
+        if ($this->_stripComments) 
+            return;
+        $this->onSpecific($data);
+    }
     
     public function onSpecific($data)
     {
@@ -152,6 +164,7 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     private $_codeGenerator;
     private $_prefilter = null;
     private $_xmlns;
+    private $_stripComments = false;
 }
 
 ?>

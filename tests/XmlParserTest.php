@@ -86,6 +86,10 @@ class MyTestParser extends PHPTAL_XmlParser
         $this->specifics++;
         $this->result .= $data; 
     }
+
+    public function onComment($data) {
+        $this->onSpecific($data);
+    }
     
     public function onElementStart($name, $attributes) {
         $this->elementStarts++;

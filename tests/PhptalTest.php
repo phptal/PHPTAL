@@ -123,6 +123,15 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
         $this->assertEquals('tpl_'.PHPTAL_VERSION.md5('123'), $tpl->getFunctionName());
     }
 
+    function testStripComments()
+    {
+        $tpl = new PHPTAL('input/phptal.04.html');
+        $exp = trim_file('output/phptal.04.html');
+        $tpl->stripComments(true);
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $this->assertEquals($exp, $res);
+    }
 }
         
 ?>

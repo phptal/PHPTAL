@@ -175,6 +175,14 @@ class PHPTAL
             $this->_repositories[] = $rep;
         }
     }//}}}
+
+    /**
+     * Ignore XML/XHTML comments on parsing.
+     */
+    public function stripComments($bool)
+    {
+        $this->_stripComments = $bool;
+    }
     
     /**
      * Set output mode (PHPTAL::XML or PHPTAL::XHTML).
@@ -405,6 +413,7 @@ class PHPTAL
         $generator = new PHPTAL_CodeGenerator($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
         $parser = new PHPTAL_Parser($generator);
+        $parser->stripComments($this->_stripComments);
         $parser->setPreFilter($this->_prefilter);
 
         if (isset($this->_source)){
@@ -494,6 +503,7 @@ class PHPTAL
 
     private $_encoding = PHPTAL_DEFAULT_ENCODING; 
     private $_outputMode = PHPTAL_XHTML;
+    private $_stripComments = false;
 }
 
 

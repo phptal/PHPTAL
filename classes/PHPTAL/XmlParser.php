@@ -197,7 +197,7 @@ abstract class PHPTAL_XmlParser
 
                 case self::ST_COMMENT:
                     if ($c == '>' and substr($src, $i-2, 2) == '--') {
-                        $this->onSpecific(substr($src, $mark, $i-$mark+1));
+                        $this->onComment(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
@@ -298,6 +298,7 @@ abstract class PHPTAL_XmlParser
     public abstract function onDocType($doctype);
     public abstract function onXmlDecl($decl);
     public abstract function onSpecific($data);
+    public abstract function onComment($data);
     public abstract function onElementStart($name, $attributes);
     public abstract function onElementClose($name);
     public abstract function onElementData($data);
