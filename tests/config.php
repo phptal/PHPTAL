@@ -1,7 +1,7 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 //  
-//  Copyright (c) 2004 Laurent Bedubourg
+//  Copyright (c) 2004-2005 Laurent Bedubourg
 //  
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public

@@ -1,7 +1,7 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 //  
-//  Copyright (c) 2004 Laurent Bedubourg
+//  Copyright (c) 2004-2005 Laurent Bedubourg
 //  
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,8 @@
 //  
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
+
+define('PHPTAL_VERSION', '1_0_2');
 
 if (substr(PHP_OS,0,3) == 'WIN'){
     define('PHPTAL_OS_WIN', true);
@@ -43,7 +45,6 @@ if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     }//}}}
 }
 
-define('PHPTAL_VERSION', '1_0_1');
 define('PHPTAL_XHTML', 1);
 define('PHPTAL_XML', 2);
 
