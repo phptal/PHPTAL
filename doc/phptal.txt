@@ -927,13 +927,15 @@ PHPTALES
   to be a concatenation sign.
 
     php:htmlentities(foo)
-    php:'string $varReplaced'
-    php:'string ${some/path/to/var}'
+    php:'string ${varReplaced}'
+    php:'string ${some.path().to[0].var}'
     php:NOT foo OR (bar GT baz)
     php:a + b
     php:array('a', 'b', 'c')
     php:range(0, 90)
     php:foo . a.b.c(e) . htmlentities(SomeClass::staticMethod()) 
+    php:SomeClass::ConstOfClass
+    php:SomeClass::$staticVar
 
   php: should be used with care and won't be needed in 80% of your 
   templates but some times you will need to invoke some php special 
