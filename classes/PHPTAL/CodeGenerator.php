@@ -254,10 +254,7 @@ class PHPTAL_CodeGenerator
 
     public function pushHtml( $html )
     {
-        $html = preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
-                             '<?php echo htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
-                                                .$this->_encoding.'\' ) ?>',
-                             $html);
+        $html = $this->_replaceInStringExpression($html);
         $this->flushCode();
         array_push( $this->_htmlBuffer, $html );
     }
@@ -271,10 +268,13 @@ class PHPTAL_CodeGenerator
         // conversion given by $this->_encoding
         $str = str_replace('&amp;', '&', $str);
         
-        $str = preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
+        $str = $this->_replaceInStringExpression($str);
+        /*
+         * preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
                             '<?php echo htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
                                                .$this->_encoding.'\' ) ?>', 
                             $str);
+         */
         $this->flushCode();
         array_push( $this->_htmlBuffer, $str );
     }
@@ -311,6 +311,26 @@ class PHPTAL_CodeGenerator
         $this->_htmlBuffer = $oldContext->_htmlBuffer;
         $this->_segments = $oldContext->_segments;
         $this->_talesMode = $oldContext->_talesMode;
+    }
+
+
+    private function _replaceInStringExpression($src)
+    {
+        if ($this->_talesMode == 'tales'){
+            return preg_replace(
+                '/\$\{([a-z0-9\/_]+)\}/ism', 
+                '<?php echo htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''.$this->_encoding.'\' ) ?>',
+                $src);
+        }
+
+        while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
+            list($ori, $exp) = $m;
+            $php  = phptal_tales_php($exp);
+            $repl = '<?php echo htmlentities( %s , ENT_COMPAT, \'%s\') ?>';
+            $repl = sprintf($repl, $php, $this->_encoding);
+            $src = str_replace($ori, $repl, $src);
+        }
+        return $src;
     }
     
     private $_result = "";

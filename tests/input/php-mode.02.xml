@@ -1,0 +1,3 @@
+<html phptal:tales="php">
+  ${strtolower('AAAA')}
+</html>
