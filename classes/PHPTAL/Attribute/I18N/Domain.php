@@ -11,7 +11,7 @@ class PHPTAL_Attribute_I18N_Domain extends PHPTAL_Attribute
 {
     function start()
     {
-        $this->tag->generator->doIf('not isset($__i18n_domains)');
+        $this->tag->generator->doIf('!isset($__i18n_domains)');
         $this->tag->generator->pushCode('$__i18n_domains = array()');
         $this->tag->generator->end();
         

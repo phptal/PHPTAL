@@ -80,11 +80,14 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         }
         else {
             $type = '_ATT_';
-            $code = sprintf('$_ATT_%s = htmlentities(%s, ENT_COMPAT, \''.$this->tag->generator->getEncoding().'\')', $this->getVarName($attribute), $code);
+            $code = sprintf('$_ATT_%s = htmlentities(%s, ENT_COMPAT, \'%s\')', $this->getVarName($attribute), $code, $this->tag->generator->getEncoding());
             $this->tag->generator->pushCode( $code );
         }
         $this->tag->attributes[ $attribute ] = 
             '<?php echo $'.$type.$this->getVarName($attribute).' ?>';
+
+        $this->tag->overwrittenAttributes[$attribute] = 
+            '$'.$type.$this->getVarName($attribute);
     }
 
     private function getVarName($attribute)
@@ -124,6 +127,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
                 }
                 $this->tag->generator->pushCode( $code );
                 $this->tag->attributes[$attribute] = "<?php echo $attkey ?>";
+                $this->tag->overwrittenAttributes[$attribute] = $attkey;
                 break;
             }
 
@@ -141,6 +145,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
        
         $this->tag->generator->doEnd();
         $this->tag->attributes[$attribute] = "<?php echo $attkey ?>";
+        $this->tag->overwrittenAttributes[$attribute] = $attkey;
     }
     
     public function end()

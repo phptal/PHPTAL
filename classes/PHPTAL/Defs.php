@@ -108,7 +108,7 @@ class PHPTAL_Defs
 
         'I18N:TRANSLATE'     => self::CONTENT,  // translate some data using GetText package
         'I18N:NAME'          => self::SURROUND, // prepare a translation name
-        'I18N:ATTRIBUTES'    => self::REPLACE,  // translate tag attributes values
+        'I18N:ATTRIBUTES'    => self::SURROUND, // translate tag attributes values
 
         'PHP:SET'            => self::REPLACE,
         'PHP:IF'             => self::SURROUND,
@@ -158,7 +158,6 @@ class PHPTAL_Defs
         'PHP:WHILE'          => 5,
         'PHP:FOREACH'        => 5,
 
-        'I18N:ATTRIBUTES'    => 6,    // replace
         'TAL:ATTRIBUTES'     => 6,    // replace
         'PHP:ATTRIBUTES'     => 6,
         'TAL:REPLACE'        => 6,    // replace
@@ -168,10 +167,12 @@ class PHPTAL_Defs
         'METAL:DEFINE-SLOT'  => 6,    // replace
         'METAL:FILL-SLOT'    => 6,    // replace
 
-        'TAL:CONTENT'        => 7,    // content
-        'PHP:CONTENT'        => 7,
+        'I18N:ATTRIBUTES'    => 7,    // replace
 
-        'TAL:COMMENT'        => 8,    // surround
+        'TAL:CONTENT'        => 8,    // content
+        'PHP:CONTENT'        => 8,
+
+        'TAL:COMMENT'        => 9,    // surround
     );
 
 

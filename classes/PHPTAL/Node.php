@@ -84,6 +84,8 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     public $attributes = array();
     public $talAttributes = array();
 
+    public $overwrittenAttributes = array();
+
     public $replaceAttributes = array();
     public $contentAttributes = array();
     public $surroundAttributes = array();

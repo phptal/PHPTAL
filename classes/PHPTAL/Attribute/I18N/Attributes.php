@@ -45,20 +45,58 @@ class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
     public function start()
     {
         // split attributes to translate
+        $expressions = $this->tag->generator->splitExpression($this->expression);
         // foreach attribute
-        //   if the translation key is specified 
-        //      we use it and replace the tag attribute with the result of
-        //      the translation
-        //   else if the attribute is overwritten by tal:attributes
-        //      we translate the result of tal:attributes
-        //   else if the attribute has a default value
-        //      we use this default value as the translation key
-        //   else
-        //      unable to translate the attribute
+        foreach ($expressions as $exp){
+            list($attribute, $key) = $this->_parseExpression($exp);
+            //   if the translation key is specified 
+            if ($key != null){
+                // we use it and replace the tag attribute with the result of
+                // the translation
+                $key = str_replace('\'', '\\\'', $key);
+                $code = $this->_getTranslationCode("'$key'");
+                $this->tag->attributes[$attribute] = $code;
+            } 
+            //   else if the attribute is overwritten by tal:attributes
+            else if (array_key_exists($attribute, $this->tag->overwrittenAttributes)){
+                // we translate the result of tal:attributes
+                $varn = $this->tag->overwrittenAttributes[$attribute];
+                $code = $this->_getTranslationCode($varn);
+                $this->tag->attributes[$attribute] = $code;
+            }
+            //   else if the attribute has a default value
+            else if (array_key_exists($attribute, $this->tag->attributes)){
+                // we use this default value as the translation key
+                $key = $this->tag->attributes[$attribute];
+                $key = str_replace('\'', '\\\'', $key);
+                $code = $this->_getTranslationCode("'$key'");
+                $this->tag->attributes[$attribute] = $code;
+            }
+            else {
+                // unable to translate the attribute
+                throw new Exception("Unable to translate attribute $attribute");
+            }
+        }
     }
    
     public function end()
     {
+    }
+
+    private function _parseExpression($exp)
+    {
+        $exp = trim($exp);
+        if (preg_match('/^([a-z0-9:\-_]+)\s+(.*?)$/i', $exp, $m)){
+            array_shift($m);
+            return $m;
+        }
+        return array($exp, null);
+    }
+
+    private function _getTranslationCode($key)
+    {
+        $code = '<?php echo htmlentities($tpl->getTranslator()->translate(%s), ENT_COMPAT, \'%s\') ?>';
+        return sprintf($code, $key, $this->tag->generator->getEncoding());
     }
 }
 
