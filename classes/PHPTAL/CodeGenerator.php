@@ -50,6 +50,11 @@ class PHPTAL_CodeGenerator
         return $this->_outputMode;
     }
 
+    public function getEncoding()
+    {
+        return $this->_encoding;
+    }
+
     public function setDocType( $dt )
     {
         $this->_doctype = $dt;
@@ -244,7 +249,7 @@ class PHPTAL_CodeGenerator
     public function doEcho( $code )
     {
         $this->flush();
-        $this->pushHtml( "<?php echo htmlentities( $code, ENT_COMPAT, 'UTF-8' ) ?>" );
+        $this->pushHtml( "<?php echo htmlentities( $code, ENT_COMPAT, '$this->_encoding' ) ?>" );
     }
 
     public function pushHtml( $html )
