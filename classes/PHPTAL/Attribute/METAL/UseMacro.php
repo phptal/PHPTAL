@@ -79,6 +79,16 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
             $tag->generate();
             return;
         }
+        if ($tag->name == 'metal:block' 
+            && array_key_exists('fill-slot', $tag->attributes)){
+            $tag->generate();
+            return;
+        }
+        if ($tag->name == 'tal:block' 
+            && array_key_exists('define', $tag->attributes)){
+            $tag->generate();
+            return;
+        }
         
         foreach ($tag->children as $child){
             $this->generateFillSlots($child);

@@ -40,6 +40,14 @@ class MetalSlotTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/metal-slot.02.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testBlock()
+    {
+        $tpl = new PHPTAL('input/metal-slot.03.html');
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/metal-slot.03.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 ?>

@@ -1,0 +1,9 @@
+<html>
+  <metal:block define-macro="test1">
+    <metal:block define-slot="foo">default value 1</metal:block>
+  </metal:block>
+
+  <metal:block use-macro="test1">
+    <metal:block fill-slot="foo">my value</metal:block>
+  </metal:block>
+</html>

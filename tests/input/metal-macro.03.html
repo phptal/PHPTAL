@@ -1,0 +1,11 @@
+<html>
+  <body> 
+    <span metal:define-macro="test1">test1</span>
+    <metal:block define-macro="test2">test2</metal:block>
+
+    <span metal:use-macro="test1"/>
+    <span metal:use-macro="test2"/>
+    <metal:block use-macro="test1"/>
+    <metal:block use-macro="test2"/>
+  </body>
+</html>
