@@ -84,6 +84,17 @@ class TalAttributesTest extends PHPUnit2_Framework_TestCase
         $this->assertEquals($exp, $res);
     }
 
+    function testZeroValues()
+    {
+        $tpl = new PHPTAL('input/tal-attributes.07.html');
+        $tpl->href1 = 0;
+        $tpl->href2 = 0;
+        $tpl->href3 = 0;
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/tal-attributes.07.html');
+        $this->assertEquals($exp, $res);
+    }
+
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
         

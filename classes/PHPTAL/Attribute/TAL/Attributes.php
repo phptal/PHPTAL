@@ -133,7 +133,8 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
                 break;
             }
 
-            $condition = sprintf('(%s = %s) || %s === ""', $attkey, $exp, $attkey);
+            // if attribute not found (null) or false (false)
+            $condition = sprintf('(%s = %s) !== null && %s !== false', $attkey, $exp, $attkey);
             if (!$started){
                 $this->tag->generator->doIf($condition);
                 $started = true;
