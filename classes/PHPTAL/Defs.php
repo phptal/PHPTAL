@@ -80,7 +80,7 @@ class PHPTAL_Defs
      * These namespaces will be drop from resulting xml/xhtml unless the parser 
      * is told to keep them.
      */
-    static $NAMESPACES = array('TAL', 'METAL', 'I18N', 'PHP', 'PHPTAL');
+    static $NAMESPACES = array('TAL', 'METAL', 'I18N', 'PHPTAL');
 
     /**
      * This dictionary contains ALL known PHPTAL attributes. Unknown attributes 
