@@ -43,8 +43,8 @@ if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     }
 }
 
-define('PHPTAL_VERSION', '1_0_0b2');
-define('PHPTAL_XHTML',1);
+define('PHPTAL_VERSION', '1_0_0b3');
+define('PHPTAL_XHTML', 1);
 define('PHPTAL_XML', 2);
 
 require_once 'PHPTAL/RepeatController.php';
@@ -145,9 +145,14 @@ class PHPTAL
         $this->_translator = $t;
     }
 
-    public function setPreFilter($filter)
+    public function setPreFilter(PHPTAL_Filter $filter)
     {
         $this->_prefilter = $filter;
+    }
+
+    public function setPostFilter(PHPTAL_Filter $filter)
+    {
+        $this->_postfilter = $filter;
     }
 
     public function __set($varname, $value)
@@ -181,7 +186,12 @@ class PHPTAL
             ob_end_clean();
             throw $e;
         }
-        return $this->_context->__docType . $res;
+
+        $res = $this->_context->__docType . $res;
+        if ($this->_postfilter != null){
+            return $this->_postfilter->filter($res);
+        }
+        return $res;
     }
 
     /**
@@ -336,6 +346,7 @@ class PHPTAL
     }//}}}
 
     private $_prefilter = null;
+    private $_postfilter = null;
     private $_codeFile;
     private $_realPath;
     private $_functionName;
