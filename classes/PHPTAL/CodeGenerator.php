@@ -332,6 +332,22 @@ class PHPTAL_CodeGenerator
         }
         return $src;
     }
+
+    public function evaluateTalesString($src)
+    {
+        if ($this->_talesMode == 'tales'){
+            return phptal_tales_string($src);
+        }
+        
+        while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
+            list($ori, $exp) = $m;
+            $php  = phptal_tales_php($exp);
+            $repl = '\'.%s.\''; 
+            $repl = sprintf($repl, $php, $this->_encoding);
+            $src = str_replace($ori, $repl, $src);
+        }
+        return '\''.$src.'\'';
+    }
     
     private $_result = "";
     private $_indent = 0;

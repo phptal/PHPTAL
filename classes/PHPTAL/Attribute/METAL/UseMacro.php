@@ -50,14 +50,14 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
             $this->generateFillSlots($child);
         }
 
-        if (preg_match('/^[a-z0-9_]+$/', $this->expression)){
+        if (preg_match('/^[a-z0-9_]+$/i', $this->expression)){
             $code = sprintf('%s%s($tpl)', 
                             $this->tag->generator->getFunctionPrefix(),
                             $this->expression);
             $this->tag->generator->pushCode($code);
         }
         else {
-            $code = phptal_tales_string($this->expression);
+            $code = $this->tag->generator->evaluateTalesString($this->expression);
             $code = sprintf('<?php $tpl->executeMacro(%s); ?>', $code);
             $this->tag->generator->pushHtml($code);
         }

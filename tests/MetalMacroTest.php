@@ -56,6 +56,34 @@ class MetalMacroTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/metal-macro.04.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testEvaluatedMacroName()
+    {
+        $call = new StdClass();
+        $call->first = 1;
+        $call->second = 2;
+        
+        $tpl = new PHPTAL('input/metal-macro.05.html');
+        $tpl->call = $call;
+
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/metal-macro.05.html');
+        $this->assertEquals($exp, $res);
+    }
+
+    function testEvaluatedMacroNameTalesPHP()
+    {
+        $call = new StdClass();
+        $call->first = 1;
+        $call->second = 2;
+        
+        $tpl = new PHPTAL('input/metal-macro.06.html');
+        $tpl->call = $call;
+
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/metal-macro.06.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 ?>
