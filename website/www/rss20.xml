@@ -118,5 +118,16 @@
       <dc:date>2005-03-29</dc:date>
     </item>
 
+    <item>
+      <title>PHPTAL 1.0.8</title>
+      <link>http://phptal.motion-twin.com/download.html</link>
+      <description>
+      - fixed bug with array/0 pathes (patch from William Bailey)
+			- fixed stupid lt,gt,eq,... replacement in php:'string not gt foo'
+      </description>
+      <dc:creator>Laurent Bedubourg</dc:creator>
+      <dc:date>2005-03-30</dc:date>
+    </item>		
+
   </channel>
 </rss>
