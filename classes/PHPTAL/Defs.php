@@ -122,6 +122,7 @@ class PHPTAL_Defs
         'PHP:OMIT-TAG'       => self::SURROUND,       
 
         'PHPTAL:TALES'       => self::SURROUND,
+        'PHPTAL:DEBUG'       => self::SURROUND,
     );
 
     /**
@@ -135,6 +136,7 @@ class PHPTAL_Defs
      * will execute in following order.
      */ 
     static $RULES_ORDER = array(
+        'PHPTAL:DEBUG'       => -1,   // meta surround
         'PHPTAL:TALES'       => 0,    // meta surround
         
         'TAL:OMIT-TAG'       => 1,    // surround -> $tag->disableHeadFootPrint()

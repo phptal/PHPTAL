@@ -29,6 +29,28 @@ define('PHPTAL_XML', 2);
 
 require_once 'PHPTAL/RepeatController.php';
 
+class PHPTAL_Exception extends Exception
+{
+    public $srcFile;
+    public $srcLine;
+
+    public function __construct($msg, $srcFile=false, $srcLine=false)
+    {
+        parent::__construct($msg);
+        $this->srcFile = $srcFile;
+        $this->srcLine = $srcLine;
+    }
+
+    public function __toString()
+    {
+        if (!$this->srcFile){
+            return parent::__toString();
+        }
+        $res = sprintf("From %s around line %d\n", $this->srcFile, $this->srcLine);
+        $res .= parent::__toString();
+        return $res;
+    }
+}
 
 /**
  * PHPTAL template entry point.
@@ -147,15 +169,18 @@ class PHPTAL
             if (file_exists(dirname($this->_realPath).'/'.$file)){
                 $file = dirname($this->_realPath).'/'.$file;
             }
-        
+    
             $tpl = new PHPTAL( $file );
             $tpl->_encoding = $this->_encoding;
             $tpl->setTemplateRepository($this->_repositories);
             $tpl->prepare();
 
+            $currentFile = $this->__file;
+            $this->__file = $tpl->__file;
             require_once $tpl->getCodePath();
             $fun = $tpl->getFunctionName() . '_' . $macroName;
             $fun( $this );
+            $this->__file = $currentFile;
         }
         else {
             $fun = $this->getFunctionName() . '_' . trim($path);
@@ -166,6 +191,7 @@ class PHPTAL
     public function prepare()
     {
         $this->findTemplate();
+        $this->__file = $this->_realPath;
         $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.php';
         if (defined('PHPTAL_FORCE_REPARSE') ||
             !file_exists($this->_codeFile) || 
@@ -283,7 +309,8 @@ class PHPTAL
 
         if ($this->_nothrow)
             return null;
-        throw new Exception("Unable to find path $varname");
+        
+        throw new PHPTAL_Exception("Unable to find path $varname", $this->__file, $this->__line);
     }
 
     private function parse()
@@ -349,6 +376,9 @@ class PHPTAL
     private $_nothrow = false;
     private $_translator = null;
     private $_outputMode = PHPTAL_XHTML;
+
+    public $__file = false;
+    public $__line = false;
 }
 
 

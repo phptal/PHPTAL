@@ -99,11 +99,14 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
 
     public function generate()
     {
+        if ($this->generator->isDebugOn()){
+            $this->generator->pushCode('$tpl->__line = '.$this->line);
+        }
         $this->prepareAttributes();
         $this->separateAttributes();
         $this->orderTalAttributes();
        
-        if (defined('PHPTAL_DEBUG')){
+        if ($this->generator->isDebugOn()){
             $this->generator->doComment("tag '$this->name' from line $this->line");
         }
         

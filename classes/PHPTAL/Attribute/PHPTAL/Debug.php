@@ -20,21 +20,22 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
-require_once 'PHPTAL/Tales.php';
-
-class TalesExistTest extends PHPUnit2_Framework_TestCase 
+/**
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
+ */
+class PHPTAL_Attribute_PHPTAL_DEBUG extends PHPTAL_Attribute
 {
-    function testLevel1()
+    public function start()
     {
-        $tpl = new PHPTAL('input/tales-exist-01.html');
-        $tpl->foo = 1;
-        $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tales-exist-01.html');
-        $this->assertEquals($exp, $res);
+        $this->_oldMode = $this->tag->generator->setDebug(true);
     }
 
+    public function end()
+    {
+        $this->tag->generator->setDebug( $this->_oldMode );
+    }
+
+    private $_oldMode;
 }
 
 ?>

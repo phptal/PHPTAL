@@ -347,7 +347,20 @@ class PHPTAL_CodeGenerator
         }
         return '\''.$src.'\'';
     }
+
+    public function setDebug($bool)
+    {
+        $old = $this->_debug;
+        $this->_debug = $bool;
+        return $this->_debug;
+    }
     
+    public function isDebugOn()
+    {
+        return $this->_debug;
+    }
+ 
+    private $_debug  = false;
     private $_result = "";
     private $_indent = 0;
     private $_codeBuffer = array();

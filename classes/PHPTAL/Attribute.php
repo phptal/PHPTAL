@@ -36,6 +36,7 @@ require_once 'PHPTAL/Attribute/METAL/DefineSlot.php';
 require_once 'PHPTAL/Attribute/METAL/FillSlot.php';
 
 require_once 'PHPTAL/Attribute/PHPTAL/Tales.php';
+require_once 'PHPTAL/Attribute/PHPTAL/Debug.php';
 
 require_once 'PHPTAL/Attribute/I18N/Translate.php';
 require_once 'PHPTAL/Attribute/I18N/Name.php';
