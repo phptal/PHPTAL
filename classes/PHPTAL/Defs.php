@@ -108,6 +108,7 @@ class PHPTAL_Defs
         'I18N:TRANSLATE'     => self::CONTENT,  // translate some data using GetText package
         'I18N:NAME'          => self::SURROUND, // prepare a translation name
         'I18N:ATTRIBUTES'    => self::SURROUND, // translate tag attributes values
+        'I18N:DOMAIN'        => self::SURROUND, // choose translation domain
 
         'PHP:SET'            => self::REPLACE,
         'PHP:IF'             => self::SURROUND,
@@ -143,37 +144,38 @@ class PHPTAL_Defs
         'PHP:OMIT-TAG'       => 1,
 
         'TAL:ON-ERROR'       => 2,    // surround
+        'I18N:DOMAIN'        => 3,    // surround
 
-        'METAL:DEFINE-MACRO' => 3,    // surround
-        'TAL:DEFINE'         => 3,    // replace
-        'PHP:SET'            => 3,
-        'I18N:NAME'          => 3,    // replace
-        'I18N:TRANSLATE'     => 3,    // content
+        'METAL:DEFINE-MACRO' => 4,    // surround
+        'TAL:DEFINE'         => 4,    // replace
+        'PHP:SET'            => 4,
+        'I18N:NAME'          => 4,    // replace
+        'I18N:TRANSLATE'     => 4,    // content
 
-        'TAL:CONDITION'      => 4,    // surround
-        'PHP:IF'             => 4,
-        'PHP:ELSEIF'         => 4,
-        'PHP:ELSE'           => 4,
+        'TAL:CONDITION'      => 5,    // surround
+        'PHP:IF'             => 5,
+        'PHP:ELSEIF'         => 5,
+        'PHP:ELSE'           => 5,
 
-        'TAL:REPEAT'         => 5,    // surround
-        'PHP:WHILE'          => 5,
-        'PHP:FOREACH'        => 5,
+        'TAL:REPEAT'         => 6,    // surround
+        'PHP:WHILE'          => 6,
+        'PHP:FOREACH'        => 6,
 
-        'TAL:ATTRIBUTES'     => 6,    // replace
-        'PHP:ATTRIBUTES'     => 6,
-        'TAL:REPLACE'        => 6,    // replace
-        'PHP:REPLACE'        => 6,
-        'METAL:USE-MACRO'    => 6,    // replace
-        'PHP:INCLUDE'        => 6,    // replace
-        'METAL:DEFINE-SLOT'  => 6,    // replace
-        'METAL:FILL-SLOT'    => 6,    // replace
+        'TAL:ATTRIBUTES'     => 7,    // replace
+        'PHP:ATTRIBUTES'     => 7,
+        'TAL:REPLACE'        => 7,    // replace
+        'PHP:REPLACE'        => 7,
+        'METAL:USE-MACRO'    => 7,    // replace
+        'PHP:INCLUDE'        => 7,    // replace
+        'METAL:DEFINE-SLOT'  => 7,    // replace
+        'METAL:FILL-SLOT'    => 7,    // replace
 
-        'I18N:ATTRIBUTES'    => 7,    // replace
+        'I18N:ATTRIBUTES'    => 8,    // replace
 
-        'TAL:CONTENT'        => 8,    // content
-        'PHP:CONTENT'        => 8,
+        'TAL:CONTENT'        => 9,    // content
+        'PHP:CONTENT'        => 9,
 
-        'TAL:COMMENT'        => 9,    // surround
+        'TAL:COMMENT'        => 10,    // surround
     );
 
 

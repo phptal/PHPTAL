@@ -7,10 +7,10 @@ class DummyTranslator implements PHPTAL_TranslationService
     public $vars = array();
     public $translations = array();
     
-    public function setLanguage($langCode){
+    public function setLanguage(){
     }
     
-    public function setDomain($domain){
+    public function useDomain($domain){
     }
     
     public function setVar($key, $value){ 

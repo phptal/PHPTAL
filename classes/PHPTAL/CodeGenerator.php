@@ -245,15 +245,16 @@ class PHPTAL_CodeGenerator
         $this->indent();
     }
 
-    public function doEcho( $code )
+    public function doEcho( $code, $replaceInString=true )
     {
         $this->flush();
-        $this->pushHtml( "<?php echo htmlentities( $code, ENT_COMPAT, '$this->_encoding' ) ?>" );
+        $this->pushHtml( "<?php echo htmlentities( $code, ENT_COMPAT, '$this->_encoding' ) ?>", $replaceInString );
     }
 
-    public function pushHtml( $html )
+    public function pushHtml( $html, $replaceInString=true )
     {
-        $html = $this->_replaceInStringExpression($html);
+        if ($replaceInString)
+            $html = $this->_replaceInStringExpression($html);
         $this->flushCode();
         array_push( $this->_htmlBuffer, $html );
     }

@@ -13,16 +13,16 @@ class PHPTAL_Attribute_I18N_Domain extends PHPTAL_Attribute
     {
         $this->tag->generator->doIf('!isset($__i18n_domains)');
         $this->tag->generator->pushCode('$__i18n_domains = array()');
-        $this->tag->generator->end();
+        $this->tag->generator->doEnd();
         
-        $code = '$__i18n_domains[] = $tpl->getTranslator()->setDomain(\'%s\')';
+        $code = '$__i18n_domains[] = $tpl->getTranslator()->useDomain(\'%s\')';
         $code = sprintf($code, $this->expression);
         $this->tag->generator->pushCode($code);
     }
 
     function end()
     {
-        $code = '$tpl->getTranslator()->setDomain(array_pop($__i18n_domains))';
+        $code = '$tpl->getTranslator()->useDomain(array_pop($__i18n_domains))';
         $this->tag->generator->pushCode($code);
     }
 }

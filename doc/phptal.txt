@@ -1,4 +1,4 @@
-/* vim: set ft=txt shiftwidth=2 tabstop=2 expantab: */
+/* vim: set ft=txt shiftwidth=2 tabstop=2 expandtab: */
 
 PHPTAL - PHP Template Attribute Language
 Author: Laurent Bedubourg <lbedubourg@motion-twin.com>
@@ -902,7 +902,7 @@ PHP INTEGRATION
     // explicitely output XML 
     $tpl->setOutputMethod(PHPTAL::XML);
 
-
+// -------------------------------------------- 
   2.4. method 
 <section id="phptal.phptal.isValid">
 <title>method isValid</title>

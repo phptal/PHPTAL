@@ -1,0 +1,17 @@
+msgid "" 
+msgstr "" 
+"Content-Type: text/plain; charset=utf-8\n" 
+"Content-Transfer-Encoding: 8bit\n" 
+
+msgid "hello world"
+msgstr "hello world 2"
+
+msgid "my first translate key"
+msgstr "First message translation test passed 2"
+
+msgid "my second translate key"
+msgstr "Second test with login=${login} and lastCxDate=${lastCxDate} passed 2"
+
+msgid "Welcome ${login}, your last connection date was : ${lastCxDate}"
+msgstr "Welcome ${login}, your last connection date was : ${lastCxDate} 2"
+

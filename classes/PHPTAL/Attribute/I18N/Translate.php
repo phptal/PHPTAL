@@ -25,10 +25,9 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
             // sub nodes may contains i18n:name attributes
             $this->_translateContent($this->tag);
         }
-        $key = sprintf('$tpl->getTranslator()->translate(%s)', $code);
-       
-
-        $this->tag->generator->pushCode('echo '.$key);
+        $code = sprintf('echo $tpl->getTranslator()->translate(%s)', $code);
+        $this->tag->generator->pushCode($code);
+        // $this->tag->generator->doEcho($key, false);
     }
 
     function end()
@@ -42,15 +41,13 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
             if ($child instanceOf PHPTAL_NodeText){
                 $result .= $child->value;
             }
+            else if (array_key_exists('i18n:name', $child->attributes)){
+                $value = $child->attributes['i18n:name'];
+                $result .= '${' . $value . '}';
+                $child->generate();
+            }
             else {
-                if (array_key_exists('i18n:name', $child->attributes)){
-                    $value = $child->attributes['i18n:name'];
-                    $result .= '${' . $value . '}';
-                    $child->generate();
-                }
-                else {
-                    $result .= $this->_translateContent($child);
-                }
+                $result .= $this->_translateContent($child);
             }
         }
         $result = preg_replace('/\s+/sm', ' ', $result);
