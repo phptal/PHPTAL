@@ -34,5 +34,14 @@
       <dc:date>2005-02-27</dc:date>    
     </item>
 
+    <item>
+      <title>PHPTAL 1.0.3</title>
+      <link>http://phptal.motion-twin.com</link>
+      <description>
+      - fixed *:block with i18n error
+			</description>
+      <dc:creator>Laurent Bedubourg</dc:creator>
+      <dc:date>2005-03-02</dc:date>    
+    </item>
   </channel>
 </rss>

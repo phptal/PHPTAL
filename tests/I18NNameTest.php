@@ -33,5 +33,25 @@ class I18NNameTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/i18n-name-03.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testBlock()
+    {
+        $tpl = new PHPTAL('input/i18n-name-04.html');
+        $tpl->setTranslator( new DummyTranslator() );
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/i18n-name-04.html');
+        $this->assertEquals($exp, $res);        
+    }
+
+    function testI18NBlock()
+    {
+        $tpl = new PHPTAL('input/i18n-name-05.html');
+        $tpl->setTranslator( new DummyTranslator() );
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/i18n-name-05.html');
+        $this->assertEquals($exp, $res);        
+    }
 }
 

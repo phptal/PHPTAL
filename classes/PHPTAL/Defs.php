@@ -250,7 +250,7 @@ class PHPTAL_Defs
      */
     static function isValidAttribute( $att )
     {
-        if (preg_match('/(.*):(.*)/', $att, $m)) {
+        if (preg_match('/^(.*):(.*)$/', $att, $m)) {
             list (,$ns,$sub) = $m;
             if (in_array(strtoupper($ns), self::$NAMESPACES) 
                 && !self::isPhpTalAttribute($att)) {

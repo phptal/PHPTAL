@@ -69,20 +69,12 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
 
     private function generateFillSlots($tag)
     {
-        $allowedAtts = array( array('metal', 'fill-slot'),
-                              array('metal', 'define-macro'),
-                              array('tal',   'define') );
+        $allowedAtts = array( 'metal:fill-slot', 'metal:define-macro', 'tal:define' );
                               
         if (! $tag instanceOf PHPTAL_NodeTree ) return;
 
         foreach ($allowedAtts as $attribute){
-            list($domain,$att) = $attribute;
-            if (array_key_exists("$domain:$att", $tag->attributes)){
-                $tag->generate();
-                return;
-            }
-            if ($tag->name == $domain.':block'
-                && array_key_exists($att, $tag->attributes)){
+            if ($tag->hasPhpTalAttribute($attribute)){
                 $tag->generate();
                 return;
             }

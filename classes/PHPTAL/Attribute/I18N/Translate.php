@@ -41,8 +41,8 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
             if ($child instanceOf PHPTAL_NodeText){
                 $result .= $child->value;
             }
-            else if (array_key_exists('i18n:name', $child->attributes)){
-                $value = $child->attributes['i18n:name'];
+            else if ($child->hasPhpTalAttribute('i18n:name')){
+                $value = $child->getPhpTalAttribute('i18n:name');
                 $result .= '${' . $value . '}';
                 $child->generate();
             }

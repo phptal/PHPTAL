@@ -104,6 +104,44 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         $this->attributes = $attributes;
     }
 
+    public function hasPhpTalAttribute($name)
+    {
+        $ns = $this->getNodePrefix();
+        foreach ($this->attributes as $key=>$value){
+            if ($this->xmlns->unAliasAttribute($key) == $name){
+                return true;
+            }
+            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function getPhpTalAttribute($name)
+    {
+        $ns = $this->getNodePrefix();
+        
+        foreach ($this->attributes as $key=>$value){
+            if ($this->xmlns->unAliasAttribute($key) == $name){
+                return $value;
+            }
+            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
+                return $value;
+            }
+        }
+        return false;
+    }
+
+    private function getNodePrefix()
+    {
+        $result = false;
+        if (preg_match('/^(.*?):block$/', $this->name, $m)){
+            list(,$result) = $m;
+        }
+        return $result;
+    }
+    
     public function generate()
     {
         if ($this->generator->isDebugOn()){
@@ -187,6 +225,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
             }
             return;
         }
+        
         parent::generate();
     }
 
@@ -263,7 +302,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
             list(,$ns) = $m;
             $attributes = array();
             foreach ($this->attributes as $key=>$value) {
-                if ($this->xmlns->isValidAttribute("$ns:$key")) {
+                if ($this->xmlns->isPhpTalAttribute("$ns:$key")) {
                     $attributes["$ns:$key"] = $value;
                 }
                 else {
@@ -302,7 +341,11 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
             $pos = $this->xmlns->getAttributePriority($key);
             if (array_key_exists($pos, $result)) {
                 $err = sprintf(self::ERR_ATTRIBUTES_CONFLICT, 
-                               $this->name, $this->line, $key, $result[$pos]->name);
+                               $this->name, 
+                               $this->line, 
+                               $key, 
+                               $result[$pos]->name
+                               );
                 throw new Exception($err);
             }
             $result[$pos] = PHPTAL_Attribute::createAttribute(
@@ -324,6 +367,12 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
                     
                 case PHPTAL_Defs::CONTENT:
                     $this->contentAttributes[] = $handler;
+                    break;
+
+                default:
+                    $err = 'Attribute %s not found in PHPTAL_Defs::$DICTIONARY';
+                    $err = sprintf($err, $handler->name);
+                    throw new Exception($err);
                     break;
             }
         }

@@ -67,7 +67,7 @@ abstract class PHPTAL_Attribute
         $class = str_replace('-', '', $class);
         
         $result = new $class($tag);
-        $result->name = $attName;
+        $result->name = strtoupper($attName);
         $result->expression = $expression;
         return $result;
     }
