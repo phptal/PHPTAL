@@ -59,19 +59,19 @@ class PHPTAL_PhpTransformer
     
     public $prefix = '$';
 
-    private $_state;
-    
+    // Automatically called by the inclusion/requirements of this file
+    public static function initStatics()
+    {
+        self::$TranslationMatches = array_keys(self::$TranslationTable);
+        self::$TranslationReplaces = array_values(self::$TranslationTable);
+    }
+
     public function transform( $str )
     {
-        $str = preg_replace( '/\bnot\b/i', '!',   $str );
-        $str = preg_replace( '/\bne\b/i',  '!=', $str );
-        $str = preg_replace( '/\band\b/i', '&&', $str );
-        $str = preg_replace( '/\bor\b/i',  '||', $str );
-        $str = preg_replace( '/\blt\b/i',  '<',  $str );
-        $str = preg_replace( '/\bgt\b/i',  '>',  $str );
-        $str = preg_replace( '/\bge\b/i',  '>=', $str );
-        $str = preg_replace( '/\ble\b/i',  '<=', $str );
-        $str = preg_replace( '/\beq\b/i',  '==', $str );
+        // replace not ne and lt gt, etc...
+        $str = preg_replace(self::$TranslationMatches, 
+                            self::$TranslationReplaces, 
+                            $str);
 
         $this->_state = self::ST_NONE;
         $result = "";
@@ -314,6 +314,24 @@ class PHPTAL_PhpTransformer
     {
         return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c == '_';
     }
+
+    private $_state;
+
+    private static $TranslationTable = array(
+        '/\bnot\b/i' => '!', 
+        '/\bne\b/i'  => '!=', 
+        '/\band\b/i' => '&&',
+        '/\bor\b/i'  => '||',
+        '/\blt\b/i'  => '<',
+        '/\bgt\b/i'  => '>',
+        '/\bge\b/i'  => '>=',
+        '/\ble\b/i'  => '<=',
+        '/\beq\b/i'  => '==',
+    );
+    private static $TranslationMatches = null;
+    private static $TranslationReplaces = null;
 }
+
+PHPTAL_PhpTransformer::initStatics();
 
 ?>
