@@ -31,7 +31,12 @@ else {
 
 if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     if (PHPTAL_OS_WIN){
-        define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINDOWS\\Temp\\');
+        if (file_exists('c:\\WINNT\\Temp\\')){
+            define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINNT\\Temp\\');
+        }
+        else {
+            define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINDOWS\\Temp\\');
+        }
     }
     else {
         define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
