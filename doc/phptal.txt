@@ -39,7 +39,7 @@ WHY YOU SHOULD USE PHPTAL
   - better application design
   - easier task repartition
   - better maintainability
-  - web skins
+  - easy web skins
 
   Most template systems uses <? ?>, <% %> or <xxx:yyy></xxx:yyy> tags to 
   find their marks. It allow easier template system development but that 
@@ -50,7 +50,7 @@ WHY YOU SHOULD USE PHPTAL
   attributes in stead of markup tags.
 
   If you already worked with a simple template system, you must have 
-  viewed something looking like :
+  encoutered something looking like :
   
     <table>
       <%loop myarray as myitem %>
@@ -90,10 +90,10 @@ WHY YOU SHOULD USE PHPTAL
 FIRST EXAMPLE
 *************
   
-  To get a first impression about PHPTAL usage, a first simple example 
-  is better than many words.
+  To get a first impression about PHPTAL usage, a simple example is better 
+  than many words.
 
-  Your template is a valid xml/html document (with a root entity). Here 
+  Your template is a valid xml/html document (with a root element). Here's 
   a file named 'my_template_file.html'.
   
     <?xml version="1.0"?> 
@@ -1032,1023 +1032,327 @@ PHP INTEGRATION
   using ob_start() in start() and ob_get_contents(), ob_end_clean() in 
   end().
 
+    <html>
+      ...
+      <div>
+      ...
+      foo bar baz <span tal:replace="id"/> foo bar baz
+      ...
+      </div>
+      ...
+    </html>
 
-    TODODODODODODODODOTOTOTODODODODODTODODTODOTODOTODOTODO
+  For some reason we decide the div block requires to be cached, we introduce
+  a phptal:id into the template :
+  
+    <html>
+      ...
+      <div phptal:id="somePossiblyUniqueKeyword">
+      ...
+      foo bar baz <span tal:replace="id"/> foo bar baz
+      ...
+      </div>
+      ...
+    </html>
+  
+  Then we write our trigger which will have to cache the div content:
+  
+    <?php
+    require_once 'PHPTAL.php';
+    require_once 'PHPTAL/Trigger.php';
+
+    class CacheTrigger implements PHPTAL_Trigger
+    {
+        public function start($phptalid, $tpl)
+        {
+            // this cache depends on 'id' which must appears in
+            // the template execution context
+            $this->_cachePath = 'cache.' . $tpl->getContext()->id;
+
+            // if already cached, read the cache and tell PHPTAL to
+            // ignore the tag content
+            if (file_exists($this->_cachePath)){
+                $this->_usedCache = true;
+                readfile($this->_cachePath);
+                return self::SKIPTAG;
+            }
+        
+            // no cache found, we start an output buffer and tell
+            // PHPTAL to proceed (ie: execute the tag content)
+            $this->_usedCache = false;
+            ob_start();
+            return self::PROCEED;
+        }
+
+        // Invoked after tag execution
+        public function end($phptalid, $tpl)
+        {
+            // end of tag, if cached file used, do nothing
+            if ($this->_usedCache){
+                return;
+            }
+
+            // otherwise, get the content of the output buffer
+            // and write it into the cache file for later usage
+            $content = ob_get_contents();
+            ob_end_clean();
+            echo $content;
+
+            $f = fopen($this->_cachePath, 'w');
+            fwrite($f, $content);
+            fclose($f);
+        }
+        
+        private $_cachePath;
+        private $_usedCache;
+    }
+    ?>
+    
+  The key here is to reply to start() with either SKIPTAG or PROCEED.
+  
+  When SKIPTAG is returned, PHPTAL will just ignore the tag and call end(). 
+  It usually means that the trigger takes the hand and decide what to show
+  there.
+  
+  When PROCEED is returned, PHPTAL will execute the tag and its content
+  as usual then call end(). This allow our cache class to play with output 
+  buffers to execute the tag once and store the result into a file which will
+  be used in later calls.
+
+  To install our trigger we use :
 
     <?php
-    
     require_once 'PHPTAL.php';
-
-    class ResultCache implements PHPTAL_Trigger 
-    {
-        public function start($tpl)
-        {
-        }
-
-        public function end($tpl)
-        {
-        }
-    }
-
+    require_once 'CacheTrigger.php'; // our custom trigger
+    
+    $trigger = new CacheTrigger();
+    
+    $tpl = new PHPTAL('test.html');
+    
+    // this trigger will only be called for phptal:id="triggerId"
+    $tpl->addTrigger('somePossiblyUniqueKeyword', $trigger);
+    
+    $tpl->id = 1;
+    
+    echo $tpl->execute();
+    
     ?>
-
+    
+  You can add as many triggers as you like to your templates. A generic cache
+  trigger may also handle more than one phptal:id... etc...
   
 
   interface PHPTAL_TranslationService
   ===================================
 
-
-
-
---------------------------
-
+  PHPTAL comes with a default gettext translation service as shown in another
+  section. For some reason you may prefer to implement your own service of
+  translation.
   
-<section id="phptal.phptal.execute">
-<title>method execute</title>
-<para>
-
-This method 'execute' the template with the given context and return the
-resulting XML/XHTML.
-
-</para>
-
-<para>
-
-Returns
-
-</para>
-
-<para>
-
-string : the template execution result.
-
-</para>
-
-<para>
-
-Throws
-
-</para>
-
-<para>
-
-FileNotFound, PHPTAL_ParseError, PHPTAL_ExpressionError, GetText_Error
-
-</para>
-
-</section>
-</section>
-<!-- end of PHPTAL -->
-
-<section id="phptal.cache">
-<title>interface PHPTAL_Cache</title>
-<para>
-
-As each developper tends to prefer his own cache system and as each user case
-is different, PHPTAL does not contains a builtin cache system.
-
-</para>
-
-<para>
-
-Instead, it contains an interface that allow you to work with any existing php
-cache system whithin PHPTAL.
-
-</para>
-
-<para>
-
-The interface allow you to cache template results and or macro results in your
-own style.
-
-</para>
-
-<para>
-
-The interface resides in PHPTAL_Cache class.
-
-</para>
-
-<para>
-
-Implementations 'may' implements following methods :
-
-</para>
-<itemizedlist><listitem>
-<para>
-
-template : called each time a template has to be executed 
-
-</para>
-</listitem><listitem>
-<para>
-
-macro : called each time a macro has to be executed
-
-</para>
-</listitem></itemizedlist>
-<para>
-
-These methods receive some parameters, the first one will be either the
-template object or the macro object.
-
-</para>
-
-<para>
-
-The result of the template/macro real execution can be retrieved using :
-<emphasis>$macro_or_template-&gt;_process()</emphasis>.
-
-</para>
-
-<para>
-
-Your cache system must use this method and return the produced string if the
-result is not already cached.
-
-</para>
-
-<para>
-
-The way you add a cache manager object to PHPTAL is :
-
-</para>
-<programlisting role="php"><![CDATA[
-$tpl = new PHPTAL('myfile.html');
-$tpl->setCacheManager($myCacheManager);
-]]></programlisting>
-
-
-
-<section id="phptal.cache.macro">
-<title>method macro</title>
-<para>
-
-This method is called by PHPTAL whenever a macro has to be called. If not
-implemented by your cache manager, this method will return the execution of the
-macro without cache.
-
-</para>
-
-<para>
-
-Important: A macro level cache system should be aware of macro slots 
-
-</para>
-
-<para>
-
-Parameters
-
-</para>
-<itemizedlist><listitem>
-<para>
-
-PHPTAL_Macro $macro : the macro object. 
-
-</para>
-</listitem><listitem>
-<para>
-
-string $file : source path of this macro (may be the path or a
-SourceLocator object) 
-
-</para>
-</listitem><listitem>
-<para>
-
-string $name : the macro name 
-
-</para>
-</listitem><listitem>
-<para>
-
-PHPTAL_Context $context : the current execution context
-
-</para>
-</listitem></itemizedlist>
-<para>
-
-Return
-
-</para>
-
-<para>
-
-string : the cached value or the result of the macro execution
-
-</para>
-
-<para>
-
-Example
-
-</para>
-
-<para>
-
-Idea : you need to cache a big html table resulting of an ugge sql query, tells
-the template designer to move the table printing into a macro, get the macro
-name and make an implementation of PHPTAL_Cache that will store the macro
-output into a file.
-
-</para>
-
-<example><title>Cache (macro result) implementation</title>
-<programlisting role="php"><![CDATA[
-class MySpecificCache extends PHPTAL_Cache 
-{ 
-    // 
-    // This method is called every time a macro is called. 
-    // 
-    function macro(&$macro, $file, $name, &$context) 
-    { 
-        // we only worry about 'mymacro' macro 
-        if ($name == 'mymacro') { 
-            $cache = '/path/to/cache.txt'; 
-            // check that the file exists and the expire time is 
-            // not reached 
-            if (file_exists($cache) && (filemtime($cache) + 3600 < time())) { 
-                // return the cache content 
-                return join('', $cache); 
-            }
-      
-            // not cached yet, let's do it
-            // first produce the result 
-            $result = $macro->_process();
-
-            // cache to file 
-            $fp = fopen($cache, 'w'); 
-            fwrite($fp, $result); 
-            fclose($fp);
-
-            // and don't forget to return the result 
-            return $result; 
-        }
+  The PHPTAL_TranslationService interface is here to serves your need.
+  
+  The usage of your service will be the same as the PHPTAL_GetTextTranslator.
+  
+    $tpl->setTranslator($yourOwnTranslatorInstance);
+  
+  Your implementation must define the following methods :
+  
+  
+  method setLanguage(...)
+  -----------------------
+
+  This method may be called by the template to change the current ouput
+  language.
+  
+  It's arguments are a list of possible language (use func_get_args() to
+  get the argument array). The first known language should be used by your
+  service.
+  
+    <?php
+    require_once 'PHPTAL/TranslationService.php';
     
-        // non handled macro, just process 
-        return $macro->_process(); 
-    } 
-} 
-]]></programlisting>
-</example>
-
-<para>
-
-When invoking a template object, you can specify the cache manager to use as
-follow :
-
-</para>
-<programlisting role="php"><![CDATA[
-require_once "PHPTAL.php";
-
-$tpl = new PHPTAL("some/template.html"); 
-
-$tpl->set("foo", "bar");
-// set template cache manager
-
-$cache = new MySpecificCache(); 
-$tpl->setCacheManager( $cache );
-
-// let's roll 
-echo $tpl->execute();
-]]></programlisting>
-
-<para>
-
-In the above cache manager exemple, we haven't used the context variable, but
-it will be the key for intelligent cache system as it contains the current
-template execution context (ie: every variable usuable inside the template,
-even defined variables and repeat data).
-
-</para>
-</section>
-
-
-<section id="phptal.cache.template">
-<title>method template</title>
-<para>
-
-This method is called by PHPTAL whenever a template is to be executed. This
-means that any template is subject to the cache system, main one invoqued in
-php script as well as tal:included ones.
-
-</para>
-
-<para>
-
-If not implemented by your cache manager, the default behavour of this method
-is to return the execution of the template object.
-
-</para>
-
-<para>
-
-Important : a template level cache system should have a way to index its cache
-using some variable defined in the context object and may be the template
-source path.
-
-</para>
-
-<para>
-
-Parameters
-
-</para>
-<itemizedlist><listitem>
-<para>
-
-PHPTAL $tpl : the template object 
-
-</para>
-</listitem><listitem>
-<para>
-
-string $file : template source file (may comes from SourceLocator) 
-
-</para>
-</listitem><listitem>
-<para>
-
-PHPTAL_Context $context : the execution context
-
-</para>
-</listitem></itemizedlist>
-<para>
-
-Return
-
-</para>
-
-<para>
-
-string : the cached value or the result of the template execution
-
-</para>
-
-<para>
-
-Example
-
-</para>
-
-<para>
-
-We want to cache 'document.html' templates as they contains only 'static' data
-retrieved from database. For this exemple, we assume the context contains a
-'doc_id' variable.
-
-</para>
-
-<example><title>Cache (template result) implementation</title>
-<programlisting><![CDATA[
-class MySpecificCache extends PHPTAL_Cache 
-{ 
-    function template(&$tpl, $file, &$context) 
-    { 
-        // we only worry about 'document.html' templates 
-        $str = new OString($file);
-        if ($str->endsWith('/document.html')) { 
-            $doc_id = $context->get('doc_id'); 
-            $cache = '/path/to/cached/documents/' . $doc_id;
-            // 
-            // check that the file exists and that the document 
-            // was not modified since the cache occured. 
-            // 
-            // here we assume Document::lastModified($id) return 
-            // the last modification time of specified document id 
-            // 
-            if (file_exists($cache) 
-                && (filemtime($cache) > Document::lastModified($doc_id)) { 
-                // return the cache content 
-                return join('', file($cache)); 
-            }
-            // use this with care, here the document object is not 
-            // loaded in the source template, as no cache exists 
-            // for it, we load it here and push its reference 
-            // in the template context. 
-            // 
-            // this small concept can prevent your scripts from 
-            // executing unrequired queries or actions as their 
-            // result is already known and cached somewhere. 
-            // 
-            $context->setRef('document', Document::load($doc_id));
-            // the template can continue its execution and now it 
-            // can access the loaded 'document' object.
-            $result = $tpl->_process();
-            // we cache the result 
-            $fp = fopen($cache, 'w'); 
-            fwrite($fp, $result); 
-            fclose($fp);
-            // and finally return it 
-            return $result; 
+    class MyTranslator implements PHPTAL_TranslationService {
+      ...
+      public function setLanguage(){
+        $langs = func_get_args();
+        foreach ($langs as $lang){
+           // if $lang known use it and stop the loop
+           $this->_currentLang = $lang;
+           return;
         }
-        // non handled template 
-        return $tpl->_process(); 
-    } 
-} 
-]]></programlisting>
-</example>
-
-<para>
-
-An of course an example on how to use this cache system :
-
-</para>
-<programlisting><![CDATA[
-require_once "PHPTAL.php";
-
-$tpl = new PHPTAL('/template/repository/document.html'); 
-$tpl->set('doc_id', $id);
-
-$cache = new MySpecificCache(); 
-$tpl->setCacheManager($cache);
-
-echo $tpl->execute();
-]]></programlisting>
-
-</section>
-</section>
-<!-- end of PHPTAL_Cache -->
-
-<section id="phptal.filter">
-<title>interface PHPTAL_Filter</title>
-<para>
-
-The filter interface let you modify the template source (input) and the
-template execution result (output) using your own filters object.
-
-</para>
-
-<para>
-
-You can add more than one filter to the PHPTAL object, they will be executed in
-the order they where added to the object.
-
-</para>
-
-<para>
-
-You can add a filter object to PHPTAL using :
-
-</para>
-<itemizedlist>
-  <listitem><para>
-
-PHPTAL::addInputFilter() 
-
-  </para></listitem>
-  <listitem><para>
-
-PHPTAL::addOutputFilter()
-
-  </para></listitem>
-</itemizedlist>
-<para>
-
-Example
-
-</para>
-<programlisting><![CDATA[
-$tpl = new PHPTAL('file.html');
-$tpl->addInputFilter($myFilter1); 
-$tpl->addInputFilter($myFilter2);
-// input filter may also be called as output filters 
-$tpl->addOutputFilter($myFilter2); 
-$tpl->addOutputFilter($myFilter3);
-]]></programlisting>
-
-<para>
-
-Note : input filters are called whenever a template source is required, output
-filters are called only at the end of the main template execution unless a
-cache manager break the main template <emphasis>_process() </emphasis>usage.
-
-</para>
-
-<section id="phptal.filter.filter">
-<title>method filter</title>
-<para>
-
-This method is called whenever the template has to filter some input or output
-data, depending if the php intermediate code is up to date and if the Filter
-was registered as an input filter or as an output filter.
-
-</para>
-
-<para>
-
-Parameters
-
-</para>
-
-<para>
-
-PHPTAL $tpl : the template object which requested this filter 
-
-</para>
-<itemizedlist><listitem>
-<para>
-
-string $data : the data to filter 
-
-</para>
-</listitem><listitem>
-<para>
-
-int $mode : one of PHPTAL_PRE_FILTER or PHPTAL_POST_FILTER, this
-parameter tells if the filter is called as an input filter or as an output
-filter.
-
-</para>
-</listitem></itemizedlist>
-<para>
-
-Return
-
-</para>
-
-<para>
-
-string : the result of the filter or $data if the filter did nothing
-
-</para>
-
-<para>
-
-Example
-
-</para>
-<example><title>Filter implementation</title>
-<programlisting><![CDATA[
-<?php
-class MyFilter extends PHPTAL_Filter 
-{ 
-    function filter(&$tpl, $data, $mode) 
-    { 
-        // just to present $mode usage for input/output filters 
-        if ($mode == PHPTAL_POST_FILTER) { 
-            return PEAR::raiseError( "MyFilter mustn't be used as a pre-filter' ); 
-        }
-        // remove html comments from template source 
-        return preg_replace('/(<\!--.*?-->)/sm', '', $data); 
-    } 
-}
-
-$tpl = new PHPTAL('mytemplate.html'); 
-$tpl->addInputFilter(new MyFilter()); 
-echo $tpl->execute();
-?>
-]]></programlisting>
-</example>
-</section>
-</section> 
-<!-- end of PHPTAL_Filter -->
-
-
-<section id="phptal.sourceresolver">
-<title>interface PHPTAL_SourceResolver</title>
-<para>
-
-In some specific systems, you'll prefer storing template sources on a distant
-server, in a database, and maybe also on the local file system. 
-
-</para>
-
-<para>
-
-The source resolver interfaces allow you to customize PHPTAL providing it more
-ways of retrieving template sources.
-
-</para>
-
-<para>
-When trying to retrieve a template source given the template path, PHPTAL
-will ask each registered SourceLocator to locate the path and will stop when
-one assume it can handle the page.
-</para>
-
-<programlisting><![CDATA[
-
-$myDBResolver = new DBResolver();
-
-$tpl = new PHPTAL('db://128');
-
-$tpl->addSourceResolver($myDBResolver);
-
-]]></programlisting>
-
-
-<section id="phptal.sourceresolver.resolve">
-<title>method resolve</title>
-
-<para>
-This method is invoked each time a template source has to be located.
-</para>
-
-<para>
-This method must returns a SourceLocator object which will 'points' to
-the template source and will be able to retrieve it.
-</para>
-
-<para>Parameters</para>
-<itemizedlist>
-<listitem>
-
-<para>string $path : path to resolver </para> 
-
-</listitem> 
-<listitem>
-
-<para>string $repository : template repository if specified on template
-instantiation
-</para>
-
-</listitem>
-<listitem>
-
-<para>string $callerPath : caller realpath, when a template look for an
-external template or macro, this is mainly usefull for relative paths </para>
-
-</listitem> 
-</itemizedlist>
-
-<para>Return
-</para>
-<para>PHPTAL_SourceLocator
-</para>
-
-<example><title>SourceResolver implementation</title>
-<programlisting><![CDATA[
-class DBResolver extends PHPTAL_SourceResolver
-{
-    function resolve($path, $repository=false, $callerPath=false)
-    {
-        // DBResolver can resolver only db:// based pathes
-        if (!substr($path, 0, 5) == 'db://') {
-            return false;
-        }
-        $locator = new DBLocator($path);
-        if ($locator->isValid()) {
-            return $locator;
-        }
-        return false;
+      }
+      ...
+      private $_currentLang;
     }
-}
-]]></programlisting>
-</example>
+    ?>
 
-</section>
-</section>
 
-<section id="phptal.sourcelocator">
-<title>interface PHPTAL_SourceLocator</title>
+  method useDomain($domain)
+  -------------------------
 
-<para>This kind of object is returned by a PHPTAL_SsourceLocator
-implementation. </para> 
-
-<para>The aim of this object is to provide an access to a template source 
-wherever the source is situated.</para>
-
-<example><title>SourceLocator implementation</title>
-<programlisting><![CDATA[
-class DBLocator extends PHPTAL_SourceLocator
-{
-    var $_id;
-    var $_lastModified;
-    var $_data;
-    var $_isValid = false;
-    var $_path;
+  If you decided to store your translations into separated files, one for
+  each application for example, this method allow you to select the 
+  translation domain from your templates (i18n:domain).
+  
+    <?php
+    require_once 'PHPTAL/TranslationService.php';
     
-    function DBLocator($path)
-    {
-        $this->_path = $path;
-        $id  = substr($path, 5);
-        $res = mysql_query("SELECT * FROM Template WHERE id=$id");
-        $val = mysql_fetch_array($res);
-        if ($val) {
-            $this->_id = $id;
-            $this->_lastModified = $val['last_modified'];
-            $this->_data = $val['data'];
-            $this->_isValid = true;
+    class MyTranslator implements PHPTAL_TranslationService {
+      ...
+      public function useDomain($domain){
+        if (!array_key_exists($domain, $this->_domains)){
+          $file = "domains/$this->_currentLang/$domain.php";
+          $this->_domains[$domain] = include($file);
         }
+        $this->_currentDomain = $this->_domains[$domain];
+      }
+      ...
+      private $_currentDomain;
+      private $_domains = array();
     }
-
-    function isValid()
-    {
-        return $this->_isValid;
-    }
+    ?>
     
-    function realPath()
-    {
-        return $this->_path;
+  The above example is a possible translation solution where keys are stored
+  into php files which returns a associative array of key => translation.
+  
+  
+  method setVar($key,$value)
+  --------------------------
+  
+  This method matches i18n:name calls. It builds an interpollation context
+  for later translate calls.
+  
+    <?php
+    require_once 'PHPTAL/TranslationService.php';
+    
+    class MyTranslator implements PHPTAL_TranslationService {
+      ...
+      public function setVar($key, $value){
+        $this->_context[$key] = $value;
+      }
+      ...
+      private $_context = array();
     }
+    ?>
+    
+    
+  method translate($key)
+  ----------------------
 
-    function lastModified()
-    {
-        return $this->_lastModified;
-    }
+  The last and most important method to implement, it ask your service to
+  translate the specified key for the current selected language.
+  
+    <?php
+    require_once 'PHPTAL/TranslationService.php';
+    
+    class MyTranslator implements PHPTAL_TranslationService {
+      ...
+      public function translate($key){
+        $value = $this->_currentDomain[$key];
         
-    function data()
-    {
-        return $this->_data;
-    }
-}
-]]></programlisting>
-</example>
-
-<section id="phptal.sourcelocator.realpath">
-<title>method realPath</title>
-<para>
-This method must return the unique template path.
-</para>
-<para>
-The result of this method is used to generate a unique md5 value which
-represents the template php function name produced by PHPTAL for this source.
-</para>
-
-<para>Return</para>
-<para>string : the unique absolute path to this source</para>
-
-</section>
-
-
-<section id="phptal.sourcelocator.lastmodified">
-<title>method lastModified</title>
-<para>This method return the source last modified time.</para>
-
-<para>The result is compared to php intermediate code generation time to decide
-whether or no this source has to be parsed again. </para>
-
-<para>Return</para>
-<para>int : time stamp</para>
-
-</section>
-
-
-<section id="phptal.sourcelocator.data">
-<title>method data</title>
-<para>This method must return the template source.
-</para>
-
-<para>This method is invoqued if the template source has to be parsed or
-reparsed. </para>
-
-<para>Return</para>
-
-<para>string : the template source</para>
-
-</section>
-
-
-</section>
-
-
-<section id="phptal.i18n">
-<title>interface PHPTAL_I18N</title>
-
-<para>I18N stands for 'internationalisation', PHPTAL default translation system
-is based on the GetText package. This interface allow you to replace the
-default translation system by yourself.</para>
-
-<itemizedlist><title>methods list</title>
-<listitem>
-<para>void <link linkend="phptal.i18n.set">set</link>($varName, $value)
-</para>
-</listitem>
-<listitem>
-<para>string <link linkend="phptal.i18n.translate">translate</link>($key)
-</para>
-</listitem>
-</itemizedlist>
-
-<example><title>I18N implementation</title>
-<programlisting><![CDATA[
-class MyTranslateSystem extends PHPTAL_I18N
-{
-    var $_context = array();
-    
-    function set($varName, $value)
-    {
-        $this->_context[$varName] = $value;
-    }
-
-    function translate($value)
-    {
-        // interpolate variables
-        while (preg_match('/\$\{(.*?)\}/sm', $value, $m)) {
-            list($src, $var) = $m;
-            $varValue = $this->_context[$var];
-            $value = str_replace($src, $varValue, $value);
+        // interpolate ${myvar} using context associative array
+        while (preg_match('/\${(.*?)\}/sm', $value, $m)){
+          list($src,$var) = $m;
+          if (!array_key_exists($var, $this->_context)){
+              $err = sprintf('Interpolation error, var "%s" not set', $var);
+              throw new Exception($err);
+          }
+          $value = str_replace($src, $this->_context[$var], $value);
         }
         
-        // reverse translated string so austrian people can read it :)
-        $result = "";
-        for ($i = strlen($value); $i >= 0; $i--) {
-            $result .= $value[$i]; 
-        }
-        return $result;
+        return $value;
+      }
+      ...
     }
-}
+    ?>
+    
 
-$tpl = PHPTAL('myfile.html');
+Creating custom expression modifiers
+====================================
 
-$tpl->setTranslator(new MyTranslateSystem());
-]]></programlisting>
-</example>
+PHPTAL comes with some basic expression modifiers (not:, exists:, string:,
+php:, path:).
 
-<section id="phptal.i18n.set">
-<title>method set</title>
-
-<para>PHPTAL will call this method whenever a i18n:name attribute is used. Your
-translation system must store these values until the translate method is
-called. </para>
-
-<para>Parameters</para>
-<itemizedlist>
-<listitem>
-<para>string $varName : the variable name
-</para>
-</listitem>
-<listitem>
-<para>string $value : the variable value
-</para>
-</listitem>
-</itemizedlist>
-</section>
-
-
-<section id="phptal.i18n.translate">
-<title>method translate</title>
-
-<para>This method must returns the translated value of $key interpolating
-${XXX} with previously set variables.  </para>
-
-<para>Parameters</para>
-<itemizedlist>
-<listitem>
-<para>string $key : key or string to translate
-</para>
-</listitem>
-</itemizedlist>
-
-<para>Return</para>
-<para>string : the translated value</para>
-
-</section>
-
-</section>
-
-<section>
-<title>interface Iterator</title>
-<para>
-</para>
-</section>
-
-<section id="phptal.modifiers">
-<title>creating custom expression modifiers</title>
-
-<para>PHPTAL comes with some basic expression modifiers (<literal>not:</literal>,
-<literal>exists:</literal>, <literal>string:</literal>,
-<literal>php:</literal>, <literal>path:</literal>). </para>
-
-<para>These modifiers are defined by ZPT specifications but PHPTALES can be
+These modifiers are defined by ZPT specifications but PHPTALES can be
 extended with your own modifiers to manipulate strings, date, money numbers,
-objects, whatever...</para>
+objects, whatever...
 
-<para>The aim of a modifier is to return some PHP code that will be included in
-the template php source.</para>
+The aim of a modifier is to return some PHP code that will be included in
+the template php source.
 
-<para>Modifiers are used at parse time, if you change the behaviour of a
-modifier, you'll have to delete generated php files. </para>
+Modifiers are used at parse time, if you change the behaviour of a
+modifier, you'll have to delete generated php files. 
 
-<para>Please note that modifiers produced code mustn't echo data !</para>
+Please note that modifiers produced code mustn't echo data !
 
-<para>Modifiers takes two arguments</para>
-<itemizedlist>
-<listitem>
-<para>PHPTAL_Expression $expression : The expression object which requires this
-modifier</para>
-</listitem>
-<listitem>
-<para>string $arg : The modifier arguments</para>
-</listitem>
-</itemizedlist>
+Any php function starting with "phptal_tales_" is usuable as a modifier.
 
-<para>Return</para>
-<para>string : some php code that will be included as is in the template php
-generated script
-</para>
+Modifiers takes two arguments:
+- $src : the source string after the "modifier:" keyword
+- $nothrow : a boolean which tells if exceptions may be thrown or not by
+  phptal_path() resolution. This boolean must be propagated whenever you
+  call another phptal_tales_* modifier in your own modifier
 
-<para>
 For example, in the following TAL template,
-</para>
-<programlisting><![CDATA[
-<span tal:replace="some-modifier: my/path/value"/>
-]]></programlisting>
 
-<para>
-The expression will be an object representing the entire tal:replace attribute.
-</para>
-<para>
-The argument will be the string <literal>my/path/value</literal>.
-</para>
+    <span tal:replace="some-modifier: my/path/value"/>
 
+The src argument will be "my/path/value" and the $nothrow boolean will be
+false because tal:replace requires the path to be fully resolvable.
 
-<para>
 An expression like :
-</para>
 
-<programlisting><![CDATA[
-<span tal:replace="some-modifier: my/path/value | other/path"/>
-]]></programlisting>
+    <span tal:replace="some-modifier: my/path/value | other/path"/>
 
-<para>
 Will use 2 modifiers :
-</para>
 
-<itemizedlist>
-<listitem>
-<para><literal>some-modifier:</literal> with <literal>my/path/value</literal>
-as argument</para>
-</listitem>
-<listitem>
-<para><literal>path:</literal> with <literal>other/path</literal> as
-argument. <literal>path:</literal> is the implicit modifier used when no
-modifier is specified.</para>
-</itemizedlist>
+  - some-modifier: with "my/path/value" as $src argument and $nothrow set to 
+  true because an alternative exists
+  - path: with "other/path" as $src and $nothrow set to false, because in 
+  case the alternative is not found, tal:replace will be in trouble.
 
-<para>
+Please note that path: is the implicit modifier used when no other modifier 
+is specified.
+
 Modifiers can use other modifiers to generate sub php code. The below exemple
 show this.
-</para>
 
-<para>
-Example :
-</para>
-<programlisting role="php"><![CDATA[
-//
-// This modifier will return a money formated string (XXX.XX)
-//
-// usage :
-//
-//      money: path/to/my/amount
-//
-// this modifier use PHPTAL_ES_path (path:) modifier to generate the
-// php code that will return the value of the modifier argument.
-//
-// in the example :
-//
-//      money: path/to/my/amount 
-// 
-// the expression "virtually" became money: path: path/to/my/amount
-//
-// thus, the produced code will be something like :
-//
-//      sprintf("%01.2f", $__ctx__->get("path/to/my/amount"))
-//
-// This code will be included right into the template where needed.
-//
-// @param PHPTAL_Expression $expression
-//      The expression object
-// @param string $arg
-//      Expression value.
-// @return string
-//      PHP code to include in the template
-//
-function PHPTAL_ES_money(&$expression, $arg) 
-{
-    return 'sprintf("%01.2f", '. PHPTAL_ES_path($expression, $arg) . ')';
-}
-]]></programlisting>
-
-<itemizedlist>
-<listitem>
-    <para>PHPTAL_ES_path : generate php code to resolve specified path.</para>
-</listitem>
-<listitem>
-    <para>PHPTAL_ES_path_in_string : take a string and generate php code to
-    resolve <literal>${some/path}</literal> variables. </para>
-</listitem>
-<listitem>
-    <para>PHPTAL_ES_string : modify the argument to generate a php string with
-    <literal>${some/path}</literal> interpollation. </para>
-</listitem>
-<listitem>
-    <para>PHPTAL_ES_path_tostring : return a string representation of the data
-    pointed by the path instead of returning the data itself.
-    </para>
-</listitem>
-</itemizedlist>
-
-<para>
-The <literal>PHPTAL_Expression</literal> object is used internally by PHPTAL,
-it's API will change in future version of PHPTAL so please avoid using it at
-this very time.
-</para>
-
-</section>
-</article>
+    //
+    // This modifier will return a money formated string (XXX.XX)
+    //
+    // usage :
+    //
+    //      money: path/to/my/amount
+    //
+    // this modifier use phptal_tales_path (path:) modifier to generate the
+    // php code that will return the value of the modifier argument.
+    //
+    // in the example :
+    //
+    //      money: path/to/my/amount 
+    // 
+    // the expression "virtually" became money: path: path/to/my/amount
+    //
+    // thus, the produced code will be something like :
+    //
+    //      sprintf("%01.2f", $ctx->get("path/to/my/amount"))
+    //
+    // This code will be included right into the template where needed.
+    //
+    // @param string $src
+    //      The expression string
+    // @param string $nothrow
+    //      A boolean indicating if exceptions may be throw by phptal_path if
+    //      the path does not exists.
+    // @return string
+    //      PHP code to include in the template
+    //
+    function phptal_tales_money( $src, $nothrow )
+    {
+        // remove spaces we do not require here
+        $src = trim($src); 
+        return 'sprintf("%01.2f", '.phptal_tales_path($src, $nothrow).')';
+    }
 
 USEFULL LINKS
 *************

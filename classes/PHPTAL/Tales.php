@@ -49,7 +49,7 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 //
 //      * repeat - the repeat variables (see RepeatVariable).
 // 
-function phptal_tales( $expression, $nothrow=false, $optimize=true )
+function phptal_tales( $expression, $nothrow=false )
 {
     $expression = trim($expression);
 
@@ -73,7 +73,7 @@ function phptal_tales( $expression, $nothrow=false, $optimize=true )
         $err = sprintf($err, $typePrefix, $func);
         throw new Exception($err);
     }
-    return $func($expression, $nothrow, $optimize);
+    return $func($expression, $nothrow);
 }
 
 
@@ -101,9 +101,9 @@ function phptal_tales( $expression, $nothrow=false, $optimize=true )
 //      not: string:${foo}
 //      not: foo/bar/booleancomparable
 // 
-function phptal_tales_not( $expression, $nothrow, $optimize )
+function phptal_tales_not( $expression, $nothrow )
 {
-    return '!' . phptal_tales( $expression, $nothrow, $optimize );
+    return '!' . phptal_tales( $expression, $nothrow );
 }
 
 // 
@@ -139,8 +139,9 @@ function phptal_tales_not( $expression, $nothrow, $optimize )
 //
 // @returns string or array
 // 
-function phptal_tales_path( $expression, $nothrow=false, $optimize=true )
+function phptal_tales_path( $expression, $nothrow=false )
 {
+    $expression = trim($expression);
     if ($expression == 'default') return PHPTAL_TALES_DEFAULT_KEYWORD;
     if ($expression == 'nothing') return PHPTAL_TALES_NOTHING_KEYWORD;
     if ($expression == '') return PHPTAL_TALES_NOTHING_KEYWORD;
@@ -168,7 +169,6 @@ function phptal_tales_path( $expression, $nothrow=false, $optimize=true )
 
     $expression = phptal_tales_string($expression);
 
-    if ($optimize){
         if (strpos($expression, '/') === false) {
             return '$ctx->'. substr($expression, 1, -1);
         }
@@ -186,13 +186,6 @@ function phptal_tales_path( $expression, $nothrow=false, $optimize=true )
         if ($nothrow) 
             return 'phptal_path($ctx->'.$next.', '.$expression.', true)';
         return 'phptal_path($ctx->'.$next.', '.$expression.')';
-    }
-
-    // cutted to avoid 1 method call for long pathes, may need more tests
-    // before validation                   
-    if ($nothrow) 
-       return 'phptal_path($ctx, '.$expression.', true)';
-    return 'phptal_path($ctx, '.$expression.')';
 }
 
 //      
@@ -210,7 +203,7 @@ function phptal_tales_path( $expression, $nothrow=false, $optimize=true )
 //      string:hello, ${user/name}
 //      string:you have $$130 in your bank account
 //
-function phptal_tales_string( $expression, $nothrow=false, $optimize=true )
+function phptal_tales_string( $expression, $nothrow=false )
 {
     $inPath = false;
     $inAccoladePath = false;
@@ -298,13 +291,13 @@ function phptal_tales_php( $src )
 }
 
 
-function phptal_tales_exists( $src, $nothrow, $optimize )
+function phptal_tales_exists( $src, $nothrow )
 {
     return sprintf('phptal_exists($ctx, %s)',
-                   phptal_tales_string(trim($src), $nothrow, $optimize));
+                   phptal_tales_string(trim($src), $nothrow));
 }
 
-function phptal_tales_number( $src, $nothrow, $optimize )
+function phptal_tales_number( $src, $nothrow )
 {
     return trim($src);
 }

@@ -23,6 +23,11 @@
 require_once 'config.php';
 require_once 'PHPTAL/Tales.php';
 
+function phptal_tales_custom($src,$nothrow)
+{
+    return 'sprintf("%01.2f", '.phptal_tales_path($src, $nothrow).')';
+}
+
 class TalesTest extends PHPUnit2_Framework_TestCase 
 {
     function testString()
@@ -56,6 +61,15 @@ class TalesTest extends PHPUnit2_Framework_TestCase
         $res = phptal_tales($src);
         $this->assertEquals("!foo()", $res);
     }
+
+    function testCustom()
+    {
+        $src = 'custom: some/path';
+        $this->assertEquals('sprintf("%01.2f", phptal_path($ctx->some, \'path\'))', 
+                            phptal_tales($src));
+    }
 }
+
+
 
 ?>
