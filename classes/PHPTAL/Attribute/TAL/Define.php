@@ -41,10 +41,11 @@
  */
 class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
 {
+    private $_buffered = false;
+    
     public function start()
     {
         $expressions = $this->tag->generator->splitExpression($this->expression);
-
         foreach ($expressions as $exp){
             list($defineScope, $defineVar, $expression) = $this->parseExpression($exp);
             if (!$defineVar) {
@@ -58,6 +59,7 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                 $code = sprintf('$tpl->%s = ob_get_contents()', $defineVar);
                 $this->tag->generator->pushCode( $code );
                 $this->tag->generator->pushCode( 'ob_end_clean()' );
+                $this->_buffered = true;
             }
             else if ($expression !== false) {
                 $started = true;
@@ -76,6 +78,18 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                     $this->tag->generator->pushCode( $code );
                 }
             }
+        }
+        // if the content of the tag was not buffered and the tag has something
+        // interesting to tell, we echo it
+        if (!$this->_buffered && $this->tag->hasRealContent()){
+            /*
+            $this->tag->generateHead();
+            $this->tag->generateContent();
+            $this->tag->generateFoot();
+            */
+        }
+        else {
+            $this->tag->hidden = true;
         }
     }
 
@@ -99,6 +113,7 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                 $code = sprintf('$tpl->%s = ob_get_contents()', $defineVar);
                 $this->tag->generator->pushCode( $code );
                 $this->tag->generator->pushCode( 'ob_end_clean()' );
+                $this->_buffered = true;
                 break;
             }
 

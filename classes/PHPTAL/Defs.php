@@ -90,7 +90,7 @@ class PHPTAL_Defs
      * code generation.
      */ 
     static $DICTIONARY = array(
-        'TAL:DEFINE'         => self::REPLACE,  // set a context variable
+        'TAL:DEFINE'         => self::SURROUND, // set a context variable
         'TAL:CONDITION'      => self::SURROUND, // print tag content only when condition true
         'TAL:REPEAT'         => self::SURROUND, // repeat over an iterable
         'TAL:CONTENT'        => self::CONTENT,  // replace tag content
@@ -110,18 +110,6 @@ class PHPTAL_Defs
         'I18N:ATTRIBUTES'    => self::SURROUND, // translate tag attributes values
         'I18N:DOMAIN'        => self::SURROUND, // choose translation domain
 
-        'PHP:SET'            => self::REPLACE,
-        'PHP:IF'             => self::SURROUND,
-        'PHP:ELSEIF'         => self::SURROUND,
-        'PHP:ELSE'           => self::SURROUND,
-        'PHP:WHILE'          => self::SURROUND,
-        'PHP:FOREACH'        => self::SURROUND,
-        'PHP:CONTENT'        => self::CONTENT,
-        'PHP:INCLUDE'        => self::REPLACE,
-        'PHP:REPLACE'        => self::REPLACE,
-        'PHP:ATTRIBUTES'     => self::REPLACE,
-        'PHP:OMIT-TAG'       => self::SURROUND,       
-
         'PHPTAL:TALES'       => self::SURROUND,
         'PHPTAL:DEBUG'       => self::SURROUND,
     );
@@ -137,43 +125,33 @@ class PHPTAL_Defs
      * will execute in following order.
      */ 
     static $RULES_ORDER = array(
-        'PHPTAL:DEBUG'       => -1,   // meta surround
-        'PHPTAL:TALES'       => 0,    // meta surround
+        'PHPTAL:DEBUG'       => -2,   // meta surround
+        'PHPTAL:TALES'       => -1,   // meta surround
         
-        'TAL:OMIT-TAG'       => 1,    // surround -> $tag->disableHeadFootPrint()
-        'PHP:OMIT-TAG'       => 1,
+        'TAL:OMIT-TAG'       => 0,    // surround -> $tag->disableHeadFootPrint()
 
-        'TAL:ON-ERROR'       => 2,    // surround
-        'I18N:DOMAIN'        => 3,    // surround
+        'TAL:ON-ERROR'       => 1,    // surround
+        'I18N:DOMAIN'        => 2,    // surround
 
+        'TAL:DEFINE'         => 3,    // replace
+        
         'METAL:DEFINE-MACRO' => 4,    // surround
-        'TAL:DEFINE'         => 4,    // replace
-        'PHP:SET'            => 4,
         'I18N:NAME'          => 4,    // replace
         'I18N:TRANSLATE'     => 4,    // content
 
         'TAL:CONDITION'      => 5,    // surround
-        'PHP:IF'             => 5,
-        'PHP:ELSEIF'         => 5,
-        'PHP:ELSE'           => 5,
 
         'TAL:REPEAT'         => 6,    // surround
-        'PHP:WHILE'          => 6,
-        'PHP:FOREACH'        => 6,
 
         'TAL:ATTRIBUTES'     => 7,    // replace
-        'PHP:ATTRIBUTES'     => 7,
         'TAL:REPLACE'        => 7,    // replace
-        'PHP:REPLACE'        => 7,
         'METAL:USE-MACRO'    => 7,    // replace
-        'PHP:INCLUDE'        => 7,    // replace
         'METAL:DEFINE-SLOT'  => 7,    // replace
         'METAL:FILL-SLOT'    => 7,    // replace
 
         'I18N:ATTRIBUTES'    => 8,    // replace
 
         'TAL:CONTENT'        => 9,    // content
-        'PHP:CONTENT'        => 9,
 
         'TAL:COMMENT'        => 10,    // surround
     );

@@ -89,6 +89,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
 
     public $headFootDisabled = false;
     public $headFootPrintCondition = false;
+    public $hidden = false;
 
     public function __construct( $parser, $name, $attributes )
     {
@@ -121,9 +122,12 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         }
 
         $this->generateSurroundHead();
-        $this->generateHead();
-        $this->generateContent();
-        $this->generateFoot();
+        // a surround tag may decide to hide us (tal:define for example)
+        if (!$this->hidden){
+            $this->generateHead();
+            $this->generateContent();
+            $this->generateFoot();
+        }
         $this->generateSurroundFoot();
     }
 
@@ -229,6 +233,21 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     private function hasContent()
     {
         return count($this->children) > 0 || count($this->contentAttributes) > 0;
+    }
+
+    public function hasRealContent()
+    {
+        if (count($this->children) == 0 && count($this->contentAttributes) == 0)
+            return false;
+
+        if (count($this->children) == 1){
+            $child = $this->children[0];
+            if ($child instanceOf PHPTAL_NodeText && $child->value == ''){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private function prepareAttributes()
