@@ -48,9 +48,22 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     {
         return $this->_codeGenerator;
     }
+
+    public function setPreFilter($filter)
+    {
+        $this->_prefilter = $filter;
+    }
     
     public function parseString( $str ) 
     {
+        // PHPTAL_XmlParser calls parseString() even if
+        // parseFile() is invoked, the prefilter usage
+        // works here. If this behaviour is changed, 
+        // the following lines may requires to be moved
+        // otherwhere.
+        if ($this->_prefilter){
+            $str = $this->_prefilter->filter($str);
+        }
         parent::parseString( $str );
         return $this->_tree;
     }
@@ -127,6 +140,7 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     private $_stack;
     private $_current;
     private $_codeGenerator;
+    private $_prefilter = null;
 }
 
 ?>
