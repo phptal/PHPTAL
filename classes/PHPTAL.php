@@ -101,7 +101,7 @@ class PHPTAL
     const XHTML = 1;
     const XML   = 2;
     
-    public function __construct($path)
+    public function __construct($path=false)
     {//{{{
         $this->_realPath = $path;
         $this->_repositories = array();
@@ -110,6 +110,11 @@ class PHPTAL
         }
         $this->_context = new PHPTAL_Context();
     }//}}}
+
+    public function setTemplate($path)
+    {
+        $this->_realPath = $path;
+    }
 
     public function __clone()
     {//{{{
@@ -355,6 +360,10 @@ class PHPTAL
 
     private function findTemplate()
     {//{{{
+        if ($this->_realPath == false){
+            throw new Exception('No template file specified');
+        }
+        
         foreach ($this->_repositories as $repository){
             $f = $repository . PHPTAL_PATH_SEP . $this->_realPath;
             if (file_exists($f)){
