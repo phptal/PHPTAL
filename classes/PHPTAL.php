@@ -298,9 +298,11 @@ class PHPTAL
 
     private function storeGeneratedCode($code)
     {//{{{
-        $fp = @fopen($this->_codeFile, "w");
+        $fp = @fopen($this->_codeFile, 'w');
         if (!$fp) {
-            throw new Exception($php_errormsg);
+            $err = 'Unable to open %s for writing';
+            $err = sprintf($err, $this->_codeFile);
+            throw new Exception($err);
         }
         fwrite($fp, $code);
         fclose($fp);
