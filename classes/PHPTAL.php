@@ -53,12 +53,6 @@ require_once 'PHPTAL/RepeatController.php';
  */
 class PHPTAL 
 {
-    public $errors = array();
-    public $repeat;
-    public $slots = array();
-    public $slotsStack = array();
-    public $encoding = 'UTF-8';
-    
     public function __construct($path)
     {
         $this->_realPath = $path;
@@ -66,7 +60,12 @@ class PHPTAL
         if (defined('PHPTAL_TEMPLATE_REPOSITORY')){
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
-        $this->repeat = new PHPTAL_RepeatController();
+        $this->_repeat = new PHPTAL_RepeatController();
+    }
+
+    public function __clone()
+    {
+        $this->_repeat = clone($this->_repeat);
     }
 
     public function setTemplateRepository( $rep )
@@ -82,7 +81,7 @@ class PHPTAL
     public function execute() 
     {
         if (!$this->_prepared) $this->prepare();
-        $this->repeat = new PHPTAL_RepeatController();
+        $this->_repeat = new PHPTAL_RepeatController();
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
         $res = $templateFunction($this);
@@ -100,7 +99,7 @@ class PHPTAL
         }
         
         $tpl = new PHPTAL( $file );
-        $tpl->encoding = $this->encoding;
+        $tpl->_encoding = $this->_encoding;
         $tpl->setTemplateRepository($this->_repositories);
         $tpl->prepare();
         require_once $tpl->getCodePath();
@@ -133,18 +132,95 @@ class PHPTAL
         return $this->_functionName;
     }
 
-    public function setDocType($doctype)
+    public function setDocType( $doctype )
     {
         if (!$this->_docType){
             $this->_docType = $doctype;
         }
+    }
+
+    public function setEncoding( $enc )
+    {
+        $this->_encoding = $enc; 
+    }
+    
+    /**
+     * Returns array of exceptions catched by tal:on-error attribute.
+     */
+    public function getErrors()
+    { 
+        return $this->_errors;
+    }
+    
+    /**
+     * Public for phptal templates, private for user.
+     * @access private
+     */
+    public function addError( $error )
+    {
+        array_push($this->_errors, $error); 
+    }
+
+    /**
+     * Public for phptal templates, private for user.
+     * @access private
+     */
+    public function hasSlot( $key )
+    {
+        return array_key_exists($key, $this->_slots); 
+    }
+    
+    /**
+     * Public for phptal templates, private for user.
+     * @access private
+     */    
+    public function getSlot( $key )
+    {
+        return $this->_slots[$key]; 
+    }
+
+    /**
+     * Public for phptal templates, private for user.
+     * @access private
+     */
+    public function fillSlot( $key, $content )
+    { 
+        $this->_slots[$key] = $content; 
+    }
+    
+    /**
+     * Public for phptal templates, private for user.
+     * @access private
+     */
+    public function pushSlots() 
+    { 
+        array_push($this->_slotsStack, $this->_slots); 
+        $this->_slots = array(); 
+    }
+    
+    /**
+     * Public for phptal templates, private for user.
+     * @access private
+     */
+    public function popSlots() 
+    { 
+        $this->_slots = array_pop($this->_slotsStack); 
+    }
+   
+    /**
+     * Public for phptal templates, private for user.
+     * @access private
+     */
+    public function repeat() 
+    { 
+        return $this->_repeat; 
     }
     
     private function parse()
     {
         require_once 'PHPTAL/Parser.php';
         require_once 'PHPTAL/CodeGenerator.php';
-        $generator = new PHPTAL_CodeGenerator($this->encoding);
+        $generator = new PHPTAL_CodeGenerator($this->_encoding);
         $parser = new PHPTAL_Parser($generator);
         $tree = $parser->parseFile($this->_realPath);
 
@@ -192,6 +268,11 @@ class PHPTAL
     private $_prepared = false;
     private $_repositories = array();
     private $_docType = '';
+    private $_errors = array();
+    private $_repeat;
+    private $_slots = array();
+    private $_slotsStack = array();
+    private $_encoding = 'UTF-8';    
 }
 
 

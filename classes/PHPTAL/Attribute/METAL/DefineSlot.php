@@ -57,9 +57,9 @@ class PHPTAL_Attribute_METAL_DefineSlot extends PHPTAL_Attribute
 {
     public function start()
     {
-        $cond = sprintf('array_key_exists("%s", $tpl->slots)', $this->expression);
+        $cond = sprintf('$tpl->hasSlot("%s")', $this->expression);
         $this->tag->generator->doIf($cond);
-        $code = sprintf('<?= $tpl->slots["%s"] ?>', $this->expression);
+        $code = sprintf('<?= $tpl->getSlot("%s") ?>', $this->expression);
         $this->tag->generator->pushHtml($code);
         $this->tag->generator->doElse();
     }

@@ -44,8 +44,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
     public function start()
     {
         // reset template slots on each macro call ?
-        $this->tag->generator->pushCode('array_push($tpl->slotsStack, $tpl->slots)');
-        $this->tag->generator->pushCode('$tpl->slots = array()');
+        $this->tag->generator->pushCode('$tpl->pushSlots()');
         
         foreach ($this->tag->children as $child){
             $this->generateFillSlots($child);
@@ -62,7 +61,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
             $code = sprintf('<?php $tpl->executeMacro(%s); ?>', $code);
             $this->tag->generator->pushHtml($code);
         }
-        $this->tag->generator->pushCode('$tpl->slots = array_pop($tpl->slotsStack)');
+        $this->tag->generator->pushCode('$tpl->popSlots()');
     }
     
     public function end()

@@ -42,8 +42,9 @@ class TalOnErrorTest extends PHPUnit2_Framework_TestCase
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-on-error.01.html');
         $this->assertEquals($exp, $res);
-        $this->assertEquals(1, count($tpl->errors));
-        $this->assertEquals('error thrown', $tpl->errors[0]->getMessage());
+        $errors = $tpl->getErrors();
+        $this->assertEquals(1, count($errors));
+        $this->assertEquals('error thrown', $errors[0]->getMessage());
     }
 
     function testEmpty()
@@ -52,8 +53,9 @@ class TalOnErrorTest extends PHPUnit2_Framework_TestCase
         $tpl->dummy = new OnErrorDummyObject();
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-on-error.02.html');
-        $this->assertEquals(1, count($tpl->errors));
-        $this->assertEquals('error thrown', $tpl->errors[0]->getMessage());
+        $errors = $tpl->getErrors();
+        $this->assertEquals(1, count($errors));
+        $this->assertEquals('error thrown', $errors[0]->getMessage());
         $this->assertEquals($exp, $res);
     }
 
@@ -63,8 +65,9 @@ class TalOnErrorTest extends PHPUnit2_Framework_TestCase
         $tpl->dummy = new OnErrorDummyObject();
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-on-error.03.html');
-        $this->assertEquals(1, count($tpl->errors));
-        $this->assertEquals('error thrown', $tpl->errors[0]->getMessage());
+        $errors = $tpl->getErrors();
+        $this->assertEquals(1, count($errors));
+        $this->assertEquals('error thrown', $errors[0]->getMessage());
         $this->assertEquals($exp, $res);        
     }
 }

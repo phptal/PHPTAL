@@ -55,7 +55,6 @@ class PHPTAL_Attribute_METAL_DefineMacro extends PHPTAL_Attribute
         }
         
         $this->tag->generator->pushCode('$tpl = clone $tpl');
-        $this->tag->generator->pushCode('$tpl->repeat = clone $tpl->repeat');
     }
     
     public function end()

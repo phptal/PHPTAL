@@ -65,7 +65,7 @@ class PHPTAL_Attribute_METAL_FillSlot extends PHPTAL_Attribute
 
     public function end()
     {
-        $code = sprintf('$tpl->slots["%s"] = ob_get_contents(); ob_end_clean()', $this->expression);
+        $code = sprintf('$tpl->fillSlot("%s", ob_get_contents()); ob_end_clean()', $this->expression);
         $this->tag->generator->pushCode($code);
     }
 }

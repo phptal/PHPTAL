@@ -50,7 +50,7 @@ class PHPTAL_Attribute_TAL_OnError extends PHPTAL_Attribute
     {
         $this->tag->generator->pushCode('ob_end_flush()');        
         $this->tag->generator->doCatch('Exception $__err__');
-        $this->tag->generator->pushCode('$tpl->errors[] = $__err__');
+        $this->tag->generator->pushCode('$tpl->addError($__err__)');
         $this->tag->generator->pushCode('ob_end_clean()');
 
         list($echoType, $expression) = $this->parseExpression( $this->expression );

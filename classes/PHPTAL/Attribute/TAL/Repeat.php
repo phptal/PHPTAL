@@ -69,7 +69,8 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
         list($this->varName, $expression) = $this->parseExpression($this->expression);
         $code = $this->tag->generator->evaluateExpression($expression);
 
-        $init = sprintf('$tpl->repeat->%s = new PHPTAL_RepeatController()', $this->varName);
+        $this->tag->generator->pushCode('$__repeat__ = $tpl->repeat()');
+        $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController()', $this->varName);
         $this->tag->generator->pushCode($init);
         
         $this->setRepeatVar('source', $code);
@@ -113,7 +114,7 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
 
     private function repeatVar( $subVar )
     {
-        return sprintf('$tpl->repeat->%s->%s', $this->varName, $subVar);
+        return sprintf('$__repeat__->%s->%s', $this->varName, $subVar);
     }
 
     private function setRepeatVar( $subVar, $value )
