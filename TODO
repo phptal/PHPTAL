@@ -13,7 +13,3 @@ interfaces:
 [ ]  translationservice
 [ ]  resolver 
 
-* tal:content="unknown_var" does not throw an exception because $tpl->__get()
-  returns 'null' and one level pathes are optimised to '$tpl->unknown_var'
-  instead of using phptal_path() resolver.
-

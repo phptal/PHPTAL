@@ -147,6 +147,11 @@ class PHPTAL
     {
         $this->_encoding = $enc; 
     }
+
+    public function noThrow( $bool )
+    {
+        $this->_nothrow = $bool;
+    }
     
     /**
      * Returns array of exceptions catched by tal:on-error attribute.
@@ -229,7 +234,9 @@ class PHPTAL
     
     public function __get($varname)
     {
-        return null;
+        if ($this->_nothrow)
+            return null;
+        throw new Exception("Unable to find path $varname");
     }
     
     private function parse()
@@ -289,6 +296,7 @@ class PHPTAL
     private $_slots = array();
     private $_slotsStack = array();
     private $_encoding = 'UTF-8';    
+    private $_nothrow = false;
 }
 
 

@@ -59,7 +59,9 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
     {
         $code = $this->tag->generator->evaluateExpression($expression);
         if (is_array($code)) {
+            $this->tag->generator->noThrow(true);
             $this->generateChainedAttribute( $attribute, $code );
+            $this->tag->generator->noThrow(false);
             return;
         }
         

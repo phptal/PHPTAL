@@ -100,6 +100,16 @@ class PHPTAL_CodeGenerator
         $this->flushCode();
         $this->flushHtml();
     }
+
+    public function noThrow( $bool )
+    {
+        if ($bool){
+            $this->pushCode('$tpl->noThrow(true)');
+        }
+        else {
+            $this->pushCode('$tpl->noThrow(false)');
+        }
+    }
     
     public function flushCode()
     {

@@ -43,6 +43,7 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
         $code = $this->tag->generator->evaluateExpression( $expression );
 
         if (is_array($code)) {
+            $this->tag->generator->noThrow(true);
             $started = false;
             foreach ($code as $exp){
                 if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
@@ -68,6 +69,7 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
             }
             if ($started)
                 $this->tag->generator->doEnd();
+            $this->tag->generator->noThrow(false);
             return;
         }
 

@@ -61,7 +61,9 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                 $started = true;
                 $code = $this->tag->generator->evaluateExpression($expression);
                 if (is_array($code)){
+                    $this->tag->generator->noThrow(true);
                     $this->chainedDefine( $defineVar, $code );
+                    $this->tag->generator->noThrow(false);
                 }
                 elseif ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
                     $code = sprintf('$tpl->%s = null', $defineVar);
