@@ -56,5 +56,15 @@
       <dc:date>2005-03-03</dc:date>    
     </item>
 
+    <item>
+      <title>PHPTAL 1.0.5</title>
+      <link>http://phptal.motion-twin.com</link>
+      <description>
+      - Important fix regarding attributes execution priority
+      </description>
+      <dc:creator>Laurent Bedubourg</dc:creator>
+      <dc:date>2005-03-03</dc:date>    
+    </item>
+
   </channel>
 </rss>

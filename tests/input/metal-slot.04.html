@@ -1,0 +1,15 @@
+<span>
+  
+  <metal:block define-macro="test">
+    <div metal:define-slot="content">no content provided</div>
+  </metal:block>
+
+  <div metal:use-macro="test">
+    <div metal:fill-slot="content" tal:condition="fillit">my content</div>
+  </div>
+
+  <div metal:use-macro="test">
+    <div metal:fill-slot="content" tal:condition="not:fillit">my content</div>
+  </div>
+
+</span>

@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_0_4');
+define('PHPTAL_VERSION', '1_0_5');
 
 //{{{OS RELATED DEFINES
 if (substr(PHP_OS,0,3) == 'WIN'){

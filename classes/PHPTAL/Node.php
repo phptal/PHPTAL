@@ -353,8 +353,10 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
             );
         }
 
+        ksort($result);
+        
         $this->talHandlers = $result;
-        foreach ($result as $handler) {
+        foreach ($result as $i=>$handler) {
             $type = PHPTAL_Defs::$DICTIONARY[strtoupper($handler->name)];
             switch ($type) {
                 case PHPTAL_Defs::REPLACE:
