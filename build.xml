@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="PHPTAL" basedir="." default="main">
-  <property name="version" value="1.0.0dev7"/>
+  <property name="version" value="1.0.0b1"/>
   <property name="build.base.dir" value="build"/>
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
@@ -21,6 +21,11 @@
   <fileset dir="docs" id="docs">
     <include name="**"/>
     <exclude name="**/.svn/**"/>
+  </fileset>
+
+  <fileset dir="." id="gendocs">
+    <include name="README"/>
+    <include name="COPYING"/>
   </fileset>
 
   <target name="main" if="version" depends="versioncheck">
@@ -56,6 +61,7 @@
       <fileset refid="lib-entry"/>
       <fileset refid="lib-classes"/>
       <fileset refid="docs"/>
+      <fileset refid="gendocs"/>
     </copy>
   </target>
 
@@ -67,6 +73,7 @@
       <fileset refid="lib-entry"/>
       <fileset refid="lib-classes"/>
       <fileset refid="docs"/>
+      <fileset refid="gendocs"/>
 
       <option name="notes">Zope Page Template implementation for PHP5</option>
       <option name="description">Zope Page Template implementation for PHP5</option>

@@ -38,7 +38,7 @@ if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     }
 }
 
-define('PHPTAL_VERSION', '1_0_0b2');
+define('PHPTAL_VERSION', '1_0_0b1');
 define('PHPTAL_XHTML',1);
 define('PHPTAL_XML', 2);
 
