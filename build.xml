@@ -31,7 +31,7 @@
   </target>
 
   <target name="doc">
-    <php expression="`phpdoc -d classes -t doc -p`"/>
+    <php expression="`phpdoc -d classes -t docs -p`"/>
   </target>
 
   <target name="test">

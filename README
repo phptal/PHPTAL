@@ -1,4 +1,4 @@
-                  PHPTAL - ZPT Implementation for PHP
+                  PHPTAL - Template Attribute Language for PHP
 
              Laurent Bedubourg <lbedubourg@motion-twin.com>
 
@@ -11,11 +11,16 @@
 
   - PHP5
 
+  If you are willing to use the builtin internationalisation system of 
+  (I18N) the gettext extension must be compiled into PHP 
+  (--with-gettext).
 
   PEAR Install
   ============
 
-  Get the latest PHPTAL package on http://phptal.sf.net. Then run
+  Get the latest PHPTAL package on http://phptal.motion-twin.com.  
+  
+  Then run
 
     pear install PHPTAL-X.X.X.tar.gz
 
@@ -23,7 +28,7 @@
   NON PEAR install
   ================
 
-  Get the latest PHPTAL package on http://phptal.sf.net. 
+  Get the latest PHPTAL package on http://phptal.motion-twin.com. 
 
     tar zxvf PHPTAL-X.X.X.tar.gz
     mv PHPTAL-X.X.X PHPTAL
@@ -36,7 +41,7 @@
 
   You can checkout the latest subversion trunk content using :
 
-    svn co https://yota.dyndns.org/phptal/trunk phptal
+    svn co https://svn.motion-twin.com/phptal/trunk phptal
 
 
   PHPTAL development requirements
@@ -49,7 +54,7 @@
   - PEAR[0]
   - Phing[1] to run maintainance tasks in an ant way
   - PHPUnit2[2] to run tests
-  - PhpDocumentor[3] to generate PHP documentation
+  - PhpDocumentor[3] (optional) to generate PHP documentation
 
 
   Phing tasks
