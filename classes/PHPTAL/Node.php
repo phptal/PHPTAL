@@ -100,7 +100,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     public function generate()
     {
         if ($this->generator->isDebugOn()){
-            $this->generator->pushCode('$tpl->__line = '.$this->line);
+            $this->generator->pushCode('$ctx->__line = '.$this->line);
         }
         $this->prepareAttributes();
         $this->separateAttributes();
@@ -361,7 +361,7 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
 
     public function generate()
     {
-        $code = sprintf('$tpl->setDocType(\'%s\')', str_replace('\'', '\\\'', $this->value));
+        $code = sprintf('$ctx->setDocType(\'%s\')', str_replace('\'', '\\\'', $this->value));
         $this->generator->pushCode($code);
         $this->generator->setDocType($this->value);
     }

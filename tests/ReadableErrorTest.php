@@ -24,13 +24,17 @@ class ReadableErrorTest extends PHPUnit2_Framework_TestCase
 
     function testMacro()
     {
+        $expected = PHPTAL_OS_WIN 
+          ? 'input\\error-02.macro.html' 
+          : 'input/error-02.macro.html';
+        
         try {
             $tpl = new PHPTAL('input/error-02.html');
             $res = $tpl->execute();
             $this->assertTrue(false);
         }
         catch (PHPTAL_Exception $e){
-            $this->assertEquals('input/error-02.macro.html', $e->srcFile);
+            $this->assertEquals($expected, $e->srcFile);
             $this->assertEquals(2, $e->srcLine);
         }
         catch (Exception $e){

@@ -118,10 +118,10 @@ class PHPTAL_CodeGenerator
     public function noThrow( $bool )
     {
         if ($bool){
-            $this->pushCode('$tpl->noThrow(true)');
+            $this->pushCode('$ctx->noThrow(true)');
         }
         else {
-            $this->pushCode('$tpl->noThrow(false)');
+            $this->pushCode('$ctx->noThrow(false)');
         }
     }
     
@@ -268,12 +268,7 @@ class PHPTAL_CodeGenerator
         $str = str_replace('&amp;', '&', $str);
         
         $str = $this->_replaceInStringExpression($str);
-        /*
-         * preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
-                            '<?php echo htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
-                                               .$this->_encoding.'\' ) ?>', 
-                            $str);
-         */
+        
         $this->flushCode();
         array_push( $this->_htmlBuffer, $str );
     }
@@ -318,7 +313,7 @@ class PHPTAL_CodeGenerator
         if ($this->_talesMode == 'tales'){
             return preg_replace(
                 '/\$\{([a-z0-9\/_]+)\}/ism', 
-                '<?php echo htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''.$this->_encoding.'\' ) ?>',
+                '<?php echo htmlentities( phptal_path($ctx, \'$1\'), ENT_COMPAT, \''.$this->_encoding.'\' ) ?>',
                 $src);
         }
 

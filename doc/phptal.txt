@@ -1,0 +1,2011 @@
+/* vim: set ft=txt shiftwidth=2 tabstop=2 expantab: */
+
+PHPTAL - PHP Template Attribute Language
+Author: Laurent Bedubourg <lbedubourg@motion-twin.com>
+Date: 2004-12-22
+
+ABOUT
+
+  PHPTAL is an implementation of the excellent Zope Page Template (ZPT) system
+  for PHP. PHPTAL supports TAL, METAL, I18N namespaces.
+  
+  PHPTALES is the equivalent of TALES, the Template Attribute Language Expression
+  Syntax, it defines how are handled xml attribute values.  
+
+  As PHPTALES is near TALES, it should be easy to port python TAL templates to
+  PHP ones (and reverse).
+
+  To be TAL compliant, PHPTAL implements an XPATH like access to data.
+
+  PHPTAL is freely distributed under the LGPL license, it is developped and
+  maintained by Laurent Bedubourg <email>laurent.bedubourg@free.fr</email>.
+
+  This document is a first documentation about PHPTAL usage for both php
+  developpers and template designers. It's not complete yet as i certainly forgot
+  a lot of things, please send me requests and notes. And 'please' be patient
+  with my style, i'm not a natural english speaker.
+
+WHY YOU SHOULD USE PHPTAL
+  
+  XML/HTML templates exists to separate logic from presentation in web services.
+  This separation brings more than one benefits in its luggage.
+
+  - better application design
+  - easier task repartition
+  - better maintainability
+  - web skins
+
+  Most template systems uses <? ?>, <% %> or <xxx:yyy></xxx:yyy> tags to find 
+  their marks. It allow easier template system development but that doesn't 
+  really help template designers.
+
+  The idea behind TAL is to allow WYSIWYG template edition with sample rendering
+  without stranges tags everywhere. That's why TAL work on xml attributes in
+  stead of markup tags.
+
+  If you already worked with a simple template system, you must have viewed
+  something looking like :
+  
+    <table>
+      <%loop myarray as myitem %>
+      <tr> 
+        <td><% myitem %></td>
+      </tr>
+      <%/loop%> 
+    </table>
+
+  Well with phptal you now can do :
+
+    <table> 
+      <tr tal:repeat="myitem myarray">
+        <td tal:content="myitem">
+          text replaced by the item value
+        </td>
+        <td tal:replace="">sample 1</td> 
+        <td tal:replace="">sample 2</td> 
+        <td tal:replace="">sample 3</td> 
+      </tr> 
+    </table>
+  
+  In WYSIWYG mode, the above code will render correctly with samples text and you
+  can present it to your clients even if the code required to get 'myarray'
+  values doesn't exist yet.
+
+  Another big advantage of PHPTAL is that you benefit from more than 3 years of
+  ZOPE community experiences, documentation, examples, help. PHPTAL rely on this
+  community to provide its users a great amount of knowledge.
+
+  PHPTAL is designed to be as customizable as possible for advanced developpers
+  and performance eaters systems but still easy to use for beginers with a
+  comfortable and simple default behaviour.
+
+FIRST EXAMPLE
+  
+  To get a first impression about PHPTAL usage, a first simple example is better
+  than many words.
+
+  Your template is a valid xml/html document (with a root entity). Here a file
+  named 'my_template_file.html'.
+  
+    <?xml version="1.0"?> 
+    <html>
+      <head>
+        <title tal:content="title">
+          place for the page title
+        </title>
+      </head>
+      <body>
+        <h1 tal:content="title">sample title</h1>
+        <table>
+          <tr>
+            <td>name</td>
+            <td>phone</td>
+          </tr>
+          <tr tal:repeat="item result">
+            <td tal:content="item/name">item name</td>
+            <td tal:content="item/phone">item phone</td>
+          </tr>
+          <tr tal:replace=""> 
+            <td>sample name</td>
+            <td>sample phone</td>
+          </tr>
+          <tr tal:replace="">
+            <td>sample name</td>
+            <td>sample phone</td>
+          </tr>
+        </table>
+      </body> 
+    </html>
+
+  In php, you just have to include the PHPTAL library and maybe configure a few
+  variables to customize the template system.
+
+    <?php 
+    require_once 'PHPTAL.php';
+
+    // create a new template object 
+    $template = new PHPTAL('my_template_file.html');
+
+    // the Person class 
+    class Person { 
+      var $name; 
+      var $phone;
+    
+      function Person($name, $phone) 
+      { 
+        $this->name = $name; 
+        $this->phone = $phone; 
+      } 
+    }
+
+    // let's create an array of objects for test purpose 
+    $result = array(); 
+    $result[] = new Person("foo", "01-344-121-021"); 
+    $result[] = new Person("bar", "05-999-165-541"); 
+    $result[] = new Person("baz", "01-389-321-024"); 
+    $result[] = new Person("buz", "05-321-378-654");
+
+    // put some data into the template context
+    $template->title = 'the title value';
+    $template->result = $result;
+
+    // execute the template 
+    try {
+      echo $template->execute(); 
+    }
+    catch (Exception $e){
+      echo $e;
+    }
+    ?>
+
+  If you execute the php script, you will obtain something similar to what
+  follows.
+
+    <?xml version="1.0"?> 
+    <html>
+      <head>
+        <title>the title value</title>
+      </head>
+      <body>
+        <h1>the title value</h1>
+        <table> 
+        <tr>
+          <td>name</td>
+          <td>phone</td>
+        </tr>
+        <tr>
+          <td>foo</td>
+          <td>01-344-121-021</td>
+        </tr><tr> <td>bar</td>
+          <td>05-999-165-541</td>
+        </tr><tr> <td>baz</td>
+          <td>01-389-321-024</td>
+        </tr><tr> <td>buz</td>
+          <td>05-321-378-654</td>
+        </tr>
+        </table>
+      </body>
+    </html>
+
+  Well, i assume you don't mind 'too' much about cariage returns in the html code
+  :) If so, you may use the tidy functions to cleanup the resulting html before 
+  echoing it.
+
+
+INSTALLATION
+
+  PHPTAL is released as a PEAR package (see http://pear.php.net).
+  You can download it on the PHPTAL website (http://phptal.sf.net) folowing the
+  resources link.
+
+  After downloading the package, you can install it using the pear utility :
+ 
+    pear install PHPTAL-X.X.X.tar.gz
+
+  If you do not use PEAR or does not have it installed on your system, you still can
+  install PHPTAL unzipping the downloaded archive. Move the PHPTAL.php file in your
+  library folder, create a PHPTAL folder in your library folder then copy all 
+  remaining files in this newly created folder.
+
+    tar zxvf PHPTAL-X.X.X.tar.gz
+    mv PHPTAL-X.X.X PHPTAL
+    mv PHPTAL/PHPTAL.php /path/to/your/include/path
+    mv PHPTAL /path/to/your/include/path
+
+
+TEMPLATE LANGUAGE
+
+  1. TAL namespace
+
+  1.1. tal:define
+  
+  This attribute defines one or more variables which may be used later in the
+  template.
+
+  Making a shortcut to a long path :
+  
+    <span tal:define="destname path/to/existing/variable" />
+
+  Creating a string inside the template :
+
+    <span tal:define="destname string:some string" />
+
+  Creating an array :
+
+    <span tal:define="destname array:1, 2, 3, 4" />
+
+  Defining more than one variables at the same time :
+
+    <span tal:define="fname string:paul; lname string:dupond" />
+
+  Defining a string containing another variable :
+  
+    <span tal:define="hello string:hello $fname welcome on this page" />
+
+
+  1.2. tal:condition
+
+  The entity and its content will be shown only if the condition is evaluated to
+  true.
+
+    <span tal:condition="identified"> 
+      Welcome member ... 
+    </span>
+
+    <span tal:condition="not: identified"> 
+      Please login before accessing this page 
+    </span>
+
+
+  1.3. tal:repeat
+
+  This attribute handles iterable objects like array, associative arrays, and
+  objects implementing the PHP5 Iterable class (see Iterable chapter).
+
+  The repeat attribute repeat it's entity and its content until the end of the
+  specified resource.
+
+    <tr tal:repeat="item some/result"> 
+      <td tal:content="item">text replaced by item</td> 
+    </tr>
+
+  Within a loop, you can access current loop (and parent for imbriqued loops)
+  information using specific repeat/* pathes.
+
+  In the above example : 
+
+  - repeat/item/index  : return the item index (0 to count-1)
+  - repeat/item/number : returns the item number (1 to count)
+  - repeat/item/even   : returns true if item index is pair
+  - repeat/item/odd    : returns true if item index is impair
+  - repeat/item/start  : returns true if item is the first one 
+  - repeat/item/end    : returns true if item is the last one 
+  - repeat/item/length : returns the number of elements in some/result 
+  - repeat/item/key    : returns the item's key if some/result is an associative 
+                         resource (index otherwise)
+
+  "item" depends of the receiver variable defined in tal:repeat expression.
+
+
+  1.4. tal:omit-tag
+
+  This attribute ask PHPTAL parser to ignore the entity's head and foot, it's
+  content will still be evaluated.
+
+    <span tal:omit-tag="">
+      only this text will appear, span open and close will be removed 
+    </span>
+
+  Will produce :
+
+    only this text will appear, span open and close will be removed
+
+  This attribute is usefull when you want to define a macro, a loop, a condition,
+  or any other template logic that mustn't show it's root tag.
+
+
+  1.5. tal:replace
+
+  This attribute will replace the entire tag with a value or by nothing if no
+  value is given.
+
+    <span tal:replace="string:this beautyfull string"> 
+      this uggly string and span 
+    </span>
+
+  Will produce :
+
+    this beautyfull string 
+
+  tal:replace can also be used to create samples in source templates and remove
+  them from final output.
+
+    <table> 
+      <tr tal:repeat="item myresult">
+        <td tal:content="item">item value</td>
+      </tr> 
+      <tr tal:replace="">
+        <td>sample 1</td>
+      </tr>
+      <tr tal:replace="">
+        <td>sample 2</td> 
+      </tr> 
+    </table>
+
+
+  1.6. tal:content
+
+  This attribute replace the tag content with the evaluation of its expression.
+
+    <span tal:define="myvar string:my string"/> 
+    <span tal:content="myvar">will be replaced</span>
+
+  Will produce :
+
+    <span>my string</span>
+
+
+  1.7. tal:comment
+
+  This attribute has no effect but can help template designers commenting their
+  work.
+
+    <tr tal:comment="Loop over the person database result"
+        tal:repeat="person persons"> 
+      <td tal:content="person/id">person id here</td> 
+    </tr>
+
+  1.8. tal:attributes
+
+  This attribute change tag attribute(s) value(s).
+
+    <a href="http://www.foo.com" title="some foo link" 
+       tal:attributes="href somelink/href; title somelink/title" 
+       tal:content="somelink/text" >sample link</a>
+
+  With a 'somelink' having :
+
+    $somelink->href = "http://www.google.com"; 
+    $somelink->title = "google search engine"; 
+    $somelink->text = "the google search engine";
+
+  Will produce :
+
+    <a href="http://www.google.com" 
+       title="google search engine">the google search engine</a>
+
+  
+  1.8. tal:on-error
+
+  This attribute replace the tag by the tal:on-error expression evaluation if a
+  path error is detected in the tag content or if any php exception is thrown
+  in the tag content.
+
+    <span tal:on-error="string:No username defined here"     
+          tal:content="user/name">the user name here</span>
+
+  If an error occurs accessing 'name' or 'user', the error string will be shown
+  at the tag place.
+
+  This also works on more than one level of template :
+
+    <span tal:on-error="string:error occured somewhere"> 
+      <span tal:content="user/firstname"/> 
+      <span tal:content="user/lastname"/> 
+    </span>
+
+
+  2. METAL namespace
+
+  METAL stands for 'Macro Extension for TAL'. This namespace, supported by PHPTAL
+  allow template designers to define and call xml/xhtml macros.
+
+  
+  2.1. metal:define-macro
+
+  This attribute declare a macro. Think of macros as library of small templates
+  which can be reused in any other template. 
+
+    <div metal:define-macro="main_menu"> 
+      <ul>
+        <li><a href="/">home</a></li>
+        <li><a href="/products">products</a></li>
+        <li><a href="/contact">contact</a></li>
+      </ul>
+
+      <div>
+      Last modified : 
+      <span tal:content="mdate">page modification date</span> 
+      </div>
+    </div>
+
+  Macros inherit from caller dictionnary. In the above example, the variable
+  'mdate' depends on the template that calls the macro.
+
+
+  2.2. metal:use-macro
+
+  This attribute calls a macro and include its result in the current template.
+
+    <span 
+      tal:comment="main_menu template requires 'mdate' variable"
+      tal:define="mdate page/last_modified" /> 
+    <span metal:use-macro="main_menu" />
+
+  You can refer external macros defined in other templates specifying the
+  template source file.
+
+    <span use-macro="site_macros.html/main_menu"/>
+
+
+  2.3. metal:define-slot
+
+  This attribute must appear under a metal:define-macro tag.
+
+  Slots can be replaced by caller template with some custom dynamically generated
+  XML/XHTML.
+
+  Slots can be thinked of like reverse includes, a macro can be an entire page
+  and slots customize this page depending on the URL. For instance, a slot may
+  contains latest news in the home page and user actions when the member is
+  logged.
+
+    <span metal:define-slot="news_place"> 
+    <table>
+      <tr tal:repeat="item php:latestNews()">
+        <td tal:content="item/value">news description</td> 
+      </tr>
+    </table>
+    </span>
+
+  The above example defines a place called '<emphasis>news_place</emphasis>'
+  which can be overwritten by caller templates. See next section for the
+  continuation of this example.
+
+  
+  2.4. metal:fill-slot
+
+  This attribute occurs only under metal:use-macro context.
+
+  This explicitely tells PHPTAL to replace defined slot with the content provided
+  under the metal:fill-slot attribute.
+
+    <span tal:condition="logged" metal:fill-slot="news_place">   
+      <h2>user menu</h2>
+      <ul>
+        <li><a href="/user/action/inbox">inbox</a></li>
+        <li><a href="/user/action/new">new mail</a></li>
+        <li><a href="/user/action/disconnect">disconnect</a></li>
+      </ul>
+    </span>
+
+  Slots give the opportunity to define really customizable and reusable page
+  templates with a simple push technology.
+
+
+  3. I18N namespace
+
+  Note: 'i18n' is a short name for 'internationalisation', this namespace allow
+  template designers to specify some text zones that must be translated on
+  template evaluation.
+
+
+  3.1. i18n:translate
+
+  This attribute define some text part that must be translated using PHPTAL
+  translation system.
+
+    <div i18n:translate="string:welcome_message">Welcome here</div>
+
+  In the above example, PHPTAL will looks for a translation key named
+  'welcome_message' and will replace the content of the tag with the equivalent 
+  in current requested language.
+
+    <div i18n:translate="">Welcome here</div>
+
+  This usage is a little different, no translation key is given, thus, PHPTAL
+  will use the content of the tag 'Welcome here' as the translation key. This is
+  a regular translation usage if translation system knows the key
+  'Welcome here'.
+
+  If no translation is found, the key will be used as the translation result.
+  That's why using readable message in stead of keys may be a good choice.
+
+  Please note that the key to translate may be contained in a variable to 
+  allow dynamic key selection.
+
+    <div tal:define="welcome random_welcome_message"/>
+    <did i18n:translate="welcome">...</div>
+
+
+  3.2. i18n:name
+
+  This attribute set a translation variable value.
+
+  Translations may contains ${xxx} strings where "xxx" is the name of a variable 
+  that need to be interpolated dynamically.
+
+  The value of this variable will be set to the tag and its content, if you
+  doesn't need tag around the value, use tal:replace instead of tal:content,
+  tal:omit-tag may help if the value is a concatenation of strings.
+
+    <span i18n:name="myVar" tal:content="some/path"/> 
+    <!-- <span>${some/path}</span> -->
+
+    <span i18n:name="myVar" tal:replace="some/path"/> 
+    <!-- ${some/path} -->
+
+    <span i18n:name="myVar">foo</span> 
+    <!-- <span>foo</span> -->
+
+    <span i18n:name="myVar" tal:omit-tag="">foo</span> 
+    <!-- foo -->
+
+  An exemple of i18n usage:
+
+    <div i18n:translate="">
+      Welcome <span i18n:name="user" tal:replace="user/name"/>, 
+      you have <span i18n:name="mails" tal:replace="user/nbrMails"/> 
+      unreaded mails. 
+    </div>
+
+  The translation key of this example will be :
+
+    "Welcome ${user}, you have ${mails} unreaded mails."
+
+  PHPTAL will replace ${user} with ${user/name} and ${mails} with ${user/nbrMails}
+  in translation.
+
+  
+  4. PHPTAL namespace
+
+  These attributes are not defined in TAL specifications but are usefull when 
+  working with PHPTAL.
+
+
+  4.1. phptal:debug
+
+  This attribute toggle activate PHPTAL debuging for the content of the tag
+  it is defined in.
+
+  The debug mode stores information like filename and source line number in
+  the template so exceptions thrown by incorrect path access will contains
+  more information about where they where thrown.
+
+    <html>
+      <head>
+         ...
+      </head>
+      <body>
+        <div id="menu">
+          ...
+        </div>
+        <div 
+          id="leftPane" 
+          tal:comment="this div seems buggy, keep trace of where errors are thrown"
+          phptal:debug="">
+          ...
+        </div>
+      </body>
+    </html>
+
+  
+  4.2. phptal:tales
+
+  This attribute allow use to change the beaviour of PHPTALES. The default 
+  behaviour is to interpret attribute expressions in a very ZPT way. But 
+  sometimes you just would like to have PHP there and you end up using
+  php: modifier everywhere (read chapter about PHPTALES).
+
+  Another problem concerning PHPTALES is the way PHPTAL have to interpret pathes.
+  For exemple, myobject/mymethod/10/othermethod/hashkey is very long to interpret. 
+  PHPTAL has to (at runtime) take myobject, see that it is an object, find if 
+  'mymethod' is a variable of this object or a method of the object, then call it, 
+  explore the result to determine if it is an array, find the tens element of this 
+  array, determine if it is an object and decide if othermethod is a variable or a 
+  method of this object then get the result of this execution, find that it is an 
+  associative array and retrieve the value for the key 'hashkey'.
+
+  Of course this was an extreme exemple and most of the time we don't care because
+  the process is fast enough. But what if this very long path is called inside
+  a big tal:repeat ? dohh ! phptal:tales can help us there :
+
+    <html>
+      <body>
+        <table phptal:tales="php">
+          <tr tal:repeat="myobject document.getChildren()">
+            <td tal:content="myobject.mymethod()[10].otherMethod()['hashkey']"></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+  Well, i am not sure the exemple above compiles but you get the idea of what
+  you can do with phptal:tales. All tal, metal, i18n pathes will be plain PHP
+  expressions.
+
+
+  5. *:BLOCK
+
+  :block is a syntax sugar for elements which contains many tal attributes and 
+  which are not to be echoed. 
+
+    <tal:block define="myvar string:Some value"/>
+
+  is the same as :
+
+    <span tal:define="myvar string:Some value"/>
+
+  Another example :
+
+    <tal:block condition="someCondition" repeat="item someRepeat">
+      <div metal:use-macro="x"/>
+    </tal:block>
+
+  is the same as :
+
+    <div tal:omit-tag="" 
+        tal:condition="someCondition" 
+        tal:repeat="item someRepeat">
+      <div metal:use-macro="x"/>
+    </div>
+
+
+PHPTALES
+
+  PHPTALES is the expression syntax used inside tal, metal, phptal attributes.
+  From above exemples, you should have seen some of PHPTALES examples (string:,
+  php:, not:, ...). This chapter describe the usage of PHPTALES in templates.
+
+  The value of a TAL attribute may contain more than one expression (ex:
+  tal:define), in which case each expression must be separated from the
+  next one with a ';' character.
+
+  1. Path
+
+  Inside the template or inside expression strings, you can refer to a context
+  variable using its path in the form ${path/to/my/variable}
+
+    <h1>${document/title}</h1>
+    <span tal:replace="string:welcome ${user/name}, 
+          this page has been readed ${page/countRead} times"/> 
+
+
+  2. Conditional statements
+
+  As '<' and '>' should be removed from attribute expression, PHPTAL provides 
+  some good old text equivalent comparision operators.
+
+  These statements will mostly appear in tal:condition attributes, and in php:
+  expressions.
+
+    - < : LT (less than)
+    - > : GT (greater than)
+    - <= : LE (less or equal)
+    - >= : GE (greater or equal)
+
+
+  3. string:
+
+  As expressions are separated by a ';' character, and as '$' marks the start 
+  of a path, you must use
+
+  - ';;' when you want to insert a real ';' character in a string,
+  - '$$' when you want to insert a real '$' character in a string.
+
+    <span tal:replace="string:this is a $$100 page"/>
+    string:foo $bar baz       <!-- will replace $bar --> 
+    string:foo $$bar baz      <!-- no interpolation --> 
+    string:foo ; php:doFoo()  <!-- two different expressions --> 
+    string:foo ;; php:doFoo() <!-- only string -->
+
+  4. php:
+
+  This expression evaluate what follows as a regular php expression except that
+  '-&gt;' are replaced by dots '.' and variable names does not need to be
+  prefixed with a dollar '$' sign.
+
+  A dot '.' separated from the rest of expression by spaces is assumed to be a
+  concatenation sign.
+
+    php:htmlentities(foo)
+    php:'string $varReplaced'
+    php:'string ${some/path/to/var}'
+    php:NOT foo OR (bar GT baz)
+    php:a + b
+    php:array('a', 'b', 'c')
+    php:range(0, 90)
+    php:foo . a.b.c(e) . htmlentities(SomeClass::staticMethod()) 
+
+  php: should be used with care and won't be needed in 80% of your templates
+  but some times you will need to invoke some php special method to be sure a
+  user is logged or to retrieve a specific heavy data depending on some
+  conditions and dynamically inside the template.
+
+  
+  5. not:
+
+  This expression is a boolean one, usefull in tal:condition statements. 
+
+    <span tal:condition="not: logged">not logged</span>
+
+
+  6. exists:
+
+  This expression is a boolean expression, it will returns true if the path
+  specified after it exists of not.
+
+    <span tal:condition="exists: user/preferences"    
+          tal:content="user/preferences"> 
+      user preferences here if defined 
+    </span>
+
+  It is important to keep in mind that using a path which doesn't exists will throw
+  and exception. Thus, uncertain pathes must be checked first.
+
+
+  7. default
+
+  This is not an expression but a keyword allowing template designers to keep the
+  content of a tag as an alternative value if an error occurs or if something is
+  not defined.
+
+    <span tal:define="myVar path/to/possible/var | default"> 
+      default my var value 
+    </span>
+
+    <span tal:content="some/var | other/path | default"> 
+      no some/var and no other/path found here 
+    </span>
+
+    <a href="unknown.html" title="Unknown page"
+       tal:attributes="href item/href | default;
+                       title item/title | default"
+       tal:content="item/title | default">Unknown page</a>
+
+  Above examples introduce the '|' characters that allow the definition of
+  alternatives for defines or prints. See next paragraph.
+
+
+  8. Expression chains
+
+  A chain of expression is a list of expressions separated by '|' character.
+
+  While evaluating expressions separated by '|', PHPTAL will stop its evaluation
+  when an expression value is not null and no error was raised while evaluating
+  the expression.
+
+  As a string: expression is always true, string: always terminate an expression 
+  chain whatever expression may follows. 
+
+  You can use php: expressions inside expression chains as any other expression.
+
+    <h1 tal:content="page/title | page/alterNativeTitle | default>
+      untitled page
+    </h1>
+
+
+  9. structure
+
+  This is not an expression but a keyword.
+
+  While printing variables inside PHPTAL templates, you certainly have remarked
+  that PHPTAL encode each variable to ensure the validity of the output document. 
+ 
+  Sometimes, you may use HTML/XML variables that must be echoed as is.
+
+    <h1 tal:content="structure document/title"/> 
+    <span tal:replace="structure document/content"/>
+
+  In above examples, we assume that $document->title and $document->content are 
+  variables containing preformated html that must be echoed as is.
+
+
+PHP INTEGRATION
+
+  This section targets PHP developpers and explain how to use and customize
+  PHPTAL behavious for simple and advanced usage.
+
+  1. Defines
+
+  After the inclusion of PHPTAL library, some defines will be created in PHP
+  context, all these defines comes from PHPTAL.php file :
+
+  - PHPTAL_VERSION : version of PHPTAL library installed on your system 
+    (in format : X.X.X) 
+  - PHPTAL_PHP_CODE_DESTINATION : this is the path where intermediate PHP 
+    files produced by PHPTAL will be stored. This define may be overwritten before
+    the inclusion of PHPTAL.php, the specified path must contain the leading path 
+    separator.
+
+  You can configure some PHPTAL features defining some constants :
+
+  To tell PHPTAL to ignore intermediate php files and to reparse templates
+  everytime :
+
+    <?php
+    define('PHPTAL_FORCE_REPARSE', 1);
+    require_once 'PHPTAL.php';
+    ?>
+  
+  To tell PHPTAL to store its intermediate PHP files otherwhere than in the
+  '/tmp/' directory :
+
+    <?php
+    define('PHPTAL_PHP_CODE_DESTINATION', '/path/to/somewhere/');
+    require_once 'PHPTAL.php';
+    ?>
+
+  If all your files are stored in a base directory (repository), you can define
+  PHPTAL_TEMPLATE_REPOSITORY as follow :
+
+    <?php
+    define('PHPTAL_TEMPLATE_REPOSITORY', '/path/to/templates/root');
+    require_once 'PHPTAL.php';
+    ?>
+
+  This doesn't mean all your files need to be in the root directory, you can use
+  sub folders to organize your template designers work. It's just a shortcut
+  which will allow you to reference templates without specifying the real path
+  but their relative path in the repository.
+
+
+  2. class PHPTAL
+
+  This is the main class that allow you to interact with PHPTAL. Here are
+  presented main PHPTAL methods. More methods will be explained in 'interfaces'
+  chapters as their usage is related to these interfaces.
+
+
+  2.1. constructor
+
+  This is the default PHPTAL constructor.
+
+  Parameters
+
+  - string $file : the template file, absolute path or path relative to
+    repository 
+
+  Examples
+
+    // simple template creation 
+    $tpl = new PHPTAL('/path/to/templates/mypage.html');
+
+    // creation using global template repository
+    define('PHPTAL_TEMPLATE_REPOSITORY', '/path/to/templates');
+    $tpl = new PHPTAL('mypage.html'); 
+
+
+  2.2. method set / __set
+
+  This method set a variable into the template execution context. A __set() method 
+  is defined, thus you can affect context variables to the template more 
+  "naturally" :
+  
+    $tpl = new PHPTAL('mytemplate.html');
+    $tpl->title = 'my title';
+    $tpl->result = UserDB::listUsers();
+
+  
+  2.3. method setOutputMethod
+
+  This method specify the output format of template execution result. By default
+  template ouputs XHTML, this means, some browser criticals tags like IMG or BR
+  that mustn't contain data are rewrote by PHPTAL to ensure correct page
+  rendering. If you want to ouput real XML with an XHTML input, you should use
+  this method with PHPTAL_XML parameter.
+
+  There's no need to call this method if you want output regular XHTML.
+
+  Example
+
+    // explicitely output XML 
+    $tpl->setOutputMethod(PHPTAL::XML);
+
+
+  2.4. method 
+<section id="phptal.phptal.isValid">
+<title>method isValid</title>
+<para>
+
+This method tells if the template source was found. Originaly named
+'fileExists()', this method is now called 'isValid()', as template sources can
+be retrieved not only from the file system (see PHPTAL_SourceResolver and
+PHPTAL_SourceLocator).
+
+</para>
+
+<para>
+
+Returns
+
+</para>
+
+<para>
+
+boolean : true if template source is found and valid false otherwise.
+
+</para>
+
+</section>
+
+
+<section id="phptal.phptal.realPath">
+<title>method realPath</title>
+<para>
+
+This method returns the real template source path as returned by the
+PHPTAL_SourceLocator in use. The default behavour is to return the absolute
+template file path on the file system. 
+
+</para>
+
+<para>
+
+Returns
+
+</para>
+
+<para>
+
+string : the absolute template source path
+
+</para>
+
+<para>
+
+Throws
+
+</para>
+
+<para>
+
+FileNotFound if source resolvers was not able to locate template
+
+</para>
+</section>
+
+
+<section id="phptal.phptal.execute">
+<title>method execute</title>
+<para>
+
+This method 'execute' the template with the given context and return the
+resulting XML/XHTML.
+
+</para>
+
+<para>
+
+Returns
+
+</para>
+
+<para>
+
+string : the template execution result.
+
+</para>
+
+<para>
+
+Throws
+
+</para>
+
+<para>
+
+FileNotFound, PHPTAL_ParseError, PHPTAL_ExpressionError, GetText_Error
+
+</para>
+
+</section>
+</section>
+<!-- end of PHPTAL -->
+
+<section id="phptal.cache">
+<title>interface PHPTAL_Cache</title>
+<para>
+
+As each developper tends to prefer his own cache system and as each user case
+is different, PHPTAL does not contains a builtin cache system.
+
+</para>
+
+<para>
+
+Instead, it contains an interface that allow you to work with any existing php
+cache system whithin PHPTAL.
+
+</para>
+
+<para>
+
+The interface allow you to cache template results and or macro results in your
+own style.
+
+</para>
+
+<para>
+
+The interface resides in PHPTAL_Cache class.
+
+</para>
+
+<para>
+
+Implementations 'may' implements following methods :
+
+</para>
+<itemizedlist><listitem>
+<para>
+
+template : called each time a template has to be executed 
+
+</para>
+</listitem><listitem>
+<para>
+
+macro : called each time a macro has to be executed
+
+</para>
+</listitem></itemizedlist>
+<para>
+
+These methods receive some parameters, the first one will be either the
+template object or the macro object.
+
+</para>
+
+<para>
+
+The result of the template/macro real execution can be retrieved using :
+<emphasis>$macro_or_template-&gt;_process()</emphasis>.
+
+</para>
+
+<para>
+
+Your cache system must use this method and return the produced string if the
+result is not already cached.
+
+</para>
+
+<para>
+
+The way you add a cache manager object to PHPTAL is :
+
+</para>
+<programlisting role="php"><![CDATA[
+$tpl = new PHPTAL('myfile.html');
+$tpl->setCacheManager($myCacheManager);
+]]></programlisting>
+
+
+
+<section id="phptal.cache.macro">
+<title>method macro</title>
+<para>
+
+This method is called by PHPTAL whenever a macro has to be called. If not
+implemented by your cache manager, this method will return the execution of the
+macro without cache.
+
+</para>
+
+<para>
+
+Important: A macro level cache system should be aware of macro slots 
+
+</para>
+
+<para>
+
+Parameters
+
+</para>
+<itemizedlist><listitem>
+<para>
+
+PHPTAL_Macro $macro : the macro object. 
+
+</para>
+</listitem><listitem>
+<para>
+
+string $file : source path of this macro (may be the path or a
+SourceLocator object) 
+
+</para>
+</listitem><listitem>
+<para>
+
+string $name : the macro name 
+
+</para>
+</listitem><listitem>
+<para>
+
+PHPTAL_Context $context : the current execution context
+
+</para>
+</listitem></itemizedlist>
+<para>
+
+Return
+
+</para>
+
+<para>
+
+string : the cached value or the result of the macro execution
+
+</para>
+
+<para>
+
+Example
+
+</para>
+
+<para>
+
+Idea : you need to cache a big html table resulting of an ugge sql query, tells
+the template designer to move the table printing into a macro, get the macro
+name and make an implementation of PHPTAL_Cache that will store the macro
+output into a file.
+
+</para>
+
+<example><title>Cache (macro result) implementation</title>
+<programlisting role="php"><![CDATA[
+class MySpecificCache extends PHPTAL_Cache 
+{ 
+    // 
+    // This method is called every time a macro is called. 
+    // 
+    function macro(&$macro, $file, $name, &$context) 
+    { 
+        // we only worry about 'mymacro' macro 
+        if ($name == 'mymacro') { 
+            $cache = '/path/to/cache.txt'; 
+            // check that the file exists and the expire time is 
+            // not reached 
+            if (file_exists($cache) && (filemtime($cache) + 3600 < time())) { 
+                // return the cache content 
+                return join('', $cache); 
+            }
+      
+            // not cached yet, let's do it
+            // first produce the result 
+            $result = $macro->_process();
+
+            // cache to file 
+            $fp = fopen($cache, 'w'); 
+            fwrite($fp, $result); 
+            fclose($fp);
+
+            // and don't forget to return the result 
+            return $result; 
+        }
+    
+        // non handled macro, just process 
+        return $macro->_process(); 
+    } 
+} 
+]]></programlisting>
+</example>
+
+<para>
+
+When invoking a template object, you can specify the cache manager to use as
+follow :
+
+</para>
+<programlisting role="php"><![CDATA[
+require_once "PHPTAL.php";
+
+$tpl = new PHPTAL("some/template.html"); 
+
+$tpl->set("foo", "bar");
+// set template cache manager
+
+$cache = new MySpecificCache(); 
+$tpl->setCacheManager( $cache );
+
+// let's roll 
+echo $tpl->execute();
+]]></programlisting>
+
+<para>
+
+In the above cache manager exemple, we haven't used the context variable, but
+it will be the key for intelligent cache system as it contains the current
+template execution context (ie: every variable usuable inside the template,
+even defined variables and repeat data).
+
+</para>
+</section>
+
+
+<section id="phptal.cache.template">
+<title>method template</title>
+<para>
+
+This method is called by PHPTAL whenever a template is to be executed. This
+means that any template is subject to the cache system, main one invoqued in
+php script as well as tal:included ones.
+
+</para>
+
+<para>
+
+If not implemented by your cache manager, the default behavour of this method
+is to return the execution of the template object.
+
+</para>
+
+<para>
+
+Important : a template level cache system should have a way to index its cache
+using some variable defined in the context object and may be the template
+source path.
+
+</para>
+
+<para>
+
+Parameters
+
+</para>
+<itemizedlist><listitem>
+<para>
+
+PHPTAL $tpl : the template object 
+
+</para>
+</listitem><listitem>
+<para>
+
+string $file : template source file (may comes from SourceLocator) 
+
+</para>
+</listitem><listitem>
+<para>
+
+PHPTAL_Context $context : the execution context
+
+</para>
+</listitem></itemizedlist>
+<para>
+
+Return
+
+</para>
+
+<para>
+
+string : the cached value or the result of the template execution
+
+</para>
+
+<para>
+
+Example
+
+</para>
+
+<para>
+
+We want to cache 'document.html' templates as they contains only 'static' data
+retrieved from database. For this exemple, we assume the context contains a
+'doc_id' variable.
+
+</para>
+
+<example><title>Cache (template result) implementation</title>
+<programlisting><![CDATA[
+class MySpecificCache extends PHPTAL_Cache 
+{ 
+    function template(&$tpl, $file, &$context) 
+    { 
+        // we only worry about 'document.html' templates 
+        $str = new OString($file);
+        if ($str->endsWith('/document.html')) { 
+            $doc_id = $context->get('doc_id'); 
+            $cache = '/path/to/cached/documents/' . $doc_id;
+            // 
+            // check that the file exists and that the document 
+            // was not modified since the cache occured. 
+            // 
+            // here we assume Document::lastModified($id) return 
+            // the last modification time of specified document id 
+            // 
+            if (file_exists($cache) 
+                && (filemtime($cache) > Document::lastModified($doc_id)) { 
+                // return the cache content 
+                return join('', file($cache)); 
+            }
+            // use this with care, here the document object is not 
+            // loaded in the source template, as no cache exists 
+            // for it, we load it here and push its reference 
+            // in the template context. 
+            // 
+            // this small concept can prevent your scripts from 
+            // executing unrequired queries or actions as their 
+            // result is already known and cached somewhere. 
+            // 
+            $context->setRef('document', Document::load($doc_id));
+            // the template can continue its execution and now it 
+            // can access the loaded 'document' object.
+            $result = $tpl->_process();
+            // we cache the result 
+            $fp = fopen($cache, 'w'); 
+            fwrite($fp, $result); 
+            fclose($fp);
+            // and finally return it 
+            return $result; 
+        }
+        // non handled template 
+        return $tpl->_process(); 
+    } 
+} 
+]]></programlisting>
+</example>
+
+<para>
+
+An of course an example on how to use this cache system :
+
+</para>
+<programlisting><![CDATA[
+require_once "PHPTAL.php";
+
+$tpl = new PHPTAL('/template/repository/document.html'); 
+$tpl->set('doc_id', $id);
+
+$cache = new MySpecificCache(); 
+$tpl->setCacheManager($cache);
+
+echo $tpl->execute();
+]]></programlisting>
+
+</section>
+</section>
+<!-- end of PHPTAL_Cache -->
+
+<section id="phptal.filter">
+<title>interface PHPTAL_Filter</title>
+<para>
+
+The filter interface let you modify the template source (input) and the
+template execution result (output) using your own filters object.
+
+</para>
+
+<para>
+
+You can add more than one filter to the PHPTAL object, they will be executed in
+the order they where added to the object.
+
+</para>
+
+<para>
+
+You can add a filter object to PHPTAL using :
+
+</para>
+<itemizedlist>
+  <listitem><para>
+
+PHPTAL::addInputFilter() 
+
+  </para></listitem>
+  <listitem><para>
+
+PHPTAL::addOutputFilter()
+
+  </para></listitem>
+</itemizedlist>
+<para>
+
+Example
+
+</para>
+<programlisting><![CDATA[
+$tpl = new PHPTAL('file.html');
+$tpl->addInputFilter($myFilter1); 
+$tpl->addInputFilter($myFilter2);
+// input filter may also be called as output filters 
+$tpl->addOutputFilter($myFilter2); 
+$tpl->addOutputFilter($myFilter3);
+]]></programlisting>
+
+<para>
+
+Note : input filters are called whenever a template source is required, output
+filters are called only at the end of the main template execution unless a
+cache manager break the main template <emphasis>_process() </emphasis>usage.
+
+</para>
+
+<section id="phptal.filter.filter">
+<title>method filter</title>
+<para>
+
+This method is called whenever the template has to filter some input or output
+data, depending if the php intermediate code is up to date and if the Filter
+was registered as an input filter or as an output filter.
+
+</para>
+
+<para>
+
+Parameters
+
+</para>
+
+<para>
+
+PHPTAL $tpl : the template object which requested this filter 
+
+</para>
+<itemizedlist><listitem>
+<para>
+
+string $data : the data to filter 
+
+</para>
+</listitem><listitem>
+<para>
+
+int $mode : one of PHPTAL_PRE_FILTER or PHPTAL_POST_FILTER, this
+parameter tells if the filter is called as an input filter or as an output
+filter.
+
+</para>
+</listitem></itemizedlist>
+<para>
+
+Return
+
+</para>
+
+<para>
+
+string : the result of the filter or $data if the filter did nothing
+
+</para>
+
+<para>
+
+Example
+
+</para>
+<example><title>Filter implementation</title>
+<programlisting><![CDATA[
+<?php
+class MyFilter extends PHPTAL_Filter 
+{ 
+    function filter(&$tpl, $data, $mode) 
+    { 
+        // just to present $mode usage for input/output filters 
+        if ($mode == PHPTAL_POST_FILTER) { 
+            return PEAR::raiseError( "MyFilter mustn't be used as a pre-filter' ); 
+        }
+        // remove html comments from template source 
+        return preg_replace('/(<\!--.*?-->)/sm', '', $data); 
+    } 
+}
+
+$tpl = new PHPTAL('mytemplate.html'); 
+$tpl->addInputFilter(new MyFilter()); 
+echo $tpl->execute();
+?>
+]]></programlisting>
+</example>
+</section>
+</section> 
+<!-- end of PHPTAL_Filter -->
+
+
+<section id="phptal.sourceresolver">
+<title>interface PHPTAL_SourceResolver</title>
+<para>
+
+In some specific systems, you'll prefer storing template sources on a distant
+server, in a database, and maybe also on the local file system. 
+
+</para>
+
+<para>
+
+The source resolver interfaces allow you to customize PHPTAL providing it more
+ways of retrieving template sources.
+
+</para>
+
+<para>
+When trying to retrieve a template source given the template path, PHPTAL
+will ask each registered SourceLocator to locate the path and will stop when
+one assume it can handle the page.
+</para>
+
+<programlisting><![CDATA[
+
+$myDBResolver = new DBResolver();
+
+$tpl = new PHPTAL('db://128');
+
+$tpl->addSourceResolver($myDBResolver);
+
+]]></programlisting>
+
+
+<section id="phptal.sourceresolver.resolve">
+<title>method resolve</title>
+
+<para>
+This method is invoked each time a template source has to be located.
+</para>
+
+<para>
+This method must returns a SourceLocator object which will 'points' to
+the template source and will be able to retrieve it.
+</para>
+
+<para>Parameters</para>
+<itemizedlist>
+<listitem>
+
+<para>string $path : path to resolver </para> 
+
+</listitem> 
+<listitem>
+
+<para>string $repository : template repository if specified on template
+instantiation
+</para>
+
+</listitem>
+<listitem>
+
+<para>string $callerPath : caller realpath, when a template look for an
+external template or macro, this is mainly usefull for relative paths </para>
+
+</listitem> 
+</itemizedlist>
+
+<para>Return
+</para>
+<para>PHPTAL_SourceLocator
+</para>
+
+<example><title>SourceResolver implementation</title>
+<programlisting><![CDATA[
+class DBResolver extends PHPTAL_SourceResolver
+{
+    function resolve($path, $repository=false, $callerPath=false)
+    {
+        // DBResolver can resolver only db:// based pathes
+        if (!substr($path, 0, 5) == 'db://') {
+            return false;
+        }
+        $locator = new DBLocator($path);
+        if ($locator->isValid()) {
+            return $locator;
+        }
+        return false;
+    }
+}
+]]></programlisting>
+</example>
+
+</section>
+</section>
+
+<section id="phptal.sourcelocator">
+<title>interface PHPTAL_SourceLocator</title>
+
+<para>This kind of object is returned by a PHPTAL_SsourceLocator
+implementation. </para> 
+
+<para>The aim of this object is to provide an access to a template source 
+wherever the source is situated.</para>
+
+<example><title>SourceLocator implementation</title>
+<programlisting><![CDATA[
+class DBLocator extends PHPTAL_SourceLocator
+{
+    var $_id;
+    var $_lastModified;
+    var $_data;
+    var $_isValid = false;
+    var $_path;
+    
+    function DBLocator($path)
+    {
+        $this->_path = $path;
+        $id  = substr($path, 5);
+        $res = mysql_query("SELECT * FROM Template WHERE id=$id");
+        $val = mysql_fetch_array($res);
+        if ($val) {
+            $this->_id = $id;
+            $this->_lastModified = $val['last_modified'];
+            $this->_data = $val['data'];
+            $this->_isValid = true;
+        }
+    }
+
+    function isValid()
+    {
+        return $this->_isValid;
+    }
+    
+    function realPath()
+    {
+        return $this->_path;
+    }
+
+    function lastModified()
+    {
+        return $this->_lastModified;
+    }
+        
+    function data()
+    {
+        return $this->_data;
+    }
+}
+]]></programlisting>
+</example>
+
+<section id="phptal.sourcelocator.realpath">
+<title>method realPath</title>
+<para>
+This method must return the unique template path.
+</para>
+<para>
+The result of this method is used to generate a unique md5 value which
+represents the template php function name produced by PHPTAL for this source.
+</para>
+
+<para>Return</para>
+<para>string : the unique absolute path to this source</para>
+
+</section>
+
+
+<section id="phptal.sourcelocator.lastmodified">
+<title>method lastModified</title>
+<para>This method return the source last modified time.</para>
+
+<para>The result is compared to php intermediate code generation time to decide
+whether or no this source has to be parsed again. </para>
+
+<para>Return</para>
+<para>int : time stamp</para>
+
+</section>
+
+
+<section id="phptal.sourcelocator.data">
+<title>method data</title>
+<para>This method must return the template source.
+</para>
+
+<para>This method is invoqued if the template source has to be parsed or
+reparsed. </para>
+
+<para>Return</para>
+
+<para>string : the template source</para>
+
+</section>
+
+
+</section>
+
+
+<section id="phptal.i18n">
+<title>interface PHPTAL_I18N</title>
+
+<para>I18N stands for 'internationalisation', PHPTAL default translation system
+is based on the GetText package. This interface allow you to replace the
+default translation system by yourself.</para>
+
+<itemizedlist><title>methods list</title>
+<listitem>
+<para>void <link linkend="phptal.i18n.set">set</link>($varName, $value)
+</para>
+</listitem>
+<listitem>
+<para>string <link linkend="phptal.i18n.translate">translate</link>($key)
+</para>
+</listitem>
+</itemizedlist>
+
+<example><title>I18N implementation</title>
+<programlisting><![CDATA[
+class MyTranslateSystem extends PHPTAL_I18N
+{
+    var $_context = array();
+    
+    function set($varName, $value)
+    {
+        $this->_context[$varName] = $value;
+    }
+
+    function translate($value)
+    {
+        // interpolate variables
+        while (preg_match('/\$\{(.*?)\}/sm', $value, $m)) {
+            list($src, $var) = $m;
+            $varValue = $this->_context[$var];
+            $value = str_replace($src, $varValue, $value);
+        }
+        
+        // reverse translated string so austrian people can read it :)
+        $result = "";
+        for ($i = strlen($value); $i >= 0; $i--) {
+            $result .= $value[$i]; 
+        }
+        return $result;
+    }
+}
+
+$tpl = PHPTAL('myfile.html');
+
+$tpl->setTranslator(new MyTranslateSystem());
+]]></programlisting>
+</example>
+
+<section id="phptal.i18n.set">
+<title>method set</title>
+
+<para>PHPTAL will call this method whenever a i18n:name attribute is used. Your
+translation system must store these values until the translate method is
+called. </para>
+
+<para>Parameters</para>
+<itemizedlist>
+<listitem>
+<para>string $varName : the variable name
+</para>
+</listitem>
+<listitem>
+<para>string $value : the variable value
+</para>
+</listitem>
+</itemizedlist>
+</section>
+
+
+<section id="phptal.i18n.translate">
+<title>method translate</title>
+
+<para>This method must returns the translated value of $key interpolating
+${XXX} with previously set variables.  </para>
+
+<para>Parameters</para>
+<itemizedlist>
+<listitem>
+<para>string $key : key or string to translate
+</para>
+</listitem>
+</itemizedlist>
+
+<para>Return</para>
+<para>string : the translated value</para>
+
+</section>
+
+</section>
+
+<section>
+<title>interface Iterator</title>
+<para>
+</para>
+</section>
+
+<section id="phptal.modifiers">
+<title>creating custom expression modifiers</title>
+
+<para>PHPTAL comes with some basic expression modifiers (<literal>not:</literal>,
+<literal>exists:</literal>, <literal>string:</literal>,
+<literal>php:</literal>, <literal>path:</literal>). </para>
+
+<para>These modifiers are defined by ZPT specifications but PHPTALES can be
+extended with your own modifiers to manipulate strings, date, money numbers,
+objects, whatever...</para>
+
+<para>The aim of a modifier is to return some PHP code that will be included in
+the template php source.</para>
+
+<para>Modifiers are used at parse time, if you change the behaviour of a
+modifier, you'll have to delete generated php files. </para>
+
+<para>Please note that modifiers produced code mustn't echo data !</para>
+
+<para>Modifiers takes two arguments</para>
+<itemizedlist>
+<listitem>
+<para>PHPTAL_Expression $expression : The expression object which requires this
+modifier</para>
+</listitem>
+<listitem>
+<para>string $arg : The modifier arguments</para>
+</listitem>
+</itemizedlist>
+
+<para>Return</para>
+<para>string : some php code that will be included as is in the template php
+generated script
+</para>
+
+<para>
+For example, in the following TAL template,
+</para>
+<programlisting><![CDATA[
+<span tal:replace="some-modifier: my/path/value"/>
+]]></programlisting>
+
+<para>
+The expression will be an object representing the entire tal:replace attribute.
+</para>
+<para>
+The argument will be the string <literal>my/path/value</literal>.
+</para>
+
+
+<para>
+An expression like :
+</para>
+
+<programlisting><![CDATA[
+<span tal:replace="some-modifier: my/path/value | other/path"/>
+]]></programlisting>
+
+<para>
+Will use 2 modifiers :
+</para>
+
+<itemizedlist>
+<listitem>
+<para><literal>some-modifier:</literal> with <literal>my/path/value</literal>
+as argument</para>
+</listitem>
+<listitem>
+<para><literal>path:</literal> with <literal>other/path</literal> as
+argument. <literal>path:</literal> is the implicit modifier used when no
+modifier is specified.</para>
+</itemizedlist>
+
+<para>
+Modifiers can use other modifiers to generate sub php code. The below exemple
+show this.
+</para>
+
+<para>
+Example :
+</para>
+<programlisting role="php"><![CDATA[
+//
+// This modifier will return a money formated string (XXX.XX)
+//
+// usage :
+//
+//      money: path/to/my/amount
+//
+// this modifier use PHPTAL_ES_path (path:) modifier to generate the
+// php code that will return the value of the modifier argument.
+//
+// in the example :
+//
+//      money: path/to/my/amount 
+// 
+// the expression "virtually" became money: path: path/to/my/amount
+//
+// thus, the produced code will be something like :
+//
+//      sprintf("%01.2f", $__ctx__->get("path/to/my/amount"))
+//
+// This code will be included right into the template where needed.
+//
+// @param PHPTAL_Expression $expression
+//      The expression object
+// @param string $arg
+//      Expression value.
+// @return string
+//      PHP code to include in the template
+//
+function PHPTAL_ES_money(&$expression, $arg) 
+{
+    return 'sprintf("%01.2f", '. PHPTAL_ES_path($expression, $arg) . ')';
+}
+]]></programlisting>
+
+<itemizedlist>
+<listitem>
+    <para>PHPTAL_ES_path : generate php code to resolve specified path.</para>
+</listitem>
+<listitem>
+    <para>PHPTAL_ES_path_in_string : take a string and generate php code to
+    resolve <literal>${some/path}</literal> variables. </para>
+</listitem>
+<listitem>
+    <para>PHPTAL_ES_string : modify the argument to generate a php string with
+    <literal>${some/path}</literal> interpollation. </para>
+</listitem>
+<listitem>
+    <para>PHPTAL_ES_path_tostring : return a string representation of the data
+    pointed by the path instead of returning the data itself.
+    </para>
+</listitem>
+</itemizedlist>
+
+<para>
+The <literal>PHPTAL_Expression</literal> object is used internally by PHPTAL,
+it's API will change in future version of PHPTAL so please avoid using it at
+this very time.
+</para>
+
+</section>
+</article>
+
+<!-- ************************************************************************* -->
+<article>
+  <title>Usefull links</title>
+  
+  <para>
+  <itemizedlist>
+    <listitem>
+      <para>
+      <ulink url="http://www.zope.org/Wikis/Projects/ZPT/">ZPT</ulink> Zope
+      Page Template front page,
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+      <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TAL/">TAL</ulink> 
+      the Template Attribute Language page,
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+      <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/METAL">METAL</ulink>
+      is the Macro Expansion of TAL,
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+      <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TALES">TALES</ulink>
+      the TAL Expression Syntax.
+      </para>
+    </listitem>
+  </itemizedlist>
+  </para>
+</article>
+
+
+<!-- ************************************************************************* -->
+<article>
+  <title>Greetings</title>
+  <para>Big thanks goes to :</para>
+  <itemizedlist>
+    <listitem>
+      <para>ZPT team, who made these usefull specifications,</para>
+    </listitem>
+    <listitem>
+      <para>Jean-Michel Hiver, who 'forced' me to look at them,</para>
+    </listitem>
+    <listitem>
+      <para>Olivier Parisy, the first entousiast PHPTAL user and bug finder,</para>
+    </listitem>
+    <listitem>
+      <para>Richard Wall for some good ideas and for his help.</para>
+    </listitem>
+  </itemizedlist>
+</article>
+
+</book>

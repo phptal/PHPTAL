@@ -20,14 +20,30 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
-    define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
+if (substr(PHP_OS,0,3) == 'WIN'){
+    define('PHPTAL_OS_WIN', true);
+    define('PHPTAL_PATH_SEP', '\\');
 }
-define('PHPTAL_VERSION', '1_0_0');
+else {
+    define('PHPTAL_OS_WIN', false);
+    define('PHPTAL_PATH_SEP', '/');
+}
+
+if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
+    if (PHPTAL_OS_WIN){
+        define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINDOWS\\Temp\\');
+    }
+    else {
+        define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
+    }
+}
+
+define('PHPTAL_VERSION', '1_0_0b2');
 define('PHPTAL_XHTML',1);
 define('PHPTAL_XML', 2);
 
 require_once 'PHPTAL/RepeatController.php';
+require_once 'PHPTAL/Context.php';
 
 class PHPTAL_Exception extends Exception
 {
@@ -52,6 +68,7 @@ class PHPTAL_Exception extends Exception
     }
 }
 
+
 /**
  * PHPTAL template entry point.
  * 
@@ -75,6 +92,9 @@ class PHPTAL_Exception extends Exception
  */
 class PHPTAL 
 {
+    const XHTML = 1;
+    const XML   = 2;
+    
     public function __construct($path)
     {
         $this->_realPath = $path;
@@ -82,12 +102,12 @@ class PHPTAL
         if (defined('PHPTAL_TEMPLATE_REPOSITORY')){
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
-        $this->_repeat = new stdClass;
+        $this->_context = new PHPTAL_Context();
     }
 
     public function __clone()
     {
-        $this->_repeat = clone($this->_repeat);
+        $this->_context = clone $this->_context;
     }
 
     /**
@@ -110,13 +130,6 @@ class PHPTAL
         $this->_outputMode = $mode;
     }
 
-    public function setDocType( $doctype )
-    {
-        if (!$this->_docType){
-            $this->_docType = $doctype;
-        }
-    }
-
     public function setEncoding( $enc )
     {
         $this->_encoding = $enc; 
@@ -127,12 +140,14 @@ class PHPTAL
         $this->_translator = $t;
     }
 
+    public function __set($varname, $value)
+    {
+        $this->_context->__set($varname, $value);
+    }
+
     public function set($varname, $value)
     {
-        if ($varname[0] == '_'){
-            throw new Exception("Template variable error '$varname' must not begin with underscore");
-        }
-        $this->$varname = $value;
+        $this->_context->__set($varname, $value);
     }
     
     /**
@@ -146,17 +161,17 @@ class PHPTAL
             $this->prepare();
         }
         
-        $this->_repeat = new stdClass;
+        $this->_context->__file = $this->__file;
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
         try {
-            $res = $templateFunction($this);
+            $res = $templateFunction($this, $this->_context);
         }
         catch (Exception $e){
             ob_end_clean();
             throw $e;
         }
-        return $this->_docType . $res;
+        return $this->_context->__docType . $res;
     }
 
     /**
@@ -166,8 +181,10 @@ class PHPTAL
     {
         if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
-            if (file_exists(dirname($this->_realPath).'/'.$file)){
-                $file = dirname($this->_realPath).'/'.$file;
+            
+            $f = dirname($this->_realPath).PHPTAL_PATH_SEP.$file;
+            if (file_exists($f)){
+                $file = $f;
             }
     
             $tpl = new PHPTAL( $file );
@@ -175,27 +192,32 @@ class PHPTAL
             $tpl->setTemplateRepository($this->_repositories);
             $tpl->prepare();
 
-            $currentFile = $this->__file;
-            $this->__file = $tpl->__file;
+            $currentFile = $this->_context->__file;
+            $this->_context->__file = $tpl->__file;
             require_once $tpl->getCodePath();
             $fun = $tpl->getFunctionName() . '_' . $macroName;
-            $fun( $this );
-            $this->__file = $currentFile;
+            $fun( $this, $this->_context );
+            $this->_context->__file = $currentFile;
         }
         else {
             $fun = $this->getFunctionName() . '_' . trim($path);
-            $fun( $this );            
+            $fun( $this, $this->_context );            
         }
     }
 
+    /**
+     * Prepare template without executing it.
+     */
     public function prepare()
     {
         $this->findTemplate();
         $this->__file = $this->_realPath;
-        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.php';
-        if (defined('PHPTAL_FORCE_REPARSE') ||
-            !file_exists($this->_codeFile) || 
-            filemtime($this->_codeFile) < filemtime($this->_realPath)) {
+        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION 
+                         . $this->getFunctionName() 
+                         . '.php';
+        if (defined('PHPTAL_FORCE_REPARSE') 
+            || !file_exists($this->_codeFile) 
+            || filemtime($this->_codeFile) < filemtime($this->_realPath)) {
             $this->parse();
         }
         $this->_prepared = true;
@@ -220,14 +242,12 @@ class PHPTAL
         return $this->_functionName;
     }
 
+    /**
+     * Returns template translator.
+     */
     public function getTranslator()
     {
         return $this->_translator;
-    }
-
-    public function noThrow( $bool )
-    {
-        $this->_nothrow = $bool;
     }
     
     /**
@@ -247,74 +267,13 @@ class PHPTAL
         array_push($this->_errors, $error); 
     }
 
-    /**
-     * Public for phptal templates, private for user.
-     * @access private
-     */
-    public function hasSlot( $key )
+    public function getContext()
     {
-        return array_key_exists($key, $this->_slots); 
+        return $this->_context;
     }
     
-    /**
-     * Public for phptal templates, private for user.
-     * @access private
-     */    
-    public function getSlot( $key )
-    {
-        return $this->_slots[$key]; 
-    }
-
-    /**
-     * Public for phptal templates, private for user.
-     * @access private
-     */
-    public function fillSlot( $key, $content )
-    { 
-        $this->_slots[$key] = $content; 
-    }
-    
-    /**
-     * Public for phptal templates, private for user.
-     * @access private
-     */
-    public function pushSlots() 
-    { 
-        array_push($this->_slotsStack, $this->_slots); 
-        $this->_slots = array(); 
-    }
-    
-    /**
-     * Public for phptal templates, private for user.
-     * @access private
-     */
-    public function popSlots() 
-    { 
-        $this->_slots = array_pop($this->_slotsStack); 
-    }
-   
-    /**
-     * Public for phptal templates, private for user.
-     * @access private
-     */
-    public function repeat() 
-    { 
-        return $this->_repeat; 
-    }
-    
-    public function __get($varname)
-    {
-        if ($varname == 'repeat')
-            return $this->_repeat;
-
-        if ($this->_nothrow)
-            return null;
-        
-        throw new PHPTAL_Exception("Unable to find path $varname", $this->__file, $this->__line);
-    }
-
     private function parse()
-    {
+    {//{{{
         require_once 'PHPTAL/Parser.php';
         require_once 'PHPTAL/CodeGenerator.php';
         
@@ -324,7 +283,7 @@ class PHPTAL
         $tree = $parser->parseFile($this->_realPath);
 
         $header = sprintf('Generated by PHPTAL from %s', $this->_realPath);
-        $generator->doFunction($this->_functionName, '$tpl');
+        $generator->doFunction($this->_functionName, '$tpl, $ctx');
         $generator->doComment( $header );
         $generator->setFunctionPrefix($this->_functionName . "_");
         $generator->pushCode('ob_start()');
@@ -335,55 +294,52 @@ class PHPTAL
         $generator->doEnd();
         
         $this->storeGeneratedCode( $generator->getResult() );
-    }
+    }//}}}
 
     private function storeGeneratedCode($code)
-    {
+    {//{{{
         $fp = @fopen($this->_codeFile, "w");
         if (!$fp) {
             throw new Exception($php_errormsg);
         }
         fwrite($fp, $code);
         fclose($fp);
-    }
+    }//}}}
 
     private function findTemplate()
-    {
+    {//{{{
         $path = $this->_realPath;
         if (file_exists($path)) return;
         foreach ($this->_repositories as $repository){
-            if (file_exists("$repository/$this->_realPath")){
-                $this->_realPath = "$repository/$this->_realPath";
+            $f = $repository . PHPTAL_PATH_SEP . $this->_realPath;
+            if (file_exists($f)){
+                $this->_realPath = $f;
                 return;
             }
         }
         $err = 'Unable to locate template file %s';
         $err = sprintf($err, $this->_realPath);
         throw new Exception($err);
-    }
+    }//}}}
 
     private $_codeFile;
     private $_realPath;
     private $_functionName;
     private $_prepared = false;
     private $_repositories = array();
-    private $_docType = '';
     private $_errors = array();
-    private $_repeat;
-    private $_slots = array();
-    private $_slotsStack = array();
-    private $_encoding = 'UTF-8';    
-    private $_nothrow = false;
+    private $_context;
+    
     private $_translator = null;
-    private $_outputMode = PHPTAL_XHTML;
-
     public $__file = false;
-    public $__line = false;
+
+    private $_encoding = 'UTF-8';    
+    private $_outputMode = PHPTAL_XHTML;
 }
 
 
 function phptal_path( $base, $path, $nothrow=false )
-{
+{//{{{
     if ($path == '') 
         return $base;
     
@@ -447,17 +403,17 @@ function phptal_path( $base, $path, $nothrow=false )
         return null;
     
     throw new Exception("Path not found: $current");
-}
+}//}}}
 
-function phptal_exists( $tpl, $path )
-{
+function phptal_exists( $ctx, $path )
+{//{{{
     // special note: this method may requires to be extended to a full
     // phptal_path() sibling to avoid calling latest path part if it is a
     // method or a function...
-    $tpl->noThrow(true);
-    $res = phptal_path($tpl, $path, true);
-    $tpl->noThrow(false);
+    $ctx->noThrow(true);
+    $res = phptal_path($ctx, $path, true);
+    $ctx->noThrow(false);
     return !is_null($res);
-}
+}//}}}
 
 ?>

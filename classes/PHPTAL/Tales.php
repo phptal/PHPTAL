@@ -127,11 +127,11 @@ function phptal_tales_not( $expression, $nothrow, $optimize )
 //
 // For example, the tal:content will have to insert php code like:
 //
-// if (isset($tpl->maybethis)) {
-//     echo $tpl->maybethis;
+// if (isset($ctx->maybethis)) {
+//     echo $ctx->maybethis;
 // }
-// else if (isset($tpl->maybethat) {
-//     echo $tpl->maybethat;
+// else if (isset($ctx->maybethat) {
+//     echo $ctx->maybethat;
 // }
 // else {
 //     // process default tag content
@@ -170,7 +170,7 @@ function phptal_tales_path( $expression, $nothrow=false, $optimize=true )
 
     if ($optimize){
         if (strpos($expression, '/') === false) {
-            return '$tpl->'. substr($expression, 1, -1);
+            return '$ctx->'. substr($expression, 1, -1);
         }
 
         $parts = split('/', substr($expression, 1, -1));
@@ -179,20 +179,20 @@ function phptal_tales_path( $expression, $nothrow=false, $optimize=true )
 
         if ($next == 'repeat'){
             if ($nothrow)
-                return 'phptal_path($tpl->repeat(), '.$expression.', true)';
-            return 'phptal_path($tpl->repeat(), '.$expression.')';
+                return 'phptal_path($ctx->repeat, '.$expression.', true)';
+            return 'phptal_path($ctx->repeat, '.$expression.')';
         }
     
         if ($nothrow) 
-            return 'phptal_path($tpl->'.$next.', '.$expression.', true)';
-        return 'phptal_path($tpl->'.$next.', '.$expression.')';
+            return 'phptal_path($ctx->'.$next.', '.$expression.', true)';
+        return 'phptal_path($ctx->'.$next.', '.$expression.')';
     }
 
     // cutted to avoid 1 method call for long pathes, may need more tests
     // before validation                   
     if ($nothrow) 
-       return 'phptal_path($tpl, '.$expression.', true)';
-    return 'phptal_path($tpl, '.$expression.')';
+       return 'phptal_path($ctx, '.$expression.', true)';
+    return 'phptal_path($ctx, '.$expression.')';
 }
 
 //      
@@ -293,14 +293,14 @@ function phptal_tales_php( $src )
 {
     require_once 'PHPTAL/PhpTransformer.php';
     $trans = new PHPTAL_PhpTransformer();
-    $trans->prefix = '$tpl->';
+    $trans->prefix = '$ctx->';
     return $trans->transform($src);
 }
 
 
 function phptal_tales_exists( $src, $nothrow, $optimize )
 {
-    return sprintf('phptal_exists($tpl, %s)',
+    return sprintf('phptal_exists($ctx, %s)',
                    phptal_tales_string(trim($src), $nothrow, $optimize));
 }
 

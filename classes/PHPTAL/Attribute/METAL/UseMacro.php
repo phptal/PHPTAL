@@ -43,14 +43,14 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
     public function start()
     {
         // reset template slots on each macro call ?
-        $this->tag->generator->pushCode('$tpl->pushSlots()');
+        $this->tag->generator->pushCode('$ctx->pushSlots()');
         
         foreach ($this->tag->children as $child){
             $this->generateFillSlots($child);
         }
 
         if (preg_match('/^[a-z0-9_]+$/i', $this->expression)){
-            $code = sprintf('%s%s($tpl)', 
+            $code = sprintf('%s%s($tpl, $ctx)', 
                             $this->tag->generator->getFunctionPrefix(),
                             $this->expression);
             $this->tag->generator->pushCode($code);
@@ -60,7 +60,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
             $code = sprintf('<?php $tpl->executeMacro(%s); ?>', $code);
             $this->tag->generator->pushHtml($code);
         }
-        $this->tag->generator->pushCode('$tpl->popSlots()');
+        $this->tag->generator->pushCode('$ctx->popSlots()');
     }
     
     public function end()
@@ -87,27 +87,6 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
                 return;
             }
         }
-        
-        /*
-        if (array_key_exists('metal:fill-slot', $tag->attributes)){
-            $tag->generate();
-            return;
-        }
-        if (array_key_exists('tal:define', $tag->attributes)){
-            $tag->generate();
-            return;
-        }
-        if ($tag->name == 'metal:block' 
-            && array_key_exists('fill-slot', $tag->attributes)){
-            $tag->generate();
-            return;
-        }
-        if ($tag->name == 'tal:block' 
-            && array_key_exists('define', $tag->attributes)){
-            $tag->generate();
-            return;
-        }
-        */
         
         foreach ($tag->children as $child){
             $this->generateFillSlots($child);

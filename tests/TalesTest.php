@@ -40,14 +40,14 @@ class TalesTest extends PHPUnit2_Framework_TestCase
     {
         $src = 'php: foo.x[10].doBar()';
         $res = phptal_tales($src);
-        $this->assertEquals('$tpl->foo->x[10]->doBar()', $res);
+        $this->assertEquals('$ctx->foo->x[10]->doBar()', $res);
     }
 
     function testPath()
     {
         $src = 'foo/x/y';
         $res = phptal_tales($src);
-        $this->assertEquals("phptal_path(\$tpl->foo, 'x/y')", $res);
+        $this->assertEquals("phptal_path(\$ctx->foo, 'x/y')", $res);
     }
 
     function testNot()

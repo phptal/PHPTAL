@@ -26,6 +26,10 @@ require_once 'PHPUnit2/Framework/TestCase.php';
 require_once 'PHPUnit2/Framework/TestSuite.php';
 require_once 'PHPUnit2/TextUI/ResultPrinter.php';
 
+if (substr(PHP_OS,0,3) == 'WIN'){
+    define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\windows\\temp\\');
+}
+
 $old_error_report_value = error_reporting( E_ALL | E_STRICT );
 
 $printer = new PHPUnit2_TextUI_ResultPrinter();

@@ -40,7 +40,7 @@ class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
         $expected = <<<EOS
 <?php 
 function test( \$tpl ) {
-\$tpl->setDocType('<?xml version="1.0"?>') ;
+\$ctx->setDocType('<?xml version="1.0"?>') ;
 ?>
 <html>
   <head>

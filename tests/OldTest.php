@@ -72,7 +72,7 @@ class OldTest extends PHPUnit2_Framework_TestCase
     function test13()  // default keyword
     {
         $tpl = new PHPTAL('input/old-13.html');
-        $l = new DummyTag();
+        $l = new StdClass(); // DummyTag();
         $l->href= "http://www.example.com";
         $l->title = "example title";
         $l->name = "my link content";

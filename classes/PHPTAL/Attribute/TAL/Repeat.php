@@ -53,7 +53,7 @@
 //    * Letter - upper-case version of letter.
 //
 // PHPTAL: index, number, even, etc... will be stored in the
-// $tpl->repeat->'item'  object.  Thus $tpl->repeat->item->odd
+// $ctx->repeat->'item'  object.  Thus $ctx->repeat->item->odd
 // letter and Letter is not supported
 //
 
@@ -68,12 +68,12 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
         list($this->varName, $expression) = $this->parseExpression($this->expression);
         $code = $this->tag->generator->evaluateExpression($expression);
 
-        $this->tag->generator->pushCode('$__repeat__ = $tpl->repeat()');
-        $this->tag->generator->pushCode('if (!isset($tpl->'.$this->varName.')) $tpl->'.$this->varName.' = false');
+        $this->tag->generator->pushCode('$__repeat__ = $ctx->repeat');
+        $this->tag->generator->pushCode('if (!isset($ctx->'.$this->varName.')) $ctx->'.$this->varName.' = false');
         $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController(%s)', $this->varName, $code);
         $this->tag->generator->pushCode($init);
        
-        $this->tag->generator->doForeach('$tpl->'.$this->varName, $this->repeatVar('source'));
+        $this->tag->generator->doForeach('$ctx->'.$this->varName, $this->repeatVar('source'));
         
         $this->setRepeatVar('index', $this->repeatVar('index').'+1');
         $this->setRepeatVar('number', $this->repeatVar('number').'+1');

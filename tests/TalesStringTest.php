@@ -38,21 +38,21 @@ class TalesStringTest extends PHPUnit2_Framework_TestCase
     function testSubPathSimple()
     {
         $res = phptal_tales_string('hello $name how are you ?');
-        $rgm = preg_match('/\'hello \'.*?\$tpl->name.*?\' how are you \?\'$/', $res);
+        $rgm = preg_match('/\'hello \'.*?\$ctx->name.*?\' how are you \?\'$/', $res);
         $this->assertEquals(1, $rgm);
     }
 
     function testSubPath()
     {
         $res = phptal_tales_string('${name}');
-        $rgm = preg_match('/\'\'\s*?\.*\$tpl->name.*?\'\'$/', $res);
+        $rgm = preg_match('/\'\'\s*?\.*\$ctx->name.*?\'\'$/', $res);
         $this->assertEquals(1, $rgm);
     }
 
     function testSubPathExtended()
     {
         $res = phptal_tales_string('hello ${user/name} how are you ?');
-        $rgm = preg_match('/\'hello \'.*?\$tpl->user, \'name\'.*?\' how are you \?\'$/', $res);
+        $rgm = preg_match('/\'hello \'.*?\$ctx->user, \'name\'.*?\' how are you \?\'$/', $res);
         $this->assertEquals(1, $rgm);
     }
 }
