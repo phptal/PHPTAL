@@ -2,3 +2,66 @@
 
              Laurent Bedubourg <lbedubourg@motion-twin.com>
 
+
+
+  Usage requirements
+  ==================
+
+  To use PHPTAL in your projects, you will only require this:
+
+  - PHP5
+
+
+  PEAR Install
+  ============
+
+  Get the latest PHPTAL package on http://phptal.sf.net. Then run
+
+    pear install PHPTAL-X.X.X.tar.gz
+
+
+  NON PEAR install
+  ================
+
+  Get the latest PHPTAL package on http://phptal.sf.net. 
+
+    tar zxvf PHPTAL-X.X.X.tar.gz
+    mv PHPTAL-X.X.X PHPTAL
+    mv PHPTAL/PHPTAL.php .
+    mv PHPTAL* /path/to/your/php/include/path
+  
+
+  Getting the latest development version
+  ======================================
+
+  You can checkout the latest subversion trunk content using :
+
+    svn co https://yota.dyndns.org/phptal/trunk phptal
+
+
+  PHPTAL development requirements
+  ===============================
+
+  If you want to hack PHPTAL (don't forget to send me patches), you will
+  require :
+
+  - The PHPTAL development package 
+  - PEAR[0]
+  - Phing[1] to run maintainance tasks in an ant way
+  - PHPUnit2[2] to run tests
+  - PhpDocumentor[3] to generate PHP documentation
+
+
+  Phing tasks
+  ===========
+  
+  - phing doc      (call phpdocumentor on classes folder)
+  - phing test     (run tests)
+  - phing main     (test, build, pear-package, tar)
+
+
+ [0] http://pear.php.net
+ [1] http://phing.tigris.org
+ [2] http://pear.php.net/package/PHPUnit2
+ [3] http://www.phpdoc.org
+
