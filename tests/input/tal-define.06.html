@@ -1,0 +1,8 @@
+<div>
+  <metal:block define-macro="foo">
+    <span tal:define="test 'value'"/>
+    <span tal:replace="test"/>
+  </metal:block>
+
+  <div metal:use-macro="foo"/>
+</div>
