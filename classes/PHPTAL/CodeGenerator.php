@@ -250,6 +250,12 @@ class PHPTAL_CodeGenerator
     public function pushString( $str )
     {
         $str = htmlentities($str, ENT_COMPAT, $this->_encoding);
+
+        // string may contains &nbsp; and other stuff which should not be
+        // encoded here, thus we restore them keeping characters encoding
+        // conversion given by $this->_encoding
+        $str = str_replace('&amp;', '&', $str);
+        
         $str = preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
                             '<?= htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
                                                .$this->_encoding.'\' ) ?>', 
