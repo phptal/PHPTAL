@@ -34,6 +34,8 @@ require_once 'PHPTAL/Attribute/METAL/UseMacro.php';
 require_once 'PHPTAL/Attribute/METAL/DefineSlot.php';
 require_once 'PHPTAL/Attribute/METAL/FillSlot.php';
 
+require_once 'PHPTAL/Attribute/PHPTAL/Tales.php';
+
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL

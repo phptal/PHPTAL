@@ -70,6 +70,7 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
         $code = $this->tag->generator->evaluateExpression($expression);
 
         $this->tag->generator->pushCode('$__repeat__ = $tpl->repeat()');
+        $this->tag->generator->pushCode('if (!isset($tpl->'.$this->varName.')) $tpl->'.$this->varName.' = false');
         $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController()', $this->varName);
         $this->tag->generator->pushCode($init);
         

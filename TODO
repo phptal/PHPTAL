@@ -3,28 +3,17 @@
 
                                   To do list.
 
-tal:*
-[x]  comment
-[x]  replace
-[x]  content
-[x]  define         
-[x]  condition
-[x]  attributes
-[x]  repeat
-[x]  on-error
-
-metal:*
-[x]  define-macro
-[x]  use-macro
-[x]  define-slot
-[x]  fill-slot
-
 i18n:*
 [ ]  domain
 [ ]  translate
 [ ]  name
 
+interfaces:
+[ ]  cache
+[ ]  translationservice
+[ ]  resolver 
 
-phptal:tales="mode"
-[X]
+* tal:content="unknown_var" does not throw an exception because $tpl->__get()
+  returns 'null' and one level pathes are optimised to '$tpl->unknown_var'
+  instead of using phptal_path() resolver.
 

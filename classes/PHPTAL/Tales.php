@@ -170,9 +170,25 @@ function phptal_tales_path( $expression, $nothrow=false )
     }
 
     $expression = phptal_tales_string($expression);
+
+    if (strpos($expression, '/') === false) {
+        return '$tpl->'. substr($expression, 1, -1);
+    }
+
+    $parts = split('/', substr($expression, 1, -1));
+    $next = array_shift($parts);
+    $expression = "'". join('/', $parts) . "'";
+
+    if ($next == 'repeat'){
+        if ($nothrow)
+            return 'phptal_path($tpl->repeat(), '.$expression.', true)';
+        return 'phptal_path($tpl->repeat(), '.$expression.')';
+    }
+    
     if ($nothrow) 
-        return 'phptal_path($tpl, '.$expression.', true)';
-    return 'phptal_path($tpl, '.$expression.')';
+        return 'phptal_path($tpl->'.$next.', '.$expression.', true)';
+    
+    return 'phptal_path($tpl->'.$next.', '.$expression.')';
     
     if ($nothrow) 
        return 'phptal_path($tpl, \''.$expression.'\', true)';

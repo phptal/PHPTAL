@@ -25,7 +25,7 @@
 
 This should be equal to 'prout' : <div tal:replace="a"/>
 
-<div tal:on-error="string:error produced here correctly handled"><span tal:replace="unkown_path"/></div>
+<div tal:on-error="string:error produced here correctly handled"><span tal:replace="unkown/path"/></div>
 
 <div tal:repeat="item php:array('a','b','c','d')">
     <span tal:replace="repeat/item/index"/>: <span tal:content="item"/>

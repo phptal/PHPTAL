@@ -80,7 +80,10 @@ class PHPTAL
     
     public function execute() 
     {
-        if (!$this->_prepared) $this->prepare();
+        if (!$this->_prepared) {
+            $this->prepare();
+        }
+        
         $this->_repeat = new PHPTAL_RepeatController();
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
@@ -102,6 +105,7 @@ class PHPTAL
         $tpl->_encoding = $this->_encoding;
         $tpl->setTemplateRepository($this->_repositories);
         $tpl->prepare();
+
         require_once $tpl->getCodePath();
         $fun = $tpl->getFunctionName() . '_' . $macroName;
         $fun( $this );
@@ -215,6 +219,18 @@ class PHPTAL
     { 
         return $this->_repeat; 
     }
+
+    /*
+    public function __set($varname, $value)
+    {
+        $this->$varname = $value;
+    }
+    */
+    
+    public function __get($varname)
+    {
+        return null;
+    }
     
     private function parse()
     {
@@ -287,17 +303,17 @@ function phptal_path( $base, $path, $nothrow=false )
     
     if (is_object($base)) {
         if (method_exists($base, $current))
-            return phptal_path($base->$current(), $path);
+            return $path ? phptal_path($base->$current(), $path) : $base->$current();
         
         // php5.0.0 does not call the __isset method so we call it by hand
         // is isset failed
         if (isset($base->$current) || (method_exists($base, '__isset') && $base->__isset($current)))
-            return phptal_path($base->$current, $path);
+            return $path ? phptal_path($base->$current, $path) : $base->$current;
 
         // variable does not exists but overload of __call exists, we assume it
         // is a method.
         if (method_exists($base, '__call'))
-            return phptal_path($base->$current(), $path);
+            return $path ? phptal_path($base->$current(), $path) : $base->$current();
         
         if ($nothrow)
             return null;
@@ -307,13 +323,13 @@ function phptal_path( $base, $path, $nothrow=false )
         
     if (is_array($base)) {
         if (array_key_exists($current, $base))
-            return phptal_path($base[$current], $path);
+            return $path ? phptal_path($base[$current], $path) : $base[$current];
 
         if ($current == 'length')
-            return phptal_path(count( $base ), $path);
+            return $path ? phptal_path(count( $base ), $path) : count($base);
 
         if ($current == 'size')
-            return phptal_path(count( $base ), $path);
+            return $path ? phptal_path(count( $base ), $path) : count($base);
 
         if ($nothrow)
             return null;
@@ -323,7 +339,7 @@ function phptal_path( $base, $path, $nothrow=false )
 
     if (is_string($base)) {
         if ($current == 'length' || $current == 'size')
-            return phptal_path(strlen($base), $path);
+            return $path ? phptal_path(strlen($base), $path) : strlen($base);
 
         if ($nothrow)
             return null;

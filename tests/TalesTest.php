@@ -47,7 +47,7 @@ class TalesTest extends PHPUnit2_Framework_TestCase
     {
         $src = 'foo/x/y';
         $res = phptal_tales($src);
-        $this->assertEquals("phptal_path(\$tpl, 'foo/x/y')", $res);
+        $this->assertEquals("phptal_path(\$tpl->foo, 'x/y')", $res);
     }
 
     function testNot()
