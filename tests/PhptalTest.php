@@ -91,6 +91,15 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);
     }
+
+    function testXmlMode()
+    {
+        $tpl = new PHPTAL('input/xml.04.xml');
+        $tpl->setOutputMode(PHPTAL::XML);
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('input/xml.04.xml');
+        $this->assertEquals($exp, $res);
+    }
 }
         
 ?>

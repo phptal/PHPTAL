@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rss version="2.0">
+	<channel>
+    <title>My title</title>
+    <link>http://foo.com</link>
+    <description>my description</description>
+		<language>fr</language>
+    <item>
+      <title>This item title</title>
+      <link>http://foo.com/item</link>
+      <description>item description</description>
+      <dc:creator>my creator</dc:creator>
+      <dc:date>2005-03-10</dc:date>
+		</item>
+  </channel>
+</rss>

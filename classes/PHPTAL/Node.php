@@ -189,6 +189,12 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         }
     }
 
+    private function isEmptyNode()
+    {
+        return ($this->generator->getOutputMode() == PHPTAL::XHTML && PHPTAL_Defs::isEmptyTag($this->name)) ||
+               ($this->generator->getOutputMode() == PHPTAL::XML   && !$this->hasContent());
+    }
+    
     public function generateHead()
     {
         if ($this->headFootDisabled) return;
@@ -199,9 +205,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         $this->generator->pushHtml('<'.$this->name);
         $this->generateAttributes();
 
-        // if (PHPTAL_Defs::isEmptyTag($this->name) || !$this->hasContent()){
-        if (PHPTAL_Defs::isEmptyTag($this->name) ||
-            (!$this->hasContent() && $this->generator->getOutputMode() == PHPTAL_XML)){
+        if ($this->isEmptyNode()){
             $this->generator->pushHtml('/>');
         }
         else {
@@ -215,8 +219,9 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     
     public function generateContent( $realContent=false )
     {
-        if (PHPTAL_Defs::isEmptyTag($this->name))
+        if ($this->isEmptyNode()){
             return;
+        }
         
         if (!$realContent && count($this->contentAttributes) > 0) {
             foreach ($this->contentAttributes as $att) {
@@ -259,10 +264,8 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     public function generateFoot()
     {
         if ($this->headFootDisabled) return;
-        if (PHPTAL_Defs::isEmptyTag($this->name)) return;
-        if (!$this->hasContent() && $this->generator->getOutputMode() == PHPTAL_XML){
+        if ($this->isEmptyNode())
             return;
-        }
 
         if ($this->headFootPrintCondition) {
             $this->generator->doIf($this->headFootPrintCondition);

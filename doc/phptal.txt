@@ -268,7 +268,7 @@ TEMPLATE LANGUAGE
 
     1.  phptal:debug
     2.  phptal:tales
-    3.  phptal:omit-tag (not exactly the same but same effect)
+    3.  phptal:omit-tag (not exactly the same position but same effect)
     4.  metal:define-macro
     5.  tal:on-error
     6.  i18n:domain
@@ -1408,7 +1408,12 @@ PHP INTEGRATION
       ...
     }
     ?>
-    
+
+
+Working with GetText
+====================
+
+  ToDo
 
 Creating custom expression modifiers
 ====================================
