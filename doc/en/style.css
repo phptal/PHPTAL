@@ -1,0 +1,113 @@
+/* PHPTAL website uggly stylesheet 
+ *
+ * Author: Laurent Bedubourg <lbedubourg@motion-twin.com>
+ */
+
+body {
+font-family: sans-serif;
+font-size: 0.9em;
+background-image: url('http://phptal.motion-twin.com/themes/clean/header-left.png');
+background-repeat: no-repeat;
+background-position: 20px 10px; 
+background-attachment: fixed;
+padding-left: 80px;
+}
+
+.book, .article, .section {
+margin: auto;
+width: 640px;
+min-width: 640px;
+}
+
+.navheader, .navfooter {
+margin: auto;
+width: 640px;
+min-width: 640px;
+}
+
+h1.title {
+font-size: 3em;
+margin-top: 1.5em;
+padding-bottom: 0em;
+margin-bottom: 0em;
+text-align: right;
+}
+h2.subtitle {
+font-size: 2em;
+margin-top: 0em;
+padding-top: 0em;
+padding-bottom: 10px;
+text-align: right;
+color: #777;
+background-color: inherit;
+}
+
+.revhistory table {
+border: 1px solid #777;
+border-collapse: collapse;
+}
+.revhistory table th {
+background-color: #EEE;
+}
+
+
+h1 {
+font-size: 3em;
+margin-top: 1.5em;
+padding-bottom: 10px;
+text-align: right;
+}
+
+h2 {
+margin-top: 1.5em;
+font-size: 1.3em;
+background-color: #333;
+background-color: #8e864e;
+color: #EEE;
+padding-left: 5px;
+}
+
+p {
+text-align: justify;
+}
+
+pre {
+border-left: 10px solid #000;
+padding-left: 10px;
+margin-left: 20px;
+}
+
+code {
+color: #6e662e;
+}
+
+a {
+color: #00E;
+}
+
+a img {
+border: 0px solid #000;
+}
+
+abbr {
+color: #6e662e;
+}
+
+#footer {
+text-align: center;
+}
+
+a img {
+border: 0px solid #000;
+}
+
+.pon .date {
+margin-top: -12pt;
+padding-left: 5px;
+font-size: 0.9em;
+font-style: italic;
+letter-spacing: 5pt;
+background-color: #DDD;
+background-color: #d3c983;
+}
+
