@@ -1,10 +1,38 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+//  
+//  Copyright (c) 2004 Laurent Bedubourg
+//  
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+//  version 2.1 of the License, or (at your option) any later version.
+//  
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  Lesser General Public License for more details.
+//  
+//  You should have received a copy of the GNU Lesser General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//  
+//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
+//  
 
 /**
+ * Helps generate php representation of a template.
+ *
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
  */
 class PHPTAL_CodeGenerator
 {
+    function __construct( $encoding='UTF-8' )
+    {
+        $this->_encoding = $encoding;
+    }
+    
     public function getResult()
     {
         $this->flush();
@@ -75,26 +103,31 @@ class PHPTAL_CodeGenerator
     
     public function flushCode()
     {
-        if (count( $this->_codeBuffer ) == 0) return;
+        if (count( $this->_codeBuffer ) == 0) 
+            return;
+
+        // special treatment for one code line
         if (count( $this->_codeBuffer ) == 1) {
             $codeLine = $this->_codeBuffer[0];
-            // avoid adding ; after }
+            // avoid adding ; after } and {
             if (!preg_match('/\}|\{\s+$/', $codeLine))
                 $this->_result .= "<?php $codeLine; ?>";
             else 
                 $this->_result .= "<?php $codeLine ?>";
+
+            $this->_codeBuffer = array();
+            return;
         }
-        else {
-            $this->_result .= "<?php \n";
-            foreach ($this->_codeBuffer as $codeLine) {
-                // avoid adding ; after }
-                if (!preg_match('/\}|\{\s+$/', $codeLine))
-                    $this->_result .= $codeLine . " ;\n";
-                else 
-                    $this->_result .= $codeLine;
-            }
-            $this->_result .= "?>";
+    
+        $this->_result .= "<?php \n";
+        foreach ($this->_codeBuffer as $codeLine) {
+            // avoid adding ; after } and {
+            if (!preg_match('/\}|\{\s+$/', $codeLine))
+                $this->_result .= $codeLine . " ;\n";
+            else 
+                $this->_result .= $codeLine;
         }
+        $this->_result .= "?>";
         $this->_codeBuffer = array();
     }
     
@@ -196,14 +229,23 @@ class PHPTAL_CodeGenerator
 
     public function pushHtml( $html )
     {
+        $html = preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
+                             '<?= htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
+                                                .$this->_encoding.'\' ) ?>',
+                             $html);
         $this->flushCode();
         array_push( $this->_htmlBuffer, $html );
     }
 
     public function pushString( $str )
     {
+        $str = htmlentities($str, ENT_COMPAT, $this->_encoding);
+        $str = preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
+                            '<?= htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
+                                               .$this->_encoding.'\' ) ?>', 
+                            $str);
         $this->flushCode();
-        array_push( $this->_htmlBuffer, htmlentities($str, ENT_COMPAT, 'UTF-8') );
+        array_push( $this->_htmlBuffer, $str );
     }
 
     public function pushCode( $codeLine ) 
@@ -248,6 +290,7 @@ class PHPTAL_CodeGenerator
     private $_contexts = array();
     private $_functionPrefix = "";
     private $_doctype = "";
+    private $_encoding;
 }
 
 ?>

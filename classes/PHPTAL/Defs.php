@@ -1,4 +1,25 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+//  
+//  Copyright (c) 2004 Laurent Bedubourg
+//  
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+//  version 2.1 of the License, or (at your option) any later version.
+//  
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  Lesser General Public License for more details.
+//  
+//  You should have received a copy of the GNU Lesser General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//  
+//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
+//  
+
 // From http://dev.zope.org/Wikis/DevSite/Projects/ZPT/TAL%20Specification%201.4
 //
 // Order of Operations
@@ -40,6 +61,9 @@
 // 
 
 /**
+ * PHPTAL constants.
+ * 
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
  */
 class PHPTAL_Defs
@@ -99,13 +123,6 @@ class PHPTAL_Defs
         'PHP:OMIT-TAG'       => self::SURROUND,       
 
         'PHPTAL:TALES'       => self::SURROUND,
-    );
-
-    /**
-     * Create aliases for attributes. If an alias is found during parsing, the
-     * matching phptal attribute will be used.
-     */
-    static $ALIASES = array(    
     );
 
     /**
@@ -204,19 +221,42 @@ class PHPTAL_Defs
         'defer'
     );
 
+    static function isEmptyTag( $tagName )
+    {
+        return in_array(strtoupper($tagName), self::$XHTML_EMPTY_TAGS);
+    }
+    
+    /**
+     * Returns true if the attribute is an xhtml boolean attribute.
+     *
+     * @return bool
+     */
     static function isBooleanAttribute( $att )
     {
         return in_array($att, self::$XHTML_BOOLEAN_ATTRIBUTES);
     }
 
+    /**
+     * Returns true if the attribute is in the phptal dictionnary.
+     *
+     * @return bool
+     */
     static function isPhpTalAttribute( $att )
     {
         return array_key_exists(strtoupper($att), self::$DICTIONARY);
     }
     
+    /**
+     * Returns true if the attribute is a valid phptal attribute or an unknown
+     * attribute.
+     *
+     * Examples of valid attributes: tal:content, metal:use-slot
+     * Examples of invalid attributes: tal:unknown, metal:content
+     *
+     * @return bool
+     */
     static function isValidAttribute( $att )
     {
-        // return array_key_exists(strtoupper($att), self::$DICTIONARY);
         if (preg_match('/(.*):(.*)/', $att, $m)) {
             list (,$ns,$sub) = $m;
             if (in_array(strtoupper($ns), self::$NAMESPACES) 
@@ -227,6 +267,14 @@ class PHPTAL_Defs
         return true;
     }
 
+    /**
+     * Returns true if the attribute is a phptal handled xml namespace
+     * declaration.
+     *
+     * Examples of handled xmlns:  xmlns:tal, xmlns:metal
+     *
+     * @return bool
+     */
     static function isHandledXmlNs( $att )
     {
         $att = strtolower($att);

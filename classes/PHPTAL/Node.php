@@ -1,10 +1,33 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+//  
+//  Copyright (c) 2004 Laurent Bedubourg
+//  
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+//  version 2.1 of the License, or (at your option) any later version.
+//  
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  Lesser General Public License for more details.
+//  
+//  You should have received a copy of the GNU Lesser General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//  
+//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
+//  
 
 require_once 'PHPTAL/CodeGenerator.php';
 require_once 'PHPTAL/Defs.php';
 require_once 'PHPTAL/Attribute.php';
 
 /**
+ * Document node abstract class.
+ *
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
  */
 abstract class PHPTAL_Node
@@ -24,6 +47,9 @@ abstract class PHPTAL_Node
 }
 
 /**
+ * Node container.
+ * 
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
  */
 class PHPTAL_NodeTree extends PHPTAL_Node
@@ -44,6 +70,9 @@ class PHPTAL_NodeTree extends PHPTAL_Node
 }
 
 /**
+ * Document Tag representation.
+ *
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
  */
 class PHPTAL_NodeElement extends PHPTAL_NodeTree
@@ -115,16 +144,19 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         $this->generator->pushHtml('<'.$this->name);
         $this->generateAttributes();
 
-        if ($this->hasContent()) {
-            $this->generator->pushHtml('>');
+        if (PHPTAL_Defs::isEmptyTag($this->name) || !$this->hasContent()){
+            $this->generator->pushHtml('/>');
         }
         else {
-            $this->generator->pushHtml('/>');
+            $this->generator->pushHtml('>');
         }
     }
     
     public function generateContent( $realContent=false )
     {
+        if (PHPTAL_Defs::isEmptyTag($this->name))
+            return;
+        
         if (!$realContent && count($this->contentAttributes) > 0) {
             foreach ($this->contentAttributes as $att) {
                 $att->start( $this );
@@ -165,6 +197,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     public function generateFoot()
     {
         if ($this->headFootDisabled) return;
+        if (PHPTAL_Defs::isEmptyTag($this->name)) return;
         if ($this->hasContent() == false) return;
         $this->generator->pushHtml( '</'.$this->name.'>' );
     }
@@ -247,6 +280,8 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
 }
 
 /**
+ * Document text representation.
+ * 
  * @package PHPTAL
  */
 class PHPTAL_NodeText extends PHPTAL_Node
@@ -266,6 +301,9 @@ class PHPTAL_NodeText extends PHPTAL_Node
 }
 
 /**
+ * Comment, preprocessor, etc... representation.
+ * 
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
  */
 class PHPTAL_NodeSpecific extends PHPTAL_Node
@@ -284,6 +322,12 @@ class PHPTAL_NodeSpecific extends PHPTAL_Node
     }
 }
 
+/**
+ * Document doctype representation.
+ * 
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @package PHPTAL
+ */
 class PHPTAL_NodeDoctype extends PHPTAL_Node
 {
     public $value;

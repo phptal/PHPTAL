@@ -1,4 +1,24 @@
 <?php
+/* vim: set expandtab tabstop=4 shiftwidth=4: */
+//  
+//  Copyright (c) 2004 Laurent Bedubourg
+//  
+//  This library is free software; you can redistribute it and/or
+//  modify it under the terms of the GNU Lesser General Public
+//  License as published by the Free Software Foundation; either
+//  version 2.1 of the License, or (at your option) any later version.
+//  
+//  This library is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+//  Lesser General Public License for more details.
+//  
+//  You should have received a copy of the GNU Lesser General Public
+//  License along with this library; if not, write to the Free Software
+//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+//  
+//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
+//  
 
 if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
@@ -37,6 +57,7 @@ class PHPTAL
     public $repeat;
     public $slots = array();
     public $slotsStack = array();
+    public $encoding = 'UTF-8';
     
     public function __construct($path)
     {
@@ -79,6 +100,8 @@ class PHPTAL
         }
         
         $tpl = new PHPTAL( $file );
+        $tpl->encoding = $this->encoding;
+        $tpl->setTemplateRepository($this->_repositories);
         $tpl->prepare();
         require_once $tpl->getCodePath();
         $fun = $tpl->getFunctionName() . '_' . $macroName;
@@ -120,7 +143,7 @@ class PHPTAL
     {
         require_once 'PHPTAL/Parser.php';
         require_once 'PHPTAL/CodeGenerator.php';
-        $generator = new PHPTAL_CodeGenerator();
+        $generator = new PHPTAL_CodeGenerator($this->encoding);
         $parser = new PHPTAL_Parser($generator);
         $tree = $parser->parseFile($this->_realPath);
 
@@ -221,6 +244,7 @@ function phptal_path( $base, $path, $nothrow=false )
 
     if ($nothrow)
         return null;
+    
     throw new Exception("Path not found: $current");
 }
 

@@ -17,21 +17,11 @@
 //  License along with this library; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //  
-//  Authors: Laurent Bedubourg <laurent.bedubourg@free.fr>
+//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
 /**
  * Simple sax like xml parser for PHPTAL.
- *
- * After many unsucessfull tries to use PHP5 xml parsers for PHPTAL
- * requirements, i've decided to create my own. 
- *
- * At this very moment, all <?xml ?>, <!DOCTYPE, etc... are send to the
- * 'onSpecific()' method, this may change when required.
- *
- * This class is extended by PHPTAL_Parser to build the PHPTAL document tree.
- * 
- * Note: The parser is implemented as a state machine.
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @package PHPTAL
