@@ -1618,6 +1618,9 @@ php:SomeClass::$staticVar
       Defines : list of PHPTAL defines and defines influencing PHPTAL
       </para></listitem>
       <listitem><para>
+      PHPTAL : the main PHPTAL class
+      </para></listitem>
+      <listitem><para>
       PHPTAL_Filter  : filtering template sources and PHPTAL output
       </para></listitem>
       <listitem><para>
@@ -1698,6 +1701,136 @@ require_once 'PHPTAL.php';
       without specifying the real path but their relative path in the 
       repository.
       </para>
+    </section>
+
+    <section>
+      <title>class PHPTAL</title>
+    
+      <para>
+      This is the main library class you will use.
+      </para>
+
+      <para>
+      The most common example of usage :
+      </para>
+
+      <programlisting><![CDATA[
+<?php
+
+// include the library
+require_once 'PHPTAL.php';
+
+// instantiate a new PHPTAL object using specified template file
+$tpl = new PHPTAL('mytemplate.html');
+
+// setting some template context variables
+$tpl->title  = 'my title';
+$tpl->values = array(1,2,3,4);
+$tpl->user   = new User('Joe');
+
+// execute the template and echo the result in a 'secure' way
+try {
+    echo $tpl->execute();
+}
+catch (Exception $e){
+    echo "Exception thrown while processing template\n";
+    echo $e;
+}
+?>
+]]></programlisting>
+
+      <para>
+      You can perfectly choose to specified the template source 
+      after setting context variables.
+      </para>
+
+      <programlisting><![CDATA[
+<?php
+...
+$tpl = new PHPTAL();
+
+// it is a matter of taste but you can use the set() method instead of 
+// setting context using PHPTAL::__set() like above
+$tpl->set('title', 'my title');
+$tpl->set('values', array(1,2,3,4));
+$tpl->set('user', new User('Joe'));
+
+$tpl->setTemplate('mytemplate.html');
+...
+?>
+]]></programlisting>
+
+      <para>
+      You can also decide to use a generated string as template source instead
+      of using an existing template file :
+      </para>
+
+      <programlisting><![CDATA[
+<?php
+
+$src = <<<EOS
+<html>
+  <head>
+  <title tal:content="title">my title</title>
+  </head>
+  <body>
+    <h1 tal:content="title">my title</h1>
+  </body>
+</html>
+EOS;
+
+require_once 'PHPTAL.php';
+$tpl = new PHPTAL();
+$tpl->setSource($src);
+$tpl->title = 'this is my title';
+try {
+    echo $tpl->execute();
+}
+catch (Exception $e){
+    echo $e;
+}
+
+?>
+]]></programlisting>
+
+      <para>
+      In the above example, because PHPTAL requires a template source
+      idenfifier (usually the template file realpath), PHPTAL will use the md5
+      of the $src parameter as a unique identifier. You may decide to force the 
+      identifier using a second setSource() argument :
+      </para>
+
+      <programlisting><![CDATA[
+<?php
+$src = <<<EOS
+<html>
+  <head>
+  <title tal:content="title">my title</title>
+  </head>
+  <body>
+    <h1 tal:content="title">my title</h1>
+  </body>
+</html>
+EOS;
+
+require_once 'PHPTAL.php';
+$tpl = new PHPTAL();
+
+// because the source is contained into this file and won't be modified unless
+// this file is modified, it is 'faster' to specify __FILE__ as the unique 
+// source identifier, thus no md5 of $src will be done on each call.
+$tpl->setSource($src, __FILE__);
+$tpl->title = 'this is my title';
+try {
+    echo $tpl->execute();
+}
+catch (Exception $e){
+    echo $e;
+}
+
+?>
+]]></programlisting>
+      
     </section>
    
     <section>
