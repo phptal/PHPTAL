@@ -1,5 +1,11 @@
 <?php
 
+define('_PHPTAL_VERSION',      '1.0.2');
+define('_PHPTAL_MAILING_LIST', 'http://lists.motion-twin.com/mailman/listinfo/phptal');
+define('_PHPTAL_SUBVERSION',   'https://svn.motion-twin.com/phptal');
+define('_PHPTAL_RSSHREF',      '/rss20.xml');
+
+
 define('IN', 'src/');
 define('OUT', 'www/');
 define('TPL', 'tpl/');
@@ -31,6 +37,10 @@ while ($entry = $d->read()){
         $t = new PHPTAL($realPath);
         $t->setTemplateRepository(TPL);
         $t->setPreFilter(new CodePreFilter());
+        $t->VERSION = _PHPTAL_VERSION;
+        $t->MAILING = _PHPTAL_MAILING_LIST;
+        $t->SUBVERS = _PHPTAL_SUBVERSION;
+        $t->RSSHREF = _PHPTAL_RSSHREF;
         try {
             $r = $t->execute();
         }

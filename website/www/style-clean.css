@@ -20,8 +20,10 @@ min-width: 640px;
 }
 
 .nav {
+/*
 padding-top: 0px;
 margin-top: -40px;
+*/
 text-align: right;
 }
 .nav a {
@@ -56,6 +58,7 @@ text-decoration: none;
 }
 #menu li a:hover {
 color: #000;
+color: #8e864e;
 }
 #menu li.current a {
 color: #000;

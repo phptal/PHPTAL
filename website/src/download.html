@@ -1,0 +1,89 @@
+<html metal:use-macro="page.html/main" tal:define="current string:download">
+  <body metal:fill-slot="content" tal:omit-tag="">
+
+    <h1 id="download">Download</h1>
+
+    <p>
+    The PHPTAL library is licensed under the terms of the 
+	<a href="http://www.gnu.org/licenses/lgpl.txt">GNU LESSER GENERAL PUBLIC LICENSE</a>
+	contained in the COPYING file of this package.
+    </p>
+
+    <p>
+    From now on prefer using the PHP5 version of PHPTAL (works only with PHP5). 
+    </p>
+      
+    <p>
+    PHP5 is stable and usually smarter than PHP4. We use it in my company on complex production websites 
+    (intensively used) without any problem. 
+    </p>
+
+    <p>
+    A free <a href="http://eaccelerator.sf.net">PHP5 accelerator</a> is also working 
+    well with PHP5.
+    </p> 
+      
+    <p>
+    Please forget PHP4.
+    </p>
+
+    <h2>Installation procedure</h2>
+
+    <p>
+    You'd better have the <a href="http://pear.php.net">PEAR</a> utility installed to use 
+    these packages, if you don't know PEAR (as too many PHP programmers), 
+    you should take the time to learn about it and how to use it. It really 
+    worth the time you will spend on it.
+    </p>
+
+	<p>
+	The usual way of installing packages with pear is : 
+	</p>
+
+<pre>
+pear install {downloadedfile}
+</pre>
+
+      
+    <h2>PHPTAL for PHP5</h2>
+      
+    <ul>
+      <li>
+        <a href="files/PHPTAL-${VERSION}.tar.gz">PHPTAL-${VERSION}.tar.gz</a>
+      </li>
+    </ul>
+
+<pre>
+pear install http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz
+</pre>
+
+    <h2>PHPTAL for PHP4</h2>
+                    
+    <p>
+    You will need to download and install packages contained in <a
+    href="files/old/">this directory</a>.
+    </p>
+
+    <h2>Subversion repository</h2>
+
+    <p>
+    You can access latest PHPTAL source code using subversion. Using this code in 
+    production is risky.
+    </p>
+
+<pre>
+svn co https://svn.motion-twin.com/phptal/trunk phptal
+</pre>
+
+    <p>
+    If you are willing to send me patches, please use <code>svn diff</code> to 
+    easier the communication.
+    </p>
+
+    <p>
+    Of course you can always <a href="${SUBVERS}">browse the subversion repository</a> providing your
+    browser support XML/XSLT, the <code>trunk</code> folder contains the latest code.
+    </p>
+
+  </body>
+</html>

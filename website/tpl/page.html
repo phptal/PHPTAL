@@ -2,6 +2,13 @@
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html metal:define-macro="main">
   <head>
+    <tal:block 
+    comment="Sub pages can overwrite these variables to fit their needs"
+    define="description description | string:The PHPTAL package, an implementation of TAL, METAL, I18N (the ZPT project) for PHP;
+            keywords    keywords    | string:PHPTAL TAL METAL I18N ZPT XHTML HTML PHP template;
+            title       title       | string:PHPTAL :: Template Attribute Language for PHP;
+            rsstitle    rsstitle    | string:PHPTAL - news;"
+    />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="Author" content="Laurent Bedubourg"/>
     <meta name="Description" content="" tal:attributes="content description"/>
@@ -10,9 +17,7 @@
     <link rel="stylesheet" type="text/css" href="style-clean.css" title="Clean style"/>
     <link rel="alternative stylesheet" type="text/css" href="style-bandw.css" title="Black and white"/>
     <link rel="alternative stylesheet" type="text/css" href="style-orange.css" title="Black and orange"/>
-
-    <link rel="alternate" type="application/rss+xml" title="yota - News" href="/lbedubourg/rss20.xml" 
-         tal:attributes="title rsstitle | default; href rsshref | default"/>
+    <link rel="alternate" type="application/rss+xml" title="PHPTAL - news" href="/rss20.xml"/>
   </head>
   <body id="top">
 
@@ -23,20 +28,39 @@
 
     <div id="page">
     
-    <div id="menu">
+    <div id="menu" tal:define="current current | 'news'">
     <ul>
-      <li><a href="#news">News</a></li>
-      <li><a href="#intro">Introduction</a></li>
-      <li><a href="#manuals">Manuals</a></li>
-      <li><a href="#download">Download</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li tal:attributes="class php:current eq 'news' ? 'current' : false">
+        <a href="index.html">News</a>
+      </li>
+      <li tal:attributes="class php:current eq 'introduction' ? 'current' : false">
+        <a href="introduction.html">Introduction</a>
+      </li>
+      <li tal:attributes="class php:current eq 'manuals' ? 'current' : false">
+        <a href="manuals.html">Manuals</a>
+      </li>
+      <li tal:attributes="class php:current eq 'download' ? 'current' : false">
+        <a href="download.html">Download</a>
+      </li>
+      <li tal:attributes="class php:current eq 'contact' ? 'current' : false">
+        <a href="contact.html">Contact</a>
+      </li>
     </ul>
     </div>
 
     <div id="content">
-    <span metal:define-slot="content"></span>
+
+      <div id="preTitleNote">
+        Stay tuned, don't forget the 
+        <a href="rss20.xml">RSS Feed</a>
+        <a href="rss20.xml"><img src="gfx/ico_rss.png" alt="PHPTAL news - RSS feed"/></a>
+      </div>
+
+      <span metal:define-slot="content"></span>
+
     </div>
 
+	<div class="nav"><a href="#top">top</a></div>
     <div id="validators">
       <a href="http://validator.w3.org/check?uri=referer"><img
           src="http://www.w3.org/Icons/valid-xhtml10"
