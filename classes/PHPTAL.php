@@ -207,10 +207,17 @@ function phptal_path( $base, $path, $nothrow=false )
     if (is_object($base)) {
         if (method_exists($base, $current))
             return phptal_path($base->$current(), $path);
-            
-        if (isset($base->$current))
+        
+        // php5.0.0 does not call the __isset method so we call it by hand
+        // is isset failed
+        if (isset($base->$current) || (method_exists($base, '__isset') && $base->__isset($current)))
             return phptal_path($base->$current, $path);
 
+        // variable does not exists but overload of __call exists, we assume it
+        // is a method.
+        if (method_exists($base, '__call'))
+            return phptal_path($base->$current(), $path);
+        
         if ($nothrow)
             return null;
         
