@@ -40,6 +40,20 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/phptal.02.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testExceptionNoEcho()
+    {
+        $tpl = new PHPTAL('input/phptal.03.html');
+        ob_start();
+        try {
+            $res = $tpl->execute();
+        }
+        catch (Exception $e){
+        }
+        $c = ob_get_contents();
+        ob_end_clean();
+        $this->assertEquals('', $c);
+    }
 }
         
 ?>

@@ -56,6 +56,20 @@ class TalConditionTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/tal-condition.03.html');
         $this->assertEquals($exp, $res);        
     }
+
+    function testException()
+    {
+        $tpl = new PHPTAL('input/tal-condition.04.html');
+        $tpl->somevar = true;
+        try {
+            $tpl->execute();
+        }
+        catch (Exception $e){
+        }
+        $this->assertEquals(true, isset($e));
+        // $exp = trim_file('output/tal-condition.04.html');
+        // $this->assertEquals($exp, $res);        
+    }
 }
         
 ?>

@@ -92,10 +92,15 @@ class PHPTAL
         }
         
         $this->_repeat = new stdClass;
-        // $this->_repeat = new PHPTAL_RepeatController();
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
-        $res = $templateFunction($this);
+        try {
+            $res = $templateFunction($this);
+        }
+        catch (Exception $e){
+            ob_end_clean();
+            throw $e;
+        }
         return $this->_docType . $res;
     }
 
@@ -243,12 +248,14 @@ class PHPTAL
         return $this->_repeat; 
     }
 
-    /*
-    public function __set($varname, $value)
+    
+    public function set($varname, $value)
     {
+        if ($varname[0] == '_'){
+            throw new Exception("Template variable error '$varname' must not begin with underscore");
+        }
         $this->$varname = $value;
     }
-    */
     
     public function __get($varname)
     {
