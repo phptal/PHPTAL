@@ -74,7 +74,8 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
         $this->tag->generator->pushCode($init);
        
         $this->tag->generator->doForeach('$ctx->'.$this->varName, $this->repeatVar('source'));
-        
+ 
+        $this->setRepeatVar('key', '$__key__');
         $this->setRepeatVar('index', $this->repeatVar('index').'+1');
         $this->setRepeatVar('number', $this->repeatVar('number').'+1');
         $this->setRepeatVar('even', $this->repeatVar('index') . ' %2 == 0');
