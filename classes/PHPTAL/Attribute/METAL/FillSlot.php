@@ -49,7 +49,7 @@
 // 
 // 2. call the macro (here not supported)
 //
-// <?= phptal_macro($tpl, 'master_page.html/macros/sidebar'); ? >
+// <?php echo phptal_macro($tpl, 'master_page.html/macros/sidebar'); ? >
 // 
  
 /**

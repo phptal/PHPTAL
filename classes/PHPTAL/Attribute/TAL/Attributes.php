@@ -84,7 +84,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
             $this->tag->generator->pushCode( $code );
         }
         $this->tag->attributes[ $attribute ] = 
-            '<?= $'.$type.$this->getVarName($attribute).' ?>';
+            '<?php echo $'.$type.$this->getVarName($attribute).' ?>';
     }
 
     private function getVarName($attribute)
@@ -123,7 +123,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
                     $code = sprintf('%s = \'\'', $attkey);
                 }
                 $this->tag->generator->pushCode( $code );
-                $this->tag->attributes[$attribute] = "<?= $attkey ?>";
+                $this->tag->attributes[$attribute] = "<?php echo $attkey ?>";
                 break;
             }
 
@@ -140,7 +140,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         }
        
         $this->tag->generator->doEnd();
-        $this->tag->attributes[$attribute] = "<?= $attkey ?>";
+        $this->tag->attributes[$attribute] = "<?php echo $attkey ?>";
     }
     
     public function end()

@@ -69,7 +69,7 @@ class PHPTAL_Attribute_TAL_OnError extends PHPTAL_Attribute
                 if ($echoType == 'text')
                     $this->tag->generator->doEcho( $code );
                 else
-                    $this->tag->generator->pushHtml('<?= '.$code.' ?>');
+                    $this->tag->generator->pushHtml('<?php echo '.$code.' ?>');
                 break;
         }
         $this->tag->generator->doEnd();

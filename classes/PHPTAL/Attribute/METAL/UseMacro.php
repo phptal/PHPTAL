@@ -32,7 +32,7 @@
 //
 // PHPTAL: (here not supported)
 //
-//      <?= phptal_macro( $tpl, 'master_page.html/macros/copyright'); ? >
+//      <?php echo phptal_macro( $tpl, 'master_page.html/macros/copyright'); ? >
 //
 
 /**

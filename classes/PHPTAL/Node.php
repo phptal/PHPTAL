@@ -181,7 +181,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     private function generateAttributes()
     {
         // A phptal attribute can modify any node attribute replacing
-        // its value by a <?= $somevalue ?\ >.
+        // its value by a <?php echo $somevalue ?\ >.
         //
         // The entire attribute (key="value") can be replaced using the
         // '$__att_' value code, it is very usefull for xhtml boolean
@@ -192,11 +192,11 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         //  $tag->generator->pushCode(
         //  '$__att_checked = $somecondition ? \'checked="checked"\' : \'\''
         //  );
-        //  $tag->attributes['checked'] = '<?= $__att_checked ?\>';
+        //  $tag->attributes['checked'] = '<?php echo $__att_checked ?\>';
         // 
 
         foreach ($this->attributes as $key=>$value) {
-            if (preg_match('/<\?= \$__att_.*? \?>/', $value)) { 
+            if (preg_match('/<\?php echo \$__att_.*? \?>/', $value)) { 
                 $this->generator->pushHtml($value);
             }
             else {

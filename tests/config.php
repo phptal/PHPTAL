@@ -26,6 +26,7 @@ chdir($testDir);
 
 define('PHPTAL_FORCE_REPARSE', 1);
 ini_set('include_path', $testDir .'/../classes:'. ini_get('include_path'));
+ini_set('short_open_tag', 'Off');
 
 
 function trim_file( $src ){

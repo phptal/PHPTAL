@@ -40,7 +40,7 @@
 //        <tr><th>Links</th></tr>
 //        <tr>
 //        <?php if (isset($tpl->slots->links)): ? >
-//          <?= $tpl->slots->links ? >
+//          <?php echo $tpl->slots->links ? >
 //        <?php else: ? >  
 //        <td>
 //          <a href="/">A Link</a>
@@ -59,7 +59,7 @@ class PHPTAL_Attribute_METAL_DefineSlot extends PHPTAL_Attribute
     {
         $cond = sprintf('$tpl->hasSlot("%s")', $this->expression);
         $this->tag->generator->doIf($cond);
-        $code = sprintf('<?= $tpl->getSlot("%s") ?>', $this->expression);
+        $code = sprintf('<?php echo $tpl->getSlot("%s") ?>', $this->expression);
         $this->tag->generator->pushHtml($code);
         $this->tag->generator->doElse();
     }

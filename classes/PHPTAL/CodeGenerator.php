@@ -244,13 +244,13 @@ class PHPTAL_CodeGenerator
     public function doEcho( $code )
     {
         $this->flush();
-        $this->pushHtml( "<?= htmlentities( $code, ENT_COMPAT, 'UTF-8' ) ?>" );
+        $this->pushHtml( "<?php echo htmlentities( $code, ENT_COMPAT, 'UTF-8' ) ?>" );
     }
 
     public function pushHtml( $html )
     {
         $html = preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
-                             '<?= htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
+                             '<?php echo htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
                                                 .$this->_encoding.'\' ) ?>',
                              $html);
         $this->flushCode();
@@ -267,7 +267,7 @@ class PHPTAL_CodeGenerator
         $str = str_replace('&amp;', '&', $str);
         
         $str = preg_replace('/\$\{([a-z0-9\/_]+)\}/sm', 
-                            '<?= htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
+                            '<?php echo htmlentities( phptal_path($tpl, \'$1\'), ENT_COMPAT, \''
                                                .$this->_encoding.'\' ) ?>', 
                             $str);
         $this->flushCode();

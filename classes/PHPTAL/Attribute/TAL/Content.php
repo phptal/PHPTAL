@@ -98,7 +98,7 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
             $this->tag->generator->doEcho( $code );
         }
         else {
-            $this->tag->generator->pushHtml('<?= '.$code.' ?>');
+            $this->tag->generator->pushHtml('<?php echo '.$code.' ?>');
         }
     }
     
