@@ -20,6 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+require_once 'PHPTAL/Attribute/TAL/Comment.php';
 require_once 'PHPTAL/Attribute/TAL/Replace.php';
 require_once 'PHPTAL/Attribute/TAL/Content.php';
 require_once 'PHPTAL/Attribute/TAL/Condition.php';
