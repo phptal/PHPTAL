@@ -12,6 +12,7 @@ margin-left: 70px;
 #page {
 margin: auto;
 width: 640px;
+min-width: 640px;
 }
 
 .nav {
@@ -161,5 +162,6 @@ font-size: 0.9em;
 font-style: italic;
 letter-spacing: 5pt;
 background-color: #DDD;
+background-color: #d3c983;
 }
 
