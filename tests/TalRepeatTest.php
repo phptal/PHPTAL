@@ -71,6 +71,16 @@ class TalRepeatTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/tal-repeat.05.html');
         $this->assertEquals($exp, $res);
     }
+
+
+    function testRepeatAttributesWithMacroPhp()
+    {
+        $tpl = new PHPTAL('input/tal-repeat.06.html');
+        $tpl->data = array(1,2,3);
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/tal-repeat.06.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 
