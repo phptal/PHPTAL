@@ -39,6 +39,10 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
 {
     public function start()
     {
+        if (trim($this->expression) == ""){
+            return;
+        }
+        
         list($echoType, $expression) = $this->parseExpression($this->expression);
         $code = $this->tag->generator->evaluateExpression( $expression );
 
