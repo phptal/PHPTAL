@@ -31,7 +31,8 @@ else {
     define('PHPTAL_OS_WIN', false);
     define('PHPTAL_PATH_SEP', '/');
 }
-
+//}}}
+//{{{PHPTAL_PHP_CODE_DESTINATION
 if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     if (PHPTAL_OS_WIN){
         if (file_exists('c:\\WINNT\\Temp\\')){
@@ -44,6 +45,11 @@ if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     else {
         define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
     }
+}
+//}}}
+//{{{PHPTAL_DEFAULT_ENCODING
+if (!defined('PHPTAL_DEFAULT_ENCODING')){
+    define('PHPTAL_DEFAULT_ENCODING', 'UTF-8');
 }
 //}}}
 
@@ -395,7 +401,7 @@ class PHPTAL
     private $_translator = null;
     public  $__file = false;
 
-    private $_encoding = 'UTF-8';    
+    private $_encoding = PHPTAL_DEFAULT_ENCODING; 
     private $_outputMode = PHPTAL_XHTML;
 }
 
