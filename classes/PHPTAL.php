@@ -340,77 +340,108 @@ class PHPTAL
 
 function phptal_path( $base, $path, $nothrow=false )
 {//{{{
-    if ($path == '') 
-        return $base;
-    
     $parts   = split('/', $path);
-    $current = array_shift($parts);
-    $path    = join('/', $parts);
-    
-    if (is_object($base)) {
-        if (method_exists($base, $current))
-            return $path ? phptal_path($base->$current(), $path, $nothrow) : $base->$current();
-        
-        if (isset($base->$current)) 
-            return $path ? phptal_path($base->$current, $path, $nothrow) : $base->$current;
+    $current = true;
 
-        if (method_exists($base, '__get')){
+    while ($current = array_shift($parts)){
+        // object handling
+        if (is_object($base)){
+            // look for method
+            if (method_exists($base, $current)){
+                $base = $base->$current();
+                continue;
+            }
+            
+            // look for variable
+            if (isset($base->$current)){
+                $base = $base->$current;
+                continue;
+            }
+            
+            // look for isset (priority over __get)
             if (method_exists($base, '__isset')){
-                // if __isset() tell us the variable exists, then we believe it
                 if ($base->__isset($current)){
-                    $result = $base->$current;
-                    return $path ? phptal_path($result, $path, $nothrow) : $result;
+                    $base = $base->$current;
+                    continue;
                 }
             }
-            else {
-                // just give it a try and discard the __get() result if null
-                $result = $base->$current;
-                if (!is_null($result))
-                    return $path ? phptal_path($result, $path, $nothrow) : $result;
+            // ask __get and discard if it returns null
+            else if (method_exists($base, '__get')){
+                $tmp = $base->$current;
+                if (!is_null($tmp)){
+                    $base = $tmp;
+                    continue;
+                }
+            }
+
+            // magic method call
+            if (method_exists($base, '__call')){
+                $base = $base->$current();
+                continue;
+            }
+
+            // emulate array behaviour
+            if (is_numeric($current) && method_exists($base, '__getAt')){
+                $base = $base->__getAt($current);
+                continue;
+            }
+            
+            if ($nothrow)
+                return null;
+
+            $err = 'Unable to find part "%s" in path "%s"';
+            $err = sprintf($err, $current, $path);
+            throw new Exception($err);
+        }
+
+        // array handling
+        if (is_array($base)) {
+            // key or index
+            if (array_key_exists($current, $base)){
+                $base = $base[$current];
+                continue;
+            }
+
+            // virtual methods provided by phptal
+            if ($current == 'length' || $current == 'size'){
+                $base = count($base);
+                continue;
+            }
+
+            if ($nothrow)
+                return null;
+
+            $err = 'Unable to find array key "%s" in path "%s"';
+            $err = sprintf($err, $current, $path);
+            throw new Exception($err);
+        }
+
+        // string handling
+        if (is_string($base)) {
+            // virtual methods provided by phptal
+            if ($current == 'length' || $current == 'size'){
+                $base = strlen($base);
+                continue;
+            }
+
+            // access char at index
+            if (is_int($current)){
+                $base = $base[$current];
+                continue;
             }
         }
 
-        // variable does not exists but overload of __call exists, we assume it
-        // is a method.
-        if (method_exists($base, '__call'))
-            return $path ? phptal_path($base->$current(), $path, $nothrow) : $base->$current();
+        // if this point is reached, then the part cannot be resolved
         
         if ($nothrow)
             return null;
         
-        throw new Exception("Path not found: $current");
-    }
-        
-    if (is_array($base)) {
-        if (array_key_exists($current, $base))
-            return $path ? phptal_path($base[$current], $path, $nothrow) : $base[$current];
-
-        if ($current == 'length')
-            return $path ? phptal_path(count( $base ), $path, $nothrow) : count($base);
-
-        if ($current == 'size')
-            return $path ? phptal_path(count( $base ), $path, $nothrow) : count($base);
-
-        if ($nothrow)
-            return null;
-
-        throw new Exception("Path not found: $current");
+        $err = 'Unable to find part "%s" in path "%s"';
+        $err = sprintf($err, $current, $path);
+        throw new Exception($err);
     }
 
-    if (is_string($base)) {
-        if ($current == 'length' || $current == 'size')
-            return $path ? phptal_path(strlen($base), $path, $nothrow) : strlen($base);
-
-        if ($nothrow)
-            return null;
-
-        throw new Exception("Path not found: $current");
-    }
-
-    if ($nothrow)
-        return null;
-    
-    throw new Exception("Path not found: $current");
+    return $base;
 }//}}}
 
 function phptal_exists( $ctx, $path )

@@ -74,6 +74,14 @@ class TalReplaceTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/tal-replace.06.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testBlock()
+    {
+        $tpl = new PHPTAL('input/tal-replace.07.html');
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/tal-replace.07.html');
+        $this->assertEquals($exp, $res);        
+    }
 }
 
 ?>
