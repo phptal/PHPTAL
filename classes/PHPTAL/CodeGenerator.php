@@ -258,7 +258,9 @@ class PHPTAL_CodeGenerator
     public function doEcho( $code, $replaceInString=true )
     {
         $this->flush();
-        $this->pushHtml( "<?php echo htmlspecialchars( $code, ENT_QUOTES, '$this->_encoding' ) ?>", $replaceInString );
+        $html = '<?php echo %s ?>';
+        $html = sprintf($html, $this->escapeCode($code));
+        $this->pushHtml($html, $replaceInString);
     }
 
     public function pushHtml( $html, $replaceInString=true )
@@ -276,7 +278,7 @@ class PHPTAL_CodeGenerator
         while (preg_match('/^(.*?)(\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
             list(,$before,$expression,$after) = $m;
             
-            $before = htmlspecialchars($before, ENT_QUOTES, $this->_encoding);
+            $before = $this->escape($before);
             $before = str_replace('&amp;', '&', $before);
             array_push($this->_htmlBuffer, $before);
 
@@ -287,7 +289,7 @@ class PHPTAL_CodeGenerator
         }
         
         if ($str){
-            $str = htmlspecialchars($str, ENT_QUOTES, $this->_encoding);
+            $str = $this->escape($str); 
             $str = str_replace('&amp;', '&', $str);
             array_push($this->_htmlBuffer, $str);
         }
@@ -300,6 +302,17 @@ class PHPTAL_CodeGenerator
         array_push( $this->_codeBuffer, $codeLine );
     }
 
+    public function escapeCode($code)
+    {
+        $result = '%s(%s, ENT_QUOTES, \'%s\')';
+        return sprintf($result, $this->_htmlEscapingFunction, $code, $this->_encoding);
+    }
+
+    public function escape($html)
+    {
+        $func = $this->_htmlEscapingFunction;
+        return $func($html, ENT_QUOTES, $this->_encoding);
+    }
 
     private function indentSpaces() 
     { 
@@ -333,25 +346,26 @@ class PHPTAL_CodeGenerator
         if ($this->_talesMode == 'tales'){
             return preg_replace(
                 '/\$\{([a-z0-9\/_]+)\}/ism', 
-                '<?php echo htmlspecialchars( phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' ) ?>',
+                '<?php echo '.$this->_htmlEscapingFunction.'( '
+                    .'phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' '
+                .') ?>',
                 $src);
         }
 
-        while (preg_match('/\${structure ([^\}]+)\}/ism', $src, $m)){
-            list($ori, $exp) = $m;
+        while (preg_match('/\${(structure )?([^\}]+)\}/ism', $src, $m)){
+            list($ori, $struct, $exp) = $m;
             $php  = phptal_tales_php($exp);
             $repl = '<?php echo %s; ?>';
-            $repl = sprintf($repl, $php);
+            // when structure keyword is specified the output is not html escaped
+            if ($struct){
+                $repl = sprintf($repl, $php);
+            }
+            else {
+                $repl = sprintf($repl, $this->escapeCode($php));
+            }
             $src  = str_replace($ori, $repl, $src);
         }
-        
-        while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
-            list($ori, $exp) = $m;
-            $php  = phptal_tales_php($exp);
-            $repl = '<?php echo htmlspecialchars( %s , ENT_QUOTES, \'%s\') ?>';
-            $repl = sprintf($repl, $php, $this->_encoding);
-            $src  = str_replace($ori, $repl, $src);
-        }
+       
         return $src;
     }
 
@@ -382,6 +396,11 @@ class PHPTAL_CodeGenerator
     {
         return $this->_debug;
     }
+
+    public function setHtmlEscaping($function, $ent=END_QUOTES)
+    {
+        $this->_htmlEscapingFunction = $function;
+    }
  
     private $_debug  = false;
     private $_result = "";
@@ -396,6 +415,7 @@ class PHPTAL_CodeGenerator
     private $_xmldeclaration = "";
     private $_encoding;
     private $_outputMode;
+    private $_htmlEscapingFunction = 'htmlspecialchars';
 }
 
 ?>

@@ -20,8 +20,9 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_0_3');
+define('PHPTAL_VERSION', '1_0_4');
 
+//{{{OS RELATED DEFINES
 if (substr(PHP_OS,0,3) == 'WIN'){
     define('PHPTAL_OS_WIN', true);
     define('PHPTAL_PATH_SEP', '\\');
@@ -39,17 +40,19 @@ if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
         else {
             define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINDOWS\\Temp\\');
         }
-    }//}}}
+    }
     else {
         define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
-    }//}}}
+    }
 }
+//}}}
 
 define('PHPTAL_XHTML', 1);
-define('PHPTAL_XML', 2);
+define('PHPTAL_XML',   2);
 
 require_once 'PHPTAL/RepeatController.php';
 require_once 'PHPTAL/Context.php';
+
 
 class PHPTAL_Exception extends Exception
 {
@@ -112,9 +115,9 @@ class PHPTAL
     }//}}}
 
     public function setTemplate($path)
-    {
+    {//{{{
         $this->_realPath = $path;
-    }
+    }//}}}
 
     public function __clone()
     {//{{{
@@ -303,7 +306,7 @@ class PHPTAL
      * Returns array of exceptions catched by tal:on-error attribute.
      */
     public function getErrors()
-    { 
+    {//{{{
         return $this->_errors;
     }//}}}
     
@@ -390,7 +393,7 @@ class PHPTAL
     private $_triggers = array();
     
     private $_translator = null;
-    public $__file = false;
+    public  $__file = false;
 
     private $_encoding = 'UTF-8';    
     private $_outputMode = PHPTAL_XHTML;
@@ -498,7 +501,7 @@ function phptal_path( $base, $path, $nothrow=false )
         $err = 'Unable to find part "%s" in path "%s"';
         $err = sprintf($err, $current, $path);
         throw new Exception($err);
-    }//}}}
+    }
 
     return $base;
 }//}}}
