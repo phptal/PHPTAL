@@ -9,8 +9,10 @@ width: 640px;
 margin: auto;
 }
 
-#backlinker {
-text-align: center;
+.nav {
+padding-top: 0px;
+margin-top: -50px;
+text-align: right;
 }
 
 #header h1, #header h2 {
