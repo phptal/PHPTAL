@@ -259,6 +259,9 @@ class PHPTAL
     
     public function __get($varname)
     {
+        if ($varname == 'repeat')
+            return $this->_repeat;
+
         if ($this->_nothrow)
             return null;
         throw new Exception("Unable to find path $varname");
