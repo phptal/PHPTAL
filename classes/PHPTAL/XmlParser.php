@@ -49,6 +49,8 @@ abstract class PHPTAL_XmlParser
     const ERR_CHARS_BEFORE_DOC_START = 
         "Characters found before the begining of the document !";
 
+    const BOM_STR = "\xef\xbb\xbf";
+    
     public function __construct() 
     {
         $this->_file = "<string>";
@@ -65,6 +67,11 @@ abstract class PHPTAL_XmlParser
 
     public function parseString($src) 
     {
+        // remove BOM (utf8 byte order mark)... 
+        if (substr($src,0,3) == self::BOM_STR){
+            $src = substr($src, 3);
+        }
+        
         $this->_line = 1;
         $state = self::ST_ROOT;
         $mark  = 0;

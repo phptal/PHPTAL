@@ -34,6 +34,19 @@ class ParserTest extends PHPUnit2_Framework_TestCase
         $this->assertEquals(3, count($tree->children));
         $this->assertEquals(5, count($tree->children[2]->children));
     }
+
+    function testByteOrderMark()
+    {
+        $generator = new PHPTAL_CodeGenerator();
+        $parser = new PHPTAL_Parser( $generator );
+        try {
+            $tree = $parser->parseFile('input/parser.02.xml');
+            $this->assertTrue(true);
+        }
+        catch (Exception $e){
+            $this->assertTrue(false);
+        }
+    }
 }
 
 ?>
