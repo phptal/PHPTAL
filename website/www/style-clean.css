@@ -6,7 +6,11 @@
 body {
 font-family: sans-serif;
 font-size: 0.9em;
-margin-left: 70px;
+background-image: url('themes/clean/header-left.png');
+background-repeat: no-repeat;
+background-position: 20px 10px; 
+background-attachment: fixed;
+padding-left: 80px;
 }
 
 #page {
@@ -28,35 +32,7 @@ text-decoration: none;
 }
 
 #header {
-float: left;
-position: fixed;
-top: 10px;
-left: 10px;
-background-image: url('themes/clean/header-left.png');
-background-repeat: no-repeat;
-width: 100px;
-height: 600px;
-}
-
-#header h1, #header h2 {
 display: none;
-padding: 0px;
-margin: 0px;
-letter-spacing: 3px;
-}
-#header h1 {
-letter-spacing: 10px;
-border: 0px;
-font-size: 3em;
-}
-#header h1 a {
-text-decoration: none;
-}
-#header h2 {
-font-size: 1.5em;
-line-height: 0.8em;
-color: #333;
-background-color: inherit;
 }
 
 #menu {
