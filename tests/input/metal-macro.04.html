@@ -1,0 +1,11 @@
+<html metal:use-macro="metal-macro.04.main.html/main">
+
+  <metal:block define-macro="subMacro">
+    foo bar baz
+  </metal:block>
+
+  <metal:block fill-slot="content">
+    <metal:block use-macro="subMacro"/>
+  </metal:block>
+  
+</html>

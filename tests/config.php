@@ -42,5 +42,9 @@ function trim_string( $src ){
     return $src;
 }
 
+function throw_all($errmsg, $errno, $file, $line){
+    throw new Exception($errmsg);
+}
+set_error_handler('throw_all');
 
 ?>

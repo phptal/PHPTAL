@@ -108,20 +108,23 @@ class PHPTAL
     {
         if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
-        }
-
-        if (file_exists(dirname($this->_realPath).'/'.$file)){
-            $file = dirname($this->_realPath).'/'.$file;
-        }
+            if (file_exists(dirname($this->_realPath).'/'.$file)){
+                $file = dirname($this->_realPath).'/'.$file;
+            }
         
-        $tpl = new PHPTAL( $file );
-        $tpl->_encoding = $this->_encoding;
-        $tpl->setTemplateRepository($this->_repositories);
-        $tpl->prepare();
+            $tpl = new PHPTAL( $file );
+            $tpl->_encoding = $this->_encoding;
+            $tpl->setTemplateRepository($this->_repositories);
+            $tpl->prepare();
 
-        require_once $tpl->getCodePath();
-        $fun = $tpl->getFunctionName() . '_' . $macroName;
-        $fun( $this );
+            require_once $tpl->getCodePath();
+            $fun = $tpl->getFunctionName() . '_' . $macroName;
+            $fun( $this );
+        }
+        else {
+            $fun = $this->getFunctionName() . '_' . trim($path);
+            $fun( $this );            
+        }
     }
 
     public function prepare()

@@ -48,6 +48,14 @@ class MetalMacroTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/metal-macro.03.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testMacroInsideMacro()
+    {
+        $tpl = new PHPTAL('input/metal-macro.04.html');
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/metal-macro.04.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 ?>
