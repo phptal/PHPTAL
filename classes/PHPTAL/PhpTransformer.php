@@ -31,13 +31,11 @@
  * - not myBool
  * - ...
  *
- * The public $prefix variable may be changed to change the context lookup.
+ * The $prefix variable may be changed to change the context lookup.
  *
  * example:
  * 
- *      $transformer = new PHPTAL_PhpTransformer();
- *      $transformer->prefix = '$ctx->';
- *      $res = $transformer->transform('a.b.c[x]');
+ *      $res = PHPTAL_PhpTransformer::transform('a.b.c[x]', '$ctx->');
  *      $res == '$ctx->a->b->c[$ctx->x]';
  *
  * A brave coder may decide to cleanup the parser, optimize things, and send 
@@ -56,24 +54,15 @@ class PHPTAL_PhpTransformer
     const ST_MEMBER = 6;  // abcd.x
     const ST_STATIC = 7;  // class::[$]static|const
     const ST_DEFINE = 8;  // @MY_DEFINE
-    
-    public $prefix = '$';
 
-    // Automatically called by the inclusion/requirements of this file
-    public static function initStatics()
-    {
-        self::$TranslationMatches = array_keys(self::$TranslationTable);
-        self::$TranslationReplaces = array_values(self::$TranslationTable);
-    }
-
-    public function transform( $str )
+    public static function transform( $str, $prefix='$' )
     {
         // replace not ne and lt gt, etc...
         $str = preg_replace(self::$TranslationMatches, 
                             self::$TranslationReplaces, 
                             $str);
 
-        $this->_state = self::ST_NONE;
+        $state = self::ST_NONE;
         $result = "";
         $i = 0;
         $len = strlen($str);
@@ -86,19 +75,19 @@ class PHPTAL_PhpTransformer
             if ($i == $len) $c = "\0";
             else $c = $str[$i];
 
-            switch ($this->_state) {
+            switch ($state) {
                 case self::ST_NONE:
                     if (self::isAlpha($c)) {
-                        $this->_state = self::ST_VAR;
+                        $state = self::ST_VAR;
                         $mark = $i;
                     }
                     else if ($c == '"') {
-                        $this->_state = self::ST_ESTR;
+                        $state = self::ST_ESTR;
                         $mark = $i;
                         $inString = true;
                     }
                     else if ($c == '\'') {
-                        $this->_state = self::ST_STR;
+                        $state = self::ST_STR;
                         $mark = $i;
                         $inString = true;
                     }
@@ -106,13 +95,13 @@ class PHPTAL_PhpTransformer
                         $result .= $c;
                         if ($i < $len-1 && $str[$i+1] == '.') {
                             $result .= '->';
-                            $this->_state = self::ST_MEMBER;
+                            $state = self::ST_MEMBER;
                             $mark = $i+2;
                             $i+=2;
                         }
                     }
                     else if ($c == '@') { // defines, ignore char
-                        $this->_state = self::ST_DEFINE;
+                        $state = self::ST_DEFINE;
                         $mark = $i+1;
                     }
                     else {
@@ -130,7 +119,7 @@ class PHPTAL_PhpTransformer
                     else if ($c == '\'') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $inString = false;
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                     }
                     break;
 
@@ -144,7 +133,7 @@ class PHPTAL_PhpTransformer
                     else if ($c == '"') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $inString = false;
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                     }
                     else if ($c == '$' && $i < $len && $str[$i+1] == '{') {
                         $result .= substr( $str, $mark, $i-$mark ) . '{';
@@ -156,9 +145,7 @@ class PHPTAL_PhpTransformer
                             }
                             elseif ($str[$j] == '}' && (--$sub) == 0) {
                                 $part = substr( $str, $i+2, $j-$i-2 );
-                                $sp = new PHPTAL_PhpTransformer();
-                                $sp->prefix = $this->prefix;
-                                $result .= $sp->transform( $part );
+                                $result .= self::transform($part, $prefix);
                                 $i = $j;
                                 $mark = $i;
                             }
@@ -170,29 +157,29 @@ class PHPTAL_PhpTransformer
                     if (self::isVarNameChar($c)) {
                     }
                     else if ($c == '.') {
-                        $result .= $this->prefix . substr( $str, $mark, $i-$mark );
+                        $result .= $prefix . substr( $str, $mark, $i-$mark );
                         $result .= '->';
-                        $this->_state = self::ST_MEMBER;
+                        $state = self::ST_MEMBER;
                         $mark = $i+1;
                     }
                     else if ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $mark = $i+1;
                         $i++;
-                        $this->_state = self::ST_STATIC;
+                        $state = self::ST_STATIC;
                         break;
                     }
                     else if ($c == '(') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                     }
                     else if ($c == '[') {
-                        $result .= $this->prefix . substr( $str, $mark, $i-$mark+1 );
-                        $this->_state = self::ST_NONE;
+                        $result .= $prefix . substr( $str, $mark, $i-$mark+1 );
+                        $state = self::ST_NONE;
                     }
                     else {
                         $var = substr( $str, $mark, $i-$mark );
-                        if (strtolower($var) == 'true' || strtolower($var) == 'false') {
+                        if (strtolower($var) == 'true' || strtolower($var) == 'false' || strtolower($var) == 'null') {
                             $result .= $var;
                         }
                         else if (strtolower($var) == 'instanceof'){
@@ -205,10 +192,10 @@ class PHPTAL_PhpTransformer
                             $instanceOf = false;
                         }
                         else {
-                            $result .= $this->prefix . $var;
+                            $result .= $prefix . $var;
                         }
                         $i--;
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                     }
                     break;
 
@@ -216,7 +203,7 @@ class PHPTAL_PhpTransformer
                     if (self::isVarNameChar($c)) {
                     }
                     else if ($c == '$') {
-                        $result .= '{' . $this->prefix;
+                        $result .= '{' . $prefix;
                         $mark++;
                         $eval = true;
                     }
@@ -225,28 +212,28 @@ class PHPTAL_PhpTransformer
                         if ($eval) { $result .='}'; $eval = false; }
                         $result .= '->';
                         $mark = $i+1;
-                        $this->_state = self::ST_MEMBER;
+                        $state = self::ST_MEMBER;
                     }
                     else if ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
-                        $this->_state = self::ST_STATIC;
+                        $state = self::ST_STATIC;
                         break;
                     }
                     else if ($c == '(') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                     }
                     else if ($c == '[') {
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
                     }
                     else {
                         $result .= substr( $str, $mark, $i-$mark );
                         if ($eval) { $result .='}'; $eval = false; }
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                         $i--;
                     }   
                     break;
@@ -255,7 +242,7 @@ class PHPTAL_PhpTransformer
                     if (self::isVarNameChar($c)) {
                     }
                     else {
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                         $result .= substr( $str, $mark, $i-$mark );
                         $i--;
                     }
@@ -270,24 +257,24 @@ class PHPTAL_PhpTransformer
                         $result .= substr( $str, $mark, $i-$mark );
                         $result .= '->';
                         $mark = $i+1;
-                        $this->_state = self::ST_MEMBER;
+                        $state = self::ST_MEMBER;
                     }
                     else if ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
-                        $this->_state = self::ST_STATIC;
+                        $state = self::ST_STATIC;
                         break;
                     }
                     else if ($c == '(') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                     }
                     else if ($c == '[') {
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                         $result .= substr( $str, $mark, $i-$mark+1 );
                     }
                     else {
                         $result .= substr( $str, $mark, $i-$mark );
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                         $i--;
                     }   
                     break;
@@ -295,13 +282,20 @@ class PHPTAL_PhpTransformer
                 case self::ST_NUM:
                     if ($c < '0' && $c > '9' && $c != '.') {
                         $result .= substr( $str, $mark, $i-$mark );
-                        $this->_state = self::ST_NONE;
+                        $state = self::ST_NONE;
                     }
                     break;
             }
         }
 
         return trim($result);
+    }
+
+    // Automatically called by the inclusion/requirements of this file
+    public static function initStatics()
+    {
+        self::$TranslationMatches = array_keys(self::$TranslationTable);
+        self::$TranslationReplaces = array_values(self::$TranslationTable);
     }
 
     private static function isAlpha( $c )
@@ -314,8 +308,6 @@ class PHPTAL_PhpTransformer
     {
         return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c == '_';
     }
-
-    private $_state;
 
     private static $TranslationTable = array(
         '/\bnot\b/i' => '!', 

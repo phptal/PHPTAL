@@ -285,9 +285,7 @@ function phptal_tales_string( $expression, $nothrow=false )
 function phptal_tales_php( $src )
 {
     require_once 'PHPTAL/PhpTransformer.php';
-    $trans = new PHPTAL_PhpTransformer();
-    $trans->prefix = '$ctx->';
-    return $trans->transform($src);
+    return PHPTAL_PhpTransformer::transform($src, '$ctx->');
 }
 
 
