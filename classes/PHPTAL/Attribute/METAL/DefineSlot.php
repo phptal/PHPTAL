@@ -51,7 +51,6 @@
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_Attribute_METAL_DefineSlot extends PHPTAL_Attribute
 {

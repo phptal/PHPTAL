@@ -24,7 +24,6 @@
  * Simple sax like xml parser for PHPTAL.
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 abstract class PHPTAL_XmlParser
 {

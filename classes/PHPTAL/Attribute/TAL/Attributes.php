@@ -40,7 +40,6 @@
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
 {

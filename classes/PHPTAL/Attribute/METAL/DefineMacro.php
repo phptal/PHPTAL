@@ -41,7 +41,6 @@
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_Attribute_METAL_DefineMacro extends PHPTAL_Attribute
 {

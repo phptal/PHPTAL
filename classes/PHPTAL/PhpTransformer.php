@@ -44,7 +44,6 @@
  * me a patch :) He will be welcome. 
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_PhpTransformer
 {

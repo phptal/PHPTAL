@@ -44,7 +44,6 @@ require_once 'PHPTAL/Attribute/I18N/Attributes.php';
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 abstract class PHPTAL_Attribute 
 {

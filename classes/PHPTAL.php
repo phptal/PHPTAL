@@ -50,7 +50,6 @@ require_once 'PHPTAL/RepeatController.php';
  * </code>
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL 
 {
@@ -61,7 +60,6 @@ class PHPTAL
         if (defined('PHPTAL_TEMPLATE_REPOSITORY')){
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
-        // $this->_repeat = new PHPTAL_RepeatController();
         $this->_repeat = new stdClass;
     }
 
@@ -70,11 +68,11 @@ class PHPTAL
         $this->_repeat = clone($this->_repeat);
     }
 
-    public function setOutputMode( $mode=PHPTAL_XHTML )
-    {
-        $this->_outputMode = $mode;
-    }
-
+    /**
+     * Specify where to look for templates.
+     *
+     * @param $rep String or Array of repositories
+     */
     public function setTemplateRepository( $rep )
     {
         if (is_array($rep)){
@@ -85,6 +83,41 @@ class PHPTAL
         }
     }
     
+    public function setOutputMode( $mode=PHPTAL_XHTML )
+    {
+        $this->_outputMode = $mode;
+    }
+
+    public function setDocType( $doctype )
+    {
+        if (!$this->_docType){
+            $this->_docType = $doctype;
+        }
+    }
+
+    public function setEncoding( $enc )
+    {
+        $this->_encoding = $enc; 
+    }
+
+    public function setTranslator( $t )
+    {
+        $this->_translator = $t;
+    }
+
+    public function set($varname, $value)
+    {
+        if ($varname[0] == '_'){
+            throw new Exception("Template variable error '$varname' must not begin with underscore");
+        }
+        $this->$varname = $value;
+    }
+    
+    /**
+     * Execute the template code.
+     *
+     * @return string
+     */
     public function execute() 
     {
         if (!$this->_prepared) {
@@ -104,6 +137,9 @@ class PHPTAL
         return $this->_docType . $res;
     }
 
+    /**
+     * Execute a template macro.
+     */
     public function executeMacro($path)
     {
         if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
@@ -139,34 +175,23 @@ class PHPTAL
         $this->_prepared = true;
     }
 
+    /**
+     * Returns the path of the intermediate PHP code file.
+     */
     public function getCodePath()
     {
         return $this->_codeFile;
     }
 
+    /**
+     * Returns the generated template function name.
+     */
     public function getFunctionName()
     {
         if (!$this->_functionName) {
             $this->_functionName = "tpl_" .PHPTAL_VERSION. md5($this->_realPath);
         }
         return $this->_functionName;
-    }
-
-    public function setDocType( $doctype )
-    {
-        if (!$this->_docType){
-            $this->_docType = $doctype;
-        }
-    }
-
-    public function setEncoding( $enc )
-    {
-        $this->_encoding = $enc; 
-    }
-
-    public function setTranslator( $t )
-    {
-        $this->_translator = $t;
     }
 
     public function getTranslator()
@@ -250,15 +275,6 @@ class PHPTAL
     { 
         return $this->_repeat; 
     }
-
-    
-    public function set($varname, $value)
-    {
-        if ($varname[0] == '_'){
-            throw new Exception("Template variable error '$varname' must not begin with underscore");
-        }
-        $this->$varname = $value;
-    }
     
     public function __get($varname)
     {
@@ -274,6 +290,7 @@ class PHPTAL
     {
         require_once 'PHPTAL/Parser.php';
         require_once 'PHPTAL/CodeGenerator.php';
+        
         $generator = new PHPTAL_CodeGenerator($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
         $parser = new PHPTAL_Parser($generator);
@@ -289,6 +306,7 @@ class PHPTAL
         $generator->pushCode('ob_end_clean()');
         $generator->pushCode('return $_result_');
         $generator->doEnd();
+        
         $this->storeGeneratedCode( $generator->getResult() );
     }
 
@@ -345,23 +363,23 @@ function phptal_path( $base, $path, $nothrow=false )
     
     if (is_object($base)) {
         if (method_exists($base, $current))
-            return $path ? phptal_path($base->$current(), $path) : $base->$current();
+            return $path ? phptal_path($base->$current(), $path, $nothrow) : $base->$current();
         
         if (isset($base->$current)) 
-            return $path ? phptal_path($base->$current, $path) : $base->$current;
+            return $path ? phptal_path($base->$current, $path, $nothrow) : $base->$current;
 
         // if __get() exists, we use it 
         //   unless __isset() exists and tell us not to do so
         if (method_exists($base, '__get') && (!method_exists($base, '__isset') || $base->__isset($current))){
             $result = $base->$current;
             if (!is_null($result))
-                return $path ? phptal_path($result, $path) : $result;
+                return $path ? phptal_path($result, $path, $nothrow) : $result;
         }
 
         // variable does not exists but overload of __call exists, we assume it
         // is a method.
         if (method_exists($base, '__call'))
-            return $path ? phptal_path($base->$current(), $path) : $base->$current();
+            return $path ? phptal_path($base->$current(), $path, $nothrow) : $base->$current();
         
         if ($nothrow)
             return null;
@@ -371,13 +389,13 @@ function phptal_path( $base, $path, $nothrow=false )
         
     if (is_array($base)) {
         if (array_key_exists($current, $base))
-            return $path ? phptal_path($base[$current], $path) : $base[$current];
+            return $path ? phptal_path($base[$current], $path, $nothrow) : $base[$current];
 
         if ($current == 'length')
-            return $path ? phptal_path(count( $base ), $path) : count($base);
+            return $path ? phptal_path(count( $base ), $path, $nothrow) : count($base);
 
         if ($current == 'size')
-            return $path ? phptal_path(count( $base ), $path) : count($base);
+            return $path ? phptal_path(count( $base ), $path, $nothrow) : count($base);
 
         if ($nothrow)
             return null;
@@ -387,7 +405,7 @@ function phptal_path( $base, $path, $nothrow=false )
 
     if (is_string($base)) {
         if ($current == 'length' || $current == 'size')
-            return $path ? phptal_path(strlen($base), $path) : strlen($base);
+            return $path ? phptal_path(strlen($base), $path, $nothrow) : strlen($base);
 
         if ($nothrow)
             return null;

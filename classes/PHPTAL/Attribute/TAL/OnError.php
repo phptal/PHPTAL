@@ -36,7 +36,6 @@
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_Attribute_TAL_OnError extends PHPTAL_Attribute
 {

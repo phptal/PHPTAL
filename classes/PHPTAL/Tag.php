@@ -24,7 +24,6 @@
  * PHPTAL Attributes base class.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 abstract class PHPTAL_Attribute
 {

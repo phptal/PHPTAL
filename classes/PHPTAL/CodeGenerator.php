@@ -24,7 +24,6 @@
  * Helps generate php representation of a template.
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_CodeGenerator
 {

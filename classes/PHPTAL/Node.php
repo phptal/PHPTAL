@@ -28,7 +28,6 @@ require_once 'PHPTAL/Attribute.php';
  * Document node abstract class.
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 abstract class PHPTAL_Node
 {
@@ -50,7 +49,6 @@ abstract class PHPTAL_Node
  * Node container.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_NodeTree extends PHPTAL_Node
 {
@@ -73,7 +71,6 @@ class PHPTAL_NodeTree extends PHPTAL_Node
  * Document Tag representation.
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_NodeElement extends PHPTAL_NodeTree
 {
@@ -306,7 +303,6 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
 /**
  * Document text representation.
  * 
- * @package PHPTAL
  */
 class PHPTAL_NodeText extends PHPTAL_Node
 {
@@ -328,7 +324,6 @@ class PHPTAL_NodeText extends PHPTAL_Node
  * Comment, preprocessor, etc... representation.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_NodeSpecific extends PHPTAL_Node
 {
@@ -350,7 +345,6 @@ class PHPTAL_NodeSpecific extends PHPTAL_Node
  * Document doctype representation.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_NodeDoctype extends PHPTAL_Node
 {

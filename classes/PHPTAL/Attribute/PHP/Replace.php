@@ -22,7 +22,6 @@
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @package PHPTAL
  */
 class PHPTAL_Attribute_PHP_Replace extends PHPTAL_Attribute
 {

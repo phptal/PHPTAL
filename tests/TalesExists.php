@@ -20,19 +20,21 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-/**
- * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- */
-class PHPTAL_Attribute_PHP_Condition extends PHPTAL_Attribute
+require_once 'config.php';
+require_once 'PHPTAL/Tales.php';
+
+class TalesExistTest extends PHPUnit2_Framework_TestCase 
 {
-    public function start( $tag, $gen )
+    function testLevel1()
     {
-        $gen->addLine('if (' . $this->expression . ') {' );
+        $tpl = new PHPTAL('input/tales-exist-01.html');
+        $tpl->foo = 1;
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/tales-exist-01.html');
+        $this->assertEquals($exp, $res);
     }
 
-    public function end( $tag, $gen ) 
-    {
-        $gen->addLine('}');
-    }
 }
 
+?>

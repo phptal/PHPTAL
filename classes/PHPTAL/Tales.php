@@ -19,9 +19,6 @@
 //  
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
-/**
- * @package PHPTAL
- */
 
 define('PHPTAL_TALES_DEFAULT_KEYWORD', '_DEFAULT_DEFAULT_DEFAULT_DEFAULT_');
 define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
