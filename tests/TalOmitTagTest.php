@@ -33,6 +33,14 @@ class TalOmitTagTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/tal-omit-tag.01.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testWithCondition()
+    {
+        $tpl = new PHPTAL('input/tal-omit-tag.02.html');
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/tal-omit-tag.02.html');
+        $this->assertEquals($exp, $res);
+    }
 }
         
 ?>

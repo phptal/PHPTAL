@@ -89,6 +89,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     public $surroundAttributes = array();
 
     public $headFootDisabled = false;
+    public $headFootPrintCondition = false;
 
     public function __construct( $parser, $name, $attributes )
     {
@@ -141,6 +142,10 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     public function generateHead()
     {
         if ($this->headFootDisabled) return;
+        if ($this->headFootPrintCondition) {
+            $this->generator->doIf($this->headFootPrintCondition);
+        }
+        
         $this->generator->pushHtml('<'.$this->name);
         $this->generateAttributes();
 
@@ -149,6 +154,10 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         }
         else {
             $this->generator->pushHtml('>');
+        }
+        
+        if ($this->headFootPrintCondition) {
+            $this->generator->doEnd();
         }
     }
     
@@ -199,7 +208,16 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         if ($this->headFootDisabled) return;
         if (PHPTAL_Defs::isEmptyTag($this->name)) return;
         if ($this->hasContent() == false) return;
+
+        if ($this->headFootPrintCondition) {
+            $this->generator->doIf($this->headFootPrintCondition);
+        }
+        
         $this->generator->pushHtml( '</'.$this->name.'>' );
+
+        if ($this->headFootPrintCondition) {
+            $this->generator->doEnd();
+        }
     }
 
     private function hasContent()

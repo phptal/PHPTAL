@@ -120,6 +120,11 @@ class PhpTransformerTest extends PHPUnit2_Framework_TestCase
     {
         $this->assertEquals('true != false', $this->t->transform('true ne false'));
     }
+
+    function testTernaryOperator()
+    {
+        $this->assertEquals('($test)?true:false', $this->t->transform('(test)?true:false'));
+    }
 }
 
 ?>

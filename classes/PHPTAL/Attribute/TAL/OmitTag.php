@@ -54,10 +54,19 @@ class PHPTAL_Attribute_TAL_OmitTag extends PHPTAL_Attribute
 {
     public function start()
     {
-        $this->tag->headFootDisabled = true;
+        if (trim($this->expression) == ''){
+            $this->tag->headFootDisabled = true;
+        }
+        else { 
+            // print tag header/foot only if condition is false
+            $cond = $this->tag->generator->evaluateExpression($this->expression);
+            $this->tag->headFootPrintCondition = '!'.$cond;
+        }
     }
 
-    public function end(){}
+    public function end()
+    {
+    }
 }
 
 ?>
