@@ -312,6 +312,7 @@ abstract class PHPTAL_XmlParser
         throw new Exception($str);
     }
     
+    private $_file;
     private $_line;
     private $_source;
 }

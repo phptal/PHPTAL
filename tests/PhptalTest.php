@@ -100,6 +100,29 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('input/xml.04.xml');
         $this->assertEquals($exp, $res);
     }
+
+    function testSource()
+    {
+        $source = '<span tal:content="foo"/>';
+        $tpl = new PHPTAL();
+        $tpl->foo = 'foo value';
+        $tpl->setSource($source);
+        $res = $tpl->execute();
+        $this->assertEquals('<span>foo value</span>', $res);
+        $this->assertEquals('tpl_'.PHPTAL_VERSION.md5('<string> '.md5($source)), $tpl->getFunctionName());
+    }
+
+    function testSourceWithPath()
+    {
+        $source = '<span tal:content="foo"/>';
+        $tpl = new PHPTAL();
+        $tpl->foo = 'foo value';
+        $tpl->setSource($source, '123');
+        $res = $tpl->execute();
+        $this->assertEquals('<span>foo value</span>', $res);
+        $this->assertEquals('tpl_'.PHPTAL_VERSION.md5('123'), $tpl->getFunctionName());
+    }
+
 }
         
 ?>
