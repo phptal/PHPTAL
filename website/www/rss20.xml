@@ -78,5 +78,22 @@
       <dc:date>2005-03-21</dc:date>
     </item>
 
+    <item>
+      <title>Pupeno's article in PHP|Architect</title>
+      <link>http://www.phparch.com/issue.php?mid=52</link>
+      <description>
+      Pupeno's (Jose Pablo Ezequiel Fernandez Silva) first article 
+      about PHPTAL was published on the issue 3, volume 4 of php|architect.
+      
+      This article introduces PHPTAL and explains most common TAL attributes 
+      with some good examples.
+
+      More articles should follow in next issues concerning advanced PHPTAL 
+      usage in daily applications.
+      </description>
+      <dc:creator>Laurent Bedubourg</dc:creator>
+      <dc:date>2005-03-22</dc:date>
+    </item>
+
   </channel>
 </rss>
