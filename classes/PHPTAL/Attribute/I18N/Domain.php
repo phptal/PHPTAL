@@ -22,7 +22,8 @@ class PHPTAL_Attribute_I18N_Domain extends PHPTAL_Attribute
 
     function end()
     {
-        $this->tag->generator->pushCode('$tpl->getTranslator()->setDomain(array_pop($__i18n_domains))');
+        $code = '$tpl->getTranslator()->setDomain(array_pop($__i18n_domains))';
+        $this->tag->generator->pushCode($code);
     }
 }
 
