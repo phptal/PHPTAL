@@ -239,16 +239,6 @@ class PHPTAL
         throw new Exception("Unable to find path $varname");
     }
 
-    public function existsPath( $path )
-    {
-        // when testing if a path exists we choose not to thrown any exceptions
-        // an just return null result.
-        $this->_nothrow = true;
-        $result = phptal_path($this, $path, true);
-        $this->_nothrow = false;
-        return $result;
-    }
-    
     private function parse()
     {
         require_once 'PHPTAL/Parser.php';
@@ -375,6 +365,14 @@ function phptal_path( $base, $path, $nothrow=false )
         return null;
     
     throw new Exception("Path not found: $current");
+}
+
+function phptal_exists( $tpl, $path )
+{
+    $tpl->noThrow(true);
+    $res = phptal_path($tpl, $path, true);
+    $tpl->noThrow(false);
+    return $res;
 }
 
 function phptal_repeat_size( $iterable )
