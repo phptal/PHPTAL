@@ -25,6 +25,7 @@ class PHPTAL_Context
     public $__line = false;
     public $__file = false;
     public $__repeat;
+    public $__xmlDeclaration;
     public $__docType;
     public $__nothrow;
     public $__translator;
@@ -43,6 +44,13 @@ class PHPTAL_Context
     {
         if (!$this->__docType){
             $this->__docType = $doctype;
+        }
+    }
+
+    public function setXmlDeclaration($xmldec)
+    {
+        if (!$this->__xmlDeclaration){
+            $this->__xmlDeclaration = $xmldec;
         }
     }
 

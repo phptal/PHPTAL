@@ -376,13 +376,38 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
     {
         parent::__construct($parser);
         $this->value = $data;
+        $this->generator->setDocType($this);
     }
 
     public function generate()
     {
-        $code = sprintf('$ctx->setDocType(\'%s\')', str_replace('\'', '\\\'', $this->value));
+        $code = sprintf('$ctx->setDocType(\'%s\')', 
+                        str_replace('\'', '\\\'', $this->value));
         $this->generator->pushCode($code);
-        $this->generator->setDocType($this->value);
+    }
+}
+
+/**
+ * XML declaration node.
+ *
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
+ */
+class PHPTAL_NodeXmlDeclaration extends PHPTAL_Node
+{
+    public $value;
+
+    public function __construct($parser, $data)
+    {
+        parent::__construct($parser);
+        $this->value = $data;
+        $this->generator->setXmlDeclaration($this);
+    }
+
+    public function generate()
+    {
+        $code = sprintf('$ctx->setXmlDeclaration(\'%s\')',
+                        str_replace('\'', '\\\'', $this->value));
+        $this->generator->pushCode($code);
     }
 }
 

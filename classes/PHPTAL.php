@@ -200,7 +200,17 @@ class PHPTAL
             throw $e;
         }
 
-        $res = $this->_context->__docType . $res;
+        // unshift doctype
+        $docType = $this->_context->__docType;
+        if ($docType){
+            $res = $docType . "\n" . $res;
+        }
+        // unshift xml declaration
+        $xmlDec = $this->_context->__xmlDeclaration;
+        if ($xmlDec){
+            $res = $xmlDec . "\n" . $res;
+        }
+        
         if ($this->_postfilter != null){
             return $this->_postfilter->filter($res);
         }

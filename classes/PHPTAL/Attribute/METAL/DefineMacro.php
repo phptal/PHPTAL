@@ -47,13 +47,17 @@ class PHPTAL_Attribute_METAL_DefineMacro extends PHPTAL_Attribute
     public function start()
     {
         $this->tag->generator->doFunction($this->expression, '$tpl, $ctx');
-        $doctype = $this->tag->generator->getDocType();
-        if ($doctype) {
-            $code = sprintf('$ctx->setDocType(\'%s\')', 
-                            str_replace('\'', '\\\'', $doctype));
-            $this->tag->generator->pushCode($code);
+
+        $xmldecl = $this->tag->generator->getXmlDeclaration();
+        if ($xmldecl){
+            $xmldecl->generate();
         }
         
+        $doctype = $this->tag->generator->getDocType();
+        if ($doctype) {
+            $doctype->generate();
+        }
+
         $this->tag->generator->pushCode('$tpl = clone $tpl');
         $this->tag->generator->pushCode('$ctx = $tpl->getContext()');
     }

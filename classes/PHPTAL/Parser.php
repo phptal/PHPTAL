@@ -96,7 +96,7 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
 
     public function onXmlDecl($decl)
     {
-        $node = new PHPTAL_NodeDocType($this, $decl);
+        $node = new PHPTAL_NodeXmlDeclaration($this, $decl);
         array_push($this->_current->children, $node);
     }
     

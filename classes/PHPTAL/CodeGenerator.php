@@ -63,6 +63,16 @@ class PHPTAL_CodeGenerator
     {
         return $this->_doctype;
     }
+
+    public function setXmlDeclaration($dt)
+    {
+        $this->_xmldeclaration = $dt;
+    }
+
+    public function getXmlDeclaration()
+    {
+        return $this->_xmldeclaration;
+    }
     
     public function setFunctionPrefix( $prefix )
     {
@@ -374,6 +384,7 @@ class PHPTAL_CodeGenerator
     private $_contexts = array();
     private $_functionPrefix = "";
     private $_doctype = "";
+    private $_xmldeclaration = "";
     private $_encoding;
     private $_outputMode;
 }
