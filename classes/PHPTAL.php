@@ -238,6 +238,16 @@ class PHPTAL
             return null;
         throw new Exception("Unable to find path $varname");
     }
+
+    public function existsPath( $path )
+    {
+        // when testing if a path exists we choose not to thrown any exceptions
+        // an just return null result.
+        $this->_nothrow = true;
+        $result = phptal_path($this, $path, true);
+        $this->_nothrow = false;
+        return $result;
+    }
     
     private function parse()
     {
@@ -313,10 +323,16 @@ function phptal_path( $base, $path, $nothrow=false )
         if (method_exists($base, $current))
             return $path ? phptal_path($base->$current(), $path) : $base->$current();
         
-        // php5.0.0 does not call the __isset method so we call it by hand
-        // is isset failed
-        if (isset($base->$current) || (method_exists($base, '__isset') && $base->__isset($current)))
+        if (isset($base->$current)) 
             return $path ? phptal_path($base->$current, $path) : $base->$current;
+
+        // if __get() exists, we use it 
+        //   unless __isset() exists and tell us not to do so
+        if (method_exists($base, '__get') && (!method_exists($base, '__isset') || $base->__isset($current))){
+            $result = $base->$current;
+            if (!is_null($result))
+                return $path ? phptal_path($result, $path) : $result;
+        }
 
         // variable does not exists but overload of __call exists, we assume it
         // is a method.

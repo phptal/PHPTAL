@@ -34,7 +34,9 @@ class OverloadTestClass
     
     public function __get( $name )
     {
-        return $this->vars[$name];
+        if (array_key_exists($name, $this->vars))
+            return $this->vars[$name];
+        return null;
     }
 
     public function __isset( $key )

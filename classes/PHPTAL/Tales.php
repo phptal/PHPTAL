@@ -303,7 +303,9 @@ function phptal_tales_php( $src )
 
 function phptal_tales_exists( $src, $nothrow, $optimize )
 {
-    return phptal_tales($src, true, false) . ' != null';
+    return sprintf('$tpl->existsPath( %s ) != null',
+                   phptal_tales_string(trim($src), $nothrow, $optimize));
+    // return phptal_tales($src, true, false) . ' != null';
 }
 
 ?>
