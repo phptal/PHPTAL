@@ -4,47 +4,53 @@ PHPTAL - PHP Template Attribute Language
 Author: Laurent Bedubourg <lbedubourg@motion-twin.com>
 Date: 2004-12-22
 
+
 ABOUT
+*****
 
-  PHPTAL is an implementation of the excellent Zope Page Template (ZPT) system
-  for PHP. PHPTAL supports TAL, METAL, I18N namespaces.
+  PHPTAL is an implementation of the excellent Zope Page Template (ZPT) 
+  system for PHP. PHPTAL supports TAL, METAL, I18N namespaces.
   
-  PHPTALES is the equivalent of TALES, the Template Attribute Language Expression
-  Syntax, it defines how are handled xml attribute values.  
+  PHPTALES is the equivalent of TALES, the Template Attribute Language 
+  Expression Syntax, it defines how are handled xml attribute values.  
 
-  As PHPTALES is near TALES, it should be easy to port python TAL templates to
-  PHP ones (and reverse).
+  As PHPTALES is near TALES, it should be easy to port python TAL 
+  templates to PHP ones (and reverse).
 
   To be TAL compliant, PHPTAL implements an XPATH like access to data.
 
-  PHPTAL is freely distributed under the LGPL license, it is developped and
-  maintained by Laurent Bedubourg <email>laurent.bedubourg@free.fr</email>.
+  PHPTAL is freely distributed under the LGPL license, it is developped 
+  and maintained by Laurent Bedubourg (lbedubourg@motion-twin.com).
 
   This document is a first documentation about PHPTAL usage for both php
-  developpers and template designers. It's not complete yet as i certainly forgot
-  a lot of things, please send me requests and notes. And 'please' be patient
-  with my style, i'm not a natural english speaker.
+  developpers and template designers. It's not complete yet as i 
+  certainly forgot a lot of things, please send me requests and notes.  
+  And 'please' be patient with my style, i'm not a natural english 
+  speaker.
+
 
 WHY YOU SHOULD USE PHPTAL
+*************************
   
-  XML/HTML templates exists to separate logic from presentation in web services.
-  This separation brings more than one benefits in its luggage.
+  XML/HTML templates exists to separate logic from presentation in web 
+  services. This separation brings more than one benefits in its 
+  luggage.
 
   - better application design
   - easier task repartition
   - better maintainability
   - web skins
 
-  Most template systems uses <? ?>, <% %> or <xxx:yyy></xxx:yyy> tags to find 
-  their marks. It allow easier template system development but that doesn't 
-  really help template designers.
+  Most template systems uses <? ?>, <% %> or <xxx:yyy></xxx:yyy> tags to 
+  find their marks. It allow easier template system development but that 
+  doesn't really help template designers.
 
-  The idea behind TAL is to allow WYSIWYG template edition with sample rendering
-  without stranges tags everywhere. That's why TAL work on xml attributes in
-  stead of markup tags.
+  The idea behind TAL is to allow WYSIWYG template edition with sample 
+  rendering without stranges tags everywhere. That's why TAL work on xml 
+  attributes in stead of markup tags.
 
-  If you already worked with a simple template system, you must have viewed
-  something looking like :
+  If you already worked with a simple template system, you must have 
+  viewed something looking like :
   
     <table>
       <%loop myarray as myitem %>
@@ -67,25 +73,28 @@ WHY YOU SHOULD USE PHPTAL
       </tr> 
     </table>
   
-  In WYSIWYG mode, the above code will render correctly with samples text and you
-  can present it to your clients even if the code required to get 'myarray'
-  values doesn't exist yet.
+  In WYSIWYG mode, the above code will render correctly with samples 
+  text and you can present it to your clients even if the code required 
+  to get 'myarray' values doesn't exist yet.
 
-  Another big advantage of PHPTAL is that you benefit from more than 3 years of
-  ZOPE community experiences, documentation, examples, help. PHPTAL rely on this
-  community to provide its users a great amount of knowledge.
+  Another big advantage of PHPTAL is that you benefit from more than 3 
+  years of ZOPE community experiences, documentation, examples, help.  
+  PHPTAL rely on this community to provide its users a great amount of 
+  knowledge.
 
-  PHPTAL is designed to be as customizable as possible for advanced developpers
-  and performance eaters systems but still easy to use for beginers with a
-  comfortable and simple default behaviour.
+  PHPTAL is designed to be as customizable as possible for advanced 
+  developpers and performance eaters systems but still easy to use for 
+  beginers with a comfortable and simple default behaviour.
+
 
 FIRST EXAMPLE
+*************
   
-  To get a first impression about PHPTAL usage, a first simple example is better
-  than many words.
+  To get a first impression about PHPTAL usage, a first simple example 
+  is better than many words.
 
-  Your template is a valid xml/html document (with a root entity). Here a file
-  named 'my_template_file.html'.
+  Your template is a valid xml/html document (with a root entity). Here 
+  a file named 'my_template_file.html'.
   
     <?xml version="1.0"?> 
     <html>
@@ -117,8 +126,8 @@ FIRST EXAMPLE
       </body> 
     </html>
 
-  In php, you just have to include the PHPTAL library and maybe configure a few
-  variables to customize the template system.
+  In php, you just have to include the PHPTAL library and maybe 
+  configure a few variables to customize the template system.
 
     <?php 
     require_once 'PHPTAL.php';
@@ -158,8 +167,8 @@ FIRST EXAMPLE
     }
     ?>
 
-  If you execute the php script, you will obtain something similar to what
-  follows.
+  If you execute the php script, you will obtain something similar to 
+  what follows.
 
     <?xml version="1.0"?> 
     <html>
@@ -187,25 +196,28 @@ FIRST EXAMPLE
       </body>
     </html>
 
-  Well, i assume you don't mind 'too' much about cariage returns in the html code
-  :) If so, you may use the tidy functions to cleanup the resulting html before 
-  echoing it.
+  Well, i assume you don't mind 'too' much about cariage returns in the 
+  html code :) If so, you may use the tidy functions to cleanup the 
+  resulting html before echoing it.
 
 
 INSTALLATION
+************
 
   PHPTAL is released as a PEAR package (see http://pear.php.net).
-  You can download it on the PHPTAL website (http://phptal.sf.net) folowing the
-  resources link.
+  You can download it on the PHPTAL website (http://phptal.sf.net) 
+  folowing the resources link.
 
-  After downloading the package, you can install it using the pear utility :
+  After downloading the package, you can install it using the pear 
+  utility :
  
     pear install PHPTAL-X.X.X.tar.gz
 
-  If you do not use PEAR or does not have it installed on your system, you still can
-  install PHPTAL unzipping the downloaded archive. Move the PHPTAL.php file in your
-  library folder, create a PHPTAL folder in your library folder then copy all 
-  remaining files in this newly created folder.
+  If you do not use PEAR or does not have it installed on your system, 
+  you still can install PHPTAL unzipping the downloaded archive. Move 
+  the PHPTAL.php file in your library folder, create a PHPTAL folder in 
+  your library folder then copy all remaining files in this newly 
+  created folder.
 
     tar zxvf PHPTAL-X.X.X.tar.gz
     mv PHPTAL-X.X.X PHPTAL
@@ -214,13 +226,16 @@ INSTALLATION
 
 
 TEMPLATE LANGUAGE
+*****************
 
-  1. TAL namespace
+  TAL namespace
+  =============
 
-  1.1. tal:define
+  tal:define
+  ----------
   
-  This attribute defines one or more variables which may be used later in the
-  template.
+  This attribute defines one or more variables which may be used later 
+  in the template.
 
   Making a shortcut to a long path :
   
@@ -243,10 +258,11 @@ TEMPLATE LANGUAGE
     <span tal:define="hello string:hello $fname welcome on this page" />
 
 
-  1.2. tal:condition
+  tal:condition
+  -------------
 
-  The entity and its content will be shown only if the condition is evaluated to
-  true.
+  The entity and its content will be shown only if the condition is 
+  evaluated to true.
 
     <span tal:condition="identified"> 
       Welcome member ... 
@@ -257,20 +273,22 @@ TEMPLATE LANGUAGE
     </span>
 
 
-  1.3. tal:repeat
+  tal:repeat
+  ----------
 
-  This attribute handles iterable objects like array, associative arrays, and
-  objects implementing the PHP5 Iterable class (see Iterable chapter).
+  This attribute handles iterable objects like array, associative 
+  arrays, and objects implementing the PHP5 Iterable class (see Iterable 
+  chapter).
 
-  The repeat attribute repeat it's entity and its content until the end of the
-  specified resource.
+  The repeat attribute repeat it's entity and its content until the end 
+  of the specified resource.
 
     <tr tal:repeat="item some/result"> 
       <td tal:content="item">text replaced by item</td> 
     </tr>
 
-  Within a loop, you can access current loop (and parent for imbriqued loops)
-  information using specific repeat/* pathes.
+  Within a loop, you can access current loop (and parent for imbriqued 
+  loops) information using specific repeat/* pathes.
 
   In the above example : 
 
@@ -287,10 +305,11 @@ TEMPLATE LANGUAGE
   "item" depends of the receiver variable defined in tal:repeat expression.
 
 
-  1.4. tal:omit-tag
+  tal:omit-tag
+  ------------
 
-  This attribute ask PHPTAL parser to ignore the entity's head and foot, it's
-  content will still be evaluated.
+  This attribute ask PHPTAL parser to ignore the entity's head and foot, 
+  it's content will still be evaluated.
 
     <span tal:omit-tag="">
       only this text will appear, span open and close will be removed 
@@ -300,14 +319,16 @@ TEMPLATE LANGUAGE
 
     only this text will appear, span open and close will be removed
 
-  This attribute is usefull when you want to define a macro, a loop, a condition,
-  or any other template logic that mustn't show it's root tag.
+  This attribute is usefull when you want to define a macro, a loop, a 
+  condition, or any other template logic that mustn't show it's root 
+  tag.
 
 
-  1.5. tal:replace
+  tal:replace
+  -----------
 
-  This attribute will replace the entire tag with a value or by nothing if no
-  value is given.
+  This attribute will replace the entire tag with a value or by nothing 
+  if no value is given.
 
     <span tal:replace="string:this beautyfull string"> 
       this uggly string and span 
@@ -317,8 +338,8 @@ TEMPLATE LANGUAGE
 
     this beautyfull string 
 
-  tal:replace can also be used to create samples in source templates and remove
-  them from final output.
+  tal:replace can also be used to create samples in source templates and 
+  remove them from final output.
 
     <table> 
       <tr tal:repeat="item myresult">
@@ -333,9 +354,11 @@ TEMPLATE LANGUAGE
     </table>
 
 
-  1.6. tal:content
+  tal:content
+  -----------
 
-  This attribute replace the tag content with the evaluation of its expression.
+  This attribute replace the tag content with the evaluation of its 
+  expression.
 
     <span tal:define="myvar string:my string"/> 
     <span tal:content="myvar">will be replaced</span>
@@ -345,17 +368,20 @@ TEMPLATE LANGUAGE
     <span>my string</span>
 
 
-  1.7. tal:comment
+  tal:comment
+  -----------
 
-  This attribute has no effect but can help template designers commenting their
-  work.
+  This attribute has no effect but can help template designers 
+  commenting their work.
 
     <tr tal:comment="Loop over the person database result"
         tal:repeat="person persons"> 
       <td tal:content="person/id">person id here</td> 
     </tr>
 
-  1.8. tal:attributes
+
+  tal:attributes
+  --------------
 
   This attribute change tag attribute(s) value(s).
 
@@ -375,17 +401,18 @@ TEMPLATE LANGUAGE
        title="google search engine">the google search engine</a>
 
   
-  1.8. tal:on-error
+  tal:on-error
+  ------------
 
-  This attribute replace the tag by the tal:on-error expression evaluation if a
-  path error is detected in the tag content or if any php exception is thrown
-  in the tag content.
+  This attribute replace the tag by the tal:on-error expression 
+  evaluation if a path error is detected in the tag content or if any 
+  php exception is thrown in the tag content.
 
     <span tal:on-error="string:No username defined here"     
           tal:content="user/name">the user name here</span>
 
-  If an error occurs accessing 'name' or 'user', the error string will be shown
-  at the tag place.
+  If an error occurs accessing 'name' or 'user', the error string will 
+  be shown at the tag place.
 
   This also works on more than one level of template :
 
@@ -395,16 +422,19 @@ TEMPLATE LANGUAGE
     </span>
 
 
-  2. METAL namespace
+  METAL namespace
+  ===============
 
-  METAL stands for 'Macro Extension for TAL'. This namespace, supported by PHPTAL
-  allow template designers to define and call xml/xhtml macros.
+  METAL stands for 'Macro Extension for TAL'. This namespace, supported 
+  by PHPTAL allow template designers to define and call xml/xhtml 
+  macros.
 
   
-  2.1. metal:define-macro
+  metal:define-macro
+  ------------------
 
-  This attribute declare a macro. Think of macros as library of small templates
-  which can be reused in any other template. 
+  This attribute declare a macro. Think of macros as library of small 
+  templates which can be reused in any other template. 
 
     <div metal:define-macro="main_menu"> 
       <ul>
@@ -415,40 +445,42 @@ TEMPLATE LANGUAGE
 
       <div>
       Last modified : 
-      <span tal:content="mdate">page modification date</span> 
-      </div>
+      <span tal:content="mdate">page modification date</span> </div>
     </div>
 
-  Macros inherit from caller dictionnary. In the above example, the variable
-  'mdate' depends on the template that calls the macro.
+  Macros inherit from caller dictionnary. In the above example, the 
+  variable 'mdate' depends on the template that calls the macro.
 
 
-  2.2. metal:use-macro
+  metal:use-macro
+  ---------------
 
-  This attribute calls a macro and include its result in the current template.
+  This attribute calls a macro and include its result in the current 
+  template.
 
     <span 
       tal:comment="main_menu template requires 'mdate' variable"
       tal:define="mdate page/last_modified" /> 
     <span metal:use-macro="main_menu" />
 
-  You can refer external macros defined in other templates specifying the
-  template source file.
+  You can refer external macros defined in other templates specifying 
+  the template source file.
 
     <span use-macro="site_macros.html/main_menu"/>
 
 
-  2.3. metal:define-slot
+  metal:define-slot
+  -----------------
 
   This attribute must appear under a metal:define-macro tag.
 
-  Slots can be replaced by caller template with some custom dynamically generated
-  XML/XHTML.
+  Slots can be replaced by caller template with some custom dynamically 
+  generated XML/XHTML.
 
-  Slots can be thinked of like reverse includes, a macro can be an entire page
-  and slots customize this page depending on the URL. For instance, a slot may
-  contains latest news in the home page and user actions when the member is
-  logged.
+  Slots can be thinked of like reverse includes, a macro can be an 
+  entire page and slots customize this page depending on the URL. For 
+  instance, a slot may contains latest news in the home page and user 
+  actions when the member is logged.
 
     <span metal:define-slot="news_place"> 
     <table>
@@ -458,17 +490,18 @@ TEMPLATE LANGUAGE
     </table>
     </span>
 
-  The above example defines a place called '<emphasis>news_place</emphasis>'
-  which can be overwritten by caller templates. See next section for the
-  continuation of this example.
+  The above example defines a place called 
+  '<emphasis>news_place</emphasis>' which can be overwritten by caller 
+  templates. See next section for the continuation of this example.
 
   
-  2.4. metal:fill-slot
+  metal:fill-slot
+  ---------------
 
   This attribute occurs only under metal:use-macro context.
 
-  This explicitely tells PHPTAL to replace defined slot with the content provided
-  under the metal:fill-slot attribute.
+  This explicitely tells PHPTAL to replace defined slot with the content 
+  provided under the metal:fill-slot attribute.
 
     <span tal:condition="logged" metal:fill-slot="news_place">   
       <h2>user menu</h2>
@@ -479,55 +512,60 @@ TEMPLATE LANGUAGE
       </ul>
     </span>
 
-  Slots give the opportunity to define really customizable and reusable page
-  templates with a simple push technology.
+  Slots give the opportunity to define really customizable and reusable 
+  page templates with a simple push technology.
 
 
-  3. I18N namespace
+  I18N namespace
+  ==============
 
-  Note: 'i18n' is a short name for 'internationalisation', this namespace allow
-  template designers to specify some text zones that must be translated on
-  template evaluation.
+  Note: 'i18n' is a short name for 'internationalisation', this 
+  namespace allow template designers to specify some text zones that 
+  must be translated during template evaluation.
 
 
-  3.1. i18n:translate
+  i18n:translate
+  --------------
 
-  This attribute define some text part that must be translated using PHPTAL
-  translation system.
+  This attribute define some text part that must be translated using 
+  PHPTAL translation system.
 
     <div i18n:translate="string:welcome_message">Welcome here</div>
 
   In the above example, PHPTAL will looks for a translation key named
-  'welcome_message' and will replace the content of the tag with the equivalent 
-  in current requested language.
+  'welcome_message' and will replace the content of the tag with the 
+  equivalent in current requested language.
 
     <div i18n:translate="">Welcome here</div>
 
-  This usage is a little different, no translation key is given, thus, PHPTAL
-  will use the content of the tag 'Welcome here' as the translation key. This is
-  a regular translation usage if translation system knows the key
-  'Welcome here'.
+  This usage is a little different, no translation key is given, thus, 
+  PHPTAL will use the content of the tag 'Welcome here' as the 
+  translation key.  This is a regular translation usage if translation 
+  system knows the key 'Welcome here'.
 
-  If no translation is found, the key will be used as the translation result.
-  That's why using readable message in stead of keys may be a good choice.
+  If no translation is found, the key will be used as the translation 
+  result. That's why using readable message in stead of keys may be a 
+  good choice.
 
-  Please note that the key to translate may be contained in a variable to 
-  allow dynamic key selection.
+  Please note that the key to translate may be contained in a variable 
+  to allow dynamic key selection.
 
     <div tal:define="welcome random_welcome_message"/>
     <did i18n:translate="welcome">...</div>
 
 
-  3.2. i18n:name
+  i18n:name
+  ---------
 
   This attribute set a translation variable value.
 
-  Translations may contains ${xxx} strings where "xxx" is the name of a variable 
-  that need to be interpolated dynamically.
+  Translations may contains ${xxx} strings where "xxx" is the name of a 
+  variable that need to be interpolated dynamically.
 
-  The value of this variable will be set to the tag and its content, if you
-  doesn't need tag around the value, use tal:replace instead of tal:content,
-  tal:omit-tag may help if the value is a concatenation of strings.
+  The value of this variable will be set to the tag and its content, if 
+  you doesn't need tag around the value, use tal:replace instead of 
+  tal:content, tal:omit-tag may help if the value is a concatenation of 
+  strings.
 
     <span i18n:name="myVar" tal:content="some/path"/> 
     <!-- <span>${some/path}</span> -->
@@ -553,24 +591,26 @@ TEMPLATE LANGUAGE
 
     "Welcome ${user}, you have ${mails} unreaded mails."
 
-  PHPTAL will replace ${user} with ${user/name} and ${mails} with ${user/nbrMails}
-  in translation.
+  PHPTAL will replace ${user} with ${user/name} and ${mails} with 
+  ${user/nbrMails} in translation.
 
   
-  4. PHPTAL namespace
+  PHPTAL namespace
+  ================
 
-  These attributes are not defined in TAL specifications but are usefull when 
-  working with PHPTAL.
+  These attributes are not defined in TAL specifications but are usefull 
+  when working with PHPTAL.
 
 
-  4.1. phptal:debug
+  phptal:debug
+  ------------
 
-  This attribute toggle activate PHPTAL debuging for the content of the tag
-  it is defined in.
+  This attribute toggle activate PHPTAL debuging for the content of the 
+  tag it is defined in.
 
-  The debug mode stores information like filename and source line number in
-  the template so exceptions thrown by incorrect path access will contains
-  more information about where they where thrown.
+  The debug mode stores information like filename and source line number 
+  in the template so exceptions thrown by incorrect path access will 
+  contains more information about where they where thrown.
 
     <html>
       <head>
@@ -590,25 +630,30 @@ TEMPLATE LANGUAGE
     </html>
 
   
-  4.2. phptal:tales
+  phptal:tales
+  ------------
 
-  This attribute allow use to change the beaviour of PHPTALES. The default 
-  behaviour is to interpret attribute expressions in a very ZPT way. But 
-  sometimes you just would like to have PHP there and you end up using
-  php: modifier everywhere (read chapter about PHPTALES).
+  This attribute allow use to change the beaviour of PHPTALES. The 
+  default behaviour is to interpret attribute expressions in a very ZPT 
+  way. But sometimes you just would like to have PHP there and you end 
+  up using php: modifier everywhere (read chapter about PHPTALES).
 
-  Another problem concerning PHPTALES is the way PHPTAL have to interpret pathes.
-  For exemple, myobject/mymethod/10/othermethod/hashkey is very long to interpret. 
-  PHPTAL has to (at runtime) take myobject, see that it is an object, find if 
-  'mymethod' is a variable of this object or a method of the object, then call it, 
-  explore the result to determine if it is an array, find the tens element of this 
-  array, determine if it is an object and decide if othermethod is a variable or a 
-  method of this object then get the result of this execution, find that it is an 
+  Another problem concerning PHPTALES is the way PHPTAL have to 
+  interpret pathes. For exemple, 
+  myobject/mymethod/10/othermethod/hashkey is very long to interpret. 
+  
+  PHPTAL has to (at runtime) take myobject, see that it is an object, 
+  find if 'mymethod' is a variable of this object or a method of the 
+  object, then call it, explore the result to determine if it is an 
+  array, find the tens element of this array, determine if it is an 
+  object and decide if othermethod is a variable or a method of this 
+  object then get the result of this execution, find that it is an 
   associative array and retrieve the value for the key 'hashkey'.
 
-  Of course this was an extreme exemple and most of the time we don't care because
-  the process is fast enough. But what if this very long path is called inside
-  a big tal:repeat ? dohh ! phptal:tales can help us there :
+  Of course this was an extreme exemple and most of the time we don't 
+  care because the process is fast enough. But what if this very long 
+  path is called inside a big tal:repeat ? dohh ! phptal:tales can help 
+  us there :
 
     <html>
       <body>
@@ -620,15 +665,31 @@ TEMPLATE LANGUAGE
       </body>
     </html>
 
-  Well, i am not sure the exemple above compiles but you get the idea of what
-  you can do with phptal:tales. All tal, metal, i18n pathes will be plain PHP
-  expressions.
+  Well, i am not sure the exemple above compiles but you get the idea of 
+  what you can do with phptal:tales. All tal, metal, i18n pathes will be 
+  plain PHP expressions.
+
+  Please note that the above example do the same as :
+  
+    <html>
+      <body>
+        <table>
+          <tr tal:repeat="myobject php:document.getChildren()">
+            <td 
+          tal:content="php:myobject.mymethod()[10].otherMethod()['hashkey']"></td>
+          </tr>
+        </table>
+      </body>
+    </html>
+
+  'php:' is explained in its own chapter.
 
 
-  5. *:BLOCK
+  *:BLOCK
+  =======
 
-  :block is a syntax sugar for elements which contains many tal attributes and 
-  which are not to be echoed. 
+  :block is a syntax sugar for elements which contains many tal 
+  attributes and which are not to be echoed. 
 
     <tal:block define="myvar string:Some value"/>
 
@@ -652,32 +713,36 @@ TEMPLATE LANGUAGE
 
 
 PHPTALES
+********
 
-  PHPTALES is the expression syntax used inside tal, metal, phptal attributes.
-  From above exemples, you should have seen some of PHPTALES examples (string:,
-  php:, not:, ...). This chapter describe the usage of PHPTALES in templates.
+  PHPTALES is the expression syntax used inside tal, metal, phptal 
+  attributes. From above exemples, you should have seen some of PHPTALES 
+  examples (string:, php:, not:, ...). This chapter describe the usage 
+  of PHPTALES in templates.
 
   The value of a TAL attribute may contain more than one expression (ex:
   tal:define), in which case each expression must be separated from the
   next one with a ';' character.
 
-  1. Path
+  Path
+  ----
 
-  Inside the template or inside expression strings, you can refer to a context
-  variable using its path in the form ${path/to/my/variable}
+  Inside the template or inside expression strings, you can refer to a 
+  context variable using its path in the form ${path/to/my/variable}
 
     <h1>${document/title}</h1>
     <span tal:replace="string:welcome ${user/name}, 
           this page has been readed ${page/countRead} times"/> 
 
 
-  2. Conditional statements
+  Conditional statements
+  ----------------------
 
-  As '<' and '>' should be removed from attribute expression, PHPTAL provides 
-  some good old text equivalent comparision operators.
+  As '<' and '>' should be removed from attribute expression, PHPTAL 
+  provides some good old text equivalent comparision operators.
 
-  These statements will mostly appear in tal:condition attributes, and in php:
-  expressions.
+  These statements will mostly appear in tal:condition attributes, and 
+  in php: expressions.
 
     - < : LT (less than)
     - > : GT (greater than)
@@ -685,10 +750,11 @@ PHPTALES
     - >= : GE (greater or equal)
 
 
-  3. string:
+  string:
+  -------
 
-  As expressions are separated by a ';' character, and as '$' marks the start 
-  of a path, you must use
+  As expressions are separated by a ';' character, and as '$' marks the 
+  start of a path, you must use
 
   - ';;' when you want to insert a real ';' character in a string,
   - '$$' when you want to insert a real '$' character in a string.
@@ -699,14 +765,16 @@ PHPTALES
     string:foo ; php:doFoo()  <!-- two different expressions --> 
     string:foo ;; php:doFoo() <!-- only string -->
 
-  4. php:
 
-  This expression evaluate what follows as a regular php expression except that
-  '-&gt;' are replaced by dots '.' and variable names does not need to be
-  prefixed with a dollar '$' sign.
+  php:
+  ----
 
-  A dot '.' separated from the rest of expression by spaces is assumed to be a
-  concatenation sign.
+  This expression evaluate what follows as a regular php expression 
+  except that '-&gt;' are replaced by dots '.' and variable names does 
+  not need to be prefixed with a dollar '$' sign.
+
+  A dot '.' separated from the rest of expression by spaces is assumed 
+  to be a concatenation sign.
 
     php:htmlentities(foo)
     php:'string $varReplaced'
@@ -717,38 +785,42 @@ PHPTALES
     php:range(0, 90)
     php:foo . a.b.c(e) . htmlentities(SomeClass::staticMethod()) 
 
-  php: should be used with care and won't be needed in 80% of your templates
-  but some times you will need to invoke some php special method to be sure a
-  user is logged or to retrieve a specific heavy data depending on some
-  conditions and dynamically inside the template.
+  php: should be used with care and won't be needed in 80% of your 
+  templates but some times you will need to invoke some php special 
+  method to be sure a user is logged or to retrieve a specific heavy 
+  data depending on some conditions and dynamically inside the template.
 
   
-  5. not:
+  not:
+  ----
 
   This expression is a boolean one, usefull in tal:condition statements. 
 
     <span tal:condition="not: logged">not logged</span>
 
 
-  6. exists:
+  exists:
+  -------
 
-  This expression is a boolean expression, it will returns true if the path
-  specified after it exists of not.
+  This expression is a boolean expression, it will returns true if the 
+  path specified after it exists of not.
 
     <span tal:condition="exists: user/preferences"    
           tal:content="user/preferences"> 
       user preferences here if defined 
     </span>
 
-  It is important to keep in mind that using a path which doesn't exists will throw
-  and exception. Thus, uncertain pathes must be checked first.
+  It is important to keep in mind that using a path which doesn't exists 
+  will throw and exception. Thus, uncertain pathes must be checked 
+  first.
 
 
-  7. default
+  default
+  -------
 
-  This is not an expression but a keyword allowing template designers to keep the
-  content of a tag as an alternative value if an error occurs or if something is
-  not defined.
+  This is not an expression but a keyword allowing template designers to 
+  keep the content of a tag as an alternative value if an error occurs 
+  or if something is not defined.
 
     <span tal:define="myVar path/to/possible/var | default"> 
       default my var value 
@@ -763,209 +835,234 @@ PHPTALES
                        title item/title | default"
        tal:content="item/title | default">Unknown page</a>
 
-  Above examples introduce the '|' characters that allow the definition of
-  alternatives for defines or prints. See next paragraph.
+  Above examples introduce the '|' characters that allow the definition 
+  of alternatives for defines or prints. See next paragraph.
 
 
-  8. Expression chains
-
-  A chain of expression is a list of expressions separated by '|' character.
-
-  While evaluating expressions separated by '|', PHPTAL will stop its evaluation
-  when an expression value is not null and no error was raised while evaluating
-  the expression.
-
-  As a string: expression is always true, string: always terminate an expression 
-  chain whatever expression may follows. 
-
-  You can use php: expressions inside expression chains as any other expression.
-
-    <h1 tal:content="page/title | page/alterNativeTitle | default>
-      untitled page
-    </h1>
-
-
-  9. structure
+  structure
+  ---------
 
   This is not an expression but a keyword.
 
-  While printing variables inside PHPTAL templates, you certainly have remarked
-  that PHPTAL encode each variable to ensure the validity of the output document. 
+  While printing variables inside PHPTAL templates, you certainly have 
+  remarked that PHPTAL encode each variable to ensure the validity of 
+  the output document. 
  
   Sometimes, you may use HTML/XML variables that must be echoed as is.
 
     <h1 tal:content="structure document/title"/> 
     <span tal:replace="structure document/content"/>
 
-  In above examples, we assume that $document->title and $document->content are 
-  variables containing preformated html that must be echoed as is.
+  In above examples, we assume that $document->title and 
+  $document->content are variables containing preformated html that must 
+  be echoed as is.
+
+
+  Expression chains
+  -----------------
+
+  A chain of expression is a list of expressions separated by '|' 
+  character.
+
+  While evaluating expressions separated by '|', PHPTAL will stop its 
+  evaluation when an expression value is not null and no error was 
+  raised while evaluating the expression.
+
+  As a string: expression is always true, string: always terminate an 
+  expression chain whatever expression may follows. 
+
+  You can use php: expressions inside expression chains as any other 
+  expression.
+
+    <h1 tal:content="page/title | page/alterNativeTitle | default>
+      untitled page
+    </h1>
 
 
 PHP INTEGRATION
+***************
 
-  This section targets PHP developpers and explain how to use and customize
-  PHPTAL behavious for simple and advanced usage.
+  This section targets PHP developpers and explain how to use and 
+  customize PHPTAL behavious for simple and advanced usage.
 
-  1. Defines
+  - Defines : list of PHPTAL defines and defines influencing PHPTAL
+  - PHPTAL : the main PHPTAL class
+  - PHPTAL_Filter  : filtering template sources and PHPTAL output
+  - PHPTAL_Trigger : creating triggers for phptal:id
+  - PHPTAL_TranslationService : replacing the builtin gettext support 
+    with your own internationalization system
 
-  After the inclusion of PHPTAL library, some defines will be created in PHP
-  context, all these defines comes from PHPTAL.php file :
+  Defines
+  =======
+
+  After the inclusion of PHPTAL library, some defines will be created in 
+  PHP context, all these defines comes from PHPTAL.php file :
 
   - PHPTAL_VERSION : version of PHPTAL library installed on your system 
     (in format : X.X.X) 
-  - PHPTAL_PHP_CODE_DESTINATION : this is the path where intermediate PHP 
-    files produced by PHPTAL will be stored. This define may be overwritten before
-    the inclusion of PHPTAL.php, the specified path must contain the leading path 
-    separator.
+  - PHPTAL_PHP_CODE_DESTINATION : this is the path where intermediate 
+    PHP files produced by PHPTAL will be stored. This define may be 
+    overwritten before the inclusion of PHPTAL.php, the specified path 
+    must contain the leading path separator.
 
   You can configure some PHPTAL features defining some constants :
 
-  To tell PHPTAL to ignore intermediate php files and to reparse templates
-  everytime :
+  To tell PHPTAL to ignore intermediate php files and to reparse 
+  templates everytime :
 
     <?php
     define('PHPTAL_FORCE_REPARSE', 1);
     require_once 'PHPTAL.php';
     ?>
   
-  To tell PHPTAL to store its intermediate PHP files otherwhere than in the
-  '/tmp/' directory :
+  To tell PHPTAL to store its intermediate PHP files otherwhere than in 
+  the '/tmp/' directory :
 
     <?php
     define('PHPTAL_PHP_CODE_DESTINATION', '/path/to/somewhere/');
     require_once 'PHPTAL.php';
     ?>
 
-  If all your files are stored in a base directory (repository), you can define
-  PHPTAL_TEMPLATE_REPOSITORY as follow :
+  If all your files are stored in a base directory (repository), you can 
+  define PHPTAL_TEMPLATE_REPOSITORY as follow :
 
     <?php
     define('PHPTAL_TEMPLATE_REPOSITORY', '/path/to/templates/root');
     require_once 'PHPTAL.php';
     ?>
 
-  This doesn't mean all your files need to be in the root directory, you can use
-  sub folders to organize your template designers work. It's just a shortcut
-  which will allow you to reference templates without specifying the real path
-  but their relative path in the repository.
+  This doesn't mean all your files need to be in the root directory, you 
+  can use sub folders to organize your template designers work. It's 
+  just a shortcut which will allow you to reference templates without 
+  specifying the real path but their relative path in the repository.
 
 
-  2. class PHPTAL
+  class PHPTAL
+  ============
 
-  This is the main class that allow you to interact with PHPTAL. Here are
-  presented main PHPTAL methods. More methods will be explained in 'interfaces'
-  chapters as their usage is related to these interfaces.
-
-
-  2.1. constructor
-
-  This is the default PHPTAL constructor.
-
-  Parameters
-
-  - string $file : the template file, absolute path or path relative to
-    repository 
-
-  Examples
-
-    // simple template creation 
-    $tpl = new PHPTAL('/path/to/templates/mypage.html');
-
-    // creation using global template repository
-    define('PHPTAL_TEMPLATE_REPOSITORY', '/path/to/templates');
-    $tpl = new PHPTAL('mypage.html'); 
+  This is the main class that allow you to interact with PHPTAL. Here 
+  are presented main PHPTAL methods. More methods will be explained in 
+  'interfaces' chapters as their usage is related to these interfaces.
 
 
-  2.2. method set / __set
+  interface PHPTAL_Filter
+  =======================
 
-  This method set a variable into the template execution context. A __set() method 
-  is defined, thus you can affect context variables to the template more 
-  "naturally" :
-  
+  This interface allow you to automatically filter templates sources 
+  (pre-filters) or PHPTAL result (post-filters).
+
+  Pre filters are invoked before the template parsing and won't be 
+  invoked until the source template file is modified.
+
+  Post filters are invoked after each template execution.
+
+    <?php
+    require_once 'PHPTAL.php';
+    
+    class MyPreFilter implements PHPTAL_Filter {
+        public function filter($source){
+            return $source;
+        }
+    }
+
+    class MyPostFilter implements PHPTAL_Filter {
+        public function filter($xhtml){
+            return $xhtml;
+        }
+    }
+
     $tpl = new PHPTAL('mytemplate.html');
-    $tpl->title = 'my title';
-    $tpl->result = UserDB::listUsers();
+    $tpl->setPreFilter(new MyPreFilter());
+    $tpl->setPostFilter(new MyPostFilter());
+    echo $tpl->execute();
+    ?>
+
+  You can set only one pre-Filter and one post-Filter using set*Filter.
+  If you have more than one filters to chain, you can wrap them
+  into a single class, implementing the PHPTAL_Filter interface, which
+  would invoque the filters' chain.
+
+    <?php
+    require_once 'PHPTAL.php';
+
+    class FilterChain implements PHPTAL_Filter {
+        private $_filters = array();
+        
+        public function add(PHPTAL_Filter $filter){
+            $this->_filters[] = $filter;
+        }
+        
+        public function filter($source){
+            foreach ($this->_filters as $filter){
+                $source = $filter->filter($source);
+            }
+            return $source;
+        }
+    }
+
+    $myfilter = new FilterChain();
+    $myfilter->add(new CommentFilter());  // imaginary filter
+    $myfilter->add(new TidyFilter());     // imaginary filter
+    
+    $tpl = new PHPTAL('mytemplate.html');
+    $tpl->setPostFilter($myFilter);
+    echo $tpl->execute();
+    ?>
+    
+
+  interface PHPTAL_Trigger
+  ========================
+
+  The phptal:id attribute was added into the PHPTAL for PHP5 version to 
+  replace the old PHPTAL_Cache interface and abstract it a little more.
+
+  When a phptal:id is reached, PHPTAL will look in its triggers list
+  for a matching id and will invoke the trigger start() and end() 
+  methods before entering the element and just after it.
+
+  If the PHPTAL_Trigger::start() methods returns 
+  PHPTAL_Trigger::SKIPTAG, PHPTAL will ignore the element and its 
+  content (start() may echo something to replace it).
+
+  If your trigger want the element and its content to be executed, 
+  you'll have to return PHPTAL_Trigger::PROCEED.
+
+  The PHPTAL_Trigger::end() will be called after the element (whether it 
+  has been executed or not). This allows you to build cache systems
+  using ob_start() in start() and ob_get_contents(), ob_end_clean() in 
+  end().
+
+
+    TODODODODODODODODOTOTOTODODODODODTODODTODOTODOTODOTODO
+
+    <?php
+    
+    require_once 'PHPTAL.php';
+
+    class ResultCache implements PHPTAL_Trigger 
+    {
+        public function start($tpl)
+        {
+        }
+
+        public function end($tpl)
+        {
+        }
+    }
+
+    ?>
 
   
-  2.3. method setOutputMethod
 
-  This method specify the output format of template execution result. By default
-  template ouputs XHTML, this means, some browser criticals tags like IMG or BR
-  that mustn't contain data are rewrote by PHPTAL to ensure correct page
-  rendering. If you want to ouput real XML with an XHTML input, you should use
-  this method with PHPTAL_XML parameter.
-
-  There's no need to call this method if you want output regular XHTML.
-
-  Example
-
-    // explicitely output XML 
-    $tpl->setOutputMethod(PHPTAL::XML);
-
-// -------------------------------------------- 
-  2.4. method 
-<section id="phptal.phptal.isValid">
-<title>method isValid</title>
-<para>
-
-This method tells if the template source was found. Originaly named
-'fileExists()', this method is now called 'isValid()', as template sources can
-be retrieved not only from the file system (see PHPTAL_SourceResolver and
-PHPTAL_SourceLocator).
-
-</para>
-
-<para>
-
-Returns
-
-</para>
-
-<para>
-
-boolean : true if template source is found and valid false otherwise.
-
-</para>
-
-</section>
+  interface PHPTAL_TranslationService
+  ===================================
 
 
-<section id="phptal.phptal.realPath">
-<title>method realPath</title>
-<para>
-
-This method returns the real template source path as returned by the
-PHPTAL_SourceLocator in use. The default behavour is to return the absolute
-template file path on the file system. 
-
-</para>
-
-<para>
-
-Returns
-
-</para>
-
-<para>
-
-string : the absolute template source path
-
-</para>
-
-<para>
-
-Throws
-
-</para>
-
-<para>
-
-FileNotFound if source resolvers was not able to locate template
-
-</para>
-</section>
 
 
+--------------------------
+
+  
 <section id="phptal.phptal.execute">
 <title>method execute</title>
 <para>
@@ -1953,59 +2050,25 @@ this very time.
 </section>
 </article>
 
-<!-- ************************************************************************* -->
-<article>
-  <title>Usefull links</title>
-  
-  <para>
-  <itemizedlist>
-    <listitem>
-      <para>
-      <ulink url="http://www.zope.org/Wikis/Projects/ZPT/">ZPT</ulink> Zope
-      Page Template front page,
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-      <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TAL/">TAL</ulink> 
-      the Template Attribute Language page,
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-      <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/METAL">METAL</ulink>
-      is the Macro Expansion of TAL,
-      </para>
-    </listitem>
-    <listitem>
-      <para>
-      <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TALES">TALES</ulink>
-      the TAL Expression Syntax.
-      </para>
-    </listitem>
-  </itemizedlist>
-  </para>
-</article>
+USEFULL LINKS
+*************
 
+  - Zope Page Template front page :     
+    http://www.zope.org/Wikis/Projects/ZPT
+  - TAL : Template Attribute Language page 
+    http://www.zope.org/Wikis/DevSite/Projects/ZPT/TAL
+  - METAL : Macro Expansion of TAL 
+    http://www.zope.org/Wikis/DevSite/Projects/ZPT/METAL
+  - TALES : TAL Expression Syntax
+    http://www.zope.org/Wikis/DevSite/Projects/ZPT/TALES
 
-<!-- ************************************************************************* -->
-<article>
-  <title>Greetings</title>
-  <para>Big thanks goes to :</para>
-  <itemizedlist>
-    <listitem>
-      <para>ZPT team, who made these usefull specifications,</para>
-    </listitem>
-    <listitem>
-      <para>Jean-Michel Hiver, who 'forced' me to look at them,</para>
-    </listitem>
-    <listitem>
-      <para>Olivier Parisy, the first entousiast PHPTAL user and bug finder,</para>
-    </listitem>
-    <listitem>
-      <para>Richard Wall for some good ideas and for his help.</para>
-    </listitem>
-  </itemizedlist>
-</article>
+GREETINGS
+*********
 
-</book>
+  Big thanks goes to :
+
+  - ZPT team, who made these usefull specifications,
+  - The PHPTAL community for their support, help and reports,
+  - Jean-Michel Hiver, who 'forced' me to look at them,
+  - Olivier Parisy, the first entousiast PHPTAL user and bug reporter.
+
