@@ -307,4 +307,9 @@ function phptal_tales_exists( $src, $nothrow, $optimize )
                    phptal_tales_string(trim($src), $nothrow, $optimize));
 }
 
+function phptal_tales_number( $src, $nothrow, $optimize )
+{
+    return trim($src);
+}
+
 ?>

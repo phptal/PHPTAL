@@ -48,7 +48,10 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
 
         foreach ($expressions as $exp){
             list($defineScope, $defineVar, $expression) = $this->parseExpression($exp);
-            if ($expression == false && !isset($started)) {
+            if (!$defineVar) {
+                continue;
+            }
+            if ($expression === false && !isset($started)) {
                 // first generate and buffer tag content, then put this content
                 // in the defineVar
                 $this->tag->generator->pushCode( 'ob_start()' );
@@ -57,7 +60,7 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                 $this->tag->generator->pushCode( $code );
                 $this->tag->generator->pushCode( 'ob_end_clean()' );
             }
-            else if ($expression) {
+            else if ($expression !== false) {
                 $started = true;
                 $code = $this->tag->generator->evaluateExpression($expression);
                 if (is_array($code)){
