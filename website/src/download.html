@@ -46,15 +46,11 @@ pear install {downloadedfile}
 
       
     <h2>PHPTAL for PHP5</h2>
-      
-    <ul>
-      <li>
-        <a href="files/PHPTAL-${VERSION}.tar.gz">PHPTAL-${VERSION}.tar.gz</a>
-      </li>
-    </ul>
 
+    <h3>PEAR installation</h3>
+      
 <pre>
-pear install http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz
+pear install <a href="files/PHPTAL-${VERSION}.tar.gz">http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz</a>
 </pre>
 
 	<p>
@@ -62,8 +58,63 @@ pear install http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz
 	</p>
 
 <pre>
-pear upgrade http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz
+pear upgrade <a href="files/PHPTAL-${VERSION}.tar.gz">http://phptal.motion-twin.com/files/PHPTAL-${VERSION}.tar.gz</a>
 </pre>
+
+  <h3>Non PEAR (ie: manual) installation</h3>
+
+  <p>
+  If you do not want to use PEAR or want to install PHPTAL in a local library 
+  directory instead of the standard php PEAR library folder, you should proceed 
+  as follow:
+  </p>
+
+<pre>
+tar zxvf PHPTAL-${VERSION}.tar.gz
+cp -r PHPTAL-${VERSION}/PHPTAL* /path/to/your/lib/folder
+</pre>
+
+  <p>
+  This will install the <code>PHPTAL.php</code> file and the associated 
+  <code>PHPTAL</code> folder in <code>/path/to/your/lib/folder</code>.
+  </p>
+
+  <p>
+  Don't forget to modify your php include path in your scripts so PHP
+  will be able to locate library files automatically :
+  </p>
+
+<pre>
+<!--code
+<?php
+$old = ini_get('include_path');
+
+// windows users must use ';' instead of ':' in the line below
+ini_set('include_path', $old.':/path/to/your/lib/folder');
+
+// will work like a charm
+require_once 'PHPTAL.php'; 
+?>
+-->
+</pre>
+
+  <p>
+  If you works with apache, you may also be able to modify the php <code>include_path</code> in a <code>.htaccess</code> file:
+  </p>
+
+<pre>
+<!--code
+# some .htaccess file
+
+# linux users may use something as follow
+php_value include_path /usr/lib/php:/usr/local/lib/php:/path/to/your/lib/folder:.
+-->
+</pre>
+
+  <p>
+  You may also modify the include_path variable in you php.ini file.
+  </p>
+
 
     <h2>PHPTAL for PHP4</h2>
                     

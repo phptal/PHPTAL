@@ -6,18 +6,11 @@
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
 
-  <fileset dir="classes" id="classes">
-    <include name="**"/>
-    <exclude name="**/.svn/**"/>
-  </fileset>
-  <fileset dir="classes" id="lib-entry">
-    <include name="PHPTAL.php"/>
-  </fileset>
-  <fileset dir="classes/PHPTAL" id="lib-classes">
-    <include name="**"/>
-    <exclude name="**/.svn/**"/>
-  </fileset>
-
+	<fileset dir="classes" id="classes">
+	  <include name="**"/>
+		<exclude name="**/.svn/**"/>
+	</fileset>
+	
   <fileset dir="." id="gendocs">
     <include name="README"/>
     <include name="COPYING"/>
@@ -53,8 +46,7 @@
   <target name="build">
     <delete dir="${build.base.dir}"/>
     <copy todir="${build.src.dir}">
-      <fileset refid="lib-entry"/>
-      <fileset refid="lib-classes"/>
+			<fileset refid="classes"/>
       <fileset refid="gendocs"/>
     </copy>
   </target>
@@ -64,8 +56,7 @@
       name="${phing.project.name}" 
       dir="${build.src.dir}" 
       destfile="${build.base.dir}/package.xml">
-      <fileset refid="lib-entry"/>
-      <fileset refid="lib-classes"/>
+			<fileset refid="classes"/>
       <fileset refid="gendocs"/>
 
       <option name="notes">Zope Page Template implementation for PHP5</option>
@@ -73,10 +64,7 @@
       <option name="summary">PHPTAL for PHP5 supports tal, metal and i18n namespaces</option>
       <option name="version" value="${version}"/>
       <option name="state" value="beta"/>
-
-      <mapping name="installexceptions">  
-        <element key="PHPTAL.php" value="/"/>
-      </mapping>
+		  <option name="baseinstalldir" value=""/>
 
       <mapping name="maintainers">
         <element>
