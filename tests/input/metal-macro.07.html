@@ -1,0 +1,8 @@
+<div metal:use-macro="b">
+  <div metal:define-macro="a" id="a">
+    <metal:block define-slot="slot">default value a</metal:block>
+  </div>
+  <div metal:define-macro="b" metal:use-macro="a" id="b">
+  </div>
+  <div metal:fill-slot="slot">main value</div>
+</div>

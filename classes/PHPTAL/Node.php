@@ -115,6 +115,14 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
                 return true;
             }
         }
+        foreach ($this->talAttributes as $key=>$value){
+            if ($this->xmlns->unAliasAttribute($key) == $name){
+                return true;
+            }
+            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
+                return true;
+            }
+        }
         return false;
     }
 

@@ -43,7 +43,11 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
     public function start()
     {
         // reset template slots on each macro call ?
-        $this->tag->generator->pushCode('$ctx->pushSlots()');
+        // note: defining and calling a macro on the same tag means inherit
+        // from the macro, thus slots are shared
+        if (!$this->tag->hasPhpTalAttribute('metal:define-macro')){
+            $this->tag->generator->pushCode('$ctx->pushSlots()');
+        }
         
         foreach ($this->tag->children as $child){
             $this->generateFillSlots($child);
@@ -60,7 +64,10 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
             $code = sprintf('<?php $tpl->executeMacro(%s); ?>', $code);
             $this->tag->generator->pushHtml($code);
         }
-        $this->tag->generator->pushCode('$ctx->popSlots()');
+
+        if (!$this->tag->hasPhpTalAttribute('metal:define-macro')){
+            $this->tag->generator->pushCode('$ctx->popSlots()');
+        }
     }
     
     public function end()
