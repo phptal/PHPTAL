@@ -64,7 +64,7 @@ abstract class PHPTAL_XmlParser
         if (!file_exists($this->_file)) {
             throw new Exception("file $src not found");
         }
-        $this->parseString( join("", file($src)) );
+        $this->parseString(file_get_contents($src));
     }
 
     public function parseString($src) 
