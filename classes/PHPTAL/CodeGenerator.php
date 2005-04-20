@@ -27,7 +27,7 @@
  */
 class PHPTAL_CodeGenerator
 {
-    function __construct( $encoding='UTF-8' )
+    function __construct($encoding='UTF-8')
     {
         $this->_encoding = $encoding;
     }
@@ -54,7 +54,7 @@ class PHPTAL_CodeGenerator
         return $this->_encoding;
     }
 
-    public function setDocType( $dt )
+    public function setDocType($dt)
     {
         $this->_doctype = $dt;
     }
@@ -74,7 +74,7 @@ class PHPTAL_CodeGenerator
         return $this->_xmldeclaration;
     }
     
-    public function setFunctionPrefix( $prefix )
+    public function setFunctionPrefix($prefix)
     {
         $this->_functionPrefix = $prefix;
     }
@@ -87,19 +87,19 @@ class PHPTAL_CodeGenerator
     /**
      * @return string Old mode
      */
-    public function setTalesMode( $mode )
+    public function setTalesMode($mode)
     {
         $old = $this->_talesMode;
         $this->_talesMode = $mode;
         return $old;
     }
 
-    public function splitExpression( $src )
+    public function splitExpression($src)
     {
         return preg_split('/(?<!;);(?!;)/sm', $src);
     }
 
-    public function evaluateExpression( $src )
+    public function evaluateExpression($src)
     {
         if ($this->_talesMode == 'php'){
             return phptal_tales_php($src);
@@ -125,7 +125,7 @@ class PHPTAL_CodeGenerator
         $this->flushHtml();
     }
 
-    public function noThrow( $bool )
+    public function noThrow($bool)
     {
         if ($bool){
             $this->pushCode('$ctx->noThrow(true)');
@@ -137,125 +137,124 @@ class PHPTAL_CodeGenerator
     
     public function flushCode()
     {
-        if (count( $this->_codeBuffer ) == 0) 
+        if (count($this->_codeBuffer) == 0) 
             return;
 
         // special treatment for one code line
-        if (count( $this->_codeBuffer ) == 1) {
+        if (count($this->_codeBuffer) == 1){
             $codeLine = $this->_codeBuffer[0];
             // avoid adding ; after } and {
             if (!preg_match('/\}|\{\s+$/', $codeLine))
-                $this->_result .= "<?php $codeLine; ?>";
-            else 
-                $this->_result .= "<?php $codeLine ?>";
-
+                $this->_result .= '<?php '.$codeLine.'; ?>';
+            else
+                $this->_result .= '<?php '.$codeLine.' ?>';
             $this->_codeBuffer = array();
             return;
         }
     
-        $this->_result .= "<?php \n";
+        $this->_result .= '<?php '."\n";
         foreach ($this->_codeBuffer as $codeLine) {
             // avoid adding ; after } and {
             if (!preg_match('/\}|\{\s+$/', $codeLine))
-                $this->_result .= $codeLine . " ;\n";
+                $this->_result .= $codeLine . ' ;'."\n";
             else 
                 $this->_result .= $codeLine;
         }
-        $this->_result .= "?>";
+        $this->_result .= '?>';
         $this->_codeBuffer = array();
     }
     
     public function flushHtml()
     {
-        if (count( $this->_htmlBuffer ) == 0) return;
+        if (count($this->_htmlBuffer) == 0) return;
         
-        $this->_result .= join( "", $this->_htmlBuffer );
+        $this->_result .= join( '', $this->_htmlBuffer );
         $this->_htmlBuffer = array();
     }
     
-    public function doFunction( $name, $params )
+    public function doFunction($name, $params)
     {
         $name = $this->_functionPrefix . $name;
         $this->pushGeneratorContext();
-        $this->pushCode( "function $name( $params ) {\n" );
+        $this->pushCode("function $name( $params ) {\n");
         $this->indent();
-        array_push( $this->_segments, 'function' );
+        array_push($this->_segments, 'function');
     }
     
-    public function doComment( $comment )
+    public function doComment($comment)
     {
         $comment = str_replace('*/', '* /', $comment);
-        $this->pushCode( "/* $comment */" );
+        $this->pushCode("/* $comment */");
     }
 
-    public function doEval( $code )
+    public function doEval($code)
     {
-        $this->pushCode( $code );
+        $this->pushCode($code);
     }
                        
-    public function doForeach( $out, $source )
+    public function doForeach($out, $source)
     {
-        array_push( $this->_segments, 'foreach' );
-        $this->pushCode( "foreach ($source as \$__key__ => $out ):" );
+        array_push($this->_segments, 'foreach');
+        $this->pushCode("foreach ($source as \$__key__ => $out ):");
         $this->indent();
     }
 
     public function doEnd()
     {
-        $segment = array_pop( $this->_segments );
+        $segment = array_pop($this->_segments);
         $this->unindent();
         if ($segment == 'function') {
-            $this->pushCode( "\n}\n\n" );
+            $this->pushCode("\n}\n\n");
             $functionCode = $this->getResult();
             $this->popGeneratorContext();
             $this->_result = $functionCode . $this->_result;
         }
         else if ($segment == 'try')
-            $this->pushCode( '}' );
+            $this->pushCode('}');
         else if ($segment == 'catch')
-            $this->pushCode( '}' );
+            $this->pushCode('}');
         else 
-            $this->pushCode( "end$segment" );
+            $this->pushCode("end$segment");
     }
 
     public function doTry()
     {
-        array_push( $this->_segments, 'try');
+        array_push($this->_segments, 'try');
         $this->pushCode('try {');
         $this->indent();
     }
 
-    public function doCatch( $catch )
+    public function doCatch($catch)
     {
         $this->doEnd();
-        array_push( $this->_segments, 'catch');
+        array_push($this->_segments, 'catch');
         $code = 'catch(%s) {';
         $this->pushCode(sprintf($code, $catch));
         $this->indent();
     }
 
-    public function doIf( $condition )
+    public function doIf($condition)
     {
-        array_push( $this->_segments, 'if' );
-        $this->pushCode( "if ($condition): " );
+        array_push($this->_segments, 'if');
+        $this->pushCode("if ($condition): ");
         $this->indent();
     }
 
-    public function doElseIf( $condition )
+    public function doElseIf($condition)
     {
         $this->unindent();
-        $this->pushCode( "elseif ($condition): ");
+        $this->pushCode("elseif ($condition): ");
         $this->indent();
     }
 
     public function doElse()
     {
         $this->unindent();
-        $this->pushCode( "else: ");
+        $this->pushCode("else: ");
         $this->indent();
     }
 
-    public function doEcho( $code, $replaceInString=true )
+    public function doEcho($code, $replaceInString=true)
     {
         $this->flush();
         $html = '<?php echo %s ?>';
@@ -263,18 +262,19 @@ class PHPTAL_CodeGenerator
         $this->pushHtml($html, $replaceInString);
     }
 
-    public function pushHtml( $html, $replaceInString=true )
+    public function pushHtml($html, $replaceInString=true)
     {
         if ($replaceInString)
             $html = $this->_replaceInStringExpression($html);
         $this->flushCode();
-        array_push( $this->_htmlBuffer, $html );
+        array_push($this->_htmlBuffer, $html);
     }
 
-    public function pushString( $str )
+    public function pushString($str)
     {
         $this->flushCode();
-        
+       
+        // replace ${var} inside strings
         while (preg_match('/^(.*?)(\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
             list(,$before,$expression,$after) = $m;
             
@@ -295,11 +295,11 @@ class PHPTAL_CodeGenerator
         }
     }
 
-    public function pushCode( $codeLine ) 
+    public function pushCode($codeLine) 
     {
         $this->flushHtml();
         $codeLine = $this->indentSpaces() . $codeLine;
-        array_push( $this->_codeBuffer, $codeLine );
+        array_push($this->_codeBuffer, $codeLine);
     }
 
     public function escapeCode($code)
@@ -340,14 +340,14 @@ class PHPTAL_CodeGenerator
         $this->_talesMode = $oldContext->_talesMode;
     }
 
-
     private function _replaceInStringExpression($src)
     {
         if ($this->_talesMode == 'tales'){
             return preg_replace(
                 '/\$\{([a-z0-9\/_]+)\}/ism', 
-                '<?php echo '.$this->_htmlEscapingFunction.'( '
-                    .'phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' '
+                '<?php echo '
+                .$this->_htmlEscapingFunction.'( '
+                .'phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' '
                 .') ?>',
                 $src);
         }
@@ -356,7 +356,8 @@ class PHPTAL_CodeGenerator
             list($ori, $struct, $exp) = $m;
             $php  = phptal_tales_php($exp);
             $repl = '<?php echo %s; ?>';
-            // when structure keyword is specified the output is not html escaped
+            // when structure keyword is specified the output is not html 
+            // escaped
             if ($struct){
                 $repl = sprintf($repl, $php);
             }
@@ -375,6 +376,7 @@ class PHPTAL_CodeGenerator
             return phptal_tales_string($src);
         }
         
+        // replace ${var} found in expression
         while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
             list($ori, $exp) = $m;
             $php  = phptal_tales_php($exp);

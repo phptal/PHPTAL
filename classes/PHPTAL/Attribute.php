@@ -44,6 +44,8 @@ require_once 'PHPTAL/Attribute/I18N/Name.php';
 require_once 'PHPTAL/Attribute/I18N/Domain.php';
 require_once 'PHPTAL/Attribute/I18N/Attributes.php';
 
+require_once 'PHPTAL/Node.php';
+
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -53,7 +55,7 @@ abstract class PHPTAL_Attribute
     public $expression;
     public $tag;
 
-    public function __construct( $tag )
+    public function __construct($tag)
     {
         $this->tag = $tag;
     }
@@ -61,7 +63,7 @@ abstract class PHPTAL_Attribute
     public abstract function start();
     public abstract function end();
     
-    public static function createAttribute( $tag, $attName, $expression )
+    public static function createAttribute($tag, $attName, $expression)
     {
         $class = 'PHPTAL_Attribute_' . str_replace(':','_', $attName);
         $class = str_replace('-', '', $class);

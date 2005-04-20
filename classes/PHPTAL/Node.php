@@ -40,7 +40,7 @@ abstract class PHPTAL_Node
      */
     public $xmlns;
 
-    public function __construct( $parser )
+    public function __construct(PHPTAL_Parser $parser)
     {
         $this->parser = $parser;
         $this->generator = $parser->getGenerator();
@@ -60,7 +60,7 @@ class PHPTAL_NodeTree extends PHPTAL_Node
 {
     public $children;
 
-    public function __construct( $parser )
+    public function __construct(PHPTAL_Parser $parser)
     {
         parent::__construct($parser);
         $this->children = array();
@@ -97,7 +97,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     public $headFootPrintCondition = false;
     public $hidden = false;
 
-    public function __construct( $parser, $name, $attributes )
+    public function __construct( PHPTAL_Parser $parser, $name, $attributes )
     {
         parent::__construct($parser);
         $this->name = $name;
@@ -225,7 +225,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         }
     }
     
-    public function generateContent( $realContent=false )
+    public function generateContent($realContent=false)
     {
         if ($this->isEmptyNode()){
             return;
@@ -400,7 +400,7 @@ class PHPTAL_NodeText extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct( $parser, $data )
+    public function __construct(PHPTAL_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;
@@ -421,7 +421,7 @@ class PHPTAL_NodeSpecific extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct( $parser, $data )
+    public function __construct(PHPTAL_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;
@@ -442,7 +442,7 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct( $parser, $data )
+    public function __construct(PHPTAL_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;
@@ -466,7 +466,7 @@ class PHPTAL_NodeXmlDeclaration extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct($parser, $data)
+    public function __construct(PHPTAL_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;
