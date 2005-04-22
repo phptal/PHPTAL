@@ -113,7 +113,7 @@ class PHPTAL
     /**
      * PHPTAL Constructor.
      *
-     * @param $path Template file path.
+     * @param string $path Template file path.
      */
     public function __construct($path=false)
     {//{{{
@@ -123,6 +123,14 @@ class PHPTAL
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
         $this->_context = new PHPTAL_Context();
+    }//}}}
+
+    /**
+     * Clone template state and context.
+     */
+    public function __clone()
+    {//{{{
+        $this->_context = clone $this->_context;
     }//}}}
 
     /**
@@ -154,19 +162,11 @@ class PHPTAL
     }//}}}
     
     /**
-     * Clone template state and context.
-     */
-    public function __clone()
-    {//{{{
-        $this->_context = clone $this->_context;
-    }//}}}
-
-    /**
      * Specify where to look for templates.
      *
      * @param $rep String or Array of repositories
      */
-    public function setTemplateRepository( $rep )
+    public function setTemplateRepository($rep)
     {//{{{
         if (is_array($rep)){
             $this->_repositories = $rep;
@@ -187,15 +187,18 @@ class PHPTAL
     /**
      * Set output mode (PHPTAL::XML or PHPTAL::XHTML).
      */
-    public function setOutputMode( $mode=PHPTAL_XHTML )
+    public function setOutputMode($mode=PHPTAL_XHTML)
     {//{{{
+        if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML){
+            throw new PHPTAL_Exception('Unsupported output mode '.$mode);
+        }
         $this->_outputMode = $mode;
     }//}}}
 
     /**
      * Set ouput encoding.
      */
-    public function setEncoding( $enc )
+    public function setEncoding($enc)
     {//{{{
         $this->_encoding = $enc; 
     }//}}}
@@ -203,7 +206,7 @@ class PHPTAL
     /**
      * Set I18N translator.
      */
-    public function setTranslator( $t )
+    public function setTranslator($t)
     {//{{{
         $this->_translator = $t;
     }//}}}
@@ -269,7 +272,8 @@ class PHPTAL
         if (!$this->_prepared) {
             $this->prepare();
         }
-        
+       
+        // includes generated template PHP code
         $this->_context->__file = $this->__file;
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
@@ -303,27 +307,43 @@ class PHPTAL
      */
     public function executeMacro($path)
     {//{{{
+        // extract macro source file from macro name, if not source file
+        // found in $path, then the macro is assumed to be local
         if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
             
+            // search for file in current template folder first
+            // TODO: ensuring that the macro file exists and looking for its
+            // location must be done at compile time instead of there, it will
+            // greatly improve macro call performances
             $f = dirname($this->_realPath).PHPTAL_PATH_SEP.$file;
             if (file_exists($f)){
                 $file = $f;
             }
-    
-            $tpl = new PHPTAL( $file );
+   
+            // ensure that the macro file is prepared and translated into PHP
+            // code before executing it.
+            // TODO: stores a list of already prepared macro to avoid this 
+            // creation on each call
+            $tpl = new PHPTAL($file);
             $tpl->_encoding = $this->_encoding;
             $tpl->setTemplateRepository($this->_repositories);
             $tpl->prepare();
 
-            $currentFile = $this->_context->__file;
+            // save current file
+            $currentFile = $this->_context->__file;            
             $this->_context->__file = $tpl->__file;
+            
+            // require PHP generated code and execute macro function
             require_once $tpl->getCodePath();
             $fun = $tpl->getFunctionName() . '_' . $macroName;
-            $fun( $this, $this->_context );
+            $fun($this, $this->_context);
+            
+            // restore current file
             $this->_context->__file = $currentFile;
         }
         else {
+            // call local macro
             $fun = $this->getFunctionName() . '_' . trim($path);
             $fun( $this, $this->_context );            
         }
@@ -334,11 +354,16 @@ class PHPTAL
      */
     public function prepare()
     {//{{{
+        // find the template source file
         $this->findTemplate();
         $this->__file = $this->_realPath;
+        // where php generated code should resides
         $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION 
                          . $this->getFunctionName() 
                          . '.php';
+        // parse template if php generated code does not exists or template
+        // source file modified since last generation of PHPTAL_FORCE_REPARSE
+        // is defined.
         if (defined('PHPTAL_FORCE_REPARSE') 
             || !file_exists($this->_codeFile) 
             || filemtime($this->_codeFile) < filemtime($this->_realPath)) {
@@ -392,7 +417,7 @@ class PHPTAL
      * Public for phptal templates, private for user.
      * @access private
      */
-    public function addError( $error )
+    public function addError($error)
     {//{{{
         array_push($this->_errors, $error); 
     }//}}}
@@ -410,12 +435,16 @@ class PHPTAL
         require_once 'PHPTAL/Parser.php';
         require_once 'PHPTAL/CodeGenerator.php';
         
+        // instantiate a new PHP code generator for this template
         $generator = new PHPTAL_CodeGenerator($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
+
+        // instantiate the PHPTAL source parser 
         $parser = new PHPTAL_Parser($generator);
         $parser->stripComments($this->_stripComments);
         $parser->setPreFilter($this->_prefilter);
 
+        // source may be provided string or template file
         if (isset($this->_source)){
             $tree = $parser->parseString($this->_source);
         }
@@ -423,9 +452,10 @@ class PHPTAL
             $tree = $parser->parseFile($this->_realPath);
         }
 
+        // generate the PHP code
         $header = sprintf('Generated by PHPTAL from %s', $this->_realPath);
         $generator->doFunction($this->_functionName, '$tpl, $ctx');
-        $generator->doComment( $header );
+        $generator->doComment($header);
         $generator->setFunctionPrefix($this->_functionName . "_");
         $generator->pushCode('ob_start()');
         $tree->generate();
@@ -434,7 +464,8 @@ class PHPTAL
         $generator->pushCode('return $_result_');
         $generator->doEnd();
         
-        $this->storeGeneratedCode( $generator->getResult() );
+        // and store it into temporary file
+        $this->storeGeneratedCode($generator->getResult());
     }//}}}
 
     private function storeGeneratedCode($code)
@@ -449,16 +480,19 @@ class PHPTAL
         fclose($fp);
     }//}}}
 
+    /** Search template source location. */
     private function findTemplate()
     {//{{{
         if ($this->_realPath == false){
             throw new Exception('No template file specified');
         }
 
-        if (isset($this->_source)){
+        // source string provided manually
+        if (isset($this->_source)){ 
             return;
         }
         
+        // search into template repositories
         foreach ($this->_repositories as $repository){
             $f = $repository . PHPTAL_PATH_SEP . $this->_realPath;
             if (file_exists($f)){
@@ -466,8 +500,12 @@ class PHPTAL
                 return;
             }
         }
+        
+        // fail back to current path (or absolute path)
         $path = $this->_realPath;
         if (file_exists($path)) return;
+        
+        // not found
         $err = 'Unable to locate template file %s';
         $err = sprintf($err, $this->_realPath);
         throw new Exception($err);
@@ -505,123 +543,5 @@ class PHPTAL
     private $_outputMode = PHPTAL_XHTML;
     private $_stripComments = false;
 }
-
-
-function phptal_path( $base, $path, $nothrow=false )
-{//{{{
-    $parts   = split('/', $path);
-    $current = true;
-
-    while (($current = array_shift($parts)) !== null){
-        // object handling
-        if (is_object($base)){
-            // look for method
-            if (method_exists($base, $current)){
-                $base = $base->$current();
-                continue;
-            }
-            
-            // look for variable
-            if (isset($base->$current)){
-                $base = $base->$current;
-                continue;
-            }
-            
-            // look for isset (priority over __get)
-            if (method_exists($base, '__isset')){
-                if ($base->__isset($current)){
-                    $base = $base->$current;
-                    continue;
-                }
-            }
-            // ask __get and discard if it returns null
-            else if (method_exists($base, '__get')){
-                $tmp = $base->$current;
-                if (!is_null($tmp)){
-                    $base = $tmp;
-                    continue;
-                }
-            }
-
-            // magic method call
-            if (method_exists($base, '__call')){
-                $base = $base->$current();
-                continue;
-            }
-
-            // emulate array behaviour
-            if (is_numeric($current) && method_exists($base, '__getAt')){
-                $base = $base->__getAt($current);
-                continue;
-            }
-            
-            if ($nothrow)
-                return null;
-
-            $err = 'Unable to find part "%s" in path "%s"';
-            $err = sprintf($err, $current, $path);
-            throw new Exception($err);
-        }
-
-        // array handling
-        if (is_array($base)) {
-            // key or index
-            if (array_key_exists((string)$current, $base)){
-                $base = $base[$current];
-                continue;
-            }
-
-            // virtual methods provided by phptal
-            if ($current == 'length' || $current == 'size'){
-                $base = count($base);
-                continue;
-            }
-
-            if ($nothrow)
-                return null;
-
-            $err = 'Unable to find array key "%s" in path "%s"';
-            $err = sprintf($err, $current, $path);
-            throw new Exception($err);
-        }
-
-        // string handling
-        if (is_string($base)) {
-            // virtual methods provided by phptal
-            if ($current == 'length' || $current == 'size'){
-                $base = strlen($base);
-                continue;
-            }
-
-            // access char at index
-            if (is_int($current)){
-                $base = $base[$current];
-                continue;
-            }
-        }
-
-        // if this point is reached, then the part cannot be resolved
-        
-        if ($nothrow)
-            return null;
-        
-        $err = 'Unable to find part "%s" in path "%s"';
-        $err = sprintf($err, $current, $path);
-        throw new Exception($err);
-    }
-
-    return $base;
-}//}}}
-
-function phptal_exists( $ctx, $path )
-{//{{{
-    // special note: this method may requires to be extended to a full
-    // phptal_path() sibling to avoid calling latest path part if it is a
-    // method or a function...
-    $ctx->noThrow(true);
-    $res = phptal_path($ctx, $path, true);
-    $ctx->noThrow(false);
-    return !is_null($res);
-}//}}}
 
 ?>

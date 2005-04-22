@@ -115,4 +115,134 @@ class PHPTAL_Context
     private $_slotsStack = array();
 }
 
+/**
+ * Resolve TALES path starting from the first path element.
+ *
+ * The TALES path : object/method1/10/method2
+ * will call : phptal_path($ctx->object, 'method1/10/method2')
+ *
+ * The nothrow param is used by phptal_exists() and prevent this function to
+ * throw an exception when a part of the path cannot be resolved, null is
+ * returned instead.
+ */
+function phptal_path($base, $path, $nothrow=false)
+{//{{{
+    $parts   = split('/', $path);
+    $current = true;
+
+    while (($current = array_shift($parts)) !== null){
+        // object handling
+        if (is_object($base)){
+            // look for method
+            if (method_exists($base, $current)){
+                $base = $base->$current();
+                continue;
+            }
+            
+            // look for variable
+            if (isset($base->$current)){
+                $base = $base->$current;
+                continue;
+            }
+            
+            // look for isset (priority over __get)
+            if (method_exists($base, '__isset')){
+                if ($base->__isset($current)){
+                    $base = $base->$current;
+                    continue;
+                }
+            }
+            // ask __get and discard if it returns null
+            else if (method_exists($base, '__get')){
+                $tmp = $base->$current;
+                if (!is_null($tmp)){
+                    $base = $tmp;
+                    continue;
+                }
+            }
+
+            // magic method call
+            if (method_exists($base, '__call')){
+                $base = $base->$current();
+                continue;
+            }
+
+            // emulate array behaviour
+            if (is_numeric($current) && method_exists($base, '__getAt')){
+                $base = $base->__getAt($current);
+                continue;
+            }
+            
+            if ($nothrow)
+                return null;
+
+            $err = 'Unable to find part "%s" in path "%s"';
+            $err = sprintf($err, $current, $path);
+            throw new Exception($err);
+        }
+
+        // array handling
+        if (is_array($base)) {
+            // key or index
+            if (array_key_exists((string)$current, $base)){
+                $base = $base[$current];
+                continue;
+            }
+
+            // virtual methods provided by phptal
+            if ($current == 'length' || $current == 'size'){
+                $base = count($base);
+                continue;
+            }
+
+            if ($nothrow)
+                return null;
+
+            $err = 'Unable to find array key "%s" in path "%s"';
+            $err = sprintf($err, $current, $path);
+            throw new Exception($err);
+        }
+
+        // string handling
+        if (is_string($base)) {
+            // virtual methods provided by phptal
+            if ($current == 'length' || $current == 'size'){
+                $base = strlen($base);
+                continue;
+            }
+
+            // access char at index
+            if (is_int($current)){
+                $base = $base[$current];
+                continue;
+            }
+        }
+
+        // if this point is reached, then the part cannot be resolved
+        
+        if ($nothrow)
+            return null;
+        
+        $err = 'Unable to find part "%s" in path "%s"';
+        $err = sprintf($err, $current, $path);
+        throw new Exception($err);
+    }
+
+    return $base;
+}//}}}
+
+/** 
+ * Returns true if $path can be fully resolved in $ctx context. 
+ */
+function phptal_exists($ctx, $path)
+{//{{{
+    // special note: this method may requires to be extended to a full
+    // phptal_path() sibling to avoid calling latest path part if it is a
+    // method or a function...
+    $ctx->noThrow(true);
+    $res = phptal_path($ctx, $path, true);
+    $ctx->noThrow(false);
+    return !is_null($res);
+}//}}}
+
 ?>

@@ -132,6 +132,18 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
         $res = trim_string($res);
         $this->assertEquals($exp, $res);
     }
+
+    function testUnknownOutputMode()
+    {
+        try {
+            $tpl = new PHPTAL();
+            $tpl->setOutputMode('unknown');
+            $this->assertTrue(false);
+        }
+        catch (PHPTAL_Exception $e){
+            $this->assertTrue(true);
+        }
+    }
 }
         
 ?>
