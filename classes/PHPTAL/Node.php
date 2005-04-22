@@ -48,6 +48,11 @@ abstract class PHPTAL_Node
         $this->xmlns = $parser->getXmlnsState();
     }
 
+    public function getSourceFile()
+    {
+        return $this->parser->getSourceFile();
+    }
+
     public abstract function generate();
 }
 

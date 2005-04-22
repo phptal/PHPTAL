@@ -279,6 +279,11 @@ abstract class PHPTAL_XmlParser
         $this->onDocumentEnd();
     }
 
+    public function getSourceFile()
+    {
+        return $this->_file;
+    }
+    
     public function getLineNumber()
     {
         return $this->_line;
@@ -313,7 +318,7 @@ abstract class PHPTAL_XmlParser
         throw new Exception($str);
     }
     
-    private $_file;
+    private $_file = '<string>';
     private $_line;
     private $_source;
 }

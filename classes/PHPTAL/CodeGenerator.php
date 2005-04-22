@@ -28,115 +28,115 @@
 class PHPTAL_CodeGenerator
 {
     function __construct($encoding='UTF-8')
-    {
+    {//{{{
         $this->_encoding = $encoding;
-    }
+    }//}}}
     
     public function getResult()
-    {
+    {//{{{
         $this->flush();
         $this->_result = trim($this->_result);
         return $this->_result;
-    }
+    }//}}}
 
     public function setOutputMode($mode)
-    {
+    {//{{{
         $this->_outputMode = $mode;
-    }
+    }//}}}
     
     public function getOutputMode()
-    {
+    {//{{{
         return $this->_outputMode;
-    }
+    }//}}}
 
     public function getEncoding()
-    {
+    {//{{{
         return $this->_encoding;
-    }
+    }//}}}
 
     public function setDocType($dt)
-    {
+    {//{{{
         $this->_doctype = $dt;
-    }
+    }//}}}
 
     public function getDocType()
-    {
+    {//{{{
         return $this->_doctype;
-    }
+    }//}}}
 
     public function setXmlDeclaration($dt)
-    {
+    {//{{{
         $this->_xmldeclaration = $dt;
-    }
+    }//}}}
 
     public function getXmlDeclaration()
-    {
+    {//{{{
         return $this->_xmldeclaration;
-    }
+    }//}}}
     
     public function setFunctionPrefix($prefix)
-    {
+    {//{{{
         $this->_functionPrefix = $prefix;
-    }
+    }//}}}
 
     public function getFunctionPrefix()
-    {
+    {//{{{
         return $this->_functionPrefix;
-    }
+    }//}}}
 
     /**
-     * @return string Old mode
+     * Returns old tales mode.
      */
     public function setTalesMode($mode)
-    {
+    {//{{{
         $old = $this->_talesMode;
         $this->_talesMode = $mode;
         return $old;
-    }
+    }//}}}
 
     public function splitExpression($src)
-    {
+    {//{{{
         return preg_split('/(?<!;);(?!;)/sm', $src);
-    }
+    }//}}}
 
     public function evaluateExpression($src)
-    {
+    {//{{{
         if ($this->_talesMode == 'php'){
             return phptal_tales_php($src);
         }
         else {
             return phptal_tales($src);
         }
-    }
+    }//}}}
     
     public function indent() 
-    { 
+    {//{{{
         $this->_indentation ++; 
-    }
+    }//}}}
     
     public function unindent() 
-    { 
+    {//{{{
         $this->_indentation --; 
-    }
+    }//}}}
     
     public function flush() 
-    {
+    {//{{{
         $this->flushCode();
         $this->flushHtml();
-    }
+    }//}}}
 
     public function noThrow($bool)
-    {
+    {//{{{
         if ($bool){
             $this->pushCode('$ctx->noThrow(true)');
         }
         else {
             $this->pushCode('$ctx->noThrow(false)');
         }
-    }
+    }//}}}
     
     public function flushCode()
-    {
+    {//{{{
         if (count($this->_codeBuffer) == 0) 
             return;
 
@@ -162,45 +162,45 @@ class PHPTAL_CodeGenerator
         }
         $this->_result .= '?>';
         $this->_codeBuffer = array();
-    }
+    }//}}}
     
     public function flushHtml()
-    {
+    {//{{{
         if (count($this->_htmlBuffer) == 0) return;
         
         $this->_result .= join( '', $this->_htmlBuffer );
         $this->_htmlBuffer = array();
-    }
+    }//}}}
     
     public function doFunction($name, $params)
-    {
+    {//{{{
         $name = $this->_functionPrefix . $name;
         $this->pushGeneratorContext();
         $this->pushCode("function $name( $params ) {\n");
         $this->indent();
         array_push($this->_segments, 'function');
-    }
+    }//}}}
     
     public function doComment($comment)
-    {
+    {//{{{
         $comment = str_replace('*/', '* /', $comment);
         $this->pushCode("/* $comment */");
-    }
+    }//}}}
 
     public function doEval($code)
-    {
+    {//{{{
         $this->pushCode($code);
-    }
+    }//}}}
                        
     public function doForeach($out, $source)
-    {
+    {//{{{
         array_push($this->_segments, 'foreach');
         $this->pushCode("foreach ($source as \$__key__ => $out ):");
         $this->indent();
-    }
+    }//}}}
 
     public function doEnd()
-    {
+    {//{{{
         $segment = array_pop($this->_segments);
         $this->unindent();
         if ($segment == 'function') {
@@ -215,63 +215,63 @@ class PHPTAL_CodeGenerator
             $this->pushCode('}');
         else 
             $this->pushCode("end$segment");
-    }
+    }//}}}
 
     public function doTry()
-    {
+    {//{{{
         array_push($this->_segments, 'try');
         $this->pushCode('try {');
         $this->indent();
-    }
+    }//}}}
 
     public function doCatch($catch)
-    {
+    {//{{{
         $this->doEnd();
         array_push($this->_segments, 'catch');
         $code = 'catch(%s) {';
         $this->pushCode(sprintf($code, $catch));
         $this->indent();
-    }
+    }//}}}
 
     public function doIf($condition)
-    {
+    {//{{{
         array_push($this->_segments, 'if');
         $this->pushCode("if ($condition): ");
         $this->indent();
-    }
+    }//}}}
 
     public function doElseIf($condition)
-    {
+    {//{{{
         $this->unindent();
         $this->pushCode("elseif ($condition): ");
         $this->indent();
-    }
+    }//}}}
 
     public function doElse()
-    {
+    {//{{{
         $this->unindent();
         $this->pushCode("else: ");
         $this->indent();
-    }
+    }//}}}
 
     public function doEcho($code, $replaceInString=true)
-    {
+    {//{{{
         $this->flush();
         $html = '<?php echo %s ?>';
         $html = sprintf($html, $this->escapeCode($code));
         $this->pushHtml($html, $replaceInString);
-    }
+    }//}}}
 
     public function pushHtml($html, $replaceInString=true)
-    {
+    {//{{{
         if ($replaceInString)
             $html = $this->_replaceInStringExpression($html);
         $this->flushCode();
         array_push($this->_htmlBuffer, $html);
-    }
+    }//}}}
 
     public function pushString($str)
-    {
+    {//{{{
         $this->flushCode();
        
         // replace ${var} inside strings
@@ -293,44 +293,80 @@ class PHPTAL_CodeGenerator
             $str = str_replace('&amp;', '&', $str);
             array_push($this->_htmlBuffer, $str);
         }
-    }
+    }//}}}
 
     public function pushCode($codeLine) 
-    {
+    {//{{{
         $this->flushHtml();
         $codeLine = $this->indentSpaces() . $codeLine;
         array_push($this->_codeBuffer, $codeLine);
-    }
+    }//}}}
 
     public function escapeCode($code)
-    {
+    {//{{{
         $result = '%s(%s, ENT_QUOTES, \'%s\')';
         return sprintf($result, $this->_htmlEscapingFunction, $code, $this->_encoding);
-    }
+    }//}}}
 
     public function escape($html)
-    {
+    {//{{{
         $func = $this->_htmlEscapingFunction;
         return $func($html, ENT_QUOTES, $this->_encoding);
-    }
+    }//}}}
 
+    public function evaluateTalesString($src)
+    {//{{{
+        if ($this->_talesMode == 'tales'){
+            return phptal_tales_string($src);
+        }
+        
+        // replace ${var} found in expression
+        while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
+            list($ori, $exp) = $m;
+            $php  = phptal_tales_php($exp);
+            $repl = '\'.%s.\''; 
+            $repl = sprintf($repl, $php, $this->_encoding);
+            $src = str_replace($ori, $repl, $src);
+        }
+        return '\''.$src.'\'';
+    }//}}}
+
+    public function setDebug($bool)
+    {//{{{
+        $old = $this->_debug;
+        $this->_debug = $bool;
+        return $this->_debug;
+    }//}}}
+    
+    public function isDebugOn()
+    {//{{{
+        return $this->_debug;
+    }//}}}
+
+    public function setHtmlEscaping($function, $ent=END_QUOTES)
+    {//{{{
+        $this->_htmlEscapingFunction = $function;
+    }//}}}
+ 
+    // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
     private function indentSpaces() 
-    { 
+    {//{{{
         return str_pad('', $this->_indent * 4); 
-    }
+    }//}}}
 
     private function pushGeneratorContext()
-    {
+    {//{{{
         array_push($this->_contexts, clone $this);
         $this->_result = "";
         $this->_indent = 0;
         $this->_codeBuffer = array();
         $this->_htmlBuffer = array();
         $this->_segments = array();
-    }
+    }//}}}
     
     private function popGeneratorContext()
-    {
+    {//{{{
         $oldContext = array_pop($this->_contexts);
         $this->_result = $oldContext->_result;
         $this->_indent = $oldContext->_indent;
@@ -338,10 +374,10 @@ class PHPTAL_CodeGenerator
         $this->_htmlBuffer = $oldContext->_htmlBuffer;
         $this->_segments = $oldContext->_segments;
         $this->_talesMode = $oldContext->_talesMode;
-    }
+    }//}}}
 
     private function _replaceInStringExpression($src)
-    {
+    {//{{{
         if ($this->_talesMode == 'tales'){
             return preg_replace(
                 '/\$\{([a-z0-9\/_]+)\}/ism', 
@@ -368,42 +404,8 @@ class PHPTAL_CodeGenerator
         }
        
         return $src;
-    }
+    }//}}}
 
-    public function evaluateTalesString($src)
-    {
-        if ($this->_talesMode == 'tales'){
-            return phptal_tales_string($src);
-        }
-        
-        // replace ${var} found in expression
-        while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
-            list($ori, $exp) = $m;
-            $php  = phptal_tales_php($exp);
-            $repl = '\'.%s.\''; 
-            $repl = sprintf($repl, $php, $this->_encoding);
-            $src = str_replace($ori, $repl, $src);
-        }
-        return '\''.$src.'\'';
-    }
-
-    public function setDebug($bool)
-    {
-        $old = $this->_debug;
-        $this->_debug = $bool;
-        return $this->_debug;
-    }
-    
-    public function isDebugOn()
-    {
-        return $this->_debug;
-    }
-
-    public function setHtmlEscaping($function, $ent=END_QUOTES)
-    {
-        $this->_htmlEscapingFunction = $function;
-    }
- 
     private $_debug  = false;
     private $_result = "";
     private $_indent = 0;

@@ -20,38 +20,21 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-/**
- * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- */
-class PHPTAL_Attribute_PHPTAL_TALES extends PHPTAL_Attribute
+require_once 'config.php';
+require_once 'PHPTAL.php';
+
+class TalesModeTest extends PHPUnit2_Framework_TestCase 
 {
-    public function start()
+    public function testUnsupportedMode()
     {
-        $mode = trim($this->expression);
-        $mode = strtolower($mode);
-        
-        if ($mode == '' || $mode == 'default') 
-            $mode = 'tales';
-        
-        if ($mode != 'php' && $mode != 'tales') {
-            $err = "Unsupported TALES mode '%s'";
-            $err = sprintf($err, $mode);
-            throw new PHPTAL_Exception(
-                $err, 
-                $this->tag->getSourceFile(), 
-                $this->tag->line
-            ); 
+        try {
+            $tpl = new PHPTAL('input/tales.mode.01.xml');
+            $tpl->execute();
+            $this->assertTrue(false);
         }
-        
-        $this->_oldMode = $this->tag->generator->setTalesMode( $mode );
+        catch (PHPTAL_Exception $e){
+            $this->assertTrue(true);
+        }
     }
-
-    public function end()
-    {
-        $this->tag->generator->setTalesMode( $this->_oldMode );
-    }
-
-    private $_oldMode;
 }
-
 ?>

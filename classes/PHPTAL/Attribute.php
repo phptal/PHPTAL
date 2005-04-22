@@ -47,24 +47,40 @@ require_once 'PHPTAL/Attribute/I18N/Attributes.php';
 require_once 'PHPTAL/Node.php';
 
 /**
+ * Base class for all PHPTAL attributes.
+ *
+ * Attributes are first ordered by PHPTAL then called depending on their
+ * priority before and after the element printing.
+ *
+ * An attribute must implements start() and end().
+ * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 abstract class PHPTAL_Attribute 
 {
+    /** Attribute name (ie: 'tal:content'). */
     public $name;
+    /** Attribute value specified by the element. */
     public $expression;
+    /** Element using this attribute (xml node). */
     public $tag;
 
+    /** Attribute constructor. */
     public function __construct($tag)
-    {
+    {//{{{
         $this->tag = $tag;
-    }
+    }//}}}
 
+    /** Called before element printing. */
     public abstract function start();
+    /** Called after element printing. */
     public abstract function end();
     
+    /**
+     * Factory method, returns a new attribute instance.
+     */
     public static function createAttribute($tag, $attName, $expression)
-    {
+    {//{{{
         $class = 'PHPTAL_Attribute_' . str_replace(':','_', $attName);
         $class = str_replace('-', '', $class);
         
@@ -72,7 +88,7 @@ abstract class PHPTAL_Attribute
         $result->name = strtoupper($attName);
         $result->expression = $expression;
         return $result;
-    }
+    }//}}}
 }
 
 ?>
