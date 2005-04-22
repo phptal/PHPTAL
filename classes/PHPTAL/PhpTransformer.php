@@ -38,25 +38,27 @@
  *      $res = PHPTAL_PhpTransformer::transform('a.b.c[x]', '$ctx->');
  *      $res == '$ctx->a->b->c[$ctx->x]';
  *
- * A brave coder may decide to cleanup the parser, optimize things, and send 
- * me a patch :) He will be welcome. 
- *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_PhpTransformer
 {
-    const ST_NONE = 0;
-    const ST_STR  = 1;    // 'foo' 
-    const ST_ESTR = 2;    // "foo ${x} bar"
-    const ST_VAR  = 3;    // abcd
-    const ST_NUM  = 4;    // 123.02
-    const ST_EVAL = 5;    // ${somevar}
+    const ST_NONE   = 0;
+    const ST_STR    = 1;  // 'foo' 
+    const ST_ESTR   = 2;  // "foo ${x} bar"
+    const ST_VAR    = 3;  // abcd
+    const ST_NUM    = 4;  // 123.02
+    const ST_EVAL   = 5;  // ${somevar}
     const ST_MEMBER = 6;  // abcd.x
     const ST_STATIC = 7;  // class::[$]static|const
     const ST_DEFINE = 8;  // @MY_DEFINE
 
     public static function transform( $str, $prefix='$' )
-    {
+    {//{{{
+
+        // 
+        // Here comes the good old state machine.
+        // 
+        
         $state = self::ST_NONE;
         $result = "";
         $i = 0;
@@ -71,23 +73,31 @@ class PHPTAL_PhpTransformer
             else $c = $str[$i];
 
             switch ($state) {
+                // no state defined, just eat char and see what to do with it.
                 case self::ST_NONE:
+                    // that an alphabetic char, then it should be the begining
+                    // of a var
                     if (self::isAlpha($c)) {
                         $state = self::ST_VAR;
                         $mark = $i;
                     }
+                    // begining of double quoted string 
                     else if ($c == '"') {
                         $state = self::ST_ESTR;
                         $mark = $i;
                         $inString = true;
                     }
+                    // begining of single quoted string
                     else if ($c == '\'') {
                         $state = self::ST_STR;
                         $mark = $i;
                         $inString = true;
                     }
+                    // closing a method, an array access or an evaluation
                     else if ($c == ')' || $c == ']' || $c == '}') {
                         $result .= $c;
+                        // if next char is dot then an object member must
+                        // follow
                         if ($i < $len-1 && $str[$i+1] == '.') {
                             $result .= '->';
                             $state = self::ST_MEMBER;
@@ -95,22 +105,26 @@ class PHPTAL_PhpTransformer
                             $i+=2;
                         }
                     }
-                    else if ($c == '@') { // defines, ignore char
+                    // @ is an access to some defined variable
+                    else if ($c == '@') { 
                         $state = self::ST_DEFINE;
                         $mark = $i+1;
                     }
+                    // character we don't mind about
                     else {
                         $result .= $c;
                     }
                     break;
                 
-                case self::ST_STR:
+                // single quoted string
+                case self::ST_STR: 
                     if ($c == '\\') {
                         $backslashed = true;
                     }
                     else if ($backslashed) {
                         $backslashed = false;
                     }
+                    // end of string, back to none state
                     else if ($c == '\'') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $inString = false;
@@ -118,18 +132,22 @@ class PHPTAL_PhpTransformer
                     }
                     break;
 
-                case self::ST_ESTR:
+                // double quoted string
+                case self::ST_ESTR: 
                     if ($c == '\\') {
                         $backslashed = true;
                     }
                     else if ($backslashed) {
                         $backslashed = false;
                     }
+                    // end of string, back to none state
                     else if ($c == '"') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $inString = false;
                         $state = self::ST_NONE;
                     }
+                    // instring interpolation, search } and transform the
+                    // interpollation to insert it into the string
                     else if ($c == '$' && $i < $len && $str[$i+1] == '{') {
                         $result .= substr( $str, $mark, $i-$mark ) . '{';
                         
@@ -148,15 +166,18 @@ class PHPTAL_PhpTransformer
                     }
                     break;
 
+                // var state
                 case self::ST_VAR:
                     if (self::isVarNameChar($c)) {
                     }
+                    // end of var, begin of member (method or var)
                     else if ($c == '.') {
                         $result .= $prefix . substr( $str, $mark, $i-$mark );
                         $result .= '->';
                         $state = self::ST_MEMBER;
                         $mark = $i+1;
                     }
+                    // static call, the var is a class name
                     else if ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $mark = $i+1;
@@ -164,14 +185,18 @@ class PHPTAL_PhpTransformer
                         $state = self::ST_STATIC;
                         break;
                     }
+                    // function invocation, the var is a function name
                     else if ($c == '(') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_NONE;
                     }
+                    // array index, the var is done
                     else if ($c == '[') {
                         $result .= $prefix . substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_NONE;
                     }
+                    // end of var with non-var-name character, handle keywords
+                    // and populate the var name
                     else {
                         $var = substr( $str, $mark, $i-$mark );
                         $low = strtolower($var);
@@ -203,14 +228,17 @@ class PHPTAL_PhpTransformer
                     }
                     break;
 
+                // object member
                 case self::ST_MEMBER:
                     if (self::isVarNameChar($c)) {
                     }
+                    // eval mode ${foo}
                     else if ($c == '$') {
                         $result .= '{' . $prefix;
                         $mark++;
                         $eval = true;
                     }
+                    // end of var member var, begin of new member
                     else if ($c == '.') {
                         $result .= substr( $str, $mark, $i-$mark );
                         if ($eval) { $result .='}'; $eval = false; }
@@ -218,22 +246,26 @@ class PHPTAL_PhpTransformer
                         $mark = $i+1;
                         $state = self::ST_MEMBER;
                     }
+                    // begin of static access
                     else if ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_STATIC;
                         break;
                     }
+                    // the member is a method
                     else if ($c == '(') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_NONE;
                     }
+                    // the member is an array
                     else if ($c == '[') {
                         $state = self::ST_NONE;
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
                     }
+                    // regular end of member, it is a var
                     else {
                         $result .= substr( $str, $mark, $i-$mark );
                         if ($eval) { $result .='}'; $eval = false; }
@@ -242,6 +274,7 @@ class PHPTAL_PhpTransformer
                     }   
                     break;
 
+                // wait for separator
                 case self::ST_DEFINE:
                     if (self::isVarNameChar($c)) {
                     }
@@ -252,17 +285,24 @@ class PHPTAL_PhpTransformer
                     }
                     break;
                     
+                // static call, can be const, static var, static method
+                // Klass::$static
+                // Klass::const
+                // Kclass::staticMethod()
+                // 
                 case self::ST_STATIC:
                     if (self::isVarNameChar($c)) {
                     }
                     else if ($c == '$') {
                     }
+                    // end of static var which is an object and begin of member
                     else if ($c == '.') {
                         $result .= substr( $str, $mark, $i-$mark );
                         $result .= '->';
                         $mark = $i+1;
                         $state = self::ST_MEMBER;
                     }
+                    // end of static var which is 
                     else if ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_STATIC;
@@ -293,18 +333,18 @@ class PHPTAL_PhpTransformer
         }
 
         return trim($result);
-    }
+    }//}}}
 
-    private static function isAlpha( $c )
-    {
+    private static function isAlpha($c)
+    {//{{{
         $c = strtolower($c);
         return $c >= 'a' && $c <= 'z';
-    }
+    }//}}}
 
-    private static function isVarNameChar( $c )
-    {
+    private static function isVarNameChar($c)
+    {//{{{
         return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c == '_';
-    }
+    }//}}}
 
     private static $TranslationTable = array(
         'not' => '!', 

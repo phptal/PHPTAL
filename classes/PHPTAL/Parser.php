@@ -28,6 +28,8 @@ require_once 'PHPTAL/XmlnsState.php';
 
 /**
  * Template parser.
+ *
+ * TODO: remove CodeGenerator dependancy.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -40,34 +42,34 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     const ERR_ELEMENT_CLOSE_MISMATCH = 
         "Tag closure mismatch, expected '%s' but was '%s'";
   
-    public function __construct( $codeGenerator )
-    {
+    public function __construct($codeGenerator)
+    {//{{{
         $this->_codeGenerator = $codeGenerator;
         $this->_xmlns = new PHPTAL_XmlnsState();
-    }
+    }//}}}
 
     public function getGenerator()
-    {
+    {//{{{
         return $this->_codeGenerator;
-    }
+    }//}}}
 
     public function getXmlnsState()
-    {
+    {//{{{
         return $this->_xmlns;
-    }
+    }//}}}
 
     public function stripComments($b)
-    {
+    {//{{{
         $this->_stripComments = $b;
-    }
+    }//}}}
 
     public function setPreFilter($filter)
-    {
+    {//{{{
         $this->_prefilter = $filter;
-    }
+    }//}}}
     
-    public function parseString( $str ) 
-    {
+    public function parseString($str)
+    {//{{{
         // PHPTAL_XmlParser calls parseString() even if
         // parseFile() is invoked, the prefilter usage
         // works here. If this behaviour is changed, 
@@ -78,42 +80,44 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
         }
         parent::parseString( $str );
         return $this->_tree;
-    }
+    }//}}}
     
-    public function parseFile( $path )
-    {
+    public function parseFile($path)
+    {//{{{
         parent::parseFile( $path );
         return $this->_tree;
-    }
+    }//}}}
 
+    // ~~~~~ XmlParser implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
     public function onDocumentStart()
-    {
+    {//{{{
         $this->_tree = new PHPTAL_NodeTree($this);
         $this->_stack = array();
         $this->_current = $this->_tree;
-    }
+    }//}}}
     
     public function onDocumentEnd()
-    {
+    {//{{{
         if (count($this->_stack) > 0) {
             $this->raiseError(self::ERR_DOCUMENT_END_STACK_NOT_EMPTY);
         }
-    }
+    }//}}}
 
     public function onDocType($doctype)
-    {
+    {//{{{
         $node = new PHPTAL_NodeDocType($this, $doctype);
         array_push($this->_current->children, $node);
-    }
+    }//}}}
 
     public function onXmlDecl($decl)
-    {
+    {//{{{
         $node = new PHPTAL_NodeXmlDeclaration($this, $decl);
         array_push($this->_current->children, $node);
-    }
+    }//}}}
     
     public function onElementStart($name, $attributes)
-    {
+    {//{{{
         $this->_xmlns = PHPTAL_XmlnsState::newElement($this->_xmlns, $attributes);
         
         foreach ($attributes as $key=>$value) {
@@ -127,36 +131,36 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
         array_push($this->_current->children, $node);
         array_push($this->_stack, $this->_current);
         $this->_current = $node;
-    }
+    }//}}}
     
     public function onElementClose($name)
-    {
+    {//{{{
         if ($this->_current->name != $name) {
             $err = sprintf(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->name, $name);
             $this->raiseError($err);
         }
         $this->_current = array_pop($this->_stack);        
         $this->_xmlns = $this->_current->xmlns;
-    }
+    }//}}}
     
     public function onElementData($data)
-    {
+    {//{{{
         $node = new PHPTAL_NodeText($this, $data);
         array_push($this->_current->children, $node);
-    }
+    }//}}}
 
     public function onComment($data)
-    {
+    {//{{{
         if ($this->_stripComments) 
             return;
         $this->onSpecific($data);
-    }
+    }//}}}
     
     public function onSpecific($data)
-    {
+    {//{{{
         $node = new PHPTAL_NodeSpecific($this, $data);
         array_push($this->_current->children, $node);
-    }
+    }//}}}
 
     private $_tree;
     private $_stack;

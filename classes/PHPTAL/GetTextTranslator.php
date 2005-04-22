@@ -22,17 +22,29 @@
 
 require_once 'PHPTAL/TranslationService.php';
 
+/**
+ * PHPTAL_TranslationService gettext implementation.
+ *
+ * Because gettext is the most common translation library in use, this
+ * implementation is shipped with the PHPTAL library.
+ *
+ * Please refer to the PHPTAL documentation for usage examples.
+ * 
+ * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
+ */
 class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 {
-    public function __construct(){}
+    public function __construct()
+    {//{{{
+    }//}}}
 
     public function setEncoding($enc)
-    {
+    {//{{{
         $this->_encoding = $enc;
-    }
+    }//}}}
     
     public function setLanguage()
-    {
+    {//{{{
         $langs = func_get_args();
         $found = false;
         foreach ($langs as $langCode){
@@ -49,32 +61,32 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
             $err = sprintf($err, join(',', $langs));
             throw new Exception($err);
         }
-    }
+    }//}}}
     
     public function addDomain($domain, $path='./locale/')
-    {
+    {//{{{
         bindtextdomain($domain, $path);
         if ($this->_encoding){
             bind_textdomain_codeset($domain, $this->_encoding);
         }
         $this->useDomain($domain);
-    }
+    }//}}}
     
     public function useDomain($domain)
-    {
+    {//{{{
         $old = $this->_currentDomain;
         $this->_currentDomain = $domain;
         textdomain($domain);
         return $old;
-    }
+    }//}}}
     
     public function setVar($key, $value)
-    {
+    {//{{{
         $this->_vars[$key] = $value;
-    }
+    }//}}}
     
     public function translate($key, $htmlencode=true)
-    {
+    {//{{{
         $value = gettext($key);
         if ($htmlencode){
             $value = htmlspecialchars($value, ENT_QUOTES, $this->_encoding);
@@ -88,7 +100,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
             $value = str_replace($src, $this->_vars[$var], $value);
         }
         return $value;
-    }
+    }//}}}
 
     private $_vars = array();
     private $_currentDomain = null;

@@ -214,7 +214,7 @@ class PHPTAL_Defs
         'defer'
     );
 
-    static function isEmptyTag( $tagName )
+    static function isEmptyTag($tagName)
     {
         return in_array(strtoupper($tagName), self::$XHTML_EMPTY_TAGS);
     }
@@ -224,7 +224,7 @@ class PHPTAL_Defs
      *
      * @return bool
      */
-    static function isBooleanAttribute( $att )
+    static function isBooleanAttribute($att)
     {
         return in_array($att, self::$XHTML_BOOLEAN_ATTRIBUTES);
     }
@@ -234,7 +234,7 @@ class PHPTAL_Defs
      *
      * @return bool
      */
-    static function isPhpTalAttribute( $att )
+    static function isPhpTalAttribute($att)
     {
         return array_key_exists(strtoupper($att), self::$DICTIONARY);
     }
@@ -248,7 +248,7 @@ class PHPTAL_Defs
      *
      * @return bool
      */
-    static function isValidAttribute( $att )
+    static function isValidAttribute($att)
     {
         if (preg_match('/^(.*):(.*)$/', $att, $m)) {
             list (,$ns,$sub) = $m;
@@ -268,7 +268,7 @@ class PHPTAL_Defs
      *
      * @return bool
      */
-    static function isHandledXmlNs( $att, $value )
+    static function isHandledXmlNs($att, $value)
     {
         $att = strtolower($att);
         return array_key_exists($value, self::$XMLNS) 
