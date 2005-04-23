@@ -288,7 +288,7 @@ class PHPTAL_CodeGenerator
             $str = $after;
         }
         
-        if ($str){
+        if (strlen($str) > 0){
             $str = $this->escape($str); 
             $str = str_replace('&amp;', '&', $str);
             array_push($this->_htmlBuffer, $str);

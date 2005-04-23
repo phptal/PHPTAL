@@ -144,6 +144,14 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
             $this->assertTrue(true);
         }
     }
+
+    function testZeroedContent()
+    {
+        $tpl = new PHPTAL('input/phptal.05.html');
+        $res = $tpl->execute();
+        $exp = trim_file('input/phptal.05.html');
+        $this->assertEquals($exp, $res);
+    }
 }
         
 ?>
