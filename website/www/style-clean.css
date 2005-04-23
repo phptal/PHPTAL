@@ -94,6 +94,7 @@ pre {
 border-left: 10px solid #000;
 padding-left: 10px;
 margin-left: 20px;
+overflow: auto;
 }
 
 code {
