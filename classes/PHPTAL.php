@@ -180,9 +180,9 @@ class PHPTAL
      * Ignore XML/XHTML comments on parsing.
      */
     public function stripComments($bool)
-    {
+    {//{{{
         $this->_stripComments = $bool;
-    }
+    }//}}}
     
     /**
      * Set output mode (PHPTAL::XML or PHPTAL::XHTML).

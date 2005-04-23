@@ -142,5 +142,19 @@
       <dc:creator>Laurent Bedubourg</dc:creator>
       <dc:date>2005-04-22</dc:date>
     </item>
+
+		<item>
+		  <title>PHPTAL 1.0.9</title>
+			<link>http://phptal.motion-twin.com/download.html</link>
+			<description>
+			- when use-macro and define-macro appears on the same tag, slots are shared to allow easier macro inheritence
+			- added PHPTAL::stripComments($bool) which remove xml comments during parsing
+			- fix, applied patch from William Bailey which fix '0' tag content unexpected behaviour
+			- more tests, minor refactorings and code comments
+
+			The next release will include many refactorings which will allow coders to "easily" insert 
+			their own namespaces and attributes into PHPTAL.
+			</description>
+		</item>
   </channel>
 </rss>
