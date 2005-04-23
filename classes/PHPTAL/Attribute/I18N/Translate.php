@@ -11,48 +11,62 @@
 // 
 class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
 {
-    function start()
+    public function start()
     {
         // if no expression is given, the content of the node is used as 
         // a translation key
         if (strlen(trim($this->expression)) == 0){
-            $code = $this->_translateContent($this->tag);
+            $code = $this->_getTranslationKey($this->tag);
             $code = str_replace('\'', '\\\'', $code);
             $code = '\'' . $code . '\'';
         }
         else {
             $code = $this->tag->generator->evaluateExpression($this->expression);
-            // sub nodes may contains i18n:name attributes
-            $this->_translateContent($this->tag);
         }
+        $this->_prepareNames($this->tag);
         $code = sprintf('echo $tpl->getTranslator()->translate(%s)', $code);
         $this->tag->generator->pushCode($code);
-        // $this->tag->generator->doEcho($key, false);
     }
 
-    function end()
+    public function end()
     {
     }
 
-    function _translateContent($tag)
+    private function _getTranslationKey($tag)
     {
-        $result = "";
+        $result = '';
         foreach ($tag->children as $child){
             if ($child instanceOf PHPTAL_NodeText){
                 $result .= $child->value;
             }
-            else if ($child->hasPhpTalAttribute('i18n:name')){
-                $value = $child->getPhpTalAttribute('i18n:name');
-                $result .= '${' . $value . '}';
-                $child->generate();
-            }
-            else {
-                $result .= $this->_translateContent($child);
+            else if ($child instanceOf PHPTAL_NodeElement){
+                if ($child->hasPhpTalAttribute('i18n:name')){
+                    $value = $child->getPhpTalAttribute('i18n:name');
+                    $result .= '${' . $value . '}';
+                }
+                else {
+                    $result .= $this->_getTranslationKey($child);
+                }
             }
         }
+        // cleanup result
         $result = preg_replace('/\s+/sm', ' ', $result);
         $result = trim($result);
         return $result;
+    }
+
+    private function _prepareNames($tag)
+    {
+        foreach ($tag->children as $child){
+            if ($child instanceOf PHPTAL_NodeElement){
+                if ($child->hasPhpTalAttribute('i18n:name')){
+                    $child->generate();
+                }
+                else {
+                    $this->_prepareNames($child);
+                }
+            }
+        }
     }
 }
 

@@ -19,8 +19,8 @@
 // 
 class PHPTAL_Attribute_I18N_Target extends PHPTAL_Attribute
 {
-    function start(){}
-    function end(){}
+    public function start(){}
+    public function end(){}
 }
 
 ?>

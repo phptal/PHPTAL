@@ -9,19 +9,22 @@
 // 
 class PHPTAL_Attribute_I18N_Domain extends PHPTAL_Attribute
 {
-    function start()
+    public function start()
     {
+        // ensure a domain stack exists or create it
         $this->tag->generator->doIf('!isset($__i18n_domains)');
         $this->tag->generator->pushCode('$__i18n_domains = array()');
         $this->tag->generator->doEnd();
-        
+
+        // push current domain and use new domain
         $code = '$__i18n_domains[] = $tpl->getTranslator()->useDomain(\'%s\')';
         $code = sprintf($code, $this->expression);
         $this->tag->generator->pushCode($code);
     }
 
-    function end()
+    public function end()
     {
+        // restore domain
         $code = '$tpl->getTranslator()->useDomain(array_pop($__i18n_domains))';
         $this->tag->generator->pushCode($code);
     }

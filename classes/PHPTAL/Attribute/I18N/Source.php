@@ -8,19 +8,22 @@
 //
 class PHPTAL_Attribute_I18N_Source extends PHPTAL_Attribute
 {
-    function start()
+    public function start()
     {
+        // ensure that a sources stack exists or create it
         $this->tag->generator->doIf('!isset($__i18n_sources)');
         $this->tag->generator->pushCode('$__i18n_sources = array()');
         $this->tag->generator->end();
 
+        // push current source and use new one
         $code = '$__i18n_sources[] = $tpl->getTranslator()->setSource(\'%s\')';
         $code = sprintf($code, $this->expression);
         $this->tag->generator->pushCode($code);
     }
 
-    function end()
+    public function end()
     {
+        // restore source
         $code = '$tpl->getTranslator()->setSource(array_pop($__i18n_sources))';
         $this->tag->generator->pushCode($code);
     }

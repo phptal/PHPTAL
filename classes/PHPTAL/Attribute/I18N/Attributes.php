@@ -86,10 +86,12 @@ class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
     private function _parseExpression($exp)
     {
         $exp = trim($exp);
+        // (attribute) (value)
         if (preg_match('/^([a-z0-9:\-_]+)\s+(.*?)$/i', $exp, $m)){
             array_shift($m);
             return $m;
         }
+        // (attribute)
         return array($exp, null);
     }
 

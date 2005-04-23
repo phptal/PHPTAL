@@ -23,37 +23,66 @@
 /**
  * Stores XMLNS aliases fluctuation in the xml flow.
  *
+ * This class is used to bind a PHPTAL namespace to an alias, for example using
+ * xmlns:t="http://xml.zope.org/namespaces/tal" and later use t:repeat instead 
+ * of tal:repeat.
+ *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_XmlnsState 
 {
+    /** Create a new XMLNS state inheriting provided aliases. */
     public function __construct($aliases = array())
-    {
+    {//{{{
+        assert(is_array($aliases));
         $this->_aliases = $aliases;
-    }
+    }//}}}
 
+    /** Returns true if $attName is a valid attribute name, false otherwise. */
     public function isValidAttribute($attName)
-    {
+    {//{{{
         $unaliased = $this->unAliasAttribute($attName);
         return PHPTAL_Defs::isValidAttribute($unaliased);
-    }
+    }//}}}
 
+    /** Returns true if $attName is a PHPTAL attribute, false otherwise. */
     public function isPhpTalAttribute($attName)
-    {
+    {//{{{
         $unaliased = $this->unAliasAttribute($attName);
         return PHPTAL_Defs::isPhpTalAttribute($unaliased);
-    }
+    }//}}}
 
+    /** Returns the PHPTAL priority of specified attribute. */
     public function getAttributePriority($attName)
-    {
+    {//{{{
         $unaliased = $this->unAliasAttribute($attName);
         return PHPTAL_Defs::$RULES_ORDER[ strtoupper($unaliased) ];
-    }
+    }//}}}
 
-    public static function newElement($currentState, $attributes)
-    {
+    /** Returns the unaliased name of specified attribute. */
+    public function unAliasAttribute($attName)
+    {//{{{
+        if (count($this->_aliases) == 0) 
+            return $attName;
+        
+        $result = $attName;
+        foreach ($this->_aliases as $alias => $real){
+            $result = str_replace("$alias:", "$real:", $result);
+        }
+        return $result;
+    }//}}}
+
+    /** 
+     * Returns a new XmlnsState inheriting of $currentState if $nodeAttributes contains 
+     * xmlns attributes, returns $currentState otherwise.
+     *
+     * This method is used by the PHPTAL parser to keep track of xmlns fluctuation for
+     * each encountered node.
+     */
+    public static function newElement(PHPTAL_XmlnsState $currentState, $nodeAttributes)
+    {//{{{
         $aliases = array();
-        foreach ($attributes as $att => $value){
+        foreach ($nodeAttributes as $att => $value){
             if (PHPTAL_Defs::isHandledXmlNs($att, $value)){
                 preg_match('/^xmlns:(.*?)$/', $att, $m);
                 list(,$alias) = $m;
@@ -66,19 +95,7 @@ class PHPTAL_XmlnsState
             return new PHPTAL_XmlnsState($aliases);
         }
         return $currentState;
-    }
-
-    public function unAliasAttribute($attName)
-    {
-        if (count($this->_aliases) == 0) 
-            return $attName;
-        
-        $result = $attName;
-        foreach ($this->_aliases as $alias => $real){
-            $result = str_replace("$alias:", "$real:", $result);
-        }
-        return $result;
-    }
+    }//}}}
 
     private $_aliases;
 }

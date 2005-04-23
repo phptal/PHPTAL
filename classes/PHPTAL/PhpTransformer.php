@@ -57,12 +57,14 @@ class PHPTAL_PhpTransformer
 
         // 
         // Here comes the good old state machine.
+        // TODO: benchmark this version and then benchmark a refactored version
+        // with states behaviour separated into methods, keep the fastest.
         // 
         
-        $state = self::ST_NONE;
-        $result = "";
-        $i = 0;
         $len = strlen($str);
+        $state = self::ST_NONE;
+        $result = '';
+        $i = 0;
         $inString = false;
         $backslashed = false;
         $instanceOf = false;
@@ -293,6 +295,7 @@ class PHPTAL_PhpTransformer
                 case self::ST_STATIC:
                     if (self::isVarNameChar($c)) {
                     }
+                    // static var 
                     else if ($c == '$') {
                     }
                     // end of static var which is an object and begin of member
@@ -302,20 +305,23 @@ class PHPTAL_PhpTransformer
                         $mark = $i+1;
                         $state = self::ST_MEMBER;
                     }
-                    // end of static var which is 
+                    // end of static var which is a class name
                     else if ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_STATIC;
                         break;
                     }
+                    // static method
                     else if ($c == '(') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_NONE;
                     }
+                    // static array
                     else if ($c == '[') {
                         $state = self::ST_NONE;
                         $result .= substr( $str, $mark, $i-$mark+1 );
                     }
+                    // end of static var or const
                     else {
                         $result .= substr( $str, $mark, $i-$mark );
                         $state = self::ST_NONE;
@@ -323,6 +329,7 @@ class PHPTAL_PhpTransformer
                     }   
                     break;
 
+                // numeric value
                 case self::ST_NUM:
                     if ($c < '0' && $c > '9' && $c != '.') {
                         $result .= substr( $str, $mark, $i-$mark );

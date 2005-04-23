@@ -23,6 +23,12 @@
 /**
  * Simple sax like xml parser for PHPTAL.
  *
+ * Because PHP Xml parser libraries tends to fail giving a real xml document 
+ * representation (at the time this file was created, it was impossible to 
+ * retrieve doctypes, xml declaration, problem with comments and CDATA) this 
+ * parser was created and can be manipulated to accept some user errors 
+ * like < and < in attribute values or inside text nodes.
+ *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 abstract class PHPTAL_XmlParser
@@ -54,21 +60,21 @@ abstract class PHPTAL_XmlParser
     const BOM_STR = "\xef\xbb\xbf";
     
     public function __construct() 
-    {
+    {//{{{
         $this->_file = "<string>";
-    }
+    }//}}}
 
     public function parseFile($src) 
-    {
+    {//{{{
         $this->_file = $src;
         if (!file_exists($this->_file)) {
             throw new Exception("file $src not found");
         }
         $this->parseString(file_get_contents($src));
-    }
+    }//}}}
 
     public function parseString($src) 
-    {
+    {//{{{
         // remove BOM (utf8 byte order mark)... 
         if (substr($src,0,3) == self::BOM_STR){
             $src = substr($src, 3);
@@ -277,28 +283,28 @@ abstract class PHPTAL_XmlParser
             }
         }
         $this->onDocumentEnd();
-    }
+    }//}}}
 
     public function getSourceFile()
-    {
+    {//{{{
         return $this->_file;
-    }
+    }//}}}
     
     public function getLineNumber()
-    {
+    {//{{{
         return $this->_line;
-    }
+    }//}}}
 
     public static function isWhiteChar($c)
-    {
+    {//{{{
         return strpos(" \t\n\r\0", $c) !== false;
-    }
+    }//}}}
 
     public static function isAlpha($c)
-    {
+    {//{{{
         $char = strtolower($c);
         return ($char >= 'a' && $char <= 'z');
-    }
+    }//}}}
 
     public abstract function onDocType($doctype);
     public abstract function onXmlDecl($decl);
@@ -309,14 +315,13 @@ abstract class PHPTAL_XmlParser
     public abstract function onElementData($data);
     public abstract function onDocumentStart();
     public abstract function onDocumentEnd();
-
     
-    protected function raiseError( $errStr )
-    {
+    protected function raiseError($errStr)
+    {//{{{
         $str = "%s error: %s in %s:%d";
         $str = sprintf($str, get_class($this), $errStr, $this->_file, $this->_line);
         throw new Exception($str);
-    }
+    }//}}}
     
     private $_file = '<string>';
     private $_line;

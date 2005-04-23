@@ -17,12 +17,12 @@
 //     
 class PHPTAL_Attribute_I18N_Name extends PHPTAL_Attribute
 {
-    function start()
+    public function start()
     {
         $this->tag->generator->pushCode('ob_start()');
     }
 
-    function end()
+    public function end()
     {
         $code = '$tpl->getTranslator()->setVar(\'%s\', ob_get_contents())';
         $code = sprintf($code, $this->expression);

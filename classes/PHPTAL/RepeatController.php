@@ -21,6 +21,19 @@
 //  
 
 /**
+ * Stores tal:repeat information during template execution.
+ *
+ * An instance of this class is created and stored into PHPTAL context on each
+ * tal:repeat usage.
+ *
+ * repeat/item/index
+ * repeat/item/number
+ * ...
+ * are provided by this instance.
+ *
+ * 'repeat' is an StdClass instance created to handle RepeatControllers, 
+ * 'item' is an instance of this class. 
+ * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_RepeatController
@@ -34,16 +47,22 @@ class PHPTAL_RepeatController
     public $even;
     public $odd;
 
-    public function __construct( $source )
+    /**
+     * Construct a new RepeatController.
+     *
+     * @param $source array, string, iterator, iterable.
+     */
+    public function __construct($source)
     {
         $this->source = $source;
         $this->index = -1;
         $this->number = 0;
         $this->start = true;
         $this->end = false;
-        $this->length = $this->_size();
+        $this->length = $this->_size($source);
     }
 
+    /** Returns current iterator key. */
     public function key()
     {
         if (!isset($this->_keys)){
@@ -52,9 +71,9 @@ class PHPTAL_RepeatController
         return $this->_keys[$this->index];
     }
 
-    private function _size()
+    /** Returns the size of an iterable. */
+    private function _size($iterable)
     {
-        $iterable = $this->source;
         if (is_array($iterable)) 
             return count($iterable);
         if (is_string($iterable))
