@@ -147,7 +147,7 @@
 		  <title>PHPTAL 1.0.9</title>
 			<link>http://phptal.motion-twin.com/download.html</link>
 			<description>
-			- when use-macro and define-macro appears on the same tag, slots are shared to allow easier macro inheritence
+			- when use-macro and define-macro appear in the same tag, slots are shared between macro to allow macro inheritence
 			- added PHPTAL::stripComments($bool) which remove xml comments during parsing
 			- fix, applied patch from William Bailey which fix '0' tag content unexpected behaviour
 			- more tests, minor refactorings and code comments
