@@ -271,8 +271,8 @@ class PHPTAL_Defs
     static function isHandledXmlNs($att, $value)
     {
         $att = strtolower($att);
-        return array_key_exists($value, self::$XMLNS) 
-            && substr($att, 0, 6) == 'xmlns:';
+        return substr($att, 0, 6) == 'xmlns:'
+            && array_key_exists($value, self::$XMLNS);
     }
 }
 
