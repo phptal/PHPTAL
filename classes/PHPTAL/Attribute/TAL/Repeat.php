@@ -65,40 +65,54 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
 {
     public function start()
     {
-        list($this->varName, $expression) = $this->parseExpression($this->expression);
-        $code = $this->tag->generator->evaluateExpression($expression);
-
-        $this->tag->generator->pushCode('$__repeat__ = $ctx->repeat');
-        $this->tag->generator->pushCode('if (!isset($ctx->'.$this->varName.')) $ctx->'.$this->varName.' = false');
-        $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController(%s)', $this->varName, $code);
-        $this->tag->generator->pushCode($init);
-       
-        $this->tag->generator->doForeach('$ctx->'.$this->varName, $this->repeatVar('source'));
- 
-        $this->setRepeatVar('key', '$__key__');
-        $this->setRepeatVar('index', $this->repeatVar('index').'+1');
-        $this->setRepeatVar('number', $this->repeatVar('number').'+1');
-        $this->setRepeatVar('even', $this->repeatVar('index') . ' %2 == 0');
-        $this->setRepeatVar('odd', '!' . $this->repeatVar('even'));
-
-        $condition = sprintf('%s == %s',
-                             $this->repeatVar('number'), 
-                             $this->repeatVar('length')
-                             );
-        
-        $this->tag->generator->doIf( $condition );
-        $this->setRepeatVar('end', 'true');
-        $this->tag->generator->doEnd();
+        $this->createController();
+        $this->doForeach();
+        $this->updateIterationVars();
     }
-    
+        
     public function end()
     {
         $this->setRepeatVar('start', 'false');
         $this->tag->generator->doEnd();
     }
 
-    private function parseExpression( $src )
+    private function createController()
     {
+        list($this->varName, $expression) = $this->parseExpression($this->expression);
+        $code = $this->tag->generator->evaluateExpression($expression);
+
+        // alias to repeats handler
+        $this->tag->generator->pushCode('$__repeat__ = $ctx->repeat');
+        // reset item var
+        $this->tag->generator->pushCode('if (!isset($ctx->'.$this->varName.')) $ctx->'.$this->varName.' = false');
+        // instantiate controller using expression
+        $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController(%s)', $this->varName, $code);
+        $this->tag->generator->pushCode($init);
+    }
+       
+    private function doForeach()
+    {
+        $this->tag->generator->doForeach('$ctx->'.$this->varName, $this->repeatVar('source'));
+    }
+    
+    private function updateIterationVars()
+    {
+        $this->setRepeatVar('key', '$__key__');
+        $this->setRepeatVar('index', $this->repeatVar('index').'+1');
+        $this->setRepeatVar('number', $this->repeatVar('number').'+1');
+        $this->setRepeatVar('even', $this->repeatVar('index') . ' %2 == 0');
+        $this->setRepeatVar('odd', '!' . $this->repeatVar('even'));
+
+        // repeat/item/end set to true when last item is reached
+        $condition = sprintf('%s == %s', $this->repeatVar('number'), $this->repeatVar('length'));
+        $this->tag->generator->doIf($condition);
+        $this->setRepeatVar('end', 'true');
+        $this->tag->generator->doEnd();
+    }
+    
+    private function parseExpression($src)
+    {
+        // (item) (sourceOfRepeat)
         if (preg_match('/^([a-z][a-z_0-9]*?)\s+(.*?)$/ism', $src, $m)){
             list(,$varName, $expression) = $m;
             return array($varName, $expression);
@@ -106,15 +120,17 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
         throw new Exception("Unable to find item in tal:repeat expression : $src");
     }
 
-    private function repeatVar( $subVar )
+    /** Returns the PHP access path to specified repeat/item/$subVar. */
+    private function repeatVar($subVar)
     {
         return sprintf('$__repeat__->%s->%s', $this->varName, $subVar);
     }
 
-    private function setRepeatVar( $subVar, $value )
+    /** Affect repeat var. */
+    private function setRepeatVar($subVar, $value)
     {
         $code = sprintf('%s = %s', $this->repeatVar($subVar), $value);
-        $this->tag->generator->pushCode( $code );
+        $this->tag->generator->pushCode($code);
     }
 
     private $varName;

@@ -48,6 +48,9 @@ class PHPTAL_Attribute_METAL_DefineMacro extends PHPTAL_Attribute
     {
         $this->tag->generator->doFunction($this->expression, '$tpl, $ctx');
 
+        // PHPTAL will echo the first xml declaration/doctype encountered 
+        // in regular template or in macro execution.
+
         $xmldecl = $this->tag->generator->getXmlDeclaration();
         if ($xmldecl){
             $xmldecl->generate();
@@ -58,6 +61,7 @@ class PHPTAL_Attribute_METAL_DefineMacro extends PHPTAL_Attribute
             $doctype->generate();
         }
 
+        // secure template context inside macro
         $this->tag->generator->pushCode('$tpl = clone $tpl');
         $this->tag->generator->pushCode('$ctx = $tpl->getContext()');
     }

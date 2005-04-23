@@ -81,7 +81,7 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
             return;
         }
         
-        $this->generateContent( $echoType, $code );
+        $this->generateContent($echoType, $code);
     }
     
     public function end(){}
@@ -91,10 +91,10 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
         $this->tag->generateContent(true);
     }
     
-    private function generateContent( $echoType, $code )
+    private function generateContent($echoType, $code)
     {
         if ($echoType == 'text') {
-            $this->tag->generator->doEcho( $code );
+            $this->tag->generator->doEcho($code);
         }
         else {
             $this->tag->generator->pushHtml('<?php echo '.$code.' ?>');

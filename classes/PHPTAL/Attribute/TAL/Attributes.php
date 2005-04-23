@@ -49,43 +49,51 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         foreach ($expressions as $exp) {
             list($attribute, $expression) = $this->parseExpression($exp);
             if ($expression) {
-                $this->prepareAttribute( $attribute, $expression );
+                $this->prepareAttribute($attribute, $expression);
             }
         }
     }
 
-    private function prepareAttribute( $attribute, $expression )
+    public function end()
+    {
+    }
+
+    private function prepareAttribute($attribute, $expression)
     {
         $code = $this->tag->generator->evaluateExpression($expression);
         if (is_array($code)) {
             $this->tag->generator->noThrow(true);
-            $this->generateChainedAttribute( $attribute, $code );
+            $this->generateChainedAttribute($attribute, $code);
             $this->tag->generator->noThrow(false);
             return;
         }
-        
+       
+        // XHTML boolean attribute does not appear when empty of false
         if (PHPTAL_Defs::isBooleanAttribute($attribute)) {
             $type = '__att_';
-            $this->tag->generator->doIf( $code );
-            $code = sprintf('$__att_%s = " %s=\"%s\""', 
-                            $this->getVarName($attribute), 
-                            $attribute, 
-                            $attribute);
-            $this->tag->generator->pushCode( $code );
+            $this->tag->generator->doIf($code);
+            $code = sprintf(
+                '$__att_%s = " %s=\"%s\""', 
+                $this->getVarName($attribute), 
+                $attribute, 
+                $attribute
+            );
+            $this->tag->generator->pushCode($code);
             $this->tag->generator->doElse();
             $code = sprintf('$__att_%s = ""', $this->getVarName($attribute));
-            $this->tag->generator->pushCode( $code );
+            $this->tag->generator->pushCode($code);
             $this->tag->generator->doEnd();
         }
         else {
             $type = '_ATT_';
-            $code = sprintf('$_ATT_%s = %s',
-                            $this->getVarName($attribute), 
-                            $this->tag->generator->escapeCode($code)
-                            );
-            $this->tag->generator->pushCode( $code );
+            $code = sprintf(
+                '$_ATT_%s = %s',
+                $this->getVarName($attribute), 
+                $this->tag->generator->escapeCode($code)
+            );
+            $this->tag->generator->pushCode($code);
         }
-        $this->tag->attributes[ $attribute ] = 
+        $this->tag->attributes[$attribute] = 
             '<?php echo $'.$type.$this->getVarName($attribute).' ?>';
 
         $this->tag->overwrittenAttributes[$attribute] = 
@@ -99,7 +107,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         return $attribute;
     }
 
-    private function generateChainedAttribute( $attribute, $chain )
+    private function generateChainedAttribute($attribute, $chain)
     {
         if (array_key_exists($attribute, $this->tag->attributes)) {
             $default = $this->tag->attributes[$attribute];
@@ -115,7 +123,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
             if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
                 if ($started) $this->tag->generator->doElse();
                 $code = sprintf('%s = \' %s=""\'', $attkey, $attribute);
-                $this->tag->generator->pushCode( $code );
+                $this->tag->generator->pushCode($code);
                 break;
             }
 
@@ -127,7 +135,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
                 else {                    
                     $code = sprintf('%s = \'\'', $attkey);
                 }
-                $this->tag->generator->pushCode( $code );
+                $this->tag->generator->pushCode($code);
                 $this->tag->attributes[$attribute] = "<?php echo $attkey ?>";
                 $this->tag->overwrittenAttributes[$attribute] = $attkey;
                 break;
@@ -151,21 +159,17 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         }
        
         $this->tag->generator->doEnd();
-        $this->tag->attributes[$attribute] = "<?php echo $attkey ?>";
+        $this->tag->attributes[$attribute] = '<?php echo '.$attkey.' ?>';
         $this->tag->overwrittenAttributes[$attribute] = $attkey;
     }
     
-    public function end()
-    {
-    }
-
-    private function parseExpression( $exp )
+    private function parseExpression($exp)
     {
         $defineVar = false;
         $expression = false;
         
         $exp = str_replace(';;', ';', $exp);
-        $exp =  trim($exp);
+        $exp = trim($exp);
         if (preg_match('/^([a-z][:\-a-z0-9_]*?)(\s+.*?)?$/ism', $exp, $m)) {
             if (count($m) == 3) {
                 list(,$defineVar, $exp) = $m;
