@@ -27,10 +27,15 @@
  */
 class PHPTAL_CodeGenerator
 {
-    function __construct($encoding='UTF-8')
+    public function __construct($encoding='UTF-8')
     {//{{{
         $this->_encoding = $encoding;
     }//}}}
+    
+    public function setEncoding($encoding)
+    {
+        $this->_encoding = $encoding;
+    }
     
     public function getResult()
     {//{{{
@@ -54,7 +59,7 @@ class PHPTAL_CodeGenerator
         return $this->_encoding;
     }//}}}
 
-    public function setDocType($dt)
+    public function setDocType(PHPTAL_NodeDoctype $dt)
     {//{{{
         $this->_doctype = $dt;
     }//}}}
@@ -64,7 +69,7 @@ class PHPTAL_CodeGenerator
         return $this->_doctype;
     }//}}}
 
-    public function setXmlDeclaration($dt)
+    public function setXmlDeclaration(PHPTAL_NodeXmlDeclaration $dt)
     {//{{{
         $this->_xmldeclaration = $dt;
     }//}}}

@@ -54,9 +54,9 @@ abstract class PHPTAL_Node
     }//}}}
 
     public function setGenerator(PHPTAL_CodeGenerator $gen)
-    {
+    {//{{{
         $this->generator = $gen;
-    }
+    }//}}}
 
     public abstract function generate();
 }
@@ -83,11 +83,11 @@ class PHPTAL_NodeTree extends PHPTAL_Node
     }//}}}
 
     public function setGenerator(PHPTAL_CodeGenerator $gen)
-    {
+    {//{{{
         parent::setGenerator($gen);
         foreach ($this->children as $child)
             $child->setGenerator($gen);
-    }
+    }//}}}
 }
 
 /**
@@ -475,10 +475,10 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
     }//}}}
 
     public function setGenerator(PHPTAL_CodeGenerator $gen)
-    {
+    {//{{{
         parent::setGenerator($gen);
         $this->generator->setDocType($this);
-    }
+    }//}}}
     
     public function generate()
     {//{{{;
@@ -504,10 +504,10 @@ class PHPTAL_NodeXmlDeclaration extends PHPTAL_Node
     }//}}}
 
     public function setGenerator(PHPTAL_CodeGenerator $gen)
-    {
+    {//{{{
         parent::setGenerator($gen);
         $this->generator->setXmlDeclaration($this);
-    }
+    }//}}}
     
     public function generate()
     {//{{{
