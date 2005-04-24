@@ -36,16 +36,19 @@ $printer = new PHPUnit2_TextUI_ResultPrinter();
 $result = new PHPUnit2_Framework_TestResult();
 $result->addListener( $printer );
 
-if (isset($argv) && count($argv) == 2){
+if (isset($argv) && count($argv) >= 2){
     echo "-> running standalone test units\n";
-    $entry = $argv[1];
-    $class = str_replace('.php', '', $entry);
-    require_once $entry;
-    $testclass = new ReflectionClass( $class );
-    $suite = new PHPUnit2_Framework_TestSuite($testclass);
-    $suite->run($result);
-    $printer->printResult( $result, 0 );
-    return;
+    for ($i = 1; $i < count($argv); $i++){
+        $entry = $argv[$i];
+        echo "RUNNING $entry\n";
+        $class = str_replace('.php', '', $entry);
+        require_once $entry;
+        $testclass = new ReflectionClass( $class );
+        $suite = new PHPUnit2_Framework_TestSuite($testclass);
+        $suite->run($result);
+        $printer->printResult( $result, 0 );
+    }
+    return;    
 }
 
 $d = dir( dirname(__FILE__) );

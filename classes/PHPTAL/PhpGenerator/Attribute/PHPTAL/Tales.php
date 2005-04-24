@@ -39,7 +39,7 @@ class PHPTAL_Attribute_PHPTAL_TALES extends PHPTAL_Attribute
             throw new PHPTAL_Exception(
                 $err, 
                 $this->tag->getSourceFile(), 
-                $this->tag->line
+                $this->tag->getSourceLine()
             ); 
         }
         

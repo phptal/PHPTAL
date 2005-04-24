@@ -21,6 +21,7 @@
 //  
 
 require_once 'config.php';
+require_once 'PHPTAL.php';
 require_once 'PHPTAL/PhpGenerator/Tales.php';
 
 class TalContentTest extends PHPUnit2_Framework_TestCase 

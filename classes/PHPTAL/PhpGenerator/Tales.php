@@ -50,7 +50,7 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 //      * repeat - the repeat variables (see RepeatVariable).
 // 
 function phptal_tales($expression, $nothrow=false)
-{
+{//{{{
     $expression = trim($expression);
 
     // Look for tales modifier (string:, exists:, etc...)
@@ -75,7 +75,7 @@ function phptal_tales($expression, $nothrow=false)
         throw new Exception($err);
     }
     return $func($expression, $nothrow);
-}
+}//}}}
 
 
 // 
@@ -103,9 +103,9 @@ function phptal_tales($expression, $nothrow=false)
 //      not: foo/bar/booleancomparable
 // 
 function phptal_tales_not($expression, $nothrow)
-{
+{//{{{
     return '!' . phptal_tales($expression, $nothrow);
-}
+}//}}}
 
 // 
 // path:
@@ -141,7 +141,7 @@ function phptal_tales_not($expression, $nothrow)
 // @returns string or array
 // 
 function phptal_tales_path($expression, $nothrow=false)
-{
+{//{{{
     $expression = trim($expression);
     if ($expression == 'default') return PHPTAL_TALES_DEFAULT_KEYWORD;
     if ($expression == 'nothing') return PHPTAL_TALES_NOTHING_KEYWORD;
@@ -196,7 +196,7 @@ function phptal_tales_path($expression, $nothrow=false)
     if ($nothrow) 
         return 'phptal_path($ctx->'.$next.', '.$expression.', true)';
     return 'phptal_path($ctx->'.$next.', '.$expression.')';
-}
+}//}}}
 
 //      
 // string:
@@ -214,7 +214,7 @@ function phptal_tales_path($expression, $nothrow=false)
 //      string:you have $$130 in your bank account
 //
 function phptal_tales_string( $expression, $nothrow=false )
-{
+{//{{{
     // This is a simple parser which evaluates ${foo} inside 
     // 'string:foo ${foo} bar' expressions, it returns the php code which will
     // print the string with correct interpollations.
@@ -294,7 +294,7 @@ function phptal_tales_string( $expression, $nothrow=false )
         $result .= $c;        
     }
     return '\''.$result.'\'';
-}
+}//}}}
 
 
 /** 
@@ -303,10 +303,10 @@ function phptal_tales_string( $expression, $nothrow=false )
  * Transform the expression into a regular PHP expression.
  */
 function phptal_tales_php($src)
-{
+{//{{{
     require_once 'PHPTAL/PhpGenerator/PhpTransformer.php';
     return PHPTAL_PhpTransformer::transform($src, '$ctx->');
-}
+}//}}}
 
 /**
  * exists: modifier.
@@ -314,10 +314,10 @@ function phptal_tales_php($src)
  * Returns the code required to invoke phptal_exists() on specified path.
  */
 function phptal_tales_exists($src, $nothrow)
-{
+{//{{{
     return sprintf('phptal_exists($ctx, %s)',
                    phptal_tales_string(trim($src), $nothrow));
-}
+}//}}}
 
 /**
  * number: modifier.
@@ -325,8 +325,8 @@ function phptal_tales_exists($src, $nothrow)
  * Returns the number as is.
  */
 function phptal_tales_number($src, $nothrow)
-{
+{//{{{
     return trim($src);
-}
+}//}}}
 
 ?>

@@ -21,6 +21,7 @@
 //  
 
 require_once 'config.php';
+require_once 'PHPTAL.php';
 require_once 'PHPTAL/Parser/Parser.php';
 require_once 'PHPTAL/PhpGenerator/CodeGenerator.php';
 require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Comment.php';
