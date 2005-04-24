@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/Defs.php';
+require_once 'PHPTAL/Parser/Defs.php';
 require_once 'PHPTAL/Parser/Node.php';
 require_once 'PHPTAL/Parser/XmlParser.php';
 require_once 'PHPTAL/Parser/XmlnsState.php';

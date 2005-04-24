@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/Defs.php';
+require_once 'PHPTAL/Parser/Defs.php';
 require_once 'PHPTAL/PhpGenerator/CodeGenerator.php';
 require_once 'PHPTAL/PhpGenerator/Attribute.php';
 
