@@ -29,8 +29,6 @@ require_once 'PHPTAL/XmlnsState.php';
 /**
  * Template parser.
  *
- * TODO: remove CodeGenerator dependancy.
- * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Parser extends PHPTAL_XmlParser
