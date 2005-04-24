@@ -255,17 +255,11 @@ class PHPTAL_PhpTransformer
                         $state = self::ST_STATIC;
                         break;
                     }
-                    // the member is a method
-                    else if ($c == '(') {
+                    // the member is a method or an array
+                    else if ($c == '(' || $c == '[') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_NONE;
-                    }
-                    // the member is an array
-                    else if ($c == '[') {
-                        $state = self::ST_NONE;
-                        $result .= substr( $str, $mark, $i-$mark+1 );
-                        if ($eval) { $result .='}'; $eval = false; }
                     }
                     // regular end of member, it is a var
                     else {
@@ -311,15 +305,10 @@ class PHPTAL_PhpTransformer
                         $state = self::ST_STATIC;
                         break;
                     }
-                    // static method
-                    else if ($c == '(') {
+                    // static method or array
+                    else if ($c == '(' || $c == '[') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_NONE;
-                    }
-                    // static array
-                    else if ($c == '[') {
-                        $state = self::ST_NONE;
-                        $result .= substr( $str, $mark, $i-$mark+1 );
                     }
                     // end of static var or const
                     else {
@@ -331,7 +320,7 @@ class PHPTAL_PhpTransformer
 
                 // numeric value
                 case self::ST_NUM:
-                    if ($c < '0' && $c > '9' && $c != '.') {
+                    if (!self::isDigitCompound($c)) {
                         $result .= substr( $str, $mark, $i-$mark );
                         $state = self::ST_NONE;
                     }
@@ -346,6 +335,11 @@ class PHPTAL_PhpTransformer
     {//{{{
         $c = strtolower($c);
         return $c >= 'a' && $c <= 'z';
+    }//}}}
+
+    private static function isDigitCompound($c)
+    {//{{{
+        return ($c >= '0' && $c <= '9' || $c == '.');
     }//}}}
 
     private static function isVarNameChar($c)

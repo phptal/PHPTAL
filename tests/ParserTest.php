@@ -28,8 +28,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
 {
     public function testParseSimpleDocument()
     {
-        $generator = new PHPTAL_CodeGenerator();
-        $parser = new PHPTAL_Parser( $generator );
+        $parser = new PHPTAL_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
         $this->assertEquals(3, count($tree->children));
         $this->assertEquals(5, count($tree->children[2]->children));
@@ -37,8 +36,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
 
     public function testByteOrderMark()
     {
-        $generator = new PHPTAL_CodeGenerator();
-        $parser = new PHPTAL_Parser( $generator );
+        $parser = new PHPTAL_Parser();
         try {
             $tree = $parser->parseFile('input/parser.02.xml');
             $this->assertTrue(true);
@@ -50,8 +48,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
 
     public function testBadAttribute(){
         try {
-            $generator = new PHPTAL_CodeGenerator();
-            $parser = new PHPTAL_Parser( $generator );
+            $parser = new PHPTAL_Parser();
             $parser->parseFile('input/parser.03.xml');
         }
         catch (Exception $e){

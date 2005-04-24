@@ -43,7 +43,7 @@ abstract class PHPTAL_Node
     public function __construct(PHPTAL_Parser $parser)
     {//{{{
         $this->parser = $parser;
-        $this->generator = $parser->getGenerator();
+        // $this->generator = $parser->getGenerator();
         $this->line = $parser->getLineNumber();
         $this->xmlns = $parser->getXmlnsState();
     }//}}}
@@ -52,6 +52,11 @@ abstract class PHPTAL_Node
     {//{{{
         return $this->parser->getSourceFile();
     }//}}}
+
+    public function setGenerator(PHPTAL_CodeGenerator $gen)
+    {
+        $this->generator = $gen;
+    }
 
     public abstract function generate();
 }
@@ -76,6 +81,13 @@ class PHPTAL_NodeTree extends PHPTAL_Node
         foreach ($this->children as $child) 
             $child->generate();
     }//}}}
+
+    public function setGenerator(PHPTAL_CodeGenerator $gen)
+    {
+        parent::setGenerator($gen);
+        foreach ($this->children as $child)
+            $child->setGenerator($gen);
+    }
 }
 
 /**
@@ -460,11 +472,16 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
     {//{{{
         parent::__construct($parser);
         $this->value = $data;
-        $this->generator->setDocType($this);
     }//}}}
 
+    public function setGenerator(PHPTAL_CodeGenerator $gen)
+    {
+        parent::setGenerator($gen);
+        $this->generator->setDocType($this);
+    }
+    
     public function generate()
-    {//{{{
+    {//{{{;
         $code = sprintf('$ctx->setDocType(\'%s\')', 
                         str_replace('\'', '\\\'', $this->value));
         $this->generator->pushCode($code);
@@ -484,9 +501,14 @@ class PHPTAL_NodeXmlDeclaration extends PHPTAL_Node
     {//{{{
         parent::__construct($parser);
         $this->value = $data;
-        $this->generator->setXmlDeclaration($this);
     }//}}}
 
+    public function setGenerator(PHPTAL_CodeGenerator $gen)
+    {
+        parent::setGenerator($gen);
+        $this->generator->setXmlDeclaration($this);
+    }
+    
     public function generate()
     {//{{{
         $code = sprintf('$ctx->setXmlDeclaration(\'%s\')',

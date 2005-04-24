@@ -42,9 +42,8 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     const ERR_ELEMENT_CLOSE_MISMATCH = 
         "Tag closure mismatch, expected '%s' but was '%s'";
   
-    public function __construct($codeGenerator)
+    public function __construct()
     {//{{{
-        $this->_codeGenerator = $codeGenerator;
         $this->_xmlns = new PHPTAL_XmlnsState();
     }//}}}
 
@@ -165,7 +164,6 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     private $_tree;
     private $_stack;
     private $_current;
-    private $_codeGenerator;
     private $_prefilter = null;
     private $_xmlns;
     private $_stripComments = false;
