@@ -409,8 +409,7 @@ class PHPTAL
     
     private function parse()
     {//{{{
-        require_once 'PHPTAL/Parser.php';
-        require_once 'PHPTAL/CodeGenerator.php';
+        require_once 'PHPTAL/Parser/Parser.php';
         
         // instantiate the PHPTAL source parser 
         $parser = new PHPTAL_Parser();
@@ -425,7 +424,7 @@ class PHPTAL
             $tree = $parser->parseFile($this->_realPath);
         }
 
-        require_once 'PHPTAL/PhpCodeGenerator.php';
+        require_once 'PHPTAL/PhpGenerator/PhpCodeGenerator.php';
         $generator = new PHPTAL_PhpCodeGenerator($this->_realPath);
         $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);

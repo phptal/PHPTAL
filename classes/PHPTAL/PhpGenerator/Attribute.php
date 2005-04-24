@@ -20,31 +20,31 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/Attribute/TAL/Comment.php';
-require_once 'PHPTAL/Attribute/TAL/Replace.php';
-require_once 'PHPTAL/Attribute/TAL/Content.php';
-require_once 'PHPTAL/Attribute/TAL/Condition.php';
-require_once 'PHPTAL/Attribute/TAL/Attributes.php';
-require_once 'PHPTAL/Attribute/TAL/Repeat.php';
-require_once 'PHPTAL/Attribute/TAL/Define.php';
-require_once 'PHPTAL/Attribute/TAL/OnError.php';
-require_once 'PHPTAL/Attribute/TAL/OmitTag.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Comment.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Replace.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Content.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Condition.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Attributes.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Repeat.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Define.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/OnError.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/TAL/OmitTag.php';
 
-require_once 'PHPTAL/Attribute/METAL/DefineMacro.php';
-require_once 'PHPTAL/Attribute/METAL/UseMacro.php';
-require_once 'PHPTAL/Attribute/METAL/DefineSlot.php';
-require_once 'PHPTAL/Attribute/METAL/FillSlot.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/METAL/DefineMacro.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/METAL/UseMacro.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/METAL/DefineSlot.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/METAL/FillSlot.php';
 
-require_once 'PHPTAL/Attribute/PHPTAL/Tales.php';
-require_once 'PHPTAL/Attribute/PHPTAL/Debug.php';
-require_once 'PHPTAL/Attribute/PHPTAL/Id.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/PHPTAL/Tales.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/PHPTAL/Debug.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/PHPTAL/Id.php';
 
-require_once 'PHPTAL/Attribute/I18N/Translate.php';
-require_once 'PHPTAL/Attribute/I18N/Name.php';
-require_once 'PHPTAL/Attribute/I18N/Domain.php';
-require_once 'PHPTAL/Attribute/I18N/Attributes.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/I18N/Translate.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/I18N/Name.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/I18N/Domain.php';
+require_once 'PHPTAL/PhpGenerator/Attribute/I18N/Attributes.php';
 
-require_once 'PHPTAL/Node.php';
+require_once 'PHPTAL/Parser/Node.php';
 
 /**
  * Base class for all PHPTAL attributes.

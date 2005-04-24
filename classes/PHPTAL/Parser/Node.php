@@ -20,9 +20,9 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/CodeGenerator.php';
 require_once 'PHPTAL/Defs.php';
-require_once 'PHPTAL/Attribute.php';
+require_once 'PHPTAL/PhpGenerator/CodeGenerator.php';
+require_once 'PHPTAL/PhpGenerator/Attribute.php';
 
 /**
  * Document node abstract class.

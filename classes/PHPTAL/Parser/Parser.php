@@ -21,10 +21,10 @@
 //  
 
 require_once 'PHPTAL/Defs.php';
-require_once 'PHPTAL/Node.php';
-require_once 'PHPTAL/XmlParser.php';
-require_once 'PHPTAL/Tales.php';
-require_once 'PHPTAL/XmlnsState.php';
+require_once 'PHPTAL/Parser/Node.php';
+require_once 'PHPTAL/Parser/XmlParser.php';
+require_once 'PHPTAL/Parser/XmlnsState.php';
+require_once 'PHPTAL/PhpGenerator/Tales.php';
 
 /**
  * Template parser.
