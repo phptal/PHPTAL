@@ -111,12 +111,12 @@ class PHPTAL_CodeGenerator
     
     public function indent() 
     {//{{{
-        $this->_indentation ++; 
+        $this->_indent ++; 
     }//}}}
     
     public function unindent() 
     {//{{{
-        $this->_indentation --; 
+        $this->_indent --; 
     }//}}}
     
     public function flush() 
@@ -137,39 +137,27 @@ class PHPTAL_CodeGenerator
     
     public function flushCode()
     {//{{{
-        if (count($this->_codeBuffer) == 0) 
-            return;
-
-        // special treatment for one code line
-        if (count($this->_codeBuffer) == 1){
-            $codeLine = $this->_codeBuffer[0];
-            // avoid adding ; after } and {
-            if (!preg_match('/\}|\{\s+$/', $codeLine))
-                $this->_result .= '<?php '.$codeLine.'; ?>';
-            else
-                $this->_result .= '<?php '.$codeLine.' ?>';
+        $nlines = count($this->_codeBuffer);
+        if ($nlines > 0){
+            $newline = $nlines > 1 ? "\n" : '';
+            $this->_result .= '<?php '.$newline;
+            foreach ($this->_codeBuffer as $codeLine){
+                $this->_result .=  $codeLine;
+                if (!preg_match('/\}|\{\s+$/', $codeLine)){
+                    $this->_result .= '; '.$newline;
+                }
+            }
+            $this->_result .= '?>';
             $this->_codeBuffer = array();
-            return;
         }
-    
-        $this->_result .= '<?php '."\n";
-        foreach ($this->_codeBuffer as $codeLine) {
-            // avoid adding ; after } and {
-            if (!preg_match('/\}|\{\s+$/', $codeLine))
-                $this->_result .= $codeLine . ' ;'."\n";
-            else 
-                $this->_result .= $codeLine;
-        }
-        $this->_result .= '?>';
-        $this->_codeBuffer = array();
     }//}}}
     
     public function flushHtml()
     {//{{{
-        if (count($this->_htmlBuffer) == 0) return;
-        
-        $this->_result .= join( '', $this->_htmlBuffer );
-        $this->_htmlBuffer = array();
+        if (count($this->_htmlBuffer) > 0){
+            $this->_result .= implode('', $this->_htmlBuffer);
+            $this->_htmlBuffer = array();
+        }
     }//}}}
     
     public function doFunction($name, $params)
@@ -325,7 +313,7 @@ class PHPTAL_CodeGenerator
             list($ori, $exp) = $m;
             $php  = phptal_tales_php($exp);
             $repl = '\'.%s.\''; 
-            $repl = sprintf($repl, $php, $this->_encoding);
+            $repl = sprintf($repl, $php);
             $src = str_replace($ori, $repl, $src);
         }
         return '\''.$src.'\'';
