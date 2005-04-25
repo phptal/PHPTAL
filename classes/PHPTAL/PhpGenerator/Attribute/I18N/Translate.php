@@ -40,8 +40,8 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
                 $result .= $child->node->value;
             }
             else if ($child instanceOf PHPTAL_PhpNodeElement){
-                if ($child->hasPhpTalAttribute('i18n:name')){
-                    $value = $child->getPhpTalAttribute('i18n:name');
+                if ($child->hasAttribute('i18n:name')){
+                    $value = $child->getAttribute('i18n:name');
                     $result .= '${' . $value . '}';
                 }
                 else {
@@ -59,7 +59,7 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
     {
         foreach ($tag->children as $child){
             if ($child instanceOf PHPTAL_PhpNodeElement){
-                if ($child->hasPhpTalAttribute('i18n:name')){
+                if ($child->hasAttribute('i18n:name')){
                     $child->generate();
                 }
                 else {

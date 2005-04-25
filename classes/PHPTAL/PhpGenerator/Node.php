@@ -21,7 +21,7 @@
 //  
 
 require_once 'PHPTAL/Parser/Defs.php';
-require_once 'PHPTAL/PhpGenerator/CodeGenerator.php';
+require_once 'PHPTAL/PhpGenerator/CodeWriter.php';
 require_once 'PHPTAL/PhpGenerator/Attribute.php';
 
 /**
@@ -34,7 +34,7 @@ abstract class PHPTAL_PhpNode
     public $node;
     public $generator;
 
-    public function __construct(PHPTAL_CodeGenerator $generator, PHPTAL_Node $node)
+    public function __construct(PHPTAL_CodeWriter $generator, PHPTAL_Node $node)
     {//{{{
         $this->generator = $generator;
         $this->node = $node;
@@ -62,7 +62,7 @@ class PHPTAL_PhpNodeTree extends PHPTAL_PhpNode
 {
     public $children;
     
-    public function __construct(PHPTAL_CodeGenerator $gen, $node)
+    public function __construct(PHPTAL_CodeWriter $gen, $node)
     {
         parent::__construct($gen,$node);
         $this->children = array();
@@ -121,7 +121,7 @@ class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
     public $headFootPrintCondition = false;
     public $hidden = false;
 
-    public function __construct(PHPTAL_CodeGenerator $generator, $node)
+    public function __construct(PHPTAL_CodeWriter $generator, $node)
     {//{{{
         parent::__construct($generator, $node);
         $this->name = $node->name;
@@ -163,9 +163,9 @@ class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
     }//}}}
 
     /** Returns true if the element contains specified PHPTAL attribute. */
-    public function hasPhpTalAttribute($name)
+    public function hasAttribute($name)
     {//{{{
-        return $this->node->hasPhpTalAttribute($name);
+        return $this->node->hasAttribute($name);
         
         $ns = $this->getNodePrefix();
         foreach ($this->attributes as $key=>$value){
@@ -188,9 +188,9 @@ class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
     }//}}}
 
     /** Returns the value of specified PHPTAL attribute. */
-    public function getPhpTalAttribute($name)
+    public function getAttribute($name)
     {//{{{
-        return $this->node->getPhpTalAttribute($name);
+        return $this->node->getAttribute($name);
         
         $ns = $this->getNodePrefix();
         
@@ -452,7 +452,7 @@ class PHPTAL_PhpNodeSpecific extends PHPTAL_PhpNode
  */
 class PHPTAL_PhpNodeDoctype extends PHPTAL_PhpNode
 {
-    public function __construct(PHPTAL_CodeGenerator $generator, $node)
+    public function __construct(PHPTAL_CodeWriter $generator, $node)
     {//{{{
         parent::__construct($generator, $node);
         $this->generator->setDocType($this);
@@ -473,7 +473,7 @@ class PHPTAL_PhpNodeDoctype extends PHPTAL_PhpNode
  */
 class PHPTAL_PhpNodeXmlDeclaration extends PHPTAL_PhpNode
 {
-    public function __construct(PHPTAL_CodeGenerator $gen, $node)
+    public function __construct(PHPTAL_CodeWriter $gen, $node)
     {//{{{
         parent::__construct($gen, $node);
         $this->generator->setXmlDeclaration($this);

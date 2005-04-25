@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/Parser/Parser.php';
-require_once 'PHPTAL/PhpGenerator/CodeGenerator.php';
+require_once 'PHPTAL/PhpGenerator/CodeWriter.php';
 require_once 'PHPTAL/PhpGenerator/Node.php';
 
 class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
@@ -32,7 +32,7 @@ class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
     {
         $parser = new PHPTAL_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
-        $generator = new PHPTAL_CodeGenerator();
+        $generator = new PHPTAL_CodeWriter();
         $treeGen   = new PHPTAL_PhpNodeTree($generator, $tree);
         $generator->doFunction('test', '$tpl');
         $treeGen->generate();
@@ -65,7 +65,7 @@ EOS;
 
     function testFunctionsGeneration()
     {
-        $generator = new PHPTAL_CodeGenerator();
+        $generator = new PHPTAL_CodeWriter();
         $generator->doFunction('test1', '$tpl');
         $generator->pushString('test1');
         $generator->doFunction('test2', '$tpl');

@@ -21,7 +21,7 @@
 //  
 
 require_once 'PHPTAL/Parser/Defs.php';
-require_once 'PHPTAL/PhpGenerator/CodeGenerator.php';
+require_once 'PHPTAL/PhpGenerator/CodeWriter.php';
 require_once 'PHPTAL/PhpGenerator/Attribute.php';
 
 /**
@@ -89,7 +89,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     }//}}}
 
     /** Returns true if the element contains specified PHPTAL attribute. */
-    public function hasPhpTalAttribute($name)
+    public function hasAttribute($name)
     {//{{{
         $ns = $this->getNodePrefix();
         foreach ($this->attributes as $key=>$value){
@@ -104,7 +104,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     }//}}}
 
     /** Returns the value of specified PHPTAL attribute. */
-    public function getPhpTalAttribute($name)
+    public function getAttribute($name)
     {//{{{
         $ns = $this->getNodePrefix();
         

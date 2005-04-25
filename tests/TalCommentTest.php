@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/Parser/Parser.php';
-require_once 'PHPTAL/PhpGenerator/CodeGenerator.php';
+require_once 'PHPTAL/PhpGenerator/CodeWriter.php';
 require_once 'PHPTAL/PhpGenerator/Attribute/TAL/Comment.php';
 
 if (!class_exists('DummyTag')) {
@@ -34,7 +34,7 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
 {
     function setUp()
     {
-        $this->_gen = new PHPTAL_CodeGenerator();
+        $this->_gen = new PHPTAL_CodeWriter();
         $this->_tag = new DummyTag();
         $this->_tag->generator = $this->_gen;
     }

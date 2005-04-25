@@ -53,7 +53,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
         // we may define a member.html macro which use the design.html macro
         // for the general layout, fill the menu slot and let caller templates
         // fill the parent content slot without interfering. 
-        if (!$this->tag->hasPhpTalAttribute('metal:define-macro')){
+        if (!$this->tag->hasAttribute('metal:define-macro')){
             $this->tag->generator->pushCode('$ctx->pushSlots()');
         }
         
@@ -78,7 +78,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
         }
 
         // restore slots if not inherited macro
-        if (!$this->tag->hasPhpTalAttribute('metal:define-macro')){
+        if (!$this->tag->hasAttribute('metal:define-macro')){
             $this->tag->generator->pushCode('$ctx->popSlots()');
         }
     }
@@ -96,7 +96,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
 
         // if the tag contains one of the allowed attribute, we generate it
         foreach ($allowedAtts as $attribute){
-            if ($tag->hasPhpTalAttribute($attribute)){
+            if ($tag->hasAttribute($attribute)){
                 $tag->generate();
                 return;
             }
