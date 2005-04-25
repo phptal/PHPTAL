@@ -294,19 +294,20 @@ class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
         // its value by a <?php echo $somevalue ?\ >.
         //
         // The entire attribute (key="value") can be replaced using the
-        // '$__att_' value code, it is very usefull for xhtml boolean
+        // '$__ATT_' value code, it is very usefull for xhtml boolean
         // attributes like selected, checked, etc...
         //
         // example: 
         //  
         //  $tag->generator->pushCode(
-        //  '$__att_checked = $somecondition ? \'checked="checked"\' : \'\''
+        //  '$__ATT_checked = $somecondition ? \'checked="checked"\' : \'\''
         //  );
-        //  $tag->attributes['checked'] = '<?php echo $__att_checked ?\>';
+        //  $tag->attributes['checked'] = '<?php echo $__ATT_checked ?\>';
         // 
 
+        $fullreplaceRx = PHPTAL_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
         foreach ($this->attributes as $key=>$value) {
-            if (preg_match('/<\?php echo \$__att_.*? \?>/', $value)) { 
+            if (preg_match($fullreplaceRx, $value)){
                 $this->generator->pushHtml($value);
             }
             else {

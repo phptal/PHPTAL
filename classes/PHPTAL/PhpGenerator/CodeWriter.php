@@ -228,6 +228,11 @@ class PHPTAL_CodeWriter
         $this->indent();
     }//}}}
 
+    public function doSetVar($varname, $code)
+    {//{{{
+        $this->pushCode($varname.' = '.$code);
+    }//}}}
+        
     public function doCatch($catch)
     {//{{{
         $this->doEnd();

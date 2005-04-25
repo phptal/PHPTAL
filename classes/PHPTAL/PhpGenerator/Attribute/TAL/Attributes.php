@@ -43,8 +43,15 @@
  */
 class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
 {
+    const ATT_FULL_REPLACE = '$__ATT_';
+    const ATT_VALUE_REPLACE = '$__att_';
+
+    // this regex is used to determine if an attribute is entirely replaced
+    // by a php variable or if only its value is replaced.
+    const REGEX_FULL_REPLACE = '/<?php echo \$__ATT_.*? ?>/';
+    
     public function start()
-    {
+    {//{{{
         $expressions = $this->tag->generator->splitExpression($this->expression);
         foreach ($expressions as $exp) {
             list($attribute, $expression) = $this->parseExpression($exp);
@@ -52,14 +59,14 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
                 $this->prepareAttribute($attribute, $expression);
             }
         }
-    }
+    }//}}}
 
     public function end()
-    {
-    }
+    {//{{{
+    }//}}}
 
     private function prepareAttribute($attribute, $expression)
-    {
+    {//{{{
         $code = $this->tag->generator->evaluateExpression($expression);
         if (is_array($code)) {
             $this->tag->generator->noThrow(true);
@@ -70,119 +77,105 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
        
         // XHTML boolean attribute does not appear when empty of false
         if (PHPTAL_Defs::isBooleanAttribute($attribute)) {
-            $type = '__att_';
+            $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
+            $value  = sprintf('" %s=\"%s\""', $attribute, $attribute);
             $this->tag->generator->doIf($code);
-            $code = sprintf(
-                '$__att_%s = " %s=\"%s\""', 
-                $this->getVarName($attribute), 
-                $attribute, 
-                $attribute
-            );
-            $this->tag->generator->pushCode($code);
+            $this->tag->generator->doSetVar($attkey, $value);
             $this->tag->generator->doElse();
-            $code = sprintf('$__att_%s = ""', $this->getVarName($attribute));
-            $this->tag->generator->pushCode($code);
+            $this->tag->generator->doSetVar($attkey, '\'\'');
             $this->tag->generator->doEnd();
         }
+        // regular attribute which value is the evaluation of $code
         else {
-            $type = '_ATT_';
-            $code = sprintf(
-                '$_ATT_%s = %s',
-                $this->getVarName($attribute), 
-                $this->tag->generator->escapeCode($code)
-            );
-            $this->tag->generator->pushCode($code);
+            $attkey = self::ATT_VALUE_REPLACE.$this->getVarName($attribute);
+            $value  = $this->tag->generator->escapeCode($code);
+            $this->tag->generator->doSetVar($attkey, $value);
         }
-        $this->tag->attributes[$attribute] = 
-            '<?php echo $'.$type.$this->getVarName($attribute).' ?>';
-
-        $this->tag->overwrittenAttributes[$attribute] = 
-            '$'.$type.$this->getVarName($attribute);
-    }
-
-    private function getVarName($attribute)
-    {
-        $attribute = str_replace(':', '_', $attribute);
-        $attribute = str_replace('-', '_', $attribute);
-        return $attribute;
-    }
+        $this->tag->attributes[$attribute] = '<?php echo '.$attkey.' ?>';
+        $this->tag->overwrittenAttributes[$attribute] = $attkey;
+    }//}}}
 
     private function generateChainedAttribute($attribute, $chain)
-    {
+    {//{{{
+        // default attribute value (from source tag)
+        $default = false;
         if (array_key_exists($attribute, $this->tag->attributes)) {
             $default = $this->tag->attributes[$attribute];
         }
-        else {
-            $default = false;
-        }
         
-        $attkey = sprintf('$__att_%s', $this->getVarName($attribute));
+        // full attribute replace, the code will decide wether or not the
+        // attribute will appear
+        $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
+        // boolean indicating if the if/elseif/else started
         $started = false;
         foreach ($chain as $exp){
-            
+           
+            // nothing keyword gives an empty attribute value and ends the
+            // chain.
             if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
                 if ($started) $this->tag->generator->doElse();
-                $code = sprintf('%s = \' %s=""\'', $attkey, $attribute);
-                $this->tag->generator->pushCode($code);
+                $this->tag->generator->doSetVar($attkey, "' $attribute=\"\"'");
                 break;
             }
 
+            // default keyword gives default value if set or do not print
+            // the attribute otherwise and ends the chain.
             if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD){
                 if ($started) $this->tag->generator->doElse();
-                if ($default !== false) {
-                    $code = sprintf('%s = \' %s="%s"\'', $attkey, $attribute, $default);
-                }
-                else {                    
-                    $code = sprintf('%s = \'\'', $attkey);
-                }
-                $this->tag->generator->pushCode($code);
-                $this->tag->attributes[$attribute] = "<?php echo $attkey ?>";
-                $this->tag->overwrittenAttributes[$attribute] = $attkey;
+                $code = ($default !== false) 
+                    ? "' $attribute=\"$default\"'"  // default value
+                    : '\'\'';                       // do not print attribute
+                $this->tag->generator->doSetVar($attkey, $code);
                 break;
             }
 
-            // if attribute not found (null) or false (false)
-            $condition = sprintf('(%s = %s) !== null && %s !== false', $attkey, $exp, $attkey);
-            if (!$started){
-                $this->tag->generator->doIf($condition);
+            // regular chain member, we try to evaluate the expression
+            // and use its return as attribute value if it gives something
+            $condition = "($attkey = $exp) !== null && $attkey !== false";
+            if ($started == false){ 
                 $started = true;
+                $this->tag->generator->doIf($condition);
             }
             else {
                 $this->tag->generator->doElseIf($condition);
             }
-            $code = sprintf('%s = \' %s="\'.%s.\'"\'', 
-                            $attkey, 
-                            $attribute, 
-                            $this->tag->generator->escapeCode($attkey)
-                            );
-            $this->tag->generator->pushCode($code);                
+
+            $value = $this->tag->generator->escapeCode($attkey);
+            $value = "' $attribute=\"'.$value.'\"'";
+            $this->tag->generator->doSetVar($attkey, $value);
         }
        
         $this->tag->generator->doEnd();
         $this->tag->attributes[$attribute] = '<?php echo '.$attkey.' ?>';
         $this->tag->overwrittenAttributes[$attribute] = $attkey;
-    }
+    }//}}}
     
+    private function getVarName($attribute)
+    {//{{{
+        $attribute = str_replace(':', '_', $attribute);
+        $attribute = str_replace('-', '_', $attribute);
+        return $attribute;
+    }//}}}
+
     private function parseExpression($exp)
-    {
-        $defineVar = false;
+    {//{{{
+        $attributeName = false;
         $expression = false;
-        
         $exp = str_replace(';;', ';', $exp);
         $exp = trim($exp);
+        // (attribute)[( expression)]
         if (preg_match('/^([a-z][:\-a-z0-9_]*?)(\s+.*?)?$/ism', $exp, $m)) {
             if (count($m) == 3) {
-                list(,$defineVar, $exp) = $m;
+                list(,$attributeName, $exp) = $m;
                 $exp = trim($exp);
             }
             else {
-                list(,$defineVar) = $m;
+                list(,$attributeName) = $m;
                 $exp = false;
-            };
+            }
         }
-        
-        return array($defineVar, $exp);
-    }
+        return array($attributeName, $exp);
+    }//}}}
 }
 
 ?>
