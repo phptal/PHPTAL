@@ -58,6 +58,9 @@ require_once 'PHPTAL/Parser/Node.php';
  */
 abstract class PHPTAL_Attribute 
 {
+    const ECHO_TEXT = 'text';
+    const ECHO_STRUCTURE = 'structure';
+    
     /** Attribute name (ie: 'tal:content'). */
     public $name;
     /** Attribute value specified by the element. */
@@ -89,6 +92,38 @@ abstract class PHPTAL_Attribute
         $result->expression = $expression;
         return $result;
     }//}}}
+
+    /**
+     * Remove structure|text keyword from expression and stores it for later
+     * doEcho() usage.
+     *
+     * $expression = 'stucture my/path';
+     * $expression = $this->extractEchoType($expression);
+     *
+     * ...
+     *
+     * $this->doEcho($code);
+     */
+    protected function extractEchoType($expression)
+    {
+        $echoType = self::ECHO_TEXT;
+        $expression = trim($expression);
+        if (preg_match('/^(text|structure)\s+(.*?)$/ism', $expression, $m)) {
+            list(, $echoType, $expression) = $m;
+        }
+        $this->_echoType = strtolower($echoType);
+        return trim($expression);
+    }
+
+    protected function doEcho($code)
+    {
+        if ($this->_echoType == self::ECHO_TEXT)
+            $this->tag->generator->doEcho($code);
+        else
+            $this->tag->generator->doEchoRaw($code);
+    }
+
+    private $_echoType = PHPTAL_Attribute::ECHO_TEXT;
 }
 
 ?>

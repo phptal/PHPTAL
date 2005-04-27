@@ -62,12 +62,13 @@ class PHPTAL_Attribute_METAL_DefineMacro extends PHPTAL_Attribute
         }
 
         // secure template context inside macro
-        $this->tag->generator->pushCode('$tpl = clone $tpl');
-        $this->tag->generator->pushCode('$ctx = $tpl->getContext()');
+        $this->tag->generator->doSetVar('$tpl', 'clone $tpl');
+        $this->tag->generator->doSetVar('$ctx', '$tpl->getContext()');
     }
     
     public function end()
     {
+        // end macro function
         $this->tag->generator->doEnd();
     }
 }

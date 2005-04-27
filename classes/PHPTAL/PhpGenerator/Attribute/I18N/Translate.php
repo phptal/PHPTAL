@@ -12,7 +12,7 @@
 class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
 {
     public function start()
-    {
+    {//{{{
         // if no expression is given, the content of the node is used as 
         // a translation key
         if (strlen(trim($this->expression)) == 0){
@@ -24,16 +24,17 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
             $code = $this->tag->generator->evaluateExpression($this->expression);
         }
         $this->_prepareNames($this->tag);
-        $code = sprintf('echo $tpl->getTranslator()->translate(%s)', $code);
-        $this->tag->generator->pushCode($code);
-    }
+
+        $php = sprintf('echo $tpl->getTranslator()->translate(%s)', $code);
+        $this->tag->generator->pushCode($php);
+    }//}}}
 
     public function end()
-    {
-    }
+    {//{{{
+    }//}}}
 
     private function _getTranslationKey($tag)
-    {
+    {//{{{
         $result = '';
         foreach ($tag->children as $child){
             if ($child instanceOf PHPTAL_PhpNodeText){
@@ -53,10 +54,10 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
         $result = preg_replace('/\s+/sm', ' ', $result);
         $result = trim($result);
         return $result;
-    }
+    }//}}}
 
     private function _prepareNames($tag)
-    {
+    {//{{{
         foreach ($tag->children as $child){
             if ($child instanceOf PHPTAL_PhpNodeElement){
                 if ($child->hasAttribute('i18n:name')){
@@ -67,7 +68,7 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
                 }
             }
         }
-    }
+    }//}}}
 }
 
 ?>

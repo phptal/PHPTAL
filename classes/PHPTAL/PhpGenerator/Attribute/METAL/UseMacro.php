@@ -41,21 +41,8 @@
 class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
 {
     public function start()
-    {
-        // reset template slots on each macro call ?
-        // 
-        // NOTE: defining a macro and using another macro on the same tag means 
-        // inherit from the used macro, thus slots are shared, it is a little 
-        // tricky to understand but very natural to use.
-        //
-        // For example, we may have a main design.html containing our main 
-        // website presentation with some slots (menu, content, etc...) then
-        // we may define a member.html macro which use the design.html macro
-        // for the general layout, fill the menu slot and let caller templates
-        // fill the parent content slot without interfering. 
-        if (!$this->tag->hasAttribute('metal:define-macro')){
-            $this->tag->generator->pushCode('$ctx->pushSlots()');
-        }
+    {//{{{
+        $this->pushSlots();
         
         foreach ($this->tag->children as $child){
             $this->generateFillSlots($child);
@@ -77,19 +64,44 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
             $this->tag->generator->pushHtml($code);
         }
 
+        $this->popSlots();
+    }//}}}
+    
+    public function end()
+    {//{{{
+    }//}}}
+
+    private function pushSlots()
+    {//{{{
+        // reset template slots on each macro call ?
+        // 
+        // NOTE: defining a macro and using another macro on the same tag 
+        // means inheriting from the used macro, thus slots are shared, it 
+        // is a little tricky to understand but very natural to use.
+        //
+        // For example, we may have a main design.html containing our main 
+        // website presentation with some slots (menu, content, etc...) then
+        // we may define a member.html macro which use the design.html macro
+        // for the general layout, fill the menu slot and let caller templates
+        // fill the parent content slot without interfering. 
+        if (!$this->tag->hasAttribute('metal:define-macro')){
+            $this->tag->generator->pushCode('$ctx->pushSlots()');
+        }
+    }//}}}
+
+    private function popSlots()
+    {//{{{
         // restore slots if not inherited macro
         if (!$this->tag->hasAttribute('metal:define-macro')){
             $this->tag->generator->pushCode('$ctx->popSlots()');
         }
-    }
+    }//}}}
     
-    public function end()
-    {
-    }
-
     private function generateFillSlots($tag)
-    {
-        $allowedAtts = array('metal:fill-slot', 'metal:define-macro', 'tal:define');
+    {//{{{
+        $allowedAtts = array(
+            'metal:fill-slot', 'metal:define-macro', 'tal:define'
+        );
                               
         if (false == ($tag instanceOf PHPTAL_PhpNodeTree)) 
             return;
@@ -106,7 +118,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
         foreach ($tag->children as $child){
             $this->generateFillSlots($child);
         }
-    }
+    }//}}}
 }
 
 ?>

@@ -271,6 +271,11 @@ class PHPTAL_CodeWriter
         $this->pushHtml($html, $replaceInString);
     }//}}}
 
+    public function doEchoRaw($code)
+    {
+        $this->pushHtml('<?php echo '.$code.' ?>');
+    }
+
     public function pushHtml($html, $replaceInString=true)
     {//{{{
         if ($replaceInString)

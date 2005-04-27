@@ -28,23 +28,36 @@ class PHPTAL_Attribute_PHPTAL_ID extends PHPTAL_Attribute
     private $id;
     
     public function start()
-    {
+    {//{{{
         $this->id = str_replace('"', '\\\"', $this->expression);
-        $code = '$trigger = $tpl->getTrigger("%s")';
-        $code = sprintf($code, $this->id);
-        $this->tag->generator->pushCode($code);
-        $code = '$trigger && $trigger->start("%s", $tpl) == PHPTAL_Trigger::PROCEED';
-        $code = sprintf($code, $this->id);
-        $this->tag->generator->doIf($code);
-    }
+        
+        // retrieve trigger
+        $this->tag->generator->doSetVar(
+            '$trigger', 
+            '$tpl->getTrigger("'.$this->id.'")'
+        );
+
+        // if trigger found and trigger tells to proceed, we execute
+        // the node content
+        $cond = '$trigger && '
+              . '$trigger->start("%s", $tpl) == PHPTAL_Trigger::PROCEED';
+        $cond = sprintf($cond, $this->id);
+
+        $this->tag->generator->doIf($cond);
+    }//}}}
 
     public function end()
-    {
+    {//{{{
+        // end of if PROCEED
         $this->tag->generator->doEnd();
-        $code = 'if ($trigger) $trigger->end("%s", $tpl)';
-        $code = sprintf($code, $this->id);
-        $this->tag->generator->pushCode($code);
-    }
+        
+        // if trigger found, notify the end of the node
+        $this->tag->generator->doIf('$trigger');
+        $this->tag->generator->pushCode(
+            '$trigger->end("'.$this->id.'", $tpl)'
+        );
+        $this->tag->generator->doEnd();
+    }//}}}
 }
 
 ?>

@@ -37,6 +37,8 @@
  */
 class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
 {
+    const REPLACE_VAR = '$__replace__';
+    
     public function start()
     {//{{{
         // tal:replace="" => do nothing and ignore node
@@ -44,12 +46,12 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
             return;
         }
 
-        list($echoType, $expression) = $this->parseExpression($this->expression);
+        $expression = $this->extractEchoType($this->expression);
         $code = $this->tag->generator->evaluateExpression($expression);
 
         // chained expression
         if (is_array($code)){
-            return $this->replaceByChainedExpression($code, $echoType);
+            return $this->replaceByChainedExpression($code);
         }
 
         // nothing do nothing
@@ -63,14 +65,14 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
         }
 
         // replace tag with result of expression
-        $this->generateReplace($echoType, $code);
+        $this->doEcho($code);
     }//}}}
 
     public function end()
     {//{{{
     }//}}}
 
-    private function replaceByChainedExpression($expArray, $echoType)
+    private function replaceByChainedExpression($expArray)
     {//{{{
         // because we have alternatives, PHPTAL must not throw exceptions when
         // an unknown path is encountered
@@ -93,7 +95,7 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
             }
 
             // (else) if ($__replace__ = $possibility) echo $__replace__;
-            $condition = sprintf('$__replace__ = %s', $exp);
+            $condition = self::REPLACE_VAR.' = '.$exp;
             if ($started) {
                 $this->tag->generator->doElseIf($condition);
             }
@@ -102,7 +104,7 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
                 $started = true;
             }
 
-            $this->generateReplace($echoType, '$__replace__');
+            $this->doEcho(self::REPLACE_VAR);
         }
         // close if/else if
         if ($started)
@@ -119,29 +121,6 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
         $this->tag->generateContent();
         $this->tag->generateFoot();
         $this->tag->generateSurroundFoot();
-    }//}}}
-
-    private function generateReplace($echoType, $code)
-    {//{{{
-        if ($echoType == 'text') {
-            $this->tag->generator->doEcho($code);
-        }
-        else {
-            $this->tag->generator->pushHtml('<?php echo  '.$code.' ?>');
-        }
-    }//}}}
-
-    private function parseExpression($exp)
-    {//{{{
-        $echoType = 'text';
-        $expression = trim($exp);
-
-        // (text|structure) (expression)
-        if (preg_match('/^(text|structure)\s+(.*?)$/ism', $expression, $m)) {
-            list(, $echoType, $expression) = $m;
-        }
-
-        return array(strtolower($echoType), trim($expression));
     }//}}}
 }
 

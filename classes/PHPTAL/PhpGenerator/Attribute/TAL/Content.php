@@ -38,38 +38,12 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
 {
     public function start()
     {
-        list($echoType, $expression) = $this->parseExpression($this->expression);
-        $code = $this->tag->generator->evaluateExpression( $expression );
+        $expression = $this->extractEchoType($this->expression);
+        
+        $code = $this->tag->generator->evaluateExpression($expression);
 
         if (is_array($code)) {
-            $this->tag->generator->noThrow(true);
-            $started = false;
-            foreach ($code as $exp){
-                if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
-                    continue;
-                }
-                
-                if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD){
-                    if ($started)
-                        $this->tag->generator->doElse();
-                    $this->generateDefault();
-                    break;
-                }
-
-                $condition = sprintf('$__content__ = %s', $exp);
-                if (!$started) {
-                    $this->tag->generator->doIf($condition);
-                    $started = true;
-                }
-                else {
-                    $this->tag->generator->doElseIf($condition);
-                }
-                $this->generateContent($echoType, '$__content__');
-            }
-            if ($started)
-                $this->tag->generator->doEnd();
-            $this->tag->generator->noThrow(false);
-            return;
+            return $this->generateChainedContent($code);
         }
 
         if ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
@@ -81,7 +55,7 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
             return;
         }
         
-        $this->generateContent($echoType, $code);
+        $this->doEcho($code);
     }
     
     public function end(){}
@@ -91,26 +65,38 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
         $this->tag->generateContent(true);
     }
     
-    private function generateContent($echoType, $code)
+    private function generateChainedContent($code)
     {
-        if ($echoType == 'text') {
-            $this->tag->generator->doEcho($code);
-        }
-        else {
-            $this->tag->generator->pushHtml('<?php echo '.$code.' ?>');
-        }
-    }
-    
-    private function parseExpression( $exp )
-    {
-        $echoType = 'text';
-        $expression = trim($exp);
+        $this->tag->generator->noThrow(true);
+        $started = false;
+        foreach ($code as $exp){
+            if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
+                continue;
+            }
+                
+            if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD){
+                if ($started){
+                    $this->tag->generator->doElse();
+                }
+                $this->generateDefault();
+                break;
+            }
 
-        if (preg_match('/^(text|structure)\s+(.*?)$/ism', $expression, $m)) {
-            list(, $echoType, $expression) = $m;
+            $condition = '$__content__ = '.$exp;
+            if (!$started) {
+                $started = true;
+                $this->tag->generator->doIf($condition);
+            }
+            else {
+                $this->tag->generator->doElseIf($condition);
+            }
+            $this->doEcho('$__content__');
         }
-
-        return array(strtolower($echoType), trim($expression));
+        
+        if ($started){
+            $this->tag->generator->doEnd();
+        }
+        $this->tag->generator->noThrow(false);
     }
 }
 
