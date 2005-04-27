@@ -3,15 +3,10 @@
 
                                   To do list.
 
+REFACTORING:
 
-- namespace binding :
-    xmlns:t="http://xml.zope.org/namespaces/tal"
-    <h1 t:content="title">Title</h1>
+    - some tal attributes uses chained expressions which lead to the 
+      same loop if/else if/else algorithm, it may be a good idea to
+      use a form template method for this stuff ?
 
-- two "headers" bug
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-- create tal/metal/i18n validation doctypes (external public files)
 
