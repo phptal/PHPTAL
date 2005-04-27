@@ -63,77 +63,72 @@
  */
 class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
 {
+    const REPEAT = '$__repeat__';
+    
     public function start()
-    {
-        $this->createController();
+    {//{{{
+        $this->initRepeat();
         $this->doForeach();
         $this->updateIterationVars();
-    }
+    }//}}}
         
     public function end()
-    {
-        $this->setRepeatVar('start', 'false');
+    {//{{{
+        $this->tag->generator->doSetVar($this->controller.'->start', 'false');
         $this->tag->generator->doEnd();
-    }
+    }//}}}
 
-    private function createController()
-    {
-        list($this->varName, $expression) = $this->parseExpression($this->expression);
+    private function initRepeat()
+    {//{{{
+        list($varName, $expression) = $this->parseExpression($this->expression);
         $code = $this->tag->generator->evaluateExpression($expression);
+        
+        $this->item       = '$ctx->'.$varName;
+        $this->controller = self::REPEAT.'->'.$varName;
 
-        // alias to repeats handler
-        $this->tag->generator->pushCode('$__repeat__ = $ctx->repeat');
-        // reset item var
-        $this->tag->generator->pushCode('if (!isset($ctx->'.$this->varName.')) $ctx->'.$this->varName.' = false');
+        // alias to repeats handler to avoid calling extra getters on each variable access
+        $this->tag->generator->doSetVar(self::REPEAT, '$ctx->repeat');
+        
+        // reset item var into template context
+        $this->tag->generator->doIf('!isset('.$this->item.')');
+        $this->tag->generator->doSetVar($this->item, 'false');
+        $this->tag->generator->doEnd();
+
         // instantiate controller using expression
-        $init = sprintf('$__repeat__->%s = new PHPTAL_RepeatController(%s)', $this->varName, $code);
-        $this->tag->generator->pushCode($init);
-    }
+        $this->tag->generator->doSetVar($this->controller, 'new PHPTAL_RepeatController('.$code.')');
+    }//}}}
        
     private function doForeach()
-    {
-        $this->tag->generator->doForeach('$ctx->'.$this->varName, $this->repeatVar('source'));
-    }
+    {//{{{
+        $this->tag->generator->doForeach($this->item, $this->controller.'->source');
+    }//}}}
     
     private function updateIterationVars()
-    {
-        $this->setRepeatVar('key', '$__key__');
-        $this->setRepeatVar('index', $this->repeatVar('index').'+1');
-        $this->setRepeatVar('number', $this->repeatVar('number').'+1');
-        $this->setRepeatVar('even', $this->repeatVar('index') . ' %2 == 0');
-        $this->setRepeatVar('odd', '!' . $this->repeatVar('even'));
+    {//{{{
+        $this->tag->generator->doSetVar($this->controller.'->key', '$__key__');
+        $this->tag->generator->doSetVar($this->controller.'->index', $this->controller.'->index +1');
+        $this->tag->generator->doSetVar($this->controller.'->number', $this->controller.'->number +1');
+        $this->tag->generator->doSetVar($this->controller.'->even', $this->controller.'->index % 2 == 0');
+        $this->tag->generator->doSetVar($this->controller.'->odd', '!'.$this->controller.'->even');
 
         // repeat/item/end set to true when last item is reached
-        $condition = sprintf('%s == %s', $this->repeatVar('number'), $this->repeatVar('length'));
-        $this->tag->generator->doIf($condition);
-        $this->setRepeatVar('end', 'true');
+        $this->tag->generator->doIf($this->controller.'->number == '.$this->controller.'->length');
+        $this->tag->generator->doSetVar($this->controller.'->end', 'true');
         $this->tag->generator->doEnd();
-    }
+    }//}}}
     
     private function parseExpression($src)
-    {
+    {//{{{
         // (item) (sourceOfRepeat)
         if (preg_match('/^([a-z][a-z_0-9]*?)\s+(.*?)$/ism', $src, $m)){
             list(,$varName, $expression) = $m;
             return array($varName, $expression);
         }
         throw new Exception("Unable to find item in tal:repeat expression : $src");
-    }
+    }//}}}
 
-    /** Returns the PHP access path to specified repeat/item/$subVar. */
-    private function repeatVar($subVar)
-    {
-        return sprintf('$__repeat__->%s->%s', $this->varName, $subVar);
-    }
-
-    /** Affect repeat var. */
-    private function setRepeatVar($subVar, $value)
-    {
-        $code = sprintf('%s = %s', $this->repeatVar($subVar), $value);
-        $this->tag->generator->pushCode($code);
-    }
-
-    private $varName;
+    private $item;
+    private $controller;
 }
 
 ?>
