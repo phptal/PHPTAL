@@ -36,13 +36,15 @@
 //
           
 
+require_once 'PHPTAL/PhpGenerator/ChainExecutor.php';
+
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
+class PHPTAL_Attribute_TAL_Define 
+extends PHPTAL_Attribute
+implements PHPTAL_Php_TalesChainReader
 {
-    private $_buffered = false;
-    
     public function start()
     {
         $expressions = $this->tag->generator->splitExpression($this->expression);
@@ -51,112 +53,102 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
             if (!$defineVar) {
                 continue;
             }
-            if ($expression === false && !isset($started)) {
-                // first generate and buffer tag content, then put this content
-                // in the defineVar
-                $this->tag->generator->pushCode( 'ob_start()' );
-                $this->tag->generateContent();
-                $code = sprintf('$tpl->%s = ob_get_contents()', $defineVar);
-                $this->tag->generator->pushCode( $code );
-                $this->tag->generator->pushCode( 'ob_end_clean()' );
-                $this->_buffered = true;
+            
+            $this->_defineVar = $defineVar;
+            if ($expression === null && !isset($started)) {
+                // no expression give, use content of tag as value for newly defined
+                // var.
+                $this->bufferizeContent();
+                continue;
             }
-            else if ($expression !== false) {
-                $started = true;
-                $code = $this->tag->generator->evaluateExpression($expression);
-                if (is_array($code)){
-                    $this->tag->generator->noThrow(true);
-                    $this->chainedDefine( $defineVar, $code );
-                    $this->tag->generator->noThrow(false);
-                }
-                elseif ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
-                    $code = sprintf('$tpl->%s = null', $defineVar);
-                    $this->tag->generator->pushCode( $code );
-                }
-                else {
-                    $code = sprintf('$tpl->%s = %s', $defineVar, $code);
-                    $this->tag->generator->pushCode( $code );
-                }
+            
+            $started = true;
+            $code = $this->tag->generator->evaluateExpression($expression);
+            if (is_array($code)){
+                $this->chainedDefine($code);
+            }
+            elseif ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
+                $this->doDefineVarWith('null');
+            }
+            else {
+                $this->doDefineVarWith($code);
             }
         }
 
-        // if the content of the tag was not buffered and the tag has something
-        // interesting to tell, we echo it
+        // if the content of the tag was buffered or the tag has nothing to tell, we hidde it.
         if ($this->_buffered || !$this->tag->hasRealContent()){
             $this->tag->hidden = true;
         }
     }
 
-    private function chainedDefine( $defineVar, $parts )
-    {
-        $started = false;
-        foreach ($parts as $exp){
-            if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
-                if ($started)
-                    $this->tag->generator->doElse();
-                $php = sprintf('$tpl->%s = null', $defineVar);
-                $this->tag->generator->pushCode($php);
-                break;
-            }
-                
-            if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD){
-                if ($started)
-                    $this->tag->generator->doElse();
-                $this->tag->generator->pushCode( 'ob_start()' );
-                $this->tag->generateContent();
-                $code = sprintf('$tpl->%s = ob_get_contents()', $defineVar);
-                $this->tag->generator->pushCode( $code );
-                $this->tag->generator->pushCode( 'ob_end_clean()' );
-                $this->_buffered = true;
-                break;
-            }
-
-            $condition = sprintf('($tpl->%s = %s) !== null', $defineVar, $exp);
-            if (!$started) {
-                $this->tag->generator->doIf($condition);
-                $started = true;
-            }
-            else {
-                $this->tag->generator->doElseIf($condition);
-            }
-        }
-        if ($started)
-            $this->tag->generator->doEnd();
-    }
-    
     public function end()
     {
     }
+    
+    private function chainedDefine($parts)
+    {
+        $executor = new PHPTAL_Php_ChainExecutor(
+            $this->tag->generator, $parts, $this
+        );
+    }
 
+    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
+    {
+        $executor->doElse();
+        $this->doDefineVarWith('null');
+        $executor->breakChain();
+    }
 
+    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    {
+        $executor->doElse();
+        $this->bufferizeContent();
+        $executor->breakChain();
+    }
+
+    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    {
+        $executor->doIf('($tpl->'.$this->_defineVar.' = '.$exp.') !== null');
+    }
+    
     /**
      * Parse the define expression, already splitted in sub parts by ';'.
      */
-    public function parseExpression( $exp )
+    public function parseExpression($exp)
     {
-        $defineScope = false;
-        $defineVar = false;
-        $expression = false;
+        $defineScope = false; // (local | global)
+        $defineVar   = false; // var to define
+        $expression  = false; // expression defining the var
         
-        $exp = str_replace(';;', ';', $exp);
-        $exp =  trim($exp);
+        // extract defineScope from expression
+        $exp = trim($exp);
         if (preg_match('/^(local|global)\s+(.*?)$/ism', $exp, $m)) {
             list(,$defineScope, $exp) = $m;
             $exp = trim($exp);
         }
-        if (preg_match('/^([a-z][a-z0-9_]*?)(\s+.*?)?$/ism', $exp, $m)) {
-            if (count($m) == 3) {
-                list(,$defineVar, $exp) = $m;
-                $exp = trim($exp);
-            }
-            else {
-                list(,$defineVar) = $m;
-                $exp = false;
-            };
-        }
-        
+
+        // extract varname and expression from remaining of expression
+        list($defineVar, $exp) = $this->parseSetExpression($exp);
+        if ($exp !== null) $exp = trim($exp);
         return array($defineScope, $defineVar, $exp);
     }
+
+    private function bufferizeContent()
+    {
+        $this->tag->generator->pushCode( 'ob_start()' );
+        $this->tag->generateContent();
+        $this->doDefineVarWith('ob_get_contents()');
+        $this->tag->generator->pushCode('ob_end_clean()');
+        $this->_buffered = true;
+    }
+
+    private function doDefineVarWith($code)
+    {
+        $this->tag->generator->doSetVar('$tpl->'.$this->_defineVar, $code);
+    }
+
+    private $_buffered = false;
+    private $_defineVar = null;
 }
 
 ?>

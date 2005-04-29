@@ -50,16 +50,8 @@ class PHPTAL_Attribute_METAL_DefineMacro extends PHPTAL_Attribute
 
         // PHPTAL will echo the first xml declaration/doctype encountered 
         // in regular template or in macro execution.
-
-        $xmldecl = $this->tag->generator->getXmlDeclaration();
-        if ($xmldecl){
-            $xmldecl->generate();
-        }
-        
-        $doctype = $this->tag->generator->getDocType();
-        if ($doctype) {
-            $doctype->generate();
-        }
+        $this->tag->generator->doXmlDeclaration();
+        $this->tag->generator->doDoctype();
 
         // secure template context inside macro
         $this->tag->generator->doSetVar('$tpl', 'clone $tpl');

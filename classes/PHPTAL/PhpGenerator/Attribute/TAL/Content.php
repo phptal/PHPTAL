@@ -30,11 +30,14 @@
 //
 //
 
+require_once 'PHPTAL/PhpGenerator/ChainExecutor.php';
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
+class PHPTAL_Attribute_TAL_Content 
+extends PHPTAL_Attribute
+implements PHPTAL_Php_TalesChainReader
 {
     public function start()
     {
@@ -67,37 +70,29 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
     
     private function generateChainedContent($code)
     {
-        $this->tag->generator->noThrow(true);
-        $started = false;
-        foreach ($code as $exp){
-            if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
-                continue;
-            }
-                
-            if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD){
-                if ($started){
-                    $this->tag->generator->doElse();
-                }
-                $this->generateDefault();
-                break;
-            }
-
-            $condition = '$__content__ = '.$exp;
-            if (!$started) {
-                $started = true;
-                $this->tag->generator->doIf($condition);
-            }
-            else {
-                $this->tag->generator->doElseIf($condition);
-            }
-            $this->doEcho('$__content__');
-        }
-        
-        if ($started){
-            $this->tag->generator->doEnd();
-        }
-        $this->tag->generator->noThrow(false);
+        $executor = new PHPTAL_Php_ChainExecutor(
+            $this->tag->generator, $code, $this
+        );
     }
+
+    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    {
+        $executor->doIf('$__content__ = '.$exp);
+        $this->doEcho('$__content__');
+    }
+    
+    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
+    {
+        $executor->breakChain();
+    }
+
+    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    {
+        $executor->doElse();
+        $this->generateDefault();
+        $executor->breakChain();
+    }
+
 }
 
 ?>

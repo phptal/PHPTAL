@@ -80,7 +80,7 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
 
     private function initRepeat()
     {//{{{
-        list($varName, $expression) = $this->parseExpression($this->expression);
+        list($varName, $expression) = $this->parseSetExpression($this->expression);
         $code = $this->tag->generator->evaluateExpression($expression);
         
         $this->item       = '$ctx->'.$varName;
@@ -117,16 +117,6 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
         $this->tag->generator->doEnd();
     }//}}}
     
-    private function parseExpression($src)
-    {//{{{
-        // (item) (sourceOfRepeat)
-        if (preg_match('/^([a-z][a-z_0-9]*?)\s+(.*?)$/ism', $src, $m)){
-            list(,$varName, $expression) = $m;
-            return array($varName, $expression);
-        }
-        throw new Exception("Unable to find item in tal:repeat expression : $src");
-    }//}}}
-
     private $item;
     private $controller;
 }

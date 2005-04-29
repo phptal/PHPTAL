@@ -49,7 +49,7 @@ class TalDefineTest extends PHPUnit2_Framework_TestCase
         list($defineScope, $defineVar, $expression) = $att->parseExpression('a');
         $this->assertEquals(false, $defineScope);
         $this->assertEquals('a', $defineVar);
-        $this->assertEquals(false, $expression); 
+        $this->assertEquals(null, $expression); 
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('global a string: foo; bar; baz');
         $this->assertEquals('global', $defineScope);

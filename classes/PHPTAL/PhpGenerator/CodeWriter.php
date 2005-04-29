@@ -60,24 +60,14 @@ class PHPTAL_CodeWriter
 
     public function setDocType(PHPTAL_PhpNodeDoctype $dt)
     {//{{{
-        $this->_doctype = $dt;
-    }//}}}
-
-    public function getDocType()
-    {//{{{
-        return $this->_doctype;
+        $this->_doctype = str_replace('\'', '\\\'', $dt->node->value);
     }//}}}
 
     public function setXmlDeclaration(PHPTAL_PhpNodeXmlDeclaration $dt)
     {//{{{
-        $this->_xmldeclaration = $dt;
+        $this->_xmldeclaration = str_replace('\'', '\\\'', $dt->node->value);
     }//}}}
 
-    public function getXmlDeclaration()
-    {//{{{
-        return $this->_xmldeclaration;
-    }//}}}
-    
     public function setFunctionPrefix($prefix)
     {//{{{
         $this->_functionPrefix = $prefix;
@@ -175,7 +165,23 @@ class PHPTAL_CodeWriter
         $this->_result .= join( '', $this->_htmlBuffer );
         $this->_htmlBuffer = array();
     }//}}}
-    
+
+    public function doDoctype()
+    {//{{{
+        if ($this->_doctype){
+            $code = '$ctx->setDocType(\''.$this->_doctype.'\')';
+            $this->pushCode($code);
+        }
+    }//}}}
+
+    public function doXmlDeclaration()
+    {//{{{
+        if ($this->_xmldeclaration){
+            $code = '$ctx->setXmlDeclaration(\''.$this->_xmldeclaration.'\')';
+            $this->pushCode($code);
+        }
+    }//}}}
+
     public function doFunction($name, $params)
     {//{{{
         $name = $this->_functionPrefix . $name;
@@ -272,9 +278,9 @@ class PHPTAL_CodeWriter
     }//}}}
 
     public function doEchoRaw($code)
-    {
+    {//{{{
         $this->pushHtml('<?php echo '.$code.' ?>');
-    }
+    }//}}}
 
     public function pushHtml($html, $replaceInString=true)
     {//{{{
@@ -328,6 +334,8 @@ class PHPTAL_CodeWriter
         return $func($html, ENT_QUOTES, $this->_encoding);
     }//}}}
 
+
+    
     public function evaluateTalesString($src)
     {//{{{
         if ($this->_talesMode == 'tales'){

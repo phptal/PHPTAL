@@ -48,7 +48,7 @@ class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
         $expressions = $this->tag->generator->splitExpression($this->expression);
         // foreach attribute
         foreach ($expressions as $exp){
-            list($attribute, $key) = $this->_parseExpression($exp);
+            list($attribute, $key) = $this->parseSetExpression($exp);
             //   if the translation key is specified 
             if ($key != null){
                 // we use it and replace the tag attribute with the result of
@@ -57,17 +57,15 @@ class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
                 $code = $this->_getTranslationCode("'$key'");
                 $this->tag->attributes[$attribute] = $code;
             } 
-            //   else if the attribute is overwritten by tal:attributes
-            else if (array_key_exists($attribute, $this->tag->overwrittenAttributes)){
-                // we translate the result of tal:attributes
-                $varn = $this->tag->overwrittenAttributes[$attribute];
+            else if ($this->tag->isOverwrittenAttribute($attribute)){
+                $varn = $this->tag->getOverwrittenAttributeVarName($attribute);
                 $code = $this->_getTranslationCode($varn);
                 $this->tag->attributes[$attribute] = $code;
             }
-            //   else if the attribute has a default value
-            else if (array_key_exists($attribute, $this->tag->attributes)){
+            // else if the attribute has a default value
+            else if ($this->tag->hasAttribute($attribute)){
                 // we use this default value as the translation key
-                $key = $this->tag->attributes[$attribute];
+                $key = $this->tag->getAttribute($attribute);
                 $key = str_replace('\'', '\\\'', $key);
                 $code = $this->_getTranslationCode("'$key'");
                 $this->tag->attributes[$attribute] = $code;
@@ -81,18 +79,6 @@ class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
    
     public function end()
     {
-    }
-
-    private function _parseExpression($exp)
-    {
-        $exp = trim($exp);
-        // (attribute) (value)
-        if (preg_match('/^([a-z0-9:\-_]+)\s+(.*?)$/i', $exp, $m)){
-            array_shift($m);
-            return $m;
-        }
-        // (attribute)
-        return array($exp, null);
     }
 
     private function _getTranslationCode($key)

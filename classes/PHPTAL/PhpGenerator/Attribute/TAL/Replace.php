@@ -32,10 +32,14 @@
 //      <span tal:replace="nothing">This element is a comment.</span>
 //  
 
+require_once 'PHPTAL/PhpGenerator/ChainExecutor.php';
+
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
+class PHPTAL_Attribute_TAL_Replace 
+extends PHPTAL_Attribute
+implements PHPTAL_Php_TalesChainReader
 {
     const REPLACE_VAR = '$__replace__';
     
@@ -74,45 +78,28 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
 
     private function replaceByChainedExpression($expArray)
     {//{{{
-        // because we have alternatives, PHPTAL must not throw exceptions when
-        // an unknown path is encountered
-        $this->tag->generator->noThrow(true);
-
-        $started = false;
-        foreach ($expArray as $exp) {                
-            // nothing keyword is ignored in this chained expression
-            if ($exp == PHPTAL_TALES_NOTHING_KEYWORD) {
-                continue;
-            }
-
-            // default execute the tag content and is always true
-            if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD) {
-                if ($started) 
-                    $this->tag->generator->doElse();
-
-                $this->generateDefault();
-                break;
-            }
-
-            // (else) if ($__replace__ = $possibility) echo $__replace__;
-            $condition = self::REPLACE_VAR.' = '.$exp;
-            if ($started) {
-                $this->tag->generator->doElseIf($condition);
-            }
-            else {
-                $this->tag->generator->doIf($condition);
-                $started = true;
-            }
-
-            $this->doEcho(self::REPLACE_VAR);
-        }
-        // close if/else if
-        if ($started)
-            $this->tag->generator->doEnd();
-
-        // restore nothrow
-        $this->tag->generator->noThrow(false);
+        $executor = new PHPTAL_Php_ChainExecutor(
+            $this->tag->generator, $expArray, $this
+        );
     }//}}}
+
+    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
+    {
+        $executor->continueChain();
+    }
+
+    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    {
+        $executor->doElse();
+        $this->generateDefault();
+        $executor->breakChain();
+    }
+
+    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    {
+        $executor->doIf(self::REPLACE_VAR.' = '.$exp);
+        $this->doEcho(self::REPLACE_VAR);
+    }
 
     private function generateDefault()
     {//{{{

@@ -123,6 +123,18 @@ abstract class PHPTAL_Attribute
             $this->tag->generator->doEchoRaw($code);
     }
 
+    protected function parseSetExpression($exp)
+    {
+        $exp = trim($exp);
+        // (dest) (value)
+        if (preg_match('/^([a-z0-9:\-_]+)\s+(.*?)$/i', $exp, $m)){
+            array_shift($m);
+            return $m;
+        }
+        // (dest)
+        return array($exp, null);
+    }
+
     private $_echoType = PHPTAL_Attribute::ECHO_TEXT;
 }
 

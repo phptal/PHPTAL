@@ -166,44 +166,29 @@ class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
     public function hasAttribute($name)
     {//{{{
         return $this->node->hasAttribute($name);
-        
-        $ns = $this->getNodePrefix();
-        foreach ($this->attributes as $key=>$value){
-            if ($this->xmlns->unAliasAttribute($key) == $name){
-                return true;
-            }
-            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
-                return true;
-            }
-        }
-        foreach ($this->talAttributes as $key=>$value){
-            if ($this->xmlns->unAliasAttribute($key) == $name){
-                return true;
-            }
-            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
-                return true;
-            }
-        }
-        return false;
     }//}}}
 
     /** Returns the value of specified PHPTAL attribute. */
     public function getAttribute($name)
     {//{{{
         return $this->node->getAttribute($name);
-        
-        $ns = $this->getNodePrefix();
-        
-        foreach ($this->attributes as $key=>$value){
-            if ($this->xmlns->unAliasAttribute($key) == $name){
-                return $value;
-            }
-            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
-                return $value;
-            }
-        }
-        return false;
     }//}}}
+
+    public function isOverwrittenAttribute($name)
+    {
+        return array_key_exists($name, $this->overwrittenAttributes);
+    }
+
+    public function getOverwrittenAttributeVarName($name)
+    {
+        return $this->overwrittenAttributes[$name];
+    }
+    
+    public function overwriteAttributeWithPhpValue($name, $phpVariable)
+    {
+        $this->attributes[$name] = '<?php echo '.$phpVariable.' ?>';
+        $this->overwrittenAttributes[$name] = $phpVariable;
+    }
 
     /** 
      * Returns true if this element or one of its PHPTAL attributes has some
@@ -211,7 +196,8 @@ class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
      */
     public function hasRealContent()
     {//{{{
-        return $this->node->hasRealContent() || count($this->contentAttributes) > 0;
+        return $this->node->hasRealContent() 
+            || count($this->contentAttributes) > 0;
     }//}}}
 
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
@@ -461,9 +447,7 @@ class PHPTAL_PhpNodeDoctype extends PHPTAL_PhpNode
 
     public function generate()
     {//{{{;
-        $code = sprintf('$ctx->setDocType(\'%s\')', 
-                        str_replace('\'', '\\\'', $this->node->value));
-        $this->generator->pushCode($code);
+        $this->generator->doDoctype();
     }//}}}
 }
 
@@ -482,9 +466,7 @@ class PHPTAL_PhpNodeXmlDeclaration extends PHPTAL_PhpNode
     
     public function generate()
     {//{{{
-        $code = sprintf('$ctx->setXmlDeclaration(\'%s\')',
-                        str_replace('\'', '\\\'', $this->node->value));
-        $this->generator->pushCode($code);
+        $this->generator->doXmlDeclaration();
     }//}}}
 }
 

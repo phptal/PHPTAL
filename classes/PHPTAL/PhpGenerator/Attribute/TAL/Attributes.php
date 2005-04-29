@@ -37,11 +37,14 @@
 // IN PHPTAL: attributes will not work on structured replace.
 //
 
+require_once 'PHPTAL/PhpGenerator/ChainExecutor.php';
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
+class PHPTAL_Attribute_TAL_Attributes 
+extends PHPTAL_Attribute
+implements PHPTAL_Php_TalesChainReader
 {
     const ATT_FULL_REPLACE = '$__ATT_';
     const ATT_VALUE_REPLACE = '$__att_';
@@ -51,11 +54,10 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
     
     public function start()
     {//{{{
-        // retrieve the list of attributes to replace splitting the
-        // expression using ; delimiter
+        // split attributes using ; delimiter
         $attrs = $this->tag->generator->splitExpression($this->expression);
         foreach ($attrs as $exp) {
-            list($attribute, $expression) = $this->parseExpression($exp);
+            list($attribute, $expression) = $this->parseSetExpression($exp);
             if ($expression) {
                 $this->prepareAttribute($attribute, $expression);
             }
@@ -73,7 +75,7 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         // if $code is an array then the attribute value is decided by a
         // tales chained expression
         if (is_array($code)) {
-            return $this->prepareChainedAttribute($attribute, $code);
+            return $this->prepareChainedAttribute2($attribute, $code);
         }
        
         // XHTML boolean attribute does not appear when empty of false
@@ -85,66 +87,22 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         $attkey = self::ATT_VALUE_REPLACE.$this->getVarName($attribute);
         $value  = $this->tag->generator->escapeCode($code);
         $this->tag->generator->doSetVar($attkey, $value);
-        $this->overwriteAttribute($attribute, $attkey);
+        $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);
     }//}}}
 
-    private function prepareChainedAttribute($attribute, $chain)
+    private function prepareChainedAttribute2($attribute, $chain)
     {//{{{
-        // TODO: chained XHTML boolean attributes
-
-        // default attribute value (from source tag)
-        $default = false;
+        $this->_default = false;
+        $this->_attribute = $attribute;
         if (array_key_exists($attribute, $this->tag->attributes)) {
-            $default = $this->tag->attributes[$attribute];
+            $this->_default = $this->tag->attributes[$attribute];
         }
-        
-        // boolean indicating if the chain if/elseif/else started
-        $started = false;
+        $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
 
-        // full attribute replace, the code will decide wether or not the
-        // attribute will appear
-        $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
-        
-        $this->tag->generator->noThrow(true);
-        foreach ($chain as $exp){
-            // nothing keyword gives an empty attribute value and ends the
-            // chain.
-            if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
-                if ($started) $this->tag->generator->doElse();
-                $this->tag->generator->doSetVar($attkey, "' $attribute=\"\"'");
-                break;
-            }
-
-            // default keyword gives default value if set or do not print
-            // the attribute otherwise and ends the chain.
-            if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD){
-                if ($started) $this->tag->generator->doElse();
-                $code = ($default !== false) 
-                    ? "' $attribute=\"$default\"'"  // default value
-                    : '\'\'';                       // do not print attribute
-                $this->tag->generator->doSetVar($attkey, $code);
-                break;
-            }
-
-            // regular chain member, we try to evaluate the expression
-            // and use its return as attribute value if it gives something
-            $condition = "($attkey = $exp) !== null && $attkey !== false";
-            if ($started == false){ 
-                $started = true;
-                $this->tag->generator->doIf($condition);
-            }
-            else {
-                $this->tag->generator->doElseIf($condition);
-            }
-
-            $value = $this->tag->generator->escapeCode($attkey);
-            $value = "' $attribute=\"'.$value.'\"'";
-            $this->tag->generator->doSetVar($attkey, $value);
-        }
-        $this->tag->generator->doEnd();
-
-        $this->overwriteAttribute($attribute, $attkey);        
-        $this->tag->generator->noThrow(false);
+        $executor = new PHPTAL_Php_ChainExecutor(
+            $this->tag->generator, $chain, $this
+        );
+        $this->tag->overwriteAttributeWithPhpValue($attribute, $this->_attkey);
     }//}}}
 
     private function prepareBooleanAttribute($attribute, $code)
@@ -156,15 +114,9 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         $this->tag->generator->doElse();
         $this->tag->generator->doSetVar($attkey, '\'\'');
         $this->tag->generator->doEnd();
-        $this->overwriteAttribute($attribute, $attkey);
+        $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);
     }//}}}
 
-    private function overwriteAttribute($attribute, $attkey)
-    {//{{{
-        $this->tag->attributes[$attribute] = '<?php echo '.$attkey.' ?>';
-        $this->tag->overwrittenAttributes[$attribute] = $attkey;
-    }//}}}
-    
     private function getVarName($attribute)
     {//{{{
         $attribute = str_replace(':', '_', $attribute);
@@ -172,24 +124,33 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
         return $attribute;
     }//}}}
 
-    private function parseExpression($exp)
+    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
     {//{{{
-        $attributeName = false;
-        $expression = false;
-        $exp = str_replace(';;', ';', $exp);
-        $exp = trim($exp);
-        // (attribute)[( expression)]
-        if (preg_match('/^([a-z][:\-a-z0-9_]*?)(\s+.*?)?$/ism', $exp, $m)) {
-            if (count($m) == 3) {
-                list(,$attributeName, $exp) = $m;
-                $exp = trim($exp);
-            }
-            else {
-                list(,$attributeName) = $m;
-                $exp = false;
-            }
-        }
-        return array($attributeName, $exp);
+        $executor->doElse();
+        $this->tag->generator->doSetVar(
+            $this->_attkey, 
+            "' $this->_attribute=\"\"'"
+        );
+        $executor->breakChain();
+    }//}}}
+
+    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    {//{{{
+        $executor->doElse();
+        $code = ($this->_default !== false)
+            ? "' $this->_attribute=\"$this->_default\"'"  // default value
+            : '\'\'';                       // do not print attribute
+        $this->tag->generator->doSetVar($this->_attkey, $code);
+        $executor->breakChain();
+    }//}}}
+
+    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    {//{{{
+        $condition = "($this->_attkey = $exp) !== null && $this->_attkey !== false";
+        $executor->doIf($condition);
+        $value = $this->tag->generator->escapeCode($this->_attkey);
+        $value = "' $this->_attribute=\"'.$value.'\"'";
+        $this->tag->generator->doSetVar($this->_attkey, $value);
     }//}}}
 }
 
