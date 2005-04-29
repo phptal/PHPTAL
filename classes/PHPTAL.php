@@ -335,9 +335,7 @@ class PHPTAL
         $this->findTemplate();
         $this->__file = $this->_realPath;
         // where php generated code should resides
-        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION 
-                         . $this->getFunctionName() 
-                         . '.php';
+        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.php';
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
@@ -366,10 +364,7 @@ class PHPTAL
     public function getFunctionName()
     {//{{{
         if (!$this->_functionName) {
-            $this->_functionName = 
-                'tpl_' .
-                PHPTAL_VERSION. 
-                md5($this->_realPath);
+            $this->_functionName = 'tpl_' . PHPTAL_VERSION . md5($this->_realPath);
         }
         return $this->_functionName;
     }//}}}
@@ -434,14 +429,9 @@ class PHPTAL
 
     private function storeGeneratedCode($code)
     {//{{{
-        $fp = @fopen($this->_codeFile, 'w');
-        if (!$fp) {
-            $err = 'Unable to open %s for writing';
-            $err = sprintf($err, $this->_codeFile);
-            throw new Exception($err);
+        if (!@file_put_contents($this->_codeFile, $code)) {
+            throw new Exception('Unable to open '.$this->_codeFile.' for writing');
         }
-        fwrite($fp, $code);
-        fclose($fp);
     }//}}}
 
     /** Search template source location. */
@@ -466,13 +456,9 @@ class PHPTAL
         }
         
         // fail back to current path (or absolute path)
-        $path = $this->_realPath;
-        if (file_exists($path)) return;
-        
-        // not found
-        $err = 'Unable to locate template file %s';
-        $err = sprintf($err, $this->_realPath);
-        throw new Exception($err);
+        if (!file_exists($this->_realPath)){        
+            throw new Exception('Unable to locate template file '.$this->_realPath);
+        }
     }//}}}
 
     private $_prefilter = null;

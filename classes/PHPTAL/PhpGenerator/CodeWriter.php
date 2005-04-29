@@ -333,8 +333,6 @@ class PHPTAL_CodeWriter
         $func = $this->_htmlEscapingFunction;
         return $func($html, ENT_QUOTES, $this->_encoding);
     }//}}}
-
-
     
     public function evaluateTalesString($src)
     {//{{{

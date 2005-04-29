@@ -54,14 +54,15 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         if ($code == PHPTAL_TALES_DEFAULT_KEYWORD) {
-            $this->generateDefault();
-            return;
+            return $this->generateDefault();
         }
         
         $this->doEcho($code);
     }
     
-    public function end(){}
+    public function end()
+    {
+    }
 
     private function generateDefault()
     {
@@ -70,9 +71,7 @@ implements PHPTAL_Php_TalesChainReader
     
     private function generateChainedContent($code)
     {
-        $executor = new PHPTAL_Php_ChainExecutor(
-            $this->tag->generator, $code, $this
-        );
+        $executor = new PHPTAL_Php_ChainExecutor($this->tag->generator, $code, $this);
     }
 
     public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
@@ -92,7 +91,5 @@ implements PHPTAL_Php_TalesChainReader
         $this->generateDefault();
         $executor->breakChain();
     }
-
 }
-
 ?>
