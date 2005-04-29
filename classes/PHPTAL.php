@@ -343,7 +343,7 @@ class PHPTAL
         // is defined.
         if (defined('PHPTAL_FORCE_REPARSE') 
             || !file_exists($this->_codeFile) 
-            || filemtime($this->_codeFile) < filemtime($this->_realPath)) {
+            || (!$this->_source && filemtime($this->_codeFile) < filemtime($this->_realPath))) {
             $this->parse();
         }
         $this->_prepared = true;
