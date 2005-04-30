@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPTAL/PhpGenerator/Node.php';
+require_once 'PHPTAL/Php/Node.php';
 
 class PHPTAL_PhpCodeGenerator
 {

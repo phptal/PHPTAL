@@ -21,8 +21,8 @@
 //  
 
 require_once 'PHPTAL/Parser/Defs.php';
-require_once 'PHPTAL/PhpGenerator/CodeWriter.php';
-require_once 'PHPTAL/PhpGenerator/Attribute.php';
+require_once 'PHPTAL/Php/CodeWriter.php';
+require_once 'PHPTAL/Php/Attribute.php';
 
 /**
  * Document node abstract class.

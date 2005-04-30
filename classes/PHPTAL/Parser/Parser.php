@@ -24,7 +24,7 @@ require_once 'PHPTAL/Parser/Defs.php';
 require_once 'PHPTAL/Parser/Node.php';
 require_once 'PHPTAL/Parser/XmlParser.php';
 require_once 'PHPTAL/Parser/XmlnsState.php';
-require_once 'PHPTAL/PhpGenerator/Tales.php';
+require_once 'PHPTAL/Php/Tales.php';
 
 /**
  * Template parser.

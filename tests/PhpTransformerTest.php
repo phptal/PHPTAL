@@ -21,7 +21,7 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL/PhpGenerator/PhpTransformer.php';
+require_once 'PHPTAL/Php/PhpTransformer.php';
 
 class PhpTransformerTest extends PHPUnit2_Framework_TestCase
 {

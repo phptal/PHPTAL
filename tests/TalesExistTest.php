@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 require_once 'PHPTAL.php';
-require_once 'PHPTAL/PhpGenerator/Tales.php';
+require_once 'PHPTAL/Php/Tales.php';
 
 class TalesExistTest extends PHPUnit2_Framework_TestCase 
 {

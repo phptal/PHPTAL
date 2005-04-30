@@ -23,8 +23,8 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/Parser/Parser.php';
-require_once 'PHPTAL/PhpGenerator/CodeWriter.php';
-require_once 'PHPTAL/PhpGenerator/Node.php';
+require_once 'PHPTAL/Php/CodeWriter.php';
+require_once 'PHPTAL/Php/Node.php';
 
 class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
 {

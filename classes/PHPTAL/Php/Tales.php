@@ -304,7 +304,7 @@ function phptal_tales_string( $expression, $nothrow=false )
  */
 function phptal_tales_php($src)
 {//{{{
-    require_once 'PHPTAL/PhpGenerator/PhpTransformer.php';
+    require_once 'PHPTAL/Php/PhpTransformer.php';
     return PHPTAL_Php_Transformer::transform($src, '$ctx->');
 }//}}}
 

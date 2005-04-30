@@ -36,7 +36,7 @@
 //
           
 
-require_once 'PHPTAL/PhpGenerator/ChainExecutor.php';
+require_once 'PHPTAL/Php/ChainExecutor.php';
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
