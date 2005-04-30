@@ -10,7 +10,7 @@
 // relying on a message ID computed from the content.
 // 
 
-class PHPTAL_Attribute_I18N_Data extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_I18N_Data extends PHPTAL_Php_Attribute
 {
     public function start(){}
     public function end(){}

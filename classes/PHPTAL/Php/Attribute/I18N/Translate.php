@@ -9,7 +9,7 @@
 // is computed from the content of the element bearing this attribute. 
 // Otherwise, the value of the element gives the message ID.
 // 
-class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 {
     public function start()
     {//{{{

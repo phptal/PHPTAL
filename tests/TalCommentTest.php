@@ -41,7 +41,7 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
     
     function testComment()
     {
-        $att = PHPTAL_Attribute::createAttribute($this->_tag, 'tal:comment', 'my dummy comment');
+        $att = PHPTAL_Php_Attribute::createAttribute($this->_tag, 'tal:comment', 'my dummy comment');
         $att->start();
         $att->end();
         $res = $this->_gen->getResult();
@@ -51,7 +51,7 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
     function testMultiLineComment()
     {
         $comment = "my dummy comment\non more than one\nline";
-        $att = PHPTAL_Attribute::createAttribute($this->_tag, 'tal:comment', $comment);
+        $att = PHPTAL_Php_Attribute::createAttribute($this->_tag, 'tal:comment', $comment);
         $att->start();
         $att->end();
         $res = $this->_gen->getResult();
@@ -61,7 +61,7 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
     function testTrickyComment()
     {
         $comment = "my dummy */ comment\non more than one\nline";
-        $att = PHPTAL_Attribute::createAttribute($this->_tag, 'tal:comment', $comment);
+        $att = PHPTAL_Php_Attribute::createAttribute($this->_tag, 'tal:comment', $comment);
         $att->start();
         $att->end();
         $res = $this->_gen->getResult();

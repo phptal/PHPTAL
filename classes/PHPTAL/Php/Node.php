@@ -291,7 +291,7 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         //  $tag->attributes['checked'] = '<?php echo $__ATT_checked ?\>';
         // 
 
-        $fullreplaceRx = PHPTAL_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
+        $fullreplaceRx = PHPTAL_Php_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
         foreach ($this->attributes as $key=>$value) {
             if (preg_match($fullreplaceRx, $value)){
                 $this->generator->pushHtml($value);
@@ -375,7 +375,7 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
                                );
                 throw new Exception($err);
             }
-            $result[$pos] = PHPTAL_Attribute::createAttribute(
+            $result[$pos] = PHPTAL_Php_Attribute::createAttribute(
                 $this, $this->xmlns->unAliasAttribute($key), $exp 
             );
         }

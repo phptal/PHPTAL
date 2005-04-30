@@ -7,7 +7,7 @@
 // default domain. The value of the attribute is used directly; it is not 
 // a TALES expression.
 // 
-class PHPTAL_Attribute_I18N_Domain extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
 {
     public function start()
     {

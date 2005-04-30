@@ -40,7 +40,7 @@
 // an icon image file, and the message ID up-arrow-alttext will be used for 
 // the "alt" text.
 //
-class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 {
     public function start()
     {

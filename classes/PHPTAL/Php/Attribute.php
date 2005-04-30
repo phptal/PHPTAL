@@ -56,7 +56,7 @@ require_once 'PHPTAL/Parser/Node.php';
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-abstract class PHPTAL_Attribute 
+abstract class PHPTAL_Php_Attribute 
 {
     const ECHO_TEXT = 'text';
     const ECHO_STRUCTURE = 'structure';
@@ -84,7 +84,7 @@ abstract class PHPTAL_Attribute
      */
     public static function createAttribute($tag, $attName, $expression)
     {//{{{
-        $class = 'PHPTAL_Attribute_' . str_replace(':','_', $attName);
+        $class = 'PHPTAL_Php_Attribute_' . str_replace(':','_', $attName);
         $class = str_replace('-', '', $class);
         
         $result = new $class($tag);
@@ -135,7 +135,7 @@ abstract class PHPTAL_Attribute
         return array($exp, null);
     }
 
-    private $_echoType = PHPTAL_Attribute::ECHO_TEXT;
+    private $_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;
 }
 
 ?>

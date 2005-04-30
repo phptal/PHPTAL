@@ -6,7 +6,7 @@
 // translated. The default is "nothing", which means we don't provide 
 // this information to the translation services.
 //
-class PHPTAL_Attribute_I18N_Source extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_I18N_Source extends PHPTAL_Php_Attribute
 {
     public function start()
     {

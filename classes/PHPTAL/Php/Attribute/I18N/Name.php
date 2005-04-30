@@ -15,7 +15,7 @@
 //
 //     "${name} was born in ${country}."
 //     
-class PHPTAL_Attribute_I18N_Name extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
 {
     public function start()
     {

@@ -23,7 +23,7 @@
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_PHPTAL_ID extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
 {
     private $id;
     

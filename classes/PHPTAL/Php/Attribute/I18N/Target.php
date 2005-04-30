@@ -17,7 +17,7 @@
 // translated to e.g. German, then it probably shouldn't be wrapped in an 
 // i18n:translate span.
 // 
-class PHPTAL_Attribute_I18N_Target extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_I18N_Target extends PHPTAL_Php_Attribute
 {
     public function start(){}
     public function end(){}

@@ -37,8 +37,8 @@ require_once 'PHPTAL/Php/ChainExecutor.php';
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_TAL_Replace 
-extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_TAL_Replace 
+extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
     const REPLACE_VAR = '$__replace__';

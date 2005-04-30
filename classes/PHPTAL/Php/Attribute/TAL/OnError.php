@@ -37,7 +37,7 @@
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Attribute_TAL_OnError extends PHPTAL_Attribute
+class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
 {
     const ERR_VAR = '$__err__';
     
