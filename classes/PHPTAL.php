@@ -409,7 +409,8 @@ class PHPTAL
         // instantiate the PHPTAL source parser 
         $parser = new PHPTAL_Parser();
         $parser->stripComments($this->_stripComments);
-        $parser->setPreFilter($this->_prefilter);
+        if ($this->_prefilter)
+            $parser->setPreFilter($this->_prefilter);
 
         // source may be provided string or template file
         if (isset($this->_source)){

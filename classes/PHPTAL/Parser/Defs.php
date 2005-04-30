@@ -60,6 +60,12 @@
 // the statements on this new element. 
 // 
 
+require_once 'PHPTAL/Namespace.php';
+require_once 'PHPTAL/Namespace/TAL.php';
+require_once 'PHPTAL/Namespace/METAL.php';
+require_once 'PHPTAL/Namespace/I18N.php';
+require_once 'PHPTAL/Namespace/PHPTAL.php';
+
 /**
  * PHPTAL constants.
  * 
@@ -73,54 +79,34 @@ class PHPTAL_Defs
     const CONTENT = 3;
 
     /**
-     * This array contains the list of all known attribute namespaces, if an
-     * attribute belonging to one of this namespaces is not recognized by PHPTAL,
-     * an exception will be raised.
-     * 
+     * Associative array of registered namespaces.
+     *
+     * A PHPTAL_Namespace can be registered using PHPTAL_Defs::registerNamespace().
+     *
      * These namespaces will be drop from resulting xml/xhtml unless the parser 
      * is told to keep them.
      */
-    static $NAMESPACES = array('TAL', 'METAL', 'I18N', 'PHPTAL');
-
-    static $XMLNS = array(
-        'http://xml.zope.org/namespaces/tal'    => 'TAL',
-        'http://xml.zope.org/namespaces/metal'  => 'METAL',
-        'http://xml.zope.org/namespaces/i18n'   => 'I18N',
-        'http://xml.zope.org/namespaces/phptal' => 'PHPTAL'
-    );
+    static $NAMESPACES;
 
     /**
-     * This dictionary contains ALL known PHPTAL attributes. Unknown attributes 
-     * will be echoed in result as xhtml/xml ones.
+     * List of registered namespaces aliases.
+     *
+     * For example:
+     *
+     * http://xml.zope.org/namespaces/metal => METAL
+     */
+    static $XMLNS;
+    
+    /**
+     * This dictionary contains ALL registered namespaces' attributes. 
+     * Unknown attributes will be echoed in result as xhtml/xml ones.
      * 
      * The value define how and when the attribute handler will be called during
      * code generation.
+     *
+     * 'TAL:DEFINE' => PHPTAL_Defs::SURROUND
      */ 
-    static $DICTIONARY = array(
-        'TAL:DEFINE'         => self::SURROUND, // set a context variable
-        'TAL:CONDITION'      => self::SURROUND, // print tag content only when condition true
-        'TAL:REPEAT'         => self::SURROUND, // repeat over an iterable
-        'TAL:CONTENT'        => self::CONTENT,  // replace tag content
-        'TAL:REPLACE'        => self::REPLACE,  // replace entire tag
-        'TAL:ATTRIBUTES'     => self::SURROUND, // dynamically set tag attributes
-        'TAL:OMIT-TAG'       => self::SURROUND, // omit to print tag but not its content
-        'TAL:COMMENT'        => self::SURROUND, // do nothing
-        'TAL:ON-ERROR'       => self::SURROUND, // replace content with this if error occurs
-
-        'METAL:DEFINE-MACRO' => self::SURROUND, // define a template macro
-        'METAL:USE-MACRO'    => self::REPLACE,  // use a template macro
-        'METAL:DEFINE-SLOT'  => self::SURROUND, // define a macro slot
-        'METAL:FILL-SLOT'    => self::SURROUND, // fill a macro slot 
-
-        'I18N:TRANSLATE'     => self::CONTENT,  // translate some data using GetText package
-        'I18N:NAME'          => self::SURROUND, // prepare a translation name
-        'I18N:ATTRIBUTES'    => self::SURROUND, // translate tag attributes values
-        'I18N:DOMAIN'        => self::SURROUND, // choose translation domain
-
-        'PHPTAL:TALES'       => self::SURROUND,
-        'PHPTAL:DEBUG'       => self::SURROUND,
-        'PHPTAL:ID'          => self::SURROUND,
-    );
+    static $DICTIONARY;
 
     /**
      * This rule associative array represents both ordering and exclusion 
@@ -131,41 +117,10 @@ class PHPTAL_Defs
      *
      * When more than one phptal attribute appear in the same tag, they 
      * will execute in following order.
+     *
+     * 'TAL:DEFINE' => 4
      */ 
-    static $RULES_ORDER = array(
-        'PHPTAL:DEBUG'       => -2,   // meta surround
-        'PHPTAL:TALES'       => -1,   // meta surround
-        
-        'TAL:OMIT-TAG'       => 0,    // surround -> $tag->disableHeadFootPrint()
-
-        'METAL:DEFINE-MACRO' => 1,    // surround
-        
-        'TAL:ON-ERROR'       => 2,    // surround
-        'I18N:DOMAIN'        => 3,    // surround
-
-        'TAL:DEFINE'         => 4,    // surround/replace
-        
-        'I18N:NAME'          => 5,    // replace
-        'I18N:TRANSLATE'     => 5,    // content
-
-        'TAL:CONDITION'      => 6,    // surround
-
-        'PHPTAL:ID'          => 7,    // surround
-
-        'TAL:REPEAT'         => 8,    // surround
-
-        'TAL:ATTRIBUTES'     => 9,    // replace
-        'TAL:REPLACE'        => 9,    // replace
-        'METAL:USE-MACRO'    => 9,    // replace
-        'METAL:DEFINE-SLOT'  => 9,    // replace
-        'METAL:FILL-SLOT'    => 9,    // replace
-
-        'I18N:ATTRIBUTES'    => 10,   // replace
-
-        'TAL:CONTENT'        => 11,   // content
-
-        'TAL:COMMENT'        => 12,   // surround
-    );
+    static $RULES_ORDER; 
 
 
     /**
@@ -252,7 +207,7 @@ class PHPTAL_Defs
     {
         if (preg_match('/^(.*):(.*)$/', $att, $m)) {
             list (,$ns,$sub) = $m;
-            if (in_array(strtoupper($ns), self::$NAMESPACES) 
+            if (array_key_exists(strtoupper($ns), self::$NAMESPACES) 
                 && !self::isPhpTalAttribute($att)) {
                 return false;
             }
@@ -274,6 +229,38 @@ class PHPTAL_Defs
         return substr($att, 0, 6) == 'xmlns:'
             && array_key_exists($value, self::$XMLNS);
     }
+
+    /**
+     * Reset ALL registered PHPTAL_Namespace and their attributes.
+     */
+    static function reset()
+    {
+        self::$NAMESPACES = array();
+        self::$DICTIONARY = array();
+        self::$XMLNS = array();
+        self::$RULES_ORDER = array();
+        self::$RESETED = true;
+    }
+
+    /**
+     * Register a PHPTAL_Namespace and its attribute into PHPTAL.
+     */
+    static function registerNamespace(PHPTAL_Namespace $ns)
+    {
+        if (!self::$RESETED){
+            self::reset();
+        }
+        $nsname = strtoupper($ns->name);
+        self::$NAMESPACES[$nsname] = $ns;
+        self::$XMLNS[$ns->xmlns] = $nsname;
+        foreach ($ns->getAttributes() as $name => $attribute){
+            $key = $nsname.':'.strtoupper($name);
+            self::$DICTIONARY[$key] = $attribute->getKind();
+            self::$RULES_ORDER[$key] = $attribute->getPriority();
+        }
+    }
+
+    private static $RESETED = false;
 }
 
 ?>

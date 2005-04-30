@@ -60,7 +60,7 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
         $this->_stripComments = $b;
     }//}}}
 
-    public function setPreFilter($filter)
+    public function setPreFilter(PHPTAL_Filter $filter)
     {//{{{
         $this->_prefilter = $filter;
     }//}}}
@@ -75,13 +75,13 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
         if ($this->_prefilter){
             $str = $this->_prefilter->filter($str);
         }
-        parent::parseString( $str );
+        parent::parseString($str);
         return $this->_tree;
     }//}}}
     
     public function parseFile($path)
     {//{{{
-        parent::parseFile( $path );
+        parent::parseFile($path);
         return $this->_tree;
     }//}}}
 
@@ -119,7 +119,7 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
         
         foreach ($attributes as $key=>$value) {
             if (!$this->_xmlns->isValidAttribute($key)) {
-                $err = sprintf( self::ERR_UNSUPPORTED_ATTRIBUTE, $key );
+                $err = sprintf(self::ERR_UNSUPPORTED_ATTRIBUTE, $key);
                 $this->raiseError($err);
             }
         }
