@@ -1,6 +1,8 @@
 <?php
 
 require_once 'PHPTAL/Php/Node.php';
+require_once 'PHPTAL/Php/State.php';
+require_once 'PHPTAL/Php/CodeWriter.php';
 
 class PHPTAL_Php_CodeGenerator
 {
@@ -8,17 +10,18 @@ class PHPTAL_Php_CodeGenerator
     {
         $this->_functionName = 'tpl_'.PHPTAL_VERSION.md5($sourcePath);
         $this->_sourceFile = $sourcePath;
-        $this->_generator = new PHPTAL_Php_CodeWriter();
+        $this->_state = new PHPTAL_Php_State();
+        $this->_generator = new PHPTAL_Php_CodeWriter($this->_state);
     }
 
     public function setOutputMode($mode)
     { 
-        $this->_generator->setOutputMode($mode); 
+        $this->_state->setOutputMode($mode);
     }
     
     public function setEncoding($enc)
     { 
-        $this->_generator->setEncoding($enc); 
+        $this->_state->setEncoding($enc);
     }
 
     public function generate(PHPTAL_NodeTree $tree)
@@ -45,6 +48,7 @@ class PHPTAL_Php_CodeGenerator
     private $_functionName;
     private $_sourceFile;
     private $_generator;
+    private $_state;
 }
 
 ?>

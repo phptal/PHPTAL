@@ -27,35 +27,16 @@
  */
 class PHPTAL_Php_CodeWriter
 {
-    public function __construct()
+    public function __construct(PHPTAL_Php_State $state)
     {//{{{
+        $this->_state = $state;
     }//}}}
-    
-    public function setEncoding($encoding)
-    {//{{{
-        $this->_encoding = $encoding;
-    }//}}}
-    
+
     public function getResult()
     {//{{{
         $this->flush();
         $this->_result = trim($this->_result);
         return $this->_result;
-    }//}}}
-
-    public function setOutputMode($mode)
-    {//{{{
-        $this->_outputMode = $mode;
-    }//}}}
-    
-    public function getOutputMode()
-    {//{{{
-        return $this->_outputMode;
-    }//}}}
-
-    public function getEncoding()
-    {//{{{
-        return $this->_encoding;
     }//}}}
 
     public function setDocType(PHPTAL_Php_NodeDoctype $dt)
@@ -83,9 +64,7 @@ class PHPTAL_Php_CodeWriter
      */
     public function setTalesMode($mode)
     {//{{{
-        $old = $this->_talesMode;
-        $this->_talesMode = $mode;
-        return $old;
+        return $this->_state->setTalesMode($mode);
     }//}}}
 
     public function splitExpression($src)
@@ -95,12 +74,7 @@ class PHPTAL_Php_CodeWriter
 
     public function evaluateExpression($src)
     {//{{{
-        if ($this->_talesMode == 'php'){
-            return phptal_tales_php($src);
-        }
-        else {
-            return phptal_tales($src);
-        }
+        return $this->_state->evalTalesExpression($src);
     }//}}}
     
     public function indent() 
@@ -251,30 +225,30 @@ class PHPTAL_Php_CodeWriter
     public function doIf($condition)
     {//{{{
         array_push($this->_segments, 'if');
-        $this->pushCode("if ($condition): ");
+        $this->pushCode('if ('.$condition.'): ');
         $this->indent();
     }//}}}
 
     public function doElseIf($condition)
     {//{{{
         $this->unindent();
-        $this->pushCode("elseif ($condition): ");
+        $this->pushCode('elseif ('.$condition.'): ');
         $this->indent();
     }//}}}
 
     public function doElse()
     {//{{{
         $this->unindent();
-        $this->pushCode("else: ");
+        $this->pushCode('else: ');
         $this->indent();
     }//}}}
 
-    public function doEcho($code, $replaceInString=true)
+    public function doEcho($code)
     {//{{{
         $this->flush();
         $html = '<?php echo %s ?>';
         $html = sprintf($html, $this->escapeCode($code));
-        $this->pushHtml($html, $replaceInString);
+        $this->pushHtml($html);
     }//}}}
 
     public function doEchoRaw($code)
@@ -282,10 +256,9 @@ class PHPTAL_Php_CodeWriter
         $this->pushHtml('<?php echo '.$code.' ?>');
     }//}}}
 
-    public function pushHtml($html, $replaceInString=true)
+    public function pushHtml($html)
     {//{{{
-        if ($replaceInString)
-            $html = $this->_replaceInStringExpression($html);
+        $html = $this->_state->interpolateTalesVarsInHtml($html);
         $this->flushCode();
         array_push($this->_htmlBuffer, $html);
     }//}}}
@@ -302,7 +275,7 @@ class PHPTAL_Php_CodeWriter
             $before = str_replace('&amp;', '&', $before);
             array_push($this->_htmlBuffer, $before);
 
-            $expression = $this->_replaceInStringExpression($expression);
+            $expression = $this->_state->interpolateTalesVarsInHtml($expression);
             array_push($this->_htmlBuffer, $expression);
 
             $str = $after;
@@ -324,51 +297,35 @@ class PHPTAL_Php_CodeWriter
 
     public function escapeCode($code)
     {//{{{
-        $result = '%s(%s, ENT_QUOTES, \'%s\')';
-        return sprintf($result, $this->_htmlEscapingFunction, $code, $this->_encoding);
+        return $this->_state->htmlchars($code);
     }//}}}
 
-    public function escape($html)
-    {//{{{
-        $func = $this->_htmlEscapingFunction;
-        return $func($html, ENT_QUOTES, $this->_encoding);
-    }//}}}
-    
     public function evaluateTalesString($src)
     {//{{{
-        if ($this->_talesMode == 'tales'){
-            return phptal_tales_string($src);
-        }
-        
-        // replace ${var} found in expression
-        while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
-            list($ori, $exp) = $m;
-            $php  = phptal_tales_php($exp);
-            $repl = '\'.%s.\''; 
-            $repl = sprintf($repl, $php, $this->_encoding);
-            $src = str_replace($ori, $repl, $src);
-        }
-        return '\''.$src.'\'';
+        return $this->_state->interpolateTalesVarsInString($src);
     }//}}}
 
     public function setDebug($bool)
     {//{{{
-        $old = $this->_debug;
-        $this->_debug = $bool;
-        return $this->_debug;
+        return $this->_state->setDebug($bool);
     }//}}}
     
     public function isDebugOn()
     {//{{{
-        return $this->_debug;
+        return $this->_state->isDebugOn();
     }//}}}
 
-    public function setHtmlEscaping($function, $ent=END_QUOTES)
+    public function getOutputMode()
     {//{{{
-        $this->_htmlEscapingFunction = $function;
+        return $this->_state->getOutputMode();
     }//}}}
- 
+    
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    
+    private function escape($html)
+    {//{{{
+        return htmlspecialchars($html, ENT_QUOTES, $this->_state->getEncoding());
+    }//}}}
     
     private function indentSpaces() 
     {//{{{
@@ -393,53 +350,18 @@ class PHPTAL_Php_CodeWriter
         $this->_codeBuffer = $oldContext->_codeBuffer;
         $this->_htmlBuffer = $oldContext->_htmlBuffer;
         $this->_segments = $oldContext->_segments;
-        $this->_talesMode = $oldContext->_talesMode;
     }//}}}
 
-    private function _replaceInStringExpression($src)
-    {//{{{
-        if ($this->_talesMode == 'tales'){
-            return preg_replace(
-                '/\$\{([a-z0-9\/_]+)\}/ism', 
-                '<?php echo '
-                .$this->_htmlEscapingFunction.'( '
-                .'phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' '
-                .') ?>',
-                $src);
-        }
-
-        while (preg_match('/\${(structure )?([^\}]+)\}/ism', $src, $m)){
-            list($ori, $struct, $exp) = $m;
-            $php  = phptal_tales_php($exp);
-            $repl = '<?php echo %s; ?>';
-            // when structure keyword is specified the output is not html 
-            // escaped
-            if ($struct){
-                $repl = sprintf($repl, $php);
-            }
-            else {
-                $repl = sprintf($repl, $this->escapeCode($php));
-            }
-            $src  = str_replace($ori, $repl, $src);
-        }
-       
-        return $src;
-    }//}}}
-
-    private $_debug  = false;
+    private $_state;
     private $_result = "";
     private $_indent = 0;
     private $_codeBuffer = array();
     private $_htmlBuffer = array();
     private $_segments = array();
-    private $_talesMode = 'tales';
     private $_contexts = array();
     private $_functionPrefix = "";
     private $_doctype = "";
     private $_xmldeclaration = "";
-    private $_encoding = 'UTF-8';
-    private $_outputMode;
-    private $_htmlEscapingFunction = 'htmlspecialchars';
 }
 
 ?>

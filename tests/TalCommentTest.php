@@ -34,7 +34,8 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
 {
     function setUp()
     {
-        $this->_gen = new PHPTAL_Php_CodeWriter();
+        $state = new PHPTAL_Php_State();
+        $this->_gen = new PHPTAL_Php_CodeWriter($state);
         $this->_tag = new DummyTag();
         $this->_tag->generator = $this->_gen;
     }
