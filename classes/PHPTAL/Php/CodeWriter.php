@@ -25,7 +25,7 @@
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_CodeWriter
+class PHPTAL_Php_CodeWriter
 {
     public function __construct()
     {//{{{

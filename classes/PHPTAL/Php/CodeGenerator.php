@@ -8,7 +8,7 @@ class PHPTAL_PhpCodeGenerator
     {
         $this->_functionName = 'tpl_'.PHPTAL_VERSION.md5($sourcePath);
         $this->_sourceFile = $sourcePath;
-        $this->_generator = new PHPTAL_CodeWriter();
+        $this->_generator = new PHPTAL_Php_CodeWriter();
     }
 
     public function setOutputMode($mode)

@@ -32,7 +32,7 @@ class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
     {
         $parser = new PHPTAL_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
-        $generator = new PHPTAL_CodeWriter();
+        $generator = new PHPTAL_Php_CodeWriter();
         $treeGen   = new PHPTAL_Php_NodeTree($generator, $tree);
         $generator->doFunction('test', '$tpl');
         $treeGen->generate();
@@ -65,7 +65,7 @@ EOS;
 
     function testFunctionsGeneration()
     {
-        $generator = new PHPTAL_CodeWriter();
+        $generator = new PHPTAL_Php_CodeWriter();
         $generator->doFunction('test1', '$tpl');
         $generator->pushString('test1');
         $generator->doFunction('test2', '$tpl');

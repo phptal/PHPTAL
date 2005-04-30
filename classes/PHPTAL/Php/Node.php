@@ -34,7 +34,7 @@ abstract class PHPTAL_Php_Node
     public $node;
     public $generator;
 
-    public function __construct(PHPTAL_CodeWriter $generator, PHPTAL_Node $node)
+    public function __construct(PHPTAL_Php_CodeWriter $generator, PHPTAL_Node $node)
     {//{{{
         $this->generator = $generator;
         $this->node = $node;
@@ -62,7 +62,7 @@ class PHPTAL_Php_NodeTree extends PHPTAL_Php_Node
 {
     public $children;
     
-    public function __construct(PHPTAL_CodeWriter $gen, $node)
+    public function __construct(PHPTAL_Php_CodeWriter $gen, $node)
     {
         parent::__construct($gen,$node);
         $this->children = array();
@@ -121,7 +121,7 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
     public $headFootPrintCondition = false;
     public $hidden = false;
 
-    public function __construct(PHPTAL_CodeWriter $generator, $node)
+    public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
     {//{{{
         parent::__construct($generator, $node);
         $this->name = $node->name;
@@ -439,7 +439,7 @@ class PHPTAL_Php_NodeSpecific extends PHPTAL_Php_Node
  */
 class PHPTAL_Php_NodeDoctype extends PHPTAL_Php_Node
 {
-    public function __construct(PHPTAL_CodeWriter $generator, $node)
+    public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
     {//{{{
         parent::__construct($generator, $node);
         $this->generator->setDocType($this);
@@ -458,7 +458,7 @@ class PHPTAL_Php_NodeDoctype extends PHPTAL_Php_Node
  */
 class PHPTAL_Php_NodeXmlDeclaration extends PHPTAL_Php_Node
 {
-    public function __construct(PHPTAL_CodeWriter $gen, $node)
+    public function __construct(PHPTAL_Php_CodeWriter $gen, $node)
     {//{{{
         parent::__construct($gen, $node);
         $this->generator->setXmlDeclaration($this);
