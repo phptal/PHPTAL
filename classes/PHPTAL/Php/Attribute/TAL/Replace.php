@@ -32,7 +32,7 @@
 //      <span tal:replace="nothing">This element is a comment.</span>
 //  
 
-require_once 'PHPTAL/Php/ChainExecutor.php';
+require_once 'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
