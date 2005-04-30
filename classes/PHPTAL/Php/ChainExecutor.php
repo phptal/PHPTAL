@@ -2,12 +2,12 @@
 
 interface PHPTAL_Php_TalesChainReader
 {
-    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor);
-    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor);
-    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $expression);
+    public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor);
+    public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor);
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $expression);
 }
 
-class PHPTAL_Php_ChainExecutor
+class PHPTAL_Php_TalesChainExecutor
 {
     const CHAIN_BREAK = 1;
     const CHAIN_CONT  = 2;

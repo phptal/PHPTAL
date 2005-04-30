@@ -78,24 +78,24 @@ implements PHPTAL_Php_TalesChainReader
 
     private function replaceByChainedExpression($expArray)
     {//{{{
-        $executor = new PHPTAL_Php_ChainExecutor(
+        $executor = new PHPTAL_Php_TalesChainExecutor(
             $this->tag->generator, $expArray, $this
         );
     }//}}}
 
-    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->continueChain();
     }
 
-    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
         $this->generateDefault();
         $executor->breakChain();
     }
 
-    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
     {
         $executor->doIf(self::REPLACE_VAR.' = '.$exp);
         $this->doEcho(self::REPLACE_VAR);

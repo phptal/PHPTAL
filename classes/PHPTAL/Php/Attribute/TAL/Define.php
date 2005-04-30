@@ -87,26 +87,26 @@ implements PHPTAL_Php_TalesChainReader
     
     private function chainedDefine($parts)
     {
-        $executor = new PHPTAL_Php_ChainExecutor(
+        $executor = new PHPTAL_Php_TalesChainExecutor(
             $this->tag->generator, $parts, $this
         );
     }
 
-    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
         $this->doDefineVarWith('null');
         $executor->breakChain();
     }
 
-    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
         $this->bufferizeContent();
         $executor->breakChain();
     }
 
-    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
     {
         $executor->doIf('($tpl->'.$this->_defineVar.' = '.$exp.') !== null');
     }

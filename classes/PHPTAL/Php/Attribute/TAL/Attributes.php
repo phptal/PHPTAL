@@ -99,7 +99,7 @@ implements PHPTAL_Php_TalesChainReader
         }
         $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
 
-        $executor = new PHPTAL_Php_ChainExecutor(
+        $executor = new PHPTAL_Php_TalesChainExecutor(
             $this->tag->generator, $chain, $this
         );
         $this->tag->overwriteAttributeWithPhpValue($attribute, $this->_attkey);
@@ -124,7 +124,7 @@ implements PHPTAL_Php_TalesChainReader
         return $attribute;
     }//}}}
 
-    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {//{{{
         $executor->doElse();
         $this->tag->generator->doSetVar(
@@ -134,7 +134,7 @@ implements PHPTAL_Php_TalesChainReader
         $executor->breakChain();
     }//}}}
 
-    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {//{{{
         $executor->doElse();
         $code = ($this->_default !== false)
@@ -144,7 +144,7 @@ implements PHPTAL_Php_TalesChainReader
         $executor->breakChain();
     }//}}}
 
-    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
     {//{{{
         $condition = "($this->_attkey = $exp) !== null && $this->_attkey !== false";
         $executor->doIf($condition);

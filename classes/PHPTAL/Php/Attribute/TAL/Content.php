@@ -71,21 +71,21 @@ implements PHPTAL_Php_TalesChainReader
     
     private function generateChainedContent($code)
     {
-        $executor = new PHPTAL_Php_ChainExecutor($this->tag->generator, $code, $this);
+        $executor = new PHPTAL_Php_TalesChainExecutor($this->tag->generator, $code, $this);
     }
 
-    public function talesChainPart(PHPTAL_Php_ChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
     {
         $executor->doIf('$__content__ = '.$exp);
         $this->doEcho('$__content__');
     }
     
-    public function talesChainNothingKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->breakChain();
     }
 
-    public function talesChainDefaultKeyword(PHPTAL_Php_ChainExecutor $executor)
+    public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
         $this->generateDefault();
