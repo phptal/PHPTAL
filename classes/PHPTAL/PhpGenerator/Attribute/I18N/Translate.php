@@ -37,10 +37,10 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
     {//{{{
         $result = '';
         foreach ($tag->children as $child){
-            if ($child instanceOf PHPTAL_PhpNodeText){
+            if ($child instanceOf PHPTAL_Php_NodeText){
                 $result .= $child->node->value;
             }
-            else if ($child instanceOf PHPTAL_PhpNodeElement){
+            else if ($child instanceOf PHPTAL_Php_NodeElement){
                 if ($child->hasAttribute('i18n:name')){
                     $value = $child->getAttribute('i18n:name');
                     $result .= '${' . $value . '}';
@@ -59,7 +59,7 @@ class PHPTAL_Attribute_I18N_Translate extends PHPTAL_Attribute
     private function _prepareNames($tag)
     {//{{{
         foreach ($tag->children as $child){
-            if ($child instanceOf PHPTAL_PhpNodeElement){
+            if ($child instanceOf PHPTAL_Php_NodeElement){
                 if ($child->hasAttribute('i18n:name')){
                     $child->generate();
                 }

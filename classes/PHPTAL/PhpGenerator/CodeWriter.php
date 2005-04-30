@@ -58,12 +58,12 @@ class PHPTAL_CodeWriter
         return $this->_encoding;
     }//}}}
 
-    public function setDocType(PHPTAL_PhpNodeDoctype $dt)
+    public function setDocType(PHPTAL_Php_NodeDoctype $dt)
     {//{{{
         $this->_doctype = str_replace('\'', '\\\'', $dt->node->value);
     }//}}}
 
-    public function setXmlDeclaration(PHPTAL_PhpNodeXmlDeclaration $dt)
+    public function setXmlDeclaration(PHPTAL_Php_NodeXmlDeclaration $dt)
     {//{{{
         $this->_xmldeclaration = str_replace('\'', '\\\'', $dt->node->value);
     }//}}}

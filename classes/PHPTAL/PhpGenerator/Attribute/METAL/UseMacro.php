@@ -103,7 +103,7 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
             'metal:fill-slot', 'metal:define-macro', 'tal:define'
         );
                               
-        if (false == ($tag instanceOf PHPTAL_PhpNodeTree)) 
+        if (false == ($tag instanceOf PHPTAL_Php_NodeTree)) 
             return;
 
         // if the tag contains one of the allowed attribute, we generate it

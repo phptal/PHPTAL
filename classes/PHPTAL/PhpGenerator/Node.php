@@ -29,7 +29,7 @@ require_once 'PHPTAL/PhpGenerator/Attribute.php';
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-abstract class PHPTAL_PhpNode
+abstract class PHPTAL_Php_Node
 {
     public $node;
     public $generator;
@@ -58,7 +58,7 @@ abstract class PHPTAL_PhpNode
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_PhpNodeTree extends PHPTAL_PhpNode
+class PHPTAL_Php_NodeTree extends PHPTAL_Php_Node
 {
     public $children;
     
@@ -68,19 +68,19 @@ class PHPTAL_PhpNodeTree extends PHPTAL_PhpNode
         $this->children = array();
         foreach ($node->children as $child){
             if ($child instanceOf PHPTAL_NodeElement){
-                $gen = new PHPTAL_PhpNodeElement($this->generator, $child);
+                $gen = new PHPTAL_Php_NodeElement($this->generator, $child);
             }
             else if ($child instanceOf PHPTAL_NodeText){
-                $gen = new PHPTAL_PhpNodeText($this->generator, $child);
+                $gen = new PHPTAL_Php_NodeText($this->generator, $child);
             }
             else if ($child instanceOf PHPTAL_NodeDoctype){
-                $gen = new PHPTAL_PhpNodeDoctype($this->generator, $child);
+                $gen = new PHPTAL_Php_NodeDoctype($this->generator, $child);
             }
             else if ($child instanceOf PHPTAL_NodeXmlDeclaration){
-                $gen = new PHPTAL_PhpNodeXmlDeclaration($this->generator, $child);
+                $gen = new PHPTAL_Php_NodeXmlDeclaration($this->generator, $child);
             }
             else if ($child instanceOf PHPTAL_NodeSpecific){
-                $gen = new PHPTAL_PhpNodeSpecific($this->generator, $child);
+                $gen = new PHPTAL_Php_NodeSpecific($this->generator, $child);
             }
             else {
                 throw new Exception('Unhandled node class '.get_class($child));
@@ -105,7 +105,7 @@ class PHPTAL_PhpNodeTree extends PHPTAL_PhpNode
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
+class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
 {
     const ERR_ATTRIBUTES_CONFLICT =
         "Attribute conflict in '%s' at line '%d', '%s' cannot appear with '%s'";
@@ -411,7 +411,7 @@ class PHPTAL_PhpNodeElement extends PHPTAL_PhpNodeTree
 /**
  * Document text data representation.
  */
-class PHPTAL_PhpNodeText extends PHPTAL_PhpNode
+class PHPTAL_Php_NodeText extends PHPTAL_Php_Node
 {
     public function generate()
     {//{{{
@@ -424,7 +424,7 @@ class PHPTAL_PhpNodeText extends PHPTAL_PhpNode
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_PhpNodeSpecific extends PHPTAL_PhpNode
+class PHPTAL_Php_NodeSpecific extends PHPTAL_Php_Node
 {
     public function generate()
     {//{{{
@@ -437,7 +437,7 @@ class PHPTAL_PhpNodeSpecific extends PHPTAL_PhpNode
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_PhpNodeDoctype extends PHPTAL_PhpNode
+class PHPTAL_Php_NodeDoctype extends PHPTAL_Php_Node
 {
     public function __construct(PHPTAL_CodeWriter $generator, $node)
     {//{{{
@@ -456,7 +456,7 @@ class PHPTAL_PhpNodeDoctype extends PHPTAL_PhpNode
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_PhpNodeXmlDeclaration extends PHPTAL_PhpNode
+class PHPTAL_Php_NodeXmlDeclaration extends PHPTAL_Php_Node
 {
     public function __construct(PHPTAL_CodeWriter $gen, $node)
     {//{{{

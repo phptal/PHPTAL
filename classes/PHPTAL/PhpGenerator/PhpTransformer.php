@@ -35,12 +35,12 @@
  *
  * example:
  * 
- *      $res = PHPTAL_PhpTransformer::transform('a.b.c[x]', '$ctx->');
+ *      $res = PHPTAL_Php_Transformer::transform('a.b.c[x]', '$ctx->');
  *      $res == '$ctx->a->b->c[$ctx->x]';
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_PhpTransformer
+class PHPTAL_Php_Transformer
 {
     const ST_NONE   = 0;
     const ST_STR    = 1;  // 'foo' 

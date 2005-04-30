@@ -33,7 +33,7 @@ class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
         $parser = new PHPTAL_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
         $generator = new PHPTAL_CodeWriter();
-        $treeGen   = new PHPTAL_PhpNodeTree($generator, $tree);
+        $treeGen   = new PHPTAL_Php_NodeTree($generator, $tree);
         $generator->doFunction('test', '$tpl');
         $treeGen->generate();
         $generator->doEnd();
