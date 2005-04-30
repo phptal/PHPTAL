@@ -2,7 +2,7 @@
 
 require_once 'PHPTAL/Php/Node.php';
 
-class PHPTAL_PhpCodeGenerator
+class PHPTAL_Php_CodeGenerator
 {
     public function __construct($sourcePath)
     {

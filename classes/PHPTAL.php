@@ -420,7 +420,7 @@ class PHPTAL
         }
 
         require_once 'PHPTAL/Php/CodeGenerator.php';
-        $generator = new PHPTAL_PhpCodeGenerator($this->_realPath);
+        $generator = new PHPTAL_Php_CodeGenerator($this->_realPath);
         $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
         $generator->generate($tree);
