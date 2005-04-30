@@ -419,7 +419,7 @@ class PHPTAL
             $tree = $parser->parseFile($this->_realPath);
         }
 
-        require_once 'PHPTAL/Php/PhpCodeGenerator.php';
+        require_once 'PHPTAL/Php/CodeGenerator.php';
         $generator = new PHPTAL_PhpCodeGenerator($this->_realPath);
         $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
