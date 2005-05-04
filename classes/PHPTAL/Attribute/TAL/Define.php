@@ -56,7 +56,7 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                 // in the defineVar
                 $this->tag->generator->pushCode( 'ob_start()' );
                 $this->tag->generateContent();
-                $code = sprintf('$tpl->%s = ob_get_contents()', $defineVar);
+                $code = sprintf('$ctx->%s = ob_get_contents()', $defineVar);
                 $this->tag->generator->pushCode( $code );
                 $this->tag->generator->pushCode( 'ob_end_clean()' );
                 $this->_buffered = true;
@@ -70,11 +70,11 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                     $this->tag->generator->noThrow(false);
                 }
                 elseif ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
-                    $code = sprintf('$tpl->%s = null', $defineVar);
+                    $code = sprintf('$ctx->%s = null', $defineVar);
                     $this->tag->generator->pushCode( $code );
                 }
                 else {
-                    $code = sprintf('$tpl->%s = %s', $defineVar, $code);
+                    $code = sprintf('$ctx->%s = %s', $defineVar, $code);
                     $this->tag->generator->pushCode( $code );
                 }
             }
@@ -94,7 +94,7 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
             if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
                 if ($started)
                     $this->tag->generator->doElse();
-                $php = sprintf('$tpl->%s = null', $defineVar);
+                $php = sprintf('$ctx->%s = null', $defineVar);
                 $this->tag->generator->pushCode($php);
                 break;
             }
@@ -104,14 +104,14 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
                     $this->tag->generator->doElse();
                 $this->tag->generator->pushCode( 'ob_start()' );
                 $this->tag->generateContent();
-                $code = sprintf('$tpl->%s = ob_get_contents()', $defineVar);
+                $code = sprintf('$ctx->%s = ob_get_contents()', $defineVar);
                 $this->tag->generator->pushCode( $code );
                 $this->tag->generator->pushCode( 'ob_end_clean()' );
                 $this->_buffered = true;
                 break;
             }
 
-            $condition = sprintf('($tpl->%s = %s) !== null', $defineVar, $exp);
+            $condition = sprintf('($ctx->%s = %s) !== null', $defineVar, $exp);
             if (!$started) {
                 $this->tag->generator->doIf($condition);
                 $started = true;

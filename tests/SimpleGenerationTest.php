@@ -41,7 +41,7 @@ class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
         $expected = <<<EOS
 <?php 
 function test( \$tpl ) {
-\$ctx->setXmlDeclaration('<?xml version="1.0"?>');?>
+\$tpl->getContext()->setXmlDeclaration('<?xml version="1.0"?>');?>
 <html>
   <head>
     <title>test document</title>

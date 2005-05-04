@@ -42,6 +42,15 @@ class DoctypeTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/doctype.02.html');
         $this->assertEquals($exp, $res);        
     }
+
+    function testDeepMacro()
+    {
+        $tpl = new PHPTAL('input/doctype.03.html');
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/doctype.03.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 ?>

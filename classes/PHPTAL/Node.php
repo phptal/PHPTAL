@@ -482,7 +482,7 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
     
     public function generate()
     {//{{{;
-        $code = sprintf('$ctx->setDocType(\'%s\')', 
+        $code = sprintf('$tpl->getContext()->setDocType(\'%s\')', 
                         str_replace('\'', '\\\'', $this->value));
         $this->generator->pushCode($code);
     }//}}}
@@ -511,7 +511,7 @@ class PHPTAL_NodeXmlDeclaration extends PHPTAL_Node
     
     public function generate()
     {//{{{
-        $code = sprintf('$ctx->setXmlDeclaration(\'%s\')',
+        $code = sprintf('$tpl->getContext()->setXmlDeclaration(\'%s\')',
                         str_replace('\'', '\\\'', $this->value));
         $this->generator->pushCode($code);
     }//}}}
