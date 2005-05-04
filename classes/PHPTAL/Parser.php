@@ -150,7 +150,8 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     {//{{{
         if ($this->_stripComments) 
             return;
-        $this->onSpecific($data);
+        $node = new PHPTAL_NodeComment($this, $data);
+        array_push($this->_current->children, $node);
     }//}}}
     
     public function onSpecific($data)

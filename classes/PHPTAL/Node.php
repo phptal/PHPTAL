@@ -459,6 +459,22 @@ class PHPTAL_NodeSpecific extends PHPTAL_Node
     }//}}}
 }
 
+class PHPTAL_NodeComment extends PHPTAL_Node
+{
+    public $value;
+
+    public function __construct(PHPTAL_Parser $parser, $data)
+    {
+        parent::__construct($parser);
+        $this->value = $data;
+    }
+
+    public function generate()
+    {
+        $this->generator->pushHtml($this->value, false);
+    }
+}
+
 /**
  * Document doctype representation.
  * 
