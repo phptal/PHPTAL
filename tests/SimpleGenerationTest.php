@@ -37,11 +37,10 @@ class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
         $generator->doEnd();
         $result = $generator->getResult();
 
-        // WILL FAIL LATER because php will try to interpret <?xml...
         $expected = <<<EOS
 <?php 
 function test( \$tpl ) {
-\$tpl->getContext()->setXmlDeclaration('<?xml version="1.0"?>');?>
+\$ctx->setXmlDeclaration('<?xml version="1.0"?>');?>
 <html>
   <head>
     <title>test document</title>

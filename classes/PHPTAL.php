@@ -107,7 +107,9 @@ class PHPTAL
      */
     public function __clone()
     {//{{{
+        $context = $this->_context;
         $this->_context = clone $this->_context;
+        $this->_context->setParent($context);
     }//}}}
 
     /**

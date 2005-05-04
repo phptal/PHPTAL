@@ -43,6 +43,11 @@ class PHPTAL_Context
         $this->__repeat = clone($this->__repeat);
     }//}}}
 
+    public function setParent(PHPTAL_Context $parent)
+    {
+        $this->_parentContext = $parent;
+    }
+    
     /** 
      * Set output document type if not already set.
      *
@@ -51,6 +56,9 @@ class PHPTAL_Context
      */
     public function setDocType($doctype)
     {//{{{
+        if ($this->_parentContext != null){
+            return $this->_parentContext->setDocType($doctype);
+        }
         if (!$this->__docType){
             $this->__docType = $doctype;
         }
@@ -65,6 +73,9 @@ class PHPTAL_Context
      */
     public function setXmlDeclaration($xmldec)
     {//{{{
+        if ($this->_parentContext != null){
+            return $this->_parentContext->setXmlDeclaration($xmldec);
+        }
         if (!$this->__xmlDeclaration){
             $this->__xmlDeclaration = $xmldec;
         }
@@ -154,6 +165,7 @@ class PHPTAL_Context
 
     private $_slots = array();
     private $_slotsStack = array();
+    private $_parentContext = null;
 }
 
 /**
