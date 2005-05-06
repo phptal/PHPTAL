@@ -58,16 +58,16 @@
 class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
 {
     public function start()
-    {//{{{
+    {
         $this->tag->generator->pushCode('ob_start()');
-    }//}}}
+    }
 
     public function end()
-    {//{{{
+    {
         $code = '$ctx->fillSlot("'.$this->expression.'", ob_get_contents())';
         $this->tag->generator->pushCode($code);
         $this->tag->generator->pushCode('ob_end_clean()');
-    }//}}}
+    }
 }
 
 ?>

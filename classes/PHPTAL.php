@@ -93,30 +93,30 @@ class PHPTAL
      * @param string $path Template file path.
      */
     public function __construct($path=false)
-    {//{{{
+    {
         $this->_realPath = $path;
         $this->_repositories = array();
         if (defined('PHPTAL_TEMPLATE_REPOSITORY')){
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
         $this->_context = new PHPTAL_Context();
-    }//}}}
+    }
 
     /**
      * Clone template state and context.
      */
     public function __clone()
-    {//{{{
+    {
         $this->_context = clone $this->_context;
-    }//}}}
+    }
 
     /**
      * Set template file path.
      */
     public function setTemplate($path)
-    {//{{{
+    {
         $this->_realPath = $path;
-    }//}}}
+    }
 
     /**
      * Set template source.
@@ -128,7 +128,7 @@ class PHPTAL
      * @param path string Fake and 'unique' template path.
      */
     public function setSource($src, $path=false)
-    {//{{{
+    {
         $this->_source = $src;
         if ($path){
             $this->_realPath = $path;
@@ -136,7 +136,7 @@ class PHPTAL
         else {
             $this->_realPath = '<string> '.md5($src);
         }
-    }//}}}
+    }
     
     /**
      * Specify where to look for templates.
@@ -144,100 +144,100 @@ class PHPTAL
      * @param $rep String or Array of repositories
      */
     public function setTemplateRepository($rep)
-    {//{{{
+    {
         if (is_array($rep)){
             $this->_repositories = $rep;
         }
         else {
             $this->_repositories[] = $rep;
         }
-    }//}}}
+    }
 
     /**
      * Ignore XML/XHTML comments on parsing.
      */
     public function stripComments($bool)
-    {//{{{
+    {
         $this->_stripComments = $bool;
-    }//}}}
+    }
     
     /**
      * Set output mode (PHPTAL::XML or PHPTAL::XHTML).
      */
     public function setOutputMode($mode=PHPTAL_XHTML)
-    {//{{{
+    {
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML){
             throw new PHPTAL_Exception('Unsupported output mode '.$mode);
         }
         $this->_outputMode = $mode;
-    }//}}}
+    }
 
     /**
      * Set ouput encoding.
      */
     public function setEncoding($enc)
-    {//{{{
+    {
         $this->_encoding = $enc; 
-    }//}}}
+    }
 
     /**
      * Set I18N translator.
      */
     public function setTranslator($t)
-    {//{{{
+    {
         $this->_translator = $t;
-    }//}}}
+    }
 
     /**
      * Set template pre filter.
      */
     public function setPreFilter(PHPTAL_Filter $filter)
-    {//{{{
+    {
         $this->_prefilter = $filter;
-    }//}}}
+    }
 
     /**
      * Set template post filter.
      */
     public function setPostFilter(PHPTAL_Filter $filter)
-    {//{{{
+    {
         $this->_postfilter = $filter;
-    }//}}}
+    }
 
     /**
      * Register a trigger for specified phptal:id.
      */
     public function addTrigger($id, PHPTAL_Trigger $trigger)
-    {//{{{
+    {
         $this->_triggers[$id] = $trigger;
-    }//}}}
+    }
 
     /**
      * Returns trigger for specified phptal:id.
      */
     public function getTrigger($id)
-    {//{{{
+    {
         if (array_key_exists($id, $this->_triggers)){
             return $this->_triggers[$id];
         }
         return null;
-    }//}}}
+    }
 
     /**
      * Set a context variable.
      */
     public function __set($varname, $value)
-    {//{{{
+    {
         $this->_context->__set($varname, $value);
-    }//}}}
+    }
 
     /**
      * Set a context variable.
      */
     public function set($varname, $value)
-    {//{{{
+    {
         $this->_context->__set($varname, $value);
-    }//}}}
+    }
     
     /**
      * Execute the template code.
@@ -245,7 +245,7 @@ class PHPTAL
      * @return string
      */
     public function execute() 
-    {//{{{
+    {
         if (!$this->_prepared) {
             $this->prepare();
         }
@@ -277,13 +277,13 @@ class PHPTAL
             return $this->_postfilter->filter($res);
         }
         return $res;
-    }//}}}
+    }
 
     /**
      * Execute a template macro.
      */
     public function executeMacro($path)
-    {//{{{
+    {
         // extract macro source file from macro name, if not source file
         // found in $path, then the macro is assumed to be local
         if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
@@ -324,13 +324,13 @@ class PHPTAL
             $fun = $this->getFunctionName() . '_' . trim($path);
             $fun( $this, $this->_context );            
         }
-    }//}}}
+    }
 
     /**
      * Prepare template without executing it.
      */
     public function prepare()
-    {//{{{
+    {
         // find the template source file
         $this->findTemplate();
         $this->__file = $this->_realPath;
@@ -345,7 +345,7 @@ class PHPTAL
             $this->parse();
         }
         $this->_prepared = true;
-    }//}}}
+    }
 
     /**
      * Returns the path of the intermediate PHP code file.
@@ -354,56 +354,56 @@ class PHPTAL
      * generated by temporary templates or more simply for debug.
      */
     public function getCodePath()
-    {//{{{
+    {
         return $this->_codeFile;
-    }//}}}
+    }
 
     /**
      * Returns the generated template function name.
      */
     public function getFunctionName()
-    {//{{{
+    {
         if (!$this->_functionName) {
             $this->_functionName = 'tpl_' . PHPTAL_VERSION . md5($this->_realPath);
         }
         return $this->_functionName;
-    }//}}}
+    }
 
     /**
      * Returns template translator.
      */
     public function getTranslator()
-    {//{{{
+    {
         return $this->_translator;
-    }//}}}
+    }
     
     /**
      * Returns array of exceptions catched by tal:on-error attribute.
      */
     public function getErrors()
-    {//{{{
+    {
         return $this->_errors;
-    }//}}}
+    }
     
     /**
      * Public for phptal templates, private for user.
      * @access private
      */
     public function addError($error)
-    {//{{{
+    {
         array_push($this->_errors, $error); 
-    }//}}}
+    }
 
     /**
      * Returns current context object.
      */
     public function getContext()
-    {//{{{
+    {
         return $this->_context;
-    }//}}}
+    }
     
     private function parse()
-    {//{{{
+    {
         require_once 'PHPTAL/Parser/Parser.php';
         
         // instantiate the PHPTAL source parser 
@@ -426,18 +426,18 @@ class PHPTAL
         $generator->setOutputMode($this->_outputMode);
         $generator->generate($tree);
         $this->storeGeneratedCode($generator->getResult());
-    }//}}}
+    }
 
     private function storeGeneratedCode($code)
-    {//{{{
+    {
         if (!@file_put_contents($this->_codeFile, $code)) {
             throw new Exception('Unable to open '.$this->_codeFile.' for writing');
         }
-    }//}}}
+    }
 
     /** Search template source location. */
     private function findTemplate()
-    {//{{{
+    {
         if ($this->_realPath == false){
             throw new Exception('No template file specified');
         }
@@ -460,7 +460,7 @@ class PHPTAL
         if (!file_exists($this->_realPath)){        
             throw new Exception('Unable to locate template file '.$this->_realPath);
         }
-    }//}}}
+    }
 
     private $_prefilter = null;
     private $_postfilter = null;

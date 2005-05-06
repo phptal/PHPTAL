@@ -34,14 +34,14 @@ class PHPTAL_Context
     public $__translator;
 
     public function __construct()
-    {//{{{
+    {
         $this->__repeat = new StdClass();
-    }//}}}
+    }
 
     public function __clone()
-    {//{{{
+    {
         $this->__repeat = clone($this->__repeat);
-    }//}}}
+    }
 
     /** 
      * Set output document type if not already set.
@@ -50,11 +50,11 @@ class PHPTAL_Context
      * template or any macro template source containing a DOCTYPE.
      */
     public function setDocType($doctype)
-    {//{{{
+    {
         if (!$this->__docType){
             $this->__docType = $doctype;
         }
-    }//}}}
+    }
 
     /**
      * Set output document xml declaration.
@@ -64,80 +64,80 @@ class PHPTAL_Context
      * declaration).
      */
     public function setXmlDeclaration($xmldec)
-    {//{{{
+    {
         if (!$this->__xmlDeclaration){
             $this->__xmlDeclaration = $xmldec;
         }
-    }//}}}
+    }
 
     /** 
      * Activate or deactivate exception throwing during unknown path
      * resolution.
      */
     public function noThrow($bool)
-    {//{{{
+    {
         $this->__nothrow = $bool;
-    }//}}}
+    }
 
     /**
      * Returns true if specified slot is filled.
      */
     public function hasSlot($key)
-    {//{{{
+    {
         return array_key_exists($key, $this->_slots);
-    }//}}}
+    }
 
     /**
      * Returns the content of specified filled slot.
      */
     public function getSlot($key)
-    {//{{{
+    {
         return $this->_slots[$key];
-    }//}}}
+    }
 
     /**
      * Fill a macro slot.
      */
     public function fillSlot($key, $content)
-    {//{{{
+    {
         $this->_slots[$key] = $content;
-    }//}}}
+    }
 
     /**
      * Push current filled slots on stack.
      */
     public function pushSlots()
-    {//{{{
+    {
         array_push($this->_slotsStack, $this->_slots);
         $this->_slots = array();
-    }//}}}
+    }
 
     /**
      * Restore filled slots stack.
      */
     public function popSlots()
-    {//{{{
+    {
         $this->_slots = array_pop($this->_slotsStack);
-    }//}}}
+    }
 
     /**
      * Context setter.
      */
     public function __set($varname, $value)
-    {//{{{
+    {
         if ($varname[0] == '_'){
             $e = 'Template variable error \'%s\' must not begin with underscore';
             $e = sprintf($e, $varname);
             throw new Exception($e);
         }
         $this->$varname = $value;
-    }//}}}
+    }
 
     /**
      * Context getter.
      */
     public function __get($varname)
-    {//{{{
+    {
         if ($varname == 'repeat')
             return $this->__repeat;
 
@@ -150,7 +150,7 @@ class PHPTAL_Context
        
         $e = sprintf('Unable to find path %s', $varname); 
         throw new PHPTAL_Exception($e, $this->__file, $this->__line);
-    }//}}}
+    }
 
     private $_slots = array();
     private $_slotsStack = array();
@@ -267,7 +267,7 @@ function phptal_path($base, $path, $nothrow=false)
         $err = 'Unable to find part "%s" in path "%s"';
         $err = sprintf($err, $current, $path);
         throw new Exception($err);
-    }//}}}
+    }
 
     return $base;
 }//}}}

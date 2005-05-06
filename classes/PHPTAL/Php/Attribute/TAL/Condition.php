@@ -37,15 +37,15 @@
 class PHPTAL_Php_Attribute_TAL_Condition extends PHPTAL_Php_Attribute
 {
     public function start()
-    {//{{{
+    {
         $code = $this->tag->generator->evaluateExpression($this->expression);
         $this->tag->generator->doIf($code);
-    }//}}}
+    }
 
     public function end() 
-    {//{{{
+    {
         $this->tag->generator->doEnd();
-    }//}}}
+    }
 }
 
 ?>

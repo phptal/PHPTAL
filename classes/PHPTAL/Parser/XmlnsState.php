@@ -33,35 +33,35 @@ class PHPTAL_XmlnsState
 {
     /** Create a new XMLNS state inheriting provided aliases. */
     public function __construct($aliases = array())
-    {//{{{
+    {
         assert(is_array($aliases));
         $this->_aliases = $aliases;
-    }//}}}
+    }
 
     /** Returns true if $attName is a valid attribute name, false otherwise. */
     public function isValidAttribute($attName)
-    {//{{{
+    {
         $unaliased = $this->unAliasAttribute($attName);
         return PHPTAL_Defs::isValidAttribute($unaliased);
-    }//}}}
+    }
 
     /** Returns true if $attName is a PHPTAL attribute, false otherwise. */
     public function isPhpTalAttribute($attName)
-    {//{{{
+    {
         $unaliased = $this->unAliasAttribute($attName);
         return PHPTAL_Defs::isPhpTalAttribute($unaliased);
-    }//}}}
+    }
 
     /** Returns the PHPTAL priority of specified attribute. */
     public function getAttributePriority($attName)
-    {//{{{
+    {
         $unaliased = $this->unAliasAttribute($attName);
         return PHPTAL_Defs::$RULES_ORDER[ strtoupper($unaliased) ];
-    }//}}}
+    }
 
     /** Returns the unaliased name of specified attribute. */
     public function unAliasAttribute($attName)
-    {//{{{
+    {
         if (count($this->_aliases) == 0) 
             return $attName;
         
@@ -70,7 +70,7 @@ class PHPTAL_XmlnsState
             $result = str_replace("$alias:", "$real:", $result);
         }
         return $result;
-    }//}}}
+    }
 
     /** 
      * Returns a new XmlnsState inheriting of $currentState if $nodeAttributes contains 
@@ -80,7 +80,7 @@ class PHPTAL_XmlnsState
      * each encountered node.
      */
     public static function newElement(PHPTAL_XmlnsState $currentState, $nodeAttributes)
-    {//{{{
+    {
         $aliases = array();
         foreach ($nodeAttributes as $att => $value){
             if (PHPTAL_Defs::isHandledXmlNs($att, $value)){
@@ -95,7 +95,7 @@ class PHPTAL_XmlnsState
             return new PHPTAL_XmlnsState($aliases);
         }
         return $currentState;
-    }//}}}
+    }
 
     private $_aliases;
 }

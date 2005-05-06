@@ -13,17 +13,17 @@ class PHPTAL_Php_TalesChainExecutor
     const CHAIN_CONT  = 2;
 
     public function __construct($generator, $chain, $reader)
-    {//{{{
+    {
         assert(is_array($chain));
         $this->_chain = $chain;
         $this->_chainStarted = false;
         $this->_chainGenerator = $generator;
         $this->_reader = $reader;
         $this->_executeChain();
-    }//}}}
+    }
     
     public function doIf($condition)
-    {//{{{
+    {
         if ($this->_chainStarted == false){
             $this->_chainStarted = true;
             $this->_chainGenerator->doIf($condition);
@@ -31,27 +31,27 @@ class PHPTAL_Php_TalesChainExecutor
         else {
             $this->_chainGenerator->doElseIf($condition);
         }
-    }//}}}
+    }
 
     public function doElse()
-    {//{{{
+    {
         if ($this->_chainStarted){
             $this->_chainGenerator->doElse();
         }
-    }//}}}
+    }
 
     public function breakChain()
-    {//{{{
+    {
         $this->_state = self::CHAIN_BREAK;
-    }//}}}
+    }
 
     public function continueChain()
-    {//{{{
+    {
         $this->_state = self::CHAIN_CONT;
-    }//}}}
+    }
 
     private function _executeChain()
-    {//{{{
+    {
         $this->_chainGenerator->noThrow(true);
         foreach ($this->_chain as $exp){
             $this->_state = 0;
@@ -79,7 +79,7 @@ class PHPTAL_Php_TalesChainExecutor
         }
         $this->_chainGenerator->doEnd();
         $this->_chainGenerator->noThrow(false);
-    }//}}}
+    }
     
     private $_state = 0;
     private $_chain;

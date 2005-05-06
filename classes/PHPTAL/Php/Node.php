@@ -35,15 +35,15 @@ abstract class PHPTAL_Php_Node
     public $generator;
 
     public function __construct(PHPTAL_Php_CodeWriter $generator, PHPTAL_Node $node)
-    {//{{{
+    {
         $this->generator = $generator;
         $this->node = $node;
-    }//}}}
+    }
 
     public function getSourceFile()
-    {//{{{
+    {
         return $this->node->getSourceFile();
-    }//}}}
+    }
 
     public function getSourceLine()
     {
@@ -90,11 +90,11 @@ class PHPTAL_Php_NodeTree extends PHPTAL_Php_Node
     }
     
     public function generate()
-    {//{{{
+    {
         foreach ($this->children as $child){
             $child->generate();
         }
-    }//}}}
+    }
 }
 
 /**
@@ -122,15 +122,15 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
     public $hidden = false;
 
     public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
-    {//{{{
+    {
         parent::__construct($generator, $node);
         $this->name = $node->name;
         $this->attributes = $node->attributes;
         $this->xmlns = $node->xmlns;
-    }//}}}
+    }
 
     public function generate()
-    {//{{{
+    {
         if ($this->generator->isDebugOn()){
             $this->generator->pushCode('$ctx->__line = '.$this->getSourceLine());
         }
@@ -160,19 +160,19 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
             $this->generateFoot();
         }
         $this->generateSurroundFoot();
-    }//}}}
+    }
 
     /** Returns true if the element contains specified PHPTAL attribute. */
     public function hasAttribute($name)
-    {//{{{
+    {
         return $this->node->hasAttribute($name);
-    }//}}}
+    }
 
     /** Returns the value of specified PHPTAL attribute. */
     public function getAttribute($name)
-    {//{{{
+    {
         return $this->node->getAttribute($name);
-    }//}}}
+    }
 
     public function isOverwrittenAttribute($name)
     {
@@ -195,22 +195,22 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
      * content to print (an empty text node child does not count).
      */
     public function hasRealContent()
-    {//{{{
+    {
         return $this->node->hasRealContent() 
             || count($this->contentAttributes) > 0;
-    }//}}}
+    }
 
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
     
     public function generateSurroundHead()
-    {//{{{
+    {
         foreach ($this->surroundAttributes as $att) {
             $att->start( $this );
         }
-    }//}}}
+    }
 
     public function generateHead()
-    {//{{{
+    {
         if ($this->headFootDisabled) return;
         if ($this->headFootPrintCondition) {
             $this->generator->doIf($this->headFootPrintCondition);
@@ -229,10 +229,10 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         if ($this->headFootPrintCondition) {
             $this->generator->doEnd();
         }
-    }//}}}
+    }
     
     public function generateContent($realContent=false)
-    {//{{{
+    {
         if ($this->isEmptyNode()){
             return;
         }
@@ -246,10 +246,10 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         }
         
         parent::generate();
-    }//}}}
+    }
 
     public function generateFoot()
-    {//{{{
+    {
         if ($this->headFootDisabled) return;
         if ($this->isEmptyNode())
             return;
@@ -263,19 +263,19 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         if ($this->headFootPrintCondition) {
             $this->generator->doEnd();
         }
-    }//}}}
+    }
 
     public function generateSurroundFoot()
-    {//{{{
+    {
         for ($i = (count($this->surroundAttributes)-1); $i>= 0; $i--) {
             $this->surroundAttributes[$i]->end( $this );
         }
-    }//}}}
+    }
 
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     private function generateAttributes()
-    {//{{{
+    {
         // A phptal attribute can modify any node attribute replacing
         // its value by a <?php echo $somevalue ?\ >.
         //
@@ -300,30 +300,30 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
                 $this->generator->pushHtml(' '.$key.'="'.$value.'"');
             }
         }
-    }//}}}
+    }
 
     private function getNodePrefix()
-    {//{{{
+    {
         $result = false;
         if (preg_match('/^(.*?):block$/', $this->name, $m)){
             list(,$result) = $m;
         }
         return $result;
-    }//}}}
+    }
     
     private function isEmptyNode()
-    {//{{{
+    {
         return ($this->generator->getOutputMode() == PHPTAL::XHTML && PHPTAL_Defs::isEmptyTag($this->name)) ||
                ($this->generator->getOutputMode() == PHPTAL::XML   && !$this->hasContent());
-    }//}}}
+    }
 
     private function hasContent()
-    {//{{{
+    {
         return count($this->children) > 0 || count($this->contentAttributes) > 0;
-    }//}}}
+    }
 
     private function prepareAttributes()
-    {//{{{
+    {
         if (preg_match('/^(.*?):block$/', $this->name, $m)) {
             $this->headFootDisabled = true;
             list(,$ns) = $m;
@@ -338,10 +338,10 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
             }
             $this->attributes = $attributes;
         }
-    }//}}}
+    }
 
     private function separateAttributes()
-    {//{{{
+    {
         $attributes = array();
         $this->talAttributes = array();
         foreach ($this->attributes as $key=>$value) {
@@ -359,10 +359,10 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
             }
         }
         $this->attributes = $attributes;
-    }//}}}
+    }
 
     private function orderTalAttributes()
-    {//{{{
+    {
         $result = array();
         foreach ($this->talAttributes as $key=>$exp) {
             $pos = $this->xmlns->getAttributePriority($key);
@@ -405,7 +405,7 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
                     break;
             }
         }
-    }//}}}
+    }
 }
 
 /**
@@ -414,9 +414,9 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
 class PHPTAL_Php_NodeText extends PHPTAL_Php_Node
 {
     public function generate()
-    {//{{{
+    {
         $this->generator->pushString($this->node->value);
-    }//}}}
+    }
 }
 
 /**
@@ -427,9 +427,9 @@ class PHPTAL_Php_NodeText extends PHPTAL_Php_Node
 class PHPTAL_Php_NodeSpecific extends PHPTAL_Php_Node
 {
     public function generate()
-    {//{{{
+    {
         $this->generator->pushHtml($this->node->value);
-    }//}}}
+    }
 }
 
 /**
@@ -440,15 +440,15 @@ class PHPTAL_Php_NodeSpecific extends PHPTAL_Php_Node
 class PHPTAL_Php_NodeDoctype extends PHPTAL_Php_Node
 {
     public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
-    {//{{{
+    {
         parent::__construct($generator, $node);
         $this->generator->setDocType($this);
-    }//}}}
+    }
 
     public function generate()
-    {//{{{;
+    {;
         $this->generator->doDoctype();
-    }//}}}
+    }
 }
 
 /**
@@ -459,15 +459,15 @@ class PHPTAL_Php_NodeDoctype extends PHPTAL_Php_Node
 class PHPTAL_Php_NodeXmlDeclaration extends PHPTAL_Php_Node
 {
     public function __construct(PHPTAL_Php_CodeWriter $gen, $node)
-    {//{{{
+    {
         parent::__construct($gen, $node);
         $this->generator->setXmlDeclaration($this);
-    }//}}}
+    }
     
     public function generate()
-    {//{{{
+    {
         $this->generator->doXmlDeclaration();
-    }//}}}
+    }
 }
 
 ?>

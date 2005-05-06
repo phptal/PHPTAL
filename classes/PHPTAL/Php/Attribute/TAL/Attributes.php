@@ -53,7 +53,7 @@ implements PHPTAL_Php_TalesChainReader
     const REGEX_FULL_REPLACE = '/<?php echo \$__ATT_.*? ?>/';
     
     public function start()
-    {//{{{
+    {
         // split attributes using ; delimiter
         $attrs = $this->tag->generator->splitExpression($this->expression);
         foreach ($attrs as $exp) {
@@ -62,14 +62,14 @@ implements PHPTAL_Php_TalesChainReader
                 $this->prepareAttribute($attribute, $expression);
             }
         }
-    }//}}}
+    }
 
     public function end()
-    {//{{{
-    }//}}}
+    {
+    }
 
     private function prepareAttribute($attribute, $expression)
-    {//{{{
+    {
         $code = $this->tag->generator->evaluateExpression($expression);
 
         // if $code is an array then the attribute value is decided by a
@@ -88,10 +88,10 @@ implements PHPTAL_Php_TalesChainReader
         $value  = $this->tag->generator->escapeCode($code);
         $this->tag->generator->doSetVar($attkey, $value);
         $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);
-    }//}}}
+    }
 
     private function prepareChainedAttribute2($attribute, $chain)
-    {//{{{
+    {
         $this->_default = false;
         $this->_attribute = $attribute;
         if (array_key_exists($attribute, $this->tag->attributes)) {
@@ -103,10 +103,10 @@ implements PHPTAL_Php_TalesChainReader
             $this->tag->generator, $chain, $this
         );
         $this->tag->overwriteAttributeWithPhpValue($attribute, $this->_attkey);
-    }//}}}
+    }
 
     private function prepareBooleanAttribute($attribute, $code)
-    {//{{{
+    {
         $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
         $value  = sprintf('" %s=\"%s\""', $attribute, $attribute);
         $this->tag->generator->doIf($code);
@@ -115,43 +115,43 @@ implements PHPTAL_Php_TalesChainReader
         $this->tag->generator->doSetVar($attkey, '\'\'');
         $this->tag->generator->doEnd();
         $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);
-    }//}}}
+    }
 
     private function getVarName($attribute)
-    {//{{{
+    {
         $attribute = str_replace(':', '_', $attribute);
         $attribute = str_replace('-', '_', $attribute);
         return $attribute;
-    }//}}}
+    }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
-    {//{{{
+    {
         $executor->doElse();
         $this->tag->generator->doSetVar(
             $this->_attkey, 
             "' $this->_attribute=\"\"'"
         );
         $executor->breakChain();
-    }//}}}
+    }
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
-    {//{{{
+    {
         $executor->doElse();
         $code = ($this->_default !== false)
             ? "' $this->_attribute=\"$this->_default\"'"  // default value
             : '\'\'';                       // do not print attribute
         $this->tag->generator->doSetVar($this->_attkey, $code);
         $executor->breakChain();
-    }//}}}
+    }
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
-    {//{{{
+    {
         $condition = "($this->_attkey = $exp) !== null && $this->_attkey !== false";
         $executor->doIf($condition);
         $value = $this->tag->generator->escapeCode($this->_attkey);
         $value = "' $this->_attribute=\"'.$value.'\"'";
         $this->tag->generator->doSetVar($this->_attkey, $value);
-    }//}}}
+    }
 }
 
 ?>

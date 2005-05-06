@@ -28,7 +28,7 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
     private $id;
     
     public function start()
-    {//{{{
+    {
         $this->id = str_replace('"', '\\\"', $this->expression);
         
         // retrieve trigger
@@ -44,10 +44,10 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
         $cond = sprintf($cond, $this->id);
 
         $this->tag->generator->doIf($cond);
-    }//}}}
+    }
 
     public function end()
-    {//{{{
+    {
         // end of if PROCEED
         $this->tag->generator->doEnd();
         
@@ -57,7 +57,7 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
             '$trigger->end("'.$this->id.'", $tpl)'
         );
         $this->tag->generator->doEnd();
-    }//}}}
+    }
 }
 
 ?>

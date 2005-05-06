@@ -53,7 +53,7 @@ class PHPTAL_Php_Transformer
     const ST_DEFINE = 8;  // @MY_DEFINE
 
     public static function transform( $str, $prefix='$' )
-    {//{{{
+    {
 
         // 
         // Here comes the good old state machine.
@@ -329,23 +329,23 @@ class PHPTAL_Php_Transformer
         }
 
         return trim($result);
-    }//}}}
+    }
 
     private static function isAlpha($c)
-    {//{{{
+    {
         $c = strtolower($c);
         return $c >= 'a' && $c <= 'z';
-    }//}}}
+    }
 
     private static function isDigitCompound($c)
-    {//{{{
+    {
         return ($c >= '0' && $c <= '9' || $c == '.');
-    }//}}}
+    }
 
     private static function isVarNameChar($c)
-    {//{{{
+    {
         return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c == '_';
-    }//}}}
+    }
 
     private static $TranslationTable = array(
         'not' => '!', 

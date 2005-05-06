@@ -44,7 +44,7 @@ implements PHPTAL_Php_TalesChainReader
     const REPLACE_VAR = '$__replace__';
     
     public function start()
-    {//{{{
+    {
         // tal:replace="" => do nothing and ignore node
         if (trim($this->expression) == ""){
             return;
@@ -70,18 +70,18 @@ implements PHPTAL_Php_TalesChainReader
 
         // replace tag with result of expression
         $this->doEcho($code);
-    }//}}}
+    }
 
     public function end()
-    {//{{{
-    }//}}}
+    {
+    }
 
     private function replaceByChainedExpression($expArray)
-    {//{{{
+    {
         $executor = new PHPTAL_Php_TalesChainExecutor(
             $this->tag->generator, $expArray, $this
         );
-    }//}}}
+    }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
@@ -102,13 +102,13 @@ implements PHPTAL_Php_TalesChainReader
     }
 
     private function generateDefault()
-    {//{{{
+    {
         $this->tag->generateSurroundHead();
         $this->tag->generateHead();
         $this->tag->generateContent();
         $this->tag->generateFoot();
         $this->tag->generateSurroundFoot();
-    }//}}}
+    }
 }
 
 ?>

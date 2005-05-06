@@ -70,9 +70,9 @@ abstract class PHPTAL_Php_Attribute
 
     /** Attribute constructor. */
     public function __construct($tag)
-    {//{{{
+    {
         $this->tag = $tag;
-    }//}}}
+    }
 
     /** Called before element printing. */
     public abstract function start();
@@ -83,7 +83,7 @@ abstract class PHPTAL_Php_Attribute
      * Factory method, returns a new attribute instance.
      */
     public static function createAttribute($tag, $attName, $expression)
-    {//{{{
+    {
         $class = 'PHPTAL_Php_Attribute_' . str_replace(':','_', $attName);
         $class = str_replace('-', '', $class);
         
@@ -91,7 +91,7 @@ abstract class PHPTAL_Php_Attribute
         $result->name = strtoupper($attName);
         $result->expression = $expression;
         return $result;
-    }//}}}
+    }
 
     /**
      * Remove structure|text keyword from expression and stores it for later

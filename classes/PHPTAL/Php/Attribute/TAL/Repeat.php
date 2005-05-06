@@ -66,20 +66,20 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
     const REPEAT = '$__repeat__';
     
     public function start()
-    {//{{{
+    {
         $this->initRepeat();
         $this->doForeach();
         $this->updateIterationVars();
-    }//}}}
+    }
         
     public function end()
-    {//{{{
+    {
         $this->tag->generator->doSetVar($this->controller.'->start', 'false');
         $this->tag->generator->doEnd();
-    }//}}}
+    }
 
     private function initRepeat()
-    {//{{{
+    {
         list($varName, $expression) = $this->parseSetExpression($this->expression);
         $code = $this->tag->generator->evaluateExpression($expression);
         
@@ -96,15 +96,15 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
 
         // instantiate controller using expression
         $this->tag->generator->doSetVar($this->controller, 'new PHPTAL_RepeatController('.$code.')');
-    }//}}}
+    }
        
     private function doForeach()
-    {//{{{
+    {
         $this->tag->generator->doForeach($this->item, $this->controller.'->source');
-    }//}}}
+    }
     
     private function updateIterationVars()
-    {//{{{
+    {
         $this->tag->generator->doSetVar($this->controller.'->key', '$__key__');
         $this->tag->generator->doSetVar($this->controller.'->index', $this->controller.'->index +1');
         $this->tag->generator->doSetVar($this->controller.'->number', $this->controller.'->number +1');
@@ -115,7 +115,7 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
         $this->tag->generator->doIf($this->controller.'->number == '.$this->controller.'->length');
         $this->tag->generator->doSetVar($this->controller.'->end', 'true');
         $this->tag->generator->doEnd();
-    }//}}}
+    }
     
     private $item;
     private $controller;
