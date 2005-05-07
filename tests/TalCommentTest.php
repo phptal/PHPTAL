@@ -23,6 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/Parser/Parser.php';
+require_once 'PHPTAL/Php/State.php';
 require_once 'PHPTAL/Php/CodeWriter.php';
 require_once 'PHPTAL/Php/Attribute/TAL/Comment.php';
 

@@ -47,7 +47,7 @@ abstract class PHPTAL_Php_Node
 
     public function getSourceLine()
     {
-        return $this->node->line;
+        return $this->node->getSourceLine();
     }
 
     public abstract function generate();
@@ -66,7 +66,7 @@ class PHPTAL_Php_NodeTree extends PHPTAL_Php_Node
     {
         parent::__construct($gen,$node);
         $this->children = array();
-        foreach ($node->children as $child){
+        foreach ($node->getChildren() as $child){
             if ($child instanceOf PHPTAL_NodeElement){
                 $gen = new PHPTAL_Php_NodeElement($this->generator, $child);
             }
@@ -124,9 +124,9 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
     public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
     {
         parent::__construct($generator, $node);
-        $this->name = $node->name;
+        $this->name = $node->getName();
         $this->attributes = $node->attributes;
-        $this->xmlns = $node->xmlns;
+        $this->xmlns = $node->getXmlnsState();
         $this->prepare();
     }
 

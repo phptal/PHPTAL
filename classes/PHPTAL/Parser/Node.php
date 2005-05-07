@@ -31,25 +31,24 @@ require_once 'PHPTAL/Php/Attribute.php';
  */
 abstract class PHPTAL_Node
 {
-    public $line;
-    public $parser;
-    /** 
-     * XMLNS aliases propagated from parent nodes and defined by this node
-     * attributes.
-     */
-    public $xmlns;
-
     public function __construct(PHPTAL_Parser $parser)
     {
-        $this->parser = $parser;
-        $this->line = $parser->getLineNumber();
-        $this->xmlns = $parser->getXmlnsState();
+        $this->_parser = $parser;
+        $this->_line = $parser->getLineNumber();
     }
 
+    public function getSourceLine()
+    {
+        return $this->_line;
+    }
+    
     public function getSourceFile()
     {
-        return $this->parser->getSourceFile();
+        return $this->_parser->getSourceFile();
     }
+
+    private $_parser;
+    private $_line;
 }
 
 /**
@@ -59,13 +58,23 @@ abstract class PHPTAL_Node
  */
 class PHPTAL_NodeTree extends PHPTAL_Node
 {
-    public $children;
-
     public function __construct(PHPTAL_Parser $parser)
     {
         parent::__construct($parser);
-        $this->children = array();
+        $this->_children = array();
     }
+
+    public function addChild(PHPTAL_Node $node)
+    {
+        array_push($this->_children, $node);
+    }
+    
+    public function &getChildren()
+    {
+        return $this->_children;
+    }
+
+    protected $_children;
 }
 
 /**
@@ -78,7 +87,7 @@ class PHPTAL_NodeTree extends PHPTAL_Node
  */
 class PHPTAL_NodeElement extends PHPTAL_NodeTree
 {
-    public $name;
+    private $name;
     public $attributes = array();
 
     public function __construct(PHPTAL_Parser $parser, $name, $attributes)
@@ -86,6 +95,18 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         parent::__construct($parser);
         $this->name = $name;
         $this->attributes = $attributes;
+        $this->_xmlns = $parser->getXmlnsState();
+        $this->xmlns = $this->_xmlns;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getXmlnsState()
+    {
+        return $this->_xmlns;
     }
 
     /** Returns true if the element contains specified PHPTAL attribute. */
@@ -93,10 +114,10 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     {
         $ns = $this->getNodePrefix();
         foreach ($this->attributes as $key=>$value){
-            if ($this->xmlns->unAliasAttribute($key) == $name){
+            if ($this->_xmlns->unAliasAttribute($key) == $name){
                 return true;
             }
-            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
+            if ($ns && $this->_xmlns->unAliasAttribute("$ns:$key") == $name){
                 return true;
             }
         }
@@ -109,10 +130,10 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         $ns = $this->getNodePrefix();
         
         foreach ($this->attributes as $key=>$value){
-            if ($this->xmlns->unAliasAttribute($key) == $name){
+            if ($this->_xmlns->unAliasAttribute($key) == $name){
                 return $value;
             }
-            if ($ns && $this->xmlns->unAliasAttribute("$ns:$key") == $name){
+            if ($ns && $this->_xmlns->unAliasAttribute("$ns:$key") == $name){
                 return $value;
             }
         }
@@ -125,11 +146,11 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
      */
     public function hasRealContent()
     {
-        if (count($this->children) == 0)
+        if (count($this->_children) == 0)
             return false;
 
-        if (count($this->children) == 1){
-            $child = $this->children[0];
+        if (count($this->_children) == 1){
+            $child = $this->_children[0];
             if ($child instanceOf PHPTAL_NodeText && $child->value == ''){
                 return false;
             }
@@ -149,8 +170,14 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     
     private function hasContent()
     {
-        return count($this->children) > 0;
+        return count($this->_children) > 0;
     }
+
+    /** 
+     * XMLNS aliases propagated from parent nodes and defined by this node
+     * attributes.
+     */
+    protected $_xmlns;
 }
 
 /**

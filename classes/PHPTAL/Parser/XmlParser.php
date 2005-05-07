@@ -316,8 +316,11 @@ abstract class PHPTAL_XmlParser
     public abstract function onDocumentStart();
     public abstract function onDocumentEnd();
     
-    protected function raiseError($errStr)
+    protected function raiseError($errFmt)
     {
+        $args = func_get_args();
+        $errStr = call_user_func_array('sprintf', $args);
+        
         $str = "%s error: %s in %s:%d";
         $str = sprintf($str, get_class($this), $errStr, $this->_file, $this->_line);
         throw new Exception($str);

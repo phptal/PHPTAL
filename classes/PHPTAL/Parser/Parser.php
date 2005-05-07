@@ -33,21 +33,13 @@ require_once 'PHPTAL/Php/Tales.php';
  */
 class PHPTAL_Parser extends PHPTAL_XmlParser
 {
-    const ERR_DOCUMENT_END_STACK_NOT_EMPTY =
-        "Reached document end but element stack not empty";
-    const ERR_UNSUPPORTED_ATTRIBUTE = 
-        "Unsupported attribute '%s'";
-    const ERR_ELEMENT_CLOSE_MISMATCH = 
-        "Tag closure mismatch, expected '%s' but was '%s'";
+    const ERR_DOCUMENT_END_STACK_NOT_EMPTY = "Reached document end but element stack not empty";
+    const ERR_UNSUPPORTED_ATTRIBUTE = "Unsupported attribute '%s'";
+    const ERR_ELEMENT_CLOSE_MISMATCH = "Tag closure mismatch, expected '%s' but was '%s'";
   
     public function __construct()
     {
         $this->_xmlns = new PHPTAL_XmlnsState();
-    }
-
-    public function getGenerator()
-    {
-        return $this->_codeGenerator;
     }
 
     public function getXmlnsState()
@@ -90,49 +82,14 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
 
     public function onDocType($doctype)
     {
-        $node = new PHPTAL_NodeDocType($this, $doctype);
-        array_push($this->_current->children, $node);
+        $this->_current->addChild(new PHPTAL_NodeDocType($this, $doctype));
     }
 
     public function onXmlDecl($decl)
     {
-        $node = new PHPTAL_NodeXmlDeclaration($this, $decl);
-        array_push($this->_current->children, $node);
+        $this->_current->addChild(new PHPTAL_NodeXmlDeclaration($this, $decl));
     }
     
-    public function onElementStart($name, $attributes)
-    {
-        $this->_xmlns = PHPTAL_XmlnsState::newElement($this->_xmlns, $attributes);
-        
-        foreach ($attributes as $key=>$value) {
-            if (!$this->_xmlns->isValidAttribute($key)) {
-                $err = sprintf(self::ERR_UNSUPPORTED_ATTRIBUTE, $key);
-                $this->raiseError($err);
-            }
-        }
-        
-        $node = new PHPTAL_NodeElement($this, $name, $attributes);
-        array_push($this->_current->children, $node);
-        array_push($this->_stack, $this->_current);
-        $this->_current = $node;
-    }
-    
-    public function onElementClose($name)
-    {
-        if ($this->_current->name != $name) {
-            $err = sprintf(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->name, $name);
-            $this->raiseError($err);
-        }
-        $this->_current = array_pop($this->_stack);        
-        $this->_xmlns = $this->_current->xmlns;
-    }
-    
-    public function onElementData($data)
-    {
-        $node = new PHPTAL_NodeText($this, $data);
-        array_push($this->_current->children, $node);
-    }
-
     public function onComment($data)
     {
         if ($this->_stripComments) 
@@ -142,14 +99,44 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
     
     public function onSpecific($data)
     {
-        $node = new PHPTAL_NodeSpecific($this, $data);
-        array_push($this->_current->children, $node);
+        $this->_current->addChild(new PHPTAL_NodeSpecific($this, $data));
     }
 
-    private $_tree;
-    private $_stack;
-    private $_current;
-    private $_xmlns;
+    public function onElementStart($name, $attributes)
+    {
+        $this->_xmlns = PHPTAL_XmlnsState::newElement($this->_xmlns, $attributes);
+        
+        foreach ($attributes as $key=>$value) {
+            if (!$this->_xmlns->isValidAttribute($key)) {
+                $this->raiseError(self::ERR_UNSUPPORTED_ATTRIBUTE, $key);
+            }
+        }
+        
+        $node = new PHPTAL_NodeElement($this, $name, $attributes);
+        $this->_current->addChild($node);
+        array_push($this->_stack, $this->_current);
+        $this->_current = $node;
+    }
+    
+    public function onElementData($data)
+    {
+        $this->_current->addChild(new PHPTAL_NodeText($this, $data));
+    }
+
+    public function onElementClose($name)
+    {
+        if ($this->_current->getName() != $name) {
+            $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getName(), $name);
+        }
+        $this->_current = array_pop($this->_stack);
+        if ($this->_current instanceOf PHPTAL_NodeElement)
+            $this->_xmlns = $this->_current->getXmlnsState();
+    }
+    
+    private $_tree;    /* PHPTAL_Parser_NodeTree */
+    private $_stack;   /* array<PHPTAL_Parser_Node> */
+    private $_current; /* PHPTAL_Parser_Node */
+    private $_xmlns;   /* PHPTAL_Parser_XmlnsState */
     private $_stripComments = false;
 }
 
