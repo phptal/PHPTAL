@@ -127,26 +127,29 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         $this->name = $node->name;
         $this->attributes = $node->attributes;
         $this->xmlns = $node->xmlns;
+        $this->prepare();
+    }
+
+    private function prepare()
+    {
+        $this->prepareAttributes();
+        $this->separateAttributes();
+        $this->orderTalAttributes();
     }
 
     public function generate()
     {
         if ($this->generator->isDebugOn()){
             $this->generator->pushCode('$ctx->__line = '.$this->getSourceLine());
+            $this->generator->doComment('tag "'.$this->name.'" from line '.$this->getSourceLine());
         }
-        $this->prepareAttributes();
-        $this->separateAttributes();
-        $this->orderTalAttributes();
        
-        if ($this->generator->isDebugOn()){
-            $this->generator->doComment("tag '$this->name' from line ".$this->getSourceLine());
-        }
         
         if (count($this->replaceAttributes) > 0) {
             $this->generateSurroundHead();
             foreach ($this->replaceAttributes as $att) {
-                $att->start( $this );
-                $att->end( $this );
+                $att->start();
+                $att->end();
             }
             $this->generateSurroundFoot();
             return;
@@ -205,7 +208,7 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
     public function generateSurroundHead()
     {
         foreach ($this->surroundAttributes as $att) {
-            $att->start( $this );
+            $att->start();
         }
     }
 
@@ -239,8 +242,8 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         
         if (!$realContent && count($this->contentAttributes) > 0) {
             foreach ($this->contentAttributes as $att) {
-                $att->start( $this );
-                $att->end( $this );
+                $att->start();
+                $att->end();
             }
             return;
         }
@@ -250,7 +253,8 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
 
     public function generateFoot()
     {
-        if ($this->headFootDisabled) return;
+        if ($this->headFootDisabled) 
+            return;
         if ($this->isEmptyNode())
             return;
 
@@ -267,8 +271,8 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
 
     public function generateSurroundFoot()
     {
-        for ($i = (count($this->surroundAttributes)-1); $i>= 0; $i--) {
-            $this->surroundAttributes[$i]->end( $this );
+        for ($i = (count($this->surroundAttributes)-1); $i >= 0; $i--) {
+            $this->surroundAttributes[$i]->end();
         }
     }
 

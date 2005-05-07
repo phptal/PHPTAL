@@ -146,7 +146,7 @@ function phptal_tales_path($expression, $nothrow=false)
     if ($expression == 'default') return PHPTAL_TALES_DEFAULT_KEYWORD;
     if ($expression == 'nothing') return PHPTAL_TALES_NOTHING_KEYWORD;
     if ($expression == '')        return PHPTAL_TALES_NOTHING_KEYWORD;
-  
+
     // split OR expressions terminated by a string
     if (preg_match('/^(.*?)\s*?\|\s*?(string:.*?)$/sm', $expression, $m)){
         list(, $expression, $string) = $m;
@@ -178,24 +178,25 @@ function phptal_tales_path($expression, $nothrow=false)
     // first evaluate ${foo} inside the expression and threat the expression
     // as if it was a string to interpolate
     $expression = phptal_tales_string($expression);
-
+    $expression = substr($expression, 1, -1);
+    
+    $pos = strpos($expression, '/');
     // if no sub part for this expression, just optimize the generated code
     // and access the $ctx->var
-    if (strpos($expression, '/') === false) {
-        return '$ctx->'. substr($expression, 1, -1);
+    if ($pos === false) {
+        return '$ctx->'.$expression;
     }
 
     // otherwise we have to call phptal_path() to resolve the path at runtime
     // extract the first part of the expression (it will be the phptal_path()
     // $base and pass the remaining of the path to phptal_path()
-    $parts = split('/', substr($expression, 1, -1));
-    $next = array_shift($parts);
-    $expression = '\''. join('/', $parts) . '\'';
+    $next = substr($expression, 0, $pos);
+    $expression = substr($expression, $pos+1);
 
-    // return php code invoking phptal_path()
-    if ($nothrow) 
-        return 'phptal_path($ctx->'.$next.', '.$expression.', true)';
-    return 'phptal_path($ctx->'.$next.', '.$expression.')';
+    // return php code invoking phptal_path($next, $expression, $notrhow)
+    return 'phptal_path($ctx->'.$next.', \''.$expression.'\''
+          .($nothrow ? ', true' : '')
+          .')';
 }//}}}
 
 //      
@@ -213,7 +214,7 @@ function phptal_tales_path($expression, $nothrow=false)
 //      string:hello, ${user/name}
 //      string:you have $$130 in your bank account
 //
-function phptal_tales_string( $expression, $nothrow=false )
+function phptal_tales_string($expression, $nothrow=false)
 {//{{{
     // This is a simple parser which evaluates ${foo} inside 
     // 'string:foo ${foo} bar' expressions, it returns the php code which will
