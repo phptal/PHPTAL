@@ -29,7 +29,7 @@ require_once 'PHPTAL/Php/Attribute.php';
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-abstract class PHPTAL_Node
+abstract class PHPTAL_Dom_Node
 {
     public function __construct(PHPTAL_Dom_Parser $parser)
     {
@@ -56,7 +56,7 @@ abstract class PHPTAL_Node
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_NodeTree extends PHPTAL_Node
+class PHPTAL_Dom_NodeTree extends PHPTAL_Dom_Node
 {
     public function __construct(PHPTAL_Dom_Parser $parser)
     {
@@ -64,7 +64,7 @@ class PHPTAL_NodeTree extends PHPTAL_Node
         $this->_children = array();
     }
 
-    public function addChild(PHPTAL_Node $node)
+    public function addChild(PHPTAL_Dom_Node $node)
     {
         array_push($this->_children, $node);
     }
@@ -85,7 +85,7 @@ class PHPTAL_NodeTree extends PHPTAL_Node
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_NodeElement extends PHPTAL_NodeTree
+class PHPTAL_Dom_NodeElement extends PHPTAL_Dom_NodeTree
 {
     private $name;
     public $attributes = array();
@@ -151,7 +151,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
 
         if (count($this->_children) == 1){
             $child = $this->_children[0];
-            if ($child instanceOf PHPTAL_NodeText && $child->value == ''){
+            if ($child instanceOf PHPTAL_Dom_NodeText && $child->value == ''){
                 return false;
             }
         }
@@ -183,7 +183,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
 /**
  * Document text data representation.
  */
-class PHPTAL_NodeText extends PHPTAL_Node
+class PHPTAL_Dom_NodeText extends PHPTAL_Dom_Node
 {
     public $value;
 
@@ -199,7 +199,7 @@ class PHPTAL_NodeText extends PHPTAL_Node
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_NodeSpecific extends PHPTAL_Node
+class PHPTAL_Dom_NodeSpecific extends PHPTAL_Dom_Node
 {
     public $value;
 
@@ -215,7 +215,7 @@ class PHPTAL_NodeSpecific extends PHPTAL_Node
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_NodeDoctype extends PHPTAL_Node
+class PHPTAL_Dom_NodeDoctype extends PHPTAL_Dom_Node
 {
     public $value;
 
@@ -231,7 +231,7 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_NodeXmlDeclaration extends PHPTAL_Node
+class PHPTAL_Dom_NodeXmlDeclaration extends PHPTAL_Dom_Node
 {
     public $value;
 

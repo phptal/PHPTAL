@@ -34,7 +34,7 @@ abstract class PHPTAL_Php_Node
     public $node;
     public $generator;
 
-    public function __construct(PHPTAL_Php_CodeWriter $generator, PHPTAL_Node $node)
+    public function __construct(PHPTAL_Php_CodeWriter $generator, PHPTAL_Dom_Node $node)
     {
         $this->generator = $generator;
         $this->node = $node;
@@ -67,19 +67,19 @@ class PHPTAL_Php_NodeTree extends PHPTAL_Php_Node
         parent::__construct($gen,$node);
         $this->children = array();
         foreach ($node->getChildren() as $child){
-            if ($child instanceOf PHPTAL_NodeElement){
+            if ($child instanceOf PHPTAL_Dom_NodeElement){
                 $gen = new PHPTAL_Php_NodeElement($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_NodeText){
+            else if ($child instanceOf PHPTAL_Dom_NodeText){
                 $gen = new PHPTAL_Php_NodeText($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_NodeDoctype){
+            else if ($child instanceOf PHPTAL_Dom_NodeDoctype){
                 $gen = new PHPTAL_Php_NodeDoctype($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_NodeXmlDeclaration){
+            else if ($child instanceOf PHPTAL_Dom_NodeXmlDeclaration){
                 $gen = new PHPTAL_Php_NodeXmlDeclaration($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_NodeSpecific){
+            else if ($child instanceOf PHPTAL_Dom_NodeSpecific){
                 $gen = new PHPTAL_Php_NodeSpecific($this->generator, $child);
             }
             else {
@@ -317,7 +317,7 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
     
     private function isEmptyNode()
     {
-        return ($this->generator->getOutputMode() == PHPTAL::XHTML && PHPTAL_Defs::isEmptyTag($this->name)) ||
+        return ($this->generator->getOutputMode() == PHPTAL::XHTML && PHPTAL_Dom_Defs::isEmptyTag($this->name)) ||
                ($this->generator->getOutputMode() == PHPTAL::XML   && !$this->hasContent());
     }
 
@@ -350,12 +350,12 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         $this->talAttributes = array();
         foreach ($this->attributes as $key=>$value) {
             // remove handled xml namespaces
-            if (PHPTAL_Defs::isHandledXmlNs($key,$value)){
+            if (PHPTAL_Dom_Defs::isHandledXmlNs($key,$value)){
             }
             else if ($this->xmlns->isPhpTalAttribute($key)) {
                 $this->talAttributes[$key] = $value;
             }
-            else if (PHPTAL_Defs::isBooleanAttribute($key)) {
+            else if (PHPTAL_Dom_Defs::isBooleanAttribute($key)) {
                 $attributes[$key] = $key;
             }
             else {
@@ -388,22 +388,22 @@ class PHPTAL_Php_NodeElement extends PHPTAL_Php_NodeTree
         
         $this->talHandlers = $result;
         foreach ($result as $i=>$handler) {
-            $type = PHPTAL_Defs::$DICTIONARY[strtoupper($handler->name)];
+            $type = PHPTAL_Dom_Defs::$DICTIONARY[strtoupper($handler->name)];
             switch ($type) {
-                case PHPTAL_Defs::REPLACE:
+                case PHPTAL_Dom_Defs::REPLACE:
                     $this->replaceAttributes[] = $handler;
                     break;
                     
-                case PHPTAL_Defs::SURROUND:
+                case PHPTAL_Dom_Defs::SURROUND:
                     $this->surroundAttributes[] = $handler;
                     break;
                     
-                case PHPTAL_Defs::CONTENT:
+                case PHPTAL_Dom_Defs::CONTENT:
                     $this->contentAttributes[] = $handler;
                     break;
 
                 default:
-                    $err = 'Attribute %s not found in PHPTAL_Defs::$DICTIONARY';
+                    $err = 'Attribute %s not found in PHPTAL_Dom_Defs::$DICTIONARY';
                     $err = sprintf($err, $handler->name);
                     throw new Exception($err);
                     break;

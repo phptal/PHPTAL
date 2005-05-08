@@ -68,7 +68,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     
     public function onDocumentStart()
     {
-        $this->_tree = new PHPTAL_NodeTree($this);
+        $this->_tree = new PHPTAL_Dom_NodeTree($this);
         $this->_stack = array();
         $this->_current = $this->_tree;
     }
@@ -82,12 +82,12 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 
     public function onDocType($doctype)
     {
-        $this->_current->addChild(new PHPTAL_NodeDocType($this, $doctype));
+        $this->_current->addChild(new PHPTAL_Dom_NodeDocType($this, $doctype));
     }
 
     public function onXmlDecl($decl)
     {
-        $this->_current->addChild(new PHPTAL_NodeXmlDeclaration($this, $decl));
+        $this->_current->addChild(new PHPTAL_Dom_NodeXmlDeclaration($this, $decl));
     }
     
     public function onComment($data)
@@ -99,7 +99,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     
     public function onSpecific($data)
     {
-        $this->_current->addChild(new PHPTAL_NodeSpecific($this, $data));
+        $this->_current->addChild(new PHPTAL_Dom_NodeSpecific($this, $data));
     }
 
     public function onElementStart($name, $attributes)
@@ -112,7 +112,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
             }
         }
         
-        $node = new PHPTAL_NodeElement($this, $name, $attributes);
+        $node = new PHPTAL_Dom_NodeElement($this, $name, $attributes);
         $this->_current->addChild($node);
         array_push($this->_stack, $this->_current);
         $this->_current = $node;
@@ -120,7 +120,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     
     public function onElementData($data)
     {
-        $this->_current->addChild(new PHPTAL_NodeText($this, $data));
+        $this->_current->addChild(new PHPTAL_Dom_NodeText($this, $data));
     }
 
     public function onElementClose($name)
@@ -129,7 +129,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
             $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getName(), $name);
         }
         $this->_current = array_pop($this->_stack);
-        if ($this->_current instanceOf PHPTAL_NodeElement)
+        if ($this->_current instanceOf PHPTAL_Dom_NodeElement)
             $this->_xmlns = $this->_current->getXmlnsState();
     }
     

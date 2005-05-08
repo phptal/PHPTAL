@@ -71,7 +71,7 @@ require_once 'PHPTAL/Namespace/PHPTAL.php';
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Defs
+class PHPTAL_Dom_Defs
 {
     // enumeration of attributes logic place relatively to the xml node
     const SURROUND = 1;
@@ -81,7 +81,7 @@ class PHPTAL_Defs
     /**
      * Associative array of registered namespaces.
      *
-     * A PHPTAL_Namespace can be registered using PHPTAL_Defs::registerNamespace().
+     * A PHPTAL_Namespace can be registered using PHPTAL_Dom_Defs::registerNamespace().
      *
      * These namespaces will be drop from resulting xml/xhtml unless the parser 
      * is told to keep them.
@@ -104,7 +104,7 @@ class PHPTAL_Defs
      * The value define how and when the attribute handler will be called during
      * code generation.
      *
-     * 'TAL:DEFINE' => PHPTAL_Defs::SURROUND
+     * 'TAL:DEFINE' => PHPTAL_Dom_Defs::SURROUND
      */ 
     static $DICTIONARY;
 

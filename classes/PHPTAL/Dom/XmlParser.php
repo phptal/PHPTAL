@@ -30,6 +30,7 @@
  * like < and < in attribute values or inside text nodes.
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @see PHPTAL_Dom_Parser
  */
 abstract class PHPTAL_XmlParser
 {

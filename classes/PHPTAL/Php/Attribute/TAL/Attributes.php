@@ -79,7 +79,7 @@ implements PHPTAL_Php_TalesChainReader
         }
        
         // XHTML boolean attribute does not appear when empty of false
-        if (PHPTAL_Defs::isBooleanAttribute($attribute)) {
+        if (PHPTAL_Dom_Defs::isBooleanAttribute($attribute)) {
             return $this->prepareBooleanAttribute($attribute, $code);
         }
         

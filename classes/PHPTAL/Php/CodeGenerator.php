@@ -24,7 +24,7 @@ class PHPTAL_Php_CodeGenerator
         $this->_state->setEncoding($enc);
     }
 
-    public function generate(PHPTAL_NodeTree $tree)
+    public function generate(PHPTAL_Dom_NodeTree $tree)
     {
         $treeGen = new PHPTAL_Php_NodeTree($this->_writer, $tree);
 
