@@ -22,10 +22,9 @@
 
 class PHPTAL_NamespaceAttribute
 {
-    public function __construct($name, $kind, $priority)
+    public function __construct($name, $priority)
     {
         $this->_name = $name;
-        $this->_kind = $kind;
         $this->_priority = $priority;
     }
 
@@ -35,7 +34,6 @@ class PHPTAL_NamespaceAttribute
         return $this->_namespace->getName() . ':' . $this->_name;
     }
     
-    public function getKind(){ return $this->_kind; }
     public function getPriority(){ return $this->_priority; }
     public function getNamespace(){ return $this->_namespace; }
     public function setNamespace(PHPTAL_Namespace $ns){ $this->_namespace = $ns; }
@@ -46,7 +44,6 @@ class PHPTAL_NamespaceAttribute
     }
     
     private $_name;         /* Attribute name without the namespace: prefix */
-    private $_kind;         /* SURROUND | REPLACE | CONTENT */
     private $_priority;     /* [0 - 1000] */
     private $_namespace;    /* PHPTAL_Namespace */
 }
@@ -55,7 +52,7 @@ class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
 {
     public function __construct($name, $priority)
     {
-        parent::__construct($name, PHPTAL_Dom_Defs::SURROUND, $priority);
+        parent::__construct($name, $priority);
     }
 }
 
@@ -63,7 +60,7 @@ class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
 {
     public function __construct($name, $priority)
     {
-        parent::__construct($name, PHPTAL_Dom_Defs::REPLACE, $priority);
+        parent::__construct($name, $priority);
     }
 }
 
@@ -71,7 +68,7 @@ class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute
 {
     public function __construct($name, $priority)
     {
-        parent::__construct($name, PHPTAL_Dom_Defs::CONTENT, $priority);
+        parent::__construct($name, $priority);
     }
 }
 

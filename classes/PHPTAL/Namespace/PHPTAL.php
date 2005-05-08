@@ -18,6 +18,6 @@ class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
     }
 }
 
-PHPTAL_Dom_Defs::registerNamespace(new PHPTAL_Namespace_PHPTAL());
+PHPTAL_Dom_Defs::getInstance()->registerNamespace(new PHPTAL_Namespace_PHPTAL());
 
 ?>

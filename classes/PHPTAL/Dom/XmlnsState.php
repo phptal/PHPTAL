@@ -42,21 +42,14 @@ class PHPTAL_Dom_XmlnsState
     public function isValidAttribute($attName)
     {
         $unaliased = $this->unAliasAttribute($attName);
-        return PHPTAL_Dom_Defs::isValidAttribute($unaliased);
+        return PHPTAL_Dom_Defs::getInstance()->isValidAttribute($unaliased);
     }
 
     /** Returns true if $attName is a PHPTAL attribute, false otherwise. */
     public function isPhpTalAttribute($attName)
     {
         $unaliased = $this->unAliasAttribute($attName);
-        return PHPTAL_Dom_Defs::isPhpTalAttribute($unaliased);
-    }
-
-    /** Returns the PHPTAL priority of specified attribute. */
-    public function getAttributePriority($attName)
-    {
-        $unaliased = $this->unAliasAttribute($attName);
-        return PHPTAL_Dom_Defs::$RULES_ORDER[ strtoupper($unaliased) ];
+        return PHPTAL_Dom_Defs::getInstance()->isPhpTalAttribute($unaliased);
     }
 
     /** Returns the unaliased name of specified attribute. */
@@ -83,10 +76,10 @@ class PHPTAL_Dom_XmlnsState
     {
         $aliases = array();
         foreach ($nodeAttributes as $att => $value){
-            if (PHPTAL_Dom_Defs::isHandledXmlNs($att, $value)){
+            if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($att, $value)){
                 preg_match('/^xmlns:(.*?)$/', $att, $m);
                 list(,$alias) = $m;
-                $aliases[$alias] = PHPTAL_Dom_Defs::$XMLNS[$value];
+                $aliases[$alias] = PHPTAL_Dom_Defs::getInstance()->xmlnsToLocalName($value);
             }
         }
         if (count($aliases) > 0){

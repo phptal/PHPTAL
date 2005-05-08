@@ -69,109 +69,45 @@ require_once 'PHPTAL/Namespace/PHPTAL.php';
 /**
  * PHPTAL constants.
  * 
+ * This is a pseudo singleton class, a user may decide to provide 
+ * his own singleton instance which will then be used by PHPTAL.
+ *
+ * This behaviour is mainly usefull to remove builtin namespaces 
+ * and provide custom ones.
+ * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Defs
 {
-    // enumeration of attributes logic place relatively to the xml node
-    const SURROUND = 1;
-    const REPLACE = 2;
-    const CONTENT = 3;
-
-    /**
-     * Associative array of registered namespaces.
-     *
-     * A PHPTAL_Namespace can be registered using PHPTAL_Dom_Defs::registerNamespace().
-     *
-     * These namespaces will be drop from resulting xml/xhtml unless the parser 
-     * is told to keep them.
-     */
-    static $NAMESPACES;
-
-    /**
-     * List of registered namespaces aliases.
-     *
-     * For example:
-     *
-     * http://xml.zope.org/namespaces/metal => METAL
-     */
-    static $XMLNS;
-    
-    /**
-     * This dictionary contains ALL registered namespaces' attributes. 
-     * Unknown attributes will be echoed in result as xhtml/xml ones.
-     * 
-     * The value define how and when the attribute handler will be called during
-     * code generation.
-     *
-     * 'TAL:DEFINE' => PHPTAL_Dom_Defs::SURROUND
-     */ 
-    static $DICTIONARY;
-
-    /**
-     * This rule associative array represents both ordering and exclusion 
-     * mecanism for template attributes.
-     *
-     * All known attributes must appear here and must be associated with 
-     * an occurence priority.
-     *
-     * When more than one phptal attribute appear in the same tag, they 
-     * will execute in following order.
-     *
-     * 'TAL:DEFINE' => 4
-     */ 
-    static $RULES_ORDER; 
-
-
-    /**
-     * This array contains XHTML tags that must be echoed in a &lt;tag/&gt; form
-     * instead of the &lt;tag&gt;&lt;/tag&gt; form.
-     *
-     * In fact, some browsers does not support the later form so PHPTAL 
-     * ensure these tags are correctly echoed.
-     */
-    static $XHTML_EMPTY_TAGS = array(
-        'AREA',
-        'BASE',
-        'BASEFONT',
-        'BR',
-        'COL',
-        'FRAME',
-        'HR',
-        'IMG',
-        'INPUT',
-        'ISINDEX',
-        'LINK',
-        'META',
-        'PARAM',
-    );
-
-    /**
-     * This array contains XHTML attributes that must be echoed in a minimized
-     * form. Some browsers (non HTML4 compliants are unable to interpret those
-     * attributes.
-     *
-     * The output will definitively not be an xml document !!
-     * PreFilters should be set to modify xhtml input containing these attributes.
-     */
-    static $XHTML_BOOLEAN_ATTRIBUTES = array(
-        'compact',
-        'nowrap',
-        'ismap',
-        'declare',
-        'noshade',
-        'checked',
-        'disabled',
-        'readonly',
-        'multiple',
-        'selected',
-        'noresize',
-        'defer'
-    );
-
-    static function isEmptyTag($tagName)
+    public static function getInstance()
     {
-        return in_array(strtoupper($tagName), self::$XHTML_EMPTY_TAGS);
+        if (self::$_instance == null){
+            self::$_instance = new PHPTAL_Dom_Defs();
+        }
+        return self::$_instance;
+    }
+
+    public static function setInstance(PHPTAL_Dom_Defs $instance)
+    {
+        self::$_instance = $instance;
+    }
+
+    
+    public function __construct()
+    {
+        $this->_dictionary = array();
+        $this->_namespaces = array();
+        $this->_xmlns = array();
+    }
+    
+    public function isEmptyTag($tagName)
+    {
+        return in_array(strtolower($tagName), self::$XHTML_EMPTY_TAGS);
+    }
+
+    public function xmlnsToLocalName($xmlns)
+    {
+        return $this->_xmlns[$xmlns];
     }
     
     /**
@@ -179,7 +115,7 @@ class PHPTAL_Dom_Defs
      *
      * @return bool
      */
-    static function isBooleanAttribute($att)
+    public function isBooleanAttribute($att)
     {
         return in_array($att, self::$XHTML_BOOLEAN_ATTRIBUTES);
     }
@@ -189,9 +125,9 @@ class PHPTAL_Dom_Defs
      *
      * @return bool
      */
-    static function isPhpTalAttribute($att)
+    public function isPhpTalAttribute($att)
     {
-        return array_key_exists(strtoupper($att), self::$DICTIONARY);
+        return array_key_exists(strtolower($att), $this->_dictionary);
     }
     
     /**
@@ -203,12 +139,12 @@ class PHPTAL_Dom_Defs
      *
      * @return bool
      */
-    static function isValidAttribute($att)
+    public function isValidAttribute($att)
     {
         if (preg_match('/^(.*):(.*)$/', $att, $m)) {
             list (,$ns,$sub) = $m;
-            if (array_key_exists(strtoupper($ns), self::$NAMESPACES) 
-                && !self::isPhpTalAttribute($att)) {
+            if (array_key_exists(strtolower($ns), $this->_namespaces)
+                && !$this->isPhpTalAttribute($att)) {
                 return false;
             }
         }
@@ -223,51 +159,78 @@ class PHPTAL_Dom_Defs
      *
      * @return bool
      */
-    static function isHandledXmlNs($att, $value)
+    public function isHandledXmlNs($att, $value)
     {
         $att = strtolower($att);
         return substr($att, 0, 6) == 'xmlns:'
-            && array_key_exists($value, self::$XMLNS);
+            && array_key_exists($value, $this->_xmlns);
     }
 
-    /**
-     * Reset ALL registered PHPTAL_Namespace and their attributes.
-     */
-    static function reset()
+    public function getNamespaceAttribute($attName)
     {
-        self::$NAMESPACES = array();
-        self::$DICTIONARY = array();
-        self::$XMLNS = array();
-        self::$RULES_ORDER = array();
-        self::$RESETED = true;
-    }
-
-    static function getNamespaceAttribute($attName)
-    {
-        list($ns, $att) = explode(':',$attName);
-        $namespace = self::$NAMESPACES[strtoupper($ns)];
-        return $namespace->getAttribute($att);
+        return $this->_dictionary[strtolower($attName)];
     }
 
     /**
      * Register a PHPTAL_Namespace and its attribute into PHPTAL.
      */
-    static function registerNamespace(PHPTAL_Namespace $ns)
+    public function registerNamespace(PHPTAL_Namespace $ns)
     {
-        if (!self::$RESETED){
-            self::reset();
-        }
-        $nsname = strtoupper($ns->name);
-        self::$NAMESPACES[$nsname] = $ns;
-        self::$XMLNS[$ns->xmlns] = $nsname;
+        $nsname = strtolower($ns->name);
+        $this->_namespaces[$nsname] = $ns;
+        $this->_xmlns[$ns->xmlns] = $nsname;
         foreach ($ns->getAttributes() as $name => $attribute){
-            $key = $nsname.':'.strtoupper($name);
-            self::$DICTIONARY[$key] = $attribute->getKind();
-            self::$RULES_ORDER[$key] = $attribute->getPriority();
+            $key = $nsname.':'.strtolower($name);
+            $this->_dictionary[$key] = $attribute;
         }
     }
 
-    private static $RESETED = false;
+    private static $_instance = null;
+    private $_dictionary;
+    private $_namespaces;
+    private $_xmlns;
+
+    /**
+     * This array contains XHTML tags that must be echoed in a &lt;tag/&gt; form
+     * instead of the &lt;tag&gt;&lt;/tag&gt; form.
+     *
+     * In fact, some browsers does not support the later form so PHPTAL 
+     * ensure these tags are correctly echoed.
+     */
+    private static $XHTML_EMPTY_TAGS = array(
+        'area',
+        'base',
+        'basefont',
+        'br',
+        'col',
+        'frame',
+        'hr',
+        'img',
+        'input',
+        'isindex',
+        'link',
+        'meta',
+        'param',
+    );
+
+    /**
+     * This array contains XHTML boolean attributes, their value is self 
+     * contained (ie: they are present or not).
+     */
+    private static $XHTML_BOOLEAN_ATTRIBUTES = array(
+        'compact',
+        'nowrap',
+        'ismap',
+        'declare',
+        'noshade',
+        'checked',
+        'disabled',
+        'readonly',
+        'multiple',
+        'selected',
+        'noresize',
+        'defer'
+    );
 }
 
 ?>

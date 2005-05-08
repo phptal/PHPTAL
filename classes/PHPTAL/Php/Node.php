@@ -317,7 +317,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     
     private function isEmptyNode()
     {
-        return ($this->generator->getOutputMode() == PHPTAL::XHTML && PHPTAL_Dom_Defs::isEmptyTag($this->name)) ||
+        return ($this->generator->getOutputMode() == PHPTAL::XHTML && PHPTAL_Dom_Defs::getInstance()->isEmptyTag($this->name)) ||
                ($this->generator->getOutputMode() == PHPTAL::XML   && !$this->hasContent());
     }
 
@@ -350,12 +350,12 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $this->talAttributes = array();
         foreach ($this->attributes as $key=>$value) {
             // remove handled xml namespaces
-            if (PHPTAL_Dom_Defs::isHandledXmlNs($key,$value)){
+            if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($key,$value)){
             }
             else if ($this->xmlns->isPhpTalAttribute($key)) {
                 $this->talAttributes[$key] = $value;
             }
-            else if (PHPTAL_Dom_Defs::isBooleanAttribute($key)) {
+            else if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($key)) {
                 $attributes[$key] = $key;
             }
             else {
@@ -370,7 +370,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $attributes = array();
         foreach ($this->talAttributes as $key=>$exp){
             $name = $this->xmlns->unAliasAttribute($key);
-            $att = PHPTAL_Dom_Defs::getNamespaceAttribute($name);
+            $att = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($name);
             if (array_key_exists($att->getPriority(), $attributes)){
                 $err = sprintf(self::ERR_ATTRIBUTES_CONFLICT, 
                                $this->name, 
