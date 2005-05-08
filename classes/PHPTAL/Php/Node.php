@@ -67,19 +67,19 @@ class PHPTAL_Php_NodeTree extends PHPTAL_Php_Node
         parent::__construct($gen,$node);
         $this->children = array();
         foreach ($node->getChildren() as $child){
-            if ($child instanceOf PHPTAL_Dom_NodeElement){
+            if ($child instanceOf PHPTAL_Dom_Element){
                 $gen = new PHPTAL_Php_NodeElement($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_NodeText){
+            else if ($child instanceOf PHPTAL_Dom_Text){
                 $gen = new PHPTAL_Php_NodeText($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_NodeDoctype){
+            else if ($child instanceOf PHPTAL_Dom_Doctype){
                 $gen = new PHPTAL_Php_NodeDoctype($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_NodeXmlDeclaration){
+            else if ($child instanceOf PHPTAL_Dom_XmlDeclaration){
                 $gen = new PHPTAL_Php_NodeXmlDeclaration($this->generator, $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_NodeSpecific){
+            else if ($child instanceOf PHPTAL_Dom_Specific){
                 $gen = new PHPTAL_Php_NodeSpecific($this->generator, $child);
             }
             else {

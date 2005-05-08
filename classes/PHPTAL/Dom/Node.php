@@ -56,7 +56,7 @@ abstract class PHPTAL_Dom_Node
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_NodeTree extends PHPTAL_Dom_Node
+class PHPTAL_Dom_Tree extends PHPTAL_Dom_Node
 {
     public function __construct(PHPTAL_Dom_Parser $parser)
     {
@@ -85,7 +85,7 @@ class PHPTAL_Dom_NodeTree extends PHPTAL_Dom_Node
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_NodeElement extends PHPTAL_Dom_NodeTree
+class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
 {
     private $name;
     public $attributes = array();
@@ -151,7 +151,7 @@ class PHPTAL_Dom_NodeElement extends PHPTAL_Dom_NodeTree
 
         if (count($this->_children) == 1){
             $child = $this->_children[0];
-            if ($child instanceOf PHPTAL_Dom_NodeText && $child->value == ''){
+            if ($child instanceOf PHPTAL_Dom_Text && $child->value == ''){
                 return false;
             }
         }
@@ -183,7 +183,7 @@ class PHPTAL_Dom_NodeElement extends PHPTAL_Dom_NodeTree
 /**
  * Document text data representation.
  */
-class PHPTAL_Dom_NodeText extends PHPTAL_Dom_Node
+class PHPTAL_Dom_Text extends PHPTAL_Dom_Node
 {
     public $value;
 
@@ -199,7 +199,7 @@ class PHPTAL_Dom_NodeText extends PHPTAL_Dom_Node
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_NodeSpecific extends PHPTAL_Dom_Node
+class PHPTAL_Dom_Specific extends PHPTAL_Dom_Node
 {
     public $value;
 
@@ -215,7 +215,7 @@ class PHPTAL_Dom_NodeSpecific extends PHPTAL_Dom_Node
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_NodeDoctype extends PHPTAL_Dom_Node
+class PHPTAL_Dom_Doctype extends PHPTAL_Dom_Node
 {
     public $value;
 
@@ -231,7 +231,7 @@ class PHPTAL_Dom_NodeDoctype extends PHPTAL_Dom_Node
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_NodeXmlDeclaration extends PHPTAL_Dom_Node
+class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_Node
 {
     public $value;
 
