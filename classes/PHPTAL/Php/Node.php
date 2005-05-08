@@ -419,7 +419,7 @@ class PHPTAL_Php_Text extends PHPTAL_Php_Node
 {
     public function generate()
     {
-        $this->generator->pushString($this->node->value);
+        $this->generator->pushString($this->node->getValue());
     }
 }
 
@@ -432,7 +432,7 @@ class PHPTAL_Php_Specific extends PHPTAL_Php_Node
 {
     public function generate()
     {
-        $this->generator->pushHtml($this->node->value);
+        $this->generator->pushHtml($this->node->getValue());
     }
 }
 

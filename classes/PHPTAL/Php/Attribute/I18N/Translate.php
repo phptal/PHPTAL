@@ -38,7 +38,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         $result = '';
         foreach ($tag->children as $child){
             if ($child instanceOf PHPTAL_Php_Text){
-                $result .= $child->node->value;
+                $result .= $child->node->getValue();
             }
             else if ($child instanceOf PHPTAL_Php_Element){
                 if ($child->hasAttribute('i18n:name')){

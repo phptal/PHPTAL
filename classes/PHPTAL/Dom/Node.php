@@ -151,7 +151,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
 
         if (count($this->_children) == 1){
             $child = $this->_children[0];
-            if ($child instanceOf PHPTAL_Dom_Text && $child->value == ''){
+            if ($child instanceOf PHPTAL_Dom_Text && $child->getValue() == ''){
                 return false;
             }
         }
@@ -180,66 +180,46 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
     protected $_xmlns;
 }
 
-/**
- * Document text data representation.
- */
-class PHPTAL_Dom_Text extends PHPTAL_Dom_Node
+class PHPTAL_Dom_ValueNode extends PHPTAL_Dom_Node
 {
-    public $value;
-
     public function __construct(PHPTAL_Dom_Parser $parser, $data)
     {
         parent::__construct($parser);
-        $this->value = $data;
+        $this->_value = $data;
     }
+
+    public function getValue()
+    {
+        return $this->_value;
+    }
+
+    private $_value;
 }
+
+/**
+ * Document text data representation.
+ */
+class PHPTAL_Dom_Text extends PHPTAL_Dom_ValueNode{}
 
 /**
  * Comment, preprocessor, etc... representation.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_Specific extends PHPTAL_Dom_Node
-{
-    public $value;
-
-    public function __construct(PHPTAL_Dom_Parser $parser, $data)
-    {
-        parent::__construct($parser);
-        $this->value = $data;
-    }
-}
+class PHPTAL_Dom_Specific extends PHPTAL_Dom_ValueNode {}
 
 /**
  * Document doctype representation.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_Doctype extends PHPTAL_Dom_Node
-{
-    public $value;
-
-    public function __construct(PHPTAL_Dom_Parser $parser, $data)
-    {
-        parent::__construct($parser);
-        $this->value = $data;
-    }
-}
+class PHPTAL_Dom_Doctype extends PHPTAL_Dom_ValueNode {}
 
 /**
  * XML declaration node.
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_Node
-{
-    public $value;
-
-    public function __construct(PHPTAL_Dom_Parser $parser, $data)
-    {
-        parent::__construct($parser);
-        $this->value = $data;
-    }
-}
+class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_ValueNode {}
 
 ?>
