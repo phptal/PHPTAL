@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 require_once 'PHPTAL.php';
-require_once 'PHPTAL/Parser/Parser.php';
+require_once 'PHPTAL/Dom/Parser.php';
 
 class OldTest extends PHPUnit2_Framework_TestCase 
 {

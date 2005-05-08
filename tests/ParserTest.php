@@ -21,7 +21,7 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL/Parser/Parser.php';
+require_once 'PHPTAL/Dom/Parser.php';
 require_once 'PHPTAL/Php/CodeWriter.php';
 
 class ParserTest extends PHPUnit2_Framework_TestCase 

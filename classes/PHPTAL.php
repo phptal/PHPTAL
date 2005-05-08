@@ -396,7 +396,7 @@ class PHPTAL
     
     private function parse()
     {
-        require_once 'PHPTAL/Parser/Parser.php';
+        require_once 'PHPTAL/Dom/Parser.php';
         
         // instantiate the PHPTAL source parser 
         $parser = new PHPTAL_Parser();

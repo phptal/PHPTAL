@@ -20,10 +20,10 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/Parser/Defs.php';
-require_once 'PHPTAL/Parser/Node.php';
-require_once 'PHPTAL/Parser/XmlParser.php';
-require_once 'PHPTAL/Parser/XmlnsState.php';
+require_once 'PHPTAL/Dom/Defs.php';
+require_once 'PHPTAL/Dom/Node.php';
+require_once 'PHPTAL/Dom/XmlParser.php';
+require_once 'PHPTAL/Dom/XmlnsState.php';
 require_once 'PHPTAL/Php/Tales.php';
 
 /**

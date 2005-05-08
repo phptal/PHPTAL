@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPTAL/Parser/Defs.php';
+require_once 'PHPTAL/Dom/Defs.php';
 require_once 'PHPTAL/Namespace.php';
 
 class PHPTAL_Namespace_PHPTAL extends PHPTAL_Namespace

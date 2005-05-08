@@ -41,10 +41,10 @@ require_once 'PHPTAL/Php/Attribute/PHPTAL/Id.php';
 
 require_once 'PHPTAL/Php/Attribute/I18N/Translate.php';
 require_once 'PHPTAL/Php/Attribute/I18N/Name.php';
-require_once 'PHPTAL/Php/Attribute/I18N/Domain.php';
+require_once 'PHPTAL/Php/Attribute/I18N/Dom/ain.php';
 require_once 'PHPTAL/Php/Attribute/I18N/Attributes.php';
 
-require_once 'PHPTAL/Parser/Node.php';
+require_once 'PHPTAL/Dom/Node.php';
 
 /**
  * Base class for all PHPTAL attributes.
