@@ -31,7 +31,7 @@ require_once 'PHPTAL/Php/Tales.php';
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Parser extends PHPTAL_XmlParser
+class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 {
     const ERR_DOCUMENT_END_STACK_NOT_EMPTY = "Reached document end but element stack not empty";
     const ERR_UNSUPPORTED_ATTRIBUTE = "Unsupported attribute '%s'";
@@ -133,10 +133,10 @@ class PHPTAL_Parser extends PHPTAL_XmlParser
             $this->_xmlns = $this->_current->getXmlnsState();
     }
     
-    private $_tree;    /* PHPTAL_Parser_NodeTree */
-    private $_stack;   /* array<PHPTAL_Parser_Node> */
-    private $_current; /* PHPTAL_Parser_Node */
-    private $_xmlns;   /* PHPTAL_Parser_XmlnsState */
+    private $_tree;    /* PHPTAL_Dom_Parser_NodeTree */
+    private $_stack;   /* array<PHPTAL_Dom_Parser_Node> */
+    private $_current; /* PHPTAL_Dom_Parser_Node */
+    private $_xmlns;   /* PHPTAL_Dom_Parser_XmlnsState */
     private $_stripComments = false;
 }
 

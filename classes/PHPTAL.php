@@ -399,7 +399,7 @@ class PHPTAL
         require_once 'PHPTAL/Dom/Parser.php';
         
         // instantiate the PHPTAL source parser 
-        $parser = new PHPTAL_Parser();
+        $parser = new PHPTAL_Dom_Parser();
         $parser->stripComments($this->_stripComments);
 
         $data = $this->_source->getData();

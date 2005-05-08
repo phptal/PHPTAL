@@ -31,7 +31,7 @@ require_once 'PHPTAL/Php/Attribute.php';
  */
 abstract class PHPTAL_Node
 {
-    public function __construct(PHPTAL_Parser $parser)
+    public function __construct(PHPTAL_Dom_Parser $parser)
     {
         $this->_parser = $parser;
         $this->_line = $parser->getLineNumber();
@@ -58,7 +58,7 @@ abstract class PHPTAL_Node
  */
 class PHPTAL_NodeTree extends PHPTAL_Node
 {
-    public function __construct(PHPTAL_Parser $parser)
+    public function __construct(PHPTAL_Dom_Parser $parser)
     {
         parent::__construct($parser);
         $this->_children = array();
@@ -90,7 +90,7 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
     private $name;
     public $attributes = array();
 
-    public function __construct(PHPTAL_Parser $parser, $name, $attributes)
+    public function __construct(PHPTAL_Dom_Parser $parser, $name, $attributes)
     {
         parent::__construct($parser);
         $this->name = $name;
@@ -187,7 +187,7 @@ class PHPTAL_NodeText extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct(PHPTAL_Parser $parser, $data)
+    public function __construct(PHPTAL_Dom_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;
@@ -203,7 +203,7 @@ class PHPTAL_NodeSpecific extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct(PHPTAL_Parser $parser, $data)
+    public function __construct(PHPTAL_Dom_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;
@@ -219,7 +219,7 @@ class PHPTAL_NodeDoctype extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct(PHPTAL_Parser $parser, $data)
+    public function __construct(PHPTAL_Dom_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;
@@ -235,7 +235,7 @@ class PHPTAL_NodeXmlDeclaration extends PHPTAL_Node
 {
     public $value;
 
-    public function __construct(PHPTAL_Parser $parser, $data)
+    public function __construct(PHPTAL_Dom_Parser $parser, $data)
     {
         parent::__construct($parser);
         $this->value = $data;

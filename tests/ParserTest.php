@@ -28,7 +28,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
 {
     public function testParseSimpleDocument()
     {
-        $parser = new PHPTAL_Parser();
+        $parser = new PHPTAL_Dom_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
         $children = $tree->getChildren();
         $this->assertEquals(3, count($children));
@@ -37,7 +37,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
 
     public function testByteOrderMark()
     {
-        $parser = new PHPTAL_Parser();
+        $parser = new PHPTAL_Dom_Parser();
         try {
             $tree = $parser->parseFile('input/parser.02.xml');
             $this->assertTrue(true);
@@ -49,7 +49,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
 
     public function testBadAttribute(){
         try {
-            $parser = new PHPTAL_Parser();
+            $parser = new PHPTAL_Dom_Parser();
             $parser->parseFile('input/parser.03.xml');
         }
         catch (Exception $e){
