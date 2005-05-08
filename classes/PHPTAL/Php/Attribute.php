@@ -20,30 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/Php/Attribute/TAL/Comment.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Replace.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Content.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Condition.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Attributes.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Repeat.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
-require_once 'PHPTAL/Php/Attribute/TAL/OnError.php';
-require_once 'PHPTAL/Php/Attribute/TAL/OmitTag.php';
-
-require_once 'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
-require_once 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
-
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Debug.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Id.php';
-
-require_once 'PHPTAL/Php/Attribute/I18N/Translate.php';
-require_once 'PHPTAL/Php/Attribute/I18N/Name.php';
-require_once 'PHPTAL/Php/Attribute/I18N/Domain.php';
-require_once 'PHPTAL/Php/Attribute/I18N/Attributes.php';
-
 require_once 'PHPTAL/Dom/Node.php';
 
 /**
@@ -68,30 +44,10 @@ abstract class PHPTAL_Php_Attribute
     /** Element using this attribute (xml node). */
     public $tag;
 
-    /** Attribute constructor. */
-    public function __construct($tag)
-    {
-        $this->tag = $tag;
-    }
-
     /** Called before element printing. */
     public abstract function start();
     /** Called after element printing. */
     public abstract function end();
-    
-    /**
-     * Factory method, returns a new attribute instance.
-     */
-    public static function createAttribute($tag, $attName, $expression)
-    {
-        $class = 'PHPTAL_Php_Attribute_' . str_replace(':','_', $attName);
-        $class = str_replace('-', '', $class);
-        
-        $result = new $class($tag);
-        $result->name = strtoupper($attName);
-        $result->expression = $expression;
-        return $result;
-    }
 
     /**
      * Remove structure|text keyword from expression and stores it for later

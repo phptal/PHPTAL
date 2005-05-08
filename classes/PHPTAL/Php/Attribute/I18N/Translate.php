@@ -1,5 +1,7 @@
 <?php
 
+require_once 'PHPTAL/Php/Attribute.php';
+
 // ZPTInternationalizationSupport
 //
 // i18n:translate

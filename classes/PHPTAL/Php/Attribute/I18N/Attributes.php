@@ -1,5 +1,7 @@
 <?php
 
+require_once 'PHPTAL/Php/Attribute.php';
+
 // i18n:attributes
 //
 // This attribute will allow us to translate attributes of HTML tags, such 

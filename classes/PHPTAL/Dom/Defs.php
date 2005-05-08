@@ -242,6 +242,13 @@ class PHPTAL_Dom_Defs
         self::$RESETED = true;
     }
 
+    static function getNamespaceAttribute($attName)
+    {
+        list($ns, $att) = explode(':',$attName);
+        $namespace = self::$NAMESPACES[strtoupper($ns)];
+        return $namespace->getAttribute($att);
+    }
+
     /**
      * Register a PHPTAL_Namespace and its attribute into PHPTAL.
      */

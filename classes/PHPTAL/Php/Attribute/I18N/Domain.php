@@ -1,5 +1,7 @@
 <?php
 
+require_once 'PHPTAL/Php/Attribute.php';
+
 // i18n:domain
 //
 // The i18n:domain attribute is used to specify the domain to be used to get 

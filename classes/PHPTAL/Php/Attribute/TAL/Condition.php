@@ -31,6 +31,8 @@
 //
 //
 
+require_once 'PHPTAL/Php/Attribute.php';
+
 /**
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

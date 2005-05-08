@@ -2,20 +2,30 @@
 
 require_once 'PHPTAL/Namespace.php';
 
-class PHPTAL_Namespace_TAL extends PHPTAL_Namespace
+require_once 'PHPTAL/Php/Attribute/TAL/Comment.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Replace.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Content.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Condition.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Attributes.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Repeat.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
+require_once 'PHPTAL/Php/Attribute/TAL/OnError.php';
+require_once 'PHPTAL/Php/Attribute/TAL/OmitTag.php';
+
+class PHPTAL_Namespace_TAL extends PHPTAL_BuiltinNamespace
 {
     public function __construct()
     {
         parent::__construct('tal', 'http://xml.zope.org/namespaces/tal');
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('define', PHPTAL_Dom_Defs::SURROUND, 4));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('condition', PHPTAL_Dom_Defs::SURROUND, 6));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('repeat', PHPTAL_Dom_Defs::SURROUND, 8));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('content', PHPTAL_Dom_Defs::CONTENT, 11));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('replace', PHPTAL_Dom_Defs::REPLACE, 9));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('attributes', PHPTAL_Dom_Defs::SURROUND, 9));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('omit-tag', PHPTAL_Dom_Defs::SURROUND, 0));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('comment', PHPTAL_Dom_Defs::SURROUND, 12));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('on-error', PHPTAL_Dom_Defs::SURROUND, 2));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('define', 4));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('condition', 6));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('repeat', 8));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeContent('content', 11));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeReplace('replace', 9));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('attributes', 9));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('omit-tag', 0));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('comment', 12));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('on-error', 2));
     }
 }
 

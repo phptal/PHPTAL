@@ -1,5 +1,7 @@
 <?php
 
+require_once 'PHPTAL/Php/Attribute.php';
+
 // i18n:source
 //
 // The i18n:source attribute specifies the language of the text to be 

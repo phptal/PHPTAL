@@ -367,47 +367,38 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     private function orderTalAttributes()
     {
-        $result = array();
-        foreach ($this->talAttributes as $key=>$exp) {
-            $pos = $this->xmlns->getAttributePriority($key);
-            if (array_key_exists($pos, $result)) {
+        $attributes = array();
+        foreach ($this->talAttributes as $key=>$exp){
+            $name = $this->xmlns->unAliasAttribute($key);
+            $att = PHPTAL_Dom_Defs::getNamespaceAttribute($name);
+            if (array_key_exists($att->getPriority(), $attributes)){
                 $err = sprintf(self::ERR_ATTRIBUTES_CONFLICT, 
                                $this->name, 
                                $this->getSourceLine(), 
                                $key, 
-                               $result[$pos]->name
+                               $attributes[$att->getPriority()][0]
                                );
                 throw new Exception($err);
             }
-            $result[$pos] = PHPTAL_Php_Attribute::createAttribute(
-                $this, $this->xmlns->unAliasAttribute($key), $exp 
-            );
+            $attributes[$att->getPriority()] = array($key, $att, $exp);
         }
+        ksort($attributes);
 
-        ksort($result);
-        
-        $this->talHandlers = $result;
-        foreach ($result as $i=>$handler) {
-            $type = PHPTAL_Dom_Defs::$DICTIONARY[strtoupper($handler->name)];
-            switch ($type) {
-                case PHPTAL_Dom_Defs::REPLACE:
-                    $this->replaceAttributes[] = $handler;
-                    break;
-                    
-                case PHPTAL_Dom_Defs::SURROUND:
-                    $this->surroundAttributes[] = $handler;
-                    break;
-                    
-                case PHPTAL_Dom_Defs::CONTENT:
-                    $this->contentAttributes[] = $handler;
-                    break;
-
-                default:
-                    $err = 'Attribute %s not found in PHPTAL_Dom_Defs::$DICTIONARY';
-                    $err = sprintf($err, $handler->name);
-                    throw new Exception($err);
-                    break;
-            }
+        $this->talHandlers = array();
+        foreach ($attributes as $prio => $dat){        
+            list($key, $att, $exp) = $dat;
+            $handler = $att->createAttributeHandler($this, $exp);
+            $this->talHandlers[$prio] = $handler;
+            
+            if ($att instanceOf PHPTAL_NamespaceAttributeSurround)
+                $this->surroundAttributes[] = $handler;
+            else if ($att instanceOf PHPTAL_NamespaceAttributeReplace)
+                $this->replaceAttributes[] = $handler;
+            else if ($att instanceOf PHPTAL_NamespaceAttributeContent)
+                $this->contentAttributes[] = $handler;
+            else 
+                throw new Exception("Unknown namespace attribute class ".get_class($att));
+            
         }
     }
 }

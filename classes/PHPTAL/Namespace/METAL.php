@@ -3,15 +3,20 @@
 require_once 'PHPTAL/Dom/Defs.php';
 require_once 'PHPTAL/Namespace.php';
 
-class PHPTAL_Namespace_METAL extends PHPTAL_Namespace
+require_once 'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
+require_once 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
+require_once 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
+require_once 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
+
+class PHPTAL_Namespace_METAL extends PHPTAL_BuiltinNamespace
 {
     public function __construct()
     {
         parent::__construct('metal', 'http://xml.zope.org/namespaces/metal');
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('define-macro', PHPTAL_Dom_Defs::SURROUND, 1));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('use-macro', PHPTAL_Dom_Defs::REPLACE, 9));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('define-slot', PHPTAL_Dom_Defs::SURROUND, 9));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('fill-slot', PHPTAL_Dom_Defs::SURROUND, 9));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('define-macro', 1));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeReplace('use-macro', 9));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('define-slot', 9));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('fill-slot', 9));
     }
 }
 

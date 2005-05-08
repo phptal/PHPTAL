@@ -3,15 +3,20 @@
 require_once 'PHPTAL/Dom/Defs.php';
 require_once 'PHPTAL/Namespace.php';
 
-class PHPTAL_Namespace_I18N extends PHPTAL_Namespace
+require_once 'PHPTAL/Php/Attribute/I18N/Translate.php';
+require_once 'PHPTAL/Php/Attribute/I18N/Name.php';
+require_once 'PHPTAL/Php/Attribute/I18N/Domain.php';
+require_once 'PHPTAL/Php/Attribute/I18N/Attributes.php';
+
+class PHPTAL_Namespace_I18N extends PHPTAL_BuiltinNamespace
 {
     public function __construct()
     {
         parent::__construct('i18n', 'http://xml.zope.org/namespaces/i18n');
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('translate', PHPTAL_Dom_Defs::CONTENT, 5));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('name', PHPTAL_Dom_Defs::SURROUND, 5));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('attributes', PHPTAL_Dom_Defs::SURROUND, 10));
-        $this->addAttribute(new PHPTAL_NamespaceAttribute('domain', PHPTAL_Dom_Defs::SURROUND, 3));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeContent('translate', 5));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('name', 5));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('attributes', 10));
+        $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('domain', 3));
     }
 }
 

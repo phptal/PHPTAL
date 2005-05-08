@@ -20,6 +20,8 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+require_once 'PHPTAL/Php/Attribute.php';
+
 // TAL spec 1.4 for tal:define content
 //
 // argument       ::= define_scope [';' define_scope]*

@@ -20,6 +20,8 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+require_once 'PHPTAL/Php/Attribute.php';
+
 /**
  */
 class PHPTAL_Php_Attribute_TAL_Comment extends PHPTAL_Php_Attribute

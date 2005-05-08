@@ -39,13 +39,15 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
         $this->_gen = new PHPTAL_Php_CodeWriter($state);
         $this->_tag = new DummyTag();
         $this->_tag->generator = $this->_gen;
+        $this->_att = new PHPTAL_Php_Attribute_TAL_Comment();
+        $this->_att->tag = $this->_tag;
     }
     
     function testComment()
     {
-        $att = PHPTAL_Php_Attribute::createAttribute($this->_tag, 'tal:comment', 'my dummy comment');
-        $att->start();
-        $att->end();
+        $this->_att->expression = 'my dummy comment';
+        $this->_att->start();
+        $this->_att->end();
         $res = $this->_gen->getResult();
         $this->assertEquals('<?php /* my dummy comment */; ?>', $res);
     }
@@ -53,9 +55,9 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
     function testMultiLineComment()
     {
         $comment = "my dummy comment\non more than one\nline";
-        $att = PHPTAL_Php_Attribute::createAttribute($this->_tag, 'tal:comment', $comment);
-        $att->start();
-        $att->end();
+        $this->_att->expression = $comment;
+        $this->_att->start();
+        $this->_att->end();
         $res = $this->_gen->getResult();
         $this->assertEquals("<?php /* $comment */; ?>", $res);
     }
@@ -63,9 +65,9 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
     function testTrickyComment()
     {
         $comment = "my dummy */ comment\non more than one\nline";
-        $att = PHPTAL_Php_Attribute::createAttribute($this->_tag, 'tal:comment', $comment);
-        $att->start();
-        $att->end();
+        $this->_att->expression = $comment;
+        $this->_att->start();
+        $this->_att->end();
         $res = $this->_gen->getResult();
         $comment = str_replace('*/', '* /', $comment);
         $this->assertEquals("<?php /* $comment */; ?>", $res);
@@ -89,6 +91,7 @@ class TalCommentTest extends PHPUnit2_Framework_TestCase
 
     private $_tag;
     private $_gen;
+    private $_att;
 }
         
 ?>
