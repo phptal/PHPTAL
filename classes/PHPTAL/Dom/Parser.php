@@ -39,7 +39,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
   
     public function __construct()
     {
-        $this->_xmlns = new PHPTAL_XmlnsState();
+        $this->_xmlns = new PHPTAL_Dom_XmlnsState();
     }
 
     public function getXmlnsState()
@@ -104,7 +104,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 
     public function onElementStart($name, $attributes)
     {
-        $this->_xmlns = PHPTAL_XmlnsState::newElement($this->_xmlns, $attributes);
+        $this->_xmlns = PHPTAL_Dom_XmlnsState::newElement($this->_xmlns, $attributes);
         
         foreach ($attributes as $key=>$value) {
             if (!$this->_xmlns->isValidAttribute($key)) {

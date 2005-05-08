@@ -29,7 +29,7 @@
  *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_XmlnsState 
+class PHPTAL_Dom_XmlnsState 
 {
     /** Create a new XMLNS state inheriting provided aliases. */
     public function __construct($aliases = array())
@@ -79,7 +79,7 @@ class PHPTAL_XmlnsState
      * This method is used by the PHPTAL parser to keep track of xmlns fluctuation for
      * each encountered node.
      */
-    public static function newElement(PHPTAL_XmlnsState $currentState, $nodeAttributes)
+    public static function newElement(PHPTAL_Dom_XmlnsState $currentState, $nodeAttributes)
     {
         $aliases = array();
         foreach ($nodeAttributes as $att => $value){
@@ -92,7 +92,7 @@ class PHPTAL_XmlnsState
         if (count($aliases) > 0){
             // inherit aliases with maybe an overwrite
             $aliases = array_merge($currentState->_aliases, $aliases);
-            return new PHPTAL_XmlnsState($aliases);
+            return new PHPTAL_Dom_XmlnsState($aliases);
         }
         return $currentState;
     }
