@@ -92,6 +92,18 @@ class MetalMacroTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/metal-macro.07.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testBadMacroNameException()
+    {
+        try {
+            $tpl = new PHPTAL('input/metal-macro.08.html');
+            $res = $tpl->execute();
+            $this->assertTrue(false, 'Bad macro name exception not thrown');
+        }
+        catch (Exception $e){
+            $this->assertTrue(true, 'Bad macro name thrown');
+        }
+    }
 }
 
 ?>

@@ -34,7 +34,7 @@ class PHPTAL_Exception extends Exception
 
     public function __toString()
     {//{{{
-        if (!empty($this->srcFile)){
+        if (empty($this->srcFile)){
             return parent::__toString();
         }
         $res = sprintf('From %s around line %d'."\n", $this->srcFile, $this->srcLine);
