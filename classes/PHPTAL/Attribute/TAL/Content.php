@@ -56,7 +56,7 @@ class PHPTAL_Attribute_TAL_Content extends PHPTAL_Attribute
                     break;
                 }
 
-                $condition = sprintf('$__content__ = %s', $exp);
+                $condition = sprintf('!phptal_isempty($__content__ = %s)', $exp);
                 if (!$started) {
                     $this->tag->generator->doIf($condition);
                     $started = true;

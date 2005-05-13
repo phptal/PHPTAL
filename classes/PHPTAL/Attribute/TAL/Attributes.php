@@ -142,7 +142,8 @@ class PHPTAL_Attribute_TAL_Attributes extends PHPTAL_Attribute
             }
 
             // if attribute not found (null) or false (false)
-            $condition = sprintf('(%s = %s) !== null && %s !== false', $attkey, $exp, $attkey);
+            //$condition = sprintf('(%s = %s) !== null && %s !== false', $attkey, $exp, $attkey);
+            $condition = sprintf('!phptal_isempty(%s = %s)', $attkey, $exp);
             if (!$started){
                 $this->tag->generator->doIf($condition);
                 $started = true;

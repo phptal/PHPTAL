@@ -101,7 +101,7 @@ class PHPTAL_Attribute_TAL_Repeat extends PHPTAL_Attribute
         $this->setRepeatVar('index', $this->repeatVar('index').'+1');
         $this->setRepeatVar('number', $this->repeatVar('number').'+1');
         $this->setRepeatVar('even', $this->repeatVar('index') . ' %2 == 0');
-        $this->setRepeatVar('odd', '!' . $this->repeatVar('even'));
+        $this->setRepeatVar('odd', '!'.$this->repeatVar('even'));
 
         // repeat/item/end set to true when last item is reached
         $condition = sprintf('%s == %s', $this->repeatVar('number'), $this->repeatVar('length'));

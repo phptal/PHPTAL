@@ -93,7 +93,7 @@ class PHPTAL_Attribute_TAL_Replace extends PHPTAL_Attribute
             }
 
             // (else) if ($__replace__ = $possibility) echo $__replace__;
-            $condition = sprintf('$__replace__ = %s', $exp);
+            $condition = sprintf('!phptal_isempty($__replace__ = %s)', $exp);
             if ($started) {
                 $this->tag->generator->doElseIf($condition);
             }

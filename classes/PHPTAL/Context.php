@@ -298,4 +298,9 @@ function phptal_exists($ctx, $path)
     return !is_null($res);
 }//}}}
 
+function phptal_isempty($var)
+{
+    return $var === null || $var === false || $var === '';
+}
+
 ?>

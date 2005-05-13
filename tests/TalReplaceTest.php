@@ -82,6 +82,30 @@ class TalReplaceTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/tal-replace.07.html');
         $this->assertEquals($exp, $res);        
     }
+
+    function testEmpty()
+    {
+        $src = <<<EOT
+<root>
+<span tal:replace="nullv | falsev | emptystrv | zerov | default">default</span>
+<span tal:replace="nullv | falsev | emptystrv | default">default</span>
+</root>
+EOT;
+        $exp = <<<EOT
+<root>
+0
+<span>default</span>
+</root>
+EOT;
+        $tpl = new PHPTAL();
+        $tpl->setSource($src, __FILE__);
+        $tpl->nullv = null;
+        $tpl->falsev = false;
+        $tpl->emptystrv = '';
+        $tpl->zerov = 0;
+        $res = $tpl->execute();
+        $this->assertEquals(trim_string($exp), trim_string($res));
+    }
 }
 
 ?>
