@@ -407,7 +407,7 @@ class PHPTAL_CodeGenerator
     private $_xmldeclaration = "";
     private $_encoding;
     private $_outputMode;
-    private $_htmlEscapingFunction = 'htmlspecialchars';
+    private $_htmlEscapingFunction = 'phptal_escape';
 }
 
 ?>
