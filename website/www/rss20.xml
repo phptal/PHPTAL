@@ -158,10 +158,16 @@
 		</item>
 
 		<item>
-			<title>PHPTAL 1.0.10 (bug fix release)</titlE>
+			<title>PHPTAL 1.0.10 (bug fix release before 1.1 branch)</titlE>
 			<link>http://phptal.motion-twin.com/download.html</link>
 			<description>
-			- 
+			- fixed echoing an object now calls its __toString() method
+			- fixed false booleans are now echoed as 0 instead of '' (css using item/repeat/odd may require an update)
+			- fixed tal:content, tal:replace and tal:attributes chained expression now ignores null, false and ''
+			- fixed &lt;!-- comments were evaluating ${foo}
+			- fixed $${foo} were evaluated inside text nodes
+			- fixed doctype and xml declaration discovery inside deep macro calls
+			-	fixed filemtime() warning when using setSource() with no path
 			</description>
 		</item>
 		

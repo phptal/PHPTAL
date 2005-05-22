@@ -4,6 +4,23 @@
     <h1 id="news">News</h1>
 
 	<div class="pon">
+		<h2>PHPTAL 1.0.10</h2>
+		<div class="date">2005-05-22</div>
+		<h3>(bug fix release before 1.1 branch)</h3>
+		<ul>
+			<li>fixed: echoing an object now calls its <code>__toString()</code> method</li>
+			<li>fixed: false booleans are now echoed as 0 instead of '' (css using <code>item/repeat/odd</code> may require an update)</li>
+			<li>fixed: <code>tal:content</code>, <code>tal:replace</code> and <code>tal:attributes</code> chained expression now ignores <code>null</code>, <code>false</code> and <code>''</code></li>
+			<li>fixed: <code>&lt;!-- --&gt;</code> comments were evaluating <code>$${foo}</code></li>
+			<li>fixed: <code>$$${foo}</code> were evaluated inside text nodes</li>
+			<li>fixed: doctype and xml declaration discovery inside deep macro calls</li>
+			<li>fixed: <code>filemtime()</code> warning when using <code>setSource()</code> with no path</li>
+		</ul>
+
+<pre>svn upgrade http://phptal.motion-twin.com/latest.tar.gz</pre>
+	</div>
+
+	<div class="pon">
 	  <h2>PHPTAL 1.0.9</h2>
 	  <div class="date">2005-04-23</div>
 	  <ul>

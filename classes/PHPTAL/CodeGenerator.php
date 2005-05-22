@@ -263,7 +263,7 @@ class PHPTAL_CodeGenerator
         $this->flushCode();
        
         // replace ${var} inside strings
-        while (preg_match('/^(.*?)(\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
+        while (preg_match('/^(.*?)((?<!\$)\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
             list(,$before,$expression,$after) = $m;
             
             $before = $this->escape($before);
@@ -275,6 +275,8 @@ class PHPTAL_CodeGenerator
 
             $str = $after;
         }
+
+        $str = str_replace('$${', '${', $str);
         
         if (strlen($str) > 0){
             $str = $this->escape($str); 
@@ -309,7 +311,7 @@ class PHPTAL_CodeGenerator
         }
         
         // replace ${var} found in expression
-        while (preg_match('/\$\{([^\}]+)\}/ism', $src, $m)){
+        while (preg_match('/(?<!\$)\$\{([^\}]+)\}/ism', $src, $m)){
             list($ori, $exp) = $m;
             $php  = phptal_tales_php($exp);
             $repl = '\'.%s.\''; 
@@ -368,7 +370,7 @@ class PHPTAL_CodeGenerator
     {//{{{
         if ($this->_talesMode == 'tales'){
             return preg_replace(
-                '/\$\{([a-z0-9\/_]+)\}/ism', 
+                '/(?<!\$)\$\{([a-z0-9\/_]+)\}/ism', 
                 '<?php echo '
                 .$this->_htmlEscapingFunction.'( '
                 .'phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' '
@@ -376,7 +378,7 @@ class PHPTAL_CodeGenerator
                 $src);
         }
 
-        while (preg_match('/\${(structure )?([^\}]+)\}/ism', $src, $m)){
+        while (preg_match('/(?<!\$)\${(structure )?([^\}]+)\}/ism', $src, $m)){
             list($ori, $struct, $exp) = $m;
             $php  = phptal_tales_php($exp);
             $repl = '<?php echo %s; ?>';
