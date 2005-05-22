@@ -65,5 +65,5 @@ while ($entry = $d->read()) {
 $printer->printResult( $result, 0 );
 
 error_reporting( $old_error_report_value );
-exit(0);
+//exit(0);
 ?>

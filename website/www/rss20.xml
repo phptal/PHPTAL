@@ -156,5 +156,14 @@
 			their own namespaces and attributes into PHPTAL.
 			</description>
 		</item>
+
+		<item>
+			<title>PHPTAL 1.0.10 (bug fix release)</titlE>
+			<link>http://phptal.motion-twin.com/download.html</link>
+			<description>
+			- 
+			</description>
+		</item>
+		
   </channel>
 </rss>

@@ -52,7 +52,7 @@ class ParserTest extends PHPUnit2_Framework_TestCase
             $parser->parseFile('input/parser.03.xml');
         }
         catch (Exception $e){
-            $this->assertTrue( preg_match('/attribute single or double quote/', $e->getMessage()) );
+            $this->assertTrue( preg_match('/attribute single or double quote/', $e->getMessage()) == true );
         }
     }
 }

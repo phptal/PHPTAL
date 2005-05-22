@@ -91,6 +91,6 @@
     <property name="tarfile" value="${build.base.dir}/${pkgname}.tar.gz"/>
     <delete file="${tarfile}"/>
     <tar destfile="${tarfile}" basedir="${build.base.dir}"/>
-  </target>
+	</target>
 
 </project>
