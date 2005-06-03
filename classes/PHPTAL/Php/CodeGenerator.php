@@ -4,6 +4,9 @@ require_once 'PHPTAL/Php/Node.php';
 require_once 'PHPTAL/Php/State.php';
 require_once 'PHPTAL/Php/CodeWriter.php';
 
+/**
+ * @package phptal.php
+ */
 class PHPTAL_Php_CodeGenerator
 {
     public function __construct($sourcePath)

@@ -8,6 +8,9 @@ require_once 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
 require_once 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
 require_once 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
 
+/** 
+ * @package phptal.namespace
+ */
 class PHPTAL_Namespace_METAL extends PHPTAL_BuiltinNamespace
 {
     public function __construct()

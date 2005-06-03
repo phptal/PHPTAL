@@ -26,7 +26,7 @@ require_once 'PHPTAL/Php/Attribute.php';
 
 /**
  * Document node abstract class.
- *
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 abstract class PHPTAL_Php_Node
@@ -56,6 +56,7 @@ abstract class PHPTAL_Php_Node
 /**
  * Node container.
  * 
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Tree extends PHPTAL_Php_Node
@@ -106,6 +107,7 @@ class PHPTAL_Php_Tree extends PHPTAL_Php_Node
  * This is the main class used by PHPTAL because TAL is a Template Attribute
  * Language, other Node kinds are (usefull) toys.
  *
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Element extends PHPTAL_Php_Tree
@@ -406,6 +408,9 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     }
 }
 
+/**
+ * @package phptal.php
+ */
 class PHPTAL_Php_Comment extends PHPTAL_Php_Node
 {
 	public function generate()
@@ -416,6 +421,7 @@ class PHPTAL_Php_Comment extends PHPTAL_Php_Node
 
 /**
  * Document text data representation.
+ * @package phptal.php
  */
 class PHPTAL_Php_Text extends PHPTAL_Php_Node
 {
@@ -428,6 +434,7 @@ class PHPTAL_Php_Text extends PHPTAL_Php_Node
 /**
  * Comment, preprocessor, etc... representation.
  * 
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Specific extends PHPTAL_Php_Node
@@ -441,6 +448,7 @@ class PHPTAL_Php_Specific extends PHPTAL_Php_Node
 /**
  * Document doctype representation.
  * 
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Doctype extends PHPTAL_Php_Node
@@ -460,6 +468,7 @@ class PHPTAL_Php_Doctype extends PHPTAL_Php_Node
 /**
  * XML declaration node.
  *
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_XmlDeclaration extends PHPTAL_Php_Node

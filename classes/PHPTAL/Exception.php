@@ -20,6 +20,9 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+/**
+ * @package phptal
+ */
 class PHPTAL_Exception extends Exception
 {
     public $srcFile;

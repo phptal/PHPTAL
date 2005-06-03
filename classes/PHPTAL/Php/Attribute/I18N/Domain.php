@@ -9,6 +9,10 @@ require_once 'PHPTAL/Php/Attribute.php';
 // default domain. The value of the attribute is used directly; it is not 
 // a TALES expression.
 // 
+
+/**
+ * @package phptal.php.attribute.i18n
+ */
 class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
 {
     public function start()

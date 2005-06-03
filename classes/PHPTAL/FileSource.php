@@ -3,6 +3,9 @@
 require_once 'PHPTAL/Source.php';
 require_once 'PHPTAL/SourceResolver.php';
 
+/** 
+ * @package phptal
+ */
 class PHPTAL_FileSource implements PHPTAL_Source
 {
     public function __construct($path)
@@ -28,6 +31,9 @@ class PHPTAL_FileSource implements PHPTAL_Source
     private $_path;
 }
 
+/** 
+ * @package phptal
+ */
 class PHPTAL_FileSourceResolver implements PHPTAL_SourceResolver
 {
     public function __construct($repositories)

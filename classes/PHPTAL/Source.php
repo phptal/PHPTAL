@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @package phptal
+ */
 interface PHPTAL_Source
 {
     /** Returns string, unique path identifying the template source. */

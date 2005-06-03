@@ -1,5 +1,8 @@
 <?php
 
+/** 
+ * @package phptal
+ */
 interface PHPTAL_TranslationService
 {
     /**

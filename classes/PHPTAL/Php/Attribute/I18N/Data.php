@@ -12,6 +12,9 @@ require_once 'PHPTAL/Php/Attribute.php';
 // relying on a message ID computed from the content.
 // 
 
+/**
+ * @package phptal.php.attribute.i18n
+ */
 class PHPTAL_Php_Attribute_I18N_Data extends PHPTAL_Php_Attribute
 {
     public function start(){}

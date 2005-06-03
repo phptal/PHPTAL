@@ -11,6 +11,10 @@ require_once 'PHPTAL/Php/Attribute.php';
 // is computed from the content of the element bearing this attribute. 
 // Otherwise, the value of the element gives the message ID.
 // 
+
+/**
+ * @package phptal.php.attribute.i18n
+ */
 class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 {
     public function start()

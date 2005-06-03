@@ -27,6 +27,7 @@
  * xmlns:t="http://xml.zope.org/namespaces/tal" and later use t:repeat instead 
  * of tal:repeat.
  *
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_XmlnsState 

@@ -29,6 +29,7 @@
  * parser was created and can be manipulated to accept some user errors 
  * like < and < in attribute values or inside text nodes.
  *
+ * @package phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @see PHPTAL_Dom_Parser
  */

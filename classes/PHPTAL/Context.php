@@ -22,6 +22,7 @@
 
 /**
  * This class handles template execution context.
+ * @package phptal
  */
 class PHPTAL_Context
 {

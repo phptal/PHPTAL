@@ -17,6 +17,10 @@ require_once 'PHPTAL/Php/Attribute.php';
 //
 //     "${name} was born in ${country}."
 //     
+
+/**
+ * @package phptal.php.attribute.i18n
+ */
 class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
 {
     public function start()

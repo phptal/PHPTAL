@@ -12,6 +12,9 @@ require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
 require_once 'PHPTAL/Php/Attribute/TAL/OnError.php';
 require_once 'PHPTAL/Php/Attribute/TAL/OmitTag.php';
 
+/**
+ * @package phptal.namespace
+ */
 class PHPTAL_Namespace_TAL extends PHPTAL_BuiltinNamespace
 {
     public function __construct()

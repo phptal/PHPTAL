@@ -27,6 +27,7 @@ require_once 'PHPTAL/Php/Attribute.php';
 /**
  * Document node abstract class.
  *
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 abstract class PHPTAL_Dom_Node
@@ -54,6 +55,7 @@ abstract class PHPTAL_Dom_Node
 /**
  * Node container.
  * 
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Tree extends PHPTAL_Dom_Node
@@ -83,6 +85,7 @@ class PHPTAL_Dom_Tree extends PHPTAL_Dom_Node
  * This is the main class used by PHPTAL because TAL is a Template Attribute
  * Language, other Node kinds are (usefull) toys.
  *
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
@@ -180,6 +183,9 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
     protected $_xmlns;
 }
 
+/**
+ * @package phptal.dom
+ */
 class PHPTAL_Dom_ValueNode extends PHPTAL_Dom_Node
 {
     public function __construct(PHPTAL_Dom_Parser $parser, $data)
@@ -198,24 +204,28 @@ class PHPTAL_Dom_ValueNode extends PHPTAL_Dom_Node
 
 /**
  * Document text data representation.
+ * @package phptal.dom
  */
 class PHPTAL_Dom_Text extends PHPTAL_Dom_ValueNode{}
 
 /**
  * Preprocessor, etc... representation.
  * 
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Specific extends PHPTAL_Dom_ValueNode {}
 
 /**
  * Comment nodes.
+ * @package phptal.dom
  */
 class PHPTAL_Dom_Comment extends PHPTAL_Dom_ValueNode {}
 
 /**
  * Document doctype representation.
  * 
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Doctype extends PHPTAL_Dom_ValueNode {}
@@ -223,6 +233,7 @@ class PHPTAL_Dom_Doctype extends PHPTAL_Dom_ValueNode {}
 /**
  * XML declaration node.
  *
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_ValueNode {}

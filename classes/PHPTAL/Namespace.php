@@ -20,15 +20,29 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-class PHPTAL_NamespaceAttribute
+/** 
+ * @package phptal
+ */
+abstract class PHPTAL_NamespaceAttribute
 {
+    /** 
+     * @param $name string The attribute name
+     * @param $priority int Attribute execution priority
+     */
     public function __construct($name, $priority)
     {
         $this->_name = $name;
         $this->_priority = $priority;
     }
 
-    public function getName(){ return $this->_name; }
+    /**
+     * @return string
+     */
+    public function getName()
+    { 
+        return $this->_name; 
+    }
+
     public function getFullName()
     {
         return $this->_namespace->getName() . ':' . $this->_name;
@@ -48,6 +62,9 @@ class PHPTAL_NamespaceAttribute
     private $_namespace;    /* PHPTAL_Namespace */
 }
 
+/** 
+ * @package phptal
+ */
 class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute 
 {
     public function __construct($name, $priority)
@@ -56,6 +73,9 @@ class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
     }
 }
 
+/** 
+ * @package phptal
+ */
 class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute 
 {
     public function __construct($name, $priority)
@@ -64,6 +84,9 @@ class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
     }
 }
 
+/** 
+ * @package phptal
+ */
 class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute 
 {
     public function __construct($name, $priority)
@@ -72,6 +95,9 @@ class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute
     }
 }
 
+/** 
+ * @package phptal
+ */
 abstract class PHPTAL_Namespace
 {
     public $xmlns;
@@ -115,6 +141,9 @@ abstract class PHPTAL_Namespace
     protected $_attributes;
 }
 
+/** 
+ * @package phptal
+ */
 class PHPTAL_BuiltinNamespace extends PHPTAL_Namespace
 {
     public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_Php_Element $tag, $expression)

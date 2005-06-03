@@ -35,6 +35,7 @@ require_once 'PHPTAL/Php/Attribute.php';
 require_once 'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
+ * @package phptal.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_TAL_Content 

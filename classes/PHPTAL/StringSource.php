@@ -2,6 +2,9 @@
 
 require_once 'PHPTAL/Source.php';
 
+/**
+ * @package phptal
+ */
 class PHPTAL_StringSource implements PHPTAL_Source
 {
     public function __construct($data, $realpath)

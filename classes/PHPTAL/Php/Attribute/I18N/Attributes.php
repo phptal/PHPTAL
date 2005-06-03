@@ -42,6 +42,10 @@ require_once 'PHPTAL/Php/Attribute.php';
 // an icon image file, and the message ID up-arrow-alttext will be used for 
 // the "alt" text.
 //
+
+/**
+ * @package phptal.php.attribute
+ */
 class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 {
     public function start()

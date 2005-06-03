@@ -30,6 +30,7 @@ require_once 'PHPTAL/TranslationService.php';
  *
  * Please refer to the PHPTAL documentation for usage examples.
  * 
+ * @package phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService

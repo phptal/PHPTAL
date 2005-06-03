@@ -22,6 +22,9 @@
 
 require_once 'PHPTAL/Php/Tales.php';
 
+/** 
+ * @package phptal.php
+ */
 class PHPTAL_Php_State
 {
     public function __construct()

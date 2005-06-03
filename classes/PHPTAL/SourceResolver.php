@@ -2,6 +2,9 @@
 
 require_once 'PHPTAL/Source.php';
 
+/** 
+ * @package phptal
+ */
 interface PHPTAL_SourceResolver 
 {
     /**

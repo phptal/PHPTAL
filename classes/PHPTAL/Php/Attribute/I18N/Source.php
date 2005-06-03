@@ -8,6 +8,10 @@ require_once 'PHPTAL/Php/Attribute.php';
 // translated. The default is "nothing", which means we don't provide 
 // this information to the translation services.
 //
+
+/**
+ * @package phptal.php.attribute.i18n
+ */
 class PHPTAL_Php_Attribute_I18N_Source extends PHPTAL_Php_Attribute
 {
     public function start()

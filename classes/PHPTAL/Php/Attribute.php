@@ -30,6 +30,7 @@ require_once 'PHPTAL/Dom/Node.php';
  *
  * An attribute must implements start() and end().
  * 
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 abstract class PHPTAL_Php_Attribute 

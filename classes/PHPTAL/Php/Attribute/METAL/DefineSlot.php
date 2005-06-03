@@ -52,6 +52,7 @@ require_once 'PHPTAL/Php/Attribute.php';
 //
 
 /**
+ * @package phptal.php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute

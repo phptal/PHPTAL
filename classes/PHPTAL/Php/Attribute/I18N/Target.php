@@ -19,6 +19,10 @@ require_once 'PHPTAL/Php/Attribute.php';
 // translated to e.g. German, then it probably shouldn't be wrapped in an 
 // i18n:translate span.
 // 
+
+/**
+ * @package phptal.php.attribute.i18n
+ */
 class PHPTAL_Php_Attribute_I18N_Target extends PHPTAL_Php_Attribute
 {
     public function start(){}

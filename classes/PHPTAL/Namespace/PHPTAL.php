@@ -7,6 +7,9 @@ require_once 'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
 require_once 'PHPTAL/Php/Attribute/PHPTAL/Debug.php';
 require_once 'PHPTAL/Php/Attribute/PHPTAL/Id.php';
 
+/**
+ * @package phptal.namespace
+ */
 class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
 {
     public function __construct()

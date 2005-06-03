@@ -23,6 +23,7 @@
 require_once 'PHPTAL/Php/Attribute.php';
 
 /**
+ * @package phptal.php.attribute.tal
  */
 class PHPTAL_Php_Attribute_TAL_Comment extends PHPTAL_Php_Attribute
 {

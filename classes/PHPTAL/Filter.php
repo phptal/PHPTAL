@@ -20,6 +20,9 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+/**
+ * @package phptal
+ */
 interface PHPTAL_Filter
 {
     public function filter($str);

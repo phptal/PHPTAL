@@ -23,6 +23,7 @@
 require_once 'PHPTAL/Php/Attribute.php';
 
 /**
+ * @package phptal.php.attribute.phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute

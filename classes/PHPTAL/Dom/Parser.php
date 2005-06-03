@@ -28,7 +28,8 @@ require_once 'PHPTAL/Php/Tales.php';
 
 /**
  * Template parser.
- *
+ * 
+ * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Parser extends PHPTAL_XmlParser

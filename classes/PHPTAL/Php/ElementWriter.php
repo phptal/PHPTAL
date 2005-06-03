@@ -20,6 +20,9 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+/**
+ * @package phptal.php
+ */
 class PHPTAL_Php_ElementWriter
 {
     public function __construct(PHPTAL_Php_CodeWriter $writer, PHPTAL_Php_Element $tag)

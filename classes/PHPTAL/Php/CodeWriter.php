@@ -23,6 +23,7 @@
 /**
  * Helps generate php representation of a template.
  *
+ * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_CodeWriter
