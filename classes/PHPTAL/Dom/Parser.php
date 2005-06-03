@@ -94,7 +94,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     {
         if ($this->_stripComments) 
             return;
-        $this->onSpecific($data);
+		$this->_current->addChild(new PHPTAL_Dom_Comment($this, $data));
     }
     
     public function onSpecific($data)

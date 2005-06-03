@@ -82,6 +82,9 @@ class PHPTAL_Php_Tree extends PHPTAL_Php_Node
             else if ($child instanceOf PHPTAL_Dom_Specific){
                 $gen = new PHPTAL_Php_Specific($this->generator, $child);
             }
+			else if ($child instanceOf PHPTAL_Dom_Comment){
+				$gen = new PHPTAL_Php_Comment($this->generator, $child);
+			}
             else {
                 throw new Exception('Unhandled node class '.get_class($child));
             }
@@ -401,6 +404,14 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             
         }
     }
+}
+
+class PHPTAL_Php_Comment extends PHPTAL_Php_Node
+{
+	public function generate()
+	{
+		$this->generator->pushRawHtml($this->node->getValue());
+	}
 }
 
 /**

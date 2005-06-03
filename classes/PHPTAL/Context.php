@@ -43,6 +43,11 @@ class PHPTAL_Context
         $this->__repeat = clone($this->__repeat);
     }
 
+	public function setParent(PHPTAL_Context $parent)
+	{
+		$this->_parentContext = $parent;
+	}
+
     /** 
      * Set output document type if not already set.
      *
@@ -51,6 +56,9 @@ class PHPTAL_Context
      */
     public function setDocType($doctype)
     {
+		if ($this->_parentContext != null){
+			return $this->_parentContext->setDocType($doctype);
+		}
         if (!$this->__docType){
             $this->__docType = $doctype;
         }
@@ -65,6 +73,9 @@ class PHPTAL_Context
      */
     public function setXmlDeclaration($xmldec)
     {
+		if ($this->_parentContext != null){
+			return $this->_parentContext->setXmlDeclaration($xmldec);
+		}
         if (!$this->__xmlDeclaration){
             $this->__xmlDeclaration = $xmldec;
         }
@@ -154,6 +165,7 @@ class PHPTAL_Context
 
     private $_slots = array();
     private $_slotsStack = array();
+	private $_parentContext = null;
 }
 
 /**
@@ -285,5 +297,25 @@ function phptal_exists($ctx, $path)
     $ctx->noThrow(false);
     return !is_null($res);
 }//}}}
+
+
+function phptal_isempty($var)
+{
+	return $var === null || $var === false || $var === '';
+}
+
+function phptal_escape($var, $ent, $encoding)
+{
+    if (is_object($var)){
+        return htmlspecialchars($var->__toString(), $ent, $encoding);
+    }
+    if (is_string($var)){
+        return htmlspecialchars($var, $ent, $encoding);
+    }
+    if (is_bool($var)){
+        return (int)$var;
+    }
+    return $var;	
+}
 
 ?>

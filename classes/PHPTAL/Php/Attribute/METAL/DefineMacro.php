@@ -48,6 +48,13 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
 {
     public function start()
     {
+        $macroname = trim($this->expression);
+        if (!preg_match('/^[a-zA-Z0-9_]+$/', $macroname)){
+            throw new PHPTAL_Exception('Bad macro name "'.$macroname.'"',
+                                       $this->tag->getSourceFile(),
+                                       $this->tag->line);
+        }
+        
         $this->tag->generator->doFunction($this->expression, '$tpl, $ctx');
         $this->tag->generator->doXmlDeclaration();
         $this->tag->generator->doDoctype();

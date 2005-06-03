@@ -263,12 +263,18 @@ class PHPTAL_Php_CodeWriter
         array_push($this->_htmlBuffer, $html);
     }
 
+	public function pushRawHtml($html)
+	{
+		$this->flushCode();
+		array_push($this->_htmlBuffer, $html);
+	}
+
     public function pushString($str)
     {
         $this->flushCode();
        
         // replace ${var} inside strings
-        while (preg_match('/^(.*?)(\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
+        while (preg_match('/^(.*?)((?<!\$)\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
             list(,$before,$expression,$after) = $m;
             
             $before = $this->escape($before);
@@ -280,6 +286,8 @@ class PHPTAL_Php_CodeWriter
 
             $str = $after;
         }
+
+		$str = str_replace('$${', '${', $str);
         
         if (strlen($str) > 0){
             $str = $this->escape($str); 

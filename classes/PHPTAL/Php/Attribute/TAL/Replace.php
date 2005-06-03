@@ -99,7 +99,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
     {
-        $executor->doIf(self::REPLACE_VAR.' = '.$exp);
+        $executor->doIf('!phptal_isempty('.self::REPLACE_VAR.' = '.$exp.')');
         $this->doEcho(self::REPLACE_VAR);
     }
 

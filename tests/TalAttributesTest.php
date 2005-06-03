@@ -95,6 +95,24 @@ class TalAttributesTest extends PHPUnit2_Framework_TestCase
         $this->assertEquals($exp, $res);
     }
 
+    function testEmpty()
+    {
+        $src = <<<EOT
+<span class="foo" tal:attributes="class nullv | falsev | emptystrv | zerov | default"></span>
+EOT;
+        $exp = <<<EOT
+<span class="0"></span>
+EOT;
+        $tpl = new PHPTAL();
+        $tpl->setSource($src, __FILE__);
+        $tpl->nullv = null;
+        $tpl->falsev = false;
+        $tpl->emptystrv = '';
+        $tpl->zerov = 0;
+        $res = $tpl->execute();
+        $this->assertEquals($exp, $res);
+    }
+
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
         

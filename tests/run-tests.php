@@ -32,25 +32,27 @@ if (substr(PHP_OS,0,3) == 'WIN'){
 
 $old_error_report_value = error_reporting( E_ALL | E_STRICT );
 
+if (isset($argv) && count($argv) >= 2){
+    array_shift($argv);
+    foreach ($argv as $entry){
+        echo "-> running standalone test units $entry\n";
+        require_once $entry;
+        $class = str_replace('.php', '', $entry);
+        $class = str_replace('./', '', $class);
+        $printer = new PHPUnit2_TextUI_ResultPrinter();
+        $result = new PHPUnit2_Framework_TestResult();
+        $result->addListener($printer);
+        $testclass = new ReflectionClass($class);
+        $suite = new PHPUnit2_Framework_TestSuite($testclass);
+        $suite->run($result);
+        $printer->printResult($result, 0);
+    }
+    exit(0);
+}
+
 $printer = new PHPUnit2_TextUI_ResultPrinter();
 $result = new PHPUnit2_Framework_TestResult();
 $result->addListener( $printer );
-
-if (isset($argv) && count($argv) >= 2){
-    echo "-> running standalone test units\n";
-    for ($i = 1; $i < count($argv); $i++){
-        $entry = $argv[$i];
-        echo "RUNNING $entry\n";
-        $class = str_replace('.php', '', $entry);
-        require_once $entry;
-        $testclass = new ReflectionClass( $class );
-        $suite = new PHPUnit2_Framework_TestSuite($testclass);
-        $suite->run($result);
-        $printer->printResult( $result, 0 );
-    }
-    return;    
-}
-
 $d = dir( dirname(__FILE__) );
 while ($entry = $d->read()) {
     if (preg_match('/(.*?Test).php$/', $entry, $m)) {
@@ -64,4 +66,5 @@ $printer->printResult( $result, 0 );
 
 
 error_reporting( $old_error_report_value );
+//exit(0);
 ?>

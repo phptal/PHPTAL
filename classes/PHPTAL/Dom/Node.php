@@ -202,11 +202,16 @@ class PHPTAL_Dom_ValueNode extends PHPTAL_Dom_Node
 class PHPTAL_Dom_Text extends PHPTAL_Dom_ValueNode{}
 
 /**
- * Comment, preprocessor, etc... representation.
+ * Preprocessor, etc... representation.
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Specific extends PHPTAL_Dom_ValueNode {}
+
+/**
+ * Comment nodes.
+ */
+class PHPTAL_Dom_Comment extends PHPTAL_Dom_ValueNode {}
 
 /**
  * Document doctype representation.

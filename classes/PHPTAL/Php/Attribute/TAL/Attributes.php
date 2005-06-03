@@ -148,7 +148,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
     {
-        $condition = "($this->_attkey = $exp) !== null && $this->_attkey !== false";
+        $condition = "!phptal_isempty($this->_attkey = $exp)";
         $executor->doIf($condition);
         $value = $this->tag->generator->escapeCode($this->_attkey);
         $value = "' $this->_attribute=\"'.$value.'\"'";
