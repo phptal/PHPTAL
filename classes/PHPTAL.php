@@ -346,7 +346,7 @@ class PHPTAL
         // is defined.
         if (defined('PHPTAL_FORCE_REPARSE') 
             || !file_exists($this->_codeFile) 
-            || filemtime($this->_codeFile) < $this->_source->getLastModified()){
+            || filemtime($this->_codeFile) < $this->_source->getLastModifiedTime()){
             $this->parse();
         }
         $this->_prepared = true;
