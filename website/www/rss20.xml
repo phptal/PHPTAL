@@ -158,7 +158,7 @@
 		</item>
 
 		<item>
-			<title>PHPTAL 1.0.10 (bug fix release before 1.1 branch)</titlE>
+			<title>PHPTAL 1.0.10 (bug fix release before 1.1 branch)</title>
 			<link>http://phptal.motion-twin.com/download.html</link>
 			<description>
 			- fixed echoing an object now calls its __toString() method
