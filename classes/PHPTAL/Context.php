@@ -169,6 +169,16 @@ class PHPTAL_Context
 	private $_parentContext = null;
 }
 
+// emulate property_exists() function, this is slow but much better than
+// isset(), use next release of PHP5 as soon as available !
+if (!function_exists('property_exists')){
+    function property_exists($o, $property)
+    {
+        return array_key_exists($property, get_object_vars($o));
+    }
+}
+
+
 /**
  * Resolve TALES path starting from the first path element.
  *
@@ -194,7 +204,7 @@ function phptal_path($base, $path, $nothrow=false)
             }
             
             // look for variable
-            if (isset($base->$current)){
+            if (property_exists($base, $current)){
                 $base = $base->$current;
                 continue;
             }
