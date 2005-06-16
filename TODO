@@ -3,10 +3,38 @@
 
                                   To do list.
 
-REFACTORING:
 
-    - some tal attributes uses chained expressions which lead to the 
-      same loop if/else if/else algorithm, it may be a good idea to
-      use a form template method for this stuff ?
+
+
+
+
+
+OPTIMIZATIONS:
+
+- Optimize macro calls : register known macros to avoid preparing 
+  template on each call
+
+
+
+PRECOMPILED MODE:
+
+- Pre-Compiled mode, assume every required template is compiled and up 
+  to date and never do file checks
+
+- In compiled mode, explode i18n templates into CC_ll folders to avoid 
+  calling gettext 
+
+    <span i18n:translate="">
+        This is my ${foo} text to translate
+    </span>
+
+    Will produce for fr_FR :
+
+    <span>
+        C'est mon ${foo} texte à traduire
+    </span>
+
+    And so on...
+
 
 
