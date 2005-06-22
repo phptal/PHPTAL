@@ -113,6 +113,14 @@ EOT;
         $this->assertEquals($exp, $res);
     }
 
+    function testSingleQuote()
+    {
+        $exp = trim_file('output/tal-attributes.08.html');
+        $tpl = new PHPTAL('input/tal-attributes.08.html');
+        $res = $tpl->execute();
+        $this->assertEquals($exp, $res);
+    }
+    
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
         

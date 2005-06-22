@@ -262,6 +262,10 @@ function phptal_tales_string( $expression, $nothrow=false )
                 }
                 break;
 
+            case '\'':
+                $c = '\\\'';
+                break;
+
             default:
                 if ($lastWasDollar) {
                     $lastWasDollar = false;

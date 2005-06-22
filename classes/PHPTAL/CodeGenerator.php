@@ -295,7 +295,8 @@ class PHPTAL_CodeGenerator
     public function escapeCode($code)
     {//{{{
         $result = '%s(%s, ENT_QUOTES, \'%s\')';
-        return sprintf($result, $this->_htmlEscapingFunction, $code, $this->_encoding);
+        $result = sprintf($result, $this->_htmlEscapingFunction, $code, $this->_encoding);
+        return $result;
     }//}}}
 
     public function escape($html)
