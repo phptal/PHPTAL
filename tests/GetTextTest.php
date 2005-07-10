@@ -89,6 +89,21 @@ class GetTextTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/gettext.04.html');
         $this->assertEquals($exp, $res);                
     }
+
+    function testSpaces()
+    {
+        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext->setLanguage('en_GB', 'en_GB.utf8');
+        $gettext->addDomain('test');
+        $gettext->useDomain('test');
+        
+        $tpl = new PHPTAL('input/gettext.05.html');
+        $tpl->login = 'john smith';
+        $tpl->setTranslator($gettext);
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/gettext.05.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 ?>
