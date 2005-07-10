@@ -14,4 +14,5 @@ deploy:
 	find www -type d | xargs chmod 755; \
 	find www -type f | xargs chmod 644; \
 	./update-latest.sh"
-
+	echo -n "Latest link is : "
+	@lynx -dump http://phptal.motion-twin.com/VERSION
