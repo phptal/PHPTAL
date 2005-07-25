@@ -31,7 +31,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         }
         $this->_prepareNames($this->tag);
 
-        $php = sprintf('echo $tpl->getTranslator()->translate(%s)', $code);
+        $php = sprintf('echo $tpl->getTranslator()->translate(%s)', $this->_canonalizeKey($code));
         $this->tag->generator->pushCode($php);
     }
 
@@ -74,6 +74,18 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                 }
             }
         }
+    }
+
+    private function _canonalizeKey($key_)
+    {
+        $key = utf8_decode($key_);
+        $key = preg_replace('/[ав]/sm', 'a', $key);
+        $key = preg_replace('/[клий]/sm', 'e', $key);
+        $key = preg_replace('/[оп]/sm', 'i', $key);
+        $key = preg_replace('/[ыь]/sm', 'u', $key);
+        $key = preg_replace('/[фц]/sm', 'o', $key);
+        $key = preg_replace('/[я]/sm', 'y', $key);
+        return $key;
     }
 }
 
