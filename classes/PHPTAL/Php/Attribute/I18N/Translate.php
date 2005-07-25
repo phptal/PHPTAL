@@ -31,7 +31,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         }
         $this->_prepareNames($this->tag);
 
-        $php = sprintf('echo $tpl->getTranslator()->translate(%s)', $this->_canonalizeKey($code));
+        $php = sprintf('echo $tpl->getTranslator()->translate(%s)', self::_canonalizeKey($code));
         $this->tag->generator->pushCode($php);
     }
 
@@ -76,7 +76,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         }
     }
 
-    private function _canonalizeKey($key_)
+    static function _canonalizeKey($key_)
     {
         $key = utf8_decode($key_);
         $key = preg_replace('/[ав]/sm', 'a', $key);
