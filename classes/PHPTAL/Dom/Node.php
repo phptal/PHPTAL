@@ -76,6 +76,11 @@ class PHPTAL_Dom_Tree extends PHPTAL_Dom_Node
         return $this->_children;
     }
 
+    public function clearChildren()
+    {
+        $this->_children = array();
+    }
+    
     protected $_children;
 }
 

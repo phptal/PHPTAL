@@ -79,6 +79,9 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
     static function _canonalizeKey($key_)
     {
         $result = "";
+        $key_ = trim($key_);
+        $key_ = str_replace("\n", "", $key_);
+        $key_ = str_replace("\r", "", $key_);
         for ($i = 0; $i<strlen($key_); $i++){
             $c = $key_[$i];
             $o = ord($c);
