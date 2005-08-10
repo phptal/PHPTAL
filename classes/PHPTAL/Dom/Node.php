@@ -32,10 +32,14 @@ require_once 'PHPTAL/Php/Attribute.php';
  */
 abstract class PHPTAL_Dom_Node
 {
-    public function __construct(PHPTAL_Dom_Parser $parser)
+    public function __construct()
     {
-        $this->_parser = $parser;
-        $this->_line = $parser->getLineNumber();
+    }
+
+    public function setSource($file, $line)
+    {
+        $this->_file = $file;
+        $this->_line = $line;
     }
 
     public function getSourceLine()
@@ -45,10 +49,10 @@ abstract class PHPTAL_Dom_Node
     
     public function getSourceFile()
     {
-        return $this->_parser->getSourceFile();
+        return $this->_file;
     }
 
-    private $_parser;
+    private $_file;
     private $_line;
 }
 
@@ -60,9 +64,9 @@ abstract class PHPTAL_Dom_Node
  */
 class PHPTAL_Dom_Tree extends PHPTAL_Dom_Node
 {
-    public function __construct(PHPTAL_Dom_Parser $parser)
+    public function __construct()
     {
-        parent::__construct($parser);
+        parent::__construct();
         $this->_children = array();
     }
 
@@ -98,13 +102,17 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
     private $name;
     public $attributes = array();
 
-    public function __construct(PHPTAL_Dom_Parser $parser, $name, $attributes)
+    public function __construct($name, $attributes)
     {
-        parent::__construct($parser);
+        parent::__construct();
         $this->name = $name;
         $this->attributes = $attributes;
-        $this->_xmlns = $parser->getXmlnsState();
-        $this->xmlns = $this->_xmlns;
+    }
+
+    public function setXmlnsState(PHPTAL_Dom_XmlnsState $state)
+    {
+        $this->_xmlns = $state;
+        $this->xmlns = $state;
     }
 
     public function getName()
@@ -193,9 +201,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
  */
 class PHPTAL_Dom_ValueNode extends PHPTAL_Dom_Node
 {
-    public function __construct(PHPTAL_Dom_Parser $parser, $data)
+    public function __construct($data)
     {
-        parent::__construct($parser);
         $this->_value = $data;
     }
 

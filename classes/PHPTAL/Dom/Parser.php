@@ -69,7 +69,8 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     
     public function onDocumentStart()
     {
-        $this->_tree = new PHPTAL_Dom_Tree($this);
+        $this->_tree = new PHPTAL_Dom_Tree();
+        $this->_tree->setSource($this->getSourceFile(), $this->getLineNumber());
         $this->_stack = array();
         $this->_current = $this->_tree;
     }
@@ -83,24 +84,24 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 
     public function onDocType($doctype)
     {
-        $this->_current->addChild(new PHPTAL_Dom_DocType($this, $doctype));
+        $this->pushNode(new PHPTAL_Dom_DocType($doctype));
     }
 
     public function onXmlDecl($decl)
     {
-        $this->_current->addChild(new PHPTAL_Dom_XmlDeclaration($this, $decl));
+        $this->pushNode(new PHPTAL_Dom_XmlDeclaration($decl));
     }
     
     public function onComment($data)
     {
         if ($this->_stripComments) 
             return;
-		$this->_current->addChild(new PHPTAL_Dom_Comment($this, $data));
+        $this->pushNode(new PHPTAL_Dom_Comment($data));
     }
     
     public function onSpecific($data)
     {
-        $this->_current->addChild(new PHPTAL_Dom_Specific($this, $data));
+        $this->pushNode(new PHPTAL_Dom_Specific($data));
     }
 
     public function onElementStart($name, $attributes)
@@ -113,15 +114,16 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
             }
         }
         
-        $node = new PHPTAL_Dom_Element($this, $name, $attributes);
-        $this->_current->addChild($node);
+        $node = new PHPTAL_Dom_Element($name, $attributes);
+        $node->setXmlnsState($this->getXmlnsState());
+        $this->pushNode($node);
         array_push($this->_stack, $this->_current);
         $this->_current = $node;
     }
     
     public function onElementData($data)
     {
-        $this->_current->addChild(new PHPTAL_Dom_Text($this, $data));
+        $this->pushNode(new PHPTAL_Dom_Text($data));
     }
 
     public function onElementClose($name)
@@ -132,6 +134,12 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
         $this->_current = array_pop($this->_stack);
         if ($this->_current instanceOf PHPTAL_Dom_Element)
             $this->_xmlns = $this->_current->getXmlnsState();
+    }
+
+    private function pushNode(PHPTAL_Dom_Node $node)
+    {
+        $node->setSource($this->getSourceFile(), $this->getLineNumber());
+        $this->_current->addChild($node);
     }
     
     private $_tree;    /* PHPTAL_Dom_Parser_NodeTree */
