@@ -31,7 +31,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         }
         $this->_prepareNames($this->tag);
 
-        $php = sprintf('echo $tpl->getTranslator()->translate(%s)', self::_canonalizeKey($code));
+        $php = sprintf('echo $tpl->getTranslator()->translate(%s);', self::_canonalizeKey($code));
         $this->tag->generator->pushCode($php);
     }
 
