@@ -43,6 +43,12 @@ require_once 'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
 {
+    static $ALLOWED_ATTRIBUTES = array(
+        'metal:fill-slot', 
+        'metal:define-macro', 
+        'tal:define',
+    );
+    
     public function start()
     {
         $this->pushSlots();
@@ -102,15 +108,11 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     
     private function generateFillSlots($tag)
     {
-        $allowedAtts = array(
-            'metal:fill-slot', 'metal:define-macro', 'tal:define'
-        );
-                              
         if (false == ($tag instanceOf PHPTAL_Php_Tree)) 
             return;
 
         // if the tag contains one of the allowed attribute, we generate it
-        foreach ($allowedAtts as $attribute){
+        foreach (self::$ALLOWED_ATTRIBUTES as $attribute){
             if ($tag->hasAttribute($attribute)){
                 $tag->generate();
                 return;
