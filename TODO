@@ -4,16 +4,25 @@
                                   To do list.
 
 
+FIXES:
+
+- tal:define : implements 'global' and 'local', set 'local' as default 
+  mode
 
 
+NICER:
 
+- put expression modifiers into separate classes 
+
+- provide a global customization interface to handle Namespaces 
+  registration (forwarded to PHPTAL_Dom_Defs) and expression modifiers 
+  insertion
 
 
 OPTIMIZATIONS:
 
 - Optimize macro calls : register known macros to avoid preparing 
-  template on each call
-
+  templates on each call
 
 
 PRECOMPILED MODE:
@@ -21,20 +30,7 @@ PRECOMPILED MODE:
 - Pre-Compiled mode, assume every required template is compiled and up 
   to date and never do file checks
 
-- In compiled mode, explode i18n templates into CC_ll folders to avoid 
-  calling gettext 
-
-    <span i18n:translate="">
-        This is my ${foo} text to translate
-    </span>
-
-    Will produce for fr_FR :
-
-    <span>
-        C'est mon ${foo} texte à traduire
-    </span>
-
-    And so on...
-
+- template pre-compiler, generate PHP from templates without executing 
+  them, do some checks and may be link it with phptal-i18n-* scripts
 
 
