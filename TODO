@@ -24,6 +24,9 @@ OPTIMIZATIONS:
 - Optimize macro calls : register known macros to avoid preparing 
   templates on each call
 
+- tal:define with single CDATA shouldn't be output buffered, may 
+  requires some refactoring
+
 
 PRECOMPILED MODE:
 
