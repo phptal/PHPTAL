@@ -51,6 +51,7 @@ implements PHPTAL_Php_TalesChainReader
     public function start()
     {
         $expressions = $this->tag->generator->splitExpression($this->expression);
+
         foreach ($expressions as $exp){
             list($defineScope, $defineVar, $expression) = $this->parseExpression($exp);
             if (!$defineVar) {
@@ -58,14 +59,13 @@ implements PHPTAL_Php_TalesChainReader
             }
             
             $this->_defineVar = $defineVar;
-            if ($expression === null && !isset($started)) {
+            if ($expression === null) {
                 // no expression give, use content of tag as value for newly defined
                 // var.
                 $this->bufferizeContent();
                 continue;
             }
             
-            $started = true;
             $code = $this->tag->generator->evaluateExpression($expression);
             if (is_array($code)){
                 $this->chainedDefine($code);
@@ -121,7 +121,6 @@ implements PHPTAL_Php_TalesChainReader
     {
         $defineScope = false; // (local | global)
         $defineVar   = false; // var to define
-        $expression  = false; // expression defining the var
         
         // extract defineScope from expression
         $exp = trim($exp);
@@ -138,11 +137,14 @@ implements PHPTAL_Php_TalesChainReader
 
     private function bufferizeContent()
     {
-        $this->tag->generator->pushCode( 'ob_start()' );
-        $this->tag->generateContent();
-        $this->doDefineVarWith('ob_get_contents()');
-        $this->tag->generator->pushCode('ob_end_clean()');
-        $this->_buffered = true;
+        if (!$this->_buffered){
+            $this->tag->generator->pushCode( 'ob_start()' );
+            $this->tag->generateContent();
+            $this->tag->generator->pushCode('$__tmp_content__ = ob_get_contents()');
+            $this->tag->generator->pushCode('ob_end_clean()');
+            $this->_buffered = true;
+        }
+        $this->doDefineVarWith('$__tmp_content__');
     }
 
     private function doDefineVarWith($code)

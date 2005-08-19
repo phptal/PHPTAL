@@ -159,6 +159,15 @@ class TalDefineTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/tal-define.10.html');
         $this->assertEquals($exp, $res);        
     }
+
+    function testDefineContent()
+    {
+        $tpl = new PHPTAL('input/tal-define.11.html');
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/tal-define.11.html');
+        $this->assertEquals($exp, $res);        
+    }
 }
 
 ?>
