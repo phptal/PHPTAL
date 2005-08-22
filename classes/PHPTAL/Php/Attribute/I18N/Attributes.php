@@ -90,7 +90,9 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
     private function _getTranslationCode($key)
     {
         $result = '<?php echo %s ?>';
-        $code = sprintf('$tpl->getTranslator()->translate(%s)', PHPTAL_Php_Attribute_I18N_Translate::_canonalizeKey($key));
+        // notice the false boolean which indicate that the html is escaped
+        // elsewhere looks like an hack doesn't it ? :)
+        $code = sprintf('$tpl->getTranslator()->translate(%s, false)', PHPTAL_Php_Attribute_I18N_Translate::_canonalizeKey($key));
         return sprintf($result, $this->tag->generator->escapeCode($code));
     }
 }
