@@ -79,7 +79,7 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         // if the content of the tag was buffered or the tag has nothing to tell, we hidde it.
-        if ($this->_buffered || !$this->tag->hasRealContent()){
+        if ($this->_buffered || (!$this->tag->hasRealContent() && !$this->tag->hasRealAttributes())){
             $this->tag->hidden = true;
         }
     }

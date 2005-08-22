@@ -208,6 +208,11 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             || count($this->contentAttributes) > 0;
     }
 
+    public function hasRealAttributes()
+    {
+        return ((count($this->attributes) - count($this->talAttributes)) > 0) || $this->hasAttribute('tal:attributes');
+    }
+
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
     
     public function generateSurroundHead()
