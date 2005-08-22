@@ -86,6 +86,8 @@ class PHPTAL_XmlnsState
             if (PHPTAL_Defs::isHandledXmlNs($att, $value)){
                 preg_match('/^xmlns:(.*?)$/', $att, $m);
                 list(,$alias) = $m;
+                if (strtoupper($alias) == PHPTAL_Defs::$XMLNS[$value])
+                    continue;
                 $aliases[$alias] = PHPTAL_Defs::$XMLNS[$value];
             }
         }

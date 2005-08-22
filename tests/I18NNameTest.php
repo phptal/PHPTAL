@@ -54,5 +54,17 @@ class I18NNameTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/i18n-name-05.html');
         $this->assertEquals($exp, $res);        
     }
+
+    function testNamespace()
+    {
+        $tpl = new PHPTAL('input/i18n-name-06.html');
+        $tpl->username = 'john';
+        $tpl->mails = 100;
+        $tpl->setTranslator( new DummyTranslator() );
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/i18n-name-06.html');
+        $this->assertEquals($exp, $res);        
+    }
 }
 
