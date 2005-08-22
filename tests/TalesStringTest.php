@@ -55,6 +55,15 @@ class TalesStringTest extends PHPUnit2_Framework_TestCase
         $rgm = preg_match('/\'hello \'.*?\$ctx->user, \'name\'.*?\' how are you \?\'$/', $res);
         $this->assertEquals(1, $rgm);
     }
+
+    function testQuote()
+    {
+        $tpl = new PHPTAL('input/tales-string-01.html');
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/tales-string-01.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 ?>

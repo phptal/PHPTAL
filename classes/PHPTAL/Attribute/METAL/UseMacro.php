@@ -40,6 +40,13 @@
  */
 class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
 {
+    // list of attributes which are executed inside metal:use-macro calls
+    static $ALLOWED_ATTRIBUTES = array(
+        'metal:fill-slot', 
+        'metal:define-macro', 
+        'tal:define',
+    );        
+    
     public function start()
     {
         // reset template slots on each macro call ?
@@ -89,17 +96,11 @@ class PHPTAL_Attribute_METAL_UseMacro extends PHPTAL_Attribute
 
     private function generateFillSlots($tag)
     {
-        $allowedAtts = array(
-            'metal:fill-slot', 
-            'metal:define-macro', 
-            'tal:define'
-        );
-                              
         if (false == ($tag instanceOf PHPTAL_NodeTree)) 
             return;
 
         // if the tag contains one of the allowed attribute, we generate it
-        foreach ($allowedAtts as $attribute){
+        foreach (self::$ALLOWED_ATTRIBUTES as $attribute){
             if ($tag->hasPhpTalAttribute($attribute)){
                 $tag->generate();
                 return;

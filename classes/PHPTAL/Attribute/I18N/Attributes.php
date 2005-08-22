@@ -98,7 +98,7 @@ class PHPTAL_Attribute_I18N_Attributes extends PHPTAL_Attribute
     private function _getTranslationCode($key)
     {
         $result = '<?php echo %s ?>';
-        $code = sprintf('$tpl->getTranslator()->translate(%s)', $key);
+        $code = sprintf('$tpl->getTranslator()->translate(%s,false)', $key);
         return sprintf($result, $this->tag->generator->escapeCode($code));
     }
 }
