@@ -212,6 +212,11 @@ class PHPTAL_NodeElement extends PHPTAL_NodeTree
         return true;
     }//}}}
 
+    public function hasRealAttributes()
+    {
+        return (count($this->attributes) - count($this->talAttributes) > 0) || $this->hasPhpTalAttribute('tal:attributes');
+    }
+
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
     
     public function generateSurroundHead()

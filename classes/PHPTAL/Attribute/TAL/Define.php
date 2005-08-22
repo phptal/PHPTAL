@@ -82,7 +82,7 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
 
         // if the content of the tag was not buffered and the tag has something
         // interesting to tell, we echo it
-        if ($this->_buffered || !$this->tag->hasRealContent()){
+        if ($this->_buffered || (!$this->tag->hasRealContent() && !$this->tag->hasRealAttributes())){
             $this->tag->hidden = true;
         }
     }
