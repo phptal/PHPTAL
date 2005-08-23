@@ -45,24 +45,32 @@ class PHPTAL_Attribute_TAL_Define extends PHPTAL_Attribute
     
     public function start()
     {
+        $contentVar = null;
         $expressions = $this->tag->generator->splitExpression($this->expression);
         foreach ($expressions as $exp){
+            
             list($defineScope, $defineVar, $expression) = $this->parseExpression($exp);
             if (!$defineVar) {
                 continue;
             }
-            if ($expression === false && !isset($started)) {
-                // first generate and buffer tag content, then put this content
-                // in the defineVar
-                $this->tag->generator->pushCode( 'ob_start()' );
-                $this->tag->generateContent();
-                $code = sprintf('$ctx->%s = ob_get_contents()', $defineVar);
-                $this->tag->generator->pushCode( $code );
-                $this->tag->generator->pushCode( 'ob_end_clean()' );
-                $this->_buffered = true;
+            if ($expression === false) {
+                if($contentVar !== null){
+                    $code = sprintf('$ctx->%s = $ctx->%s', $defineVar, $contentVar);   
+                    $this->tag->generator->pushCode($code);
+                }
+                else {
+                    // first generate and buffer tag content, then put this content
+                    // in the defineVar
+                    $this->tag->generator->pushCode( 'ob_start()' );
+                    $this->tag->generateContent();
+                    $code = sprintf('$ctx->%s = ob_get_contents()', $defineVar);
+                    $this->tag->generator->pushCode( $code );
+                    $this->tag->generator->pushCode( 'ob_end_clean()' );
+                    $this->_buffered = true;
+                    $contentVar = $defineVar;
+                }
             }
             else if ($expression !== false) {
-                $started = true;
                 $code = $this->tag->generator->evaluateExpression($expression);
                 if (is_array($code)){
                     $this->tag->generator->noThrow(true);
