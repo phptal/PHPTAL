@@ -297,6 +297,14 @@ function phptal_tales_string( $expression, $nothrow=false )
         }
         $result .= $c;        
     }
+    if ($inPath){
+        $subEval = phptal_tales_path($subPath);
+        if (is_array($subEval)){
+            $err = 'cannot use | operator is evaluated expressions';
+            throw new Exception($err);
+        }
+        $result .= "'." . $subEval . ".'";        
+    }
     return '\''.$result.'\'';
 }
 
