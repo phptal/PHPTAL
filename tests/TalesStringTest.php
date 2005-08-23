@@ -64,6 +64,13 @@ class TalesStringTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/tales-string-01.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testDoubleVar()
+    {
+        $res = phptal_tales_string('hello $foo $bar');
+        $this->assertEquals(1, preg_match('/ctx->foo/', $res), '$foo not interpolated');
+        $this->assertEquals(1, preg_match('/ctx->bar/', $res), '$bar not interpolated');
+    }
 }
 
 ?>
