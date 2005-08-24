@@ -409,7 +409,7 @@ class PHPTAL
         return $this->_context;
     }//}}}
     
-    private function parse()
+    protected function parse()
     {//{{{
         require_once 'PHPTAL/Parser.php';
         require_once 'PHPTAL/CodeGenerator.php';
@@ -448,7 +448,7 @@ class PHPTAL
         $this->storeGeneratedCode($generator->getResult());
     }//}}}
 
-    private function storeGeneratedCode($code)
+    protected function storeGeneratedCode($code)
     {//{{{
         $fp = @fopen($this->_codeFile, 'w');
         if (!$fp) {
@@ -461,7 +461,7 @@ class PHPTAL
     }//}}}
 
     /** Search template source location. */
-    private function findTemplate()
+    protected function findTemplate()
     {//{{{
         if ($this->_realPath == false){
             throw new Exception('No template file specified');
@@ -491,37 +491,37 @@ class PHPTAL
         throw new Exception($err);
     }//}}}
 
-    private $_prefilter = null;
-    private $_postfilter = null;
+    protected $_prefilter = null;
+    protected $_postfilter = null;
 
     // list of template source repositories
-    private $_repositories = array();
+    protected $_repositories = array();
     // template path
-    private $_realPath;
+    protected $_realPath;
     // template source (only set when not working with file)
-    private $_source;
+    protected $_source;
     // destination of PHP intermediate file
-    private $_codeFile;
+    protected $_codeFile;
     // php function generated for the template
-    private $_functionName;
+    protected $_functionName;
     // set to true when template is ready for execution
-    private $_prepared = false;
+    protected $_prepared = false;
     
     // associative array of phptal:id => PHPTAL_Trigger
-    private $_triggers = array();
+    protected $_triggers = array();
     // i18n translator
-    private $_translator = null;
+    protected $_translator = null;
 
     // current execution context
-    private $_context;
+    protected $_context;
     // current template file (changes within macros)
     public  $__file = false;
     // list of on-error caught exceptions
-    private $_errors = array();
+    protected $_errors = array();
 
-    private $_encoding = PHPTAL_DEFAULT_ENCODING; 
-    private $_outputMode = PHPTAL_XHTML;
-    private $_stripComments = false;
+    protected $_encoding = PHPTAL_DEFAULT_ENCODING; 
+    protected $_outputMode = PHPTAL_XHTML;
+    protected $_stripComments = false;
 }
 
 ?>
