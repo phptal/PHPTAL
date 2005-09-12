@@ -35,6 +35,14 @@ class MyPreFilter implements PHPTAL_Filter
     }
 }
 
+class MyPreFilter2 implements PHPTAL_Filter
+{
+    public function filter($str)
+    {
+        return preg_replace('/dummy/', '', $str);
+    }
+}
+
 class PreFilterTest extends PHPUnit2_Framework_TestCase
 {
     function testIt()
@@ -45,6 +53,17 @@ class PreFilterTest extends PHPUnit2_Framework_TestCase
         $tpl->value = 'my value';
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/prefilter.01.html');
+        $this->assertEquals($exp, $res);
+    }
+
+
+    function testExternalMacro()
+    {
+        $filter = new MyPreFilter2();
+        $tpl = new PHPTAL('input/prefilter.02.html');
+        $tpl->setPreFilter($filter);
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/prefilter.02.html');
         $this->assertEquals($exp, $res);
     }
 }

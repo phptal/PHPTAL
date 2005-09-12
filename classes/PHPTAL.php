@@ -310,6 +310,8 @@ class PHPTAL
             $tpl->setTemplateRepository($this->_repositories);
             array_unshift($tpl->_repositories, dirname($this->_source->getRealPath()));
             $tpl->_resolvers = $this->_resolvers;
+            $tpl->_prefilter = $this->_prefilter;
+            $tpl->_postfilter = $this->_postfilter;
             $tpl->prepare();
 
             // save current file
