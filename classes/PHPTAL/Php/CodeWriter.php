@@ -328,6 +328,16 @@ class PHPTAL_Php_CodeWriter
     {
         return $this->_state->getOutputMode();
     }
+
+    public function pushContext()
+    {
+        $this->pushCode('$ctx = $tpl->pushContext()');
+    }
+
+    public function popContext()
+    {
+        $this->pushCode('$ctx = $tpl->popContext()');
+    }
     
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     

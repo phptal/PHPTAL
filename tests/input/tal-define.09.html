@@ -1,4 +1,4 @@
 <div>
   <span metal:define-macro="foo">${value}</span>
-  <span tal:define="value 'my value'" metal:use-macro="foo"/>
+  <span tal:define="global value 'my value'" metal:use-macro="foo"/>
 </div>

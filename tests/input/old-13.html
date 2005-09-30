@@ -2,12 +2,12 @@
     Tests for 'default' keyword
 
     <span tal:omit-tag="" tal:on-error="string:error catched for define test">
-    <span tal:define="a some/path | default">default a value</span>
+    <span tal:define="global a some/path | default">default a value</span>
     <span tal:replace="a"/>
     </span>
 
     <span tal:omit-tag="" tal:on-error="string:error catched for define test">
-    <span tal:define="a a2 | default">default a value</span>
+    <span tal:define="global a a2 | default">default a value</span>
     <span tal:replace="a"/>
     </span>
 

@@ -1,6 +1,6 @@
 <div>
   <metal:block define-macro="foo">
-    <span tal:define="test 'value'"/>
+    <span tal:define="global test 'value'"/>
     <span tal:replace="test"/>
   </metal:block>
 

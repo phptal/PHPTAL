@@ -1,5 +1,5 @@
 <root>
-    <tal:block define="foo string:my foo string; true php:true" />
+    <tal:block define="global foo string:my foo string; global true php:true" />
     <tal:block replace="foo"/>
     
     <tal:block condition="true">true</tal:block>

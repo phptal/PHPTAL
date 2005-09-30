@@ -101,7 +101,9 @@ class PHPTAL
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
         $this->_resolvers = array();
+        $this->_globalContext = new StdClass();
         $this->_context = new PHPTAL_Context();
+        $this->_context->setGlobal($this->_globalContext);
     }
 
     /**
@@ -112,6 +114,7 @@ class PHPTAL
         $context = $this->_context;
         $this->_context = clone $this->_context;
         $this->_context->setParent($context);
+        $this->_context->setGlobal($this->_globalContext);
     }
 
     /**
@@ -414,6 +417,23 @@ class PHPTAL
     {
         return $this->_context;
     }
+
+    public function getGlobalContext()
+    {
+        return $this->_globalContext;
+    }
+
+    public function pushContext()
+    {
+        $this->_context = $this->_context->pushContext();
+        return $this->_context;
+    }
+
+    public function popContext()
+    {
+        $this->_context = $this->_context->popContext();
+        return $this->_context;
+    }
     
     protected function parse()
     {
@@ -491,6 +511,8 @@ class PHPTAL
     // i18n translator
     protected $_translator = null;
 
+    // global execution context
+    protected $_globalContext;
     // current execution context
     protected $_context;
     // current template file (changes within macros)

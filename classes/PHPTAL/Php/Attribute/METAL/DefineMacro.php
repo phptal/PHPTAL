@@ -61,6 +61,7 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
         $this->tag->generator->doDoctype();
         $this->tag->generator->doSetVar('$tpl', 'clone $tpl');
         $this->tag->generator->doSetVar('$ctx', '$tpl->getContext()');
+        $this->tag->generator->doSetVar('$glb', '$tpl->getGlobalContext()');
     }
     
     public function end()

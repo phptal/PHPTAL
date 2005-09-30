@@ -1,0 +1,7 @@
+<root>
+  <tal:block tal:define="foo string:foo value 1"><span tal:content="foo"/></tal:block>
+  <span tal:content="exists:foo"/>
+  <tal:block tal:define="global foo string:foo value 2"/>
+  <span tal:content="foo"/>
+  <span tal:content="exists:foo"/>
+</root>

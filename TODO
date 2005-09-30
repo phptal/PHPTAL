@@ -4,12 +4,6 @@
                                   To do list.
 
 
-FIXES:
-
-- tal:define : implements 'global' and 'local', set 'local' as default 
-  mode
-
-
 NICER:
 
 - put expression modifiers into separate classes 
@@ -34,6 +28,6 @@ PRECOMPILED MODE:
   to date and never do file checks
 
 - template pre-compiler, generate PHP from templates without executing 
-  them, do some checks and may be link it with phptal-i18n-* scripts
+  them, do some checks 
 
 

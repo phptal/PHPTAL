@@ -26,6 +26,8 @@
  */
 class PHPTAL_Context
 {
+    public static $USE_GLOBAL = false;
+    
     public $__line = false;
     public $__file = false;
     public $__repeat;
@@ -48,6 +50,25 @@ class PHPTAL_Context
 	{
 		$this->_parentContext = $parent;
 	}
+
+    public function setGlobal(StdClass $globalContext)
+    {
+        $this->_globalContext = $globalContext;
+    }
+
+    public function pushContext()
+    {
+        if (self::$USE_GLOBAL) return $this;
+        $res = clone $this;
+        $res->setParent($this);
+        return $res;
+    }
+
+    public function popContext()
+    {
+        if (self::$USE_GLOBAL) return $this;
+        return $this->_parentContext;
+    }
 
     /** 
      * Set output document type if not already set.
@@ -156,6 +177,10 @@ class PHPTAL_Context
         if (isset($this->$varname)){
             return $this->$varname;
         }
+
+        if (isset($this->_globalContext->$varname)){
+            return $this->_globalContext->$varname;
+        }
             
         if ($this->__nothrow)
             return null;
@@ -167,6 +192,7 @@ class PHPTAL_Context
     private $_slots = array();
     private $_slotsStack = array();
 	private $_parentContext = null;
+    private $_globalContext = null;
 }
 
 // emulate property_exists() function, this is slow but much better than

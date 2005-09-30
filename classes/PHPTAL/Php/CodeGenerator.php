@@ -36,6 +36,7 @@ class PHPTAL_Php_CodeGenerator
         $this->_writer->doComment($header);
         $this->_writer->setFunctionPrefix($this->_functionName . "_");
         $this->_writer->pushCode('ob_start()');
+        $this->_writer->doSetVar('$glb', '$tpl->getGlobalContext()');
         $treeGen->generate();
         $this->_writer->pushCode('$_result_ = ob_get_contents()');
         $this->_writer->pushCode('ob_end_clean()');

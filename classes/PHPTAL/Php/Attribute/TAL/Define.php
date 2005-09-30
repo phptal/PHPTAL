@@ -58,6 +58,13 @@ implements PHPTAL_Php_TalesChainReader
                 continue;
             }
             
+            $this->_defineScope = $defineScope;
+
+            if ($this->_defineScope != 'global' && !$this->_pushedContext){
+                $this->tag->generator->pushContext();
+                $this->_pushedContext = true;
+            }
+            
             $this->_defineVar = $defineVar;
             if ($expression === null) {
                 // no expression give, use content of tag as value for newly defined
@@ -86,6 +93,9 @@ implements PHPTAL_Php_TalesChainReader
 
     public function end()
     {
+        if ($this->_pushedContext){
+            $this->tag->generator->popContext();
+        }
     }
     
     private function chainedDefine($parts)
@@ -111,7 +121,12 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
     {
-        $executor->doIf('($tpl->'.$this->_defineVar.' = '.$exp.') !== null');
+        if ($this->_defineScope == 'global'){
+            $executor->doIf('($glb->'.$this->_defineVar.' = '.$exp.') !== null');
+        }
+        else {
+            $executor->doIf('($ctx->'.$this->_defineVar.' = '.$exp.') !== null');
+        }
     }
     
     /**
@@ -149,11 +164,18 @@ implements PHPTAL_Php_TalesChainReader
 
     private function doDefineVarWith($code)
     {
-        $this->tag->generator->doSetVar('$tpl->'.$this->_defineVar, $code);
+        if ($this->_defineScope == 'global'){
+            $this->tag->generator->doSetVar('$glb->'.$this->_defineVar, $code);
+        }
+        else {
+            $this->tag->generator->doSetVar('$ctx->'.$this->_defineVar, $code);
+        }
     }
 
     private $_buffered = false;
+    private $_defineScope = null;
     private $_defineVar = null;
+    private $_pushedContext = false;
 }
 
 ?>
