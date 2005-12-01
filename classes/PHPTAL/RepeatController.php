@@ -34,6 +34,7 @@
  * 'repeat' is an StdClass instance created to handle RepeatControllers, 
  * 'item' is an instance of this class. 
  * 
+ * @package phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_RepeatController

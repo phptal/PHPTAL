@@ -21,3 +21,9 @@ msgstr ""
 
 msgid "Welcome ${login}, your last connection date was : ${lastCxDate}"
 msgstr "Bienvenue ${login}, votre dernière connection date de ${lastCxDate}"
+
+msgid "Clef avec accents eae"
+msgstr "Clef avec accents éàé"
+
+msgid "Clef sans accent"
+msgstr "Clef sans accent"

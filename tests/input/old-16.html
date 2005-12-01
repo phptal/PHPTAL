@@ -20,7 +20,7 @@
 
 
                       
-    <span tal:define="name 'test'; value 'passed2'" />
+    <span tal:define="global name 'test'; global value 'passed2'" />
 
     
 
@@ -44,7 +44,7 @@
     
 
     <span tal:comment="Redefine for new test" 
-          tal:define="name 'test'; value nothing"/>
+          tal:define="global name 'test'; global value nothing"/>
                       
 
     Value not touched name set to test :

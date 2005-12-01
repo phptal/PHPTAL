@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_0_11');
+define('PHPTAL_VERSION', '1_1_4');
 
 //{{{OS RELATED DEFINES
 if (substr(PHP_OS,0,3) == 'WIN'){
@@ -56,6 +56,7 @@ if (!defined('PHPTAL_DEFAULT_ENCODING')){
 define('PHPTAL_XHTML', 1);
 define('PHPTAL_XML',   2);
 
+require_once 'PHPTAL/FileSource.php';
 require_once 'PHPTAL/RepeatController.php';
 require_once 'PHPTAL/Context.php';
 require_once 'PHPTAL/Exception.php';
@@ -93,32 +94,38 @@ class PHPTAL
      * @param string $path Template file path.
      */
     public function __construct($path=false)
-    {//{{{
-        $this->_realPath = $path;
+    {
+        $this->_path = $path;
         $this->_repositories = array();
         if (defined('PHPTAL_TEMPLATE_REPOSITORY')){
             $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
         }
+        $this->_resolvers = array();
+        $this->_globalContext = new StdClass();
         $this->_context = new PHPTAL_Context();
-    }//}}}
+        $this->_context->setGlobal($this->_globalContext);
+    }
 
     /**
      * Clone template state and context.
      */
     public function __clone()
-    {//{{{
+    {
+        $context = $this->_context;
         $context = $this->_context;
         $this->_context = clone $this->_context;
         $this->_context->setParent($context);
-    }//}}}
+        $this->_context->setGlobal($this->_globalContext);
+    }
 
     /**
      * Set template file path.
+     * @param $path string
      */
     public function setTemplate($path)
-    {//{{{
-        $this->_realPath = $path;
-    }//}}}
+    {
+        $this->_path = $path;
+    }
 
     /**
      * Set template source.
@@ -130,116 +137,124 @@ class PHPTAL
      * @param path string Fake and 'unique' template path.
      */
     public function setSource($src, $path=false)
-    {//{{{
-        $this->_source = $src;
-        if ($path){
-            $this->_realPath = $path;
-        }
-        else {
-            $this->_realPath = '<string> '.md5($src);
-        }
-    }//}}}
+    {
+        if ($path == false)
+            $path = '<string> '.md5($src);
+        
+        require_once 'PHPTAL/StringSource.php';
+        $this->_source = new PHPTAL_StringSource($src, $path);
+        $this->_path = $path;
+    }
     
     /**
      * Specify where to look for templates.
      *
-     * @param $rep String or Array of repositories
+     * @param $rep mixed string or Array of repositories
      */
     public function setTemplateRepository($rep)
-    {//{{{
+    {
         if (is_array($rep)){
             $this->_repositories = $rep;
         }
         else {
             $this->_repositories[] = $rep;
         }
-    }//}}}
+    }
 
     /**
      * Ignore XML/XHTML comments on parsing.
+     * @param $bool bool
      */
     public function stripComments($bool)
-    {//{{{
+    {
         $this->_stripComments = $bool;
-    }//}}}
+    }
     
     /**
-     * Set output mode (PHPTAL::XML or PHPTAL::XHTML).
+     * Set output mode 
+     * @param $mode int (PHPTAL::XML or PHPTAL::XHTML).
      */
     public function setOutputMode($mode=PHPTAL_XHTML)
-    {//{{{
+    {
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML){
             throw new PHPTAL_Exception('Unsupported output mode '.$mode);
         }
         $this->_outputMode = $mode;
-    }//}}}
+    }
 
     /**
      * Set ouput encoding.
+     * @param $enc string example: 'UTF-8'
      */
     public function setEncoding($enc)
-    {//{{{
+    {
         $this->_encoding = $enc; 
-    }//}}}
+    }
 
     /**
      * Set I18N translator.
      */
-    public function setTranslator($t)
-    {//{{{
+    public function setTranslator(PHPTAL_TranslationService $t)
+    {
         $this->_translator = $t;
-    }//}}}
+    }
 
     /**
      * Set template pre filter.
      */
     public function setPreFilter(PHPTAL_Filter $filter)
-    {//{{{
+    {
         $this->_prefilter = $filter;
-    }//}}}
+    }
 
     /**
      * Set template post filter.
      */
     public function setPostFilter(PHPTAL_Filter $filter)
-    {//{{{
+    {
         $this->_postfilter = $filter;
-    }//}}}
+    }
 
     /**
      * Register a trigger for specified phptal:id.
+     * @param $id string phptal:id to look for
      */
     public function addTrigger($id, PHPTAL_Trigger $trigger)
-    {//{{{
+    {
         $this->_triggers[$id] = $trigger;
-    }//}}}
+    }
 
     /**
      * Returns trigger for specified phptal:id.
+     * @param $id string phptal:id
      */
     public function getTrigger($id)
-    {//{{{
+    {
         if (array_key_exists($id, $this->_triggers)){
             return $this->_triggers[$id];
         }
         return null;
-    }//}}}
+    }
 
     /**
      * Set a context variable.
+     * @param $varname string
+     * @param $value mixed
      */
     public function __set($varname, $value)
-    {//{{{
+    {
         $this->_context->__set($varname, $value);
-    }//}}}
+    }
 
     /**
      * Set a context variable.
+     * @param $varname string
+     * @param $value mixed
      */
     public function set($varname, $value)
-    {//{{{
+    {
         $this->_context->__set($varname, $value);
-    }//}}}
+    }
     
     /**
      * Execute the template code.
@@ -247,7 +262,7 @@ class PHPTAL
      * @return string
      */
     public function execute() 
-    {//{{{
+    {
         if (!$this->_prepared) {
             $this->prepare();
         }
@@ -279,34 +294,28 @@ class PHPTAL
             return $this->_postfilter->filter($res);
         }
         return $res;
-    }//}}}
+    }
 
     /**
      * Execute a template macro.
+     * @param $path string Template macro path
      */
     public function executeMacro($path)
-    {//{{{
+    {
         // extract macro source file from macro name, if not source file
         // found in $path, then the macro is assumed to be local
         if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
-            
-            // search for file in current template folder first
-            // TODO: ensuring that the macro file exists and looking for its
-            // location must be done at compile time instead of there, it will
-            // greatly improve macro call performances
-            $f = dirname($this->_realPath).PHPTAL_PATH_SEP.$file;
-            if (file_exists($f)){
-                $file = $f;
-            }
-   
-            // ensure that the macro file is prepared and translated into PHP
-            // code before executing it.
+
             // TODO: stores a list of already prepared macro to avoid this 
-            // creation on each call
+            // preparation on each call
             $tpl = new PHPTAL($file);
             $tpl->_encoding = $this->_encoding;
             $tpl->setTemplateRepository($this->_repositories);
+            array_unshift($tpl->_repositories, dirname($this->_source->getRealPath()));
+            $tpl->_resolvers = $this->_resolvers;
+            $tpl->_prefilter = $this->_prefilter;
+            $tpl->_postfilter = $this->_postfilter;
             $tpl->prepare();
 
             // save current file
@@ -326,170 +335,159 @@ class PHPTAL
             $fun = $this->getFunctionName() . '_' . trim($path);
             $fun( $this, $this->_context );            
         }
-    }//}}}
+    }
 
     /**
      * Prepare template without executing it.
      */
     public function prepare()
-    {//{{{
+    {
         // find the template source file
         $this->findTemplate();
-        $this->__file = $this->_realPath;
+        $this->__file = $this->_source->getRealPath();
         // where php generated code should resides
-        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION 
-                         . $this->getFunctionName() 
-                         . '.php';
+        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.php';
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
         if (defined('PHPTAL_FORCE_REPARSE') 
             || !file_exists($this->_codeFile) 
-            || (!$this->_source && filemtime($this->_codeFile) < filemtime($this->_realPath))) {
+            || filemtime($this->_codeFile) < $this->_source->getLastModifiedTime()){
             $this->parse();
         }
         $this->_prepared = true;
-    }//}}}
+    }
 
     /**
      * Returns the path of the intermediate PHP code file.
      *
      * The returned file may be used to cleanup (unlink) temporary files
      * generated by temporary templates or more simply for debug.
+     * 
+     * @return string
      */
     public function getCodePath()
-    {//{{{
+    {
         return $this->_codeFile;
-    }//}}}
+    }
 
     /**
      * Returns the generated template function name.
+     * @return string
      */
     public function getFunctionName()
-    {//{{{
+    {
         if (!$this->_functionName) {
-            $this->_functionName = 
-                'tpl_' .
-                PHPTAL_VERSION. 
-                md5($this->_realPath);
+            $this->_functionName = 'tpl_'.PHPTAL_VERSION.md5($this->_source->getRealPath());
         }
         return $this->_functionName;
-    }//}}}
+    }
 
     /**
      * Returns template translator.
+     * @return PHPTAL_TranslationService
      */
     public function getTranslator()
-    {//{{{
+    {
         return $this->_translator;
-    }//}}}
+    }
     
     /**
      * Returns array of exceptions catched by tal:on-error attribute.
+     * @return array<Exception>
      */
     public function getErrors()
-    {//{{{
+    {
         return $this->_errors;
-    }//}}}
+    }
     
     /**
      * Public for phptal templates, private for user.
      * @access private
      */
-    public function addError($error)
-    {//{{{
+    public function addError(Exception $error)
+    {
         array_push($this->_errors, $error); 
-    }//}}}
+    }
 
     /**
      * Returns current context object.
+     * @return PHPTAL_Context
      */
     public function getContext()
-    {//{{{
+    {
         return $this->_context;
-    }//}}}
+    }
+
+    public function getGlobalContext()
+    {
+        return $this->_globalContext;
+    }
+
+    public function pushContext()
+    {
+        $this->_context = $this->_context->pushContext();
+        return $this->_context;
+    }
+
+    public function popContext()
+    {
+        $this->_context = $this->_context->popContext();
+        return $this->_context;
+    }
     
     protected function parse()
-    {//{{{
-        require_once 'PHPTAL/Parser.php';
-        require_once 'PHPTAL/CodeGenerator.php';
+    {
+        require_once 'PHPTAL/Dom/Parser.php';
         
         // instantiate the PHPTAL source parser 
-        $parser = new PHPTAL_Parser();
+        $parser = new PHPTAL_Dom_Parser();
         $parser->stripComments($this->_stripComments);
-        $parser->setPreFilter($this->_prefilter);
 
-        // source may be provided string or template file
-        if (isset($this->_source)){
-            $tree = $parser->parseString($this->_source);
-        }
-        else {
-            $tree = $parser->parseFile($this->_realPath);
-        }
-        
-        // instantiate a new PHP code generator for this template
-        $generator = new PHPTAL_CodeGenerator($this->_encoding);
+        $data = $this->_source->getData();
+        if ($this->_prefilter)
+            $data = $this->_prefilter->filter($data);
+        $tree = $parser->parseString($data);
+
+        require_once 'PHPTAL/Php/CodeGenerator.php';
+        $generator = new PHPTAL_Php_CodeGenerator($this->_source->getRealPath());
+        $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
-        $tree->setGenerator($generator);
+        $generator->generate($tree);
 
-        // generate the PHP code
-        $header = sprintf('Generated by PHPTAL from %s', $this->_realPath);
-        $generator->doFunction($this->_functionName, '$tpl, $ctx');
-        $generator->doComment($header);
-        $generator->setFunctionPrefix($this->_functionName . "_");
-        $generator->pushCode('ob_start()');
-        $tree->generate();
-        $generator->pushCode('$_result_ = ob_get_contents()');
-        $generator->pushCode('ob_end_clean()');
-        $generator->pushCode('return $_result_');
-        $generator->doEnd();
-        
-        // and store it into temporary file
-        $this->storeGeneratedCode($generator->getResult());
-    }//}}}
-
-    protected function storeGeneratedCode($code)
-    {//{{{
-        $fp = @fopen($this->_codeFile, 'w');
-        if (!$fp) {
-            $err = 'Unable to open %s for writing';
-            $err = sprintf($err, $this->_codeFile);
-            throw new Exception($err);
+        if (!@file_put_contents($this->_codeFile, $generator->getResult())) {
+            throw new Exception('Unable to open '.$this->_codeFile.' for writing');
         }
-        fwrite($fp, $code);
-        fclose($fp);
-    }//}}}
+    }
 
-    /** Search template source location. */
+    /** 
+     * Search template source location. 
+     */
     protected function findTemplate()
-    {//{{{
-        if ($this->_realPath == false){
+    {
+        if ($this->_path == false){
             throw new Exception('No template file specified');
         }
 
-        // source string provided manually
+        // template source already defined
         if (isset($this->_source)){ 
             return;
         }
-        
-        // search into template repositories
-        foreach ($this->_repositories as $repository){
-            $f = $repository . PHPTAL_PATH_SEP . $this->_realPath;
-            if (file_exists($f)){
-                $this->_realPath = $f;
-                return;
+       
+        array_push($this->_resolvers, new PHPTAL_FileSourceResolver($this->_repositories));
+        foreach ($this->_resolvers as $resolver){
+            $source = $resolver->resolve($this->_path);
+            if ($source != null){
+                $this->_source = $source;
+                break;
             }
         }
-        
-        // fail back to current path (or absolute path)
-        $path = $this->_realPath;
-        if (file_exists($path)) return;
-        
-        // not found
-        $err = 'Unable to locate template file %s';
-        $err = sprintf($err, $this->_realPath);
-        throw new Exception($err);
-    }//}}}
+        array_pop($this->_resolvers);
+
+        if ($this->_source == null){
+            throw new Exception('Unable to locate template file '.$this->_path);
+        }
+    }
 
     protected $_prefilter = null;
     protected $_postfilter = null;
@@ -497,7 +495,9 @@ class PHPTAL
     // list of template source repositories
     protected $_repositories = array();
     // template path
-    protected $_realPath;
+    protected $_path;
+    // template source resolvers
+    protected $_resolvers = array();
     // template source (only set when not working with file)
     protected $_source;
     // destination of PHP intermediate file
@@ -512,6 +512,8 @@ class PHPTAL
     // i18n translator
     protected $_translator = null;
 
+    // global execution context
+    protected $_globalContext;
     // current execution context
     protected $_context;
     // current template file (changes within macros)
@@ -520,7 +522,7 @@ class PHPTAL
     protected $_errors = array();
 
     protected $_encoding = PHPTAL_DEFAULT_ENCODING; 
-    protected $_outputMode = PHPTAL_XHTML;
+    protected $_outputMode = PHPTAL::XHTML;
     protected $_stripComments = false;
 }
 

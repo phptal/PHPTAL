@@ -15,3 +15,8 @@ msgstr "Second test with login=${login} and lastCxDate=${lastCxDate} passed"
 msgid "Welcome ${login}, your last connection date was : ${lastCxDate}"
 msgstr "Welcome ${login}, your last connection date was : ${lastCxDate}"
 
+msgid "Clef avec accents C<195>C<169>C<195>C<160>C<195>C<169>"
+msgstr "Accentuated key"
+
+msgid "Clef sans accent"
+msgstr "Not accentuated"

@@ -1,10 +1,10 @@
 <span tal:omit-tag="" tal:comment="this tag head and foot are removed from result">
 
 <span tal:comment="set some data" 
-      tal:define="a string:a;
-                  b string:b;
-                  c string:c;"/>
-<span tal:define="a">prout</span>
+      tal:define="global a string:a;
+                  global b string:b;
+                  global c string:c;"/>
+<span tal:define="global a">prout</span>
 
 <span tal:content="a"/>
 <span tal:content="b"/>

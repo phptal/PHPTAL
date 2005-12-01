@@ -70,3 +70,25 @@
  [2] http://pear.php.net/package/PHPUnit2
  [3] http://www.phpdoc.org
 
+
+-- dev notes --
+
+Runtime classes
+===============
+
+- PHPTAL_Exception
+- PHPTAL_Context
+- PHPTAL_RepeatController
+- PHPTAL_Filter
+- PHPTAL_Trigger
+- PHPTAL_TranslationService
+- PHPTAL_GetTextTranslator
+
+Parsetime classes
+=================
+
+- PHPTAL_XmlParser
+- PHPTAL_Php_Attribute
+- PHPTAL_Dom_Node
+- PHPTAL_Dom_Parser
+

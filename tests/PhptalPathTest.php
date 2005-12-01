@@ -23,6 +23,11 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 
+class PhptalPathTest_DummyClass
+{
+    public $foo;
+}
+
 class PhptalPathTest extends PHPUnit2_Framework_TestCase
 {
     function testZeroIndex()
@@ -30,6 +35,27 @@ class PhptalPathTest extends PHPUnit2_Framework_TestCase
         $data   = array(1,0,3);
         $result = phptal_path($data, '0');
         $this->assertEquals(1, $result);
+    }
+
+    function testDefinedButNullProperty()
+    {
+        $src = <<<EOS
+<span tal:content="o/foo"/>
+<span tal:content="o/foo | string:blah"/>
+<span tal:content="o/bar" tal:on-error="string:ok"/>
+EOS;
+        $exp = <<<EOS
+<span></span>
+<span>blah</span>
+ok
+EOS;
+
+        $tpl = new PHPTAL();
+        $tpl->setSource($src, __FILE__);
+        $tpl->o = new PhptalPathTest_DummyClass();
+        $res = $tpl->execute();
+
+        $this->assertEquals($exp, $res);
     }
 }
 

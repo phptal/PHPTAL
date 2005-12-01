@@ -21,7 +21,8 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL/Tales.php';
+require_once 'PHPTAL.php';
+require_once 'PHPTAL/Php/Tales.php';
 
 class DummyToStringObject {
     public function __construct($value){ $this->_value = $value; }

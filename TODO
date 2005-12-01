@@ -4,14 +4,30 @@
                                   To do list.
 
 
-- namespace binding :
-    xmlns:t="http://xml.zope.org/namespaces/tal"
-    <h1 t:content="title">Title</h1>
+NICER:
 
-- two "headers" bug
-    <?xml version="1.0" encoding="UTF-8"?>
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+- put expression modifiers into separate classes 
 
-- create tal/metal/i18n validation doctypes (external public files)
+- provide a global customization interface to handle Namespaces 
+  registration (forwarded to PHPTAL_Dom_Defs) and expression modifiers 
+  insertion
+
+
+OPTIMIZATIONS:
+
+- Optimize macro calls : register known macros to avoid preparing 
+  templates on each call
+
+- tal:define with single CDATA shouldn't be output buffered, may 
+  requires some refactoring
+
+
+PRECOMPILED MODE:
+
+- Pre-Compiled mode, assume every required template is compiled and up 
+  to date and never do file checks
+
+- template pre-compiler, generate PHP from templates without executing 
+  them, do some checks 
+
 

@@ -89,6 +89,51 @@ class GetTextTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('output/gettext.04.html');
         $this->assertEquals($exp, $res);                
     }
+
+    function testSpaces()
+    {
+        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext->setLanguage('en_GB', 'en_GB.utf8');
+        $gettext->addDomain('test');
+        $gettext->useDomain('test');
+        
+        $tpl = new PHPTAL('input/gettext.05.html');
+        $tpl->login = 'john smith';
+        $tpl->setTranslator($gettext);
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/gettext.05.html');
+        $this->assertEquals($exp, $res);
+    }
+
+    function testAccentuateKey()
+    {
+        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext->setLanguage('en_GB', 'en_GB.utf8');
+        $gettext->addDomain('test');
+        $gettext->useDomain('test');
+
+        $tpl = new PHPTAL('input/gettext.06.html');
+        $tpl->setTranslator($gettext);
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/gettext.06.html');
+        $this->assertEquals($exp, $res);
+    }
+
+    function testQuote()
+    {
+        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext->setLanguage('en_GB', 'en_GB.utf8');
+        $gettext->addDomain('test');
+        $gettext->useDomain('test');
+
+        $tpl = new PHPTAL('input/gettext.07.html');
+        $tpl->setTranslator($gettext);
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/gettext.07.html');
+        $this->assertEquals($exp, $res);
+    }
 }
 
 ?>

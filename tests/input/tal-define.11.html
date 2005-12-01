@@ -1,7 +1,7 @@
 <root>
-  <tal:block tal:define="foo string:foo value; content1">my content 1</tal:block>
-  <tal:block tal:define="content2; bar string:bar value">my content 2</tal:block>
-  <tal:block  tal:define="content3; content4;">my content 3</tal:block>
+  <tal:block tal:define="global foo string:foo value; global content1">my content 1</tal:block>
+  <tal:block tal:define="global content2; bar string:bar value">my content 2</tal:block>
+  <tal:block  tal:define="global content3; global content4;">my content 3</tal:block>
   <span tal:content="content1"/>
   <span tal:content="content2"/>
   <span tal:content="content3"/>

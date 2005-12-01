@@ -20,34 +20,37 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+/**
+ * @package phptal
+ */
 class PHPTAL_Exception extends Exception
 {
     public $srcFile;
     public $srcLine;
 
     public function __construct($msg, $srcFile=false, $srcLine=false)
-    {//{{{
+    {
         parent::__construct($msg);
         $this->srcFile = $srcFile;
         $this->srcLine = $srcLine;
-    }//}}}
+    }
 
     public function __toString()
-    {//{{{
+    {
         if (empty($this->srcFile)){
             return parent::__toString();
         }
         $res = sprintf('From %s around line %d'."\n", $this->srcFile, $this->srcLine);
         $res .= parent::__toString();
         return $res;
-    }//}}}
+    }
 
     public static function formatted($format /*, ...*/)
-    {//{{{
+    {
         $args = func_get_args();
         $msg  = call_user_func('sprintf', $args);
         return new PHPTAL_Exception($format);
-    }//}}}
+    }
 }
 
 ?>

@@ -1,0 +1,34 @@
+* 2005-12-01 1.1.4
+	- integrated branch 1.1.x into trunk
+	- code cleanup
+	- many little refactorings (not ended)
+	- added namespace declaration handlers
+	- fixed doctype and xml declaration discovery in deep macro calls
+	- fixed, ${foo} are not interpolated anymore inside xml comments
+	- added a way to propagate xml and doctype declarations keeping track of parent context in PHPTAL_Context
+	- made Defs a pseudo singleton class and removed access to its static members
+	- added phptal_isempty() usage in tal:content, tal:replace and tal:attributes
+	- added phptal_escape() which is called by each phptal echo (except structures)
+	- false booleans are now echoed as 0 instead of ''
+	- malformed macro names now throws an exception
+	- added object.__toString() tests
+	- fixed getLastModifiedTime() call
+	- replace isset() with property_exists() in phptal_path()
+	- fixed single quote in string: error  (string:foo 'bar' baz)
+	- fixed characters in translation keys
+	- fixed latin1 characters in i18n:attributes keys
+	- changed key generation relatively to I18NFool
+	- fixed tal:define so following things works :
+		<span tal:define="foo; bar string:x">foo value</span>
+		<span tal:define="bar string:x; foo">foo value</span>
+		<span tal:define="bar; foo">foo and bar value</span>
+	- fixed tal:define and hidden img node bug
+	- fixed double i18n:attributes html escaping
+	- fixed i18n:name + xmlns error
+	- fixed last path in string: not interpolated
+	- tal:define and content buffering fixes (patch from William Bailey)
+	- made private things protected so the class can be freely extended and modified by library users
+	- fixed i18n:attributes on non i18n:translate nodes
+	- fixed pre filter propagation on external macro execution
+	- implemented global & local tal:define system, ***this will break some templates***
+

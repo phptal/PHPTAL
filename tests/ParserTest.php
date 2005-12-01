@@ -21,22 +21,23 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL/Parser.php';
-require_once 'PHPTAL/CodeGenerator.php';
+require_once 'PHPTAL/Dom/Parser.php';
+require_once 'PHPTAL/Php/CodeWriter.php';
 
 class ParserTest extends PHPUnit2_Framework_TestCase 
 {
     public function testParseSimpleDocument()
     {
-        $parser = new PHPTAL_Parser();
+        $parser = new PHPTAL_Dom_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
-        $this->assertEquals(3, count($tree->children));
-        $this->assertEquals(5, count($tree->children[2]->children));
+        $children = $tree->getChildren();
+        $this->assertEquals(3, count($children));
+        $this->assertEquals(5, count($children[2]->getChildren()));
     }
 
     public function testByteOrderMark()
     {
-        $parser = new PHPTAL_Parser();
+        $parser = new PHPTAL_Dom_Parser();
         try {
             $tree = $parser->parseFile('input/parser.02.xml');
             $this->assertTrue(true);
@@ -48,11 +49,11 @@ class ParserTest extends PHPUnit2_Framework_TestCase
 
     public function testBadAttribute(){
         try {
-            $parser = new PHPTAL_Parser();
+            $parser = new PHPTAL_Dom_Parser();
             $parser->parseFile('input/parser.03.xml');
         }
         catch (Exception $e){
-            $this->assertTrue( preg_match('/attribute single or double quote/', $e->getMessage()) == true );
+            $this->assertTrue( preg_match('/attribute single or double quote/', $e->getMessage()) == 1 );
         }
     }
 }

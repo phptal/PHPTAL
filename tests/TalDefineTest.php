@@ -22,14 +22,15 @@
 
 require_once 'config.php';
 require_once 'PHPTAL.php';
-require_once 'PHPTAL/Attribute.php';
-require_once 'PHPTAL/Attribute/TAL/Define.php';
+require_once 'PHPTAL/Php/Attribute.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
 
 class TalDefineTest extends PHPUnit2_Framework_TestCase 
 {
     function testExpressionParser()
     {
-        $att = PHPTAL_Attribute::createAttribute(null, 'tal:define', 'a b');
+        $att = new PHPTAL_Php_Attribute_Tal_Define();
+        $att->expression = 'a b';
         
         list($defineScope, $defineVar, $expression) = $att->parseExpression('local a_234z b');
         $this->assertEquals('local', $defineScope);
@@ -49,7 +50,7 @@ class TalDefineTest extends PHPUnit2_Framework_TestCase
         list($defineScope, $defineVar, $expression) = $att->parseExpression('a');
         $this->assertEquals(false, $defineScope);
         $this->assertEquals('a', $defineVar);
-        $this->assertEquals(false, $expression); 
+        $this->assertEquals(null, $expression); 
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('global a string: foo; bar; baz');
         $this->assertEquals('global', $defineScope);
@@ -176,6 +177,14 @@ class TalDefineTest extends PHPUnit2_Framework_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.12.html');
+        $this->assertEquals($exp, $res);
+    }
+
+    function testDefineGlobal()
+    {
+        $exp = trim_file('output/tal-define.13.html');
+        $tpl = new PHPTAL('input/tal-define.13.html');
+        $res = trim_string($tpl->execute());
         $this->assertEquals($exp, $res);
     }
 }

@@ -21,26 +21,29 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL/Parser.php';
-require_once 'PHPTAL/CodeGenerator.php';
+require_once 'PHPTAL.php';
+require_once 'PHPTAL/Dom/Parser.php';
+require_once 'PHPTAL/Php/CodeWriter.php';
+require_once 'PHPTAL/Php/Node.php';
 
 class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
 {
     function testTreeGeneration()
     {
-        $parser = new PHPTAL_Parser();
+        $parser = new PHPTAL_Dom_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
-        $generator = new PHPTAL_CodeGenerator();
-        $tree->setGenerator($generator);
+        $state     = new PHPTAL_Php_State();
+        $generator = new PHPTAL_Php_CodeWriter($state);
+        $treeGen   = new PHPTAL_Php_Tree($generator, $tree);
         $generator->doFunction('test', '$tpl');
-        $tree->generate();
+        $treeGen->generate();
         $generator->doEnd();
         $result = $generator->getResult();
 
         $expected = <<<EOS
 <?php 
 function test( \$tpl ) {
-\$ctx->setXmlDeclaration('<?xml version="1.0"?>');?>
+\$ctx->setXmlDeclaration('<?xml version="1.0"?>') ;?>
 <html>
   <head>
     <title>test document</title>
@@ -61,7 +64,8 @@ EOS;
 
     function testFunctionsGeneration()
     {
-        $generator = new PHPTAL_CodeGenerator();
+        $state = new PHPTAL_Php_State();
+        $generator = new PHPTAL_Php_CodeWriter($state);
         $generator->doFunction('test1', '$tpl');
         $generator->pushString('test1');
         $generator->doFunction('test2', '$tpl');

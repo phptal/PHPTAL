@@ -1,5 +1,5 @@
 <span>
-  <span tal:define="foo 'foo'; bar 'bar'; foobar php: foo . bar"/>
+  <span tal:define="global foo 'foo'; global bar 'bar'; global foobar php: foo . bar"/>
   <span tal:content="foo"/>
   <span tal:content="bar"/>
   <span tal:content="foobar"/>
