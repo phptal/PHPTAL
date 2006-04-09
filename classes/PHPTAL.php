@@ -52,6 +52,11 @@ if (!defined('PHPTAL_DEFAULT_ENCODING')){
     define('PHPTAL_DEFAULT_ENCODING', 'UTF-8');
 }
 //}}}
+//{{{PHPTAL_PHP_CODE_EXTENSION
+if (!defined('PHPTAL_PHP_CODE_EXTENSION')){
+    define('PHPTAL_PHP_CODE_EXTENSION', 'php');
+}
+//}}}
 
 define('PHPTAL_XHTML', 1);
 define('PHPTAL_XML',   2);
@@ -346,7 +351,7 @@ class PHPTAL
         $this->findTemplate();
         $this->__file = $this->_source->getRealPath();
         // where php generated code should resides
-        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.php';
+        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.' . PHPTAL_PHP_CODE_EXTENSION;
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
