@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="PHPTAL" basedir="." default="main">
-  <property name="version" value="1.1.4"/>
+  <property name="version" value="1.1.5"/>
   <property name="build.base.dir" value="build"/>
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>

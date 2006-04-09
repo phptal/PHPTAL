@@ -484,7 +484,7 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[
-<span tal:define="destname path/to/existing/variable" />
+<span tal:define="global destname path/to/existing/variable" />
 ]]></programlisting>
 
         <para>
@@ -492,7 +492,7 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[
-<span tal:define="destname string:some string" />
+<span tal:define="global destname string:some string" />
 ]]></programlisting>
 
         <para>
@@ -500,7 +500,7 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[
-<span tal:define="destname array:1, 2, 3, 4" />
+<span tal:define="global destname array:1, 2, 3, 4" />
 ]]></programlisting>
 
         <para>
@@ -508,7 +508,7 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[
-<span tal:define="fname string:paul; lname string:dupond" />
+<span tal:define="global fname string:paul; lname string:dupond" />
 ]]></programlisting>
 
         <para>
@@ -516,7 +516,7 @@ catch (Exception $e){
         </para>
   
         <programlisting><![CDATA[
-<span tal:define="hello string:hello $fname welcome on this page" />
+<span tal:define="global hello string:hello $fname welcome on this page" />
 ]]></programlisting>
 
         <para>
@@ -524,7 +524,7 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[
-<span tal:define="hello">hello ${fname} welcome on this page</span>
+<span tal:define="global hello">hello ${fname} welcome on this page</span>
 ]]></programlisting>
 
         <para>
@@ -564,6 +564,27 @@ catch (Exception $e){
 <span tal:define="hello" tal:content="hello">
   hello ${fname} welcome on this page
 </span>
+]]></programlisting>
+
+	<para>
+	In above examples, you may have spotten the 'global' keywords before some variables names. In PHPTAL you can either define a variable globally or locally.</para>
+	
+	<para>
+	A global variable will be accessible from any xml node of your templates or called macros.
+	</para>
+
+	<programlisting><![CDATA[
+<span tal:define="global hello string:hello world"/>
+<p tal:content="hello"/>
+]]></programlisting>
+
+	<para>
+	On the contrary, a local variable is only available inside the tag it is defined in :
+	</para>
+
+	<programlisting><![CDATA[
+<span tal:define="hello string:hello world"/>
+<p tal:content="hello"/> <!-- will produce an undefined variable error -->
 ]]></programlisting>
 
       </section>
