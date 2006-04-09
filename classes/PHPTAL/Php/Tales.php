@@ -78,7 +78,7 @@ function phptal_tales($expression, $nothrow=false)
             throw new Exception($err);
         }
         $ref = new ReflectionClass($classCallback[0]);
-        if(!$ref->isSubclassOf(new ReflectionClass('PHPTAL_Tales'))){
+        if(!$ref->implementsInterface('PHPTAL_Tales')){
             $err = 'Unable to use phptal modifier %s as the class %s does not implement the PHPTAL_Tales interface.';
             $err = sprintf($err, $typePrefix, $callbackName);
             throw new Exception($err);
