@@ -50,7 +50,7 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 //      * repeat - the repeat variables (see RepeatVariable).
 // 
 function phptal_tales($expression, $nothrow=false)
-{//{{{
+{
     $expression = trim($expression);
 
     // Look for tales modifier (string:, exists:, etc...)
@@ -94,7 +94,7 @@ function phptal_tales($expression, $nothrow=false)
         throw new Exception($err);
     }
     return $func($expression, $nothrow);
-}//}}}
+}
 
 
 // 
@@ -122,9 +122,9 @@ function phptal_tales($expression, $nothrow=false)
 //      not: foo/bar/booleancomparable
 // 
 function phptal_tales_not($expression, $nothrow)
-{//{{{
+{
     return '!' . phptal_tales($expression, $nothrow);
-}//}}}
+}
 
 // 
 // path:
@@ -160,7 +160,7 @@ function phptal_tales_not($expression, $nothrow)
 // @returns string or array
 // 
 function phptal_tales_path($expression, $nothrow=false)
-{//{{{
+{
     $expression = trim($expression);
     if ($expression == 'default') return PHPTAL_TALES_DEFAULT_KEYWORD;
     if ($expression == 'nothing') return PHPTAL_TALES_NOTHING_KEYWORD;
@@ -213,120 +213,124 @@ function phptal_tales_path($expression, $nothrow=false)
     $expression = substr($expression, $pos+1);
 
     // return php code invoking phptal_path($next, $expression, $notrhow)
-    return 'phptal_path($ctx->'.$next.', \''.$expression.'\''
-            .($nothrow ? ', true' : '')
-            .')';
-            }//}}}
+    return 'phptal_path($ctx->'.$next.', \''.$expression.'\''.($nothrow ? ', true' : '').')';
+}
 
-            //      
-            // string:
-            //
-            //      string_expression ::= ( plain_string | [ varsub ] )*
-            //      varsub            ::= ( '$' Path ) | ( '${' Path '}' )
-            //      plain_string      ::= ( '$$' | non_dollar )*
-            //      non_dollar        ::= any character except '$'
-            //
-            // Examples:
-            //
-            //      string:my string
-            //      string:hello, $username how are you
-            //      string:hello, ${user/name}
-            //      string:you have $$130 in your bank account
-            //
-            function phptal_tales_string($expression, $nothrow=false)
-            {//{{{
-                // This is a simple parser which evaluates ${foo} inside 
-                // 'string:foo ${foo} bar' expressions, it returns the php code which will
-                // print the string with correct interpollations.
-                // Nothing special there :)
+//      
+// string:
+//
+//      string_expression ::= ( plain_string | [ varsub ] )*
+//      varsub            ::= ( '$' Path ) | ( '${' Path '}' )
+//      plain_string      ::= ( '$$' | non_dollar )*
+//      non_dollar        ::= any character except '$'
+//
+// Examples:
+//
+//      string:my string
+//      string:hello, $username how are you
+//      string:hello, ${user/name}
+//      string:you have $$130 in your bank account
+//
+function phptal_tales_string($expression, $nothrow=false)
+{
+    // This is a simple parser which evaluates ${foo} inside 
+    // 'string:foo ${foo} bar' expressions, it returns the php code which will
+    // print the string with correct interpollations.
+    // Nothing special there :)
 
-                $inPath = false;
-                $inAccoladePath = false;
-                $lastWasDollar = false;
-                $result = '';
-                $len = strlen($expression);
-                for ($i=0; $i<$len; $i++) {
-                    $c = $expression[$i];
-                    switch ($c) {
-                        case '$':
-                            if ($lastWasDollar) {
-                                $lastWasDollar = false;
-                            }
-                            else {
-                                $lastWasDollar = true;
-                                $c = '';
-                            }
-                            break;
-
-                        case '\'':
-                            $c = '\\\'';
-                            break;
-
-                        case '{':
-                            if ($lastWasDollar) {
-                                $lastWasDollar = false;
-                                $inAccoladePath = true;
-                                $subPath = '';
-                                $c = '';
-                            }
-                            break;
-
-                        case '}':
-                            if ($inAccoladePath) {
-                                $inAccoladePath = false;
-                                $subEval = phptal_tales_path($subPath);
-                                if (is_array($subEval)) {
-                                    $err = 'cannot use | operator is evaluated expressions';
-                                    throw new Exception($err);
-                                }
-                                $result .= "'." . $subEval . ".'";
-                                $subPath = '';
-                                $lastWasDollar = false;
-                                $c = '';
-                            }
-                            break;
-
-                        default:
-                            if ($lastWasDollar) {
-                                $lastWasDollar = false;
-                                $inPath = true;
-                                $subPath = $c;
-                                $c = '';
-                            }
-                            else if ($inAccoladePath) {
-                                $subPath .= $c;
-                                $c = '';
-                            }
-                            else if ($inPath) {
-                                $t = strtolower($c);
-                                if (($t >= 'a' && $t <= 'z') || ($t >= '0' && $t <= '9') || ($t == '_')){
-                                    $subPath .= $c;
-                                    $c = '';
-                                }
-                                else {
-                                    $inPath = false;
-                                    $subEval = phptal_tales_path($subPath);
-                                    if (is_array($subEval)) {
-                                        $err = 'cannot use | operator is evaluated expressions';
-                                        throw new Exception($err);
-                                    }
-                                    $result .= "'." . $subEval . ".'";
-                                }
-                            }
-                            break;
-                    }
-                    $result .= $c;        
+    $inPath = false;
+    $inAccoladePath = false;
+    $lastWasDollar = false;
+    $result = '';
+    $len = strlen($expression);
+    for ($i=0; $i<$len; $i++) {
+        $c = $expression[$i];
+        switch ($c) {
+            case '$':
+                if ($lastWasDollar) {
+                    $lastWasDollar = false;
                 }
-                if ($inPath){
+                else {
+                    $lastWasDollar = true;
+                    $c = '';
+                }
+                break;
+
+            case ';':
+                if ($i<$len && $expression[$i+1] == ';'){ 
+                    $i++; 
+                }
+                break;
+
+            case '\'':
+                $c = '\\\'';
+                break;
+
+            case '{':
+                if ($lastWasDollar) {
+                    $lastWasDollar = false;
+                    $inAccoladePath = true;
+                    $subPath = '';
+                    $c = '';
+                }
+                break;
+
+            case '}':
+                if ($inAccoladePath) {
+                    $inAccoladePath = false;
                     $subEval = phptal_tales_path($subPath);
-                    if (is_array($subEval)){
+                    if (is_array($subEval)) {
                         $err = 'cannot use | operator is evaluated expressions';
                         throw new Exception($err);
                     }
-                    $result .= "'." . $subEval . ".'";        
+                    $result .= "'." . $subEval . ".'";
+                    $subPath = '';
+                    $lastWasDollar = false;
+                    $c = '';
                 }
-                return '\''.$result.'\'';
-            }//}}}
+                break;
+
+            default:
+                if ($lastWasDollar) {
+                    $lastWasDollar = false;
+                    $inPath = true;
+                    $subPath = $c;
+                    $c = '';
+                }
+                else if ($inAccoladePath) {
+                    $subPath .= $c;
+                    $c = '';
+                }
+                else if ($inPath) {
+                    $t = strtolower($c);
+                    if (($t >= 'a' && $t <= 'z') || ($t >= '0' && $t <= '9') || ($t == '_')){
+                        $subPath .= $c;
+                        $c = '';
+                    }
+                    else {
+                        $inPath = false;
+                        $subEval = phptal_tales_path($subPath);
+                        if (is_array($subEval)) {
+                            $err = 'cannot use | operator is evaluated expressions';
+                            throw new Exception($err);
+                        }
+                        $result .= "'." . $subEval . ".'";
+                    }
+                }
+                break;
+        }
+        $result .= $c;        
+    }
+    if ($inPath){
+        $subEval = phptal_tales_path($subPath);
+        if (is_array($subEval)){
+            $err = 'cannot use | operator is evaluated expressions';
+            throw new Exception($err);
+        }
+        $result .= "'." . $subEval . ".'";        
+    }
+    return '\''.$result.'\'';
+}
 
 
 /** 
@@ -335,10 +339,10 @@ function phptal_tales_path($expression, $nothrow=false)
  * Transform the expression into a regular PHP expression.
  */
 function phptal_tales_php($src)
-{//{{{
+{
     require_once 'PHPTAL/Php/Transformer.php';
     return PHPTAL_Php_Transformer::transform($src, '$ctx->');
-}//}}}
+}
 
 /**
  * exists: modifier.
@@ -346,10 +350,10 @@ function phptal_tales_php($src)
  * Returns the code required to invoke phptal_exists() on specified path.
  */
 function phptal_tales_exists($src, $nothrow)
-{//{{{
+{
     return sprintf('phptal_exists($ctx, %s)',
             phptal_tales_string(trim($src), $nothrow));
-}//}}}
+}
 
 /**
  * number: modifier.
@@ -357,8 +361,8 @@ function phptal_tales_exists($src, $nothrow)
  * Returns the number as is.
  */
 function phptal_tales_number($src, $nothrow)
-{//{{{
+{
     return trim($src);
-}//}}}
+}
 
 ?>
