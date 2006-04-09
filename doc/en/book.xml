@@ -973,7 +973,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <programlisting><![CDATA[
-<span use-macro="site_macros.html/main_menu"/>
+<span metal:use-macro="site_macros.html/main_menu"/>
 ]]></programlisting>
 
         <para>
@@ -982,7 +982,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <programlisting><![CDATA[
-<span use-macro="${design}/site_macros.html/main_menu"/>
+<span metal:use-macro="${design}/site_macros.html/main_menu"/>
 ]]></programlisting>
 
       </section>

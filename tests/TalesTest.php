@@ -22,10 +22,18 @@
 
 require_once 'config.php';
 require_once 'PHPTAL/Php/Tales.php';
+require_once 'PHPTAL/Tales.php';
 
 function phptal_tales_custom($src,$nothrow)
 {
     return 'sprintf("%01.2f", '.phptal_tales_path($src, $nothrow).')';
+}
+
+class MyTalesClass implements PHPTAL_Tales
+{
+    public static function reverse($exp,$nothrow){
+        return 'strrev('.phptal_tales($exp,$nothrow).')';
+    }
 }
 
 class TalesTest extends PHPUnit2_Framework_TestCase 
@@ -67,6 +75,12 @@ class TalesTest extends PHPUnit2_Framework_TestCase
         $src = 'custom: some/path';
         $this->assertEquals('sprintf("%01.2f", phptal_path($ctx->some, \'path\'))', 
                             phptal_tales($src));
+    }
+
+    function testCustomClass()
+    {
+        $src = 'MyTalesClass.reverse: some';
+        $this->assertEquals('strrev($ctx->some)', phptal_tales($src));
     }
 }
 
