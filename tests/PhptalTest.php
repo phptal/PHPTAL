@@ -153,6 +153,14 @@ class PhptalTest extends PHPUnit2_Framework_TestCase
         $exp = trim_file('input/phptal.05.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testOnlineExpression()
+    {
+        $tpl = new PHPTAL('input/phptal.06.html');
+        $res = $tpl->execute();
+        $exp = trim_file('input/phptal.06.html');
+        $this->assertEquals($exp,$res);
+    }
 }
         
 ?>
