@@ -81,6 +81,13 @@ class PHPTAL_Php_ElementWriter
             if (preg_match($fullreplaceRx, $value)){
                 $this->_writer->pushHtml($value);
             }
+            /*
+            else if (strpos('<?php', $value) === 0){
+                $this->_writer->pushHtml(' '.$key.'="');
+                $this->_writer->pushRawHtml($value);
+                $this->_writer->pushHtml('"');
+            }
+            */
             else {
                 $this->_writer->pushHtml(' '.$key.'="'.$value.'"');
             }

@@ -310,6 +310,11 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             if (preg_match($fullreplaceRx, $value)){
                 $this->generator->pushHtml($value);
             }
+            else if (strpos($value,'<?php') === 0){
+                $this->generator->pushHtml(' '.$key.'="');
+                $this->generator->pushRawHtml($value);
+                $this->generator->pushHtml('"');
+            }
             else {
                 $this->generator->pushHtml(' '.$key.'="'.$value.'"');
             }

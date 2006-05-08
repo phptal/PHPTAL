@@ -60,21 +60,18 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 // we use it and replace the tag attribute with the result of
                 // the translation
                 $key = str_replace('\'', '\\\'', $key);
-                $code = $this->_getTranslationCode("'$key'");
-                $this->tag->attributes[$attribute] = $code;
+                $this->tag->attributes[$attribute] = $this->_getTranslationCode("'$key'");
             } 
             else if ($this->tag->isOverwrittenAttribute($attribute)){
                 $varn = $this->tag->getOverwrittenAttributeVarName($attribute);
-                $code = $this->_getTranslationCode($varn);
-                $this->tag->attributes[$attribute] = $code;
+                $this->tag->attributes[$attribute] = $this->_getTranslationCode($varn);
             }
             // else if the attribute has a default value
             else if ($this->tag->hasAttribute($attribute)){
                 // we use this default value as the translation key
                 $key = $this->tag->getAttribute($attribute);
                 $key = str_replace('\'', '\\\'', $key);
-                $code = $this->_getTranslationCode("'$key'");
-                $this->tag->attributes[$attribute] = $code;
+                $this->tag->attributes[$attribute] = $this->_getTranslationCode("'$key'");
             }
             else {
                 // unable to translate the attribute
@@ -89,11 +86,22 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 
     private function _getTranslationCode($key)
     {
-        $result = '<?php echo %s ?>';
+		$ckey = PHPTAL_Php_Attribute_I18N_Translate::_canonalizeKey($key);
+		$code = '<?php ';
+		if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
+			array_shift($m);
+			$m = array_shift($m);
+			foreach ($m as $name){
+				$code .= "\n".'$tpl->getTranslator()->setVar(\''.$name.'\','.phptal_tales($name).');';
+			}
+			$code .= "\n";
+		}
+
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
-        $code = sprintf('$tpl->getTranslator()->translate(%s, false)', PHPTAL_Php_Attribute_I18N_Translate::_canonalizeKey($key));
-        return sprintf($result, $this->tag->generator->escapeCode($code));
+		$result = $this->tag->generator->escapeCode(sprintf('$tpl->getTranslator()->translate(%s, false)', $ckey));
+        $code .= 'echo '.$result.'?>';
+		return $code;
     }
 }
 
