@@ -25,32 +25,42 @@ require_once 'PHPTAL.php';
 
 class DoctypeTest extends PHPUnit2_Framework_TestCase
 {
-    function testSimple()
-    {
-        $tpl = new PHPTAL('input/doctype.01.html');
-        $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/doctype.01.html');
-        $this->assertEquals($exp, $res);
-    }
+	function testSimple()
+	{
+		$tpl = new PHPTAL('input/doctype.01.html');
+		$res = $tpl->execute();
+		$res = trim_string($res);
+		$exp = trim_file('output/doctype.01.html');
+		$this->assertEquals($exp, $res);
+	}
 
-    function testMacro()
-    {
-        $tpl = new PHPTAL('input/doctype.02.user.html');
-        $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/doctype.02.html');
-        $this->assertEquals($exp, $res);        
-    }
+	function testMacro()
+	{
+		$tpl = new PHPTAL('input/doctype.02.user.html');
+		$res = $tpl->execute();
+		$res = trim_string($res);
+		$exp = trim_file('output/doctype.02.html');
+		$this->assertEquals($exp, $res);		
+	}
 
-    function testDeepMacro()
-    {
-        $tpl = new PHPTAL('input/doctype.03.html');
-        $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/doctype.03.html');
-        $this->assertEquals($exp, $res);
-    }
+	function testDeepMacro()
+	{
+		$tpl = new PHPTAL('input/doctype.03.html');
+		$res = $tpl->execute();
+		$res = trim_string($res);
+		$exp = trim_file('output/doctype.03.html');
+		$this->assertEquals($exp, $res);
+	}
+
+	function testDtdInline()
+	{
+		$tpl = new PHPTAL('input/doctype.04.html');
+		$res = $tpl->execute();
+		$res = trim_string($res);
+		$exp = trim_file('output/doctype.04.html');
+        echo $res,"\n";
+		$this->assertEquals($exp, $res);
+	}
 }
 
 ?>

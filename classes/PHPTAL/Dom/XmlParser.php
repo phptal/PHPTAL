@@ -92,6 +92,8 @@ abstract class PHPTAL_XmlParser
         $attribute  = "";
         $attributes = array();
 
+        $customDoctype = false;
+
         $this->onDocumentStart();
         for ($i=0; $i<$len; $i++) {        
             $c = $src[$i];
@@ -229,7 +231,17 @@ abstract class PHPTAL_XmlParser
                     break;
 
                 case self::ST_DOCTYPE:
-                    if ($c == '>') {
+                    if ($c == '[') {
+                        $customDoctype = true;
+                    }
+                    else if ($customDoctype && $c == '>' && substr($src, $i-1, 2) == ']>'){
+                        $customDoctype = false;
+                        $this->onDocType(substr($src, $mark, $i-$mark+1));
+                        $mark = $i+1; // mark text start
+                        $state = self::ST_TEXT;
+                    }
+                    else if (!$customDoctype && $c == '>') {
+                        $customDoctype = false;
                         $this->onDocType(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
