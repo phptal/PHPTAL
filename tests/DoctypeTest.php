@@ -58,7 +58,6 @@ class DoctypeTest extends PHPUnit2_Framework_TestCase
 		$res = $tpl->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/doctype.04.html');
-        echo $res,"\n";
 		$this->assertEquals($exp, $res);
 	}
 }
