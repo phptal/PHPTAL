@@ -343,7 +343,8 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     private function prepareAttributes()
     {
-        if (preg_match('/^(.*?):block$/', $this->name, $m)) {
+        //TODO: use registered namespaces instead of the raw list
+        if (preg_match('/^(tal|metal|phptal|i18n):block$/', $this->name, $m)) {
             $this->headFootDisabled = true;
             list(,$ns) = $m;
             $attributes = array();
