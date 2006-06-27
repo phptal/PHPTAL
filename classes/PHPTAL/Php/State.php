@@ -107,6 +107,11 @@ class PHPTAL_Php_State
     public function interpolateTalesVarsInHtml($src)
     {
         if ($this->_talesMode == 'tales'){
+            $func = create_function('$matches','return "<?php echo ".phptal_tales($matches[1])." ?>";');
+            $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/ism', $func, $src);
+            $func = create_function('$matches','return "<?php echo phptal_escape(".phptal_tales($matches[1]).", ENT_QUOTES, \''.$this->_encoding.'\'); ?>";');
+            $result = preg_replace_callback('/(?<!\$)\$\{(.*?)\}/ism', $func, $result);
+            /*
             $result = preg_replace(
                 '/(?<!\$)\$\{([a-z0-9\/_]+)\}/ism', 
                 '<?php echo phptal_escape('
@@ -114,6 +119,13 @@ class PHPTAL_Php_State
                 .') ?>',
                 $src
             );
+            $result = preg_replace(
+                '/(?<!\$)\$\{structure ([a-z0-9\/_]+)\}/ism', 
+                '<?php echo phptal_path($ctx, \'$1\') ?>',
+                $result
+            );
+            */
+
 			$result = str_replace('$${', '${', $result);
 			return $result;
         }
