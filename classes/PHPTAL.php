@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_1_6');
+define('PHPTAL_VERSION', '1_1_7');
 
 //{{{OS RELATED DEFINES
 if (substr(PHP_OS,0,3) == 'WIN'){
@@ -129,7 +129,10 @@ class PHPTAL
      */
     public function setTemplate($path)
     {
+        $this->_prepared = false;
+        $this->_functionName = null;
         $this->_path = $path;
+        $this->_source = null;
     }
 
     /**
@@ -475,7 +478,7 @@ class PHPTAL
         }
 
         // template source already defined
-        if (isset($this->_source)){ 
+        if ($this->_source != null){
             return;
         }
        
@@ -500,15 +503,15 @@ class PHPTAL
     // list of template source repositories
     protected $_repositories = array();
     // template path
-    protected $_path;
+    protected $_path = null;
     // template source resolvers
     protected $_resolvers = array();
     // template source (only set when not working with file)
-    protected $_source;
+    protected $_source = null;
     // destination of PHP intermediate file
-    protected $_codeFile;
+    protected $_codeFile = null;
     // php function generated for the template
-    protected $_functionName;
+    protected $_functionName = null;
     // set to true when template is ready for execution
     protected $_prepared = false;
     
@@ -518,9 +521,9 @@ class PHPTAL
     protected $_translator = null;
 
     // global execution context
-    protected $_globalContext;
+    protected $_globalContext = null;
     // current execution context
-    protected $_context;
+    protected $_context = null;
     // current template file (changes within macros)
     public  $__file = false;
     // list of on-error caught exceptions
