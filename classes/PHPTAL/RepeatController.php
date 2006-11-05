@@ -66,6 +66,10 @@ class PHPTAL_RepeatController
     /** Returns current iterator key. */
     public function key()
     {
+        if(is_object($this->source) && $this->source instanceof Iterator) {
+            return $this->source->key();
+        }
+
         if (!isset($this->_keys)){
             $this->_keys = array_keys($this->source);
         }
