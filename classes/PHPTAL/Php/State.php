@@ -82,20 +82,20 @@ class PHPTAL_Php_State
     public function evalTalesExpression($expression)
     {
         if ($this->_talesMode == 'php')
-            return phptal_tales_php($expression);
+            return PHPTAL_TalesInternal::php($expression);
         return phptal_tales($expression);
     }
 
     public function interpolateTalesVarsInString($string)
     {
         if ($this->_talesMode == 'tales'){
-            return phptal_tales_string($string);
+            return PHPTAL_TalesInternal::string($string);
         }
         
         // replace ${var} found in expression
         while (preg_match('/(?<!\$)\$\{([^\}]+)\}/ism', $string, $m)){
             list($ori, $exp) = $m;
-            $php  = phptal_tales_php($exp);
+            $php  = PHPTAL_TalesInternal::php($exp);
             $repl = '\'.%s.\''; 
             $repl = sprintf($repl, $php, $this->_encoding);
             $string = str_replace($ori, $repl, $string);
@@ -132,7 +132,7 @@ class PHPTAL_Php_State
 
         while (preg_match('/(?<!\$)\${(structure )?([^\}]+)\}/ism', $src, $m)){
             list($ori, $struct, $exp) = $m;
-            $php  = phptal_tales_php($exp);
+            $php  = PHPTAL_TalesInternal::php($exp);
             // when structure keyword is specified the output is not html 
             // escaped
             if ($struct){

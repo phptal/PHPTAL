@@ -325,13 +325,13 @@ function phptal_path($base, $path, $nothrow=false)
     }
 
     return $base;
-}//}}}
+}
 
 /** 
  * Returns true if $path can be fully resolved in $ctx context. 
  */
 function phptal_exists($ctx, $path)
-{//{{{
+{
     // special note: this method may requires to be extended to a full
     // phptal_path() sibling to avoid calling latest path part if it is a
     // method or a function...
@@ -339,7 +339,7 @@ function phptal_exists($ctx, $path)
     $res = phptal_path($ctx, $path, true);
     $ctx->noThrow(false);
     return !is_null($res);
-}//}}}
+}
 
 function phptal_isempty($var)
 {

@@ -26,7 +26,7 @@ require_once 'PHPTAL/Tales.php';
 
 function phptal_tales_custom($src,$nothrow)
 {
-    return 'sprintf("%01.2f", '.phptal_tales_path($src, $nothrow).')';
+    return 'sprintf("%01.2f", '.PHPTAL_TalesInternal::path($src, $nothrow).')';
 }
 
 class MyTalesClass implements PHPTAL_Tales

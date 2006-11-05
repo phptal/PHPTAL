@@ -65,6 +65,7 @@ require_once 'PHPTAL/FileSource.php';
 require_once 'PHPTAL/RepeatController.php';
 require_once 'PHPTAL/Context.php';
 require_once 'PHPTAL/Exception.php';
+require_once 'PHPTAL/TalesRegistry.php';
 
 
 /**
