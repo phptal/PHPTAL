@@ -327,6 +327,14 @@ function phptal_path($base, $path, $nothrow=false)
     return $base;
 }
 
+function phptal_true($ctx, $path)
+{
+    $ctx->noThrow(true);
+    $res = phptal_path($ctx, $path, true);
+    $ctx->noThrow(false);
+    return $res != null;
+}
+
 /** 
  * Returns true if $path can be fully resolved in $ctx context. 
  */

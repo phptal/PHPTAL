@@ -70,6 +70,15 @@ class TalesTest extends PHPUnit2_Framework_TestCase
         $this->assertEquals("!foo()", $res);
     }
 
+    function testTrue()
+    {
+        $tpl = new PHPTAL('input/tales-true.html');
+        $tpl->isNotTrue = false;
+        $tpl->isTrue = true;
+        $res = $tpl->execute();
+        $this->assertEquals(trim_file('output/tales-true.html'), trim_string($res));
+    }
+
     function testCustom()
     {
         $src = 'custom: some/path';

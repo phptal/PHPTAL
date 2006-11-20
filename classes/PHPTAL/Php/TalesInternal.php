@@ -44,9 +44,15 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 		$registry->registerPrefix('php', array(__CLASS__, 'php'));
 		$registry->registerPrefix('exists', array(__CLASS__, 'exists'));
 		$registry->registerPrefix('number', array(__CLASS__, 'number'));
+        $registry->registerPrefix('true', array(__CLASS__, 'true'));
 
 		$registered = true;
 	}
+
+    static public function true($src, $nothrow)
+    {
+	    return sprintf('phptal_true($ctx, %s)', self::string(trim($src), $nothrow));
+    }
 
 	//
 	// not:
@@ -302,8 +308,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	 */
 	static public function exists($src, $nothrow)
 	{
-	    return sprintf('phptal_exists($ctx, %s)',
-	            self::string(trim($src), $nothrow));
+	    return sprintf('phptal_exists($ctx, %s)', self::string(trim($src), $nothrow));
 	}
 
 	/**
