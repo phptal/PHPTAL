@@ -104,28 +104,19 @@ class PHPTAL_Php_State
         return '\''.$string.'\'';
     }
 
+    private function _interpolateTalesVarsStructure($matches) {
+        return '<?php echo '.phptal_tales($matches[1]).' ?>';
+    }
+
+    private function _interpolateTalesVarsEscaped($matches) {
+        return '<?php echo phptal_escape('.phptal_tales($matches[1]).', ENT_QUOTES, \''.$this->_encoding.'\');?>';
+    }
+
     public function interpolateTalesVarsInHtml($src)
     {
         if ($this->_talesMode == 'tales'){
-            $func = create_function('$matches','return "<?php echo ".phptal_tales($matches[1])." ?>";');
-            $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/ism', $func, $src);
-            $func = create_function('$matches','return "<?php echo phptal_escape(".phptal_tales($matches[1]).", ENT_QUOTES, \''.$this->_encoding.'\'); ?>";');
-            $result = preg_replace_callback('/(?<!\$)\$\{(.*?)\}/ism', $func, $result);
-            /*
-            $result = preg_replace(
-                '/(?<!\$)\$\{([a-z0-9\/_]+)\}/ism', 
-                '<?php echo phptal_escape('
-                .'phptal_path($ctx, \'$1\'), ENT_QUOTES, \''.$this->_encoding.'\' '
-                .') ?>',
-                $src
-            );
-            $result = preg_replace(
-                '/(?<!\$)\$\{structure ([a-z0-9\/_]+)\}/ism', 
-                '<?php echo phptal_path($ctx, \'$1\') ?>',
-                $result
-            );
-            */
-
+            $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/ism', array($this,'_interpolateTalesVarsStructure'), $src);
+            $result = preg_replace_callback('/(?<!\$)\$\{(.*?)\}/ism', array($this,'_interpolateTalesVarsEscaped'), $result);
 			$result = str_replace('$${', '${', $result);
 			return $result;
         }
