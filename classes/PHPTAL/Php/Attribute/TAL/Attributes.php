@@ -73,7 +73,8 @@ implements PHPTAL_Php_TalesChainReader
 
     private function prepareAttribute($attribute, $expression)
     {
-        $code = $this->tag->generator->evaluateExpression($expression);
+        $code = $this->extractEchoType(trim($expression));
+        $code = $this->tag->generator->evaluateExpression($code);
 
         // if $code is an array then the attribute value is decided by a
         // tales chained expression
@@ -87,8 +88,11 @@ implements PHPTAL_Php_TalesChainReader
         }
         
         // regular attribute which value is the evaluation of $code
-        $attkey = self::ATT_VALUE_REPLACE.$this->getVarName($attribute);
-        $value  = $this->tag->generator->escapeCode($code);
+        $attkey = self::ATT_VALUE_REPLACE . $this->getVarName($attribute);
+        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
+            $value = $code;
+        else
+            $value = $this->tag->generator->escapeCode($code);
         $this->tag->generator->doSetVar($attkey, $value);
         $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);
     }
@@ -101,10 +105,7 @@ implements PHPTAL_Php_TalesChainReader
             $this->_default = $this->tag->attributes[$attribute];
         }
         $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
-
-        $executor = new PHPTAL_Php_TalesChainExecutor(
-            $this->tag->generator, $chain, $this
-        );
+        $executor = new PHPTAL_Php_TalesChainExecutor($this->tag->generator, $chain, $this);
         $this->tag->overwriteAttributeWithPhpValue($attribute, $this->_attkey);
     }
 
@@ -151,7 +152,10 @@ implements PHPTAL_Php_TalesChainReader
     {
         $condition = "!phptal_isempty($this->_attkey = $exp)";
         $executor->doIf($condition);
-        $value = $this->tag->generator->escapeCode($this->_attkey);
+        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
+            $value = $this->_attkey;
+        else
+            $value = $this->tag->generator->escapeCode($this->_attkey);
         $value = "' $this->_attribute=\"'.$value.'\"'";
         $this->tag->generator->doSetVar($this->_attkey, $value);
     }

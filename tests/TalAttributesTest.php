@@ -120,7 +120,26 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
+
+    function testStructure()
+    {
+        $exp = trim_file('output/tal-attributes.09.html');
+        $tpl = new PHPTAL('input/tal-attributes.09.html');
+        $tpl->value = "return confirm('hel<lo');";
+        $res = $tpl->execute();
+        $this->assertEquals($exp, $res);
+    } 
+
+    function testChainedStructure()
+    {
+        $exp = trim_file('output/tal-attributes.10.html');
+        $tpl = new PHPTAL('input/tal-attributes.10.html');
+        $tpl->value1 = false;
+        $tpl->value2 = "return confirm('hel<lo');";
+        $res = $tpl->execute();
+        $this->assertEquals($exp, $res);
+    }
+
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
         
