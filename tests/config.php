@@ -20,9 +20,11 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-error_reporting(E_ALL | E_STRICT);
+//error_reporting(E_ALL | E_STRICT);
 $testDir = dirname(__FILE__);
 chdir($testDir);
+
+date_default_timezone_set('Europe/Paris');
 
 define('PHPTAL_FORCE_REPARSE', 1);
 ini_set('short_open_tag', 'Off');
