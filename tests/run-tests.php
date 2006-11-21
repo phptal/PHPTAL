@@ -20,11 +20,12 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPUnit2/Framework/TestResult.php';
-require_once 'PHPUnit2/Framework/Test.php';
-require_once 'PHPUnit2/Framework/TestCase.php';
-require_once 'PHPUnit2/Framework/TestSuite.php';
-require_once 'PHPUnit2/TextUI/ResultPrinter.php';
+require_once 'PHPUnit/Util/Timer.php';
+require_once 'PHPUnit/Framework/TestResult.php';
+require_once 'PHPUnit/Framework/Test.php';
+require_once 'PHPUnit/Framework/TestCase.php';
+require_once 'PHPUnit/Framework/TestSuite.php';
+require_once 'PHPUnit/TextUI/ResultPrinter.php';
 
 if (substr(PHP_OS,0,3) == 'WIN'){
     define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\windows\\temp\\');
@@ -39,26 +40,26 @@ if (isset($argv) && count($argv) >= 2){
         require_once $entry;
         $class = str_replace('.php', '', $entry);
         $class = str_replace('./', '', $class);
-        $printer = new PHPUnit2_TextUI_ResultPrinter();
-        $result = new PHPUnit2_Framework_TestResult();
+        $printer = new PHPUnit_TextUI_ResultPrinter();
+        $result = new PHPUnit_Framework_TestResult();
         $result->addListener($printer);
         $testclass = new ReflectionClass($class);
-        $suite = new PHPUnit2_Framework_TestSuite($testclass);
+        $suite = new PHPUnit_Framework_TestSuite($testclass);
         $suite->run($result);
         $printer->printResult($result, 0);
     }
     exit(0);
 }
 
-$printer = new PHPUnit2_TextUI_ResultPrinter();
-$result = new PHPUnit2_Framework_TestResult();
+$printer = new PHPUnit_TextUI_ResultPrinter();
+$result = new PHPUnit_Framework_TestResult();
 $result->addListener( $printer );
 $d = dir( dirname(__FILE__) );
 while ($entry = $d->read()) {
     if (preg_match('/(.*?Test).php$/', $entry, $m)) {
         require_once $entry;
         $testclass = new ReflectionClass( $m[1] );
-        $suite = new PHPUnit2_Framework_TestSuite($testclass);
+        $suite = new PHPUnit_Framework_TestSuite($testclass);
         $suite->run($result);
     }
 }

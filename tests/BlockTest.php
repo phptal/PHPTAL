@@ -3,7 +3,7 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 
-class BlockTest extends PHPUnit2_Framework_TestCase
+class BlockTest extends PHPUnit_Framework_TestCase
 {
 	function testTalBlock(){
 		$t = new PHPTAL();

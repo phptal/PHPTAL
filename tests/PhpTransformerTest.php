@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL/Php/Transformer.php';
 
-class PhpTransformerTest extends PHPUnit2_Framework_TestCase
+class PhpTransformerTest extends PHPUnit_Framework_TestCase
 {
     function testBooleanOperators()
     {

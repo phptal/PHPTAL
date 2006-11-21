@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 
-class TalesModeTest extends PHPUnit2_Framework_TestCase 
+class TalesModeTest extends PHPUnit_Framework_TestCase 
 {
     public function testUnsupportedMode()
     {

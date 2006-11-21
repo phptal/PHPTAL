@@ -43,7 +43,7 @@ class MyPreFilter2 implements PHPTAL_Filter
     }
 }
 
-class PreFilterTest extends PHPUnit2_Framework_TestCase
+class PreFilterTest extends PHPUnit_Framework_TestCase
 {
     function testIt()
     {

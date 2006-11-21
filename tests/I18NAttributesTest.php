@@ -4,7 +4,7 @@ require_once 'config.php';
 require_once 'PHPTAL.php';
 require_once 'I18NDummyTranslator.php';
 
-class I18NAttributesTest extends PHPUnit2_Framework_TestCase
+class I18NAttributesTest extends PHPUnit_Framework_TestCase
 {
     function testSingle()
     {

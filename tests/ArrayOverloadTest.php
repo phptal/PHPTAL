@@ -40,7 +40,7 @@ class MyArray
     private $_values = array();
 }
 
-class ArrayOverloadTest extends PHPUnit2_Framework_TestCase
+class ArrayOverloadTest extends PHPUnit_Framework_TestCase
 {
     function testIt()
     {

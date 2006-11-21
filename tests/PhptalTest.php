@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 
-class PhptalTest extends PHPUnit2_Framework_TestCase 
+class PhptalTest extends PHPUnit_Framework_TestCase 
 {
     function test01()
     {

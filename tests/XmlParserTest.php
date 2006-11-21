@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL/Dom/XmlParser.php';
 
-class XmlParserTest extends PHPUnit2_Framework_TestCase
+class XmlParserTest extends PHPUnit_Framework_TestCase
 {
     public function testSimpleParse(){
         $parser = new MyTestParser();

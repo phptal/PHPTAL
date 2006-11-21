@@ -27,7 +27,7 @@ if (!class_exists('DummyTag')) {
     class DummyTag {}
 }
 
-class TalAttributesTest extends PHPUnit2_Framework_TestCase 
+class TalAttributesTest extends PHPUnit_Framework_TestCase 
 {
     function testSimple()
     {

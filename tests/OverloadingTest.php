@@ -51,7 +51,7 @@ class OverloadTestClass
 }
 
 
-class OverloadingTest extends PHPUnit2_Framework_TestCase 
+class OverloadingTest extends PHPUnit_Framework_TestCase 
 {
     function test()
     {

@@ -66,7 +66,7 @@ class StupidCacheTrigger implements PHPTAL_Trigger
     }
 }
 
-class TriggerTest extends PHPUnit2_Framework_TestCase
+class TriggerTest extends PHPUnit_Framework_TestCase
 {
     public function setUp()
     {

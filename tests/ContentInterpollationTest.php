@@ -1,6 +1,6 @@
 <?php
 
-class ContentInterpollationTest extends PHPUnit2_Framework_Testcase
+class ContentInterpollationTest extends PHPUnit_Framework_Testcase
 {
     public function testInterpol()
     {

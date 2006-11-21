@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL/Php/Tales.php';
 
-class TalesStringTest extends PHPUnit2_Framework_TestCase 
+class TalesStringTest extends PHPUnit_Framework_TestCase 
 {
     function testSimple()
     {

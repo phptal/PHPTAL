@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once 'PHPTAL.php';
 
-class NamespacesTest extends PHPUnit2_Framework_TestCase
+class NamespacesTest extends PHPUnit_Framework_TestCase
 {
     function testTalAlias()
     {

@@ -25,7 +25,7 @@ require_once 'PHPTAL.php';
 require_once 'PHPTAL/Php/Attribute.php';
 require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
 
-class TalDefineTest extends PHPUnit2_Framework_TestCase 
+class TalDefineTest extends PHPUnit_Framework_TestCase 
 {
     function testExpressionParser()
     {
@@ -184,6 +184,14 @@ class TalDefineTest extends PHPUnit2_Framework_TestCase
     {
         $exp = trim_file('output/tal-define.13.html');
         $tpl = new PHPTAL('input/tal-define.13.html');
+        $res = trim_string($tpl->execute());
+        $this->assertEquals($exp, $res);
+    }
+
+    function testDefineAlter()
+    {
+        $exp = trim_file('output/tal-define.14.html');
+        $tpl = new PHPTAL('input/tal-define.14.html');
         $res = trim_string($tpl->execute());
         $this->assertEquals($exp, $res);
     }

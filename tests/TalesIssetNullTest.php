@@ -42,7 +42,7 @@ class DummyObjectX{
     private $_data;
 }
 
-class TalesIssetNullTest extends PHPUnit2_Framework_TestCase
+class TalesIssetNullTest extends PHPUnit_Framework_TestCase
 {
     function testIt()
     {

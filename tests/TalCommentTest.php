@@ -31,7 +31,7 @@ if (!class_exists('DummyTag')) {
     class DummyTag {}
 }
 
-class TalCommentTest extends PHPUnit2_Framework_TestCase 
+class TalCommentTest extends PHPUnit_Framework_TestCase 
 {
     function setUp()
     {

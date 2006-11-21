@@ -24,7 +24,7 @@ require_once 'config.php';
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/Php/Tales.php';
 
-class TalesExistTest extends PHPUnit2_Framework_TestCase 
+class TalesExistTest extends PHPUnit_Framework_TestCase 
 {
     function testLevel1()
     {

@@ -26,7 +26,7 @@ require_once 'PHPTAL/Dom/Parser.php';
 require_once 'PHPTAL/Php/CodeWriter.php';
 require_once 'PHPTAL/Php/Node.php';
 
-class SimpleGenerationTest extends PHPUnit2_Framework_TestCase
+class SimpleGenerationTest extends PHPUnit_Framework_TestCase
 {
     function testTreeGeneration()
     {
