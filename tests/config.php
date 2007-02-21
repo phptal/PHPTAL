@@ -20,7 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-//error_reporting(E_ALL | E_STRICT);
 $testDir = dirname(__FILE__);
 chdir($testDir);
 

@@ -20,7 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPUnit/Util/Timer.php';
 require_once 'PHPUnit/Framework/TestResult.php';
 require_once 'PHPUnit/Framework/Test.php';
 require_once 'PHPUnit/Framework/TestCase.php';
@@ -31,7 +30,7 @@ if (substr(PHP_OS,0,3) == 'WIN'){
     define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\windows\\temp\\');
 }
 
-$old_error_report_value = error_reporting( E_ALL | E_STRICT );
+error_reporting( E_ALL | E_STRICT );
 
 if (isset($argv) && count($argv) >= 2){
     array_shift($argv);
@@ -65,6 +64,4 @@ while ($entry = $d->read()) {
 }
 $printer->printResult( $result, 0 );
 
-error_reporting( $old_error_report_value );
-//exit(0);
 ?>

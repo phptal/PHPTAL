@@ -496,14 +496,6 @@ catch (Exception $e){
 ]]></programlisting>
 
         <para>
-        Creating an array :
-        </para>
-
-        <programlisting><![CDATA[
-<span tal:define="global destname array:1, 2, 3, 4" />
-]]></programlisting>
-
-        <para>
         Defining more than one variable at the same time :
         </para>
 

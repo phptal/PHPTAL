@@ -103,7 +103,6 @@ class PhptalTest extends PHPUnit_Framework_TestCase
 
     function testSource()
     {
-        error_reporting(E_ALL | E_STRICT);
         $source = '<span tal:content="foo"/>';
         $tpl = new PHPTAL();
         $tpl->foo = 'foo value';
