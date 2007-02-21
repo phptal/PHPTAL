@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="PHPTAL" basedir="." default="main">
-  <property name="version" value="1.1.8"/>
+  <property name="version" value="1.1.9"/>
   <property name="build.base.dir" value="build"/>
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
@@ -63,7 +63,7 @@
       <option name="description">Zope Page Template implementation for PHP5</option>
       <option name="summary">PHPTAL for PHP5 supports tal, metal and i18n namespaces</option>
       <option name="version" value="${version}"/>
-      <option name="state" value="beta"/>
+      <option name="state" value="stable"/>
 		  <option name="baseinstalldir" value=""/>
 
       <mapping name="maintainers">
