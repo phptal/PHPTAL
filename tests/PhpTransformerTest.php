@@ -78,7 +78,7 @@ class PhpTransformerTest extends PHPUnit_Framework_TestCase
 
     function testEvals()
     {
-        $this->assertEquals('$$a', PHPTAL_Php_Transformer::transform('$a'));
+        $this->assertEquals('${$a}', PHPTAL_Php_Transformer::transform('$a'));
         $this->assertEquals('$a->{$b}->c', PHPTAL_Php_Transformer::transform('a.$b.c'));
         $this->assertEquals('$a->{$x->y}->z', PHPTAL_Php_Transformer::transform('a.{x.y}.z'));
         $this->assertEquals('$a->{$x->y}()', PHPTAL_Php_Transformer::transform('a.{x.y}()'));

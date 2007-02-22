@@ -78,9 +78,15 @@ class PHPTAL_Php_Transformer
             switch ($state) {
                 // no state defined, just eat char and see what to do with it.
                 case self::ST_NONE:
+                    // begin of eval without {
+                    if ($c == '$' && $i < $len && self::isAlpha($str[$i+1])){
+                        $state = self::ST_EVAL;
+                        $mark = $i+1;
+                        $result .= $prefix.'{';
+                    } 
                     // that an alphabetic char, then it should be the begining
                     // of a var
-                    if (self::isAlpha($c)) {
+                    else if (self::isAlpha($c)) {
                         $state = self::ST_VAR;
                         $mark = $i;
                     }
@@ -118,7 +124,16 @@ class PHPTAL_Php_Transformer
                         $result .= $c;
                     }
                     break;
-                
+               
+                // $xxx
+                case self::ST_EVAL:
+                    if (!self::isVarNameChar($c)){
+                        $result .= $prefix . substr($str, $mark, $i-$mark);
+                        $result .= '}';
+                        $state = self::ST_NONE;
+                    }
+                    break;
+ 
                 // single quoted string
                 case self::ST_STR: 
                     if ($c == '\\') {

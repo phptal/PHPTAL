@@ -1,0 +1,14 @@
+<html>
+<?php 
+// this is not usuable from php:context
+$foo = 'foo value';
+?>
+<span tal:content="php:$foo"/>
+<span tal:content="foo"/>
+<?php
+$ctx->template = 'template value';
+$ctx->foo = 'template';
+?>
+<span tal:content="php:$foo"/>
+<span tal:content="foo"/>
+</html>
