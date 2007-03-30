@@ -23,8 +23,8 @@
 require_once 'config.php';
 require_once 'PHPTAL/Php/Tales.php';
 
-class TalesStringTest extends PHPUnit_Framework_TestCase 
-{
+class TalesStringTest extends PHPUnit_Framework_TestCase {
+
     function testSimple()
     {
         $this->assertEquals('\'this is a string\'', PHPTAL_TalesInternal::string('this is a string'));
@@ -79,6 +79,15 @@ class TalesStringTest extends PHPUnit_Framework_TestCase
         $res = trim_string($res);
         $exp = trim_file('output/tales-string-02.html');
         $this->assertEquals($exp, $res);
+    }
+
+    function testEscape()
+    {
+        $tpl = new PHPTAL('input/tales-string-03.html');
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_file('output/tales-string-03.html');
+        $this->assertEquals($exp,$res);
     }
 }
 

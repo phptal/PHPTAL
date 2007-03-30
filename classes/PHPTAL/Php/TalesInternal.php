@@ -220,6 +220,10 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                }
 	                break;
 
+                case '\\':
+                    $c = '\\\\';
+                    break;
+
 	            case '\'':
 	                $c = '\\\'';
 	                break;
