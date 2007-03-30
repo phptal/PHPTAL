@@ -67,7 +67,7 @@ class TalesTest extends PHPUnit_Framework_TestCase
     {
         $src = "not: php: foo()";
         $res = phptal_tales($src);
-        $this->assertEquals("!foo()", $res);
+        $this->assertEquals("!(foo())", $res);
     }
 
     function testTrue()

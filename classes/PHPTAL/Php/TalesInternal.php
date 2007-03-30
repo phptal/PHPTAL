@@ -80,7 +80,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	//
 	static public function not($expression, $nothrow)
 	{
-		return '!' . phptal_tales($expression, $nothrow);
+		return '!(' . phptal_tales($expression, $nothrow) . ')';
 	}
 
 
