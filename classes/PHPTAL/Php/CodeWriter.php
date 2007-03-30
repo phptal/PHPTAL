@@ -259,6 +259,7 @@ class PHPTAL_Php_CodeWriter
 
     public function pushHtml($html)
     {
+        // echo '-- pushHtml : '.$html."\n";
         $html = $this->_state->interpolateTalesVarsInHtml($html);
         $this->flushCode();
         array_push($this->_htmlBuffer, $html);
@@ -277,9 +278,8 @@ class PHPTAL_Php_CodeWriter
         // replace ${var} inside strings
         while (preg_match('/^(.*?)((?<!\$)\$\{[^\}]*?\})(.*?)$/s', $str, $m)){
             list(,$before,$expression,$after) = $m;
-            
-            $before = $this->escape($before);
-            $before = str_replace('&amp;', '&', $before);
+
+            $before = $this->escapeLTandGT($before);
             array_push($this->_htmlBuffer, $before);
 
             $expression = $this->_state->interpolateTalesVarsInHtml($expression);
@@ -291,8 +291,7 @@ class PHPTAL_Php_CodeWriter
 		$str = str_replace('$${', '${', $str);
         
         if (strlen($str) > 0){
-            $str = $this->escape($str); 
-            $str = str_replace('&amp;', '&', $str);
+            $str = $this->escapeLTandGT($str);
             array_push($this->_htmlBuffer, $str);
         }
     }
@@ -302,6 +301,12 @@ class PHPTAL_Php_CodeWriter
         $this->flushHtml();
         $codeLine = $this->indentSpaces() . $codeLine;
         array_push($this->_codeBuffer, $codeLine);
+    }
+
+    public function escapeLTandGT($str){
+        $str = str_replace('<', '&lt;', $str);
+        $str = str_replace('>', '&gt;', $str);
+        return $str;
     }
 
     public function escapeCode($code)
