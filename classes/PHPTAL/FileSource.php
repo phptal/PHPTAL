@@ -10,7 +10,7 @@ class PHPTAL_FileSource implements PHPTAL_Source
 {
     public function __construct($path)
     {
-        $this->_path = $path;
+        $this->_path = realpath($path); // canonicalized absolute pathname
     }
 
     public function getRealPath()

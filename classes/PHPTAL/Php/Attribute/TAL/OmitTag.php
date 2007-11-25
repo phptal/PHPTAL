@@ -62,7 +62,7 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
         else { 
             // print tag header/foot only if condition is false
             $cond = $this->tag->generator->evaluateExpression($this->expression);
-            $this->tag->headFootPrintCondition = '!'.$cond;
+            $this->tag->headFootPrintCondition = '!('.$cond.')';
         }
     }
 

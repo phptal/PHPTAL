@@ -105,11 +105,11 @@ class PHPTAL_Php_State
     }
 
     private function _interpolateTalesVarsStructure($matches) {
-        return '<?php echo '.phptal_tales($matches[1]).' ?>';
+        return '<?php echo '.phptal_tale($matches[1]).' ?>';
     }
 
     private function _interpolateTalesVarsEscaped($matches) {
-        return '<?php echo phptal_escape('.phptal_tales($matches[1]).', ENT_QUOTES, \''.$this->_encoding.'\');?>';
+        return '<?php echo phptal_escape('.phptal_tale($matches[1]).', ENT_QUOTES, \''.$this->_encoding.'\');?>';
     }
 
     public function interpolateTalesVarsInHtml($src)

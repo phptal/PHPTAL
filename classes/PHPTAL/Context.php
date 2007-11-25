@@ -123,6 +123,7 @@ class PHPTAL_Context
      */
     public function hasSlot($key)
     {
+		if ($this->_parentContext) return $this->_parentContext->hasSlot($key); // setting slots in any context
         return array_key_exists($key, $this->_slots);
     }
 
@@ -131,6 +132,7 @@ class PHPTAL_Context
      */
     public function getSlot($key)
     {
+		if ($this->_parentContext) return $this->_parentContext->getSlot($key); // setting slots in any context
         return $this->_slots[$key];
     }
 
@@ -139,7 +141,8 @@ class PHPTAL_Context
      */
     public function fillSlot($key, $content)
     {
-        $this->_slots[$key] = $content;
+		if ($this->_parentContext) $this->_parentContext->fillSlot($key,$content); // setting slots in any context
+		else $this->_slots[$key] = $content;
     }
 
     /**
@@ -226,6 +229,12 @@ function phptal_path($base, $path, $nothrow=false)
     $parts   = split('/', $path);
     $current = true;
 
+	if ($base === null) 
+	{
+		if ($nothrow) return null;
+		throw new PHPTAL_Exception("Trying to read property '$path' from NULL");
+	}
+
     while (($current = array_shift($parts)) !== null){
         // object handling
         if (is_object($base)){
@@ -272,7 +281,7 @@ function phptal_path($base, $path, $nothrow=false)
             if ($nothrow)
                 return null;
 
-            $err = 'Unable to find part "%s" in path "%s"';
+            $err = 'Unable to find part "%s" in path "%s" inside '.(is_object($base)?get_class($base):gettype($base));
             $err = sprintf($err, $current, $path);
             throw new Exception($err);
         }
@@ -319,9 +328,9 @@ function phptal_path($base, $path, $nothrow=false)
         if ($nothrow)
             return null;
         
-        $err = 'Unable to find part "%s" in path "%s"';
-        $err = sprintf($err, $current, $path);
-        throw new Exception($err);
+        $err = 'Unable to find part "%s" in path "%s" with base "%s"';
+        $err = sprintf($err, $current, $path, is_scalar($base)?"$base":(is_object($base)?get_class($base):gettype($base)));
+        throw new PHPTAL_Exception($err);
     }
 
     return $base;

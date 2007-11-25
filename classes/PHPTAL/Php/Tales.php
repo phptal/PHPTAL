@@ -49,6 +49,28 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 //
 //      * repeat - the repeat variables (see RepeatVariable).
 // 
+
+function _phptal_tale_wrap($array, $nothrow)
+{
+	if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
+		($array[0]==PHPTAL_TALES_NOTHING_KEYWORD?'NULL':$array[0]).
+		'):"")';
+	
+	$expr = array_shift($array);
+	
+	return "((\$tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$tmp5:"._phptal_tale_wrap($array, $nothrow).')';
+}
+
+/** translates array of alternative expressions into single PHP expression. Identical to phptal_tales() for singular expressions. */
+function phptal_tale($expression, $nothrow=false)
+{
+	$r = phptal_tales($expression,true);
+	if (!is_array($r)) return $r;
+	
+	// this weird ternary operator construct is to execute noThrow inside the expression
+	return '($ctx->noThrow(true)||1?'._phptal_tale_wrap($r, $nothrow).':"")';
+}
+
 function phptal_tales($expression, $nothrow=false)
 {
     $expression = trim($expression);

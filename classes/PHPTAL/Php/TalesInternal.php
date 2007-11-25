@@ -142,10 +142,10 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    if (count($exps) > 1 || isset($string)) {
 	        $result = array();
 	        foreach ($exps as $exp) {
-	            array_push($result, phptal_tales(trim($exp), true));
+	            $result[] = phptal_tales(trim($exp), true);
 	        }
 	        if (isset($string)){
-	            array_push($result, phptal_tales($string), true);
+	            $result[] = phptal_tales($string, true);
 	        }
 	        return $result;
 	    }
