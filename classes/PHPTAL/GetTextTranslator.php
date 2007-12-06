@@ -37,6 +37,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 {
     public function __construct()
     {
+	    if (!function_exists('gettext')) throw new Exception("Gettext not installed");
     }
 
     public function setEncoding($enc)

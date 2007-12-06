@@ -346,6 +346,12 @@ class PHPTAL
         }
     }
 
+	public function setCodeFile()
+	{
+		// where php generated code should resides
+        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.' . PHPTAL_PHP_CODE_EXTENSION;
+	}
+
     /**
      * Prepare template without executing it.
      */
@@ -354,18 +360,34 @@ class PHPTAL
         // find the template source file
         $this->findTemplate();
         $this->__file = $this->_source->getRealPath();
-        // where php generated code should resides
-        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.' . PHPTAL_PHP_CODE_EXTENSION;
+		$this->setCodeFile();
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
         if (defined('PHPTAL_FORCE_REPARSE') 
             || !file_exists($this->_codeFile) 
-            || filemtime($this->_codeFile) < $this->_source->getLastModifiedTime()){
+            || filemtime($this->_codeFile) < $this->_source->getLastModifiedTime())
+		{
+			$this->cleanUpCache();
             $this->parse();
         }
         $this->_prepared = true;
     }
+
+	
+	public function cleanUpCache()
+	{
+		if (!$this->_codeFile) 
+		{
+			$this->findTemplate(); $this->setCodeFile();
+			if (!$this->_codeFile) throw new PHPTAL_Exception("No codefile");
+		}
+		foreach(glob($this->_codeFile.'*') as $file)
+		{
+			if (substr($file, 0, strlen($this->_codeFile)) !== $this->_codeFile) continue; // safety net
+			unlink($file);
+		}
+	}
 
     /**
      * Returns the path of the intermediate PHP code file.

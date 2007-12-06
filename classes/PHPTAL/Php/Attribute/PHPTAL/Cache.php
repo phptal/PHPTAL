@@ -74,7 +74,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
              $this->tag->generator->doSetVar($this->cache_tag, '('.$code.')."@".' . $old_cache_tag );
         }
     
-        $cond = 'time() - '.$cache_len.' > @filemtime(__FILE__.md5('.$this->cache_tag.'))';
+	    $cond = '!file_exists(__FILE__.md5('.$this->cache_tag.')) || time() - '.$cache_len.' > @filemtime(__FILE__.md5('.$this->cache_tag.'))';
 
         $this->tag->generator->doIf($cond);
         $this->tag->generator->doEval('ob_start()');

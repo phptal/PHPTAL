@@ -194,8 +194,7 @@ class PHPTAL_Context
         if ($this->__nothrow)
             return null;
        
-        $e = sprintf('Unable to find path %s', $varname); 
-        throw new PHPTAL_Exception($e, $this->__file, $this->__line);
+        throw new PHPTAL_Exception("Unable to find path '$varname' in current scope", $this->__file, $this->__line);
     }
 
     private $_slots = array();
@@ -250,6 +249,20 @@ function phptal_path($base, $path, $nothrow=false)
                 continue;
             }
             
+            if ($base instanceof ArrayAccess && $base->offsetExists($current))
+            {
+                $base = $base->offsetGet($current);
+                continue;
+            }
+            
+            if ($base instanceof Countable && ($current === 'length' || $current === 'size'))
+            {
+                $base = count($base);
+                continue;
+            }
+            
+            
+            
             // look for isset (priority over __get)
             if (method_exists($base, '__isset')){
                 if ($base->__isset($current)){
@@ -260,7 +273,7 @@ function phptal_path($base, $path, $nothrow=false)
             // ask __get and discard if it returns null
             else if (method_exists($base, '__get')){
                 $tmp = $base->$current;
-                if (!is_null($tmp)){
+                if (NULL !== $tmp){
                     $base = $tmp;
                     continue;
                 }
@@ -317,7 +330,7 @@ function phptal_path($base, $path, $nothrow=false)
             }
 
             // access char at index
-            if (is_int($current)){
+            if (is_numeric($current)){
                 $base = $base[$current];
                 continue;
             }
@@ -341,7 +354,7 @@ function phptal_true($ctx, $path)
     $ctx->noThrow(true);
     $res = phptal_path($ctx, $path, true);
     $ctx->noThrow(false);
-    return $res != null;
+    return !!$res;
 }
 
 /** 
@@ -355,7 +368,7 @@ function phptal_exists($ctx, $path)
     $ctx->noThrow(true);
     $res = phptal_path($ctx, $path, true);
     $ctx->noThrow(false);
-    return !is_null($res);
+    return $res !== NULL;
 }
 
 function phptal_isempty($var)

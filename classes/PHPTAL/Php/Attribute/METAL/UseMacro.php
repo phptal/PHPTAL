@@ -57,12 +57,14 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
             $this->generateFillSlots($child);
         }
 
+        $macroname = strtr($this->expression,'-','_');
+
         // local macro (no filename specified) and non dynamic macro name
-        if (preg_match('/^[a-z0-9_]+$/i', $this->expression)){
+        if (preg_match('/^[a-z0-9_]+$/i', $macroname)) {
             $code = sprintf(
                 '%s%s($tpl, $ctx)', 
                 $this->tag->generator->getFunctionPrefix(),
-                $this->expression
+                $macroname
             );
             $this->tag->generator->pushCode($code);
         }

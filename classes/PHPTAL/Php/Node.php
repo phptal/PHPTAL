@@ -95,8 +95,16 @@ class PHPTAL_Php_Tree extends PHPTAL_Php_Node
     
     public function generate()
     {
+        try
+        {
         foreach ($this->children as $child){
             $child->generate();
+        }
+    }
+        catch(PHPTAL_Exception $e)
+        {
+            $e->hintSrcPosition($this->getSourceFile(), $this->getSourceLine());
+            throw $e;
         }
     }
 }

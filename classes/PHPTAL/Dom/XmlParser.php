@@ -171,7 +171,7 @@ abstract class PHPTAL_XmlParser
 
                 case self::ST_TAG_CLOSE:
                     if ($c == '>') {
-                        $tagname = substr($src, $mark, $i-$mark);
+                        $tagname = rtrim(substr($src, $mark, $i-$mark));
                         $this->onElementClose($tagname);
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;

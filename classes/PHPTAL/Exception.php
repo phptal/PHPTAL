@@ -51,6 +51,15 @@ class PHPTAL_Exception extends Exception
         $msg  = call_user_func('sprintf', $args);
         return new PHPTAL_Exception($format);
     }
+    
+    /**
+     * set new source line/file only if one hasn't been set previously
+     */
+    public function hintSrcPosition($srcFile, $srcLine)
+    {
+        if ($srcFile && $this->srcFile === false) $this->srcFile = $srcFile;
+        if ($srcLine && $this->srcLine === false) $this->srcLine = $srcLine;
+    }
 }
 
 ?>

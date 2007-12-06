@@ -129,9 +129,9 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	        list(, $expression, $string) = $m;
 	    }
 	    // split OR expressions terminated by a 'fast' string
-	    else if (preg_match('/^(.*?)\s*?\|\s*?(\'.*?\')$/sm', $expression, $m)){
+	    else if (preg_match('/^(.*?)\s*?\|\s*(\'(?:[^\'\\\\]|\\\\.)*\')\s*$/sm', $expression, $m)){
 	        list(, $expression, $string) = $m;
-	        $string = 'string:'.substr($string, 1, -1);
+	        $string = 'string:'.stripslashes(substr($string, 1, -1));
 	    }
 
 	    // split OR expressions
@@ -161,6 +161,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    // if no sub part for this expression, just optimize the generated code
 	    // and access the $ctx->var
 	    if ($pos === false) {
+	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_Exception("Invalid TALES path: '$expression', expected variable name");
 	        return '$ctx->'.$expression;
 	    }
 
@@ -170,9 +171,16 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    $next = substr($expression, 0, $pos);
 	    $expression = substr($expression, $pos+1);
 
+        if (!self::checkExpressionPart($next))  throw new PHPTAL_Exception("Invalid TALES path: '$next/$expression', expected '$next' to be variable name");
+        
 	    // return php code invoking phptal_path($next, $expression, $notrhow)
 	    return 'phptal_path($ctx->'.$next.', \''.$expression.'\''.($nothrow ? ', true' : '').')';
 	}
+
+    private static function checkExpressionPart($expression)
+    {
+        return preg_match('/^(\$?[a-z_][a-z0-9_]*|{.*})$/i',$expression);
+    }
 
 	//
 	// string:
