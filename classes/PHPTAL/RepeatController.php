@@ -55,6 +55,9 @@ class PHPTAL_RepeatController
      */
     public function __construct($source)
     {
+        if ($source instanceof IteratorAggregate) $source = $source->getIterator();
+        else if (!is_array($source) && !($source instanceof Iterator)) $source = array();   
+    
         $this->source = $source;
         $this->index = -1;
         $this->number = 0;
@@ -79,18 +82,19 @@ class PHPTAL_RepeatController
     /** Returns the size of an iterable. */
     private function _size($iterable)
     {
-        if (is_array($iterable)) 
+        if (is_array($iterable) || $iterable instanceof Countable) 
             return count($iterable);
         if (is_string($iterable))
             return strlen($iterable);
-        if (is_object($iterable) && method_exists($iterable, 'size')) 
-            return $iterable->size();
-        if (is_object($iterable) && method_exists($iterable, 'length')) 
-            return $iterable->length();
+        if (is_object($iterable))
+        {
+            if (method_exists($iterable, 'size'))
+                return $iterable->size();
+            if (method_exists($iterable, 'length')) 
+                return $iterable->length();
+        }
         return 0;        
     }
 
     private $_keys;
 }
-
-?>

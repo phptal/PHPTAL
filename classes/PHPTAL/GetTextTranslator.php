@@ -37,7 +37,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 {
     public function __construct()
     {
-	    if (!function_exists('gettext')) throw new Exception("Gettext not installed");
+	    if (!function_exists('gettext')) throw new PHPTAL_Exception("Gettext not installed");
     }
 
     public function setEncoding($enc)
@@ -108,4 +108,4 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     private $_currentDomain = null;
     private $_encoding = 'UTF-8';
 }
-?>
+

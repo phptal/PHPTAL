@@ -26,9 +26,22 @@ require_once 'PHPTAL/GetTextTranslator.php';
 
 class GetTextTest extends PHPUnit_Framework_TestCase
 {
+    private function getTextTranslator()
+    {
+        try
+        {
+            $gettext = new PHPTAL_GetTextTranslator();
+        }
+        catch(PHPTAL_Exception $e)
+        {            
+            $this->markTestSkipped($e->getMessage());
+        }
+    }
+    
+    
     function testSimple()
     {
-        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext = $this->getTextTranslator();
         $gettext->setLanguage('en_GB', 'en_GB.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
@@ -42,7 +55,7 @@ class GetTextTest extends PHPUnit_Framework_TestCase
 
     function testLang()
     {
-        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext = $this->getTextTranslator();
         $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
@@ -56,7 +69,7 @@ class GetTextTest extends PHPUnit_Framework_TestCase
 
     function testInterpol()
     {
-        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext = $this->getTextTranslator();
         $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
         $gettext->setEncoding('UTF-8');
         $gettext->addDomain('test');
@@ -73,7 +86,7 @@ class GetTextTest extends PHPUnit_Framework_TestCase
 
     function testDomainChange()
     {
-        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext = $this->getTextTranslator();
         $gettext->setEncoding('UTF-8');
         $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
         $gettext->addDomain('test');
@@ -92,7 +105,7 @@ class GetTextTest extends PHPUnit_Framework_TestCase
 
     function testSpaces()
     {
-        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext = $this->getTextTranslator();
         $gettext->setLanguage('en_GB', 'en_GB.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
@@ -107,7 +120,7 @@ class GetTextTest extends PHPUnit_Framework_TestCase
 
     function testAccentuateKey()
     {
-        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext = $this->getTextTranslator();
         $gettext->setLanguage('en_GB', 'en_GB.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
@@ -122,7 +135,7 @@ class GetTextTest extends PHPUnit_Framework_TestCase
 
     function testQuote()
     {
-        $gettext = new PHPTAL_GetTextTranslator();
+        $gettext = $this->getTextTranslator();
         $gettext->setLanguage('en_GB', 'en_GB.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');

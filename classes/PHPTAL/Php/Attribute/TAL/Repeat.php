@@ -98,14 +98,7 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
         $this->tag->generator->doEnd();
 
         // instantiate controller using expression
-        $this->tag->generator->doSetVar('$tmp', $code);
-	    $this->tag->generator->doIf('($tmp) instanceof IteratorAggregate');
-        $this->tag->generator->doSetVar($this->controller, 'new PHPTAL_RepeatController($tmp->getIterator())');
-    	$this->tag->generator->doElseIf('is_array($tmp)');
-	    $this->tag->generator->doSetVar($this->controller, 'new PHPTAL_RepeatController($tmp)');
-    	$this->tag->generator->doElse();
-	    $this->tag->generator->doSetVar($this->controller, 'new PHPTAL_RepeatController(array())');
-    	$this->tag->generator->doEnd();
+	    	$this->tag->generator->doSetVar($this->controller, 'new PHPTAL_RepeatController('.$code.')');
     }
        
     private function doForeach()
