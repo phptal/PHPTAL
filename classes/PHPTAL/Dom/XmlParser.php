@@ -68,15 +68,16 @@ abstract class PHPTAL_XmlParser
 
     public function parseFile($src) 
     {
-        $this->_file = $src;
-        if (!file_exists($this->_file)) {
-            throw new Exception("file $src not found");
+        if (!file_exists($src)) {
+            throw new PHPTAL_Exception("file $src not found");
         }
-        $this->parseString(file_get_contents($src));
+        $this->parseString(file_get_contents($src), $src);
     }
 
-    public function parseString($src) 
-    {
+    public function parseString($src, $filename = '<string>') 
+    {        
+        $this->_file = $filename;
+        
         // remove BOM (utf8 byte order mark)... 
         if (substr($src,0,3) == self::BOM_STR){
             $src = substr($src, 3);
@@ -290,6 +291,7 @@ abstract class PHPTAL_XmlParser
 
                 case self::ST_ATTR_QUOTE:
                     if ($c == $quoteStyle) {
+                        if (isset($attributes[$attribute])) $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
                         $attributes[$attribute] = substr($src, $mark, $i-$mark);
                         $state = self::ST_TAG_ATTRIBUTES;
                     }
@@ -337,10 +339,10 @@ abstract class PHPTAL_XmlParser
         
         $str = "%s error: %s in %s:%d";
         $str = sprintf($str, get_class($this), $errStr, $this->_file, $this->_line);
-        throw new Exception($str);
+        throw new PHPTAL_Exception($str);
     }
     
-    private $_file = '<string>';
+    private $_file;
     private $_line;
     private $_source;
 }

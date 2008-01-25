@@ -10,7 +10,8 @@ class PHPTAL_FileSource implements PHPTAL_Source
 {
     public function __construct($path)
     {
-        $this->_path = realpath($path); // canonicalized absolute pathname
+        $this->_path = realpath($path);
+        if ($this->_path === false) throw new PHPTAL_Exception("Unable to normalize path '$path'");
     }
 
     public function getRealPath()

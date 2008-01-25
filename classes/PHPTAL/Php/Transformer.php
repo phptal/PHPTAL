@@ -86,7 +86,7 @@ class PHPTAL_Php_Transformer
                     } 
                     // that an alphabetic char, then it should be the begining
                     // of a var
-                    else if (self::isAlpha($c)) {
+                    else if (self::isAlpha($c) || $c==='_') {
                         $state = self::ST_VAR;
                         $mark = $i;
                     }
@@ -210,7 +210,12 @@ class PHPTAL_Php_Transformer
                     }
                     // array index, the var is done
                     else if ($c == '[') {
-                        $result .= $prefix . substr( $str, $mark, $i-$mark+1 );
+                        if ($str[$mark]==='_') { // superglobal?
+                            $result .= '$' . substr( $str, $mark, $i-$mark+1 );
+                        }
+                        else {
+                            $result .= $prefix . substr( $str, $mark, $i-$mark+1 );
+                        }
                         $state = self::ST_NONE;
                     }
                     // end of var with non-var-name character, handle keywords

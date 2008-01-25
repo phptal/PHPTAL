@@ -52,10 +52,10 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     {
         $this->_stripComments = $b;
     }
-
-    public function parseString($str)
+    
+    public function parseString($src, $filename = '<string>') 
     {
-        parent::parseString($str);
+        parent::parseString($src, $filename);
         return $this->_tree;
     }
     

@@ -194,7 +194,8 @@ class PHPTAL_Context
         if ($this->__nothrow)
             return null;
        
-        throw new PHPTAL_Exception("Unable to find path '$varname' in current scope", $this->__file, $this->__line);
+        $e = sprintf('Unable to find path %s in current scope', $varname); 
+        throw new PHPTAL_Exception($e, $this->__file, $this->__line);
     }
 
     private $_slots = array();

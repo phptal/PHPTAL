@@ -250,7 +250,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                    $inAccoladePath = false;
 	                    $subEval = self::path($subPath);
 	                    if (is_array($subEval)) {
-	                        $err = 'cannot use | operator is evaluated expressions';
+	                        $err = 'cannot use | operator in evaluated expressions';
 	                        throw new Exception($err);
 	                    }
 	                    $result .= "'." . $subEval . ".'";
@@ -281,7 +281,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                        $inPath = false;
 	                        $subEval = self::path($subPath);
 	                        if (is_array($subEval)) {
-	                            $err = 'cannot use | operator is evaluated expressions';
+	                            $err = 'cannot use | operator in evaluated expressions';
 	                            throw new Exception($err);
 	                        }
 	                        $result .= "'." . $subEval . ".'";
@@ -294,7 +294,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    if ($inPath){
 	        $subEval = self::path($subPath);
 	        if (is_array($subEval)){
-	            $err = 'cannot use | operator is evaluated expressions';
+	            $err = 'cannot use | operator in evaluated expressions';
 	            throw new Exception($err);
 	        }
 	        $result .= "'." . $subEval . ".'";

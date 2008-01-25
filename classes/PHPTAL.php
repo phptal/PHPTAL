@@ -476,12 +476,14 @@ class PHPTAL
         $parser->stripComments($this->_stripComments);
 
         $data = $this->_source->getData();
+        $realpath = $this->_source->getRealPath();
+        
         if ($this->_prefilter)
             $data = $this->_prefilter->filter($data);
-        $tree = $parser->parseString($data);
+        $tree = $parser->parseString($data, $realpath);
 
         require_once 'PHPTAL/Php/CodeGenerator.php';
-        $generator = new PHPTAL_Php_CodeGenerator($this->_source->getRealPath());
+        $generator = new PHPTAL_Php_CodeGenerator($realpath);
         $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
         $generator->generate($tree);
