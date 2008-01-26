@@ -45,7 +45,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
     public function start()
     {
         if (!preg_match('!^\s*([0-9]+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$!',$this->expression, $matches))
-            throw new Exception("Cache attribute syntax error: ".$this->expression);
+            throw new PHPTAL_Exception("Cache attribute syntax error: ".$this->expression);
             
         $cache_len = $matches[1];
         switch($matches[2])

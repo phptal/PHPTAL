@@ -24,9 +24,7 @@ class ReadableErrorTest extends PHPUnit_Framework_TestCase
 
     function testMacro()
     {
-        $expected = PHPTAL_OS_WIN 
-          ? 'input\\error-02.macro.html' 
-          : 'input/error-02.macro.html';
+        $expected = 'input' . DIRECTORY_SEPARATOR . 'error-02.macro.html';
         
         try {
             $tpl = new PHPTAL('input/error-02.html');

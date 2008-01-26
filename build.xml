@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="PHPTAL" basedir="." default="main">
-  <property name="version" value="1.1.9"/>
+  <property name="version" value="1.1.10"/>
   <property name="build.base.dir" value="build"/>
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
@@ -68,10 +68,15 @@
 
       <mapping name="maintainers">
         <element>
+          <element key="handle" value="kornel"/>
+          <element key="name" value="Kornel Lesiński"/>
+          <element key="email" value="kornel@aardvarkmedia.co.uk"/>
+          <element key="role" value="lead"/>
+        </element>
+        <element>
           <element key="handle" value="lbedubourg"/>
           <element key="name" value="Laurent Bedubourg"/>
           <element key="email" value="lbedubourg@motion-twin.com"/>
-          <element key="role" value="lead"/>
         </element>
       </mapping>
 

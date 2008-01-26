@@ -20,21 +20,14 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_1_9');
+define('PHPTAL_VERSION', '1_1_10');
 
-//{{{OS RELATED DEFINES
-if (substr(PHP_OS,0,3) == 'WIN'){
-    define('PHPTAL_OS_WIN', true);
-    define('PHPTAL_PATH_SEP', '\\');
-}
-else {
-    define('PHPTAL_OS_WIN', false);
-    define('PHPTAL_PATH_SEP', '/');
-}
-//}}}
 //{{{PHPTAL_PHP_CODE_DESTINATION
 if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
-    if (PHPTAL_OS_WIN){
+    if (function_exists('sys_get_temp_dir')) {
+        define('PHPTAL_PHP_CODE_DESTINATION',sys_get_temp_dir());
+    }
+    else if (substr(PHP_OS,0,3) == 'WIN') {
         if (file_exists('c:\\WINNT\\Temp\\')){
             define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINNT\\Temp\\');
         }
@@ -489,7 +482,7 @@ class PHPTAL
         $generator->generate($tree);
 
         if (!@file_put_contents($this->_codeFile, $generator->getResult())) {
-            throw new Exception('Unable to open '.$this->_codeFile.' for writing');
+            throw new PHPTAL_Exception('Unable to open '.$this->_codeFile.' for writing');
         }
     }
 
@@ -499,7 +492,7 @@ class PHPTAL
     protected function findTemplate()
     {
         if ($this->_path == false){
-            throw new Exception('No template file specified');
+            throw new PHPTAL_Exception('No template file specified');
         }
 
         // template source already defined
@@ -518,7 +511,7 @@ class PHPTAL
         array_pop($this->_resolvers);
 
         if ($this->_source == null){
-            throw new Exception('Unable to locate template file '.$this->_path);
+            throw new PHPTAL_Exception('Unable to locate template file '.$this->_path);
         }
     }
 

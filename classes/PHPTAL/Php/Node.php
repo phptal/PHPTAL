@@ -87,7 +87,7 @@ class PHPTAL_Php_Tree extends PHPTAL_Php_Node
 				$gen = new PHPTAL_Php_Comment($this->generator, $child);
 			}
             else {
-                throw new Exception('Unhandled node class '.get_class($child));
+                throw new PHPTAL_Exception('Unhandled node class '.get_class($child));
             }
             array_push($this->children, $gen);
         }
@@ -402,7 +402,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
                                $key, 
                                $attributes[$att->getPriority()][0]
                                );
-                throw new Exception($err);
+                throw new PHPTAL_Exception($err);
             }
             $attributes[$att->getPriority()] = array($key, $att, $exp);
         }
@@ -421,7 +421,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             else if ($att instanceOf PHPTAL_NamespaceAttributeContent)
                 $this->contentAttributes[] = $handler;
             else 
-                throw new Exception("Unknown namespace attribute class ".get_class($att));
+                throw new PHPTAL_Exception("Unknown namespace attribute class ".get_class($att));
             
         }
     }

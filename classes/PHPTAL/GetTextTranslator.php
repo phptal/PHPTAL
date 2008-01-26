@@ -61,7 +61,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         if (!$found){
             $err = 'Language(s) code(s) "%s" not supported by your system';
             $err = sprintf($err, join(',', $langs));
-            throw new Exception($err);
+            throw new PHPTAL_Exception($err);
         }
     }
     
@@ -97,7 +97,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
             list($src,$var) = $m;
             if (!array_key_exists($var, $this->_vars)){
                 $err = sprintf('Interpolation error, var "%s" not set', $var);
-                throw new Exception($err);
+                throw new PHPTAL_Exception($err);
             }
             $value = str_replace($src, $this->_vars[$var], $value);
         }

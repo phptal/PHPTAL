@@ -170,7 +170,7 @@ class PHPTAL_Context
         if ($varname[0] == '_'){
             $e = 'Template variable error \'%s\' must not begin with underscore';
             $e = sprintf($e, $varname);
-            throw new Exception($e);
+            throw new PHPTAL_Exception($e);
         }
         $this->$varname = $value;
     }
@@ -297,7 +297,7 @@ function phptal_path($base, $path, $nothrow=false)
 
             $err = 'Unable to find part "%s" in path "%s" inside '.(is_object($base)?get_class($base):gettype($base));
             $err = sprintf($err, $current, $path);
-            throw new Exception($err);
+            throw new PHPTAL_Exception($err);
         }
 
         // array handling
@@ -319,7 +319,7 @@ function phptal_path($base, $path, $nothrow=false)
 
             $err = 'Unable to find array key "%s" in path "%s"';
             $err = sprintf($err, $current, $path);
-            throw new Exception($err);
+            throw new PHPTAL_Exception($err);
         }
 
         // string handling
