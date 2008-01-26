@@ -1,6 +1,6 @@
 #!/bin/bash
 LANGS="en"
-DEST=../website/www/manual
+DEST=/www/phptal-website/www/manual
 
 for lang in $LANGS
 do

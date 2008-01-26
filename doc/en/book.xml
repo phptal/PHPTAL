@@ -5,7 +5,11 @@
   <bookinfo>
     <title>PHPTAL</title>
     <subtitle>PHP Template Attribute Language</subtitle>
-    <date>2005-03-27</date>
+    <date>2008-01-27</date>
+    <author>
+       <firstname>Kornel</firstname><surname>Lesiński</surname>
+       <address><email>kornel@aardvarkmedia.co.uk</email></address>
+     </author>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
       <address><email>lbedubourg@motion-twin.com</email></address>
@@ -15,6 +19,12 @@
 		</author>
 
     <revhistory>
+		  <revision>
+			  <revnumber>v1.3</revnumber>
+				<date>2008-01-27</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Updated for PHPTAL 1.1.10</revremark>
+		  </revision>
 		  <revision>
 			  <revnumber>v1.2</revnumber>
 				<date>2005-12-10</date>
@@ -68,19 +78,10 @@
 
     <para>
     PHPTAL is freely distributed under the LGPL license, it is 
-    developed and maintained by Laurent Bedubourg 
-    <email>lbedubourg@motion-twin.com</email>.
+    developed by Laurent Bedubourg 
+    <email>lbedubourg@motion-twin.com</email> and maintained by Kornel Lesiński.
     </para>
-  
-    <para>
-    This document is not complete. I certainly forgot a lot of things, please send 
-    me requests and notes.
-    </para>
-  
-    <para>
-    And 'please' be patient with my style, I'm still not a natural
-    English speaker.
-    </para>
+    
   </article>
 
   <article id="whyusingphptal">
@@ -113,7 +114,7 @@
 
     <para>
     If you have already worked with a simple template system, then you must 
-    have encountered something looking like :
+    have encountered something looking like:
     </para>
   
     <programlisting><![CDATA[
@@ -127,7 +128,7 @@
 ]]></programlisting>
 
     <para>
-    Well, with phptal you now can write :
+    Well, with phptal you now can write:
     </para>
 
     <programlisting><![CDATA[
@@ -159,8 +160,8 @@
     <para>
     PHPTAL is designed to be as customizable as possible for advanced 
     developers and performance-eating systems, but still be easy to use for 
-    beginners, with a comfortable and simple default behaviour (at least i 
-    tried:).
+    beginners, with a comfortable and simple default behaviour (at least I 
+    tried :)
     </para>
 
   </article>
@@ -176,25 +177,21 @@
     </para>
 
     <para>
-    You can install it using the pear utility :
+    You can install it using the pear utility:
     </para>
 
     <programlisting><![CDATA[
-pear install http://phptal.motion-twin.com/files/PHPTAL-X.X.X.tar.gz
+pear install http://phptal.motion-twin.com/latest.tar.gz
 ]]></programlisting>
   
-    <para>
-    Where X.X.X must be replaced with the latest library version as 
-    shown on the PHPTAL website.
-    </para>
-
+  
     <para>
     Once installed, you can upgrade PHPTAL easily on each PHPTAL update 
-    using PEAR :
+    using PEAR:
     </para>
 
     <programlisting><![CDATA[
-pear upgrade http://phptal.motion-twin.com/files/PHPTAL-X.X.X.tar.gz
+pear upgrade http://phptal.motion-twin.com/latest.tar.gz
 ]]></programlisting>  
 
     <para>
@@ -214,15 +211,13 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 
     <para>
     Don't forget to modify your php include path in your scripts so that PHP 
-    will be able to locate library files automatically :
+    will be able to locate library files automatically:
     </para>
 
     <programlisting><![CDATA[
 <?php
-$old = ini_get('include_path');
 
-// windows users must use ';' instead of ':' in the line below
-ini_set('include_path', $old.':/path/to/your/lib/folder');
+set_include_path(get_include_path() . PATH_SEPARATOR . '/path/to/your/lib/folder');
 
 // will work like a charm
 require_once 'PHPTAL.php'; 
@@ -265,7 +260,7 @@ php_value include_path /usr/lib/php:/usr/local/lib/php:/path/to/your/lib/folder:
 <html>
   <head>
     <title tal:content="title">
-      place for the page title
+      Place for the page title
     </title>
   </head>
   <body>
@@ -273,14 +268,14 @@ php_value include_path /usr/lib/php:/usr/local/lib/php:/path/to/your/lib/folder:
     <table>
       <thead>
         <tr>
-          <th>name</th>
-          <th>phone</th>
+          <th>Name</th>
+          <th>Phone</th>
         </tr>
       </thead>
       <tbody>
-        <tr tal:repeat="item result">
-          <td tal:content="item/name">item name</td>
-          <td tal:content="item/phone">item phone</td>
+        <tr tal:repeat="person people">
+          <td tal:content="person/name">person's name</td>
+          <td tal:content="person/phone">person's phone</td>
         </tr>
         <tr tal:replace="">
           <td>sample name</td>
@@ -320,15 +315,15 @@ class Person {
 }
 
 // let's create an array of objects for test purpose
-$result = array();
-$result[] = new Person("foo", "01-344-121-021");
-$result[] = new Person("bar", "05-999-165-541");
-$result[] = new Person("baz", "01-389-321-024");
-$result[] = new Person("buz", "05-321-378-654");
+$people = array();
+$people[] = new Person("foo", "01-344-121-021");
+$people[] = new Person("bar", "05-999-165-541");
+$people[] = new Person("baz", "01-389-321-024");
+$people[] = new Person("buz", "05-321-378-654");
 
 // put some data into the template context
-$template->title = 'the title value';
-$template->result = $result;
+$template->title = 'The title value';
+$template->people = $people;
 
 // execute the template 
 try {
@@ -349,15 +344,15 @@ catch (Exception $e){
 <?xml version="1.0"?>
 <html>
   <head>
-    <title>the title value</title>
+    <title>The title value</title>
   </head>
   <body>
-    <h1>the title value</h1>
+    <h1>The title value</h1>
     <table>
       <thead>
         <tr>
-          <th>name</th>
-          <th>phone</th>
+          <th>Name</th>
+          <th>Phone</th>
         </tr>
       </thead>
       <tbody>
@@ -378,8 +373,8 @@ catch (Exception $e){
 ]]></programlisting>
 
     <para>
-    Well, i assume you don't mind 'too' much about carriage returns in 
-    the html code :) If so, you may use the tidy functions to cleanup 
+    Well, I assume you don't mind 'too' much about carriage returns in 
+    the HTML code :) If so, you may use the tidy functions to cleanup 
     the resulting html before echoing it.
     </para>
 
@@ -393,7 +388,7 @@ catch (Exception $e){
     template designers but must be read by PHP integrators as well.
     </para>
 
-    <section>
+    <section id="attributes">
       <title>Attribute priority</title>
 
       <para>
@@ -413,7 +408,7 @@ catch (Exception $e){
 ]]></programlisting>
 
       <para>
-      Is EXACTLY the same as :
+      Is EXACTLY the same as:
       </para>
 
       <programlisting><![CDATA[
@@ -424,7 +419,7 @@ catch (Exception $e){
 ]]></programlisting>
 
       <para>
-      Priority is the same as described by TAL specifications :
+      Priority is the same as described by TAL specifications:
       </para>
 
       <orderedlist>
@@ -439,7 +434,7 @@ catch (Exception $e){
 <!-- Hard to understand here, just skip this for now
       <para>
       Because PHPTAL implements METAL and I18N, this list is completed 
-      as follow :
+      as follow:
       </para>
 
     1.  phptal:debug
@@ -466,12 +461,12 @@ catch (Exception $e){
 
     </section>
 
-    <section>
+    <section id="tal-namespace">
       <title>TAL namespace</title>
 
       <para></para>
 
-      <section>
+      <section id="tal-define">
         <title>tal:define</title>
 
         <para>
@@ -480,7 +475,7 @@ catch (Exception $e){
         </para>
 
         <para>
-        Making a shortcut to a long path :
+        Making a shortcut to a long path:
         </para>
 
         <programlisting><![CDATA[
@@ -488,7 +483,7 @@ catch (Exception $e){
 ]]></programlisting>
 
         <para>
-        Creating a string inside the template :
+        Creating a string inside the template:
         </para>
 
         <programlisting><![CDATA[
@@ -496,7 +491,7 @@ catch (Exception $e){
 ]]></programlisting>
 
         <para>
-        Defining more than one variable at the same time :
+        Defining more than one variable at the same time:
         </para>
 
         <programlisting><![CDATA[
@@ -504,7 +499,7 @@ catch (Exception $e){
 ]]></programlisting>
 
         <para>
-        Defining a string containing another variable :
+        Defining a string containing another variable:
         </para>
   
         <programlisting><![CDATA[
@@ -512,7 +507,7 @@ catch (Exception $e){
 ]]></programlisting>
 
         <para>
-        A small trick which uses output buffers :
+        A small trick which uses output buffers:
         </para>
 
         <programlisting><![CDATA[
@@ -571,7 +566,7 @@ catch (Exception $e){
 ]]></programlisting>
 
 	<para>
-	On the contrary, a local variable is only available inside the tag it is defined in :
+	On the contrary, a local variable is only available inside the tag it is defined in:
 	</para>
 
 	<programlisting><![CDATA[
@@ -582,7 +577,7 @@ catch (Exception $e){
       </section>
 
 
-      <section>
+      <section id="tal-condition">
         <title>tal:condition</title>
 
         <para>
@@ -603,7 +598,7 @@ catch (Exception $e){
         <para>
         If the php backend does not provide your templates with enough 
         methods, you will often have to fall back to php for special 
-        conditions :
+        conditions:
         </para>
 
         <programlisting><![CDATA[
@@ -614,7 +609,7 @@ catch (Exception $e){
         <para>
         This may put too much logic inside the template and it is 
         sometimes preferable to provide boolean attributes or accessible 
-        methods to the template :
+        methods to the template:
         </para>
 
         <programlisting><![CDATA[
@@ -627,7 +622,7 @@ catch (Exception $e){
 
       </section>
 
-      <section>
+      <section id="tal-repeat"> 
         <title>tal:repeat</title>
 
         <para>
@@ -653,7 +648,7 @@ catch (Exception $e){
         </para>
 
         <para>
-        In the above example :
+        In the above example:
         </para>
 
         <itemizedlist>
@@ -693,7 +688,7 @@ catch (Exception $e){
         <para>
         The most common usage of tal:repeat is in using some SQL
         database result.  Providing you use a library implementing the
-        Iterator PHP interface :
+        Iterator PHP interface:
         </para>
 
         <programlisting><![CDATA[
@@ -717,7 +712,7 @@ catch (Exception $e){
 
       </section>
 
-      <section>
+      <section id="tal-omit-tag">
         <title>tal:omit-tag</title>
 
         <para>
@@ -732,7 +727,7 @@ catch (Exception $e){
 ]]></programlisting>
 
         <para>
-        Will produce :
+        Will produce:
         </para>
 
         <programlisting><![CDATA[
@@ -747,7 +742,7 @@ only this text will appear, span open and close will be removed
 
       </section>
 
-      <section>
+      <section id="tal-replace">
         <title>tal:replace</title>
 
         <para>
@@ -762,7 +757,7 @@ only this text will appear, span open and close will be removed
 ]]></programlisting>
 
         <para>
-        Will produce :
+        Will produce:
         </para>
 
         <programlisting><![CDATA[
@@ -790,7 +785,7 @@ this beautyfull string
 
       </section>
 
-      <section>
+      <section id="tal-content">
         <title>tal:content</title>
 
         <para>
@@ -804,7 +799,7 @@ this beautyfull string
 ]]></programlisting>
 
         <para>
-        Will produce :
+        Will produce:
         </para>
 
         <programlisting><![CDATA[
@@ -813,7 +808,7 @@ this beautyfull string
 
       </section>
 
-      <section>
+      <section id="tal-attributes">
         <title>tal:attributes</title>
 
         <para>
@@ -828,7 +823,7 @@ this beautyfull string
 ]]></programlisting>
 
         <para>
-        With a 'somelink' having :
+        With a 'somelink' having:
         </para>
 
         <programlisting><![CDATA[
@@ -838,7 +833,7 @@ $somelink->text = "the google search engine";
 ]]></programlisting>
 
         <para>
-        Will produce :
+        Will produce:
         </para>
 
         <programlisting><![CDATA[
@@ -847,7 +842,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
         <para>
-        A somewhat complicated example involving tal:repeat :
+        A somewhat complicated example involving tal:repeat:
         </para>
 
         <programlisting><![CDATA[
@@ -872,7 +867,7 @@ title="google search engine">the google search engine</a>
         <para>
         A better way to achieve the same result would be to ask your PHP 
         coder to create a custom modifier for your needs (see PHP 
-        integration / custom modifiers) which would be used as follows :
+        integration / custom modifiers) which would be used as follows:
         </para>
 
         <programlisting><![CDATA[
@@ -890,7 +885,7 @@ title="google search engine">the google search engine</a>
       </section>
 
 
-      <section>
+      <section id="tal-on-error">
         <title>tal:on-error</title>
 
         <para>
@@ -910,7 +905,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-        This also works on more than one level of template :
+        This also works on more than one level of template:
         </para>
 
         <programlisting><![CDATA[
@@ -925,7 +920,7 @@ title="google search engine">the google search engine</a>
     
     </section><!-- end of TAL namespace -->
 
-    <section>
+    <section id="metal">
       <title>METAL namespace</title>
 
       <para>
@@ -934,7 +929,7 @@ title="google search engine">the google search engine</a>
       xml/xhtml macros.
       </para>
 
-      <section>
+      <section id="metal-define-macro">
         <title>metal:define-macro</title>
 
         <para>
@@ -951,7 +946,7 @@ title="google search engine">the google search engine</a>
   </ul>
 
   <div>
-    Last modified :
+    Last modified:
     <span tal:content="mdate">page modification date</span>
   </div>
 </div>
@@ -964,7 +959,7 @@ title="google search engine">the google search engine</a>
         </para>
       </section>
 
-      <section>
+      <section id="metal-use-macro">
         <title>metal:use-macro</title>
 
         <para>
@@ -991,7 +986,7 @@ title="google search engine">the google search engine</a>
 
         <para>
         It is interesting to note that you can also use the PHPTAL inline 
-        replacement feature inside the use-macro attribute value :
+        replacement feature inside the use-macro attribute value:
         </para>
 
         <programlisting><![CDATA[
@@ -1001,7 +996,7 @@ title="google search engine">the google search engine</a>
       </section>
 
 
-      <section>
+      <section id="metal-define-slot">
         <title>metal:define-slot</title>
 
         <para>
@@ -1040,7 +1035,7 @@ title="google search engine">the google search engine</a>
       </section>
 
 
-      <section>
+      <section id="metal-fill-slot">
         <title>metal:fill-slot</title>
 
         <para>
@@ -1072,7 +1067,7 @@ title="google search engine">the google search engine</a>
     </section><!-- end of METAL namespace -->
     
 
-    <section>
+    <section id="i18n">
       <title>I18N namespace</title>
 
       <para>
@@ -1174,7 +1169,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
         <para>
-        The translation key of this example will be :
+        The translation key of this example will be:
         </para>
 
         <programlisting><![CDATA[
@@ -1195,7 +1190,7 @@ title="google search engine">the google search engine</a>
     </section><!-- end of I18N namespace -->
    
 
-    <section>
+    <section id="phptal-namespace">
       <title>PHPTAL namespace</title>
 
       <para>
@@ -1203,7 +1198,7 @@ title="google search engine">the google search engine</a>
       useful when working with PHPTAL.
       </para>
 
-      <section>
+      <section id="phptal-debug">
         <title>phptal:debug</title>
 
         <para>
@@ -1238,7 +1233,50 @@ title="google search engine">the google search engine</a>
 
       </section>
 
-      <section>
+
+           <section id="phptal-cache">
+              <title>phptal:cache</title>
+
+              <para>
+              This attribute causes output of entire element (including its tag) to be cached on disk and not re-evaluated until cache expires.
+              </para>
+
+                <para>Content of this attribute is duration (how long element should be kept in cache) written as number with 'd', 'h', 'm' or 's' suffix.
+            </para>
+            <programlisting><![CDATA[
+<div class="footer" phptal:cache="3h">...</div>]]></programlisting> 
+            <para>                  &lt;div> will be evaluated at most once per 3 hours.</para>
+            
+            <para>Duration can be followed by optional "per" parameter that defines how cache should be shared. By default cache is shared between all pages that use that template. 
+                  You can add "per url" to have separate copy of given element for every URL.
+</para>
+
+            <programlisting><![CDATA[             
+<ol id="breadcrumbs" phptal:cache="1d per url">...</ol>]]></programlisting>
+          <para>&lt;ol> will be cached for one day, separately for each page.</para>
+<para>
+                  You can add "per expression" to have different cache copy for every different value of an expression (which MUST evaluate to a string). 
+                  Expression cannot refer to variables defined using tal:define on the same element.
+</para>
+<programlisting><![CDATA[             
+<ul id="user-info" phptal:cache="25m per object/id">...</ul>]]></programlisting>
+             <para>&lt;ul> will be cached for 25 minutes, separately for each object ID.</para>
+
+<para>Limitations:</para>
+            
+            
+            <itemizedlist>
+              <listitem><para>
+                  phptal:cache blocks can be nested, but outmost block will cache other blocks regardless of their freshness. </para></listitem><listitem><para>You cannot use metal:fill-slot inside elements with phptal:cache.</para></listitem><listitem><para>
+  </para></listitem></itemizedlist>
+                  
+
+
+
+            </section>
+
+
+      <section id="phptal-tales">
         <title>phptal:tales</title>
 
         <para>
@@ -1271,7 +1309,7 @@ title="google search engine">the google search engine</a>
         Of course this was an extreme example and most of the time we 
         don't care, because the process is fast enough. But what if this 
         very long path is called inside a big tal:repeat ? D'oh!  
-        phptal:tales can help us here :
+        phptal:tales can help us here:
         </para>
 
         <programlisting><![CDATA[
@@ -1294,7 +1332,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-        Please note that the above example do the same as :
+        Please note that the above example do the same as:
         </para>
 
         <programlisting><![CDATA[
@@ -1317,7 +1355,7 @@ title="google search engine">the google search engine</a>
       
     </section><!-- end of PHPTAL namespace -->
   
-    <section>
+    <section id="phptal-blocks">
       <title>*:block</title>
 
       <para>
@@ -1330,7 +1368,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
       <para>
-      is the same as :
+      is the same as:
       </para>
 
       <programlisting><![CDATA[
@@ -1338,7 +1376,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
       <para>
-      Another example :
+      Another example:
       </para>
 
       <programlisting><![CDATA[
@@ -1348,7 +1386,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
       <para>
-      is the same as :
+      is the same as:
       </para>
 
       <programlisting><![CDATA[
@@ -1361,7 +1399,7 @@ title="google search engine">the google search engine</a>
       
     </section><!-- end of *:block -->
 
-    <section>
+    <section id="phptales">
       <title>PHPTALES</title>
       
       <para>
@@ -1377,7 +1415,7 @@ title="google search engine">the google search engine</a>
       from the next one with a ';' character.
       </para>
 
-      <section>
+      <section id="tales-path">
         <title>path:</title>
 
         <para>
@@ -1386,7 +1424,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-        The following lines will give the same result :
+        The following lines will give the same result:
         </para>
 
         <programlisting><![CDATA[
@@ -1408,7 +1446,7 @@ this page has been readed ${page/countRead} times"/>
 ]]></programlisting>
       </section>
 
-      <section>
+      <section id="conditional">
         <title>Conditional statements</title>
 
         <para>
@@ -1438,12 +1476,12 @@ this page has been readed ${page/countRead} times"/>
         </itemizedlist>
       </section>
 
-      <section>
+      <section id="tales-string">
         <title>string:</title>
 
         <para>
         Because expressions are separated by a ';' character, and 
-        because '$' marks the start of a path, you must use :
+        because '$' marks the start of a path, you must use:
         </para>
 
         <itemizedlist>
@@ -1464,7 +1502,7 @@ string:foo ;; php:doFoo() <!-- only string -->
 ]]></programlisting>
       </section>
 
-      <section>
+      <section id="tales-php">
         <title>php:</title>
 
         <para>
@@ -1501,7 +1539,7 @@ php:SomeClass::$staticVar
         </para>
       </section>
 
-      <section>
+      <section id="tales-not">
         <title>not:</title>
 
         <para>
@@ -1514,7 +1552,7 @@ php:SomeClass::$staticVar
 ]]></programlisting>
       </section>
 
-      <section>
+      <section id="tales-exists">
         <title>exists:</title>
 
         <para>
@@ -1536,7 +1574,7 @@ php:SomeClass::$staticVar
         </para>
       </section>
 
-      <section>
+      <section id="tales-default">
         <title>default</title>
 
         <para>
@@ -1565,7 +1603,7 @@ php:SomeClass::$staticVar
         </para>
       </section>
 
-      <section>
+      <section id="tales-structure">
         <title>structure</title>
 
         <para>
@@ -1589,7 +1627,7 @@ php:SomeClass::$staticVar
 
         <para>
         In above examples, we assume that $document->title and 
-        $document->content are variables containing preformated html 
+        $document->content are variables containing preformated HTML 
         which must be echoed as is.
         </para>
       </section>
@@ -1638,19 +1676,19 @@ php:SomeClass::$staticVar
 
     <itemizedlist>
       <listitem><para>
-      Defines : list of PHPTAL defines and defines influencing PHPTAL
+      Defines: list of PHPTAL defines and defines influencing PHPTAL
       </para></listitem>
       <listitem><para>
-      PHPTAL : the main PHPTAL class
+      PHPTAL: the main PHPTAL class
       </para></listitem>
       <listitem><para>
-      PHPTAL_Filter  : filtering template sources and PHPTAL output
+      PHPTAL_Filter : filtering template sources and PHPTAL output
       </para></listitem>
       <listitem><para>
-      PHPTAL_Trigger : creating triggers for phptal:id
+      PHPTAL_Trigger: creating triggers for phptal:id
       </para></listitem>
       <listitem><para>
-      PHPTAL_TranslationService : replacing the builtin gettext support 
+      PHPTAL_TranslationService: replacing the builtin gettext support 
       with your own internationalization system
       </para></listitem>
     </itemizedlist>
@@ -1661,16 +1699,16 @@ php:SomeClass::$staticVar
       <para>
       After the inclusion of PHPTAL library, some defines will be 
       created in PHP context, all these defines come from PHPTAL.php 
-      file :
+      file:
       </para>
 
       <itemizedlist>
         <listitem><para>
-        PHPTAL_VERSION : version of PHPTAL library installed on your
-        system (in format : X.X.X)
+        PHPTAL_VERSION: version of PHPTAL library installed on your
+        system (in format: X.X.X)
         </para></listitem>
         <listitem><para>
-        PHPTAL_PHP_CODE_DESTINATION : this is the path where 
+        PHPTAL_PHP_CODE_DESTINATION: this is the path where 
         intermediate PHP files produced by PHPTAL will be stored. This 
         define may be overwritten before the inclusion of PHPTAL.php, 
         the specified path must contain the leading path separator.
@@ -1678,12 +1716,12 @@ php:SomeClass::$staticVar
       </itemizedlist>
 
       <para>
-      You can configure some PHPTAL features by defining some constants :
+      You can configure some PHPTAL features by defining some constants:
       </para>
 
       <para>
       To tell PHPTAL to ignore intermediate php files and to reparse 
-      templates every time :
+      templates every time:
       </para>
 
       <programlisting><![CDATA[
@@ -1695,7 +1733,7 @@ require_once 'PHPTAL.php';
   
       <para>
       To tell PHPTAL to store its intermediate PHP files other than 
-      in the '/tmp/' directory :
+      in the '/tmp/' directory:
       </para>
 
       <programlisting><![CDATA[
@@ -1785,7 +1823,7 @@ $tpl->setTemplate('mytemplate.html');
 
       <para>
       You can also decide to use a generated string as the template
-      source instead of using an existing template file :
+      source instead of using an existing template file:
       </para>
 
       <programlisting><![CDATA[
@@ -1820,7 +1858,7 @@ catch (Exception $e){
       In the above example, because PHPTAL requires a template source
       idenfifier (usually the template file realpath), PHPTAL will use the md5
       of the $src parameter as a unique identifier. You may decide to force the 
-      identifier using a second setSource() argument :
+      identifier using a second setSource() argument:
       </para>
 
       <programlisting><![CDATA[
@@ -1980,7 +2018,7 @@ echo $tpl->execute();
 
       <para>
       For some reason we decide the div block requires to be cached. We 
-      introduce a phptal:id into the template :
+      introduce a phptal:id into the template:
       </para>
 
       <programlisting><![CDATA[
@@ -2071,7 +2109,7 @@ class CacheTrigger implements PHPTAL_Trigger
       </para>
 
       <para>
-      To install our trigger we use :
+      To install our trigger we use:
       </para>
 
       <programlisting><![CDATA[
@@ -2124,7 +2162,7 @@ $tpl->setTranslator($yourOwnTranslatorInstance);
 ]]></programlisting>
       
       <para>
-      Your implementation must define the following methods :
+      Your implementation must define the following methods:
       </para>
 
       <section>
@@ -2284,7 +2322,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </para>
 
       <para>
-      You can test your installation using following peace of code :
+      You can test your installation using following peace of code:
       </para>
 
       <programlisting role="php"><![CDATA[
@@ -2325,7 +2363,7 @@ else
         </para>
 
         <para>
-        The directory pattern is :
+        The directory pattern is:
         </para>
 
         <programlisting><![CDATA[
@@ -2343,7 +2381,7 @@ else
         </para>
 
         <para>
-        po minimalistic example (en_US/LC_MESSAGES/mydomain.po) :
+        po minimalistic example (en_US/LC_MESSAGES/mydomain.po):
         </para>
 
         <programlisting><![CDATA[
@@ -2357,7 +2395,7 @@ msgstr "A small sentence in english"
 ]]></programlisting>
 
         <para>
-        Once edited, each PO file must be indexed using :
+        Once edited, each PO file must be indexed using:
         </para>
 
         <programlisting><![CDATA[
@@ -2379,7 +2417,7 @@ msgfmt mydomain.po -o mydomain.mo
         </para>
 
         <para>
-        po minimalistic example (fr_FR/LC_MESSAGES/mydomain.po) :
+        po minimalistic example (fr_FR/LC_MESSAGES/mydomain.po):
         </para>
         
         <programlisting><![CDATA[
@@ -2393,7 +2431,7 @@ msgstr "Une petite phrase en français"
 ]]></programlisting>
 
         <para>
-        The translation file must also be indexed :
+        The translation file must also be indexed:
         </para>
         
         <programlisting><![CDATA[
@@ -2526,15 +2564,15 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       </para>
 
       <para>
-      Modifiers takes two arguments :
+      Modifiers takes two arguments:
       </para>
 
       <itemizedlist>
         <listitem><para>
-        $src : the source string after the "modifier:" keyword
+        $src: the source string after the "modifier:" keyword
         </para></listitem>
         <listitem><para> 
-	  $nothrow : a boolean which determines whether exceptions may
+	  $nothrow: a boolean which determines whether exceptions may
 	  be thrown or not by phptal_path() resolution. This boolean
 	  must be propagated whenever you call another phptal_tales_*
 	  modifier from within your own modifier. 
@@ -2556,7 +2594,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       </para>
 
       <para>
-      An expression like :
+      An expression like:
       </para>
 
       <programlisting><![CDATA[
@@ -2564,7 +2602,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
 ]]></programlisting>
 
       <para>
-      Will use 2 modifiers :
+      Will use 2 modifiers:
       </para>
 
       <itemizedlist>
@@ -2593,20 +2631,18 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
 //
 // This modifier will return a money formated string (XXX.XX)
 //
-// usage :
+// usage:
 //
 //      money: path/to/my/amount
 //
-// this modifier use phptal_tales_path (path:) modifier to generate the
+// this modifier uses phptal_tales() function to generate the
 // php code that will return the value of the modifier argument.
 //
-// in the example :
+// in the example:
 //
 //      money: path/to/my/amount 
-// 
-// the expression "virtually" became money: path: path/to/my/amount
 //
-// thus, the produced code will be something looking like :
+// the produced code will be something looking like:
 //
 //      sprintf("%01.2f", phptal_path($ctx->path, "to/my/amount"))
 //
@@ -2624,7 +2660,7 @@ function phptal_tales_money( $src, $nothrow )
 {
     // remove spaces we do not require here
     $src = trim($src); 
-    return 'sprintf("%01.2f", '.phptal_tales_path($src, $nothrow).')';
+    return 'sprintf("%01.2f", '.phptal_tales($src, $nothrow).')';
 }
 ]]></programlisting>
 
