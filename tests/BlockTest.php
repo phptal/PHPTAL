@@ -21,10 +21,20 @@ class BlockTest extends PHPUnit_Framework_TestCase
 
 	function testUnknownNamespaceBlock(){
 		$t = new PHPTAL();
-		$t->setSource('<foo:block>foo</foo:block>');
+		$t->setSource('<foo:block xmlns:foo="http://phptal.example.com">foo</foo:block>');
+		$res = $t->execute();
+		$this->assertEquals('<foo:block xmlns:foo="http://phptal.example.com">foo</foo:block>', $res);
+	}
+	
+	function testInvalidNamespaceBlock(){
+		$t = new PHPTAL();
+				
+		$this->setExpectedException('PHPTAL_Exception');
+		
+		$t->setSource('<foo:block>foo</foo:block>');		
 		$res = $t->execute();
 		$this->assertEquals('<foo:block>foo</foo:block>', $res);
-	}
+	}	
 }
 
 ?>

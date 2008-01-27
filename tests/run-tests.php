@@ -38,7 +38,7 @@ if (isset($argv) && count($argv) >= 2){
         echo "-> running standalone test units $entry\n";
         require_once $entry;
         $class = str_replace('.php', '', $entry);
-        $class = str_replace('./', '', $class);
+        $class = basename($class);
         $printer = new PHPUnit_TextUI_ResultPrinter();
         $result = new PHPUnit_Framework_TestResult();
         $result->addListener($printer);

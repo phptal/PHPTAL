@@ -65,7 +65,7 @@ class PHPTAL_Dom_XmlnsState
         }
         return $result;
     }
-
+    
     /** 
      * Returns a new XmlnsState inheriting of $currentState if $nodeAttributes contains 
      * xmlns attributes, returns $currentState otherwise.
