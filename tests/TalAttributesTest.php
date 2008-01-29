@@ -140,6 +140,30 @@ EOT;
         $this->assertEquals($exp, $res);
     }
 
+    function testNothingValue()
+    {
+        $tpl = new PHPTAL(); 
+        $tpl->setSource('<p tal:attributes="title missing | nothing"></p>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'<p></p>');
+    }
+
+    function testNULLValue()
+    {
+        $tpl = new PHPTAL(); 
+        $tpl->setSource('<p tal:attributes="title missing | php:NULL"></p>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'<p></p>');
+    }
+    
+    function testEmptyValue()
+    {
+        $tpl = new PHPTAL(); 
+        $tpl->setSource('<p tal:attributes="title missing | \'\'"></p>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'<p title=""></p>');
+    }
+    
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
         

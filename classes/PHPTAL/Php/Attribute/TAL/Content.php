@@ -77,7 +77,7 @@ implements PHPTAL_Php_TalesChainReader
         $executor = new PHPTAL_Php_TalesChainExecutor($this->tag->generator, $code, $this);
     }
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         $executor->doIf('!phptal_isempty($__content__ = '.$exp.')');
         $this->doEcho('$__content__');

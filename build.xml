@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <project name="PHPTAL" basedir="/www/phptal/" default="main">
-  <property name="version" value="1.1.10"/>
+  <property name="version" value="1.1.11"/>
   <property name="build.base.dir" value="/www/phptal/build"/>
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
@@ -44,14 +44,14 @@
   </target>
 
   <target name="build">
-   <!-- <delete dir="${build.base.dir}"/>-->
+    <delete dir="${build.base.dir}"/>
     <copy todir="${build.src.dir}">
 			<fileset refid="classes"/>
       <fileset refid="gendocs"/>
     </copy>
   </target>
 
-  <target name="pear-package">
+  <target name="pear-package" depends="build">
     <pearpkg 
       name="${phing.project.name}" 
       dir="${build.src.dir}" 
@@ -94,9 +94,9 @@
     </pearpkg>
   </target>
 
-  <target name="tar">
+  <target name="tar" depends="pear-package,build">
     <property name="tarfile" value="${build.base.dir}/${pkgname}.tar.gz"/>
-<!--    <delete file="${tarfile}"/>-->
+    <delete file="${tarfile}"/>
     <tar destfile="${tarfile}" basedir="${build.base.dir}"/>
 	</target>
 

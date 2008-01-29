@@ -20,12 +20,12 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_1_10');
+define('PHPTAL_VERSION', '1_1_11');
 
 //{{{PHPTAL_PHP_CODE_DESTINATION
 if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
     if (function_exists('sys_get_temp_dir')) {
-        define('PHPTAL_PHP_CODE_DESTINATION',sys_get_temp_dir());
+        define('PHPTAL_PHP_CODE_DESTINATION',rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
     }
     else if (substr(PHP_OS,0,3) == 'WIN') {
         if (file_exists('c:\\WINNT\\Temp\\')){
@@ -327,6 +327,7 @@ class PHPTAL
             // require PHP generated code and execute macro function
             require_once $tpl->getCodePath();
             $fun = $tpl->getFunctionName() . '_' . $macroName;
+            if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
             $fun($this, $this->_context);
             
             // restore current file
@@ -335,13 +336,14 @@ class PHPTAL
         else {
             // call local macro
             $fun = $this->getFunctionName() . '_' . trim($path);
+            if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined",$this->_source->getRealPath());
             $fun( $this, $this->_context );            
         }
     }
 
-	public function setCodeFile()
+	private function setCodeFile()
 	{
-		// where php generated code should resides
+		// where php generated code should reside
         $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.' . PHPTAL_PHP_CODE_EXTENSION;
 	}
 
@@ -367,7 +369,10 @@ class PHPTAL
         $this->_prepared = true;
     }
 
-	
+	/**
+	 * Removes single compiled template from cache and all its fragments cached by phptal:cache.
+	 * Must be called after setSource/setTemplate.
+	 */
 	public function cleanUpCache()
 	{
 		if (!$this->_codeFile) 
@@ -375,11 +380,13 @@ class PHPTAL
 			$this->findTemplate(); $this->setCodeFile();
 			if (!$this->_codeFile) throw new PHPTAL_Exception("No codefile");
 		}
-		foreach(glob($this->_codeFile.'*') as $file)
+		if ($phptalCacheFiles = glob($this->_codeFile.'*')) {
+		    foreach($phptalCacheFiles as $file)
 		{
 			if (substr($file, 0, strlen($this->_codeFile)) !== $this->_codeFile) continue; // safety net
 			unlink($file);
 		}
+	}
 	}
 
     /**

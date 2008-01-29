@@ -7,7 +7,7 @@ interface PHPTAL_Php_TalesChainReader
 {
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor);
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor);
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $expression);
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $expression, $islast);
 }
 
 /**
@@ -59,7 +59,10 @@ class PHPTAL_Php_TalesChainExecutor
     private function _executeChain()
     {
         $this->_chainGenerator->noThrow(true);
-        foreach ($this->_chain as $exp){
+        
+        end($this->_chain); $lastkey = key($this->_chain);
+        
+        foreach ($this->_chain as $key => $exp){
             $this->_state = 0;
             if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
                 $this->_reader->talesChainNothingKeyword($this);
@@ -76,7 +79,7 @@ class PHPTAL_Php_TalesChainExecutor
                     continue;
             }
             else {
-                $this->_reader->talesChainPart($this, $exp);
+                $this->_reader->talesChainPart($this, $exp, $lastkey === $key);
                 if ($this->_state == self::CHAIN_BREAK)
                     break;
                 if ($this->_state == self::CHAIN_CONT)

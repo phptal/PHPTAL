@@ -259,7 +259,6 @@ class PHPTAL_Php_CodeWriter
 
     public function pushHtml($html)
     {
-        // echo '-- pushHtml : '.$html."\n";
         $html = $this->_state->interpolateTalesVarsInHtml($html);
         $this->flushCode();
         array_push($this->_htmlBuffer, $html);

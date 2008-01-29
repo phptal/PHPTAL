@@ -119,7 +119,7 @@ implements PHPTAL_Php_TalesChainReader
         $executor->breakChain();
     }
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         if ($this->_defineScope == 'global'){
             $executor->doIf('($glb->'.$this->_defineVar.' = '.$exp.') !== null');

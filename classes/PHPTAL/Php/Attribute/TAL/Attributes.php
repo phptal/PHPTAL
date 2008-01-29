@@ -123,9 +123,7 @@ implements PHPTAL_Php_TalesChainReader
 
     private function getVarName($attribute)
     {
-        $attribute = str_replace(':', '_', $attribute);
-        $attribute = str_replace('-', '_', $attribute);
-        return $attribute;
+        return strtr($attribute,':-', '__');
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
@@ -133,7 +131,7 @@ implements PHPTAL_Php_TalesChainReader
         $executor->doElse();
         $this->tag->generator->doSetVar(
             $this->_attkey, 
-            "' $this->_attribute=\"\"'"
+            "''"
         );
         $executor->breakChain();
     }
@@ -148,9 +146,15 @@ implements PHPTAL_Php_TalesChainReader
         $executor->breakChain();
     }
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
+        if (!$islast) {
         $condition = "!phptal_isempty($this->_attkey = $exp)";
+        }
+        else {
+            $condition = "NULL !== ($this->_attkey = $exp)";
+        }
+        
         $executor->doIf($condition);
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
             $value = $this->_attkey;

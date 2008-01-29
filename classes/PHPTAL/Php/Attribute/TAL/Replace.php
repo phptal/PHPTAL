@@ -98,7 +98,7 @@ implements PHPTAL_Php_TalesChainReader
         $executor->breakChain();
     }
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         $executor->doIf('!phptal_isempty('.self::REPLACE_VAR.' = '.$exp.')');
         $this->doEcho(self::REPLACE_VAR);
