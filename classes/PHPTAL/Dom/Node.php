@@ -104,6 +104,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
 
     public function __construct($name, $attributes)
     {
+        if (!preg_match('/^[a-z_:][a-z0-9._:\x80-\xff-]*$/i',$name)) throw new PHPTAL_Exception("Invalid element name '$name'");
         parent::__construct();
         $this->name = $name;
         $this->attributes = $attributes;

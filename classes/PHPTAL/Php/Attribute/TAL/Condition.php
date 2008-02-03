@@ -32,16 +32,34 @@
 //
 
 require_once 'PHPTAL/Php/Attribute.php';
+require_once 'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * @package phptal.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Condition extends PHPTAL_Php_Attribute
+class PHPTAL_Php_Attribute_TAL_Condition 
+extends PHPTAL_Php_Attribute
+implements PHPTAL_Php_TalesChainReader
 {
+    private $expressions = array();
+
     public function start()
     {
         $code = $this->tag->generator->evaluateExpression($this->expression);
+
+        // If it's a chained expression build a new code path
+        if (is_array($code)) {
+            $this->expressions = array();
+            $executor = new PHPTAL_Php_TalesChainExecutor( $this->tag->generator, $code, $this );
+            return;
+        }
+
+        // Force a falsy condition if the nothing keyword is active
+        if ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
+            $code = 'false';
+        }        
+
         $this->tag->generator->doIf($code);
     }
 
@@ -49,6 +67,35 @@ class PHPTAL_Php_Attribute_TAL_Condition extends PHPTAL_Php_Attribute
     {
         $this->tag->generator->doEnd();
     }
+
+
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
+    {
+        // check if the expression is empty
+        if ( $exp !== 'false' ) {
+            $this->expressions[] = '!phptal_isempty($__content__ = ' . $exp . ')';
+        }
+
+        if ( $islast ) {
+            // for the last one in the chain build a ORed condition
+            $this->tag->generator->doIf( implode(' || ', $this->expressions ) );
+            // The executor will always end an if so we output a dummy if
+            $executor->doIf('false');
+        } 
+    }
+
+    public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
+    {
+        // end the chain
+        $this->talesChainPart( $executor, 'false', true );
+        $executor->breakChain();
+    }
+
+    public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
+    {
+        throw new PHPTAL_Exception('\'default\' keyword not allowed on condition expressions');
+    }
+
 }
 
-?>
+

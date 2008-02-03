@@ -273,8 +273,10 @@ class PHPTAL
         $this->_context->__file = $this->__file;
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
-        try {
-            $res = $templateFunction($this, $this->_context);
+        try {            
+            ob_start();
+            $templateFunction($this, $this->_context);
+            $res = ob_get_clean();
         }
         catch (Exception $e){
             ob_end_clean();

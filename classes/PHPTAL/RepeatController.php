@@ -56,7 +56,7 @@ class PHPTAL_RepeatController
     public function __construct($source)
     {
         if ($source instanceof IteratorAggregate) $source = $source->getIterator();
-        else if (!is_array($source) && !($source instanceof Iterator)) $source = array();   
+        else if (!$source) $source = array();   
     
         $this->source = $source;
         $this->index = -1;
@@ -65,20 +65,7 @@ class PHPTAL_RepeatController
         $this->end = false;
         $this->length = $this->_size($source);
     }
-
-    /** Returns current iterator key. */
-    public function key()
-    {
-        if(is_object($this->source) && $this->source instanceof Iterator) {
-            return $this->source->key();
-        }
-
-        if (!isset($this->_keys)){
-            $this->_keys = array_keys($this->source);
-        }
-        return $this->_keys[$this->index];
-    }
-
+    
     /** Returns the size of an iterable. */
     private function _size($iterable)
     {
@@ -93,7 +80,7 @@ class PHPTAL_RepeatController
             if (method_exists($iterable, 'length')) 
                 return $iterable->length();
         }
-        return 0;        
+        return -1;        
     }
 
     private $_keys;

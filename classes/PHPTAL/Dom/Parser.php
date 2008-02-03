@@ -105,7 +105,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     }
 
     public function onElementStart($name, $attributes)
-    {
+    {        
         $this->_xmlns = PHPTAL_Dom_XmlnsState::newElement($this->_xmlns, $attributes);
         
         foreach ($attributes as $key=>$value) {
@@ -128,7 +128,6 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 
     public function onElementClose($name)
     {
-        assert('preg_match("/^[a-z0-9:]+$/",$name)');	
 		if (!$this->_current instanceof PHPTAL_Dom_Element) $this->raiseError("Found closing tag for '$name' where there are no open tags");			
         if ($this->_current->getName() != $name) {
             $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getName(), $name);
