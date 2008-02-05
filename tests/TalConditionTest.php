@@ -70,6 +70,28 @@ class TalConditionTest extends PHPUnit_Framework_TestCase
         // $exp = trim_file('output/tal-condition.04.html');
         // $this->assertEquals($exp, $res);        
     }
+    
+    function testChainedFalse()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<tal:block tal:condition="foo | bar | baz | nothing">fail!</tal:block>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'');
+    }
+    
+    function testChainedTrue()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<tal:block tal:condition="foo | bar | baz | \'ok!\'">ok</tal:block>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'ok');
 }
         
-?>
+    function testChainedShortCircuit()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<tal:block tal:condition="foo | \'ok!\' | bar | nothing">ok</tal:block>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'ok');
+    }
+}

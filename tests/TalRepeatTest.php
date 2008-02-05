@@ -82,7 +82,6 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($exp, $res);
     }
 
-
     function testPhpMode()
     {
         $tpl = new PHPTAL('input/tal-repeat.07.html');
@@ -91,8 +90,19 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $exp = trim_file('output/tal-repeat.07.html');
         $this->assertEquals($exp, $res);        
     }
+    
+    function testTraversableRepeat()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXML('<a><b/><c/><d/><e/><f/><g/></a>');
+                
+        $tpl = new PHPTAL();
+        $tpl->setSource('<tal:block tal:repeat="node nodes">${repeat/node/key}${node/tagName}</tal:block>');
+        $tpl->nodes = $doc->getElementsByTagName('*');
+        
+        $this->assertEquals($tpl->execute(), '0a1b2c3d4e5f6g');
+    }
 }
-
 
 class MyIterable implements Iterator
 {
@@ -130,4 +140,3 @@ class MyIterable implements Iterator
     private $_size;
 }
 
-?>
