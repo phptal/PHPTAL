@@ -37,16 +37,17 @@
  * @package phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_RepeatController
+class PHPTAL_RepeatController implements Iterator
 {
-    public $source;
-    public $index;
-    public $number;
-    public $start;
-    public $end;
-    public $length;
-    public $even;
-    public $odd;
+    private $key;
+    private $current;
+    private $valid;
+    private $validOnNext;
+
+    protected $iterator;
+    protected $index;
+    protected $end;
+    protected $length;
 
     /**
      * Construct a new RepeatController.
@@ -55,33 +56,370 @@ class PHPTAL_RepeatController
      */
     public function __construct($source)
     {
-        if ($source instanceof IteratorAggregate) $source = $source->getIterator();
-        else if (!$source) $source = array();   
+        if ( is_string($source) ) {
+            $this->iterator = new ArrayIterator( str_split($source) );
+        } else if ( is_array($source) ) {
+            $this->iterator = new ArrayIterator($source);
+        } else if ( $source instanceof IteratorAggregate ) {
+            $this->iterator = $source->getIterator();
+        } else if ( $source instanceof Iterator ) {        
+            $this->iterator = $source;
+        } else if ( $source instanceof Traversable || $source instanceof DOMNodeList ) {
+            // PDO Statements for example implement the engine internal Traversable 
+            // interface. To make it fully iterable we traverse the set to populate
+            // an array which will be actually used for iteration.
+            $array = array();
+            foreach ( $source as $k=>$v ) {
+                $array[$k] = $v;
+            }
+            $this->iterator = new ArrayIterator($array);
+        } else {
+            $this->iterator = new ArrayIterator( array() );
+        }
     
-        $this->source = $source;
-        $this->index = -1;
-        $this->number = 0;
-        $this->start = true;
-        $this->end = false;
-        $this->length = $this->_size($source);
+        // Try to find the set length
+        $this->length = 0;
+        if ( $this->iterator instanceof Countable ) {
+            $this->length = count($this->iterator);
+        } else if ( is_object($this->iterator) ) {
+            // This should be removed since there is already the Countable interface in PHP5
+            if ( method_exists( $this->iterator, 'size' ) ) {
+                $this->length = $this->iterator->size();                
+            } else if ( method_exists( $this->iterator, 'length' ) ) {
+                $this->length = $this->iterator->length();
+            }
+        }
+        
+        $this->groups = new PHPTAL_RepeatController_Groups();
+        
+        $this->rewind();            
+    }
+  
+    /**
+     * Returns the current element value in the iteration
+     *
+     * @return Mixed    The current element value
+     */
+    public function current()
+    {
+        return $this->current;
     }
     
-    /** Returns the size of an iterable. */
-    private function _size($iterable)
+    /**
+     * Returns the current element key in the iteration
+     *
+     * @return String/Int   The current element key
+     */
+    public function key()
     {
-        if (is_array($iterable) || $iterable instanceof Countable) 
-            return count($iterable);
-        if (is_string($iterable))
-            return strlen($iterable);
-        if (is_object($iterable))
-        {
-            if (method_exists($iterable, 'size'))
-                return $iterable->size();
-            if (method_exists($iterable, 'length')) 
-                return $iterable->length();
-        }
-        return -1;        
+        return $this->key;
+    }
+    
+    /**
+     * Tells if the iteration is over
+     *
+     * @return bool     True if the iteration is not finished yet
+     */
+    public function valid()
+    {   
+        $valid = $this->valid || $this->validOnNext;
+        $this->validOnNext = $this->valid;
+        
+        return $valid;
     }
 
-    private $_keys;
+    /**
+     * Restarts the iteration process going back to the first element
+     *
+     */
+    public function rewind()
+    {
+        $this->index = 0;
+        $this->end = false;
+        
+        $this->iterator->rewind();
+
+        // Prefetch the next element
+        if ( $this->iterator->valid() ) {
+            $this->validOnNext = true;
+            $this->prefetch();
+        } else {
+            $this->validOnNext = false;
+        }
+    }
+
+    /**
+     * Fetches the next element in the iteration and advances the pointer
+     *
+     */
+    public function next()
+    {
+        $this->index++;        
+        
+        // Prefetch the next element
+        $this->prefetch();    
+    }
+    
+    
+    /**
+     * Gets an object property
+     *
+     * @return $var  Mixed  The variable value
+     */
+    public function __get( $var )
+    {
+        switch ( $var ) {
+            case 'index':
+            case 'end':
+            case 'length':
+                return $this->$var;
+            case 'number':
+                return $this->index + 1;
+            case 'start':
+                return $this->index === 0;
+            case 'even':
+                return ($this->index % 2) === 0;
+            case 'odd':
+                return ($this->index % 2) === 1;
+            case 'key':
+                return $this->key();
+            case 'letter':
+                return strtolower( $this->int2letter($this->index+1) );
+            case 'Letter':
+                return strtoupper( $this->int2letter($this->index+1) );            
+            case 'roman':
+                return strtolower( $this->int2roman($this->index+1) );
+            case 'Roman':            
+                return strtoupper( $this->int2roman($this->index+1) );
+                
+            case 'first':
+                // Compare the current one with the previous in the dictionary
+                $res = $this->groups->first( $this->current );
+                return is_bool($res) ? $res : $this->groups;
+            case 'last':
+                // Compare the next one with the dictionary
+                $res = $this->groups->last( $this->iterator->current() );
+                return is_bool($res) ? $res : $this->groups;
+            
+            default:
+                throw new PHPTAL_Exception( "Unable to find part '$var' repeater controller" );
+        }
+    }    
+    
+    /**
+     * Fetches the next element from the source data store and
+     * updates the end flag if needed. 
+     *
+     * @access protected
+     */
+    protected function prefetch()
+    {
+        $this->valid = true;
+        $this->key = $this->iterator->key();
+        $this->current = $this->iterator->current();
+
+        $this->iterator->next();
+        if ( !$this->iterator->valid() ) {
+            $this->valid = false;
+            $this->end = true;
+        }
+    }    
+    
+    /**
+     * Converts an integer number (1 based) to a sequence of letters
+     *     
+     * @param $int Int  The number to convert
+     * @return String   The letters equivalent as a, b, c-z ... aa, ab, ac-zz ...
+     * @access protected
+     */
+    protected function int2letter( $int )
+    {
+        $lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $size = strlen($lookup);
+
+        $letters = '';
+        while ( $int > 0 ) {
+            $int--;
+            $letters = $lookup[$int % $size] . $letters;
+            $int = floor($int / $size);
+        }
+        return $letters;
+    }
+    
+    /**
+     * Converts an integer number (1 based) to a roman numeral
+     *     
+     * @param $int Int  The number to convert
+     * @return String   The roman numeral
+     * @access protected
+     */
+    protected function int2roman( $int )
+    {
+        $lookup = array(
+            '1000'  => 'M',
+            '900'   => 'CM',
+            '500'   => 'D',
+            '400'   => 'CD',
+            '100'   => 'C',
+            '90'    => 'XC',
+            '50'    => 'L',
+            '40'    => 'XL',
+            '10'    => 'X',
+            '9'     => 'IX',
+            '5'     => 'V',
+            '4'     => 'IV',
+            '1'     => 'I',
+        );
+        
+        $roman = '';
+        foreach ( $lookup as $max => $letters ) {
+            while ( $int >= $max ) {
+                $roman .= $letters;
+                $int -= $max;
+            }
+        }
+        
+        return $roman;
+    }
+}
+
+
+/**
+ * Keeps track of variable contents when using grouping in a path (first/ and last/)
+ *
+ * @package phptal
+ * @author Iván Montes <drslump@pollinimini.net>
+ */
+class PHPTAL_RepeatController_Groups {
+
+    protected $dict = array( 'first' => array(), 'last' => array() );
+    protected $data = null;
+    protected $vars = array();
+    protected $branch;
+    protected $first;
+    protected $last;
+    
+    
+    /**
+     * Checks if the data passed is the first one in a group
+     * 
+     * @param $data Mixed   The data to evaluate
+     * @return Mixed    True if the first item in the group, false if not and
+     *                  this same object if the path is not finished
+     */ 
+    public function first( $data )
+    {
+        if ( !is_array($data) && !is_object($data) && !is_null($data) ) {
+            if ( $this->first !== md5($data) ) {
+                $this->first = md5($data);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        $this->data = $data;
+        $this->branch = 'first';
+        $this->vars = array();
+        return $this;
+    }
+   
+    /**
+     * Checks if the data passed is the last one in a group
+     * 
+     * @param $data Mixed   The data to evaluate
+     * @return Mixed    True if the last item in the group, false if not and
+     *                  this same object if the path is not finished
+     */ 
+    public function last( $data )
+    {
+        if ( !is_array($data) && !is_object($data) && !is_null($data) ) {
+            if (empty($this->last)) {
+                $this->last = md5($data);
+                return false;
+            } else if ( $this->last !== md5($data) ) {
+                $this->last = md5($data);
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        $this->data = $data;
+        $this->branch = 'last';
+        $this->vars = array();
+        return $this;
+    }    
+    
+    /**
+     * Handles variable accesses for the tal path resolver
+     *
+     * @param $var String   The variable name to check
+     * @return Mixed    An object/array if the path is not over or a boolean
+     */
+    public function __get( $var )
+    {   
+        // When the iterator item is empty we just let the tal 
+        // expression consume be continuously returning this 
+        // same object which should evaluate to true for 'last'
+        if ( is_null($this->data) ) {
+            return $this;
+        }
+        
+        // Find the requested variable
+        $value = phptal_path( $this->data, $var, true );
+        
+        // Check if it's an object or an array
+        if ( is_array($value) || is_object($value) ) {
+            // Move the context to the requested variable and return
+            $this->data = $value;
+            $this->addVarName( $var );
+            return $this;
+        }
+        
+        // get a hash of the variable contents
+        $hash = md5( $value );
+        
+        // compute a path for the variable to use as dictionary key
+        $path = $this->getVarPath() . $var;
+
+        // If we don't know about this var store in the dictionary
+        
+        if ( !isset($this->dict[$this->branch][$path]) ) {
+            $this->dict[$this->branch][$path] = $hash;
+            return $this->branch === 'first';
+        } else {
+            // Check if the value has changed
+            if ( $this->dict[$this->branch][$path] !== $hash ) {
+                $this->dict[$this->branch][$path] = $hash;
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+    }
+
+    /**
+     * Adds a variable name to the current path of variables
+     *
+     * @param $varname String  The variable name to store as a path part
+     * @access protected
+     */
+    protected function addVarName( $varname )
+    {
+        $this->vars[] = $varname;
+    }
+
+    /**
+     * Returns the current variable path separated by a slash
+     *
+     * @return String  The current variable path
+     * @access protected
+     */
+    protected function getVarPath()
+    {
+        return implode('/', $this->vars) . '/';
+    }
+
 }

@@ -100,7 +100,7 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $tpl->setSource('<tal:block tal:repeat="node nodes">${repeat/node/key}${node/tagName}</tal:block>');
         $tpl->nodes = $doc->getElementsByTagName('*');
         
-        $this->assertEquals($tpl->execute(), '0a1b2c3d4e5f6g');
+        $this->assertEquals('0a1b2c3d4e5f6g',$tpl->execute());
     }
 }
 
