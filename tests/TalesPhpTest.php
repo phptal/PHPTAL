@@ -1,7 +1,6 @@
 <?php
 
 require_once 'config.php';
-require_once 'PHPTAL.php';
 
 class TalesPhpTest extends PHPUnit_Framework_TestCase {
 	

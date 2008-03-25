@@ -32,6 +32,8 @@ if (substr(PHP_OS,0,3) == 'WIN'){
 
 error_reporting( E_ALL | E_STRICT );
 
+require_once dirname(__FILE__).'/../classes/PHPTAL.php';
+
 if (isset($argv) && count($argv) >= 2){
     array_shift($argv);
     foreach ($argv as $entry){

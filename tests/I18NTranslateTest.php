@@ -21,7 +21,6 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL.php';
 
 require_once 'I18NDummyTranslator.php';
 

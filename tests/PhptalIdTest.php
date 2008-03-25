@@ -21,7 +21,6 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL.php';
 require_once PHPTAL_DIR.'Trigger.php';
 
 class MyTrigger implements PHPTAL_Trigger

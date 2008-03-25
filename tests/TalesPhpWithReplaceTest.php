@@ -21,7 +21,6 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL.php';
 
 class TalesPhpWithReplaceTest extends PHPUnit_Framework_TestCase
 {

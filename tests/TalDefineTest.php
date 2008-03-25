@@ -21,7 +21,6 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL.php';
 require_once PHPTAL_DIR.'Php/Attribute.php';
 require_once PHPTAL_DIR.'Php/Attribute/TAL/Define.php';
 

@@ -21,7 +21,6 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL.php';
 
 if (!class_exists('DummyTag')) {
     class DummyTag {}
