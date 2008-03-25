@@ -20,9 +20,9 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'Dom/Defs.php';
-require_once PHPTAL_DIR.'Php/CodeWriter.php';
-require_once PHPTAL_DIR.'Php/Attribute.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 
 /**
  * Document node abstract class.

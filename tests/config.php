@@ -28,13 +28,6 @@ date_default_timezone_set('Europe/Paris');
 define('PHPTAL_FORCE_REPARSE', 1);
 ini_set('short_open_tag', 'Off');
 
-if (substr(PHP_OS,0,3) == 'WIN'){
-ini_set('include_path', $testDir .'\\..\\classes;'. ini_get('include_path'));
-}
-else {
-ini_set('include_path', $testDir .'/../classes:'. ini_get('include_path'));
-}
-
 function trim_file( $src ){
     return trim_string( join('', file($src) ) );
 }
@@ -51,7 +44,6 @@ function trim_string( $src ){
 function throw_all($errmsg, $errno, $file, $line){
     $e = sprintf("--> $errmsg, $errno, $file, $line");
     throw new Exception($e);
-    throw new Exception($errmsg);
 }
 set_error_handler('throw_all');
 

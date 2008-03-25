@@ -2040,7 +2040,7 @@ echo $tpl->execute();
       <programlisting><![CDATA[
 <?php
 require_once 'PHPTAL.php';
-require_once PHPTAL_DIR.'Trigger.php';
+require_once PHPTAL_DIR.'PHPTAL/Trigger.php';
 
 class CacheTrigger implements PHPTAL_Trigger
 {
@@ -2181,7 +2181,7 @@ $tpl->setTranslator($yourOwnTranslatorInstance);
 
         <programlisting><![CDATA[
 <?php
-require_once PHPTAL_DIR.'TranslationService.php';
+require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
 ...
@@ -2211,7 +2211,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 
         <programlisting><![CDATA[
 <?php
-require_once PHPTAL_DIR.'TranslationService.php';
+require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
     ...
@@ -2246,7 +2246,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 
         <programlisting><![CDATA[
 <?php
-require_once PHPTAL_DIR.'TranslationService.php';
+require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
     ...
@@ -2271,7 +2271,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 
         <programlisting><![CDATA[
 <?php
-require_once PHPTAL_DIR.'TranslationService.php';
+require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
     ...
@@ -2461,7 +2461,7 @@ msgfmt mydomain.po -o mydomain.mo
         <programlisting><![CDATA[
 <?php
 require_once 'PHPTAL.php';
-require_once PHPTAL_DIR.'GetTextTranslator.php';
+require_once PHPTAL_DIR.'PHPTAL/GetTextTranslator.php';
 
 try {
     $tr = new PHPTAL_GetTextTranslator();

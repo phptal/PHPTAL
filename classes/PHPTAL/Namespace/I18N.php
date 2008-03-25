@@ -1,12 +1,12 @@
 <?php
 
-require_once PHPTAL_DIR.'Dom/Defs.php';
-require_once PHPTAL_DIR.'Namespace.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
+require_once PHPTAL_DIR.'PHPTAL/Namespace.php';
 
-require_once PHPTAL_DIR.'Php/Attribute/I18N/Translate.php';
-require_once PHPTAL_DIR.'Php/Attribute/I18N/Name.php';
-require_once PHPTAL_DIR.'Php/Attribute/I18N/Domain.php';
-require_once PHPTAL_DIR.'Php/Attribute/I18N/Attributes.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Translate.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Name.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Domain.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Attributes.php';
 
 /**
  * @package phptal.namespace

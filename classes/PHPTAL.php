@@ -50,20 +50,22 @@ if (!defined('PHPTAL_PHP_CODE_EXTENSION')){
     define('PHPTAL_PHP_CODE_EXTENSION', 'php');
 }
 //}}}
-
+//{{{PHPTAL_DIR
 if (!defined('PHPTAL_DIR'))
 {
-    define('PHPTAL_DIR',dirname(__FILE__).'/PHPTAL/');
+    define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
 }
+assert('substr(PHPTAL_DIR,-1) == DIRECTORY_SEPARATOR');
+//}}}
 
 define('PHPTAL_XHTML', 1);
 define('PHPTAL_XML',   2);
 
-require_once PHPTAL_DIR.'FileSource.php';
-require_once PHPTAL_DIR.'RepeatController.php';
-require_once PHPTAL_DIR.'Context.php';
-require_once PHPTAL_DIR.'Exception.php';
-require_once PHPTAL_DIR.'TalesRegistry.php';
+require_once PHPTAL_DIR.'PHPTAL/FileSource.php';
+require_once PHPTAL_DIR.'PHPTAL/RepeatController.php';
+require_once PHPTAL_DIR.'PHPTAL/Context.php';
+require_once PHPTAL_DIR.'PHPTAL/Exception.php';
+require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
 
 
 /**
@@ -148,7 +150,7 @@ class PHPTAL
         if ($path == false)
             $path = '<string> '.md5($src);
         
-        require_once PHPTAL_DIR.'StringSource.php';
+        require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
         $this->_source = new PHPTAL_StringSource($src, $path);
         $this->_path = $path;
     }
@@ -476,7 +478,7 @@ class PHPTAL
     
     protected function parse()
     {
-        require_once PHPTAL_DIR.'Dom/Parser.php';
+        require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
         
         // instantiate the PHPTAL source parser 
         $parser = new PHPTAL_Dom_Parser();
@@ -489,7 +491,7 @@ class PHPTAL
             $data = $this->_prefilter->filter($data);
         $tree = $parser->parseString($data, $realpath);
 
-        require_once PHPTAL_DIR.'Php/CodeGenerator.php';
+        require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
         $generator = new PHPTAL_Php_CodeGenerator($realpath);
         $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);

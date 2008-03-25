@@ -21,7 +21,7 @@
 //			 Moritz Bechler <mbechler@eenterphace.org>
 //
 
-require_once PHPTAL_DIR.'TalesRegistry.php';
+require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
 
 class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
@@ -309,7 +309,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	 */
 	static public function php($src)
 	{
-	    require_once PHPTAL_DIR.'Php/Transformer.php';
+	    require_once PHPTAL_DIR.'PHPTAL/Php/Transformer.php';
 	    return PHPTAL_Php_Transformer::transform($src, '$ctx->');
 	}
 

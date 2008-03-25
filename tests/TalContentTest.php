@@ -21,7 +21,7 @@
 //  
 
 require_once 'config.php';
-require_once PHPTAL_DIR.'Php/Tales.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 class DummyToStringObject {
     public function __construct($value){ $this->_value = $value; }

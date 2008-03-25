@@ -26,13 +26,12 @@ require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/ResultPrinter.php';
 
-if (substr(PHP_OS,0,3) == 'WIN'){
-    define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\windows\\temp\\');
-}
-
 error_reporting( E_ALL | E_STRICT );
 
-require_once dirname(__FILE__).'/../classes/PHPTAL.php';
+define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR);
+
+require_once "config.php";
+require_once PHPTAL_DIR.'PHPTAL.php';
 
 if (isset($argv) && count($argv) >= 2){
     array_shift($argv);

@@ -21,7 +21,7 @@
 //  
 
 require_once 'config.php';
-require_once PHPTAL_DIR.'Php/Tales.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 class TalesExistTest extends PHPUnit_Framework_TestCase 
 {

@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'Php/Attribute.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 
 // TAL spec 1.4 for tal:define content
 //
@@ -38,7 +38,7 @@ require_once PHPTAL_DIR.'Php/Attribute.php';
 //
           
 
-require_once PHPTAL_DIR.'Php/TalesChainExecutor.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * @package phptal.php.attribute.tal

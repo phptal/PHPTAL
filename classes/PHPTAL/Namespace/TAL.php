@@ -1,16 +1,16 @@
 <?php
 
-require_once PHPTAL_DIR.'Namespace.php';
+require_once PHPTAL_DIR.'PHPTAL/Namespace.php';
 
-require_once PHPTAL_DIR.'Php/Attribute/TAL/Comment.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/Replace.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/Content.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/Condition.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/Attributes.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/Repeat.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/Define.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/OnError.php';
-require_once PHPTAL_DIR.'Php/Attribute/TAL/OmitTag.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Comment.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Replace.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Content.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Condition.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Attributes.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Repeat.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Define.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/OnError.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/OmitTag.php';
 
 /**
  * @package phptal.namespace

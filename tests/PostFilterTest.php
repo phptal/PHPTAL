@@ -21,7 +21,7 @@
 //  
 
 require_once 'config.php';
-require_once PHPTAL_DIR.'Filter.php';
+require_once PHPTAL_DIR.'PHPTAL/Filter.php';
 
 class MyPostFilter implements PHPTAL_Filter
 {

@@ -20,11 +20,11 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'Dom/Defs.php';
-require_once PHPTAL_DIR.'Dom/Node.php';
-require_once PHPTAL_DIR.'Dom/XmlParser.php';
-require_once PHPTAL_DIR.'Dom/XmlnsState.php';
-require_once PHPTAL_DIR.'Php/Tales.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/Node.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/XmlnsState.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 /**
  * Template parser.

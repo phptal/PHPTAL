@@ -20,7 +20,7 @@
 //  Authors: Kornel Lesiński <kornel@aardvarkmedia.co.uk>
 //  
 
-require_once PHPTAL_DIR.'Php/Attribute.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 
 /** phptal:cache (note that's not tal:cache) caches element's HTML for a given time. Time is a number with 'd', 'h', 'm' or 's' suffix.
     There's optional parameter that defines how cache should be shared. By default cache is not sensitive to template's context at all 

@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'Php/Tales.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 /** 
  * @package phptal.php

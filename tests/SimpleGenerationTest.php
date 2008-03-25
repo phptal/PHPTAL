@@ -21,10 +21,10 @@
 //  
 
 require_once 'config.php';
-require_once PHPTAL_DIR.'Dom/Parser.php';
-require_once PHPTAL_DIR.'Php/CodeWriter.php';
-require_once PHPTAL_DIR.'Php/Node.php';
-require_once PHPTAL_DIR.'Php/State.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/State.php';
 
 class SimpleGenerationTest extends PHPUnit_Framework_TestCase
 {
