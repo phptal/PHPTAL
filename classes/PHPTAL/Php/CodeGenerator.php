@@ -1,8 +1,8 @@
 <?php
 
-require_once 'PHPTAL/Php/Node.php';
-require_once 'PHPTAL/Php/State.php';
-require_once 'PHPTAL/Php/CodeWriter.php';
+require_once PHPTAL_DIR.'Php/Node.php';
+require_once PHPTAL_DIR.'Php/State.php';
+require_once PHPTAL_DIR.'Php/CodeWriter.php';
 
 /**
  * @package phptal.php

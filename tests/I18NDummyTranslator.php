@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPTAL/TranslationService.php';
+require_once PHPTAL_DIR.'TranslationService.php';
 
 class DummyTranslator implements PHPTAL_TranslationService
 {

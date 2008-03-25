@@ -22,8 +22,8 @@
 
 require_once 'config.php';
 require_once 'PHPTAL.php';
-require_once 'PHPTAL/Php/Attribute.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
+require_once PHPTAL_DIR.'Php/Attribute.php';
+require_once PHPTAL_DIR.'Php/Attribute/TAL/Define.php';
 
 class TalDefineTest extends PHPUnit_Framework_TestCase 
 {

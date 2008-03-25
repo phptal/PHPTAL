@@ -21,8 +21,8 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL/Php/Tales.php';
-require_once 'PHPTAL/Tales.php';
+require_once PHPTAL_DIR.'Php/Tales.php';
+require_once PHPTAL_DIR.'Tales.php';
 
 function phptal_tales_custom($src,$nothrow)
 {

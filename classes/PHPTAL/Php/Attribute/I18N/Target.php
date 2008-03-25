@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPTAL/Php/Attribute.php';
+require_once PHPTAL_DIR.'Php/Attribute.php';
 
 // i18n:target
 //

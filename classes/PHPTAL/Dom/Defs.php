@@ -60,11 +60,11 @@
 // the statements on this new element. 
 // 
 
-require_once 'PHPTAL/Namespace.php';
-require_once 'PHPTAL/Namespace/TAL.php';
-require_once 'PHPTAL/Namespace/METAL.php';
-require_once 'PHPTAL/Namespace/I18N.php';
-require_once 'PHPTAL/Namespace/PHPTAL.php';
+require_once PHPTAL_DIR.'Namespace.php';
+require_once PHPTAL_DIR.'Namespace/TAL.php';
+require_once PHPTAL_DIR.'Namespace/METAL.php';
+require_once PHPTAL_DIR.'Namespace/I18N.php';
+require_once PHPTAL_DIR.'Namespace/PHPTAL.php';
 
 /**
  * PHPTAL constants.

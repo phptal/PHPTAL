@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/TranslationService.php';
+require_once PHPTAL_DIR.'TranslationService.php';
 
 /**
  * PHPTAL_TranslationService gettext implementation.

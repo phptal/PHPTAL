@@ -22,9 +22,9 @@
 
 require_once 'config.php';
 require_once 'PHPTAL.php';
-require_once 'PHPTAL/Dom/Parser.php';
-require_once 'PHPTAL/Php/CodeWriter.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Comment.php';
+require_once PHPTAL_DIR.'Dom/Parser.php';
+require_once PHPTAL_DIR.'Php/CodeWriter.php';
+require_once PHPTAL_DIR.'Php/Attribute/TAL/Comment.php';
 
 if (!class_exists('DummyTag')) {
     class DummyTag {}

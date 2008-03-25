@@ -130,6 +130,6 @@ function phptal_tales($expression, $nothrow=false)
 }
 
 // Register internal Tales expression modifiers
-require_once 'PHPTAL/Php/TalesInternal.php';
+require_once PHPTAL_DIR.'Php/TalesInternal.php';
 PHPTAL_TalesInternal::registerInternalTales();
 ?>

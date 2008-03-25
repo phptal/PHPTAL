@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/Php/Attribute.php';
+require_once PHPTAL_DIR.'Php/Attribute.php';
 
 // TAL Specifications 1.4
 //
@@ -32,7 +32,7 @@ require_once 'PHPTAL/Php/Attribute.php';
 //
 //
 
-require_once 'PHPTAL/Php/TalesChainExecutor.php';
+require_once PHPTAL_DIR.'Php/TalesChainExecutor.php';
 
 /**
  * @package phptal.php.attribute.tal

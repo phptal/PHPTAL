@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPTAL/Dom/Node.php';
+require_once PHPTAL_DIR.'Dom/Node.php';
 
 /**
  * Base class for all PHPTAL attributes.

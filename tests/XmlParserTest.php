@@ -21,7 +21,7 @@
 //  
 
 require_once 'config.php';
-require_once 'PHPTAL/Dom/XmlParser.php';
+require_once PHPTAL_DIR.'Dom/XmlParser.php';
 
 class XmlParserTest extends PHPUnit_Framework_TestCase
 {

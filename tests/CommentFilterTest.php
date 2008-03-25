@@ -2,7 +2,7 @@
 
 require_once 'config.php';
 require_once 'PHPTAL.php';
-require_once 'PHPTAL/CommentFilter.php';
+require_once PHPTAL_DIR.'CommentFilter.php';
 
 class CommentFilterTest extends PHPUnit_Framework_TestCase
 {

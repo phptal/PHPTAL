@@ -1,12 +1,12 @@
 <?php
 
-require_once 'PHPTAL/Dom/Defs.php';
-require_once 'PHPTAL/Namespace.php';
+require_once PHPTAL_DIR.'Dom/Defs.php';
+require_once PHPTAL_DIR.'Namespace.php';
 
-require_once 'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
-require_once 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
+require_once PHPTAL_DIR.'Php/Attribute/METAL/DefineMacro.php';
+require_once PHPTAL_DIR.'Php/Attribute/METAL/UseMacro.php';
+require_once PHPTAL_DIR.'Php/Attribute/METAL/DefineSlot.php';
+require_once PHPTAL_DIR.'Php/Attribute/METAL/FillSlot.php';
 
 /** 
  * @package phptal.namespace

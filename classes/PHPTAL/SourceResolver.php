@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPTAL/Source.php';
+require_once PHPTAL_DIR.'Source.php';
 
 /** 
  * @package phptal

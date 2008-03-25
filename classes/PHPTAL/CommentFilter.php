@@ -1,6 +1,6 @@
 <?php
 
-require_once 'PHPTAL/Filter.php';
+require_once PHPTAL_DIR.'Filter.php';
 
 class PHPTAL_CommentFilter implements PHPTAL_Filter
 {

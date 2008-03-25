@@ -20,7 +20,7 @@
 //  Authors: Moritz Bechler <mbechler@eenterphace.org>
 //
 
-require_once 'PHPTAL/Tales.php';
+require_once PHPTAL_DIR.'Tales.php';
 
 /**
  * Global registry of TALES expression modifiers
