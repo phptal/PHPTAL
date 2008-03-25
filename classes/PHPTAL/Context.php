@@ -374,7 +374,8 @@ function phptal_exists($ctx, $path)
 
 function phptal_isempty($var)
 {
-	return $var === null || $var === false || $var === '';
+	return $var === null || $var === false || $var === ''  
+	       || ((is_array($var) || $var instanceof Countable) && count($var)===0);
 }
 
 function phptal_escape($var, $ent, $encoding)

@@ -81,6 +81,7 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($exp, $res);
     }
 
+
     function testPhpMode()
     {
         $tpl = new PHPTAL('input/tal-repeat.07.html');
@@ -100,8 +101,95 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $tpl->nodes = $doc->getElementsByTagName('*');
         
         $this->assertEquals('0a1b2c3d4e5f6g',$tpl->execute());
+
     }
+    
+    function testLetter()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource( '<span tal:omit-tag="" tal:repeat="item items" tal:content="repeat/item/letter"/>' );
+        $tpl->items = range( 0, 32 );
+        $res = trim_string( $tpl->execute() );
+        $exp = 'abcdefghijklmnopqrstuvwxyzaaabacadaeafag';
+        $this->assertEquals( $exp, $res );
+    }
+    
+    function testRoman()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource( '<span tal:omit-tag="" tal:repeat="item items" tal:content="string:${repeat/item/roman},"/>' );
+        $tpl->items = range( 0, 16 );
+        $res = trim_string( $tpl->execute() );
+        $exp = 'i,ii,iii,iv,v,vi,vii,viii,ix,x,xi,xii,xiii,xiv,xv,xvi,xvii,';
+        $this->assertEquals( $exp, $res );        
+    }
+    
+    function testGrouping()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('
+            <div tal:omit-tag="" tal:repeat="item items">
+                <h1 tal:condition="repeat/item/first" tal:content="item"></h1>
+                <p tal:condition="not: repeat/item/first" tal:content="item"></p>
+                <hr tal:condition="repeat/item/last" />
+            </div>'
+        );
+        $tpl->items = array( 'apple', 'apple', 'orange', 'orange', 'orange', 'pear', 'kiwi', 'kiwi' );
+        $res = trim_string( $tpl->execute() );        
+        $exp = trim_string('
+            <h1>apple</h1>
+            <p>apple</p>
+            <hr/>
+            <h1>orange</h1>
+            <p>orange</p>
+            <p>orange</p>
+            <hr/>
+            <h1>pear</h1>
+            <hr/>
+            <h1>kiwi</h1>
+            <p>kiwi</p>
+            <hr/>'
+        );
+
+        $this->assertEquals( $exp, $res );        
+    }
+    
+    function testGroupingPath()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('
+            <div tal:omit-tag="" tal:repeat="item items">
+                <h1 tal:condition="repeat/item/first/type" tal:content="item/type"></h1>
+                <p tal:content="item/name"></p>
+                <hr tal:condition="repeat/item/last/type" />
+            </div>'
+        );
+        $tpl->items = array(
+                            array( 'type' => 'car', 'name' => 'bmw' ),
+                            array( 'type' => 'car', 'name' => 'audi' ),
+                            array( 'type' => 'plane', 'name' => 'boeing' ),
+                            array( 'type' => 'bike', 'name' => 'suzuki' ),
+                            array( 'type' => 'bike', 'name' => 'honda' ),
+        );
+        $res = trim_string( $tpl->execute() );        
+        $exp = trim_string('
+            <h1>car</h1>
+            <p>bmw</p>
+            <p>audi</p>
+            <hr/>
+            <h1>plane</h1>
+            <p>boeing</p>
+            <hr/>
+            <h1>bike</h1>
+            <p>suzuki</p>
+            <p>honda</p>
+            <hr/>'
+        );
+
+        $this->assertEquals( $exp, $res );        
+    }    
 }
+
 
 class MyIterable implements Iterator
 {
@@ -139,3 +227,4 @@ class MyIterable implements Iterator
     private $_size;
 }
 
+?>

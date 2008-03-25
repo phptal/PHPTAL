@@ -122,7 +122,7 @@ function phptal_tales($expression, $nothrow=false)
     
     // check if it is implemented via runtime function
     $runfunc = 'phptal_runtime_tales_'.str_replace('-','_',$typePrefix);
-    if (function_exists($func)) {
+    if (function_exists($runfunc)) {
         return "$runfunc(".phptal_tale($expression, $nothrow).")";
     }
     
