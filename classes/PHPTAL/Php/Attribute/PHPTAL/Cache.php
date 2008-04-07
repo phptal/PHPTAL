@@ -44,15 +44,16 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
     public function start()
     {
-        if (!preg_match('!^\s*([0-9]+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$!',$this->expression, $matches))
+        if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/',$this->expression, $matches))
             throw new PHPTAL_Exception("Cache attribute syntax error: ".$this->expression);
             
         $cache_len = $matches[1];
+        if (!is_numeric($cache_len)) $cache_len = '$ctx->'.$cache_len;
         switch($matches[2])
         {
-            case 'd': $cache_len *= 24; /* no break */
-            case 'h': $cache_len *= 60; /* no break */
-            case 'm': $cache_len *= 60; /* no break */
+            case 'd': $cache_len .= '*24'; /* no break */
+            case 'h': $cache_len .= '*60'; /* no break */
+            case 'm': $cache_len .= '*60'; /* no break */
         }
 
         $this->cache_tag = '"'.addslashes( $this->tag->node->getName() . ':' . $this->tag->node->getSourceLine()).'"';
@@ -74,7 +75,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
              $this->tag->generator->doSetVar($this->cache_tag, '('.$code.')."@".' . $old_cache_tag );
         }
     
-	    $cond = '!file_exists(__FILE__.md5('.$this->cache_tag.')) || time() - '.$cache_len.' > @filemtime(__FILE__.md5('.$this->cache_tag.'))';
+	    $cond = '!file_exists(__FILE__.md5('.$this->cache_tag.')) || time() - '.$cache_len.' >= @filemtime(__FILE__.md5('.$this->cache_tag.'))';
 
         $this->tag->generator->doIf($cond);
         $this->tag->generator->doEval('ob_start()');
