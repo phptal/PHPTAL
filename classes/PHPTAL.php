@@ -89,11 +89,11 @@ require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
  * 
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL 
+class PHPTAL
 {
     const XHTML = 1;
     const XML   = 2;
-    
+
     /**
      * PHPTAL Constructor.
      *
@@ -110,6 +110,18 @@ class PHPTAL
         $this->_globalContext = new StdClass();
         $this->_context = new PHPTAL_Context();
         $this->_context->setGlobal($this->_globalContext);
+    }
+
+    /**
+     * create
+     * returns a new PHPTAL object
+     *
+     * @param string $path Template file path.
+     * @return PHPTAL
+     */
+    public static function create($path=false)
+    {
+        return new PHPTAL($path);
     }
 
     /**
@@ -134,6 +146,7 @@ class PHPTAL
         $this->_functionName = null;
         $this->_path = $path;
         $this->_source = null;
+        return $this;
     }
 
     /**
@@ -153,6 +166,7 @@ class PHPTAL
         require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
         $this->_source = new PHPTAL_StringSource($src, $path);
         $this->_path = $path;
+        return $this;
     }
     
     /**
@@ -168,6 +182,24 @@ class PHPTAL
         else {
             $this->_repositories[] = $rep;
         }
+        return $this;
+    }
+
+    /**
+     * Get template repositories.
+     */
+    public function getTemplateRepositories()
+    {
+        return $this->_repositories;
+    }
+
+    /**
+     * Clears the template repositories.
+     */
+    public function clearTemplateRepositories()
+    {
+        $this->_repositories = array();
+        return $this;
     }
 
     /**
@@ -177,10 +209,11 @@ class PHPTAL
     public function stripComments($bool)
     {
         $this->_stripComments = $bool;
+        return $this;
     }
-    
+
     /**
-     * Set output mode 
+     * Set output mode
      * @param $mode int (PHPTAL::XML or PHPTAL::XHTML).
      */
     public function setOutputMode($mode=PHPTAL_XHTML)
@@ -189,6 +222,15 @@ class PHPTAL
             throw new PHPTAL_Exception('Unsupported output mode '.$mode);
         }
         $this->_outputMode = $mode;
+        return $this;
+    }
+
+    /**
+     * Get output mode
+     */
+    public function getOutputMode()
+    {
+        return $this->_outputMode;
     }
 
     /**
@@ -197,7 +239,78 @@ class PHPTAL
      */
     public function setEncoding($enc)
     {
-        $this->_encoding = $enc; 
+        $this->_encoding = $enc;
+        return $this;
+    }
+
+    /**
+     * Get ouput encoding.
+     * @param $enc string example: 'UTF-8'
+     */
+    public function getEncoding($enc)
+    {
+        return $this->_encoding;
+    }
+
+    /**
+     * Set the storage location for intermediate PHP files.
+     * @param string $path Intermediate file path.
+     */
+
+    public function setPhpCodeDestination($path)
+    {
+        $this->_phpCodeDestination = $path;
+        return $this;
+    }
+
+    /**
+     * Get the storage location for intermediate PHP files.
+     */
+
+    public function getPhpCodeDestination()
+    {
+        return $this->_phpCodeDestination;
+    }
+
+    /**
+     * Set the file extension for intermediate PHP files.
+     * @param string $extension The file extension.
+     */
+
+    public function setPhpCodeExtension($extension)
+    {
+        $this->_phpCodeExtension = $extension;
+        return $this;
+    }
+
+    /**
+     * Get the file extension for intermediate PHP files.
+     */
+
+    public function getPhpCodeExtension()
+    {
+        return $this->_phpCodeExtension;
+    }
+
+    /**
+     * Flags whether to ignore intermediate php files and to
+     * reparse templates every time (if set to true).
+     * @param bool bool Forced reparse state.
+     */
+
+    public function setForceReparse($bool)
+    {
+        $this->_forceReparse = (bool) $bool;
+        return $this;
+    }
+
+    /**
+     * Get the value of the force reparse state.
+     */
+
+    public function getForceReparse()
+    {
+        return $this->_forceReparse;
     }
 
     /**
@@ -206,6 +319,7 @@ class PHPTAL
     public function setTranslator(PHPTAL_TranslationService $t)
     {
         $this->_translator = $t;
+        return $this;
     }
 
     /**
@@ -214,6 +328,7 @@ class PHPTAL
     public function setPreFilter(PHPTAL_Filter $filter)
     {
         $this->_prefilter = $filter;
+        return $this;
     }
 
     /**
@@ -222,6 +337,7 @@ class PHPTAL
     public function setPostFilter(PHPTAL_Filter $filter)
     {
         $this->_postfilter = $filter;
+        return $this;
     }
 
     /**
@@ -231,6 +347,7 @@ class PHPTAL
     public function addTrigger($id, PHPTAL_Trigger $trigger)
     {
         $this->_triggers[$id] = $trigger;
+        return $this;
     }
 
     /**
@@ -263,6 +380,7 @@ class PHPTAL
     public function set($varname, $value)
     {
         $this->_context->__set($varname, $value);
+        return $this;
     }
     
     /**
@@ -270,17 +388,17 @@ class PHPTAL
      *
      * @return string
      */
-    public function execute() 
+    public function execute()
     {
         if (!$this->_prepared) {
             $this->prepare();
         }
-       
+
         // includes generated template PHP code
         $this->_context->__file = $this->__file;
         require_once $this->_codeFile;
         $templateFunction = $this->_functionName;
-        try {            
+        try {
             ob_start();
             $templateFunction($this, $this->_context);
             $res = ob_get_clean();
@@ -300,7 +418,7 @@ class PHPTAL
         if ($xmlDec){
             $res = $xmlDec . "\n" . $res;
         }
-        
+
         if ($this->_postfilter != null){
             return $this->_postfilter->filter($res);
         }
@@ -330,7 +448,7 @@ class PHPTAL
             $tpl->prepare();
 
             // save current file
-            $currentFile = $this->_context->__file;            
+            $currentFile = $this->_context->__file;
             $this->_context->__file = $tpl->__file;
             
             // require PHP generated code and execute macro function
@@ -346,14 +464,15 @@ class PHPTAL
             // call local macro
             $fun = $this->getFunctionName() . '_' . trim($path);
             if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined",$this->_source->getRealPath());
-            $fun( $this, $this->_context );            
+            $fun( $this, $this->_context );
         }
     }
 
 	private function setCodeFile()
 	{
 		// where php generated code should reside
-        $this->_codeFile = PHPTAL_PHP_CODE_DESTINATION . $this->getFunctionName() . '.' . PHPTAL_PHP_CODE_EXTENSION;
+        $this->_codeFile = $this->getPhpCodeDestination() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
+        return $this;
 	}
 
     /**
@@ -368,14 +487,16 @@ class PHPTAL
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
-        if (defined('PHPTAL_FORCE_REPARSE') 
-            || !file_exists($this->_codeFile) 
+        if (defined('PHPTAL_FORCE_REPARSE')
+            || $this->getForceReparse()
+            || !file_exists($this->_codeFile)
             || filemtime($this->_codeFile) < $this->_source->getLastModifiedTime())
 		{
 			$this->cleanUpCache();
             $this->parse();
         }
         $this->_prepared = true;
+        return $this;
     }
 
 	/**
@@ -384,7 +505,7 @@ class PHPTAL
 	 */
 	public function cleanUpCache()
 	{
-		if (!$this->_codeFile) 
+		if (!$this->_codeFile)
 		{
 			$this->findTemplate(); $this->setCodeFile();
 			if (!$this->_codeFile) throw new PHPTAL_Exception("No codefile");
@@ -395,6 +516,7 @@ class PHPTAL
 			if (substr($file, 0, strlen($this->_codeFile)) !== $this->_codeFile) continue; // safety net
 			unlink($file);
 		}
+        return $this;
 	}
 	}
 
@@ -431,7 +553,7 @@ class PHPTAL
     {
         return $this->_translator;
     }
-    
+
     /**
      * Returns array of exceptions catched by tal:on-error attribute.
      * @return array<Exception>
@@ -440,14 +562,15 @@ class PHPTAL
     {
         return $this->_errors;
     }
-    
+
     /**
      * Public for phptal templates, private for user.
      * @access private
      */
     public function addError(Exception $error)
     {
-        array_push($this->_errors, $error); 
+        array_push($this->_errors, $error);
+        return $this;
     }
 
     /**
@@ -500,10 +623,12 @@ class PHPTAL
         if (!@file_put_contents($this->_codeFile, $generator->getResult())) {
             throw new PHPTAL_Exception('Unable to open '.$this->_codeFile.' for writing');
         }
+
+        return $this;
     }
 
-    /** 
-     * Search template source location. 
+    /**
+     * Search template source location.
      */
     protected function findTemplate()
     {
@@ -563,9 +688,15 @@ class PHPTAL
     // list of on-error caught exceptions
     protected $_errors = array();
 
-    protected $_encoding = PHPTAL_DEFAULT_ENCODING; 
+    protected $_encoding = PHPTAL_DEFAULT_ENCODING;
     protected $_outputMode = PHPTAL::XHTML;
     protected $_stripComments = false;
+
+    // configuration properties
+    protected $_forceReparse = false;
+    protected $_phpCodeDestination = PHPTAL_PHP_CODE_DESTINATION;
+    protected $_phpCodeExtension = PHPTAL_PHP_CODE_EXTENSION;
+
 }
 
 ?>
