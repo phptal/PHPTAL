@@ -129,9 +129,9 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	        list(, $expression, $string) = $m;
 	    }
 	    // split OR expressions terminated by a 'fast' string
-	    else if (preg_match('/^(.*?)\s*?\|\s*(\'(?:[^\'\\\\]|\\\\.)*\')\s*$/sm', $expression, $m)){
+	    else if (preg_match('/^(.*?)\s*?\|\s*\'((?:[^\'\\\\]|\\\\.)*)\'\s*$/sm', $expression, $m)){
 	        list(, $expression, $string) = $m;
-	        $string = 'string:'.stripslashes(substr($string, 1, -1));
+	        $string = 'string:'.stripslashes($string);
 	    }
 
 	    // split OR expressions

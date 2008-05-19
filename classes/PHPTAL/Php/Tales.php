@@ -73,7 +73,7 @@ function phptal_tale($expression, $nothrow=false)
 
 function phptal_tales($expression, $nothrow=false)
 {
-    $expression = trim($expression);
+	$expression = trim($expression);
 
     // Look for tales modifier (string:, exists:, etc...)
     //if (preg_match('/^([-a-z]+):(.*?)$/', $expression, $m)) {
@@ -81,15 +81,15 @@ function phptal_tales($expression, $nothrow=false)
         list(,$typePrefix,$expression) = $m;
     }
     // may be a 'string'
-    else if (preg_match('/^\'(.*?)\'$/', $expression, $m)) {
-        list(,$expression) = $m;
+    else if (preg_match('/^\'((?:[^\']|\\\\.)*)\'$/', $expression, $m)) {
+        $expression = stripslashes($m[1]);
         $typePrefix = 'string';
     }
     // failback to path:
     else {
         $typePrefix = 'path';
     }
-
+    
     // is a registered TALES expression modifier
     if(PHPTAL_TalesRegistry::getInstance()->isRegistered($typePrefix)) {
     	$callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);

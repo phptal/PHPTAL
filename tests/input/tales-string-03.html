@@ -1,2 +1,6 @@
 <span tal:content="php:'This is some \' thing'"/>
+<span tal:content="'This is some \' thing'"/>
+<span tal:content="'This is some \' thing' | 'some thing'"/>
+<span tal:content="nonexistantvariable | 'some \' thing'"/>
+<span tal:content="'' | 'some \' thing' | string:else"/>
 <span tal:content="string:This is some \' thing"/>
