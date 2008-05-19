@@ -425,6 +425,21 @@ class PHPTAL
         return $res;
     }
 
+    protected function setConfigurationFrom(PHPTAL $from)
+    {
+        $this->_encoding = $from->_encoding;
+        $this->_outputMode = $from->_outputMode;
+        $this->_stripComments = $from->_stripComments;
+        $this->_forceReparse = $from->_forceReparse;
+        $this->_phpCodeDestination = $from->_phpCodeDestination;
+        $this->_phpCodeExtension = $from->_phpCodeExtension;
+        $this->setTemplateRepository($from->_repositories);
+        array_unshift($this->_repositories, dirname($from->_source->getRealPath()));
+        $this->_resolvers = $from->_resolvers;
+        $this->_prefilter = $from->_prefilter;
+        $this->_postfilter = $from->_postfilter;        
+    }
+
     /**
      * Execute a template macro.
      * @param $path string Template macro path
@@ -433,18 +448,13 @@ class PHPTAL
     {
         // extract macro source file from macro name, if not source file
         // found in $path, then the macro is assumed to be local
-        if (preg_match('/^(.*?)\/([a-z0-9_]*?)$/i', $path, $m)){
+        if (preg_match('/^(.*?)\/([a-z0-9_]*)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
 
             // TODO: stores a list of already prepared macro to avoid this 
             // preparation on each call
             $tpl = new PHPTAL($file);
-            $tpl->_encoding = $this->_encoding;
-            $tpl->setTemplateRepository($this->_repositories);
-            array_unshift($tpl->_repositories, dirname($this->_source->getRealPath()));
-            $tpl->_resolvers = $this->_resolvers;
-            $tpl->_prefilter = $this->_prefilter;
-            $tpl->_postfilter = $this->_postfilter;
+            $tpl->setConfigurationFrom($this);
             $tpl->prepare();
 
             // save current file
