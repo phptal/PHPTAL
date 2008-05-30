@@ -261,18 +261,18 @@ function phptal_path($base, $path, $nothrow=false)
                 $base = count($base);
                 continue;
             }
-            
-            
-            
+                        
             // look for isset (priority over __get)
-            if (method_exists($base, '__isset')){
+            if (is_callable(array($base, '__isset')))
+            {
                 if ($base->__isset($current)){
                     $base = $base->$current;
                     continue;
                 }
             }
             // ask __get and discard if it returns null
-            else if (method_exists($base, '__get')){
+            else if (is_callable(array($base, '__get')))
+            {
                 $tmp = $base->$current;
                 if (NULL !== $tmp){
                     $base = $tmp;

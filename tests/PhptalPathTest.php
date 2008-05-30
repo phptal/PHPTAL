@@ -27,6 +27,22 @@ class PhptalPathTest_DummyClass
     public $foo;
 }
 
+class PhptalPathTest_DummyIssetClass
+{    
+    protected function __isset($isset)
+    {
+        return false;
+    }
+}
+
+class PhptalPathTest_DummyGetClass
+{   
+    protected function __get($anything)
+    {
+        return 'whatever';
+    }
+}
+
 class PhptalPathTest extends PHPUnit_Framework_TestCase
 {
     function testZeroIndex()
@@ -35,7 +51,25 @@ class PhptalPathTest extends PHPUnit_Framework_TestCase
         $result = phptal_path($data, '0');
         $this->assertEquals(1, $result);
     }
-
+    
+    function testProtectedIsset()
+    {
+        $tpl = new PHPTAL(); 
+        $tpl->protected = new PhptalPathTest_DummyIssetClass;
+        $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'<p>ok</p>');
+    }
+    
+    function testProtectedGet()
+    {
+        $tpl = new PHPTAL(); 
+        $tpl->protected = new PhptalPathTest_DummyGetClass;
+        $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'<p>ok</p>');
+    }    
+    
     function testDefinedButNullProperty()
     {
         $src = <<<EOS
