@@ -55,11 +55,31 @@ abstract class PHPTAL_XmlParser
 
     // exceptions error messages
     const ERR_CHARS_BEFORE_DOC_START = 
-        "Characters found before the begining of the document !";
+        "Characters found before the begining of the document!";
     const ERR_EXPECT_VALUE_QUOTE =
         "Unexpected '%s' character, expecting attribute single or double quote";
         
     const BOM_STR = "\xef\xbb\xbf";
+    
+    
+    static $state_names = array(
+      self::ST_ROOT => 'root node',
+      self::ST_TEXT => 'text',
+      self::ST_LT   => 'start of tag',
+      self::ST_TAG_NAME => 'tag name',
+      self::ST_TAG_CLOSE => 'closing tag',
+      self::ST_TAG_SINGLE => 'self-closing tag',
+      self::ST_TAG_ATTRIBUTES => 'tag',
+      self::ST_CDATA => 'CDATA',
+      self::ST_COMMENT => 'comment',
+      self::ST_DOCTYPE => 'doctype',
+      self::ST_XMLDEC => 'XML declaration',
+      self::ST_PREPROC => 'preprocessor directive',
+      self::ST_ATTR_KEY => 'attribute name',
+      self::ST_ATTR_EQ => 'attribute value',
+      self::ST_ATTR_QUOTE => 'quoted attribute value',
+      self::ST_ATTR_VALUE => 'unquoted attribute value',
+    );
     
     public function __construct() 
     {
@@ -298,6 +318,21 @@ abstract class PHPTAL_XmlParser
                     break;
             }
         }
+        
+        if ($state == self::ST_TEXT) // allows text past root node, which is in violation of XML spec
+        {
+            if ($i > $mark)
+            {
+                $text = substr($src, $mark, $i-$mark);
+                //if (!ctype_space($text)) $this->onElementData($text);
+                if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element");
+            }
+        }
+        else
+        {
+            throw new PHPTAL_Exception("Finished document in unexpected state: ".self::$state_names[$state]." is not finished");
+        }
+        
         $this->onDocumentEnd();
     }
 
