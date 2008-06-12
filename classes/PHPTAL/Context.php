@@ -167,13 +167,14 @@ class PHPTAL_Context
      */
     public function __set($varname, $value)
     {
-        if ($varname[0] == '_'){
-            $e = 'Template variable error \'%s\' must not begin with underscore';
-            $e = sprintf($e, $varname);
-            throw new PHPTAL_Exception($e);
+        if ($varname[0] == '_')
+        {
+            throw new PHPTAL_Exception('Template variable error \''.$varname.'\' must not begin with underscore');
         }
         $this->$varname = $value;
     }
+
+   
 
     /**
      * Context getter.
@@ -190,7 +191,12 @@ class PHPTAL_Context
         if (isset($this->_globalContext->$varname)){
             return $this->_globalContext->$varname;
         }
-            
+        
+        if (defined($varname))
+        {
+            return constant($varname);
+        }
+        
         if ($this->__nothrow)
             return null;
        
