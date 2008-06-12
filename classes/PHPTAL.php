@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-define('PHPTAL_VERSION', '1_1_12');
+define('PHPTAL_VERSION', '1_1_13');
 
 //{{{PHPTAL_PHP_CODE_DESTINATION
 if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
@@ -137,7 +137,7 @@ class PHPTAL
     }
 
     /**
-     * Set template file path.
+     * Set template from file path.
      * @param $path string
      */
     public function setTemplate($path)
@@ -150,10 +150,9 @@ class PHPTAL
     }
 
     /**
-     * Set template source.
+     * Set template from source.
      *
-     * Should be used only with temporary template sources, prefer plain
-     * files.
+     * Should be used only with temporary template sources. Use setTemplate() whenever possible.
      *
      * @param $src string The phptal template source.
      * @param path string Fake and 'unique' template path.
@@ -214,6 +213,10 @@ class PHPTAL
 
     /**
      * Set output mode
+     * XHTML output mode will force elements like <link/>, <meta/> and <img/>, etc. to be empty 
+     * and threats attributes like selected, checked to be boolean attributes.
+     *
+     * XML output mode outputs XML without such modifications and is neccessary to generate RSS feeds properly.
      * @param $mode int (PHPTAL::XML or PHPTAL::XHTML).
      */
     public function setOutputMode($mode=PHPTAL_XHTML)
@@ -234,7 +237,7 @@ class PHPTAL
     }
 
     /**
-     * Set ouput encoding.
+     * Set input and ouput encoding.
      * @param $enc string example: 'UTF-8'
      */
     public function setEncoding($enc)
@@ -244,7 +247,7 @@ class PHPTAL
     }
 
     /**
-     * Get ouput encoding.
+     * Get input and ouput encoding.
      * @param $enc string example: 'UTF-8'
      */
     public function getEncoding($enc)
@@ -256,7 +259,6 @@ class PHPTAL
      * Set the storage location for intermediate PHP files.
      * @param string $path Intermediate file path.
      */
-
     public function setPhpCodeDestination($path)
     {
         $this->_phpCodeDestination = $path;
@@ -266,7 +268,6 @@ class PHPTAL
     /**
      * Get the storage location for intermediate PHP files.
      */
-
     public function getPhpCodeDestination()
     {
         return $this->_phpCodeDestination;
@@ -276,7 +277,6 @@ class PHPTAL
      * Set the file extension for intermediate PHP files.
      * @param string $extension The file extension.
      */
-
     public function setPhpCodeExtension($extension)
     {
         $this->_phpCodeExtension = $extension;
@@ -286,7 +286,6 @@ class PHPTAL
     /**
      * Get the file extension for intermediate PHP files.
      */
-
     public function getPhpCodeExtension()
     {
         return $this->_phpCodeExtension;
@@ -295,9 +294,9 @@ class PHPTAL
     /**
      * Flags whether to ignore intermediate php files and to
      * reparse templates every time (if set to true).
+     * Don't use in production - this makes PHPTAL significantly slower.
      * @param bool bool Forced reparse state.
      */
-
     public function setForceReparse($bool)
     {
         $this->_forceReparse = (bool) $bool;
@@ -307,7 +306,6 @@ class PHPTAL
     /**
      * Get the value of the force reparse state.
      */
-
     public function getForceReparse()
     {
         return $this->_forceReparse;
@@ -323,7 +321,7 @@ class PHPTAL
     }
 
     /**
-     * Set template pre filter.
+     * Set template pre filter. It will be called once before template is compiled.
      */
     public function setPreFilter(PHPTAL_Filter $filter)
     {
@@ -332,7 +330,7 @@ class PHPTAL
     }
 
     /**
-     * Set template post filter.
+     * Set template post filter. It will be called every time after template generates output.
      */
     public function setPostFilter(PHPTAL_Filter $filter)
     {
@@ -442,6 +440,8 @@ class PHPTAL
 
     /**
      * Execute a template macro.
+     * Should be used only from within generated template code!
+     *
      * @param $path string Template macro path
      */
     public function executeMacro($path)
@@ -565,7 +565,7 @@ class PHPTAL
     }
 
     /**
-     * Returns array of exceptions catched by tal:on-error attribute.
+     * Returns array of exceptions caught by tal:on-error attribute.
      * @return array<Exception>
      */
     public function getErrors()
@@ -585,6 +585,8 @@ class PHPTAL
 
     /**
      * Returns current context object.
+     * Use only in Triggers.
+     *
      * @return PHPTAL_Context
      */
     public function getContext()
@@ -592,17 +594,29 @@ class PHPTAL
         return $this->_context;
     }
 
+    /**
+     * only for use in generated template code
+     * @access private
+     */
     public function getGlobalContext()
     {
         return $this->_globalContext;
     }
 
+    /**
+     * only for use in generated template code
+     * @access private
+     */
     public function pushContext()
     {
         $this->_context = $this->_context->pushContext();
         return $this->_context;
     }
 
+    /**
+     * only for use in generated template code
+     * @access private
+     */
     public function popContext()
     {
         $this->_context = $this->_context->popContext();
