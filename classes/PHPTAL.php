@@ -497,7 +497,7 @@ class PHPTAL
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
-        if (defined('PHPTAL_FORCE_REPARSE')
+        if ((defined('PHPTAL_FORCE_REPARSE') && PHPTAL_FORCE_REPARSE)
             || $this->getForceReparse()
             || !file_exists($this->_codeFile)
             || filemtime($this->_codeFile) < $this->_source->getLastModifiedTime())
@@ -628,7 +628,7 @@ class PHPTAL
         require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
         
         // instantiate the PHPTAL source parser 
-        $parser = new PHPTAL_Dom_Parser();
+        $parser = new PHPTAL_Dom_Parser($this->_encoding);
         $parser->stripComments($this->_stripComments);
 
         $data = $this->_source->getData();

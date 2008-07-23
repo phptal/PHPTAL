@@ -37,16 +37,24 @@ if (isset($argv) && count($argv) >= 2){
     array_shift($argv);
     foreach ($argv as $entry){
         echo "-> running standalone test units $entry\n";
-        require_once $entry;
-        $class = str_replace('.php', '', $entry);
-        $class = basename($class);
-        $printer = new PHPUnit_TextUI_ResultPrinter();
-        $result = new PHPUnit_Framework_TestResult();
-        $result->addListener($printer);
-        $testclass = new ReflectionClass($class);
-        $suite = new PHPUnit_Framework_TestSuite($testclass);
-        $suite->run($result);
-        $printer->printResult($result, 0);
+        try
+        {
+            require_once $entry;
+            $class = str_replace('.php', '', $entry);
+            $class = basename($class);
+            $printer = new PHPUnit_TextUI_ResultPrinter();
+            $result = new PHPUnit_Framework_TestResult();
+            $result->addListener($printer);
+            $testclass = new ReflectionClass($class);
+            $suite = new PHPUnit_Framework_TestSuite($testclass);
+            $suite->run($result);
+            $printer->printResult($result, 0);
+        }
+        catch(Exception $e)
+        {
+            echo "Exception during execution of $entry";
+        }
+        
     }
     exit(0);
 }
@@ -63,6 +71,8 @@ while ($entry = $d->read()) {
         $suite->run($result);
     }
 }
-$printer->printResult( $result, 0 );
 
-?>
+//ob_start();
+$printer->printResult( $result, 0 );
+//echo html_entity_decode(ob_get_clean(),ENT_QUOTES,'UTF-8');
+

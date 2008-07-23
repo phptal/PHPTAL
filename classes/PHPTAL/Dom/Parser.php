@@ -34,12 +34,13 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
  */
 class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 {
-    const ERR_DOCUMENT_END_STACK_NOT_EMPTY = "Reached document end but element stack not empty";
+    const ERR_DOCUMENT_END_STACK_NOT_EMPTY = "Not all elements were closed before end of the document (element stack not empty)";
     const ERR_UNSUPPORTED_ATTRIBUTE = "Unsupported attribute '%s'";
     const ERR_ELEMENT_CLOSE_MISMATCH = "Tag closure mismatch, expected '%s' but was '%s'";
   
-    public function __construct()
+    public function __construct($input_encoding = 'UTF-8')
     {
+        parent::__construct($input_encoding);
         $this->_xmlns = new PHPTAL_Dom_XmlnsState();
     }
 

@@ -219,18 +219,18 @@ class PHPTAL_Dom_Defs
      * contained (ie: they are present or not).
      */
     private static $XHTML_BOOLEAN_ATTRIBUTES = array(
-        'compact',
-        'nowrap',
-        'ismap',
-        'declare',
-        'noshade',
         'checked',
+        'compact',
+        'declare',
+        'defer',
         'disabled',
-        'readonly',
+        'ismap',
         'multiple',
-        'selected',
         'noresize',
-        'defer'
+        'noshade',
+        'nowrap',
+        'readonly',
+        'selected',
     );
 }
 

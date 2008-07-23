@@ -27,6 +27,7 @@ class PhptalPathTest_DummyClass
     public $foo;
 }
 
+/* protected get/isset doesn't work in PHP 5.3 
 class PhptalPathTest_DummyIssetClass
 {    
     protected function __isset($isset)
@@ -42,6 +43,7 @@ class PhptalPathTest_DummyGetClass
         return 'whatever';
     }
 }
+*/
 
 class PhptalPathTest extends PHPUnit_Framework_TestCase
 {
@@ -52,6 +54,7 @@ class PhptalPathTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $result);
     }
     
+    /* protected get/isset doesn't work in PHP 5.3 
     function testProtectedIsset()
     {
         $tpl = new PHPTAL(); 
@@ -69,6 +72,7 @@ class PhptalPathTest extends PHPUnit_Framework_TestCase
         $res = $tpl->execute();
         $this->assertEquals($res,'<p>ok</p>');
     }    
+    */
     
     function testDefinedButNullProperty()
     {

@@ -29,7 +29,7 @@ class GetTextTest extends PHPUnit_Framework_TestCase
     {
         try
         {
-            $gettext = new PHPTAL_GetTextTranslator();
+            return new PHPTAL_GetTextTranslator();
         }
         catch(PHPTAL_Exception $e)
         {            
