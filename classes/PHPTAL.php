@@ -377,8 +377,8 @@ class PHPTAL
 
         // includes generated template PHP code
         $this->_context->__file = $this->__file;
-        require_once $this->_codeFile;
-        $templateFunction = $this->_functionName;
+        require_once $this->getCodePath();
+        $templateFunction = $this->getFunctionName();
         try {
             ob_start();
             $templateFunction($this, $this->_context);
@@ -465,7 +465,8 @@ class PHPTAL
 
     private function setCodeFile()
     {
-        $this->_codeFile = $this->getPhpCodeDestination() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
+        $this->_codeFile = $this->getPhpCodeDestination() . 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
+            substr(preg_replace('/[^a-zA-Z]/','',basename($this->_source->getRealPath())),0,10) . md5($this->_source->getRealPath()) . '.' . $this->getPhpCodeExtension();
     }
 
     /**
@@ -592,7 +593,7 @@ class PHPTAL
     public function getFunctionName()
     {
         if (!$this->_functionName) {
-            $this->_functionName = 'tpl_' . PHPTAL_VERSION .  md5($this->_source->getRealPath());
+            $this->_functionName = 'tpl_' . PHPTAL_VERSION . substr(preg_replace('/[^a-zA-Z]/','',basename($this->_source->getRealPath())),0,16) . md5($this->_source->getRealPath());
         }
         return $this->_functionName;
     }
@@ -764,7 +765,7 @@ class PHPTAL
     protected $_phpCodeExtension = PHPTAL_PHP_CODE_EXTENSION;
 
     protected $_cacheLifetime = 30;
-    protected $_cachePurgeFrequency = 10;
+    protected $_cachePurgeFrequency = 50;
 }
 
 ?>
