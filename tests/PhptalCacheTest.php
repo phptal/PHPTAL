@@ -22,12 +22,23 @@
 
 require_once 'config.php';
 
+$PhptalCacheTest_random = time().mt_rand();
+
 class PhptalCacheTest extends PHPUnit_Framework_TestCase 
 { 
+    private function PHPTALWithSource($source)
+    {
+        global $PhptalCacheTest_random;
+        
+        $tpl = new PHPTAL();
+        $tpl->setForceReparse(false);
+        $tpl->setSource($source."<!-- $PhptalCacheTest_random -->"); // avoid cached templates from previous test runs
+        return $tpl;
+    }
+    
     function testBasicCache()
     {
-        $tpl = new PHPTAL();
-        $tpl->setSource('<div phptal:cache="1h" tal:content="var" />');
+        $tpl = $this->PHPTALWithSource('<div phptal:cache="1h" tal:content="var" />');
         $tpl->var = 'SUCCESS';
         $this->assertContains( "SUCCESS", $tpl->execute() );        
         
@@ -42,8 +53,7 @@ class PhptalCacheTest extends PHPUnit_Framework_TestCase
      */
     function testDefine()
     {
-        $tpl = new PHPTAL();
-        $tpl->setSource('<div tal:define="display var" phptal:cache="1h">${display}</div>');
+        $tpl = $this->PHPTALWithSource('<div tal:define="display var" phptal:cache="1h">${display}</div>');
         $tpl->var = 'SUCCESS';
         $this->assertContains( "SUCCESS", $tpl->execute() );        
         
@@ -55,8 +65,7 @@ class PhptalCacheTest extends PHPUnit_Framework_TestCase
         
     function testTimedExpiry()
     {
-        $tpl = new PHPTAL();
-        $tpl->setSource('<div phptal:cache="1s" tal:content="var" />');
+        $tpl = $this->PHPTALWithSource('<div phptal:cache="1s" tal:content="var" />');
         $tpl->var = 'FIRST';
         $this->assertContains( "FIRST", $tpl->execute() );        
         
@@ -68,10 +77,46 @@ class PhptalCacheTest extends PHPUnit_Framework_TestCase
         $this->assertNotContains( "FIRST", $res );        
     }
     
+    function testCacheInStringSource()
+    {
+        $source = '<div phptal:cache="1d" tal:content="var" />';   
+        $tpl = $this->PHPTALWithSource($source);
+        $tpl->var = 'FIRST';
+        $this->assertContains( "FIRST", $tpl->execute() );
+        
+        $tpl = $this->PHPTALWithSource($source);
+        $tpl->var = 'SECOND';
+        $this->assertContains( "FIRST", $tpl->execute() );
+    }
+    
+    function testCleanUpCache()
+    {
+        $source = '<div phptal:cache="1d" tal:content="var" />';
+        
+        $tpl = $this->PHPTALWithSource($source);
+        $tpl->cleanUpCache();
+        
+        $tpl->var = 'FIRST';
+        $this->assertContains( "FIRST", $tpl->execute() );        
+        
+        $tpl = $this->PHPTALWithSource($source);
+        $tpl->var = 'SECOND';
+        $res = $tpl->execute();
+        $this->assertContains( "FIRST", $res );        
+        $this->assertNotContains( "SECOND", $res );        
+        
+        $tpl->cleanUpCache();
+        
+        $tpl->var = 'THIRD';
+        $res = $tpl->execute();
+        $this->assertContains( "THIRD", $res );        
+        $this->assertNotContains( "SECOND", $res );        
+        $this->assertNotContains( "FIRST", $res );        
+    }
+    
     function testPerExpiry()
     {
-        $tpl = new PHPTAL();
-        $tpl->setSource('<div phptal:cache="1d per var" tal:content="var" />');
+        $tpl = $this->PHPTALWithSource('<div phptal:cache="1d per var" tal:content="var" />');
         $tpl->var = 'FIRST';
         $this->assertContains( "FIRST", $tpl->execute() );        
         $tpl->var = 'SECOND';
@@ -82,8 +127,7 @@ class PhptalCacheTest extends PHPUnit_Framework_TestCase
     
     function testVersions()
     {
-        $tpl = new PHPTAL();
-        $tpl->setSource('<div phptal:cache="40s per version" tal:content="var" />');
+        $tpl = $this->PHPTALWithSource('<div phptal:cache="40s per version" tal:content="var" />');
         
         $tpl->var = 'FIRST';
         $tpl->version = '1';
@@ -110,8 +154,7 @@ class PhptalCacheTest extends PHPUnit_Framework_TestCase
     
     function testVariableExpiry()
     {
-        $tpl = new PHPTAL();
-        $tpl->setSource('<div phptal:cache="vartime s" tal:content="var" />');
+        $tpl = $this->PHPTALWithSource('<div phptal:cache="vartime s" tal:content="var" />');
         $tpl->vartime = 0;
         $tpl->var = 'FIRST';        
         $this->assertContains( "FIRST", $tpl->execute() );

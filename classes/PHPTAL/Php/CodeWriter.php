@@ -345,14 +345,9 @@ class PHPTAL_Php_CodeWriter
     
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-    private function escape($html)
-    {
-        return htmlspecialchars($html, ENT_QUOTES, $this->_state->getEncoding());
-    }
-    
     private function indentSpaces() 
     {
-        return str_pad('', $this->_indent * 4); 
+        return str_repeat("\t", $this->_indent); 
     }
 
     private function pushGeneratorContext()

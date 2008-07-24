@@ -1,61 +1,44 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
+//
 //  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
+//
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
 //  License as published by the Free Software Foundation; either
 //  version 2.1 of the License, or (at your option) any later version.
-//  
+//
 //  This library is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //  Lesser General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU Lesser General Public
 //  License along with this library; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
+//
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
+//
 
 define('PHPTAL_VERSION', '1_1_13');
 
-//{{{PHPTAL_PHP_CODE_DESTINATION
-if (!defined('PHPTAL_PHP_CODE_DESTINATION')){
-    if (function_exists('sys_get_temp_dir')) {
-        define('PHPTAL_PHP_CODE_DESTINATION',rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
-    }
-    else if (substr(PHP_OS,0,3) == 'WIN') {
-        if (file_exists('c:\\WINNT\\Temp\\')){
-            define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINNT\\Temp\\');
-        }
-        else {
-            define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINDOWS\\Temp\\');
-        }
-    }
-    else {
-        define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
-    }
-}
-//}}}
-//{{{PHPTAL_DEFAULT_ENCODING
-if (!defined('PHPTAL_DEFAULT_ENCODING')){
-    define('PHPTAL_DEFAULT_ENCODING', 'UTF-8');
-}
-//}}}
-//{{{PHPTAL_PHP_CODE_EXTENSION
-if (!defined('PHPTAL_PHP_CODE_EXTENSION')){
-    define('PHPTAL_PHP_CODE_EXTENSION', 'php');
-}
-//}}}
 //{{{PHPTAL_DIR
-if (!defined('PHPTAL_DIR'))
-{
-    define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
+if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
+else assert('substr(PHPTAL_DIR,-1) == DIRECTORY_SEPARATOR');
+//}}}
+
+/* Please don't use the following constants. They have been replaced by methods in the PHPTAL class and are kept for backwards compatibility only. */
+//{{{
+if (!defined('PHPTAL_PHP_CODE_DESTINATION')) {
+    if (function_exists('sys_get_temp_dir')) define('PHPTAL_PHP_CODE_DESTINATION',rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
+    else if (substr(PHP_OS,0,3) == 'WIN') {
+        if (file_exists('c:\\WINNT\\Temp\\')) define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINNT\\Temp\\');
+        else define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINDOWS\\Temp\\');
+    }
+    else define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
 }
-assert('substr(PHPTAL_DIR,-1) == DIRECTORY_SEPARATOR');
+if (!defined('PHPTAL_DEFAULT_ENCODING')) define('PHPTAL_DEFAULT_ENCODING', 'UTF-8');
+if (!defined('PHPTAL_PHP_CODE_EXTENSION')) define('PHPTAL_PHP_CODE_EXTENSION', 'php');
 //}}}
 
 define('PHPTAL_XHTML', 1);
@@ -70,7 +53,7 @@ require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
 
 /**
  * PHPTAL template entry point.
- * 
+ *
  * <code>
  * <?php
  * require_once 'PHPTAL.php';
@@ -86,7 +69,7 @@ require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
  * }
  * ?>
  * </code>
- * 
+ *
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL
@@ -161,13 +144,13 @@ class PHPTAL
     {
         if ($path == false)
             $path = '<string> '.md5($src);
-        
+
         require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
         $this->_source = new PHPTAL_StringSource($src, $path);
         $this->_path = $path;
         return $this;
     }
-    
+
     /**
      * Specify where to look for templates.
      *
@@ -213,7 +196,7 @@ class PHPTAL
 
     /**
      * Set output mode
-     * XHTML output mode will force elements like <link/>, <meta/> and <img/>, etc. to be empty 
+     * XHTML output mode will force elements like <link/>, <meta/> and <img/>, etc. to be empty
      * and threats attributes like selected, checked to be boolean attributes.
      *
      * XML output mode outputs XML without such modifications and is neccessary to generate RSS feeds properly.
@@ -256,12 +239,12 @@ class PHPTAL
     }
 
     /**
-     * Set the storage location for intermediate PHP files.
+     * Set the storage location for intermediate PHP files. The path cannot contain characters that would be interpreted by glob() (e.g. * or ?)
      * @param string $path Intermediate file path.
      */
     public function setPhpCodeDestination($path)
     {
-        $this->_phpCodeDestination = $path;
+        $this->_phpCodeDestination = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
         return $this;
     }
 
@@ -308,7 +291,7 @@ class PHPTAL
      */
     public function getForceReparse()
     {
-        return $this->_forceReparse;
+        return $this->_forceReparse !== NULL ? $this->_forceReparse : (defined('PHPTAL_FORCE_REPARSE') && PHPTAL_FORCE_REPARSE);
     }
 
     /**
@@ -380,7 +363,7 @@ class PHPTAL
         $this->_context->__set($varname, $value);
         return $this;
     }
-    
+
     /**
      * Execute the template code.
      *
@@ -431,11 +414,13 @@ class PHPTAL
         $this->_forceReparse = $from->_forceReparse;
         $this->_phpCodeDestination = $from->_phpCodeDestination;
         $this->_phpCodeExtension = $from->_phpCodeExtension;
+        $this->_cacheLifetime = $from->_cacheLifetime;
+        $this->_cachePurgeFrequency = $from->_cachePurgeFrequency;
         $this->setTemplateRepository($from->_repositories);
         array_unshift($this->_repositories, dirname($from->_source->getRealPath()));
         $this->_resolvers = $from->_resolvers;
         $this->_prefilter = $from->_prefilter;
-        $this->_postfilter = $from->_postfilter;        
+        $this->_postfilter = $from->_postfilter;
     }
 
     /**
@@ -451,7 +436,7 @@ class PHPTAL
         if (preg_match('/^(.*?)\/([a-z0-9_]*)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
 
-            // TODO: stores a list of already prepared macro to avoid this 
+            // TODO: stores a list of already prepared macro to avoid this
             // preparation on each call
             $tpl = new PHPTAL($file);
             $tpl->setConfigurationFrom($this);
@@ -460,13 +445,13 @@ class PHPTAL
             // save current file
             $currentFile = $this->_context->__file;
             $this->_context->__file = $tpl->__file;
-            
+
             // require PHP generated code and execute macro function
             require_once $tpl->getCodePath();
             $fun = $tpl->getFunctionName() . '_' . $macroName;
             if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
             $fun($this, $this->_context);
-            
+
             // restore current file
             $this->_context->__file = $currentFile;
         }
@@ -478,12 +463,10 @@ class PHPTAL
         }
     }
 
-	private function setCodeFile()
-	{
-		// where php generated code should reside
+    private function setCodeFile()
+    {
         $this->_codeFile = $this->getPhpCodeDestination() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
-        return $this;
-	}
+    }
 
     /**
      * Prepare template without executing it.
@@ -494,48 +477,107 @@ class PHPTAL
         $this->findTemplate();
         $this->__file = $this->_source->getRealPath();
 		$this->setCodeFile();
+		
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
-        if ((defined('PHPTAL_FORCE_REPARSE') && PHPTAL_FORCE_REPARSE)
-            || $this->getForceReparse()
-            || !file_exists($this->_codeFile)
-            || filemtime($this->_codeFile) < $this->_source->getLastModifiedTime())
+        if ($this->getForceReparse() || !file_exists($this->_codeFile))
 		{
-			$this->cleanUpCache();
+	        if ($this->getCachePurgeFrequency() && mt_rand()%$this->getCachePurgeFrequency() == 0)
+    		{
+    		    $this->cleanUpGarbage();
+    		}
             $this->parse();
         }
         $this->_prepared = true;
         return $this;
     }
 
+    public function getCacheLifetime()
+    {
+        return $this->_cacheLifetime;
+    }
+
+    /**
+     * how long compiled templates and phptal:cache files are kept, in days
+     */
+    public function setCacheLifetime($days)
+    {
+        $this->_cacheLifetime = max(0.5,$days);
+    }
+
+    /**
+     * PHPTAL will scan cache and remove old files on every nth compile
+     * Set to 0 to disable cleanups
+     */
+    public function setCachePurgeFrequency($n)
+    {
+        $this->_cachePurgeFrequency = (int)$n;
+    }
+
+    public function getCachePurgeFrequency()
+    {
+        return $this->_cachePurgeFrequency;
+    }
+
+
 	/**
+	 * Removes all compiled templates from cache after PHPTAL_CACHE_LIFETIME days
+	 */
+	public function cleanUpGarbage()
+	{
+		$phptalCacheFilesExpire = time() - $this->getCacheLifetime() * 3600 * 24;
+		$limit = $this->getPhpCodeDestination() . 'tpl_' . $phptalCacheFilesExpire . '_';
+		$phptalCacheFiles = glob($this->getPhpCodeDestination() . 'tpl_*.php');
+		if ($phptalCacheFiles)
+		{
+			foreach($phptalCacheFiles as $index => $file)
+	        {
+				if ($file < $limit AND $file > $this->getPhpCodeDestination() . 'tpl_0')
+				{
+					$this->cleanUpGarbageUnlink($file);
+					unset($phptalCacheFiles[$index]);
+				}
+	        }
+	        foreach($phptalCacheFiles as $file)
+	        {
+				if (@filemtime($file) < $phptalCacheFilesExpire) unlink($file);
+		    }
+	    }
+	}
+
+	private function cleanUpGarbageUnlink($filename)
+	{
+		$phptalCacheFiles = glob($filename . '*');
+		foreach($phptalCacheFiles as $file)
+		{
+		    if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
+			unlink($file);
+	    }
+	}
+
+    /**
 	 * Removes single compiled template from cache and all its fragments cached by phptal:cache.
 	 * Must be called after setSource/setTemplate.
 	 */
 	public function cleanUpCache()
 	{
-		if (!$this->_codeFile)
+		if (!$this->getCodePath()) 
 		{
 			$this->findTemplate(); $this->setCodeFile();
-			if (!$this->_codeFile) throw new PHPTAL_Exception("No codefile");
+			if (!$this->getCodePath()) throw new PHPTAL_Exception("No codefile");
 		}
-		if ($phptalCacheFiles = glob($this->_codeFile.'*')) {
-		    foreach($phptalCacheFiles as $file)
-		{
-			if (substr($file, 0, strlen($this->_codeFile)) !== $this->_codeFile) continue; // safety net
-			unlink($file);
-		}
-        return $this;
-	}
-	}
+		
+		$this->cleanUpGarbageUnlink($this->getCodePath());		
+        $this->_prepared = false;
+	}	
 
     /**
      * Returns the path of the intermediate PHP code file.
      *
      * The returned file may be used to cleanup (unlink) temporary files
      * generated by temporary templates or more simply for debug.
-     * 
+     *
      * @return string
      */
     public function getCodePath()
@@ -550,7 +592,7 @@ class PHPTAL
     public function getFunctionName()
     {
         if (!$this->_functionName) {
-            $this->_functionName = 'tpl_'.PHPTAL_VERSION.md5($this->_source->getRealPath());
+            $this->_functionName = 'tpl_' . PHPTAL_VERSION .  md5($this->_source->getRealPath());
         }
         return $this->_functionName;
     }
@@ -622,24 +664,24 @@ class PHPTAL
         $this->_context = $this->_context->popContext();
         return $this->_context;
     }
-    
+
     protected function parse()
     {
         require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
-        
-        // instantiate the PHPTAL source parser 
+
+        // instantiate the PHPTAL source parser
         $parser = new PHPTAL_Dom_Parser($this->_encoding);
         $parser->stripComments($this->_stripComments);
 
         $data = $this->_source->getData();
         $realpath = $this->_source->getRealPath();
-        
+
         if ($this->_prefilter)
             $data = $this->_prefilter->filter($data);
         $tree = $parser->parseString($data, $realpath);
 
         require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
-        $generator = new PHPTAL_Php_CodeGenerator($realpath);
+        $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath());
         $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
         $generator->generate($tree);
@@ -664,7 +706,7 @@ class PHPTAL
         if ($this->_source != null){
             return;
         }
-       
+
         array_push($this->_resolvers, new PHPTAL_FileSourceResolver($this->_repositories));
         foreach ($this->_resolvers as $resolver){
             $source = $resolver->resolve($this->_path);
@@ -697,7 +739,7 @@ class PHPTAL
     protected $_functionName = null;
     // set to true when template is ready for execution
     protected $_prepared = false;
-    
+
     // associative array of phptal:id => PHPTAL_Trigger
     protected $_triggers = array();
     // i18n translator
@@ -717,10 +759,12 @@ class PHPTAL
     protected $_stripComments = false;
 
     // configuration properties
-    protected $_forceReparse = false;
+    protected $_forceReparse = NULL;
     protected $_phpCodeDestination = PHPTAL_PHP_CODE_DESTINATION;
     protected $_phpCodeExtension = PHPTAL_PHP_CODE_EXTENSION;
 
+    protected $_cacheLifetime = 30;
+    protected $_cachePurgeFrequency = 10;
 }
 
 ?>

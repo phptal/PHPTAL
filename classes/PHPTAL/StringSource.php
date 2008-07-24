@@ -16,7 +16,7 @@ class PHPTAL_StringSource implements PHPTAL_Source
     public function getLastModifiedTime()
     {
         if (file_exists($this->_realpath))
-            return filemtime($this->_realpath);
+            return @filemtime($this->_realpath);
         return 0;
     }
 
