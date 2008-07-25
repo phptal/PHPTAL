@@ -70,7 +70,9 @@ class PHPTAL_Php_CodeWriter
 
     public function splitExpression($src)
     {
-        return preg_split('/(?<!;);(?!;)/sm', $src);
+        $array = preg_split('/(?<!;);(?!;)/sm', $src);
+        foreach($array as &$a) $a = str_replace(';;',';',$a);
+        return $array;
     }
 
     public function evaluateExpression($src)

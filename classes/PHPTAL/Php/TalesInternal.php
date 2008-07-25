@@ -222,12 +222,6 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                }
 	                break;
 
-	            case ';':
-	                if ($i<$len && $expression[$i+1] == ';'){
-	                    $i++;
-	                }
-	                break;
-
                 case '\\':
                     $c = '\\\\';
                     break;

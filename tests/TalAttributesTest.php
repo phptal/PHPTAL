@@ -97,7 +97,7 @@ class TalAttributesTest extends PHPUnit_Framework_TestCase
     function testEmpty()
     {
         $src = <<<EOT
-<span class="foo" tal:attributes="class nullv | falsev | emptystrv | zerov | default"></span>
+<span class="&quot;'default" tal:attributes="class nullv | falsev | emptystrv | zerov | default"></span>
 EOT;
         $exp = <<<EOT
 <span class="0"></span>
@@ -121,7 +121,7 @@ EOT;
     }
 
     function testStructure()
-    {
+    { 
         $exp = trim_file('output/tal-attributes.09.html');
         $tpl = new PHPTAL('input/tal-attributes.09.html');
         $tpl->value = "return confirm('hel<lo');";
@@ -152,7 +152,7 @@ EOT;
         $tpl = new PHPTAL(); 
         $tpl->setSource('<p tal:attributes="title missing | php:NULL"></p>');
         $res = $tpl->execute();
-        $this->assertEquals($res,'<p></p>');
+        $this->assertEquals('<p></p>',$res);
     }
     
     function testEmptyValue()
@@ -160,7 +160,15 @@ EOT;
         $tpl = new PHPTAL(); 
         $tpl->setSource('<p tal:attributes="title missing | \'\'"></p>');
         $res = $tpl->execute();
-        $this->assertEquals($res,'<p title=""></p>');
+        $this->assertEquals('<p title=""></p>',$res);
+    }
+    
+    function testSemicolon()
+    {
+        $tpl = new PHPTAL(); 
+        $tpl->setSource('<div><p tal:content="\'\\\'a;b;;c;;;d\'" tal:attributes="style \'color:red;; font-weight:bold;;;;\'; title php:\'\\\'test;;test;;;;test\'"></p></div>');
+        $res = $tpl->execute();
+        $this->assertEquals($res,'<div><p style="color:red; font-weight:bold;;" title="&#039;test;test;;test">&#039;a;b;;c;;;d</p></div>');
     }
     
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)

@@ -112,7 +112,7 @@ implements PHPTAL_Php_TalesChainReader
     private function prepareBooleanAttribute($attribute, $code)
     {
         $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
-        $value  = sprintf('" %s=\"%s\""', $attribute, $attribute);
+        $value  = " $attribute=\"$attribute\"";
         $this->tag->generator->doIf($code);
         $this->tag->generator->doSetVar($attkey, $value);
         $this->tag->generator->doElse();
@@ -140,7 +140,7 @@ implements PHPTAL_Php_TalesChainReader
     {
         $executor->doElse();
         $code = ($this->_default !== false)
-            ? "' $this->_attribute=\"$this->_default\"'"  // default value
+            ? "' $this->_attribute=\"".str_replace("'",'\\\'',$this->_default)."\"'"  // default value
             : '\'\'';                       // do not print attribute
         $this->tag->generator->doSetVar($this->_attkey, $code);
         $executor->breakChain();
@@ -160,8 +160,8 @@ implements PHPTAL_Php_TalesChainReader
             $value = $this->_attkey;
         else
             $value = $this->tag->generator->escapeCode($this->_attkey);
-        $value = "' $this->_attribute=\"'.$value.'\"'";
-        $this->tag->generator->doSetVar($this->_attkey, $value);
+
+        $this->tag->generator->doSetVar($this->_attkey, "' $this->_attribute=\"'.$value.'\"'");
     }
 }
 
