@@ -57,14 +57,20 @@ class PHPTAL_RepeatController implements Iterator
     public function __construct($source)
     {
         if ( is_string($source) ) {
-            $this->iterator = new ArrayIterator( str_split($source) );
+            $this->iterator = new ArrayIterator( str_split($source) );  // FIXME: invalid for UTF-8 encoding, use preg_match_all('/./u') trick
         } else if ( is_array($source) ) {
             $this->iterator = new ArrayIterator($source);
         } else if ( $source instanceof IteratorAggregate ) {
             $this->iterator = $source->getIterator();
         } else if ( $source instanceof Iterator ) {        
             $this->iterator = $source;
-        } else if ( $source instanceof Traversable || $source instanceof DOMNodeList  ) {
+        } else if ( $source instanceof SimpleXMLElement) { // has non-unique keys!
+            $array = array();
+            foreach ( $source as $v ) {
+                $array[] = $v;
+            }
+            $this->iterator = new ArrayIterator($array);
+        } else if ( $source instanceof Traversable || $source instanceof DOMNodeList ) {
             // PDO Statements for example implement the engine internal Traversable 
             // interface. To make it fully iterable we traverse the set to populate
             // an array which will be actually used for iteration.
@@ -468,5 +474,4 @@ class PHPTAL_RepeatController_Groups {
     {
         return implode('/', $this->vars) . '/';
     }
-
 }

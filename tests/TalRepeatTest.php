@@ -188,6 +188,14 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals( $exp, $res );        
     }    
+    
+    function testSimpleXML()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource("<tal:block tal:repeat='s php:sxml'><b tal:content='s' />\n</tal:block>");
+        $tpl->sxml = new SimpleXMLElement("<x><y>test</y><y attr=\"test\"><z>test</z></y><y/></x>");
+        $this->assertEquals("<b><y>test</y></b>\n<b><y attr=\"test\"><z>test</z></y></b>\n<b><y/></b>\n", $tpl->execute());
+    }
 }
 
 

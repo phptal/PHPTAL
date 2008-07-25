@@ -386,13 +386,14 @@ function phptal_isempty($var)
 
 function phptal_escape($var, $ent, $encoding)
 {
-    if (is_object($var)){
-        return htmlspecialchars($var->__toString(), $ent, $encoding);
-    }
-    if (is_string($var)){
+    if (is_string($var)) {
         return htmlspecialchars($var, $ent, $encoding);
     }
-    if (is_bool($var)){
+    elseif (is_object($var)) {
+        if ($var instanceof SimpleXMLElement) return $var->asXML();
+        return htmlspecialchars($var->__toString(), $ent, $encoding);
+    }
+    elseif (is_bool($var)){
         return (int)$var;
     }
     return $var;	
