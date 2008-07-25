@@ -107,9 +107,7 @@
     </para>
 
     <para>
-    The idea behind TAL is to allow WYSIWYG template editing with sample 
-    rendering without strange tags everywhere. That's why TAL works on 
-    XML attributes instead of markup tags.
+    TAL hides most of its logic in XML attributes, preserving syntax and strucutre of XHTML. This allows previewing of TAL templates in web browser (WYSIWYG editors, live previews) and doesn't break HTML syntax highlighting in programmers' editors.
     </para>
 
     <para>
@@ -128,7 +126,7 @@
 ]]></programlisting>
 
     <para>
-    Well, with phptal you now can write:
+    Well, with PHPTAL you now can write:
     </para>
 
     <programlisting><![CDATA[
@@ -145,8 +143,8 @@
 ]]></programlisting>
 
     <para>
-    In WYSIWYG mode, the above code will render correctly with the sample
-    text, and you can present it to your clients even if the code 
+    The above code will render correctly with the sample
+    text in normal web browser, so you can present it to your clients even if the code 
     required to get 'myarray' values doesn't yet exist.
     </para>
 
@@ -207,37 +205,6 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
     <para>
     This will install the PHPTAL.php file and the associated PHPTAL 
     folder in /path/to/your/lib/folder.
-    </para>
-
-    <para>
-    Don't forget to modify your php include path in your scripts so that PHP 
-    will be able to locate library files automatically:
-    </para>
-
-    <programlisting><![CDATA[
-<?php
-
-set_include_path(get_include_path() . PATH_SEPARATOR . '/path/to/your/lib/folder');
-
-// will work like a charm
-require_once 'PHPTAL.php'; 
-?>
-]]></programlisting>
-
-    <para>
-    If you work with apache, you may also be able to modify the php 
-    include_path in a .htaccess file:
-    </para>
-
-    <programlisting><![CDATA[
-# some .htaccess file
-
-# linux users may use something as follow
-php_value include_path /usr/lib/php:/usr/local/lib/php:/path/to/your/lib/folder:.
-]]></programlisting>
-
-    <para>
-    You may also modify the include_path variable in you php.ini file.  
     </para>
     
   </article>
@@ -319,7 +286,7 @@ $people = array();
 $people[] = new Person("foo", "01-344-121-021");
 $people[] = new Person("bar", "05-999-165-541");
 $people[] = new Person("baz", "01-389-321-024");
-$people[] = new Person("buz", "05-321-378-654");
+$people[] = new Person("quz", "05-321-378-654");
 
 // put some data into the template context
 $template->title = 'The title value';
@@ -336,7 +303,7 @@ catch (Exception $e){
 ]]></programlisting>
     
     <para>
-    If you execute the php script, you will obtain something similar to 
+    If you execute the PHP script, you will obtain something similar to 
     what follows.
     </para>
 
@@ -363,7 +330,7 @@ catch (Exception $e){
           <td>05-999-165-541</td>
         </tr><tr> <td>baz</td>
           <td>01-389-321-024</td>
-        </tr><tr> <td>buz</td>
+        </tr><tr> <td>quz</td>
           <td>05-321-378-654</td>
         </tr>
       </tbody>
@@ -375,7 +342,7 @@ catch (Exception $e){
     <para>
     Well, I assume you don't mind 'too' much about carriage returns in 
     the HTML code :) If so, you may use the tidy functions to cleanup 
-    the resulting html before echoing it.
+    the resulting HTML before echoing it.
     </para>
 
   </article>
@@ -653,6 +620,10 @@ catch (Exception $e){
 
         <itemizedlist>
           <listitem><para>
+            repeat/item/key    : returns the item's key if some/result is 
+            an associative resource (index otherwise)
+          </para></listitem>
+          <listitem><para>
           repeat/item/index  : return the item index (0 to count-1)
           </para></listitem>
           <listitem><para>
@@ -673,10 +644,6 @@ catch (Exception $e){
           <listitem><para>
           repeat/item/length : returns the number of elements in 
           some/result
-          </para></listitem>
-          <listitem><para>
-          repeat/item/key    : returns the item's key if some/result is 
-          an associative resource (index otherwise)
           </para></listitem>
         </itemizedlist>
 
@@ -721,8 +688,8 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[
-<span tal:omit-tag="">
-  only this text will appear, span open and close will be removed
+<span tal:omit-tag="condition">
+  if the condition is true, then only this text will appear and span open and close will be removed
 </span>
 ]]></programlisting>
 
@@ -735,10 +702,13 @@ only this text will appear, span open and close will be removed
 ]]></programlisting>
 
         <para>
-        This attribute is useful when you want to define a macro, a 
-        loop, a condition, or any other template logic that mustn't show 
-        it's root tag.
+        This attribute is useful when you want to create element optionally, e.g. hide a link if certain condition is met.
         </para>
+        
+        <para>If you want element that is never output, you can use tal:block</para>
+        <programlisting><![CDATA[
+<tal:block tal:repeat="x php:range(1,10)">only this text will appear, ten times.</tal:block>
+]]></programlisting>
 
       </section>
 
@@ -751,7 +721,7 @@ only this text will appear, span open and close will be removed
         </para>
 
         <programlisting><![CDATA[
-<span tal:replace="string:this beautyfull string">
+<span tal:replace="string:this beautyful string">
   this uggly string and span
 </span>
 ]]></programlisting>
@@ -761,7 +731,7 @@ only this text will appear, span open and close will be removed
         </para>
 
         <programlisting><![CDATA[
-this beautyfull string
+this beautyful string
 ]]></programlisting>
 
         <para>
@@ -840,6 +810,8 @@ $somelink->text = "the google search engine";
 <a href="http://www.google.com" 
 title="google search engine">the google search engine</a>
 ]]></programlisting>
+
+        <para>Semicolon (;) separates attributes. If you want semicolon to be output in an attribute, you have to double it (;;).</para>
 
         <para>
         A somewhat complicated example involving tal:repeat:
@@ -926,7 +898,7 @@ title="google search engine">the google search engine</a>
       <para>
       METAL stands for 'Macro Extension for TAL'. This namespace, 
       supported by PHPTAL, allows template designers to define and call 
-      xml/xhtml macros.
+      XML/XHTML macros.
       </para>
 
       <section id="metal-define-macro">
@@ -992,6 +964,17 @@ title="google search engine">the google search engine</a>
         <programlisting><![CDATA[
 <span metal:use-macro="${design}/site_macros.html/main_menu"/>
 ]]></programlisting>
+
+
+        <para>Macro can call itself. This way you can output arrays recursively:</para>
+        <programlisting><![CDATA[
+        <ul metal:define-macro="show-list">
+            <li tal:repeat="item list">
+                <tal:block tal:condition="php:is_array(item)" tal:define="list item" metal:use-macro="show-list" />
+                <tal:block tal:condition="php:!is_array(item)" tal:content="item" />
+            </li>
+        </ul>        
+        ]]></programlisting>
 
       </section>
 
@@ -1262,6 +1245,8 @@ title="google search engine">the google search engine</a>
 <ul id="user-info" phptal:cache="25m per object/id">...</ul>]]></programlisting>
              <para>&lt;ul> will be cached for 25 minutes, separately for each object ID.</para>
 
+             <para>Use of cache is beneficial only for elements that use very complex expressions, macros from external files or PHP expressions/objects that access the database. Otherwise uncached templates will be just as fast.</para>
+
 <para>Limitations:</para>
             
             
@@ -1289,7 +1274,7 @@ title="google search engine">the google search engine</a>
         <para>
         Another problem concerning PHPTALES is the way PHPTAL has to 
         interpret paths. For example, 
-        myobject/mymethod/10/othermethod/hashkey takes a very long to 
+        myobject/mymethod/property/10/othermethod/hashkey takes relatively long to 
         interpret.
         </para>
   
@@ -1297,11 +1282,11 @@ title="google search engine">the google search engine</a>
         PHPTAL has (at runtime) to take myobject and discover that it
         is an object; find out that 'mymethod' is a method of this
         object (rather than a variable), and then to call it; explore
-        the result to determine that it is an array; find the 'ten'
+        the result to determine that it is an object with a property; find that its value is an array; find the 'ten'
         element of this array, and determine that it is an object;
         decide that othermethod is a method of this object (rather
         than a variable), and get the result of its execution; find
-        that it is an associative array, and then retrieve the value
+        that it is an object, and then retrieve the value
         for the key 'hashkey'.
         </para>
 
@@ -1318,18 +1303,12 @@ title="google search engine">the google search engine</a>
     <table phptal:tales="php">
       <tr tal:repeat="myobject document.getChildren()">
         <td
-          tal:content="myobject.mymethod()[10].otherMethod()['hashkey']"></td>
+          tal:content="myobject.mymethod().property[10].otherMethod().hashkey"></td>
       </tr>
     </table>
   </body>
 </html>
 ]]></programlisting>
-
-        <para>
-        Well, I am not sure that the example above compiles, but you get the 
-        idea of what you can do with phptal:tales. All tal, metal, i18n 
-        paths will be plain PHP expressions.
-        </para>
 
         <para>
         Please note that the above example do the same as:
@@ -1341,7 +1320,7 @@ title="google search engine">the google search engine</a>
     <table>
       <tr tal:repeat="myobject php:document.getChildren()">
         <td 
-          tal:content="php:myobject.mymethod()[10].otherMethod()['hashkey']"></td>
+          tal:content="php:myobject.mymethod().property[10].otherMethod().hashkey"></td>
       </tr>
     </table>
   </body>
@@ -1360,7 +1339,7 @@ title="google search engine">the google search engine</a>
 
       <para>
       :block is a syntactic sugar for elements which contains many tal 
-      attributes  which are not to be echoed.
+      attributes which are not to be echoed.
       </para>
 
       <programlisting><![CDATA[
@@ -1372,7 +1351,7 @@ title="google search engine">the google search engine</a>
       </para>
 
       <programlisting><![CDATA[
-<span tal:define="myvar string:Some value"/>
+<span tal:define="myvar string:Some value" tal:omit-tag=""/>
 ]]></programlisting>
 
       <para>
