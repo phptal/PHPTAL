@@ -194,6 +194,13 @@ class TalDefineTest extends PHPUnit_Framework_TestCase
         $res = trim_string($tpl->execute());
         $this->assertEquals($exp, $res);
     }
+    
+    function testDefineSemicolon()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<p tal:define="one \';;\'; two string:;;;;; three php:\';;;;;;\'">${one}-${two}-${three}</p>');
+        $this->assertEquals('<p>;-;;-;;;</p>',$tpl->execute());
+    }
 }
 
 ?>

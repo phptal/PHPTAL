@@ -112,7 +112,7 @@ implements PHPTAL_Php_TalesChainReader
     private function prepareBooleanAttribute($attribute, $code)
     {
         $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
-        $value  = " $attribute=\"$attribute\"";
+        $value  = "' $attribute=\"$attribute\"'";
         $this->tag->generator->doIf($code);
         $this->tag->generator->doSetVar($attkey, $value);
         $this->tag->generator->doElse();
