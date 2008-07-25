@@ -269,7 +269,7 @@ function phptal_path($base, $path, $nothrow=false)
             }
                         
             // look for isset (priority over __get)
-            if (is_callable(array($base, '__isset')))
+            if (method_exists($base,'__isset') && is_callable(array($base, '__isset')))
             {
                 if ($base->__isset($current)){
                     $base = $base->$current;
@@ -277,7 +277,7 @@ function phptal_path($base, $path, $nothrow=false)
                 }
             }
             // ask __get and discard if it returns null
-            else if (is_callable(array($base, '__get')))
+            else if (method_exists($base,'__get') && is_callable(array($base, '__get')))
             {
                 $tmp = $base->$current;
                 if (NULL !== $tmp){
