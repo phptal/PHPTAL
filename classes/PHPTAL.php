@@ -465,8 +465,7 @@ class PHPTAL
 
     private function setCodeFile()
     {
-        $this->_codeFile = $this->getPhpCodeDestination() . 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
-            substr(preg_replace('/[^a-zA-Z]/','',basename($this->_source->getRealPath())),0,10) . md5($this->_source->getRealPath()) . '.' . $this->getPhpCodeExtension();
+        $this->_codeFile = $this->getPhpCodeDestination() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
     }
 
     /**
@@ -528,32 +527,23 @@ class PHPTAL
 	public function cleanUpGarbage()
 	{
 		$phptalCacheFilesExpire = time() - $this->getCacheLifetime() * 3600 * 24;
-		$limit = $this->getPhpCodeDestination() . 'tpl_' . $phptalCacheFilesExpire . '_';
-		$phptalCacheFiles = glob($this->getPhpCodeDestination() . 'tpl_*.php');
+		$upperLimit = $this->getPhpCodeDestination() . 'tpl_' . $phptalCacheFilesExpire . '_';
+		$lowerLimit = $this->getPhpCodeDestination() . 'tpl_0_';
+		$phptalCacheFiles = glob($this->getPhpCodeDestination() . 'tpl_*.' . $this->getPhpCodeExtension() . '*');
 		if ($phptalCacheFiles)
 		{
 			foreach($phptalCacheFiles as $index => $file)
 	        {
-				if ($file < $limit AND $file > $this->getPhpCodeDestination() . 'tpl_0')
+				if ($file < $upperLimit && substr($file,0,strlen($lowerLimit)) !== $lowerLimit)
 				{
-					$this->cleanUpGarbageUnlink($file);
-					unset($phptalCacheFiles[$index]);
+					if (unlink($file)) unset($phptalCacheFiles[$index]);
 				}
 	        }
 	        foreach($phptalCacheFiles as $file)
 	        {
-				if (@filemtime($file) < $phptalCacheFilesExpire) unlink($file);
+	            $time = filemtime($file);
+	            if ($time && $time < $phptalCacheFilesExpire) unlink($file);
 		    }
-	    }
-	}
-
-	private function cleanUpGarbageUnlink($filename)
-	{
-		$phptalCacheFiles = glob($filename . '*');
-		foreach($phptalCacheFiles as $file)
-		{
-		    if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
-			unlink($file);
 	    }
 	}
 
@@ -569,7 +559,13 @@ class PHPTAL
 			if (!$this->getCodePath()) throw new PHPTAL_Exception("No codefile");
 		}
 		
-		$this->cleanUpGarbageUnlink($this->getCodePath());		
+		$filename = $this->getCodePath();		
+		$phptalCacheFiles = glob($filename . '*');
+		if ($phptalCacheFiles) foreach($phptalCacheFiles as $file)
+		{
+		    if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
+			unlink($file);
+	    }
         $this->_prepared = false;
 	}	
 
@@ -593,7 +589,8 @@ class PHPTAL
     public function getFunctionName()
     {
         if (!$this->_functionName) {
-            $this->_functionName = 'tpl_' . PHPTAL_VERSION . substr(preg_replace('/[^a-zA-Z]/','',basename($this->_source->getRealPath())),0,16) . md5($this->_source->getRealPath());
+            $this->_functionName = 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
+                substr(preg_replace('/[^a-zA-Z]/','',basename($this->_source->getRealPath())),0,10) . md5($this->_source->getRealPath());
         }
         return $this->_functionName;
     }

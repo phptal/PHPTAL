@@ -108,7 +108,9 @@ class PhptalTest extends PHPUnit_Framework_TestCase
         $tpl->setSource($source);
         $res = $tpl->execute();
         $this->assertEquals('<span>foo value</span>', $res);
-        $this->assertEquals('tpl_'.PHPTAL_VERSION.'stringddcffdedaf'.md5('<string> '.md5($source)), $tpl->getFunctionName());
+        $this->assertRegExp('/^tpl_/', $tpl->getFunctionName());
+        $this->assertContains(PHPTAL_VERSION, $tpl->getFunctionName());
+        $this->assertContains(md5('<string> '.md5($source)), $tpl->getFunctionName());
     }
 
     function testSourceWithPath()
@@ -119,7 +121,9 @@ class PhptalTest extends PHPUnit_Framework_TestCase
         $tpl->setSource($source, '123');
         $res = $tpl->execute();
         $this->assertEquals('<span>foo value</span>', $res);
-        $this->assertEquals('tpl_'.PHPTAL_VERSION.md5('123'), $tpl->getFunctionName());
+        $this->assertRegExp('/^tpl_/', $tpl->getFunctionName());
+        $this->assertContains(PHPTAL_VERSION, $tpl->getFunctionName());
+        $this->assertContains(md5('123'), $tpl->getFunctionName());
     }
 
     function testStripComments()

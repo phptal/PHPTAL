@@ -38,6 +38,7 @@ function trim_string( $src ){
     $src = str_replace('\n', ' ', $src);
     $src = str_replace('> ', '>', $src);
     $src = str_replace(' <', '<', $src);
+    $src = str_replace(' />', '/>', $src);
     return $src;
 }
 
