@@ -155,6 +155,14 @@ EOT;
         $this->assertEquals('<p></p>',$res);
     }
     
+    function testNULLValueNoAlternative()
+    {
+       $tpl = new PHPTAL(); 
+       $tpl->setSource('<p tal:attributes="title php:NULL"></p>');
+       $res = $tpl->execute();
+       $this->assertEquals('<p></p>',$res);
+    }
+    
     function testEmptyValue()
     {
         $tpl = new PHPTAL(); 

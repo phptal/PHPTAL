@@ -125,17 +125,17 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    if ($expression == '')        return PHPTAL_TALES_NOTHING_KEYWORD;
 
 	    // split OR expressions terminated by a string
-	    if (preg_match('/^(.*?)\s*?\|\s*?(string:.*?)$/sm', $expression, $m)){
+	    if (preg_match('/^(.*?)\s*\|\s*?(string:.*)$/sm', $expression, $m)){
 	        list(, $expression, $string) = $m;
 	    }
 	    // split OR expressions terminated by a 'fast' string
-	    else if (preg_match('/^(.*?)\s*?\|\s*\'((?:[^\'\\\\]|\\\\.)*)\'\s*$/sm', $expression, $m)){
+	    else if (preg_match('/^(.*?)\s*\|\s*\'((?:[^\'\\\\]|\\\\.)*)\'\s*$/sm', $expression, $m)){
 	        list(, $expression, $string) = $m;
 	        $string = 'string:'.stripslashes($string);
 	    }
 
 	    // split OR expressions
-	    $exps = preg_split('/\s*?\|\s*?/sm', $expression);
+	    $exps = preg_split('/\s*\|\s*/sm', $expression);
 
 	    // if (many expressions) or (expressions or terminating string) found then
 	    // generate the array of sub expressions and return it.

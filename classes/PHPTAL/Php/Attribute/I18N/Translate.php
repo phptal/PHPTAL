@@ -31,7 +31,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         }
         $this->_prepareNames($this->tag);
 
-        $php = sprintf('echo $tpl->getTranslator()->translate(%s);', self::_canonalizeKey($code));
+        $php = sprintf('echo $_translator->translate(%s);', $code);
         $this->tag->generator->pushCode($php);
     }
 
@@ -57,7 +57,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
             }
         }
         // cleanup result
-        $result = preg_replace('/\s+/sm', ' ', $result);
+        $result = preg_replace('/\s+/sm'.($this->tag->generator->getEncoding()=='UTF-8'?'u':''), ' ', $result);
         $result = trim($result);
         return $result;
     }
@@ -74,35 +74,6 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                 }
             }
         }
-    }
-
-    static function _canonalizeKey($key_)
-    {
-        $result = "";
-        $key_ = trim($key_);
-        $key_ = str_replace("\n", "", $key_);
-        $key_ = str_replace("\r", "", $key_);
-        for ($i = 0; $i<strlen($key_); $i++){
-            $c = $key_[$i];
-            $o = ord($c);
-            if ($o < 5 || $o > 127){
-                $result .= 'C<'.$o.'>';
-            }
-            else {
-                $result .= $c;
-            }
-        }
-        return $result;
-        /*
-        $key = utf8_decode($key_);
-        $key = preg_replace('/[ав]/sm', 'a', $key);
-        $key = preg_replace('/[клий]/sm', 'e', $key);
-        $key = preg_replace('/[оп]/sm', 'i', $key);
-        $key = preg_replace('/[ыь]/sm', 'u', $key);
-        $key = preg_replace('/[фц]/sm', 'o', $key);
-        $key = preg_replace('/[я]/sm', 'y', $key);
-        return $key;
-        */
     }
 }
 

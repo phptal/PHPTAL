@@ -10,6 +10,8 @@ class DummyTranslator implements PHPTAL_TranslationService
     public function setLanguage(){
     }
     
+    public function setEncoding($enc) {}
+    
     public function useDomain($domain){
     }
     

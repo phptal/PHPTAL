@@ -40,29 +40,39 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 	    if (!function_exists('gettext')) throw new PHPTAL_Exception("Gettext not installed");
     }
 
+    private $_vars = array();
+    private $_currentDomain = null;
+    private $_encoding = 'UTF-8';
+    private $_canonicalize = false;
+
     public function setEncoding($enc)
     {
         $this->_encoding = $enc;
     }
     
+    /**
+     * if true, all non-ASCII characters in keys will be converted to C<xxx> form. This impacts performance.
+     * by default keys will be passed to gettext unmodified.
+     */
+    public function setCanonicalize($bool)
+    {
+        $this->_canonicalize = $bool;
+    }
+    
     public function setLanguage()
     {
         $langs = func_get_args();
-        $found = false;
         foreach ($langs as $langCode){
             putenv("LANG=$langCode");
             putenv("LC_ALL=$langCode");
             putenv("LANGUAGE=$langCode");
-            $found = setlocale(LC_ALL, $langCode);
-            if ($found) {
-                break;
+            if (setlocale(LC_ALL, $langCode)) {
+                return;
             }
         }
-        if (!$found){
-            $err = 'Language(s) code(s) "%s" not supported by your system';
-            $err = sprintf($err, join(',', $langs));
-            throw new PHPTAL_Exception($err);
-        }
+
+        $err = sprintf('Language(s) code(s) "%s" not supported by your system', join(',', $langs));
+        throw new PHPTAL_Exception($err);
     }
     
     public function addDomain($domain, $path='./locale/')
@@ -89,9 +99,12 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     
     public function translate($key, $htmlencode=true)
     {
+        if ($this->_canonicalize) $key = self::_canonicalizeKey($key);
+        
         $value = gettext($key);
+        
         if ($htmlencode){
-            $value = htmlspecialchars($value, ENT_QUOTES, $this->_encoding);
+            $value = @htmlspecialchars($value, ENT_QUOTES, $this->_encoding); // silence unsupported encoding error for ISO-8859-x, which doesn't matter.
         }
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src,$var) = $m;
@@ -104,8 +117,23 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         return $value;
     }
 
-    private $_vars = array();
-    private $_currentDomain = null;
-    private $_encoding = 'UTF-8';
+    static function _canonicalizeKey($key_)
+    {
+        $result = "";
+        $key_ = trim($key_);
+        $key_ = str_replace("\n", "", $key_);
+        $key_ = str_replace("\r", "", $key_);
+        for ($i = 0; $i<strlen($key_); $i++){
+            $c = $key_[$i];
+            $o = ord($c);
+            if ($o < 5 || $o > 127){
+                $result .= 'C<'.$o.'>';
+            }
+            else {
+                $result .= $c;
+            }
+        }
+        return $result;
+    }
 }
 

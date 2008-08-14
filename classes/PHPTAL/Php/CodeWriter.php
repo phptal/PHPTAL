@@ -315,6 +315,11 @@ class PHPTAL_Php_CodeWriter
     {
         return $this->_state->htmlchars($code);
     }
+    
+    public function getEncoding()
+    {
+        return $this->_state->getEncoding();
+    }
 
     public function evaluateTalesString($src)
     {

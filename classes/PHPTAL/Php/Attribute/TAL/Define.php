@@ -155,8 +155,7 @@ implements PHPTAL_Php_TalesChainReader
         if (!$this->_buffered){
             $this->tag->generator->pushCode( 'ob_start()' );
             $this->tag->generateContent();
-            $this->tag->generator->pushCode('$__tmp_content__ = ob_get_contents()');
-            $this->tag->generator->pushCode('ob_end_clean()');
+            $this->tag->generator->pushCode('$__tmp_content__ = ob_get_clean()');
             $this->_buffered = true;
         }
         $this->doDefineVarWith('$__tmp_content__');

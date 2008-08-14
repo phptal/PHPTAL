@@ -30,7 +30,7 @@ class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
 
     public function end()
     {
-        $code = '$tpl->getTranslator()->setVar(\'%s\', ob_get_contents())';
+        $code = '$_translator->setVar(\'%s\', ob_get_contents())';
         $code = sprintf($code, $this->expression);
         $this->tag->generator->pushCode($code);
         $this->tag->generator->pushCode('ob_end_clean()');

@@ -17,6 +17,12 @@ interface PHPTAL_TranslationService
     function setLanguage();
 
     /**
+     * PHPTAL will inform translation service what encoding page uses.
+     * Output of translate() must be in this encoding.
+     */
+    function setEncoding($encoding);
+
+    /**
      * Set the domain to use for translations.
      */
     function useDomain($domain);

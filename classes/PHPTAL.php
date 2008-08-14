@@ -226,6 +226,7 @@ class PHPTAL
     public function setEncoding($enc)
     {
         $this->_encoding = $enc;
+        if ($this->_translator) $this->_translator->setEncoding($enc);
         return $this;
     }
 
@@ -233,7 +234,7 @@ class PHPTAL
      * Get input and ouput encoding.
      * @param $enc string example: 'UTF-8'
      */
-    public function getEncoding($enc)
+    public function getEncoding()
     {
         return $this->_encoding;
     }
@@ -300,6 +301,7 @@ class PHPTAL
     public function setTranslator(PHPTAL_TranslationService $t)
     {
         $this->_translator = $t;
+        $this->_translator->setEncoding($this->getEncoding());
         return $this;
     }
 

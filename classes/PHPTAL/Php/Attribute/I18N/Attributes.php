@@ -86,20 +86,19 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 
     private function _getTranslationCode($key)
     {
-		$ckey = PHPTAL_Php_Attribute_I18N_Translate::_canonalizeKey($key);
 		$code = '<?php ';
 		if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
 			array_shift($m);
 			$m = array_shift($m);
 			foreach ($m as $name){
-				$code .= "\n".'$tpl->getTranslator()->setVar(\''.$name.'\','.phptal_tale($name).');'; // allow more complex TAL expressions
+				$code .= "\n".'$_translator->setVar(\''.$name.'\','.phptal_tale($name).');'; // allow more complex TAL expressions
 			}
 			$code .= "\n";
 		}
 
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
-		$result = $this->tag->generator->escapeCode(sprintf('$tpl->getTranslator()->translate(%s, false)', $ckey));
+		$result = $this->tag->generator->escapeCode(sprintf('$_translator->translate(%s, false)', $key));
         $code .= 'echo '.$result.'?>';
 		return $code;
     }

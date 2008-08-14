@@ -123,12 +123,33 @@ class GetTextTest extends PHPUnit_Framework_TestCase
         $gettext->setLanguage('en_GB', 'en_GB.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
+        $gettext->setCanonicalize(true);
 
         $tpl = new PHPTAL('input/gettext.06.html');
         $tpl->setTranslator($gettext);
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/gettext.06.html');
+        $this->assertEquals($exp, $res);
+    }
+    
+    function testAccentuateKeyNonCanonical()
+    {
+        $gettext = $this->getTextTranslator();
+        $gettext->setLanguage('en_GB', 'en_GB.utf8');
+        $gettext->addDomain('test');
+        $gettext->useDomain('test');
+
+        $tpl = new PHPTAL('input/gettext.06.html');
+        $tpl->setTranslator($gettext);
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $exp = trim_string('<root>
+  <span>Not accentuated</span>
+  <span>Accentuated key without canonicalization</span>
+  <span>Accentuated key without canonicalization</span>
+</root>
+');
         $this->assertEquals($exp, $res);
     }
 

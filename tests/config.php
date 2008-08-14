@@ -34,7 +34,7 @@ function trim_file( $src ){
 
 function trim_string( $src ){
     $src = trim($src);
-    $src = preg_replace('/\s+/sm', ' ', $src);
+    $src = preg_replace('/\s+/usm', ' ', $src);
     $src = str_replace('\n', ' ', $src);
     $src = str_replace('> ', '>', $src);
     $src = str_replace(' <', '<', $src);

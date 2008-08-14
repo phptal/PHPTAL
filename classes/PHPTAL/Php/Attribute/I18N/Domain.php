@@ -23,7 +23,7 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
         $this->tag->generator->doEnd();
 
         // push current domain and use new domain
-        $code = '$__i18n_domains[] = $tpl->getTranslator()->useDomain(\'%s\')';
+        $code = '$__i18n_domains[] = $_translator->useDomain(\'%s\')';
         $code = sprintf($code, $this->expression);
         $this->tag->generator->pushCode($code);
     }
@@ -31,7 +31,7 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
     public function end()
     {
         // restore domain
-        $code = '$tpl->getTranslator()->useDomain(array_pop($__i18n_domains))';
+        $code = '$_translator->useDomain(array_pop($__i18n_domains))';
         $this->tag->generator->pushCode($code);
     }
 }

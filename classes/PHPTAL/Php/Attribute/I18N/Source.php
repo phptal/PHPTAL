@@ -22,7 +22,7 @@ class PHPTAL_Php_Attribute_I18N_Source extends PHPTAL_Php_Attribute
         $this->tag->generator->end();
 
         // push current source and use new one
-        $code = '$__i18n_sources[] = $tpl->getTranslator()->setSource(\'%s\')';
+        $code = '$__i18n_sources[] = $_translator->setSource(\'%s\')';
         $code = sprintf($code, $this->expression);
         $this->tag->generator->pushCode($code);
     }
@@ -30,7 +30,7 @@ class PHPTAL_Php_Attribute_I18N_Source extends PHPTAL_Php_Attribute
     public function end()
     {
         // restore source
-        $code = '$tpl->getTranslator()->setSource(array_pop($__i18n_sources))';
+        $code = '$_translator->setSource(array_pop($__i18n_sources))';
         $this->tag->generator->pushCode($code);
     }
 }
