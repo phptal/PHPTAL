@@ -2646,7 +2646,40 @@ function phptal_tales_money( $src, $nothrow )
     </section>
 
   </article>
-
+  
+  <article id="sysadmin">
+      <title>Note for system administrators</title>
+      <para>
+          PHPTAL functions by generating PHP files from the template's logic,
+          this means that it needs a directory to store those generated files so
+          they can be parsed by the PHP interpreter.
+</para><para>
+          By default PHPTAL will use the system's temp directory (via PHP's
+          sys_get_temp_dir() function if available) or will try to guess where
+          it should be, /tmp on Unix like systems and c:\windows\temp on
+          Microsoft ones, to store the compiled templates. The default
+          destination can be changed to your liking by setting the define
+          PHPTAL_PHP_CODE_DESTINATION or by calling setPhpCodeDestination()
+          method with the appropriate path.
+          Be it the system's temp directory or a custom one, it needs to have
+          its permissions setup as to allow the PHP running process (the Apache
+          user if using mod_php or the cgi/fastcgi user otherwise) to create and
+          update files in that directory.
+</para><para>
+          PHPTAL creates one file for each different template file and one file
+          for each tag if using phptal:cache. It doesn't create separate files
+          for macros (which are simply compiled as PHP functions inside the
+          compiled template file).
+          These files are automatically cleaned up once in a while, more
+          specifically, each time a template is compiled there is random
+          probability, controlled by setCachePurgeFrequency() method, which will
+          just delete files older than set by setCacheLifetime() method.
+          Alternatively you can also schedulle the deletion of old/unused files
+          by running this from an Unix like shell (like in a cron job):
+</para><programlisting>
+             find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -exec rm -v {} \;
+</programlisting>
+</article>
   <article id="usefulllinks">
     <title>Useful links</title>
 
