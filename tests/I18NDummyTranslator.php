@@ -23,7 +23,7 @@ class DummyTranslator implements PHPTAL_TranslationService
         $this->translations[$key] = $translation;
     }
     
-    public function translate($key){ 
+    public function translate($key, $escape = true){ 
         if (array_key_exists($key, $this->translations)){
             $v = $this->translations[$key];
         }
@@ -31,10 +31,14 @@ class DummyTranslator implements PHPTAL_TranslationService
             $v = $key;
         }
         
+        if ($escape) $v = htmlspecialchars($v);
+        
         while (preg_match('/\$\{(.*?)\}/sm', $v, $m)){
             list($src, $var) = $m;
             $v = str_replace($src, $this->vars[$var], $v);
         }
+        
+        
         return $v; 
     }
 }

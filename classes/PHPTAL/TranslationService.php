@@ -35,7 +35,7 @@ interface PHPTAL_TranslationService
     /**
      * Translate a gettext key and interpolate variables.
      */
-    function translate($key);
+    function translate($key, $htmlescape=true);
 }
 
 ?>

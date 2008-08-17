@@ -40,12 +40,47 @@ class I18NTranslateTest extends PHPUnit_Framework_TestCase
     {
         $tpl = new PHPTAL('input/i18n-translate-02.html');
         $tpl->setTranslator( new DummyTranslator() );
-        $tpl->message = "my translate key";
+        $tpl->message = "my translate key &";
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/i18n-translate-02.html');
         $this->assertEquals($exp, $res);
     }
+    
+    function testStructureTranslate()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setTranslator( new DummyTranslator() );
+        $tpl->setSource('<p i18n:translate="structure \'translate<b>this</b>\'"/>');
+        $this->assertEquals('<p>translate<b>this</b></p>',$tpl->execute());
+    }
+    
+    function testStructureTranslate2()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setTranslator( new DummyTranslator() );
+        $tpl->setSource('<p i18n:translate="structure">
+        translate
+        <b class="foo&amp;bar">
+        this
+        </b>
+        </p>');
+        $this->assertEquals('<p>translate <b class="foo&amp;bar"> this </b></p>',$tpl->execute());
+    }
+    
+    function testStructureTranslate3()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        $t->setTranslation('msg','<b class="foo&amp;bar">translated&nbsp;key</b>');
+        $tpl->var = 'msg';
+        $tpl->setSource('<div>
+        <p i18n:translate="var"/>
+        <p i18n:translate="structure var"/>
+        </div>');
+        $this->assertEquals('<div>
+        <p>&lt;b class=&quot;foo&amp;amp;bar&quot;&gt;translated&amp;nbsp;key&lt;/b&gt;</p>
+        <p><b class="foo&amp;bar">translated&nbsp;key</b></p>
+        </div>',$tpl->execute());
+    }
 }
-
-?>

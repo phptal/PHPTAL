@@ -19,19 +19,26 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 {
     public function start()
     {
+        $escape = true;
+        if (preg_match('/^(text|structure)(?:\s+(.*)|\s*$)/',$this->expression,$m))
+        {
+            if ($m[1]=='structure') $escape=false;
+            $this->expression = isset($m[2])?$m[2]:'';
+        }
+                
         // if no expression is given, the content of the node is used as 
         // a translation key
         if (strlen(trim($this->expression)) == 0){
-            $code = $this->_getTranslationKey($this->tag);
-            $code = str_replace('\'', '\\\'', $code);
-            $code = '\'' . $code . '\'';
+            $key = $this->_getTranslationKey($this->tag, !$escape);
+            $key = trim(preg_replace('/\s+/sm'.($this->tag->generator->getEncoding()=='UTF-8'?'u':''), ' ', $key));
+            $code = '\'' . str_replace('\'', '\\\'', $key) . '\'';
         }
         else {
             $code = $this->tag->generator->evaluateExpression($this->expression);
         }
         $this->_prepareNames($this->tag);
 
-        $php = sprintf('echo $_translator->translate(%s);', $code);
+        $php = sprintf('echo $_translator->translate(%s,%s);', $code, $escape ? 'true':'false');
         $this->tag->generator->pushCode($php);
     }
 
@@ -39,7 +46,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
     {
     }
 
-    private function _getTranslationKey($tag)
+    private function _getTranslationKey($tag, $preserve_tags)
     {
         $result = '';
         foreach ($tag->children as $child){
@@ -52,13 +59,23 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                     $result .= '${' . $value . '}';
                 }
                 else {
-                    $result .= $this->_getTranslationKey($child);
+                    
+                    if ($preserve_tags)
+                    {
+                        $result .= '<'.$child->name;
+                        foreach($child->attributes as $k => $v)
+                        {
+                            $result .= ' '.$k.'="'.$v.'"';
+                        }
+                        $result .= '>'.$this->_getTranslationKey($child, $preserve_tags).'</'.$child->name.'>';
+                    }
+                    else
+                    {                    
+                        $result .= $this->_getTranslationKey($child, $preserve_tags);
+                    }
                 }
             }
         }
-        // cleanup result
-        $result = preg_replace('/\s+/sm'.($this->tag->generator->getEncoding()=='UTF-8'?'u':''), ' ', $result);
-        $result = trim($result);
         return $result;
     }
 
