@@ -19,6 +19,12 @@
 		</author>
 
     <revhistory>
+        <revision>
+			  <revnumber>v1.4</revnumber>
+				<date>2008-08-18</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Corrections and updates for PHPTAL 1.1.13</revremark>
+		  </revision>
 		  <revision>
 			  <revnumber>v1.3</revnumber>
 				<date>2008-01-27</date>
@@ -722,7 +728,7 @@ only this text will appear, span open and close will be removed
 
         <programlisting><![CDATA[
 <span tal:replace="string:this beautyful string">
-  this uggly string and span
+  this ugly string and span
 </span>
 ]]></programlisting>
 
@@ -1101,10 +1107,22 @@ title="google search engine">the google search engine</a>
 
         <programlisting><![CDATA[
 <div tal:define="welcome random_welcome_message"/>
-<did i18n:translate="welcome">...</div>
+<div i18n:translate="welcome">...</div>
 ]]></programlisting>
 
       </section>
+      
+      <section>
+          <title>i18n:attributes</title>
+
+          <para>
+              Defines which attributes should be translated. Takes semicolon-separated list of attributes and keys similar to those for i18n:translate.
+          </para>      
+          <programlisting><![CDATA[
+<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
+]]></programlisting>
+  
+      </section>      
 
       <section>
         <title>i18n:name</title>
@@ -1169,6 +1187,22 @@ title="google search engine">the google search engine</a>
         section of this book.
         </para>
       </section>
+      
+      <section><title>XHTML in translations</title>
+          <para>By defaults translations are assumed to contain only text, so PHPTAL escapes all "&lt;" characters.</para>
+          <para>As of 1.1.14 you can use structure keyword in i18n:translate to disable escaping and use translated text as-is:</para>
+          
+           <programlisting><![CDATA[
+      <div i18n:translate="structure '<b>bold text</b>'" />
+      ]]></programlisting>
+      <para>Gives:</para>
+          
+             <programlisting><![CDATA[
+        <div><b>bold text</b></div>
+        ]]></programlisting>
+      
+      <para>Caveats: This will only work in simplest cases – TAL attributes inside translated strings are ignored. Ill-formed XHTML in translations will break page well-formedness.</para>      
+    </section>
 
     </section><!-- end of I18N namespace -->
    
@@ -2450,7 +2484,7 @@ try {
     $tr->setLanguage('en_GB.utf8', 'en_GB');
     
     // register gettext domain to use
-    $tr->addDomain('mydomain', '/path/to/your/translation_root/');
+    $tr->addDomain('mydomain', '/path/to/your/translation_root');
 
     // specify current domain
     $tr->useDomain('mydomain');

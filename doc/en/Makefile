@@ -1,4 +1,4 @@
-XMLTO=/usr/bin/xmlto
+XMLTO=xmlto
 PARMS=-m config.xsl
 BOOK=book.xml
 
