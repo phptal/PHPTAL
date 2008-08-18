@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //
 
-define('PHPTAL_VERSION', '1_1_13');
+define('PHPTAL_VERSION', '1_1_14');
 
 //{{{PHPTAL_DIR
 if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
