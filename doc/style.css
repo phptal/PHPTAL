@@ -81,6 +81,10 @@ code {
 color: #6e662e;
 }
 
+h2 code {color:#fff}
+
+a code {color: #03f}
+
 a {
 color: #00E;
 }
@@ -111,3 +115,4 @@ background-color: #DDD;
 background-color: #d3c983;
 }
 
+acronym {font-variant:small-caps;text-transform:lowercase;line-height:1;font-size:120%}
