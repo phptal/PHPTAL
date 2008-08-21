@@ -1,5 +1,5 @@
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.1//EN"
-"http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="en">
 
   <bookinfo>
@@ -19,6 +19,12 @@
 		</author>
 
     <revhistory>
+        <revision>
+			  <revnumber>v1.5</revnumber>
+				<date>2008-08-21</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Removed old defines, documented configuration methods.</revremark>
+		  </revision>
         <revision>
 			  <revnumber>v1.4</revnumber>
 				<date>2008-08-18</date>
@@ -592,7 +598,7 @@ catch (Exception $e){
         <para>
         Within a loop, you can access the current loop information
         (and that of its parent for nested loops) using specific
-        <varname>repeat/*</varname> paths.
+        <varname>repeat/<replaceable>*</replaceable></varname> paths.
         </para>
 
         <para>
@@ -787,19 +793,19 @@ title="google search engine">the google search engine</a>
         </para>
 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
-    tal:attribute="class php: repeat.ranking.odd ? 'odd' : false">
+    tal:attribute="class php: repeat.ranking.odd ? 'odd' : NULL">
     ...
 </tr>
 ]]></programlisting>
 
         <para>
         The php: modifier will be explained later, basically if the line 
-        is odd then tr will have a class attribute with "odd" as value, 
-        otherwise, no class attribute will be set.
+        is odd then <sgmltag>tr</sgmltag> will have a <sgmltag>class</sgmltag> attribute with "odd" as value, 
+        otherwise, no class will be set.
         </para>
 
         <para>
-        The "condition ? then : else" is a regular <acronym>PHP</acronym> expression which 
+        The "<code>condition ? then : else</code>" is a regular <acronym>PHP</acronym> expression which 
         must be used with care but has proven to be useful on more 
         than one occasion.
         </para>
@@ -809,7 +815,7 @@ title="google search engine">the google search engine</a>
         coder to create a custom modifier for your needs (see <acronym>PHP</acronym> 
         integration / custom modifiers) which would be used as follows:
         </para>
-
+                
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class css-odd:repeat/ranking/odd">
   ...
@@ -820,7 +826,7 @@ title="google search engine">the google search engine</a>
         The modifier would return "odd" if <varname>repeat/ranking/odd</varname> is true, 
         false otherwise.
         </para>
-
+<section><title>Optional attributes</title>
         <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in php) as last alternative,
             attribute won't be added at all if there's no value for it (this avoids adding empty attributes):</para>
         <programlisting><![CDATA[... tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
@@ -828,9 +834,12 @@ title="google search engine">the google search engine</a>
         <para><acronym>XHTML</acronym> attributes like <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag>, etc. are properly handled automatically.</para>
 
         <programlisting><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting>
+        
+        <para>
+            Remember that <acronym>XHTML</acronym> is case-sensitive, so <sgmltag>SELECTED</sgmltag> attribute is an error in <acronym>XHTML</acronym>. Use <sgmltag>selected</sgmltag>.
+        </para>
       </section>
-
-
+    </section>
       <section id="tal-on-error">
         <title><sgmltag>tal:on-error</sgmltag></title>
 
@@ -1622,25 +1631,22 @@ php:SomeClass::$staticVar
 
     <itemizedlist>
       <listitem><para>
-      Defines: list of <acronym>PHPTAL</acronym> defines and defines influencing <acronym>PHPTAL</acronym>
+      <classname>PHPTAL</classname>: the main <acronym>PHPTAL</acronym> class. It is used to load and execute templates.
       </para></listitem>
       <listitem><para>
-      <constant>PHPTAL</constant>: the main <acronym>PHPTAL</acronym> class
+      <classname>PHPTAL_Filter</classname>: filtering template sources and <acronym>PHPTAL</acronym> output.
       </para></listitem>
       <listitem><para>
-      <constant>PHPTAL_Filter</constant> : filtering template sources and <acronym>PHPTAL</acronym> output
+      <classname>PHPTAL_Trigger</classname>: handles output of elements with <sgmltag>phptal:id</sgmltag>.
       </para></listitem>
       <listitem><para>
-      <constant>PHPTAL_Trigger</constant>: creating triggers for <sgmltag>phptal:id</sgmltag>
-      </para></listitem>
-      <listitem><para>
-      <constant>PHPTAL_TranslationService</constant>: replacing the builtin gettext support 
-      with your own internationalization system
+      <classname>PHPTAL_TranslationService</classname>: for replacing the built-in <constant>gettext</constant> support 
+      with your own internationalization system.
       </para></listitem>
     </itemizedlist>
 
     <section>
-      <title>Defines</title>
+      <title>Constants</title>
 
       <para>
       After the inclusion of <acronym>PHPTAL</acronym> library, some defines will be 
@@ -1650,65 +1656,60 @@ php:SomeClass::$staticVar
 
       <itemizedlist>
         <listitem><para>
-        <constant>PHPTAL_VERSION</constant>: version of <acronym>PHPTAL</acronym> library installed on your
+        <classname>PHPTAL_VERSION</classname>: version of <acronym>PHPTAL</acronym> library installed on your
         system (in format: X.X.X)
         </para></listitem>
         <listitem><para>
-        <constant>PHPTAL_PHP_CODE_DESTINATION</constant>: this is the path where 
-        intermediate <acronym>PHP</acronym> files produced by <acronym>PHPTAL</acronym> will be stored. This 
-        define may be overwritten before the inclusion of <filename>PHPTAL.php</filename>, 
-        the specified path must contain the leading path separator.
+        <classname>PHPTAL_DIR</classname>: path to directory where <filename>PHPTAL.php</filename> is located.
         </para></listitem>
       </itemizedlist>
 
       <para>
-      You can configure some <acronym>PHPTAL</acronym> features by defining some constants:
+      In older versions of there were constants for configuration. They have been replaced with methods.
       </para>
+  </section>
+  <section>
+      <title>Configuration methods</title>
+      
+      <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
+      
+      <para>All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:</para>
+        <programlisting><![CDATA[<?php
+  echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
+?>]]></programlisting>
+<para>is the same as:</para>
+        <programlisting><![CDATA[<?php
+  $phptal->setPhpCodeDestination('/tmp/phptal');
+  $phptal->setOutputMode(PHPTAL::XML);
+  $phptal->setTemplate('tpl.zpt');
+  echo $phptal->execute();
+?>]]></programlisting>
 
-      <para>
-      To tell <acronym>PHPTAL</acronym> to ignore intermediate <acronym>PHP</acronym> files and to reparse 
-      templates every time:
-      </para>
-
-      <programlisting><![CDATA[<?php
-define('PHPTAL_FORCE_REPARSE', 1);
-require_once 'PHPTAL.php';
-?>
-]]></programlisting>
-  
-      <para>
-      To tell <acronym>PHPTAL</acronym> to store its intermediate <acronym>PHP</acronym> files other than 
-      in the '/tmp/' directory:
-      </para>
-
-      <programlisting><![CDATA[<?php
-define('PHPTAL_PHP_CODE_DESTINATION', '/path/to/somewhere/');
-require_once 'PHPTAL.php';
-?>
-]]></programlisting>
-
-      <para>
-      If all your files are stored in a base directory (repository), you 
-      can define <constant>PHPTAL_TEMPLATE_REPOSITORY</constant> as follows:
-      </para>
-
-      <programlisting><![CDATA[<?php
-define('PHPTAL_TEMPLATE_REPOSITORY', '/path/to/templates/root');
-require_once 'PHPTAL.php';
-?>
-]]></programlisting>
-
-      <para>
-      This doesn't mean all your files need to be in the root
-      directory, you can use sub folders to organize your template
-      designer's work.  It's just a shortcut which will allow you to
-      reference templates without specifying the real path, but
-      instead their relative path within the repository.
-      </para>
+      <itemizedlist>
+          <listitem><para><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname>: Specify what encoding your templates use. The default is <acronym>UTF-8</acronym>.</para></listitem>
+          <listitem><para><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname>: If given <constant>PHPTAL::XHTML</constant> (the default), will output elements like <sgmltag>&lt;img></sgmltag>, <sgmltag>&lt;link></sgmltag>, and attribtes like <sgmltag>checked</sgmltag>, <sgmltag>selected</sgmltag> according to XHTML specification, including <acronym>HTML</acronym> compatibility guidelines. Use <constant>PHPTAL::XML</constant> if you want to output other <acronym>XML</acronym> formats, like Atom or <acronym>RSS</acronym>.</para></listitem>
+          <listitem><para><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname>: Specifies where to look for templates. If given a string, it adds it to the list of paths searched. If given array, it replaces the list.</para>
+              <para>
+                  This doesn't mean all your files need to be in the root
+                  directory, you can use sub folders to organize your template
+                  designer's work.  It's just a shortcut which will allow you to
+                  reference templates without specifying the real path, but
+                  instead their relative path within the repository.
+              </para>
+          </listitem>
+          <listitem><para><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname>: To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <methodname>sys_get_tmp_dir()</methodname>, which usually is '<filename>/tmp/</filename>' directory.</para></listitem>
+          <listitem><para><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname>: What filename extension should be used for intermediate <acronym>PHP</acronym> files. The default is <filename>php</filename> and frankly, there's no reason to change it.</para></listitem>
+          <listitem><para><methodname>setCacheLifetime(<replaceable>num_days</replaceable>)</methodname>: Maximum number of days intermediate files and fragments cached with <sgmltag>phptal:cache</sgmltag> should be kept.</para></listitem>
+          
+          <listitem><para><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname>: forces reparsing of all templates all the time. This slows down <acronym>PHPTAL</acronym> very much, it should be used only for testing and debugging. Never enable this on production servers.</para></listitem>
+          </itemizedlist>     
+          
+          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalisation, etc. They have been described in other sections of this manual.</para>
+          
     </section>
 
     <section>
-      <title>class <constant>PHPTAL</constant></title>
+      <title>class <classname>PHPTAL</classname></title>
     
       <para>
       This is the main library class for you to use.
@@ -1798,7 +1799,7 @@ catch (Exception $e){
       In the above example, because <acronym>PHPTAL</acronym> requires a template source
       idenfifier (usually the template file realpath), <acronym>PHPTAL</acronym> will use the md5
       of the <varname>$src</varname> parameter as a unique identifier. You may decide to force the 
-      identifier using a second <constant>setSource()</constant> argument:
+      identifier using a second <methodname>setSource()</methodname> argument:
       </para>
 
       <programlisting><![CDATA[<?php
@@ -1834,7 +1835,7 @@ catch (Exception $e){
     </section>
    
     <section>
-      <title>interface <constant>PHPTAL_Filter</constant></title>
+      <title>interface <classname>PHPTAL_Filter</classname></title>
 
       <para>
       This interface allows you to automatically filter templates sources 
@@ -1874,8 +1875,8 @@ echo $tpl->execute();
 
       <para>
       You can set only one pre-Filter and one post-Filter using 
-      set*Filter. If you have more than one filter to chain, you can 
-      wrap them into a single class, implementing the <constant>PHPTAL_Filter</constant> 
+      set<replaceable>*</replaceable>Filter. If you have more than one filter to chain, you can 
+      wrap them into a single class, implementing the <classname>PHPTAL_Filter</classname> 
       interface, which would invoke the filter's chain.
       </para>
 
@@ -1909,11 +1910,11 @@ echo $tpl->execute();
     </section>
 
     <section>
-      <title>interface <constant>PHPTAL_Trigger</constant></title>
+      <title>interface <classname>PHPTAL_Trigger</classname></title>
 
       <para>
       The <sgmltag>phptal:id</sgmltag> attribute was added into the <acronym>PHPTAL</acronym> for the PHP5
-      version to replace the old <constant>PHPTAL_Cache</constant> interface and to abstract
+      version to replace the old <classname>PHPTAL_Cache</classname> interface and to abstract
       it a little more.
       </para>
 
@@ -2072,7 +2073,7 @@ echo $tpl->execute();
     </section>
 
     <section>
-      <title>interface <constant>PHPTAL_TranslationService</constant></title>
+      <title>interface <classname>PHPTAL_TranslationService</classname></title>
 
       <para>
       <acronym>PHPTAL</acronym> comes with a default gettext translation service, as shown 
@@ -2081,13 +2082,13 @@ echo $tpl->execute();
       </para>
 
       <para>
-      The <constant>PHPTAL_TranslationService</constant> interface is here to serve your 
+      The <classname>PHPTAL_TranslationService</classname> interface is here to serve your 
       needs.
       </para>
 
       <para>
       The usage of your service will be the same as the   
-      <constant>PHPTAL_GetTextTranslator</constant>.
+      <classname>PHPTAL_GetTextTranslator</classname>.
       </para>
 
       <programlisting><![CDATA[$tpl->setTranslator($yourOwnTranslatorInstance);
@@ -2493,7 +2494,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
         <listitem><para> 
 	  $nothrow: a boolean which determines whether exceptions may
 	  be thrown or not by <constant>phptal_path()</constant> resolution. This boolean
-	  must be propagated whenever you call another phptal_tales_*
+	  must be propagated whenever you call another phptal_tales_<replaceable>*</replaceable>
 	  modifier from within your own modifier. 
 	</para></listitem>
       </itemizedlist>
@@ -2592,11 +2593,10 @@ function phptal_tales_money( $src, $nothrow )
           they can be parsed by the <acronym>PHP</acronym> interpreter.
 </para><para>
           By default <acronym>PHPTAL</acronym> will use the system's temp directory (via <acronym>PHP</acronym>'s
-          sys_get_temp_dir() function if available) or will try to guess where
-          it should be, /tmp on Unix like systems and c:\windows\temp on
+          <constant>sys_get_temp_dir()</constant> function if available) or will try to guess where
+          it should be, <filename>/tmp</filename> on Unix like systems and <filename>c:\windows\temp</filename> on
           Microsoft ones, to store the compiled templates. The default
-          destination can be changed to your liking by setting the define
-          <constant>PHPTAL_PHP_CODE_DESTINATION</constant> or by calling setPhpCodeDestination()
+          destination can be changed to your liking by calling <methodname>setPhpCodeDestination()</methodname>
           method with the appropriate path.
           Be it the system's temp directory or a custom one, it needs to have
           its permissions setup as to allow the <acronym>PHP</acronym> running process (the Apache
@@ -2609,10 +2609,11 @@ function phptal_tales_money( $src, $nothrow )
           compiled template file).
           These files are automatically cleaned up once in a while, more
           specifically, each time a template is compiled there is random
-          probability, controlled by setCachePurgeFrequency() method, which will
-          just delete files older than set by setCacheLifetime() method.
-          Alternatively you can also schedulle the deletion of old/unused files
-          by running this from an Unix like shell (like in a cron job):
+          probability, controlled by <methodname>setCachePurgeFrequency()</methodname> method, which will
+          just delete files older than set by <methodname>setCacheLifetime()</methodname> method.
+          </para><para>
+          Alternatively you can also schedule the deletion of old/unused files
+          by running this from an Unix-like shell (e.g. in a cron job):
 </para><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -exec rm -v {} \;</programlisting>
 </article>
   <article id="usefulllinks">

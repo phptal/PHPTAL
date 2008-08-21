@@ -45,6 +45,7 @@ background-color: inherit;
 .revhistory table {
 border: 1px solid #777;
 border-collapse: collapse;
+font-size:0.8em;
 }
 .revhistory table th {
 background-color: #EEE;
@@ -116,3 +117,5 @@ background-color: #d3c983;
 }
 
 acronym {font-variant:small-caps;text-transform:lowercase;line-height:1;font-size:120%}
+
+hr {height:0;color:#aaa;border:0;border-top:1px solid #aaa;}
