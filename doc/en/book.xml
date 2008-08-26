@@ -786,7 +786,7 @@ $somelink->text = "the google search engine";
 title="google search engine">the google search engine</a>
 ]]></programlisting>
 
-        <para>Semicolon (;) separates attributes. If you want semicolon to be output in an attribute, you have to double it (;;).</para>
+        <para>Semicolon (<literal>;</literal>) separates attributes. If you want semicolon to be output in an attribute, you have to double it (<literal>;;</literal>).</para>
 
         <para>
         A somewhat complicated example involving <sgmltag>tal:repeat</sgmltag>:
@@ -826,7 +826,7 @@ title="google search engine">the google search engine</a>
         The modifier would return "odd" if <varname>repeat/ranking/odd</varname> is true, 
         false otherwise.
         </para>
-<section><title>Optional attributes</title>
+<section id="optional-attrs"><title>Optional attributes</title>
         <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in php) as last alternative,
             attribute won't be added at all if there's no value for it (this avoids adding empty attributes):</para>
         <programlisting><![CDATA[... tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
@@ -1033,7 +1033,7 @@ title="google search engine">the google search engine</a>
       must be translated during template evaluation.
       </para>
 
-      <section>
+      <section id="i18n-translate">
         <title><sgmltag>i18n:translate</sgmltag></title>
 
         <para>
@@ -1077,7 +1077,7 @@ title="google search engine">the google search engine</a>
 
       </section>
       
-      <section>
+      <section id="i18n-attributes">
           <title><sgmltag>i18n:attributes</sgmltag></title>
 
           <para>
@@ -1088,7 +1088,7 @@ title="google search engine">the google search engine</a>
   
       </section>      
 
-      <section>
+      <section id="i18n-name">
         <title><sgmltag>i18n:name</sgmltag></title>
 
         <para>
@@ -1149,7 +1149,7 @@ title="google search engine">the google search engine</a>
         </para>
       </section>
       
-      <section><title><acronym>XHTML</acronym> in translations</title>
+      <section id="xhtml-in-translations"><title><acronym>XHTML</acronym> in translations</title>
           <para>By defaults translations are assumed to contain only text, so <acronym>PHPTAL</acronym> escapes all "&lt;" characters.</para>
           <para>As of 1.1.14 you can use structure keyword in <sgmltag>i18n:translate</sgmltag> to disable escaping and use translated text as-is:</para>
           
@@ -1216,7 +1216,9 @@ title="google search engine">the google search engine</a>
               This attribute causes output of entire element (including its tag) to be cached on disk and not re-evaluated until cache expires.
               </para>
 
-                <para>Content of this attribute is duration (how long element should be kept in cache) written as number with '<varname>d</varname>', '<varname>h</varname>', '<varname>m</varname>' or '<varname>s</varname>' suffix.
+              <note><para>Use of cache is beneficial only for elements that use very complex expressions, macros from external files or <acronym>PHP</acronym> expressions/objects that access the database. Otherwise uncached templates will be just as fast.</para></note>
+              
+                <para>Content of this attribute is a duration (how long element should be kept in cache) written as number with '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' or '<constant>s</constant>' suffix.
             </para>
             <programlisting><![CDATA[<div class="footer" phptal:cache="3h">...</div>]]></programlisting> 
             <para>                  <sgmltag>&lt;div></sgmltag> will be evaluated at most once per 3 hours.</para>
@@ -1225,20 +1227,24 @@ title="google search engine">the google search engine</a>
                   You can add "<varname>per url</varname>" to have separate copy of given element for every <acronym>URL</acronym>.
 </para>
 
-            <programlisting><![CDATA[             
-<ol id="breadcrumbs" phptal:cache="1d per url">...</ol>]]></programlisting>
+            <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">...</ol>]]></programlisting>
           <para><sgmltag>&lt;ol></sgmltag> will be cached for one day, separately for each page.</para>
 <para>
                   You can add "<varname>per expression</varname>" to have different cache copy for every different value of an expression (which MUST evaluate to a string). 
                   Expression cannot refer to variables defined using <sgmltag>tal:define</sgmltag> on the same element.
 </para>
-<programlisting><![CDATA[             
-<ul id="user-info" phptal:cache="25m per object/id">...</ul>]]></programlisting>
+<programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">...</ul>]]></programlisting>
              <para><sgmltag>&lt;ul></sgmltag> will be cached for 25 minutes, separately for each object ID.</para>
 
-             <para>Use of cache is beneficial only for elements that use very complex expressions, macros from external files or <acronym>PHP</acronym> expressions/objects that access the database. Otherwise uncached templates will be just as fast.</para>
+             <section id="cache-refresh"><title>Instant refreshing</title>
 
-<para>Limitations:</para>
+                 <para>Instead of clearing cache, it might be a better idea to put version or last modification timestamp in the <varname>per</varname> parameter. This will cause cached template to be refreshed as soon as version/timestamp changes and no special cache clearing will be neccessary.</para>
+<programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">...</div>]]></programlisting>
+
+                 </section>
+
+
+<section id="cache-limits"><title>Limitations:</title>
             
             
             <itemizedlist>
@@ -1247,7 +1253,7 @@ title="google search engine">the google search engine</a>
   </para></listitem></itemizedlist>
                   
 
-
+</section>
 
             </section>
 
@@ -1448,10 +1454,10 @@ this page has been readed ${page/countRead} times"/>
 
         <itemizedlist>
           <listitem><para>
-          ';;' when you want to insert a real ';' character in a string,
+          '<literal>;;</literal>' when you want to insert a real ';' character in a string,
           </para></listitem>
           <listitem><para>
-          '$$' when you want to insert a real '$' character in a string.
+          '<literal>$$</literal>' when you want to insert a real '$' character in a string.
           </para></listitem>
         </itemizedlist>
 
@@ -1588,7 +1594,7 @@ php:SomeClass::$staticVar
         </para>
       </section>
 
-      <section>
+      <section id="expression-chains">
         <title>Expression chains</title>
 
         <para>
@@ -1645,7 +1651,7 @@ php:SomeClass::$staticVar
       </para></listitem>
     </itemizedlist>
 
-    <section>
+    <section id="constants">
       <title>Constants</title>
 
       <para>
@@ -1668,7 +1674,7 @@ php:SomeClass::$staticVar
       In older versions of there were constants for configuration. They have been replaced with methods.
       </para>
   </section>
-  <section>
+  <section id="configuration">
       <title>Configuration methods</title>
       
       <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
@@ -1708,7 +1714,7 @@ php:SomeClass::$staticVar
           
     </section>
 
-    <section>
+    <section id="phptal-class">
       <title>class <classname>PHPTAL</classname></title>
     
       <para>
@@ -1834,7 +1840,7 @@ catch (Exception $e){
       
     </section>
    
-    <section>
+    <section id="filter-interface">
       <title>interface <classname>PHPTAL_Filter</classname></title>
 
       <para>
@@ -1909,7 +1915,7 @@ echo $tpl->execute();
 ]]></programlisting>
     </section>
 
-    <section>
+    <section id="trigger-interface">
       <title>interface <classname>PHPTAL_Trigger</classname></title>
 
       <para>
@@ -2072,7 +2078,7 @@ echo $tpl->execute();
       </para>
     </section>
 
-    <section>
+    <section id="translation-interface">
       <title>interface <classname>PHPTAL_TranslationService</classname></title>
 
       <para>
@@ -2098,7 +2104,7 @@ echo $tpl->execute();
       Your implementation must define the following methods:
       </para>
 
-      <section>
+      <section id="i18n-setlanguage">
         <title>method setLanguage(...)</title>
 
         <para>
@@ -2132,7 +2138,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 ]]></programlisting>
       </section>
 
-      <section>
+      <section id="i18n-usedomain">
         <title>method useDomain($domain)</title>
 
         <para>
@@ -2167,7 +2173,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         </para>
       </section>
 
-      <section>
+      <section id="i18n-setvar">
         <title>method setVar($key,$value)</title>
   
         <para>
@@ -2190,7 +2196,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 ]]></programlisting>
       </section>
     
-      <section>
+      <section id="i18n-translatekey">
         <title>method translate($key)</title>
 
         <para>
@@ -2229,7 +2235,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     </section> <!-- end of PHPTAL_TranslationService -->
 
 
-    <section>
+    <section id="gettext">
       <title>Working with gettext</title>
       
       <para>
@@ -2269,7 +2275,7 @@ else
 }
 ]]></programlisting>
 
-      <section>
+      <section id="i18n-directory">
         <title>Creating the translation directory structure</title>
 
         <para>
@@ -2299,7 +2305,7 @@ else
 
       </section>
 
-      <section>
+      <section id="po-files">
         <title>Portable Object files</title>
 
         <para>
@@ -2363,7 +2369,7 @@ msgstr "Une petite phrase en français"
 
       </section>
 
-      <section>
+      <section id="i18n-domains">
         <title>Translation Domain</title>
 
         <para>
@@ -2378,7 +2384,7 @@ msgstr "Une petite phrase en français"
         </para>
       </section>
 
-      <section>
+      <section id="php-in-phptal">
         <title><acronym>PHP</acronym> usage in <acronym>PHPTAL</acronym></title>
 
         <programlisting><![CDATA[<?php
@@ -2409,7 +2415,7 @@ catch (Exception $e){
 ]]></programlisting>
       </section>
 
-      <section>
+      <section id="var-interpolation">
         <title>Variable interpolation</title>
 
         <para>
@@ -2449,7 +2455,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
 
     </section>
 
-    <section>
+    <section id="custom-modifiers">
       <title>Creating custom expression modifiers</title>
 
       <para>

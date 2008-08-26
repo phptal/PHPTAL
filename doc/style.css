@@ -32,6 +32,7 @@ padding-bottom: 0em;
 margin-bottom: 0em;
 text-align: right;
 }
+
 h2.subtitle {
 font-size: 2em;
 margin-top: 0em;
@@ -60,13 +61,15 @@ text-align: right;
 }
 
 h2 {
-margin-top: 1.5em;
+margin-top: 2em;
 font-size: 1.3em;
 background-color: #333;
 background-color: #8e864e;
 color: #EEE;
 padding-left: 5px;
 }
+
+h3 {margin-top:2em;}
 
 p {
 text-align: justify;
@@ -119,3 +122,9 @@ background-color: #d3c983;
 acronym {font-variant:small-caps;text-transform:lowercase;line-height:1;font-size:120%}
 
 hr {height:0;color:#aaa;border:0;border-top:1px solid #aaa;}
+
+.note h3.title,
+.note h4.title {font-size:100%;margin: 0;}
+.note h3.title + p,
+.note h4.title + p {margin-top:0;}
+
