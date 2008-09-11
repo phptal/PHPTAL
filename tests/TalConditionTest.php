@@ -84,7 +84,7 @@ class TalConditionTest extends PHPUnit_Framework_TestCase
         $tpl->setSource('<tal:block tal:condition="foo | bar | baz | \'ok!\'">ok</tal:block>');
         $res = $tpl->execute();
         $this->assertEquals($res,'ok');
-}
+    }
         
     function testChainedShortCircuit()
     {

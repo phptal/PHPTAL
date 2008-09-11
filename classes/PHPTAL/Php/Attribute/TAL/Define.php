@@ -51,6 +51,7 @@ implements PHPTAL_Php_TalesChainReader
     public function start()
     {
         $expressions = $this->tag->generator->splitExpression($this->expression);
+        $definesAnyNonGlobalVars = false;
 
         foreach ($expressions as $exp){
             list($defineScope, $defineVar, $expression) = $this->parseExpression($exp);
@@ -59,6 +60,8 @@ implements PHPTAL_Php_TalesChainReader
             }
             
             $this->_defineScope = $defineScope;
+
+            if ($defineScope != 'global') $definesAnyNonGlobalVars = true; // <span tal:define="global foo" /> should be invisible, but <img tal:define="bar baz" /> not
 
             if ($this->_defineScope != 'global' && !$this->_pushedContext){
                 $this->tag->generator->pushContext();
@@ -85,8 +88,8 @@ implements PHPTAL_Php_TalesChainReader
             }
         }
 
-        // if the content of the tag was buffered or the tag has nothing to tell, we hidde it.
-        if ($this->_buffered || (!$this->tag->hasRealContent() && !$this->tag->hasRealAttributes())){
+        // if the content of the tag was buffered or the tag has nothing to tell, we hide it.
+        if ($this->_buffered || (!$definesAnyNonGlobalVars && !$this->tag->hasRealContent() && !$this->tag->hasRealAttributes())){
             $this->tag->hidden = true;
         }
     }

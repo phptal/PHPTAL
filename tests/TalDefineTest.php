@@ -201,6 +201,15 @@ class TalDefineTest extends PHPUnit_Framework_TestCase
         $tpl->setSource('<p tal:define="one \';;\'; two string:;;;;; three php:\';;;;;;\'">${one}-${two}-${three}</p>');
         $this->assertEquals('<p>;-;;-;;;</p>',$tpl->execute());
     }
+    
+    function testEmpty()
+    {
+        $tal = new PHPTAL();
+        $tal->setSource('<div class="blank_bg" tal:define="book relative/book" tal:condition="php: count(book)>0"></div>');
+        $tal->relative = array('book'=>1);
+
+        $this->assertEquals($tal->execute(), '<div class="blank_bg"></div>');
+    }
 }
 
 ?>
