@@ -506,6 +506,7 @@ class PHPTAL
     public function setCacheLifetime($days)
     {
         $this->_cacheLifetime = max(0.5,$days);
+        return $this;
     }
 
     /**
@@ -515,6 +516,7 @@ class PHPTAL
     public function setCachePurgeFrequency($n)
     {
         $this->_cachePurgeFrequency = (int)$n;
+        return $this;
     }
 
     public function getCachePurgeFrequency()
