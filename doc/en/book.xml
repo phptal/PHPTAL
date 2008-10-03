@@ -5,20 +5,29 @@
   <bookinfo>
     <title>PHPTAL</title>
     <subtitle>PHP Template Attribute Language</subtitle>
-    <date>2008-01-27</date>
-    <author>
-       <firstname>Kornel</firstname><surname>Lesiński</surname>
-       <address><email>kornel@aardvarkmedia.co.uk</email></address>
-     </author>
+    <date>2008-10-03</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
       <address><email>lbedubourg@motion-twin.com</email></address>
     </author>
-		<author>
-			<firstname>Dan</firstname><surname>Sheppard</surname>
-		</author>
+    <author>
+       <firstname>Kornel</firstname><surname>Lesiński</surname>
+       <address><email>kornel@aardvarkmedia.co.uk</email></address>
+    </author>
+	<author>
+		<firstname>Dan</firstname><surname>Sheppard</surname>
+	</author>
+	<author>
+		<firstname>Anton</firstname><surname>Andriyevskyy</surname>
+	</author>	
 
     <revhistory>
+        <revision>
+			  <revnumber>v1.6</revnumber>
+				<date>2008-10-03</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Fixed errors spotted by Anton.</revremark>
+		</revision>
         <revision>
 			  <revnumber>v1.5</revnumber>
 				<date>2008-08-21</date>
@@ -344,9 +353,8 @@ catch (Exception $e){
 ]]></programlisting>
 
     <para>
-    Well, I assume you don't mind 'too' much about carriage returns in 
-    the <acronym>HTML</acronym> code :) If so, you may use the tidy functions to cleanup 
-    the resulting <acronym>HTML</acronym> before echoing it.
+
+    <acronym>PHPTAL</acronym> doesn't care much about line breaks and indentation in files it reads and generates. If you want source code of generated HTML files to be pretty (with line breaks and perfect indentation), then you might need to postprocess it with HTML Tidy.
     </para>
 
   </article>
@@ -641,8 +649,7 @@ catch (Exception $e){
 
         <para>
         The most common usage of <sgmltag>tal:repeat</sgmltag> is in using some <acronym>SQL</acronym>
-        database result.  Providing you use a library implementing the
-        Iterator <acronym>PHP</acronym> interface:
+        database result.  The following code will work if <varname>playersRanking</varname> contains object that implements <acronym>PHP</acronym>'s <constant>Iterator</constant> interface:
         </para>
 
         <programlisting><![CDATA[<table>
@@ -959,7 +966,7 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>metal:define-slot</sgmltag></title>
 
         <para>
-        This attribute must appear under a <sgmltag>metal:define-macro</sgmltag> tag.
+        This attribute must appear inside a <sgmltag>metal:define-macro</sgmltag> tag.
         </para>
 
         <para>
@@ -997,12 +1004,12 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>metal:fill-slot</sgmltag></title>
 
         <para>
-        This attribute occurs only under <sgmltag>metal:use-macro</sgmltag> context.
+        This attribute can occur only inside <sgmltag>metal:use-macro</sgmltag> element.
         </para>
 
         <para>
         This explicitly tells <acronym>PHPTAL</acronym> to replace a defined slot with the 
-        content provided under the <sgmltag>metal:fill-slot</sgmltag> attribute.
+        content provided inside the <sgmltag>metal:fill-slot</sgmltag> attribute.
         </para>
 
         <programlisting><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">

@@ -44,6 +44,7 @@ background-color: inherit;
 }
 
 .revhistory table {
+margin:0;
 border: 1px solid #777;
 border-collapse: collapse;
 font-size:0.8em;
@@ -70,6 +71,8 @@ padding-left: 5px;
 }
 
 h3 {margin-top:2em;}
+
+.author h3 {margin:0 0 0.3em;}
 
 p {
 text-align: justify;
@@ -121,7 +124,7 @@ background-color: #d3c983;
 
 acronym {font-variant:small-caps;text-transform:lowercase;line-height:1;font-size:120%}
 
-hr {height:0;color:#aaa;border:0;border-top:1px solid #aaa;}
+hr {clear:both;height:0;color:#aaa;border:0;border-top:1px solid #aaa;}
 
 .note h3.title,
 .note h4.title {font-size:100%;margin: 0;}
