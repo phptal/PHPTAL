@@ -4,8 +4,7 @@ gendoc:
 	./gendoc.sh
 
 sync: gendoc
-	rsync -P --recursive ./build/en/ root@phptal.motion-twin.com:/www/phptal/www/manual/en/
-	rsync -P --recursive ./build/ru/ root@phptal.motion-twin.com:/www/phptal/www/manual/ru/
+	rsync -P --recursive ./build/?? root@phptal.motion-twin.com:/www/phptal/www/manual/
 
 clean:
-	-rm -rf build/en
+	-rm -rf build/??

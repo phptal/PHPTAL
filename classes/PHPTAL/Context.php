@@ -288,8 +288,12 @@ function phptal_path($base, $path, $nothrow=false)
 
             // magic method call
             if (method_exists($base, '__call')){
-                $base = $base->$current();
-                continue;
+                try
+                {
+                    $base = $base->$current();
+                    continue;
+                }
+                catch(BadMethodCallException $e){}
             }
 
             // emulate array behaviour

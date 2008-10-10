@@ -113,7 +113,6 @@ class PHPTAL
     public function __clone()
     {
         $context = $this->_context;
-        $context = $this->_context;
         $this->_context = clone $this->_context;
         $this->_context->setParent($context);
         $this->_context->setGlobal($this->_globalContext);
@@ -410,20 +409,23 @@ class PHPTAL
 
     protected function setConfigurationFrom(PHPTAL $from)
     {
-        $this->_encoding = $from->_encoding;
-        $this->_outputMode = $from->_outputMode;
-        $this->_stripComments = $from->_stripComments;
-        $this->_forceReparse = $from->_forceReparse;
-        $this->_phpCodeDestination = $from->_phpCodeDestination;
-        $this->_phpCodeExtension = $from->_phpCodeExtension;
-        $this->_cacheLifetime = $from->_cacheLifetime;
-        $this->_cachePurgeFrequency = $from->_cachePurgeFrequency;
+        // use references - this way config of both objects will be more-or-less in sync
+        $this->_encoding = &$from->_encoding;
+        $this->_outputMode = &$from->_outputMode;
+        $this->_stripComments = &$from->_stripComments;
+        $this->_forceReparse = &$from->_forceReparse;
+        $this->_phpCodeDestination = &$from->_phpCodeDestination;
+        $this->_phpCodeExtension = &$from->_phpCodeExtension;
+        $this->_cacheLifetime = &$from->_cacheLifetime;
+        $this->_cachePurgeFrequency = &$from->_cachePurgeFrequency;
         $this->setTemplateRepository($from->_repositories);
         array_unshift($this->_repositories, dirname($from->_source->getRealPath()));
-        $this->_resolvers = $from->_resolvers;
-        $this->_prefilter = $from->_prefilter;
-        $this->_postfilter = $from->_postfilter;
+        $this->_resolvers = &$from->_resolvers;
+        $this->_prefilter = &$from->_prefilter;
+        $this->_postfilter = &$from->_postfilter;
     }
+
+    private $externalMacroTempaltesCache = array();
 
     /**
      * Execute a template macro.
@@ -438,18 +440,26 @@ class PHPTAL
         if (preg_match('/^(.*?)\/([a-z0-9_]*)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
 
-            // TODO: stores a list of already prepared macro to avoid this
-            // preparation on each call
-            $tpl = new PHPTAL($file);
-            $tpl->setConfigurationFrom($this);
-            $tpl->prepare();
+            if (isset($this->externalMacroTempaltesCache[$file]))
+            {
+                $tpl = $this->externalMacroTempaltesCache[$file];
+            }
+            else
+            {
+                $tpl = new PHPTAL($file);
+                $tpl->setConfigurationFrom($this);
+                $tpl->prepare();
+                // require PHP generated code
+                require_once $tpl->getCodePath();
+                
+                $this->externalMacroTempaltesCache[$file] = $tpl;
+                if (count($this->externalMacroTempaltesCache) > 10) $this->externalMacroTempaltesCache = array(); // keep it small (typically only 1 or 2 external files are used)
+            }
 
             // save current file
             $currentFile = $this->_context->__file;
             $this->_context->__file = $tpl->__file;
 
-            // require PHP generated code and execute macro function
-            require_once $tpl->getCodePath();
             $fun = $tpl->getFunctionName() . '_' . $macroName;
             if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
             $fun($this, $this->_context);
@@ -457,10 +467,11 @@ class PHPTAL
             // restore current file
             $this->_context->__file = $currentFile;
         }
-        else {
+        else 
+        {
             // call local macro
             $fun = $this->getFunctionName() . '_' . trim($path);
-            if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined",$this->_source->getRealPath());
+            if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$path' is not defined",$this->_source->getRealPath());
             $fun( $this, $this->_context );
         }
     }
@@ -475,6 +486,9 @@ class PHPTAL
      */
     public function prepare()
     {
+        // clear just in case settings changed and cache is out of date
+        $this->externalMacroTempaltesCache = array();
+        
         // find the template source file
         $this->findTemplate();
         $this->__file = $this->_source->getRealPath();
@@ -534,19 +548,20 @@ class PHPTAL
 		$upperLimit = $this->getPhpCodeDestination() . 'tpl_' . $phptalCacheFilesExpire . '_';
 		$lowerLimit = $this->getPhpCodeDestination() . 'tpl_0_';
 		$phptalCacheFiles = glob($this->getPhpCodeDestination() . 'tpl_*.' . $this->getPhpCodeExtension() . '*');
+
 		if ($phptalCacheFiles)
 		{
 			foreach($phptalCacheFiles as $index => $file)
 	        {
-				if ($file < $upperLimit && substr($file,0,strlen($lowerLimit)) !== $lowerLimit)
+				if ($file > $upperLimit && substr($file,0,strlen($lowerLimit)) !== $lowerLimit)
 				{
-					if (unlink($file)) unset($phptalCacheFiles[$index]);
+				    unset($phptalCacheFiles[$index]);
 				}
 	        }
 	        foreach($phptalCacheFiles as $file)
 	        {
 	            $time = filemtime($file);
-	            if ($time && $time < $phptalCacheFilesExpire) unlink($file);
+	            if ($time && $time < $phptalCacheFilesExpire) @unlink($file);			 
 		    }
 	    }
 	}
@@ -568,7 +583,7 @@ class PHPTAL
 		if ($phptalCacheFiles) foreach($phptalCacheFiles as $file)
 		{
 		    if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
-			unlink($file);
+			@unlink($file);
 	    }
         $this->_prepared = false;
 	}	

@@ -1,5 +1,5 @@
 #!/bin/bash
-LANGS="en ru"
+LANGS="en ru de"
 DEST=./build/
 
 for lang in $LANGS

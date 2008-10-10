@@ -1,10 +1,18 @@
 <div>
 
-<div metal:define-macro="test">
-  test macro content
+<div metal:define-macro="test1">
+  test macro1 content
 </div>
 
-<div metal:use-macro="test"/>
-<div metal:use-macro="test"/>
+<div metal:define-macro="test2">
+  test macro2 content
+</div>
+
+<div metal:define-macro="test3">
+  test macro3 content
+</div>
+
+<div metal:use-macro="test1"/>
+<div metal:use-macro="test1"/>
 
 </div>
