@@ -20,11 +20,10 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'PHPUnit/Framework/TestResult.php';
 require_once 'PHPUnit/Framework/Test.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/ResultPrinter.php';
+require_once 'PHPUnit/TextUI/TestRunner.php';
 
 error_reporting( E_ALL | E_STRICT );
 
@@ -59,20 +58,17 @@ if (isset($argv) && count($argv) >= 2){
     exit(0);
 }
 
-$printer = new PHPUnit_TextUI_ResultPrinter();
-$result = new PHPUnit_Framework_TestResult();
-$result->addListener( $printer );
-$d = dir( dirname(__FILE__) );
-while ($entry = $d->read()) {
-    if (preg_match('/(.*?Test).php$/', $entry, $m)) {
-        require_once $entry;
-        $testclass = new ReflectionClass( $m[1] );
-        $suite = new PHPUnit_Framework_TestSuite($testclass);
-        $suite->run($result);
+$alltests = new PHPUnit_Framework_TestSuite();
+foreach(new DirectoryIterator( dirname(__FILE__) ) as $f) 
+{
+    if ($f->isDot() || !$f->isFile()) continue;
+    
+    if (preg_match('/(.*?Test).php$/', $f->getFileName(), $m)) 
+    {
+        require_once $f->getPathName();
+        $alltests->addTestSuite(new PHPUnit_Framework_TestSuite($m[1]));
     }
 }
 
-//ob_start();
-$printer->printResult( $result, 0 );
-//echo html_entity_decode(ob_get_clean(),ENT_QUOTES,'UTF-8');
-
+$runner = new PHPUnit_TextUI_TestRunner();
+$runner->doRun($alltests);
