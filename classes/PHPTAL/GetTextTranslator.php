@@ -38,10 +38,11 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     public function __construct()
     {
 	    if (!function_exists('gettext')) throw new PHPTAL_Exception("Gettext not installed");
+	    $this->useDomain("messages"); // PHP bug #21965
     }
 
     private $_vars = array();
-    private $_currentDomain = null;
+    private $_currentDomain;
     private $_encoding = 'UTF-8';
     private $_canonicalize = false;
 
@@ -75,6 +76,9 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         throw new PHPTAL_Exception($err);
     }
     
+    /**
+     * encoding must be set before calling addDomain
+     */
     public function addDomain($domain, $path='./locale/')
     {
         bindtextdomain($domain, $path);

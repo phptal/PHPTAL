@@ -296,6 +296,7 @@ class PHPTAL
 
     /**
      * Set I18N translator.
+     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator. 
      */
     public function setTranslator(PHPTAL_TranslationService $t)
     {

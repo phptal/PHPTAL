@@ -22,9 +22,11 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
         $this->tag->generator->pushCode('$__i18n_domains = array()');
         $this->tag->generator->doEnd();
 
+        //\''.str_replace(array('\\',"'"),array('\\\\',"\\'"),$expression).'\'
+        $expression = $this->tag->generator->interpolateTalesVarsInString($this->expression);
+
         // push current domain and use new domain
-        $code = '$__i18n_domains[] = $_translator->useDomain(\'%s\')';
-        $code = sprintf($code, $this->expression);
+        $code = '$__i18n_domains[] = $_translator->useDomain('.$expression.')';
         $this->tag->generator->pushCode($code);
     }
 

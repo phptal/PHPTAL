@@ -70,7 +70,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         }
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
         else {
-            $code = $this->tag->generator->evaluateTalesString($this->expression);
+            $code = $this->tag->generator->interpolateTalesVarsInString($this->expression);
             $code = sprintf('<?php $tpl->executeMacro(%s); ?>', $code);
             $this->tag->generator->pushHtml($code);
         }

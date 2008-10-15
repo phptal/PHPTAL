@@ -45,6 +45,7 @@ class PHPTAL_Php_CodeGenerator
         return $this->_writer->getResult();
     }
 
+
     private $_functionName;
     private $_sourceFile;
     private $_writer;

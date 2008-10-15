@@ -321,7 +321,7 @@ class PHPTAL_Php_CodeWriter
         return $this->_state->getEncoding();
     }
 
-    public function evaluateTalesString($src)
+    public function interpolateTalesVarsInString($src)
     {
         return $this->_state->interpolateTalesVarsInString($src);
     }
