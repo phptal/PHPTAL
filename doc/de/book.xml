@@ -2420,7 +2420,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
 ]]></programlisting>
 
       <para>
-        Will use 2 modifiers:
+        nutzt zwei Operatoren:
       </para>
 
       <itemizedlist>
