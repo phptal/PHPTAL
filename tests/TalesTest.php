@@ -91,6 +91,25 @@ class TalesTest extends PHPUnit_Framework_TestCase
         $src = 'MyTalesClass.reverse: some';
         $this->assertEquals('strrev($ctx->some)', phptal_tales($src));
     }
+    
+    function testInterpolate1()
+    {
+        $this->assertEquals('$ctx->{phptal_path($ctx->some, \'path\')}',phptal_tales('${some/path}'));
+    }
+
+    function testInterpolate2()
+    {
+        $this->assertEquals('phptal_path($ctx->{phptal_path($ctx->some, \'path\')}, \'meh\')',phptal_tales('${some/path}/meh'));
+    }
+    
+    function testInterpolate3()
+    {
+        $this->assertEquals('phptal_path($ctx->meh, phptal_path($ctx->some, \'path\'))',phptal_tales('meh/${some/path}'));
+    }
+    
+    function testInterpolate4()
+    {
+        $this->assertEquals('phptal_path($ctx->{$ctx->meh}, $ctx->blah)',phptal_tales('${meh}/${blah}'));
+    }
 }
 
-?>

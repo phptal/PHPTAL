@@ -150,36 +150,42 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	        return $result;
 	    }
 
-	    // only one expression to process
+	    
+        // see if there are subexpressions, but skip interpolated parts, i.e. ${a/b}/c is 2 parts
+        if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/',$expression, $m))
+        {
+            if (!self::checkExpressionPart($m[1]))  throw new PHPTAL_Exception("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
+            
+            $next = self::string($m[1]);
+            $expression = self::string($m[2]);
+        }
+        else
+        {
+	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_Exception("Invalid TALES path: '$expression', expected variable name");
 
-	    // first evaluate ${foo} inside the expression and threat the expression
-	    // as if it was a string to interpolate
-	    $expression = self::string($expression);
-	    $expression = substr($expression, 1, -1);
+            $next = self::string($expression); 
+            $expression = NULL;
+        }
 
-	    $pos = strpos($expression, '/');
+        if (preg_match('/^\'[a-z][a-z0-9_]*\'$/i',$next)) $next = substr($next,1,-1); else $next = '{'.$next.'}';
+
 	    // if no sub part for this expression, just optimize the generated code
 	    // and access the $ctx->var
-	    if ($pos === false) {
-	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_Exception("Invalid TALES path: '$expression', expected variable name");
-	        return '$ctx->'.$expression;
-	    }
-
+        if ($expression === NULL)
+        {
+            return '$ctx->'.$next;            
+        }
+    	    
 	    // otherwise we have to call phptal_path() to resolve the path at runtime
 	    // extract the first part of the expression (it will be the phptal_path()
-	    // $base and pass the remaining of the path to phptal_path()
-	    $next = substr($expression, 0, $pos);
-	    $expression = substr($expression, $pos+1);
-
-        if (!self::checkExpressionPart($next))  throw new PHPTAL_Exception("Invalid TALES path: '$next/$expression', expected '$next' to be variable name");
-        
-	    // return php code invoking phptal_path($next, $expression, $notrhow)
-	    return 'phptal_path($ctx->'.$next.', \''.$expression.'\''.($nothrow ? ', true' : '').')';
+	    // $base and pass the remaining of the path to phptal_path()    	    
+    	return 'phptal_path($ctx->'.$next.', '.$expression.($nothrow ? ', true' : '').')';
 	}
 
     private static function checkExpressionPart($expression)
     {
-        return preg_match('/^(\$?[a-z_][a-z0-9_]*|{.*})$/i',$expression);
+        $expression = preg_replace('/\${[^}]+}/','a',$expression); // pretend interpolation is done                
+        return preg_match('/^[a-z][a-z0-9_]*$/i',$expression);
     }
 
 	//
@@ -293,7 +299,9 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	        }
 	        $result .= "'." . $subEval . ".'";
 	    }
-	    return '\''.$result.'\'';
+	    
+	    // optimize ''.foo.'' to foo
+	    return preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/",'\1','\''.$result.'\'');        
 	}
 
 	/**
