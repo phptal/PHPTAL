@@ -45,8 +45,7 @@ class TalesStringTest extends PHPUnit_Framework_TestCase {
     function testSubPath()
     {
         $res = PHPTAL_TalesInternal::string('${name}');
-        $rgm = preg_match('/\'\'\s*?\.*\$ctx->name.*?\'\'$/', $res);
-        $this->assertEquals(1, $rgm);
+        $this->assertRegExp('/^(\'\'\s*?\.*)?\$ctx->name(.*?\'\')?$/', $res);
     }
 
     function testSubPathExtended()

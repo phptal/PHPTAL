@@ -46,8 +46,8 @@ if (isset($argv) && count($argv) >= 2){
             $result->addListener($printer);
             $testclass = new ReflectionClass($class);
             $suite = new PHPUnit_Framework_TestSuite($testclass);
-            $suite->run($result);
-            $printer->printResult($result, 0);
+            $runner = new PHPUnit_TextUI_TestRunner();
+            $runner->doRun($suite);
         }
         catch(Exception $e)
         {
