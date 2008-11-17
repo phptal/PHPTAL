@@ -145,6 +145,8 @@ class PHPTAL
             $path = '<string> '.md5($src);
 
         require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
+        $this->_prepared = false;
+        $this->_functionName = null;
         $this->_source = new PHPTAL_StringSource($src, $path);
         $this->_path = $path;
         return $this;

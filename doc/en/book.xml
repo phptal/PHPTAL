@@ -800,7 +800,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
-    tal:attribute="class php: repeat.ranking.odd ? 'odd' : NULL">
+    tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
     ...
 </tr>
 ]]></programlisting>
@@ -1189,13 +1189,15 @@ title="google search engine">the google search engine</a>
         the content of the tag it is defined in.
         </para>
 
+        <note><para>To debug errors in macros called across templates you need to add <sgmltag>phptal:debug</sgmltag> in template which <emphasis>defines</emphasis> the macro, not the one which uses it.</para></note>
+
         <para>
         The debug mode stores information like filename and source line 
         number in the template, so exceptions thrown by incorrect path 
-        access will contains more information about where they where 
+        access will contain more information about where they where 
         thrown.
         </para>
-
+        
         <programlisting><![CDATA[<html>
   <head>
     ...
@@ -1314,7 +1316,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
         <para>
-        Please note that the above example do the same as:
+        Please note that the above example does the same as:
         </para>
 
         <programlisting><![CDATA[<html>
@@ -1528,21 +1530,17 @@ php:SomeClass::$staticVar
         <title>exists:</title>
 
         <para>
-        This expression is a boolean expression, it will returns true if 
-        the path specified after it exists of not.
+        This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <code>isset()</code>.</para>
+            
+        <para>
+        Normally using a path which doesn't exist throws an error like "Cannot find variable '<varname>foo</varname>' in current scope". Thus, uncertain paths must be checked first:
         </para>
-
-        <programlisting><![CDATA[<span tal:condition="exists: user/preferences"
-      tal:content="user/preferences">
-  user preferences here if defined
+              
+        <programlisting><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
+  Use user/preferences here if defined
 </span>
 ]]></programlisting>
       
-        <para>
-        It is important to keep in mind that using a path which doesn't 
-        exist will throw and exception. Thus, uncertain paths must be 
-        checked first.
-        </para>
       </section>
 
       <section id="tales-default">
@@ -1568,7 +1566,7 @@ php:SomeClass::$staticVar
 ]]></programlisting>
 
         <para>
-        Above examples introduce the '|' character that allows the 
+        Above examples introduce the '<code>|</code>' character that allows the 
         definition of alternatives for defines or prints.
         </para>
       </section>
@@ -1595,8 +1593,8 @@ php:SomeClass::$staticVar
 ]]></programlisting>
 
         <para>
-        In above examples, we assume that $document->title and 
-        $document->content are variables containing preformated <acronym>HTML</acronym> 
+        In above examples, we assume that <code>$document->title</code> and 
+        <code>$document->content</code> are variables containing preformated <acronym>HTML</acronym> 
         which must be echoed as is.
         </para>
       </section>
@@ -1605,12 +1603,12 @@ php:SomeClass::$staticVar
         <title>Expression chains</title>
 
         <para>
-        An expression chain is a list of expressions separated by '|' 
+        An expression chain is a list of expressions separated by '<code>|</code>' 
         characters.
         </para>
 
         <para>
-        While evaluating expressions separated by '|', <acronym>PHPTAL</acronym> will stop 
+        While evaluating expressions separated by '<code>|</code>', <acronym>PHPTAL</acronym> will stop 
         its evaluation when an expression value is not null and no error 
         was raised while evaluating the expression.
         </para>
@@ -1621,14 +1619,11 @@ php:SomeClass::$staticVar
         </para>
 
         <para>
-        You can use php: expressions inside expression chains, like any 
+        You can use <code>php:</code> expressions inside expression chains, like any 
         other expression.
         </para>
 
-        <programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | default>
-  untitled page
-</h1>
-]]></programlisting>
+        <programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting>
       </section>
  
     </section><!-- end of PHPTALES -->
@@ -2239,6 +2234,14 @@ class MyTranslator implements PHPTAL_TranslationService {
 ]]></programlisting>
       </section>
 
+
+        <section id="i18n-setencoding">
+          <title>method setEncoding($encoding)</title>
+
+          <para>
+              <acronym>PHPTAL</acronym> class calls this method to inform your translation service what encoding is used by the template. <code>translate()</code> method should return strings in that encoding. If you always use the same encoding for templates and translation files (i.e. UTF-8), you can leave this method empty.
+          </para>
+        </section>
     </section> <!-- end of PHPTAL_TranslationService -->
 
 
@@ -2466,8 +2469,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       <title>Creating custom expression modifiers</title>
 
       <para>
-      <acronym>PHPTAL</acronym> comes with some basic expression modifiers (not:, exists:, 
-      string:, php:, path:).
+      <acronym>PHPTAL</acronym> comes with some basic expression modifiers (<code>not:</code>, <code>exists:</code>, 
+      <code>string:</code>, <code>php:</code>, <code>path:</code>).
       </para>
 
       <para>
