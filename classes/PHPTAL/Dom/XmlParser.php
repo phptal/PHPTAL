@@ -55,7 +55,7 @@ abstract class PHPTAL_XmlParser
 
     // exceptions error messages
     const ERR_CHARS_BEFORE_DOC_START = 
-        "Characters found before the begining of the document!";
+        "Characters found before the beginning of the document!";
     const ERR_EXPECT_VALUE_QUOTE =
         "Unexpected '%s' character, expecting attribute single or double quote";
         

@@ -388,7 +388,9 @@ class PHPTAL
             $templateFunction($this, $this->_context);
             $res = ob_get_clean();
         }
-        catch (Exception $e){
+        catch (Exception $e)
+        {
+            if ($e instanceof PHPTAL_Exception) $e->hintSrcPosition($this->_context->__file,$this->_context->__line);
             ob_end_clean();
             throw $e;
         }
@@ -465,7 +467,16 @@ class PHPTAL
 
             $fun = $tpl->getFunctionName() . '_' . $macroName;
             if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
-            $fun($this, $this->_context);
+            try
+            {
+                $fun($this, $this->_context);
+            }
+            catch(PHPTAL_Exception $e)
+            {
+                $e->hintSrcPosition($this->_context->__file.'/'.$macroName,$this->_context->__line);                
+                $this->_context->__file = $currentFile;
+                throw $e;
+            }
 
             // restore current file
             $this->_context->__file = $currentFile;

@@ -57,8 +57,8 @@ class PHPTAL_Exception extends Exception
      */
     public function hintSrcPosition($srcFile, $srcLine)
     {
-        if ($srcFile && $this->srcFile === false) $this->srcFile = $srcFile;
-        if ($srcLine && $this->srcLine === false) $this->srcLine = $srcLine;
+        if ($srcFile && !$this->srcFile) {$this->srcFile = $srcFile; $this->srcLine = $srcLine;}
+        elseif ($srcLine && $this->srcFile === $srcFile && !$this->srcLine) $this->srcLine = $srcLine;
     }
 }
 
