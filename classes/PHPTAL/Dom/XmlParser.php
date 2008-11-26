@@ -227,7 +227,7 @@ abstract class PHPTAL_XmlParser
                     break;
 
                 case self::ST_COMMENT:
-                    if ($c == '>' and substr($src, $i-2, 2) == '--') {
+                    if ($c == '>' && $i > $mark+4 && substr($src, $i-2, 2) == '--') {
                         $this->onComment(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;

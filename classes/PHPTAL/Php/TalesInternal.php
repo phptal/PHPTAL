@@ -185,7 +185,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
     private static function checkExpressionPart($expression)
     {
         $expression = preg_replace('/\${[^}]+}/','a',$expression); // pretend interpolation is done                
-        return preg_match('/^[a-z][a-z0-9_]*$/i',$expression);
+        return preg_match('/^[a-z_][a-z0-9_]*$/i',$expression);
     }
 
 	//

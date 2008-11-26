@@ -28,7 +28,34 @@ class CommentTest extends PHPUnit_Framework_TestCase
     {
         $source = '<html><!-- \${variable} --></html>';
         $tpl = new PHPTAL();
+        $tpl->setSource($source);
+        $res = $tpl->execute();
+        $this->assertEquals($source, $res);
+    }
+    
+    function testNoEntities()
+    {
+        $source = '<html><!-- <foo> --></html>';
+        $tpl = new PHPTAL();
         $tpl->setSource($source, __FILE__);
+        $res = $tpl->execute();
+        $this->assertEquals($source, $res);
+    }
+    
+    function testShortComments()
+    {
+        $source = '<html><!--><--></html>';
+        $tpl = new PHPTAL();
+        $tpl->setSource($source);
+        $res = $tpl->execute();
+        $this->assertEquals($source, $res);
+    }
+    
+    function testNestedComments()
+    {
+        $source = '<html><!--<!--<!--></html>';
+        $tpl = new PHPTAL();
+        $tpl->setSource($source);
         $res = $tpl->execute();
         $this->assertEquals($source, $res);
     }

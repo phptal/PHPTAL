@@ -111,5 +111,10 @@ class TalesTest extends PHPUnit_Framework_TestCase
     {
         $this->assertEquals('phptal_path($ctx->{$ctx->meh}, $ctx->blah)',phptal_tales('${meh}/${blah}'));
     }
+    
+    function testSuperglobals()
+    {
+        $this->assertEquals('phptal_path($ctx->{\'_GET\'}, \'a\')',phptal_tales('_GET/a'));
+    }
 }
 
