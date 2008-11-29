@@ -86,7 +86,7 @@ EOS;
 
     function trimCode( $code )
     {
-        $lines = split("\n", $code);
+        $lines = explode("\n", $code);
         $code = "";
         foreach ($lines as $line){
             $code .= trim($line);

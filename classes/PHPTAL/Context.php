@@ -232,7 +232,7 @@ if (!function_exists('property_exists')){
  */
 function phptal_path($base, $path, $nothrow=false)
 {//{{{
-    $parts   = split('/', $path);
+    $parts   = explode('/', $path);
     $current = true;
 
 	if ($base === null) 
