@@ -14,7 +14,7 @@ interface PHPTAL_TranslationService
      *
      * setLanguage('fr_FR', 'fr_FR@euro')
      */
-    function setLanguage();
+    function setLanguage(/*...*/);
 
     /**
      * PHPTAL will inform translation service what encoding page uses.

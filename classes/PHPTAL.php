@@ -298,7 +298,7 @@ class PHPTAL
 
     /**
      * Set I18N translator.
-     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator. 
+     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator.
      */
     public function setTranslator(PHPTAL_TranslationService $t)
     {
@@ -442,7 +442,7 @@ class PHPTAL
     {
         // extract macro source file from macro name, if not source file
         // found in $path, then the macro is assumed to be local
-        if (preg_match('/^(.*?)\/([a-z0-9_]*)$/i', $path, $m)){
+        if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m)){
             list(,$file,$macroName) = $m;
 
             if (isset($this->externalMacroTempaltesCache[$file]))
@@ -456,7 +456,7 @@ class PHPTAL
                 $tpl->prepare();
                 // require PHP generated code
                 require_once $tpl->getCodePath();
-                
+
                 $this->externalMacroTempaltesCache[$file] = $tpl;
                 if (count($this->externalMacroTempaltesCache) > 10) $this->externalMacroTempaltesCache = array(); // keep it small (typically only 1 or 2 external files are used)
             }
@@ -465,7 +465,7 @@ class PHPTAL
             $currentFile = $this->_context->__file;
             $this->_context->__file = $tpl->__file;
 
-            $fun = $tpl->getFunctionName() . '_' . $macroName;
+            $fun = $tpl->getFunctionName() . '_' . strtr($macroName,"-","_");
             if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
             try
             {
@@ -473,7 +473,7 @@ class PHPTAL
             }
             catch(PHPTAL_Exception $e)
             {
-                $e->hintSrcPosition($this->_context->__file.'/'.$macroName,$this->_context->__line);                
+                $e->hintSrcPosition($this->_context->__file.'/'.$macroName,$this->_context->__line);
                 $this->_context->__file = $currentFile;
                 throw $e;
             }
@@ -481,10 +481,10 @@ class PHPTAL
             // restore current file
             $this->_context->__file = $currentFile;
         }
-        else 
+        else
         {
             // call local macro
-            $fun = $this->getFunctionName() . '_' . trim($path);
+            $fun = $this->getFunctionName() . '_' . strtr($path,"-","_");
             if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$path' is not defined",$this->_source->getRealPath());
             $fun( $this, $this->_context );
         }
@@ -502,12 +502,12 @@ class PHPTAL
     {
         // clear just in case settings changed and cache is out of date
         $this->externalMacroTempaltesCache = array();
-        
+
         // find the template source file
         $this->findTemplate();
         $this->__file = $this->_source->getRealPath();
 		$this->setCodeFile();
-		
+
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
@@ -575,7 +575,7 @@ class PHPTAL
 	        foreach($phptalCacheFiles as $file)
 	        {
 	            $time = filemtime($file);
-	            if ($time && $time < $phptalCacheFilesExpire) @unlink($file);			 
+	            if ($time && $time < $phptalCacheFilesExpire) @unlink($file);
 		    }
 	    }
 	}
@@ -586,13 +586,13 @@ class PHPTAL
 	 */
 	public function cleanUpCache()
 	{
-		if (!$this->getCodePath()) 
+		if (!$this->getCodePath())
 		{
 			$this->findTemplate(); $this->setCodeFile();
 			if (!$this->getCodePath()) throw new PHPTAL_Exception("No codefile");
 		}
-		
-		$filename = $this->getCodePath();		
+
+		$filename = $this->getCodePath();
 		$phptalCacheFiles = glob($filename . '*');
 		if ($phptalCacheFiles) foreach($phptalCacheFiles as $file)
 		{
@@ -600,7 +600,7 @@ class PHPTAL
 			@unlink($file);
 	    }
         $this->_prepared = false;
-	}	
+	}
 
     /**
      * Returns the path of the intermediate PHP code file.
