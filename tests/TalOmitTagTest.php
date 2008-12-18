@@ -40,6 +40,34 @@ class TalOmitTagTest extends PHPUnit_Framework_TestCase
         $exp = trim_file('output/tal-omit-tag.02.html');
         $this->assertEquals($exp, $res);
     }
+    
+    private $call_count;
+    function callCount()
+    {
+        $this->call_count++;
+    }
+    
+    function testCalledOnlyOnce()
+    {
+        $this->call_count=0;
+        $tpl = new PHPTAL();        
+        $tpl->setSource('<p tal:omit-tag="test/callCount" />');
+        
+        $tpl->test = $this;
+        $tpl->execute();        
+        $this->assertEquals(1,$this->call_count);
+
+        $tpl->execute();
+        $this->assertEquals(2,$this->call_count);
+    }
+    
+    function testNestedConditions()
+    {
+        $this->call_count=0;
+        $tpl = new PHPTAL();
+        $tpl->setSource('<span tal:omit-tag="php:true">a<span tal:omit-tag="php:false">b<span tal:omit-tag="php:true">c<span tal:omit-tag="php:false">d<span tal:omit-tag="php:false">e<span tal:omit-tag="php:true">f<span tal:omit-tag="php:true">g</span>h</span>i</span>j</span>k</span></span></span>');
+        
+        $this->assertEquals('a<span>bc<span>d<span>efghi</span>j</span>k</span>',$tpl->execute());
+    }
 }
         
-?>

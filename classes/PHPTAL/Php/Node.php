@@ -131,7 +131,8 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     public $contentAttributes = array();
     public $surroundAttributes = array();
     public $headFootDisabled = false;
-    public $headFootPrintCondition = false;
+    public $headPrintCondition = false;
+    public $footPrintCondition = false;
     public $hidden = false;
 
     public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
@@ -233,8 +234,8 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     public function generateHead()
     {
         if ($this->headFootDisabled) return;
-        if ($this->headFootPrintCondition) {
-            $this->generator->doIf($this->headFootPrintCondition);
+        if ($this->headPrintCondition) {
+            $this->generator->doIf($this->headPrintCondition);
         }
         
         $this->generator->pushHtml('<'.$this->name);
@@ -247,7 +248,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             $this->generator->pushHtml('>');
         }
         
-        if ($this->headFootPrintCondition) {
+        if ($this->headPrintCondition) {
             $this->generator->doEnd();
         }
     }
@@ -276,13 +277,13 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         if ($this->isEmptyNode())
             return;
 
-        if ($this->headFootPrintCondition) {
-            $this->generator->doIf($this->headFootPrintCondition);
+        if ($this->footPrintCondition) {
+            $this->generator->doIf($this->footPrintCondition);
         }
         
         $this->generator->pushHtml( '</'.$this->name.'>' );
 
-        if ($this->headFootPrintCondition) {
+        if ($this->footPrintCondition) {
             $this->generator->doEnd();
         }
     }
