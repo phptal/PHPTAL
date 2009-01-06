@@ -51,6 +51,24 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $exp = trim_file('output/tal-repeat.03.html');
         $this->assertEquals($exp, $res);        
     }
+    
+    function testArrayObject()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p></div>');
+        $tpl->aobj = new MyArrayObj(array(1,2,3));
+        
+        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p></div>',$tpl->execute());
+    }
+
+    function testArrayObjectAggregated()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p></div>');
+        $tpl->aobj = new MyArrayObj(new MyArrayObj(array("1","2","3")));
+        
+        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p></div>',$tpl->execute());
+    }
 
     function testHashKey()
     {
@@ -198,6 +216,10 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
     }
 }
 
+class MyArrayObj extends ArrayObject
+{
+    
+}
 
 class MyIterable implements Iterator
 {

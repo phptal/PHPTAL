@@ -45,9 +45,9 @@ class PHPTAL_RepeatController implements Iterator
     private $validOnNext;
 
     protected $iterator;
-    protected $index;
-    protected $end;
-    protected $length;
+    public $index;
+    public $end;
+    public $length;
 
     /**
      * Construct a new RepeatController.
@@ -71,8 +71,8 @@ class PHPTAL_RepeatController implements Iterator
             }
             $this->iterator = new ArrayIterator($array);
         } else if ( $source instanceof Traversable || $source instanceof DOMNodeList ) {
-            // PDO Statements for example implement the engine internal Traversable 
-            // interface. To make it fully iterable we traverse the set to populate
+            // PDO Statements implement an internal Traversable interface. 
+            // To make it fully iterable we traverse the set to populate
             // an array which will be actually used for iteration.
             $array = array();
             foreach ( $source as $k=>$v ) {
@@ -87,7 +87,8 @@ class PHPTAL_RepeatController implements Iterator
         $this->length = 0;
         if ( $this->iterator instanceof Countable ) {
             $this->length = count($this->iterator);
-        } else if ( is_object($this->iterator) ) {
+        }
+        else if ( is_object($this->iterator) ) {
             // This should be removed since there is already the Countable interface in PHP5
             if ( method_exists( $this->iterator, 'size' ) ) {
                 $this->length = $this->iterator->size();                
@@ -95,7 +96,6 @@ class PHPTAL_RepeatController implements Iterator
                 $this->length = $this->iterator->length();
             }
         }
-        
         $this->groups = new PHPTAL_RepeatController_Groups();
         
         $this->rewind();            
@@ -166,7 +166,7 @@ class PHPTAL_RepeatController implements Iterator
         $this->index++;        
         
         // Prefetch the next element
-        $this->prefetch();
+        if ($this->validOnNext) $this->prefetch();
         
         // Notify the grouping helper of the change
         $this->groups->reset();        
@@ -179,11 +179,7 @@ class PHPTAL_RepeatController implements Iterator
      */
     public function __get( $var )
     {
-        switch ( $var ) {
-            case 'index':
-            case 'end':
-            case 'length':
-                return $this->$var;
+        switch ( $var ) {        
             case 'number':
                 return $this->index + 1;
             case 'start':
