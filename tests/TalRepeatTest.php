@@ -55,19 +55,46 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
     function testArrayObject()
     {
         $tpl = new PHPTAL();
-        $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p></div>');
+        $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"></p></div>');
         $tpl->aobj = new MyArrayObj(array(1,2,3));
         
-        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p></div>',$tpl->execute());
+        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p><p>1</p><p>2</p><p>3</p></div>',$tpl->execute());
+    }
+
+    function testArrayObjectOneElement()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"></p></div>');
+        $tpl->aobj = new MyArrayObj(array(1));
+        
+        $this->assertEquals('<div><p>1</p><p>1</p></div>',$tpl->execute());
+    }
+
+    function testArrayObjectZeroElements()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"/></div>');
+        $tpl->aobj = new MyArrayObj(array());
+        
+        $this->assertEquals('<div></div>',$tpl->execute());
     }
 
     function testArrayObjectAggregated()
     {
         $tpl = new PHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p></div>');
-        $tpl->aobj = new MyArrayObj(new MyArrayObj(array("1","2","3")));
+        $tpl->aobj = new MyArrayObj(new MyArrayObj(array("1","2","3",NULL)));
         
-        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p></div>',$tpl->execute());
+        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p><p></p></div>',$tpl->execute());
+    }
+    
+    function testArrayObjectNested()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div><p tal:repeat="a aobj">${a}<b tal:repeat="b aobj" tal:content="b"/></p></div>');
+        $tpl->aobj = new MyArrayObj(array("1","2"));
+        
+        $this->assertEquals('<div><p>1<b>1</b><b>2</b></p><p>2<b>1</b><b>2</b></p></div>',$tpl->execute());
     }
 
     function testHashKey()
