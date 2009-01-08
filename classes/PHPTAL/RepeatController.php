@@ -96,9 +96,7 @@ class PHPTAL_RepeatController implements Iterator
                 $this->length = $this->iterator->length();
             }
         }
-        $this->groups = new PHPTAL_RepeatController_Groups();
-        
-        $this->rewind();            
+        $this->groups = new PHPTAL_RepeatController_Groups();        
     }
   
     /**
@@ -222,8 +220,8 @@ class PHPTAL_RepeatController implements Iterator
     protected function prefetch()
     {
         $this->valid = true;
-        $this->key = $this->iterator->key();
         $this->current = $this->iterator->current();
+        $this->key = $this->iterator->key();
 
         $this->iterator->next();
         if ( !$this->iterator->valid() ) {

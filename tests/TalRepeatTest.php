@@ -241,6 +241,61 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $tpl->sxml = new SimpleXMLElement("<x><y>test</y><y attr=\"test\"><z>test</z></y><y/></x>");
         $this->assertEquals("<b><y>test</y></b>\n<b><y attr=\"test\"><z>test</z></y></b>\n<b><y/></b>\n", $tpl->execute());
     }
+    
+    
+    function testSameCallsAsForeach()
+    {
+        $foreach = new LogIteratorCalls(array(1,2,3));
+
+        foreach($foreach as $k => $x)
+        {           
+        }
+
+        $controller = new LogIteratorCalls(array(1,2,3));
+        
+        $phptal = new PHPTAL();
+        $phptal->iter = $controller;
+        $phptal->setSource('<tal:block tal:repeat="x iter" />');
+        $phptal->execute();
+
+        $this->assertEquals($foreach->log, $controller->log);
+    }
+}
+
+
+class LogIteratorCalls implements Iterator
+{
+    public $i, $log = '';
+    function __construct($arr)
+    {
+        $this->i = new ArrayIterator($arr);
+    }
+    
+    function current()
+    {
+        $this->log .= "current\n";
+        return $this->i->current();
+    }
+    function next()
+    {
+        $this->log .= "next\n";
+        return $this->i->next();
+    }
+    function key()
+    {
+        $this->log .= "key\n";
+        return $this->i->key();
+    }
+    function rewind()
+    {
+        $this->log .= "rewind\n";
+        return $this->i->rewind();
+    }
+    function valid()
+    {
+        $this->log .= "valid\n";
+        return $this->i->valid();
+    }    
 }
 
 class MyArrayObj extends ArrayObject
