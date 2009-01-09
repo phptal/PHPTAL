@@ -45,7 +45,7 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
     function testIterableUsage()
     {
         $tpl = new PHPTAL('input/tal-repeat.03.html');
-        $tpl->result = new MyIterable(4);
+        $tpl->result = new MyIterableWithSize(4);
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-repeat.03.html');
@@ -82,10 +82,10 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
     function testArrayObjectAggregated()
     {
         $tpl = new PHPTAL();
-        $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p></div>');
+        $tpl->setSource('<div><p tal:repeat="a aobj">${a}${repeat/a/length}</p></div>');
         $tpl->aobj = new MyArrayObj(new MyArrayObj(array("1","2","3",NULL)));
         
-        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p><p></p></div>',$tpl->execute());
+        $this->assertEquals('<div><p>14</p><p>24</p><p>34</p><p>4</p></div>',$tpl->execute());
     }
     
     function testArrayObjectNested()
@@ -142,10 +142,10 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $doc->loadXML('<a><b/><c/><d/><e/><f/><g/></a>');
                 
         $tpl = new PHPTAL();
-        $tpl->setSource('<tal:block tal:repeat="node nodes">${repeat/node/key}${node/tagName}</tal:block>');
+        $tpl->setSource('<tal:block tal:repeat="node nodes"><tal:block tal:condition="php:repeat.node.index==4">(len=${repeat/node/length})</tal:block>${repeat/node/key}${node/tagName}</tal:block>');
         $tpl->nodes = $doc->getElementsByTagName('*');
         
-        $this->assertEquals('0a1b2c3d4e5f6g',$tpl->execute());
+        $this->assertEquals('0a1b2c3d(len=7)4e5f6g',$tpl->execute());
 
     }
     
@@ -264,13 +264,13 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
     function testCountIsLazy()
     {
         $tpl = new PHPTAL();
-        $tpl->i = new MyIterableNoSize(10);
+        $tpl->i = new MyIterableThrowsOnSize(10);
         $tpl->setSource('<tal:block tal:repeat="i i">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block>');
         $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
 
         try
         {
-            $tpl->i = new MyIterableNoSize(10);
+            $tpl->i = new MyIterableThrowsOnSize(10);
             $tpl->setSource('<tal:block tal:repeat="i i">aaaaa${repeat/i/length}aaaaa</tal:block>');
             echo $tpl->execute();
             $this->fail("Expected SizeCalledException");
@@ -281,10 +281,22 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
     function testReset()
     {
         $tpl = new PHPTAL();
-        $tpl->i = new MyIterableNoSize(10);
-        $tpl->setSource('<tal:block tal:repeat="i i">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block><tal:block tal:repeat="i i">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block>');
+        $tpl->iter = $i = new LogIteratorCalls(new MyIterableThrowsOnSize(10));
+                
+        $tpl->setSource('<tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block><tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block>');
+  
+        $res = $tpl->execute();
+        $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]11[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $res,$tpl->getCodePath());        
+        $this->assertRegExp("/rewind.*rewind/s",$i->log);
         $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]11[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
-        $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]11[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
+    }
+    
+    function testFakedLength()
+    {
+        $tpl = new PHPTAL();
+        $tpl->iter = new MyIterable(10);            
+        $tpl->setSource('<tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}/${repeat/i/length}]${repeat/i/end}</tal:block>');
+        $this->assertEquals("1[0/]00[1/]00[2/]00[3/]00[4/]00[5/]00[6/]00[7/]00[8/]00[9/10]1", $tpl->execute(),$tpl->getCodePath());        
     }
 }
 
@@ -293,7 +305,7 @@ class LogIteratorCalls implements Iterator
     public $i, $log = '';
     function __construct($arr)
     {
-        $this->i = new ArrayIterator($arr);
+        if ($arr instanceof Iterator) $this->i = $arr; else $this->i = new ArrayIterator($arr);
     }
     
     function current()
@@ -356,17 +368,20 @@ class MyIterable implements Iterator
         return $this->_index < $this->_size;
     }
 
+    private $_index;
+    protected $_size;
+}
+
+class MyIterableWithSize extends MyIterable
+{
     public function size(){
         return $this->_size;
     }
-
-    private $_index;
-    private $_size;
 }
 
 class SizeCalledException extends Exception {}
 
-class MyIterableNoSize extends MyIterable implements Countable
+class MyIterableThrowsOnSize extends MyIterable implements Countable
 {
     public function count()
     {

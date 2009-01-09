@@ -47,7 +47,6 @@ class PHPTAL_RepeatController implements Iterator
     protected $iterator;
     public $index;
     public $end;
-    public $length;
 
     /**
      * Construct a new RepeatController.
@@ -83,19 +82,6 @@ class PHPTAL_RepeatController implements Iterator
             $this->iterator = new ArrayIterator( array() );
         }
     
-        // Try to find the set length
-        $this->length = 0;
-        if ( $this->iterator instanceof Countable ) {
-            $this->length = count($this->iterator);
-        }
-        else if ( is_object($this->iterator) ) {
-            // This should be removed since there is already the Countable interface in PHP5
-            if ( method_exists( $this->iterator, 'size' ) ) {
-                $this->length = $this->iterator->size();                
-            } else if ( method_exists( $this->iterator, 'length' ) ) {
-                $this->length = $this->iterator->length();
-            }
-        }
         $this->groups = new PHPTAL_RepeatController_Groups();        
     }
   
@@ -131,6 +117,37 @@ class PHPTAL_RepeatController implements Iterator
         
         return $valid;
     }
+    
+    private $length = NULL;
+    public function length()
+    {
+        if ($this->length === NULL)
+        {
+            if ( $this->iterator instanceof Countable ) 
+            {
+                return $this->length = count($this->iterator);
+            }
+            else if ( is_object($this->iterator) ) 
+            {
+                // for backwards compatibility with existing PHPTAL templates
+                if ( method_exists( $this->iterator, 'size' ) ) 
+                {
+                    return $this->length = $this->iterator->size();                
+                } 
+                else if ( method_exists( $this->iterator, 'length' ) ) 
+                {
+                    return $this->length = $this->iterator->length();
+                }
+            }            
+            $this->length = '_PHPTAL_LENGTH_UNKNOWN_';
+        }
+        
+        if ($this->length === '_PHPTAL_LENGTH_UNKNOWN_') // return length if end is discovered
+        {
+            return $this->end ? $this->index + 1 : NULL;
+        }
+        return $this->length;
+    }
 
     /**
      * Restarts the iteration process going back to the first element
@@ -139,6 +156,7 @@ class PHPTAL_RepeatController implements Iterator
     public function rewind()
     {
         $this->index = 0;
+        $this->length = NULL;
         $this->end = false;
         
         $this->iterator->rewind();
@@ -187,7 +205,9 @@ class PHPTAL_RepeatController implements Iterator
             case 'odd':
                 return ($this->index % 2) === 1;
             case 'key':
-                return $this->key();
+                return $this->key;
+            case 'length':
+                return $this->length();
             case 'letter':
                 return strtolower( $this->int2letter($this->index+1) );
             case 'Letter':
