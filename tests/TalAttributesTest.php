@@ -150,9 +150,9 @@ EOT;
     function testNULLValue()
     {
         $tpl = new PHPTAL(); 
-        $tpl->setSource('<p tal:attributes="title missing | php:NULL"></p>');
+        $tpl->setSource('<p tal:attributes="title missing | php:NULL"></p><p tal:attributes="class \'ok\'; title null:blah"></p>');
         $res = $tpl->execute();
-        $this->assertEquals('<p></p>',$res);
+        $this->assertEquals('<p></p><p class="ok"></p>',$res);
     }
     
     function testNULLValueNoAlternative()
@@ -162,13 +162,21 @@ EOT;
        $res = $tpl->execute();
        $this->assertEquals('<p></p>',$res);
     }
+
+    function testNULLValueReversed()
+    {
+       $tpl = new PHPTAL(); 
+       $tpl->setSource('<p tal:attributes="title php:true ? NULL : false; class structure php:false ? NULL : \'fo\\\'o\'; style structure php:true ? NULL : false;"></p>');
+       $res = $tpl->execute();
+       $this->assertEquals('<p class="fo\'o"></p>',$res);
+    }
     
     function testEmptyValue()
     {
         $tpl = new PHPTAL(); 
-        $tpl->setSource('<p tal:attributes="title missing | \'\'"></p>');
+        $tpl->setSource('<p tal:attributes="title missing | \'\'"></p><p tal:attributes="title missing | php:\'\'"></p>');
         $res = $tpl->execute();
-        $this->assertEquals('<p title=""></p>',$res);
+        $this->assertEquals('<p title=""></p><p title=""></p>',$res);
     }
     
     function testSemicolon()
@@ -181,5 +189,10 @@ EOT;
     
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
-        
-?>
+
+
+function phptal_tales_null($code,$nothrow)
+{
+    return 'NULL';
+}
+

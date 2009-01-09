@@ -39,7 +39,19 @@ class I18NAttributesTest extends PHPUnit_Framework_TestCase
         $tpl->setTranslator($t);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/i18n-attributes-03.html');
-        $this->assertEquals($exp, $res);
+        $this->assertEquals($exp, $res, $tpl->getCodePath());
+    }
+
+    function testTranslateTalAttributeEscape()
+    {
+        $t = new DummyTranslator();
+        $t->setTranslation('my\'title', 'mon\'titre');
+        
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div><a title="foo" tal:attributes="title sometitle; class \'foo\'" i18n:attributes="title">test</a></div>');
+        $tpl->sometitle = 'my\'title';
+        $tpl->setTranslator($t);
+        $this->assertEquals('<div><a title="mon&#039;titre" class="foo">test</a></div>', $tpl->execute(), $tpl->getCodePath());
     }
 
     function testMultiple()

@@ -260,8 +260,33 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($foreach->log, $controller->log);
     }
-}
+    
+    function testCountIsLazy()
+    {
+        $tpl = new PHPTAL();
+        $tpl->i = new MyIterableNoSize(10);
+        $tpl->setSource('<tal:block tal:repeat="i i">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block>');
+        $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
 
+        try
+        {
+            $tpl->i = new MyIterableNoSize(10);
+            $tpl->setSource('<tal:block tal:repeat="i i">aaaaa${repeat/i/length}aaaaa</tal:block>');
+            echo $tpl->execute();
+            $this->fail("Expected SizeCalledException");
+        }
+        catch(SizeCalledException $e) {}
+    }
+    
+    function testReset()
+    {
+        $tpl = new PHPTAL();
+        $tpl->i = new MyIterableNoSize(10);
+        $tpl->setSource('<tal:block tal:repeat="i i">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block><tal:block tal:repeat="i i">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block>');
+        $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]11[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
+        $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]11[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
+    }
+}
 
 class LogIteratorCalls implements Iterator
 {
@@ -337,6 +362,26 @@ class MyIterable implements Iterator
 
     private $_index;
     private $_size;
+}
+
+class SizeCalledException extends Exception {}
+
+class MyIterableNoSize extends MyIterable implements Countable
+{
+    public function count()
+    {
+        throw new SizeCalledException("count() called");
+    }
+    
+    public function length()
+    {
+        throw new SizeCalledException("length() called");
+    }
+    
+    public function size()
+    {
+        throw new SizeCalledException("size() called");
+    }
 }
 
 ?>
