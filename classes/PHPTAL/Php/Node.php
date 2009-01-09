@@ -185,10 +185,16 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         return $this->node->hasAttribute($name);
     }
 
-    /** Returns the value of specified PHPTAL attribute. */
+    /** Returns HTML-escaped the value of specified PHPTAL attribute. */
     public function getAttribute($name)
     {
         return $this->node->getAttribute($name);
+    }
+
+    /** Returns textual (unescaped) value of specified PHPTAL attribute. */
+    public function getAttributeText($name)
+    {
+        return $this->node->getAttributeText($name, $this->generator->getEncoding());
     }
 
     public function isOverwrittenAttribute($name)

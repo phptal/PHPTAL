@@ -69,7 +69,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
             // else if the attribute has a default value
             else if ($this->tag->hasAttribute($attribute)){
                 // we use this default value as the translation key
-                $key = $this->tag->getAttribute($attribute);
+                $key = $this->tag->getAttributeText($attribute);
                 $key = str_replace('\'', '\\\'', $key);
                 $this->tag->attributes[$attribute] = $this->_getTranslationCode("'$key'");
             }

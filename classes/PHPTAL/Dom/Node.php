@@ -141,7 +141,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
         return false;
     }
 
-    /** Returns the value of specified PHPTAL attribute. */
+    /** Returns HTML-escaped the value of specified PHPTAL attribute. */
     public function getAttribute($name)
     {
         $ns = $this->getNodePrefix();
@@ -156,6 +156,15 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
         }
         return false;
     }
+    
+    /** Returns textual (unescaped) value of specified PHPTAL attribute. */
+    public function getAttributeText($name, $encoding)
+    {
+        $v = $this->getAttribute($name); if ($v === false) return false;
+        
+        return html_entity_decode($v,ENT_QUOTES,$encoding);
+    }
+    
 
     /** 
      * Returns true if this element or one of its PHPTAL attributes has some

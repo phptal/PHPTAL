@@ -89,7 +89,7 @@ abstract class PHPTAL_Php_Attribute
             return $m;
         }
         // (dest)
-        return array($exp, null);
+        return array($exp, NULL);
     }
 
     protected $_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;
