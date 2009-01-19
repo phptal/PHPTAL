@@ -1000,9 +1000,9 @@ title="google search engine">the google search engine</a>
           Beachten Sie bitte, das der Schlüssel, um eine dynamische Schlüsselwahl zu ermöglichen, auch in einer Variable enthalten sein kann.
         </para>
 
-        <programlisting><![CDATA[<div tal:define="welcome random_welcome_message"/>
-<div i18n:translate="welcome">...</div>
-]]></programlisting>
+        <programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
+  <div i18n:translate="welcome">...</div>
+</div>]]></programlisting>
 
       </section>
       

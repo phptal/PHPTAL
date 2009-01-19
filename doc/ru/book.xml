@@ -802,9 +802,9 @@ title="google search engine">the google search engine</a>
 
         <para>Мало того, ключ может задаваться переменной:</para>
 
-        <programlisting><![CDATA[<div tal:define="welcome random_welcome_message"/>
-<div i18n:translate="welcome">...</div>
-]]></programlisting>
+        <programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
+  <div i18n:translate="welcome">...</div>
+</div>]]></programlisting>
 
       </section>
       
