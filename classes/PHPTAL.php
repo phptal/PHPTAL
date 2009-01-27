@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //
 
-define('PHPTAL_VERSION', '1_1_15');
+define('PHPTAL_VERSION', '1_1_16a');
 
 //{{{PHPTAL_DIR
 if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
@@ -312,6 +312,8 @@ class PHPTAL
      */
     public function setPreFilter(PHPTAL_Filter $filter)
     {
+        $this->_prepared = false;
+        $this->_functionName = null;        
         $this->_prefilter = $filter;
         return $this;
     }
@@ -621,9 +623,13 @@ class PHPTAL
      */
     public function getFunctionName()
     {
-        if (!$this->_functionName) {
+        if (!$this->_functionName) 
+        {   
+            // function name is used as base for caching, so it must be unique for every combination of settings
+            // that changes code in compiled template         
             $this->_functionName = 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
-                substr(preg_replace('/[^a-zA-Z]/','',basename($this->_source->getRealPath())),0,10) . md5($this->_source->getRealPath());
+                substr(preg_replace('/[^a-zA-Z]/','_',basename($this->_source->getRealPath())),0,15) . 
+                md5($this->_source->getRealPath() . ($this->_prefilter ? get_class($this->_prefilter) : '-'));
         }
         return $this->_functionName;
     }

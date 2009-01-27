@@ -34,6 +34,14 @@ class MyPostFilter implements PHPTAL_Filter
     }
 }
 
+class MyPostFilter2 implements PHPTAL_Filter
+{
+    public function filter($str)
+    {
+        return str_replace('test','test-filtered',$str);
+    }
+}
+
 class PostFilterTest extends PHPUnit_Framework_TestCase
 {
     function testIt()
@@ -46,6 +54,16 @@ class PostFilterTest extends PHPUnit_Framework_TestCase
         $exp = trim_file('output/postfilter.01.html');
         $this->assertEquals($exp, $res);
     }
+    
+    function testMacro()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setPostFilter(new MyPostFilter2());
+        $tpl->setSource('<x><y metal:define-macro="macro">test2</y>
+        test1
+        <z metal:use-macro="macro" />
+        </x>
+        ');
+        $this->assertEquals(trim_string('<x>test-filtered1<y>test-filtered2</y></x>'),trim_string($tpl->execute()));
+    }
 }
-
-?>

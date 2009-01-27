@@ -65,6 +65,28 @@ class PreFilterTest extends PHPUnit_Framework_TestCase
         $exp = trim_file('output/prefilter.02.html');
         $this->assertEquals($exp, $res);
     }
-}
 
-?>
+    function testCache1()
+    {
+        $tpl = new PHPTAL('input/prefilter.03.html');
+        $tpl->execute(); // compile and store version without prefilter
+
+        $tpl = new PHPTAL('input/prefilter.03.html');
+        $tpl->setPreFilter(new MyPreFilter2());
+        $res = trim_string($tpl->execute());
+        $exp = trim_string('<root>filtered</root>');
+        $this->assertEquals($exp, $res);
+    }
+    
+    function testCache2()
+    {
+        $tpl = new PHPTAL('input/prefilter.03.html');
+        $tpl->execute(); // prepare version without prefilter
+
+        $tpl->setPreFilter(new MyPreFilter2());
+        $res = trim_string($tpl->execute());
+        $exp = trim_string('<root>filtered</root>');
+        $this->assertEquals($exp, $res);
+    }
+    
+}
