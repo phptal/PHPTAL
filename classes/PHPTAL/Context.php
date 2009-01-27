@@ -167,9 +167,9 @@ class PHPTAL_Context
      */
     public function __set($varname, $value)
     {
-        if ($varname[0] == '_')
+        if (preg_match('/^_|\s/',$varname))
         {
-            throw new PHPTAL_Exception('Template variable error \''.$varname.'\' must not begin with underscore');
+            throw new PHPTAL_InvalidVariableNameException('Template variable error \''.$varname.'\' must not begin with underscore or contain spaces');
         }
         $this->$varname = $value;
     }
@@ -200,8 +200,7 @@ class PHPTAL_Context
         if ($this->__nothrow)
             return null;
        
-        $e = sprintf('Unable to find path %s in current scope', $varname); 
-        throw new PHPTAL_Exception($e, $this->__file, $this->__line);
+        throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->__file, $this->__line);
     }
 
     private $_slots = array();
@@ -238,7 +237,7 @@ function phptal_path($base, $path, $nothrow=false)
 	if ($base === null) 
 	{
 		if ($nothrow) return null;
-		throw new PHPTAL_Exception("Trying to read property '$path' from NULL");
+		throw new PHPTAL_VariableNotFoundException("Trying to read property '$path' from NULL");
 	}
 
     while (($current = array_shift($parts)) !== null){
@@ -307,7 +306,7 @@ function phptal_path($base, $path, $nothrow=false)
 
             $err = 'Unable to find part "%s" in path "%s" inside '.(is_object($base)?get_class($base):gettype($base));
             $err = sprintf($err, $current, $path);
-            throw new PHPTAL_Exception($err);
+            throw new PHPTAL_VariableNotFoundException($err);
         }
 
         // array handling
@@ -329,7 +328,7 @@ function phptal_path($base, $path, $nothrow=false)
 
             $err = 'Unable to find array key "%s" in path "%s"';
             $err = sprintf($err, $current, $path);
-            throw new PHPTAL_Exception($err);
+            throw new PHPTAL_VariableNotFoundException($err);
         }
 
         // string handling
@@ -354,7 +353,7 @@ function phptal_path($base, $path, $nothrow=false)
         
         $err = 'Unable to find part "%s" in path "%s" with base "%s"';
         $err = sprintf($err, $current, $path, is_scalar($base)?"$base":(is_object($base)?get_class($base):gettype($base)));
-        throw new PHPTAL_Exception($err);
+        throw new PHPTAL_VariableNotFoundException($err);
     }
 
     return $base;

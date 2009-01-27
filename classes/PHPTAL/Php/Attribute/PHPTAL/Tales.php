@@ -36,11 +36,10 @@ class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
         if ($mode == '' || $mode == 'default') 
             $mode = 'tales';
         
-        if ($mode != 'php' && $mode != 'tales') {
-            $err = "Unsupported TALES mode '%s'";
-            $err = sprintf($err, $mode);
-            throw new PHPTAL_Exception(
-                $err, 
+        if ($mode != 'php' && $mode != 'tales') 
+        {
+            throw new PHPTAL_TemplateException(
+                "Unsupported TALES mode '$mode'", 
                 $this->tag->getSourceFile(), 
                 $this->tag->getSourceLine()
             ); 

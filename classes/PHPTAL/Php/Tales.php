@@ -101,15 +101,12 @@ function phptal_tales($expression, $nothrow=false)
         $classCallback = explode('.', $typePrefix, 2);
         $callbackName  = NULL;
         if(!is_callable($classCallback, FALSE, $callbackName)) {
-            $err = 'Unknown phptal modifier %s function %s does not exists or is not statically callable.';
-            $err = sprintf($err, $typePrefix, $callbackName);
-            throw new PHPTAL_Exception($err);
+            throw new PHPTAL_ParserException(sprintf('Unknown phptal modifier %s. Function %s does not exists or is not statically callable.', $typePrefix, $callbackName));
         }
         $ref = new ReflectionClass($classCallback[0]);
-        if(!$ref->implementsInterface('PHPTAL_Tales')){
-            $err = 'Unable to use phptal modifier %s as the class %s does not implement the PHPTAL_Tales interface.';
-            $err = sprintf($err, $typePrefix, $callbackName);
-            throw new PHPTAL_Exception($err);
+        if(!$ref->implementsInterface('PHPTAL_Tales'))
+        {
+            throw new PHPTAL_ParserException(sprintf('Unable to use phptal modifier %s as the class %s does not implement the PHPTAL_Tales interface.', $typePrefix, $callbackName));
         }
         return call_user_func($classCallback, $expression, $nothrow);
     }
@@ -126,10 +123,10 @@ function phptal_tales($expression, $nothrow=false)
         return "$runfunc(".phptal_tale($expression, $nothrow).")";
     }
     
-    throw new PHPTAL_Exception("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist");
+    throw new PHPTAL_ParserException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist");
 }
 
 // Register internal Tales expression modifiers
 require_once PHPTAL_DIR.'PHPTAL/Php/TalesInternal.php';
 PHPTAL_TalesInternal::registerInternalTales();
-?>
+

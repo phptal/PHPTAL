@@ -154,14 +154,14 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
         // see if there are subexpressions, but skip interpolated parts, i.e. ${a/b}/c is 2 parts
         if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/',$expression, $m))
         {
-            if (!self::checkExpressionPart($m[1]))  throw new PHPTAL_Exception("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
+            if (!self::checkExpressionPart($m[1]))  throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
             
             $next = self::string($m[1]);
             $expression = self::string($m[2]);
         }
         else
         {
-	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_Exception("Invalid TALES path: '$expression', expected variable name");
+	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name");
 
             $next = self::string($expression); 
             $expression = NULL;
@@ -251,7 +251,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                    $subEval = self::path($subPath);
 	                    if (is_array($subEval)) {
 	                        $err = 'cannot use | operator in evaluated expressions';
-	                        throw new PHPTAL_Exception($err);
+	                        throw new PHPTAL_ParserException($err);
 	                    }
 	                    $result .= "'." . $subEval . ".'";
 	                    $subPath = '';
@@ -282,7 +282,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                        $subEval = self::path($subPath);
 	                        if (is_array($subEval)) {
 	                            $err = 'cannot use | operator in evaluated expressions';
-	                            throw new PHPTAL_Exception($err);
+	                            throw new PHPTAL_ParserException($err);
 	                        }
 	                        $result .= "'." . $subEval . ".'";
 	                    }
@@ -295,7 +295,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	        $subEval = self::path($subPath);
 	        if (is_array($subEval)){
 	            $err = 'cannot use | operator in evaluated expressions';
-	            throw new PHPTAL_Exception($err);
+	            throw new PHPTAL_ParserException($err);
 	        }
 	        $result .= "'." . $subEval . ".'";
 	    }

@@ -206,7 +206,7 @@ class PHPTAL
     public function setOutputMode($mode=PHPTAL_XHTML)
     {
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML){
-            throw new PHPTAL_Exception('Unsupported output mode '.$mode);
+            throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
         }
         $this->_outputMode = $mode;
         return $this;
@@ -378,12 +378,12 @@ class PHPTAL
     public function execute()
     {
         if (!$this->_prepared) {
+            // includes generated template PHP code
             $this->prepare();
         }
 
-        // includes generated template PHP code
         $this->_context->__file = $this->__file;
-        require_once $this->getCodePath();
+
         $templateFunction = $this->getFunctionName();
         try {
             ob_start();
@@ -392,7 +392,7 @@ class PHPTAL
         }
         catch (Exception $e)
         {
-            if ($e instanceof PHPTAL_Exception) $e->hintSrcPosition($this->_context->__file,$this->_context->__line);
+            if ($e instanceof PHPTAL_TemplateException) $e->hintSrcPosition($this->_context->__file,$this->_context->__line);
             ob_end_clean();
             throw $e;
         }
@@ -456,8 +456,6 @@ class PHPTAL
                 $tpl = new PHPTAL($file);
                 $tpl->setConfigurationFrom($this);
                 $tpl->prepare();
-                // require PHP generated code
-                require_once $tpl->getCodePath();
 
                 $this->externalMacroTempaltesCache[$file] = $tpl;
                 if (count($this->externalMacroTempaltesCache) > 10) $this->externalMacroTempaltesCache = array(); // keep it small (typically only 1 or 2 external files are used)
@@ -468,12 +466,12 @@ class PHPTAL
             $this->_context->__file = $tpl->__file;
 
             $fun = $tpl->getFunctionName() . '_' . strtr($macroName,"-","_");
-            if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
+            if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
             try
             {
                 $fun($this, $this->_context);
             }
-            catch(PHPTAL_Exception $e)
+            catch(PHPTAL_TemplateException $e)
             {
                 $e->hintSrcPosition($this->_context->__file.'/'.$macroName,$this->_context->__line);
                 $this->_context->__file = $currentFile;
@@ -487,7 +485,7 @@ class PHPTAL
         {
             // call local macro
             $fun = $this->getFunctionName() . '_' . strtr($path,"-","_");
-            if (!function_exists($fun)) throw new PHPTAL_Exception("Macro '$path' is not defined",$this->_source->getRealPath());
+            if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$path' is not defined",$this->_source->getRealPath());
             $fun( $this, $this->_context );
         }
     }
@@ -513,7 +511,7 @@ class PHPTAL
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
-        if ($this->getForceReparse() || !file_exists($this->_codeFile))
+        if ($this->getForceReparse() || !file_exists($this->getCodePath()))
 		{
 	        if ($this->getCachePurgeFrequency() && mt_rand()%$this->getCachePurgeFrequency() == 0)
     		{
@@ -521,6 +519,9 @@ class PHPTAL
     		}
             $this->parse();
         }
+        
+        require_once $this->getCodePath();
+        
         $this->_prepared = true;
         return $this;
     }
@@ -591,7 +592,7 @@ class PHPTAL
 		if (!$this->getCodePath())
 		{
 			$this->findTemplate(); $this->setCodeFile();
-			if (!$this->getCodePath()) throw new PHPTAL_Exception("No codefile");
+			if (!$this->getCodePath()) throw new PHPTAL_ConfigurationException("No codefile");
 		}
 
 		$filename = $this->getCodePath();
@@ -723,8 +724,8 @@ class PHPTAL
         $generator->setOutputMode($this->_outputMode);
         $generator->generate($tree);
 
-        if (!@file_put_contents($this->_codeFile, $generator->getResult())) {
-            throw new PHPTAL_Exception('Unable to open '.$this->_codeFile.' for writing');
+        if (!@file_put_contents($this->getCodePath(), $generator->getResult())) {
+            throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
         }
 
         return $this;
@@ -736,7 +737,7 @@ class PHPTAL
     protected function findTemplate()
     {
         if ($this->_path == false){
-            throw new PHPTAL_Exception('No template file specified');
+            throw new PHPTAL_ConfigurationException('No template file specified');
         }
 
         // template source already defined
@@ -755,7 +756,7 @@ class PHPTAL
         array_pop($this->_resolvers);
 
         if ($this->_source == null){
-            throw new PHPTAL_Exception('Unable to locate template file '.$this->_path);
+            throw new PHPTAL_IOException('Unable to locate template file '.$this->_path);
         }
     }
 

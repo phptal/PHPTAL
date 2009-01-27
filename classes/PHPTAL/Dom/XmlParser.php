@@ -89,7 +89,7 @@ abstract class PHPTAL_XmlParser
     public function parseFile($src) 
     {
         if (!file_exists($src)) {
-            throw new PHPTAL_Exception("file $src not found");
+            throw new PHPTAL_IOException("file $src not found");
         }
         $this->parseString(file_get_contents($src), $src);
     }
@@ -330,7 +330,7 @@ abstract class PHPTAL_XmlParser
         }
         else
         {
-            throw new PHPTAL_Exception("Finished document in unexpected state: ".self::$state_names[$state]." is not finished");
+            throw new PHPTAL_ParserException("Finished document in unexpected state: ".self::$state_names[$state]." is not finished");
         }
         
         $this->onDocumentEnd();
@@ -374,7 +374,7 @@ abstract class PHPTAL_XmlParser
         
         $str = "%s error: %s in %s:%d";
         $str = sprintf($str, get_class($this), $errStr, $this->_file, $this->_line);
-        throw new PHPTAL_Exception($str);
+        throw new PHPTAL_ParserException($str,$this->_file, $this->_line);
     }
     
     private $_file;

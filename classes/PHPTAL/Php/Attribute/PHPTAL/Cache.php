@@ -45,7 +45,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
     public function start()
     {
         if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/',$this->expression, $matches))
-            throw new PHPTAL_Exception("Cache attribute syntax error: ".$this->expression);
+            throw new PHPTAL_ParserException("Cache attribute syntax error: ".$this->expression);
             
         $cache_len = $matches[1];
         if (!is_numeric($cache_len)) $cache_len = '$ctx->'.$cache_len;
@@ -68,7 +68,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         {
              $code = $this->tag->generator->evaluateExpression($cache_per_expression);
 
-             if (is_array($code)) { throw new PHPTAL_Exception("Chained expressions in per-cache directive are not supported"); }
+             if (is_array($code)) { throw new PHPTAL_ParserException("Chained expressions in per-cache directive are not supported"); }
             
              $old_cache_tag = $this->cache_tag;
              $this->cache_tag = '$ctx->cache_tag_';

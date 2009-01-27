@@ -75,7 +75,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
             }
             else {
                 // unable to translate the attribute
-                throw new PHPTAL_Exception("Unable to translate attribute $attribute");
+                throw new PHPTAL_TemplateException("Unable to translate attribute $attribute");
             }
         }
     }

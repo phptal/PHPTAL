@@ -25,6 +25,10 @@
  */
 class PHPTAL_Exception extends Exception
 {
+}
+
+class PHPTAL_TemplateException extends PHPTAL_Exception
+{
     public $srcFile;
     public $srcLine;
 
@@ -62,4 +66,10 @@ class PHPTAL_Exception extends Exception
     }
 }
 
-?>
+class PHPTAL_IOException extends PHPTAL_Exception {}
+class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception {}
+class PHPTAL_ConfigurationException extends PHPTAL_Exception {}
+class PHPTAL_VariableNotFoundException extends PHPTAL_TemplateException {}
+class PHPTAL_ParserException extends PHPTAL_TemplateException {}
+class PHPTAL_MacroMissingException extends PHPTAL_TemplateException {}
+

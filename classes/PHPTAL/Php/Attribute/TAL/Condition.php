@@ -93,7 +93,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
-        throw new PHPTAL_Exception('\'default\' keyword not allowed on condition expressions');
+        throw new PHPTAL_ParserException('\'default\' keyword not allowed on condition expressions');
     }
 
 }

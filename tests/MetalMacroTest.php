@@ -92,17 +92,37 @@ class MetalMacroTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($exp, $res);
     }
 
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
     function testBadMacroNameException()
     {
-        try {
             $tpl = new PHPTAL('input/metal-macro.08.html');
             $res = $tpl->execute();
-            $this->assertTrue(false, 'Bad macro name exception not thrown');
+        $this->fail('Bad macro name exception not thrown');
         }
-        catch (Exception $e){
-            $this->assertTrue(true, 'Bad macro name thrown');
+    
+    /**
+     * @expectedException PHPTAL_MacroMissingException
+     */
+    function testExternalMacroMissingException()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.07.html/this-macro-doesnt-exist"/>');
+        $res = $tpl->execute();
+        $this->fail('Bad macro name exception not thrown');
         }
+
+    /**
+     * @expectedException PHPTAL_MacroMissingException
+     */
+    function testMacroMissingException()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<tal:block metal:use-macro="this-macro-doesnt-exist"/>');
+        $res = $tpl->execute();
+        $this->fail('Bad macro name exception not thrown');
     }
+    
 }
 
-?>

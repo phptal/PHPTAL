@@ -37,7 +37,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 {
     public function __construct()
     {
-	    if (!function_exists('gettext')) throw new PHPTAL_Exception("Gettext not installed");
+	    if (!function_exists('gettext')) throw new PHPTAL_ConfigurationException("Gettext not installed");
 	    $this->useDomain("messages"); // PHP bug #21965
     }
 
@@ -72,8 +72,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
             }
         }
 
-        $err = sprintf('Language(s) code(s) "%s" not supported by your system', join(',', $langs));
-        throw new PHPTAL_Exception($err);
+        throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');
     }
     
     /**
@@ -114,7 +113,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
             list($src,$var) = $m;
             if (!array_key_exists($var, $this->_vars)){
                 $err = sprintf('Interpolation error, var "%s" not set', $var);
-                throw new PHPTAL_Exception($err);
+                throw new PHPTAL_VariableNotFoundException($err);
             }
             $value = str_replace($src, $this->_vars[$var], $value);
         }

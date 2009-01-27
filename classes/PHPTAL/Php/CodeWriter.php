@@ -160,9 +160,18 @@ class PHPTAL_Php_CodeWriter
         }
     }
 
+    public function functionExists($name)
+    {
+        return isset($this->known_functions[$this->_functionPrefix . $name]);
+    }
+
+    private $known_functions = array();
+    
     public function doFunction($name, $params)
     {
         $name = $this->_functionPrefix . $name;
+        $this->known_functions[$name] = true;
+                
         $this->pushGeneratorContext();
         $this->pushCode("function $name( $params ) {\n");
         $this->indent();
