@@ -49,7 +49,7 @@ require_once PHPTAL_DIR.'PHPTAL/RepeatController.php';
 require_once PHPTAL_DIR.'PHPTAL/Context.php';
 require_once PHPTAL_DIR.'PHPTAL/Exception.php';
 require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
-
+require_once PHPTAL_DIR.'PHPTAL/Filter.php';
 
 /**
  * PHPTAL template entry point.
