@@ -77,7 +77,7 @@ function phptal_tales($expression, $nothrow=false)
 
     // Look for tales modifier (string:, exists:, etc...)
     //if (preg_match('/^([-a-z]+):(.*?)$/', $expression, $m)) {
-    if (preg_match('/^([a-z][-.a-z]*[a-z]):(.*?)$/i', $expression, $m)) {
+    if (preg_match('/^([a-z][.a-z_-]*[a-z]):(.*?)$/i', $expression, $m)) {
         list(,$typePrefix,$expression) = $m;
     }
     // may be a 'string'

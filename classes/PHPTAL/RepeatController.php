@@ -78,11 +78,13 @@ class PHPTAL_RepeatController implements Iterator
                 $array[$k] = $v;
             }
             $this->iterator = new ArrayIterator($array);
+        } else if ( $source instanceof stdClass ) {
+            $this->iterator = new ArrayIterator( (array) $source );
         } else {
             $this->iterator = new ArrayIterator( array() );
         }
     
-        $this->groups = new PHPTAL_RepeatController_Groups();        
+        $this->groups = new PHPTAL_RepeatController_Groups();
     }
   
     /**
@@ -117,7 +119,7 @@ class PHPTAL_RepeatController implements Iterator
         
         return $valid;
     }
-    
+
     private $length = NULL;
     public function length()
     {
@@ -195,7 +197,7 @@ class PHPTAL_RepeatController implements Iterator
      */
     public function __get( $var )
     {
-        switch ( $var ) {        
+        switch ( $var ) {
             case 'number':
                 return $this->index + 1;
             case 'start':
@@ -313,7 +315,7 @@ class PHPTAL_RepeatController implements Iterator
  * Keeps track of variable contents when using grouping in a path (first/ and last/)
  *
  * @package phptal
- * @author Iv·n Montes <drslump@pollinimini.net>
+ * @author Iv√°n Montes <drslump@pollinimini.net>
  */
 class PHPTAL_RepeatController_Groups {
 

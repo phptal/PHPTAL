@@ -298,7 +298,7 @@ class PHPTAL
 
     /**
      * Set I18N translator.
-     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator.
+     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator. 
      */
     public function setTranslator(PHPTAL_TranslationService $t)
     {
@@ -456,7 +456,7 @@ class PHPTAL
                 $tpl = new PHPTAL($file);
                 $tpl->setConfigurationFrom($this);
                 $tpl->prepare();
-
+                
                 $this->externalMacroTempaltesCache[$file] = $tpl;
                 if (count($this->externalMacroTempaltesCache) > 10) $this->externalMacroTempaltesCache = array(); // keep it small (typically only 1 or 2 external files are used)
             }
@@ -473,7 +473,7 @@ class PHPTAL
             }
             catch(PHPTAL_TemplateException $e)
             {
-                $e->hintSrcPosition($this->_context->__file.'/'.$macroName,$this->_context->__line);
+                $e->hintSrcPosition($this->_context->__file.'/'.$macroName,$this->_context->__line);                
                 $this->_context->__file = $currentFile;
                 throw $e;
             }
@@ -481,7 +481,7 @@ class PHPTAL
             // restore current file
             $this->_context->__file = $currentFile;
         }
-        else
+        else 
         {
             // call local macro
             $fun = $this->getFunctionName() . '_' . strtr($path,"-","_");
@@ -502,12 +502,12 @@ class PHPTAL
     {
         // clear just in case settings changed and cache is out of date
         $this->externalMacroTempaltesCache = array();
-
+        
         // find the template source file
         $this->findTemplate();
         $this->__file = $this->_source->getRealPath();
 		$this->setCodeFile();
-
+		
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
@@ -578,7 +578,7 @@ class PHPTAL
 	        foreach($phptalCacheFiles as $file)
 	        {
 	            $time = filemtime($file);
-	            if ($time && $time < $phptalCacheFilesExpire) @unlink($file);
+	            if ($time && $time < $phptalCacheFilesExpire) @unlink($file);			 
 		    }
 	    }
 	}
@@ -589,13 +589,13 @@ class PHPTAL
 	 */
 	public function cleanUpCache()
 	{
-		if (!$this->getCodePath())
+		if (!$this->getCodePath()) 
 		{
 			$this->findTemplate(); $this->setCodeFile();
 			if (!$this->getCodePath()) throw new PHPTAL_ConfigurationException("No codefile");
 		}
-
-		$filename = $this->getCodePath();
+		
+		$filename = $this->getCodePath();		
 		$phptalCacheFiles = glob($filename . '*');
 		if ($phptalCacheFiles) foreach($phptalCacheFiles as $file)
 		{
@@ -603,7 +603,7 @@ class PHPTAL
 			@unlink($file);
 	    }
         $this->_prepared = false;
-	}
+	}	
 
     /**
      * Returns the path of the intermediate PHP code file.

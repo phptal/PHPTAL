@@ -394,7 +394,9 @@ function phptal_escape($var, $ent, $encoding)
     }
     elseif (is_object($var)) {
         if ($var instanceof SimpleXMLElement) return $var->asXML();
-        return htmlspecialchars($var->__toString(), $ent, $encoding);
+        
+//        assert('is_callable(array($var,"__toString"))');
+        return htmlspecialchars((string)$var, $ent, $encoding);
     }
     elseif (is_bool($var)){
         return (int)$var;

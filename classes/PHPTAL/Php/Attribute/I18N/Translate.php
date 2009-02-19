@@ -53,8 +53,8 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
             if ($child instanceOf PHPTAL_Php_Text){
 				if ($preserve_tags)
 				{
-					$result .= $child->node->getValue();
-				}
+                $result .= $child->node->getValue();
+            }
 				else
 				{
                 	$result .= html_entity_decode($child->node->getValue(),ENT_QUOTES,$this->tag->generator->getEncoding());
