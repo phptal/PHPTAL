@@ -63,14 +63,14 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // can be called directly if it's a known function (just generated or seen in previous compilation)
         if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $this->tag->generator->functionExists($macroname)) 
         {
-            $code = $this->tag->generator->getFunctionPrefix() . $macroname . '($_thistpl, $tpl, $ctx)';
+            $code = $this->tag->generator->getFunctionPrefix() . $macroname . '($_thistpl, $tpl)';
             $this->tag->generator->pushCode($code);
         }
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
         else 
         {
             $code = $this->tag->generator->interpolateTalesVarsInString($this->expression);
-            $this->tag->generator->pushHtml('<?php $tpl->_executeMacroOfTempalte('.$code.', $_thistpl, "'.$this->tag->generator->getFunctionPrefix().'"); ?>');
+            $this->tag->generator->pushHtml('<?php $tpl->_executeMacroOfTempalte('.$code.', $_thistpl); ?>');
         }
 
         $this->popSlots();

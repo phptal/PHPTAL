@@ -482,7 +482,7 @@ class PHPTAL
             if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
             try
             {
-                $fun($tpl, $this, $this->_context);
+                $fun($tpl, $this);
             }
             catch(PHPTAL_TemplateException $e)
             {
@@ -499,7 +499,7 @@ class PHPTAL
             // call local macro
             $fun = $local_tpl->getFunctionName() . '_' . strtr($path,"-","_");
             if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$path' is not defined",$local_tpl->_source->getRealPath());
-            $fun( $local_tpl, $this, $this->_context);
+            $fun( $local_tpl, $this);
         }
     }
 

@@ -128,6 +128,7 @@ class MetalMacroTest extends PHPUnit_Framework_TestCase
     {
         $tpl = new PHPTAL();
         $tpl->defined_later_var = 'defined_later';
+        $tpl->ok_var = '??'; // fallback in case test fails
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.09.html/defined_earlier" />');
         $res = $tpl->execute();
         $this->assertEquals('Call OK OK',trim(preg_replace('/\s+/',' ',$res)));        
