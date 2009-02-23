@@ -1,0 +1,6 @@
+
+<tal:block metal:define-macro="defined_earlier">
+    Call <tal:block metal:use-macro="defined_later" /> <tal:block metal:use-macro="${defined_later_var}" />
+</tal:block>
+
+<tal:block metal:define-macro="defined_later">OK</tal:block>

@@ -54,7 +54,7 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
             throw new PHPTAL_ParserException('Bad macro name "'.$macroname.'"', $this->tag->getSourceFile(), $this->tag->getSourceLine());
         }
         
-        $this->tag->generator->doFunction($macroname, '$tpl, $ctx');
+        $this->tag->generator->doFunction($macroname, '$_thistpl, $tpl, $ctx');
         $this->tag->generator->doXmlDeclaration();
         $this->tag->generator->doDoctype();
         $this->tag->generator->doSetVar('$tpl', 'clone $tpl');

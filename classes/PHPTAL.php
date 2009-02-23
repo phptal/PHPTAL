@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //
 
-define('PHPTAL_VERSION', '1_1_16a');
+define('PHPTAL_VERSION', '1_1_16b');
 
 //{{{PHPTAL_DIR
 if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
@@ -442,9 +442,22 @@ class PHPTAL
      */
     public function executeMacro($path)
     {
-        // extract macro source file from macro name, if not source file
-        // found in $path, then the macro is assumed to be local
-        if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m)){
+        $this->_executeMacroOfTempalte($path, $this);
+    }
+    
+    /**
+     * This is PHPTAL's internal function that handles execution of macros from templates.
+     *
+     * $this is caller's context (the file where execution had originally started)
+     * @param $local_tpl is PHPTAL instance of the file in which macro is defined (it will be different from $this if it's external macro call)
+     * @access private
+     */
+    public function _executeMacroOfTempalte($path, PHPTAL $local_tpl)
+    {
+        // extract macro source file from macro name, if macro path does not contain filename, 
+        // then the macro is assumed to be local
+        if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m))
+        {
             list(,$file,$macroName) = $m;
 
             if (isset($this->externalMacroTempaltesCache[$file]))
@@ -457,8 +470,8 @@ class PHPTAL
                 $tpl->setConfigurationFrom($this);
                 $tpl->prepare();
                 
-                $this->externalMacroTempaltesCache[$file] = $tpl;
                 if (count($this->externalMacroTempaltesCache) > 10) $this->externalMacroTempaltesCache = array(); // keep it small (typically only 1 or 2 external files are used)
+                $this->externalMacroTempaltesCache[$file] = $tpl;
             }
 
             // save current file
@@ -469,11 +482,11 @@ class PHPTAL
             if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file",$this->_source->getRealPath());
             try
             {
-                $fun($this, $this->_context);
+                $fun($tpl, $this, $this->_context);
             }
             catch(PHPTAL_TemplateException $e)
             {
-                $e->hintSrcPosition($this->_context->__file.'/'.$macroName,$this->_context->__line);                
+                $e->hintSrcPosition($tpl->_context->__file.'/'.$macroName,$tpl->_context->__line);                
                 $this->_context->__file = $currentFile;
                 throw $e;
             }
@@ -484,9 +497,9 @@ class PHPTAL
         else 
         {
             // call local macro
-            $fun = $this->getFunctionName() . '_' . strtr($path,"-","_");
-            if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$path' is not defined",$this->_source->getRealPath());
-            $fun( $this, $this->_context );
+            $fun = $local_tpl->getFunctionName() . '_' . strtr($path,"-","_");
+            if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$path' is not defined",$local_tpl->_source->getRealPath());
+            $fun( $local_tpl, $this, $this->_context);
         }
     }
 
