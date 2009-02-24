@@ -51,14 +51,39 @@ class CommentTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($source, $res);
     }
     
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
     function testNestedComments()
     {
         $source = '<html><!--<!--<!--></html>';
         $tpl = new PHPTAL();
         $tpl->setSource($source);
         $res = $tpl->execute();
-        $this->assertEquals($source, $res);
+        $this->fail("Ill-formed comment accepted");
+    }
+
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testDashedComment()
+    {
+        $source = '<html><!--- XML hates you ---></html>';
+        $tpl = new PHPTAL();
+        $tpl->setSource($source);
+        $res = $tpl->execute();
+        $this->fail("Ill-formed comment accepted");
+    }
+
+    
+    function testSkippedComments()
+    {
+        $source = '<html><!--!
+        removed --><!-- left --><!-- !removed --></html>';
+        $tpl = new PHPTAL();
+        $tpl->setSource($source);
+        $res = $tpl->execute();
+        $this->assertEquals('<html><!-- left --></html>', $res);
     }
 }
 
-?>

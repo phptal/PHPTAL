@@ -228,6 +228,12 @@ abstract class PHPTAL_XmlParser
 
                 case self::ST_COMMENT:
                     if ($c == '>' && $i > $mark+4 && substr($src, $i-2, 2) == '--') {
+                        
+                        if (preg_match('/^-|--|-$/', substr($src, $mark +4, $i-$mark+1 -7)))
+                        {
+                            $this->raiseError("Ill-formed comment. XML comments are not allowed to contain '--' or start/end with '-': ".substr($src, $mark+4, $i-$mark+1-7));
+                        }
+                        
                         $this->onComment(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;

@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //
 
-define('PHPTAL_VERSION', '1_1_16b');
+define('PHPTAL_VERSION', '1_2_0a');
 
 //{{{PHPTAL_DIR
 if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
@@ -40,9 +40,6 @@ if (!defined('PHPTAL_PHP_CODE_DESTINATION')) {
 if (!defined('PHPTAL_DEFAULT_ENCODING')) define('PHPTAL_DEFAULT_ENCODING', 'UTF-8');
 if (!defined('PHPTAL_PHP_CODE_EXTENSION')) define('PHPTAL_PHP_CODE_EXTENSION', 'php');
 //}}}
-
-define('PHPTAL_XHTML', 1);
-define('PHPTAL_XML',   2);
 
 require_once PHPTAL_DIR.'PHPTAL/FileSource.php';
 require_once PHPTAL_DIR.'PHPTAL/RepeatController.php';
@@ -76,6 +73,7 @@ class PHPTAL
 {
     const XHTML = 1;
     const XML   = 2;
+    const HTML5 = 5;
 
     /**
      * PHPTAL Constructor.
@@ -203,9 +201,9 @@ class PHPTAL
      * XML output mode outputs XML without such modifications and is neccessary to generate RSS feeds properly.
      * @param $mode int (PHPTAL::XML or PHPTAL::XHTML).
      */
-    public function setOutputMode($mode=PHPTAL_XHTML)
+    public function setOutputMode($mode)
     {
-        if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML){
+        if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
         }
         $this->_outputMode = $mode;

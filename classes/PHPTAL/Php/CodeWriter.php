@@ -350,6 +350,13 @@ class PHPTAL_Php_CodeWriter
         return $this->_state->getOutputMode();
     }
 
+    public function quoteAttributeValue($value)
+    {
+        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match('/^[^&\/=\'><\s]+$/',$value)) // HTML 5: 8.1.2.3 Attributes 
+            return $value;
+        else return '"'.$value.'"';
+    }
+
     public function pushContext()
     {
         $this->pushCode('$ctx = $tpl->pushContext()');

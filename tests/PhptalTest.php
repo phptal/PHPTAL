@@ -27,7 +27,7 @@ class PhptalTest extends PHPUnit_Framework_TestCase
     function test01()
     {
         $tpl = new PHPTAL('input/phptal.01.html');
-        $tpl->setOutputMode(PHPTAL_XML);
+        $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);
     }
@@ -58,7 +58,7 @@ class PhptalTest extends PHPUnit_Framework_TestCase
     {
         $tpl = new PHPTAL('phptal.01.html');
         $tpl->setTemplateRepository('input');
-        $tpl->setOutputMode(PHPTAL_XML);
+        $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);
     }
@@ -67,7 +67,7 @@ class PhptalTest extends PHPUnit_Framework_TestCase
     {
         $tpl = new PHPTAL('phptal.01.html');
         $tpl->setTemplateRepository('input/');
-        $tpl->setOutputMode(PHPTAL_XML);
+        $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);
     }
@@ -76,7 +76,7 @@ class PhptalTest extends PHPUnit_Framework_TestCase
     {
         $tpl = new PHPTAL('phptal.01.html');
         $tpl->setTemplateRepository(array('bar', 'input/'));
-        $tpl->setOutputMode(PHPTAL_XML);
+        $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);
     }
@@ -85,7 +85,7 @@ class PhptalTest extends PHPUnit_Framework_TestCase
     {
         $tpl = new PHPTAL();
         $tpl->setTemplateRepository(array('bar', 'input/'));
-        $tpl->setOutputMode(PHPTAL_XML);
+        $tpl->setOutputMode(PHPTAL::XML);
         $tpl->setTemplate('phptal.01.html');
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);

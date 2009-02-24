@@ -27,13 +27,10 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
  */
 class PHPTAL_Php_State
 {
-    public function __construct()
-    {
-        $this->_debug      = false;
-        $this->_talesMode  = 'tales';
-        $this->_encoding   = 'UTF-8';
-        $this->_outputMode = '';
-    }
+    private $_debug      = false;
+    private $_talesMode  = 'tales';
+    private $_encoding   = 'UTF-8';
+    private $_outputMode = PHPTAL::XHTML;
 
     public function setDebug($bool)
     {
@@ -142,11 +139,5 @@ class PHPTAL_Php_State
     {
         return 'phptal_escape('.$php.', ENT_QUOTES, \''.$this->_encoding.'\')';
     }
-        
-    private $_debug;
-    private $_talesMode;
-    private $_encoding;
-    private $_outputMode;
 }
 
-?>

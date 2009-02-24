@@ -147,7 +147,15 @@ implements PHPTAL_Php_TalesChainReader
     private function prepareBooleanAttribute($attribute, $code)
     {
         $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
+        
+        if ($this->tag->generator->getOutputMode() === PHPTAL::HTML5)
+        {
+            $value  = "' $attribute'";
+        }
+        else
+        {
         $value  = "' $attribute=\"$attribute\"'";
+        }
         $this->tag->generator->doIf($code);
         $this->tag->generator->doSetVar($attkey, $value);
         $this->tag->generator->doElse();
@@ -174,10 +182,10 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
-        $code = ($this->_default !== false)
-            ? "' $this->_attribute=\"".str_replace("'",'\\\'',$this->_default)."\"'"  // default value
-            : '\'\'';                       // do not print attribute
-        $this->tag->generator->doSetVar($this->_attkey, $code);
+        $attr_str = ($this->_default !== false)
+            ? ' '.$this->_attribute.'='.$this->tag->generator->quoteAttributeValue($this->_default)  // default value
+            : '';                                 // do not print attribute
+        $this->tag->generator->doSetVar($this->_attkey, "'".str_replace("'",'\\\'',$attr_str)."'");
         $executor->breakChain();
     }
 
@@ -200,4 +208,4 @@ implements PHPTAL_Php_TalesChainReader
     }
 }
 
-?>
+

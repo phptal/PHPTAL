@@ -247,7 +247,8 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $this->generator->pushHtml('<'.$this->name);
         $this->generateAttributes();
 
-        if ($this->isEmptyNode()){
+        if ($this->generator->getOutputMode() !== PHPTAL::HTML5 && $this->isEmptyNode())
+        {
             $this->generator->pushHtml('/>');
         }
         else {
@@ -330,11 +331,16 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
                 $this->generator->pushRawHtml($value);
                 $this->generator->pushHtml('"');
             }
-            else {
-                $this->generator->pushHtml(' '.$key.'="'.$value.'"');
+            elseif ($this->generator->getOutputMode() === PHPTAL::HTML5 && PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($key))
+            {
+                $this->generator->pushHtml(' '.$key);
             }
+            else
+            {
+                $this->generator->pushHtml(' '.$key.'='.$this->generator->quoteAttributeValue($value));
         }
     }
+    }    
 
     private function getNodePrefix()
     {
@@ -347,8 +353,9 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     
     private function isEmptyNode()
     {
-        return ($this->generator->getOutputMode() == PHPTAL::XHTML && PHPTAL_Dom_Defs::getInstance()->isEmptyTag($this->name)) ||
-               ($this->generator->getOutputMode() == PHPTAL::XML   && !$this->hasContent());
+        $mode = $this->generator->getOutputMode();
+        return (($mode === PHPTAL::XHTML || $mode === PHPTAL::HTML5) && PHPTAL_Dom_Defs::getInstance()->isEmptyTag($this->name)) ||
+               ( $mode === PHPTAL::XML   && !$this->hasContent());
     }
 
     private function hasContent()
@@ -441,8 +448,11 @@ class PHPTAL_Php_Comment extends PHPTAL_Php_Node
 {
 	public function generate()
 	{
+		if (!preg_match('/^<!--\s*!/',$this->node->getValue())) 
+		{
 		$this->generator->pushRawHtml($this->node->getValue());
 	}
+}
 }
 
 /**
@@ -486,7 +496,7 @@ class PHPTAL_Php_Doctype extends PHPTAL_Php_Node
     }
 
     public function generate()
-    {;
+    {
         $this->generator->doDoctype();
     }
 }
