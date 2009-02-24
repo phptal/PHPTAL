@@ -1,5 +1,6 @@
-test:
-	phing test
 
 all:
 	phing
+
+test:
+	phing test
