@@ -1,29 +1,35 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="ru">
 
   <bookinfo>
     <title>PHPTAL</title>
     <subtitle>PHP Template Attribute Language</subtitle>
-    <date>2008-01-27</date>
-    <author>
-       <firstname>Kornel</firstname><surname>Lesiński</surname>
-       <address><email>kornel@aardvarkmedia.co.uk</email></address>
-     </author>
+    <date>2008-10-03</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
       <address><email>lbedubourg@motion-twin.com</email></address>
     </author>
-		<author>
-			<firstname>Dan</firstname><surname>Sheppard</surname>
-		</author>
-		<author>
-      <firstname>Антон</firstname><surname>Андриевский</surname>
+    <author>
+       <firstname>Kornel</firstname><surname>Lesiński</surname>
+       <address><email>kornel@aardvarkmedia.co.uk</email></address>
+    </author>
+	<author>
+		<firstname>Dan</firstname><surname>Sheppard</surname>
+	</author>
+	<author>
+		<firstname>Антон</firstname><surname>Андриевский</surname>
 			<othername>Валериевич</othername>
       <address><email>x.meglio@gmail.com</email></address>
-    </author>
+	</author>	
 
     <revhistory>
+        <revision>
+			  <revnumber>v1.6</revnumber>
+				<date>2008-10-03</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Fixed errors spotted by Anton.</revremark>
+		</revision>
         <revision>
 			  <revnumber>v1.5</revnumber>
 				<date>2008-08-21</date>
@@ -283,7 +289,10 @@ catch (Exception $e){
 </html>
 ]]></programlisting>
 
-    <para>PHPTAL не заботится о переносах строк в генерируемом HTML. Код HTML может содержать длинные строки, и, соответственно, может оказаться нечитабелен. Если Вы хотите получить более читаемый HTML, обрабатывайте его с помощью HTML Tidy перед выводом.</para>
+    <para>
+
+    <acronym>PHPTAL</acronym> doesn't care much about line breaks and indentation in files it reads and generates. If you want source code of generated HTML files to be pretty (with line breaks and perfect indentation), then you might need to postprocess it with HTML Tidy.
+    </para>
 
   </article>
 
@@ -493,7 +502,7 @@ catch (Exception $e){
 
         <para>в этих примерах, вместо названия &quot;item&quot; нужно использовать то же название, что определно в выражении <sgmltag>tal:repeat</sgmltag> (tal:repeat=&quot;item some/result&quot;).</para>
 
-        <para>Наверное, самое распространненное применение атрибута <sgmltag>tal:repeat</sgmltag> - для обработки разультатов запроса к базе данных <acronym>SQL</acronym>. В следующем примере playersRanking является объектом, реализующим <acronym>PHP</acronym> интерфейс Iterator, что позволяет этому объекту быть использованым в tal:repeat:</para>
+        <para>Наверное, самое распространненное применение атрибута <sgmltag>tal:repeat</sgmltag> - для обработки разультатов запроса к базе данных <acronym>SQL</acronym>. The following code will work if <varname>playersRanking</varname> contains object that implements <acronym>PHP</acronym>'s <constant>Iterator</constant> interface:</para>
 
         <programlisting><![CDATA[<table>
   <thead>
@@ -616,7 +625,7 @@ title="google search engine">the google search engine</a>
         <para>Вот отличный (и немного более сложный) пример с использованием <sgmltag>tal:repeat</sgmltag>:</para>
 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
-    tal:attribute="class php: repeat.ranking.odd ? 'odd' : NULL">
+    tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
     ...
 </tr>
 ]]></programlisting>
@@ -673,12 +682,12 @@ title="google search engine">the google search engine</a>
       <title>Пространство имен <acronym>METAL</acronym></title>
 
       <para>
-      <acronym>METAL</acronym> обозначает 'Macro Extension for <acronym>TAL</acronym>' (макросы расширения для TAL). Это пространство имен реализовано в <acronym>PHPTAL</acronym> и дает возможность разработчикам шаблонов создавать и вызывать <acronym>XML</acronym>/<acronym>XHTML</acronym> макросы.</para>
+      <acronym>METAL</acronym> обозначает 'Macro Extension for <acronym>TAL</acronym>' (расширение TAL для макросов). Это пространство имен реализовано в <acronym>PHPTAL</acronym> и дает возможность разработчикам шаблонов создавать и вызывать <acronym>XML</acronym>/<acronym>XHTML</acronym> макросы.</para>
 
       <section id="metal-define-macro">
         <title><sgmltag>metal:define-macro</sgmltag></title>
 
-        <para>Этот атрибут определяет макрос. Макросы можно понимать как библиотеку маленьких шаблончиков, которых могут быть многократно использованы в других шаблонах.</para>
+        <para>С помощью этого атрибута можно создать макрос. Макросы можно понимать как библиотеку маленьких шаблончиков, которые могут быть многократно использованы в других шаблонах.</para>
 
         <programlisting><![CDATA[<div metal:define-macro="main_menu">
   <ul>
@@ -694,7 +703,7 @@ title="google search engine">the google search engine</a>
 </div>
 ]]></programlisting>
 
-        <para>Макрос наследует из вызывающей библиотеки. В вышеприведенном примере, значение переменной 'mdate' будет зависеть от шаблона, в который включили этот макрос.</para>
+        <para>Макрос наследует доступные переменные из вызывающей библиотеки. В вышеприведенном примере, значение переменной 'mdate' будет зависеть от шаблона, в который включили этот макрос.</para>
       </section>
 
       <section id="metal-use-macro">
@@ -714,13 +723,13 @@ title="google search engine">the google search engine</a>
         <programlisting><![CDATA[<span metal:use-macro="site_macros.html/main_menu"/>
 ]]></programlisting>
 
-        <para>Стоить заметить, что Вы можете воспользоваться возможностью подстановки <acronym>PHPTAL</acronym> для атрибута use-macro:</para>
+        <para>Заметьте, возможность подстановок работает для этого атрибута:</para>
 
         <programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.html/main_menu"/>
 ]]></programlisting>
 
 
-        <para>Макрос также может вызвать самого себя. Таким образом можно использовать рекурсию для вывода массивов:</para>
+        <para>Макрос может вызывать самого себя. Таким образом, можно использовать рекурсию для вывода массивов:</para>
         <programlisting><![CDATA[        <ul metal:define-macro="show-list">
             <li tal:repeat="item list">
                 <tal:block tal:condition="php:is_array(item)" tal:define="list item" metal:use-macro="show-list" />
@@ -735,7 +744,9 @@ title="google search engine">the google search engine</a>
       <section id="metal-define-slot">
         <title><sgmltag>metal:define-slot</sgmltag></title>
 
-        <para>Этот атрибут определяет слот и должен использоваться только &quot;под&quot; атрибутом <sgmltag>metal:define-macro</sgmltag> tag.</para>
+        <para>
+        This attribute must appear inside a <sgmltag>metal:define-macro</sgmltag> tag.
+        </para>
 
         <para>Слоты могут заменяться вызывающим шаблоном на динамически генерируемый <acronym>XML</acronym>/<acronym>XHTML</acronym>.</para>
 
@@ -758,9 +769,14 @@ title="google search engine">the google search engine</a>
       <section id="metal-fill-slot">
         <title><sgmltag>metal:fill-slot</sgmltag></title>
 
-        <para>Этот атрибут должен использоваться только &quot;под&quot; атрибутом <sgmltag>metal:use-macro</sgmltag> context.</para>
+        <para>
+        This attribute can occur only inside <sgmltag>metal:use-macro</sgmltag> element.
+        </para>
 
-        <para>Это заменит слот, указанный в <sgmltag>metal:fill-slot</sgmltag>, на содержание из span.</para>
+        <para>
+        This explicitly tells <acronym>PHPTAL</acronym> to replace a defined slot with the 
+        content provided inside the <sgmltag>metal:fill-slot</sgmltag> attribute.
+        </para>
 
         <programlisting><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
   ]]><![CDATA[<h2>Меню пользователя]]><![CDATA[</h2>
@@ -886,8 +902,15 @@ title="google search engine">the google search engine</a>
 
         <para>Этот атрибут активирует отладку <acronym>PHPTAL</acronym> для тега с этим атрибутом.</para>
 
-        <para>В режиме отладки сохраняется дополнительная информация, такая как имя файла и строка в шаблоне, поэтому исключения, вызванные в результате неправильных путей, будут содержать больше информации о том, где эти исключения возникли.</para>
+        <note><para>To debug errors in macros called across templates you need to add <sgmltag>phptal:debug</sgmltag> in template which <emphasis>defines</emphasis> the macro, not the one which uses it.</para></note>
 
+        <para>
+        The debug mode stores information like filename and source line 
+        number in the template, so exceptions thrown by incorrect path 
+        access will contain more information about where they where 
+        thrown.
+        </para>
+        
         <programlisting><![CDATA[<html>
   <head>
     ...
@@ -973,7 +996,9 @@ title="google search engine">the google search engine</a>
 </html>
 ]]></programlisting>
 
-        <para>Пример выше делает то же самое, что и этот:</para>
+        <para>
+        Please note that the above example does the same as:
+        </para>
 
         <programlisting><![CDATA[<html>
   <body>
@@ -1176,21 +1201,17 @@ php:SomeClass::$staticVar
         <title>exists:</title>
 
         <para>
-        This expression is a boolean expression, it will returns true if 
-        the path specified after it exists of not.
+        This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <code>isset()</code>.</para>
+            
+        <para>
+        Normally using a path which doesn't exist throws an error like &quot;Cannot find variable '<varname>foo</varname>' in current scope&quot;. Thus, uncertain paths must be checked first:
         </para>
-
-        <programlisting><![CDATA[<span tal:condition="exists: user/preferences"
-      tal:content="user/preferences">
-  user preferences here if defined
+              
+        <programlisting><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
+  Use user/preferences here if defined
 </span>
 ]]></programlisting>
       
-        <para>
-        It is important to keep in mind that using a path which doesn't 
-        exist will throw and exception. Thus, uncertain paths must be 
-        checked first.
-        </para>
       </section>
 
       <section id="tales-default">
@@ -1216,7 +1237,7 @@ php:SomeClass::$staticVar
 ]]></programlisting>
 
         <para>
-        Above examples introduce the '|' character that allows the 
+        Above examples introduce the '<code>|</code>' character that allows the 
         definition of alternatives for defines or prints.
         </para>
       </section>
@@ -1243,8 +1264,8 @@ php:SomeClass::$staticVar
 ]]></programlisting>
 
         <para>
-        In above examples, we assume that $document-&gt;title and 
-        $document-&gt;content are variables containing preformated <acronym>HTML</acronym> 
+        In above examples, we assume that <code>$document-&gt;title</code> and 
+        <code>$document-&gt;content</code> are variables containing preformated <acronym>HTML</acronym> 
         which must be echoed as is.
         </para>
       </section>
@@ -1253,12 +1274,12 @@ php:SomeClass::$staticVar
         <title>Expression chains</title>
 
         <para>
-        An expression chain is a list of expressions separated by '|' 
+        An expression chain is a list of expressions separated by '<code>|</code>' 
         characters.
         </para>
 
         <para>
-        While evaluating expressions separated by '|', <acronym>PHPTAL</acronym> will stop 
+        While evaluating expressions separated by '<code>|</code>', <acronym>PHPTAL</acronym> will stop 
         its evaluation when an expression value is not null and no error 
         was raised while evaluating the expression.
         </para>
@@ -1269,14 +1290,11 @@ php:SomeClass::$staticVar
         </para>
 
         <para>
-        You can use php: expressions inside expression chains, like any 
+        You can use <code>php:</code> expressions inside expression chains, like any 
         other expression.
         </para>
 
-        <programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | default>
-  untitled page
-</h1>
-]]></programlisting>
+        <programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting>
       </section>
  
     </section><!-- end of PHPTALES -->
@@ -1887,6 +1905,14 @@ class MyTranslator implements PHPTAL_TranslationService {
 ]]></programlisting>
       </section>
 
+
+        <section id="i18n-setencoding">
+          <title>method setEncoding($encoding)</title>
+
+          <para>
+              <acronym>PHPTAL</acronym> class calls this method to inform your translation service what encoding is used by the template. <code>translate()</code> method should return strings in that encoding. If you always use the same encoding for templates and translation files (i.e. UTF-8), you can leave this method empty.
+          </para>
+        </section>
     </section> <!-- end of PHPTAL_TranslationService -->
 
 
@@ -2114,8 +2140,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       <title>Creating custom expression modifiers</title>
 
       <para>
-      <acronym>PHPTAL</acronym> comes with some basic expression modifiers (not:, exists:, 
-      string:, php:, path:).
+      <acronym>PHPTAL</acronym> comes with some basic expression modifiers (<code>not:</code>, <code>exists:</code>, 
+      <code>string:</code>, <code>php:</code>, <code>path:</code>).
       </para>
 
       <para>
