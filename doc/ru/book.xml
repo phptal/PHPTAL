@@ -4,8 +4,8 @@
 
   <bookinfo>
     <title>PHPTAL</title>
-    <subtitle>PHP Template Attribute Language</subtitle>
-    <date>2008-10-03</date>
+    <subtitle>Атрибутивный Язык Шаблонов для PHP</subtitle>
+    <date>3 Окт. 2008</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
       <address><email>lbedubourg@motion-twin.com</email></address>
@@ -26,25 +26,25 @@
     <revhistory>
         <revision>
 			  <revnumber>v1.6</revnumber>
-				<date>2008-10-03</date>
+				<date>3 Окт. 2008</date>
 				<authorinitials>kl</authorinitials>
-				<revremark>Fixed errors spotted by Anton.</revremark>
+				<revremark>Исправлены ошибки, замеченные Антоном.</revremark>
 		</revision>
         <revision>
 			  <revnumber>v1.5</revnumber>
-				<date>2008-08-21</date>
+				<date>21 Авг. 2008</date>
 				<authorinitials>kl</authorinitials>
 				<revremark>Удалены старые defines, документированы методы конфигурирования.</revremark>
 		  </revision>
         <revision>
 			  <revnumber>v1.4</revnumber>
-				<date>2008-08-18</date>
+				<date>18 Авг. 2008</date>
 				<authorinitials>kl</authorinitials>
 				<revremark>Исправления и обновления для PHPTAL 1.1.13</revremark>
 		  </revision>
 		  <revision>
 			  <revnumber>v1.3</revnumber>
-				<date>2008-01-27</date>
+				<date>27 Янв. 2008</date>
 				<authorinitials>kl</authorinitials>
 				<revremark>Обновления для PHPTAL 1.1.10</revremark>
 		  </revision>
@@ -56,15 +56,15 @@
 		  </revision>
       <revision>
         <revnumber>v1.1</revnumber>
-        <date>2005-03-29</date>
+        <date>29 Мар. 2005</date>
         <authorinitials>lb</authorinitials>
         <revremark>Добавлена секция о классе PHPTAL</revremark>
       </revision>
       <revision>
         <revnumber>v1.0</revnumber>
-        <date>2005-03-27</date>
+        <date>27 Мар. 2005</date>
         <authorinitials>lb</authorinitials>
-        <revremark>Конвертация в формат docbook</revremark>
+        <revremark>Конвертация из черновика в формат docbook</revremark>
       </revision>
     </revhistory>
 
@@ -81,7 +81,7 @@
     <title>Вступление</title>
   
     <para>
-    <acronym>PHPTAL</acronym> является реализацией прекрасной системы Zope Page Template (<acronym>ZPT</acronym>) для <acronym>PHP</acronym>. <acronym>PHPTAL</acronym> поддерживает пространства имен <acronym>TAL</acronym>, <acronym>METAL</acronym> и <acronym>I18N</acronym>.</para>
+    <acronym>PHPTAL</acronym> является <acronym>PHP</acronym> реализацией системы шаблонов Zope Page Template (<acronym>ZPT</acronym>). <acronym>PHPTAL</acronym> поддерживает пространства имен <acronym>TAL</acronym>, <acronym>METAL</acronym> и <acronym>I18N</acronym>.</para>
   
     <para>
     <acronym>PHPTALES</acronym> является эквивалентом <acronym>TALES</acronym>, Template Attribute Language Expression Syntax (синтаксис атрибутивного языка шаблонов). Он определяет, как обрабатываются значения атрибутов <acronym>XML</acronym>.</para>
@@ -99,19 +99,19 @@
     <title>Почему <acronym>PHPTAL</acronym>?</title>
 
     <para>
-    <acronym>XML</acronym>/<acronym>HTML</acronym> шаблоны отделяют логику от представления (отображения) в веб сервисах.  Такое отделение имеет ряд преимуществ.</para>
+    <acronym>XML</acronym>/<acronym>HTML</acronym> шаблоны отделяют логику скрипта (обработку данных) от представления (отображения этих данных) в веб.  Такое отделение имеет ряд преимуществ.</para>
 
     <itemizedlist>
-      <listitem><para>лучшее проектирование</para></listitem>
-      <listitem><para>упрощение разделения задач</para></listitem>
+      <listitem><para>более удобное проектирование программы/скрипта</para></listitem>
+      <listitem><para>простота разделения задач между программистом и дазийнером</para></listitem>
       <listitem><para>упрощение поддержки после разработки</para></listitem>
-      <listitem><para>простота веб скинов (видов)</para></listitem>
+      <listitem><para>простота создания веб скинов (видов)</para></listitem>
     </itemizedlist>
 
     <para>Большинство шаблонных языков используют теги <sgmltag>&lt;? ?&gt;</sgmltag>, <sgmltag>&lt;% %&gt;</sgmltag> или <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag> чтобы определить, где и какое значение подставить в шаблон. Это упрощает разработку сайта, но никак не помогает разработчикам шаблонов.</para>
 
     <para>
-    <acronym>TAL</acronym> же использует для описания логики в <acronym>XML</acronym> атрибуты, не затрагивая синтакс и структуру <acronym>XHTML</acronym>. Это дает нам возможность предосмотра <acronym>TAL</acronym> шаблона в браузере (или <acronym>WYSIWYG</acronym> редакторе) и не нарушает подсветку синтаксиса <acronym>HTML</acronym> в редакторах разработчиков.</para>
+    <acronym>TAL</acronym> для описания логики использует <acronym>XML</acronym> атрибуты, не затрагивая синтакс и структуру <acronym>XHTML</acronym>. Это дает нам возможность предосмотра <acronym>TAL</acronym> шаблона в браузере (или в <acronym>WYSIWYG</acronym> редакторе) и не нарушает подсветку <acronym>HTML</acronym> синтаксиса в редакторе программиста.</para>
 
     <para>Если Вы уже использовали какие-либо системы шаблонов, то наверняка сталкивались с чем-то вроде этого:</para>
   
@@ -124,7 +124,7 @@
 </table>
 ]]></programlisting>
 
-    <para>В <acronym>PHPTAL</acronym> Вы бы могли описать тоже самое по-другому:</para>
+    <para>В <acronym>PHPTAL</acronym> можно описать тоже самое проще и красивее:</para>
 
     <programlisting><![CDATA[<table>
   <tr tal:repeat="myitem myarray">
@@ -138,12 +138,12 @@
 </table>
 ]]></programlisting>
 
-    <para>Такой шаблон будет корректно отображен в браузере со строками Пример 1, 2 и 3, поэтому Вы могли бы без проблем продемонстрировать его клиенту даже на той стадии, когда код необходимый для получения значений 'myarray' еще не существует.</para>
+    <para>Такой шаблон будет корректно отображен в браузере с примерами &quot;Пример 1&quot;, &quot;Пример 2&quot; и &quot;Пример 3&quot;, поэтому можно продемонстрировать его клиенту даже на той стадии, когда код, необходимый для получения значений 'myarray', еще не существует.</para>
 
-    <para>Другое важное преимущество <acronym>PHPTAL</acronym> состоит в том, что Вы получаете доступ к более чем трехлетним опыту, документации, примерам и помощи сообщества Zope. Пользователи <acronym>PHPTAL</acronym> являются частью этого сообщества и автоматически получают от него исчерпывающую и полезную информацию </para>
+    <para>Другое важное преимущество <acronym>PHPTAL</acronym> состоит в том, что Вы получаете доступ к помощи и более чем трехлетним опыту, документации и примерам сообщества Zope. Пользователи <acronym>PHPTAL</acronym> являются частью этого сообщества и автоматически получают от него исчерпывающую и полезную информацию</para>
 
     <para>
-    Главная сила <acronym>PHPTAL</acronym> в том, что он настраиваемый настолько, насколько только это возможно - для &quot;продвинутых&quot; программистов и ресурсоемких систем, однако в то же время настолько прост, что может быть комфортно и легко использован любым новичком</para>
+    Главная сила <acronym>PHPTAL</acronym> в том, что для &quot;продвинутых&quot; программистов и ресурсоемких систем он настраиваемый настолько, насколько только это возможно, и в то же время очень прост и комфортнен для любыго новичка</para>
 
   </article>
 
@@ -151,20 +151,20 @@
     <title>Установка</title>
 
     <para>
-    <acronym>PHPTAL</acronym>реализован как <acronym>PEAR</acronym> библиотека (см. <ulink url="http://pear.php.net">http://pear.php.net</ulink>). Вы можете скачать библиотеку <acronym>PHPTAL</acronym> на сайте <acronym>PHPTAL</acronym> (<ulink url="http://phptal.motion-twin.com">http://phptal.motion-twin.com</ulink>).</para>
+    <acronym>PHPTAL</acronym>реализован в виде <acronym>PEAR</acronym> библиотеки (см. <ulink url="http://pear.php.net">http://pear.php.net</ulink>). Библиотеку <acronym>PHPTAL</acronym> можно скачать на сайте <acronym>PHPTAL</acronym> (<ulink url="http://phptal.motion-twin.com">http://phptal.motion-twin.com</ulink>).</para>
 
-    <para>Вы можете произвести установку с помощью утилит pear:</para>
+    <para>Eстановку можно выполнить с помощью утилит pear:</para>
 
     <programlisting><![CDATA[pear install http://phptal.motion-twin.com/latest.tar.gz
 ]]></programlisting>
   
   
-    <para>После установки, Вы можете также легко обновлять <acronym>PHPTAL</acronym>, используя <acronym>PEAR</acronym>:</para>
+    <para>После установки, так же просто можно обновлять <acronym>PHPTAL</acronym>, используя <acronym>PEAR</acronym>:</para>
 
     <programlisting><![CDATA[pear upgrade http://phptal.motion-twin.com/latest.tar.gz
 ]]></programlisting>  
 
-    <para>В том случае, если Вы не используете <acronym>PEAR</acronym> или он не установлен в Вашей системе, тогда Вы может установить <acronym>PHPTAL</acronym>, попросту разархивировав архив.</para>
+    <para>Можно обойтись и без <acronym>PEAR</acronym>, попросту разархивировав архив.</para>
 
     <programlisting><![CDATA[tar zxvf PHPTAL-X.X.X.tar.gz
 cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
@@ -175,11 +175,11 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
   </article>
 
   <article id="firstexample">
-    <title>Простой пример</title>
+    <title>Пример</title>
 
-    <para>Простой пример намного интереснее и познавательнее, чем многие слова о языке.</para>
+    <para>Простой пример намного интереснее и познавательнее, чем многие слова</para>
 
-    <para>Ваш шаблон - это синтаксически правильный xml/html документ (с корневым элементом). Вот пример файла под названием 'my_template_file.html'.</para>
+    <para>Ваш шаблон всегда будет синтаксически правильным xml/html документом (с присутствующим корневым элементом)! Вот пример файла под названием 'my_template_file.html'.</para>
   
     <programlisting><![CDATA[<?xml version="1.0"?>
 <html>
@@ -216,7 +216,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 </html>
 ]]></programlisting>
 
-    <para>Все, что Вам понадобиться сделать в php - это включить (include) библиотеку <acronym>PHPTAL</acronym> и, возможно, установить несколько полей, чтобы настроить шаблонную систему.</para>
+    <para>Все, что Вам понадобиться сделать в php - это включить (include) библиотеку <acronym>PHPTAL</acronym> и, возможно, установить несколько переменных, чтобы настроить шаблонную систему.</para>
 
     <programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
@@ -235,18 +235,18 @@ class Person {
     }
 }
 
-// создаем массив объектов для тестирования
+// Создаем массив объектов для тестирования
 $people = array();
 $people[] = new Person("foo", "01-344-121-021");
 $people[] = new Person("bar", "05-999-165-541");
 $people[] = new Person("baz", "01-389-321-024");
 $people[] = new Person("quz", "05-321-378-654");
 
-// передаем массив данных обработчику шаблонов
+// Передаем массив данных обработчику шаблонов
 $template->title = 'Я Заголовок';
 $template->people = $people;
 
-// выполняем обработку шаблона
+// Выполняем обработку шаблона
 try {
     echo $template->execute();
 }
@@ -291,8 +291,7 @@ catch (Exception $e){
 
     <para>
 
-    <acronym>PHPTAL</acronym> doesn't care much about line breaks and indentation in files it reads and generates. If you want source code of generated HTML files to be pretty (with line breaks and perfect indentation), then you might need to postprocess it with HTML Tidy.
-    </para>
+    <acronym>PHPTAL</acronym> не заботится о переносах строки и отступах ни в читаемых, ни в генерируемых файлах. Чтобы получить красивый HTML (с переносами и правильными отступами), можно использовать HTML Tidy на этапе постпроцессинга.</para>
 
   </article>
 
