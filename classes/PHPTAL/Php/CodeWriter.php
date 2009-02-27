@@ -352,7 +352,16 @@ class PHPTAL_Php_CodeWriter
 
     public function quoteAttributeValue($value)
     {
-        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match('/^[^&\/=\'><\s]+$/',$value)) // HTML 5: 8.1.2.3 Attributes 
+        if ($this->getEncoding() == 'UTF-8') // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
+        {
+            $attr_regex = '/^[^&\/=\'"><\s`\p{ZsPcCMSk}]+$/u';
+        }
+        else
+        {
+            $attr_regex = '/^[^&\/=\'"><\s`\0177-\377]+$/';
+        }
+        
+        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex,$value)) 
             return $value;
         else return '"'.$value.'"';
     }
