@@ -298,6 +298,35 @@ class TalRepeatTest extends PHPUnit_Framework_TestCase
         $tpl->setSource('<tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}/${repeat/i/length}]${repeat/i/end}</tal:block>');
         $this->assertEquals("1[0/]00[1/]00[2/]00[3/]00[4/]00[5/]00[6/]00[7/]00[8/]00[9/10]1", $tpl->execute(),$tpl->getCodePath());        
     }
+    
+    function testPushesContext()
+    {
+        $phptal = new PHPTAL();
+        $phptal->setSource('
+        <x>
+        original=${user}
+        <y tal:define="user \'defined\'">
+        defined=${user}
+        <z tal:repeat="user users">
+        repeat=${user}
+        <z tal:repeat="user users2">
+        repeat2=${user}
+        </z>
+        repeat=${user}
+        </z>
+        defined=${user}
+        </y>
+        original=${user}</x>
+        ');
+        
+        $phptal->user = 'original';
+        $phptal->users = array('repeat');
+        $phptal->users2 = array('repeat2');
+
+        $this->assertEquals(
+            trim_string('<x> original=original <y> defined=defined <z> repeat=repeat <z> repeat2=repeat2 </z> repeat=repeat </z> defined=defined </y> original=original</x>'),
+            trim_string($phptal->execute()));
+    }
 }
 
 class LogIteratorCalls implements Iterator

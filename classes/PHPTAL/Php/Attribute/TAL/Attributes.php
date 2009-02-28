@@ -154,7 +154,7 @@ implements PHPTAL_Php_TalesChainReader
         }
         else
         {
-        $value  = "' $attribute=\"$attribute\"'";
+            $value  = "' $attribute=\"$attribute\"'";
         }
         $this->tag->generator->doIf($code);
         $this->tag->generator->doSetVar($attkey, $value);

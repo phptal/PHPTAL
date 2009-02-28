@@ -1,24 +1,24 @@
 <?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
+//
 //  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
+//
 //  This library is free software; you can redistribute it and/or
 //  modify it under the terms of the GNU Lesser General Public
 //  License as published by the Free Software Foundation; either
 //  version 2.1 of the License, or (at your option) any later version.
-//  
+//
 //  This library is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 //  Lesser General Public License for more details.
-//  
+//
 //  You should have received a copy of the GNU Lesser General Public
 //  License along with this library; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
+//
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
+//
 
 require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
@@ -55,14 +55,14 @@ abstract class PHPTAL_Php_Node
 
 /**
  * Node container.
- * 
+ *
  * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Tree extends PHPTAL_Php_Node
 {
     public $children;
-    
+
     public function __construct(PHPTAL_Php_CodeWriter $gen, $node)
     {
         parent::__construct($gen,$node);
@@ -92,7 +92,7 @@ class PHPTAL_Php_Tree extends PHPTAL_Php_Node
             array_push($this->children, $gen);
         }
     }
-    
+
     public function generate()
     {
         try
@@ -122,7 +122,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 {
     const ERR_ATTRIBUTES_CONFLICT =
         "Attribute conflict in '%s' at line '%d', '%s' cannot appear with '%s'";
-    
+
     public $name;
     public $attributes = array();
     public $talAttributes = array();
@@ -157,8 +157,8 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             $this->generator->pushCode('$ctx->__line = '.$this->getSourceLine());
             $this->generator->doComment('tag "'.$this->name.'" from line '.$this->getSourceLine());
         }
-       
-        
+
+
         if (count($this->replaceAttributes) > 0) {
             $this->generateSurroundHead();
             foreach ($this->replaceAttributes as $att) {
@@ -206,20 +206,20 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     {
         return $this->overwrittenAttributes[$name];
     }
-    
+
     public function overwriteAttributeWithPhpValue($name, $phpVariable)
     {
         $this->attributes[$name] = '<?php echo '.$phpVariable.' ?>';
         $this->overwrittenAttributes[$name] = $phpVariable;
     }
 
-    /** 
+    /**
      * Returns true if this element or one of its PHPTAL attributes has some
      * content to print (an empty text node child does not count).
      */
     public function hasRealContent()
     {
-        return $this->node->hasRealContent() 
+        return $this->node->hasRealContent()
             || count($this->contentAttributes) > 0;
     }
 
@@ -229,7 +229,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     }
 
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
-    
+
     public function generateSurroundHead()
     {
         foreach ($this->surroundAttributes as $att) {
@@ -243,7 +243,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         if ($this->headPrintCondition) {
             $this->generator->doIf($this->headPrintCondition);
         }
-        
+
         $this->generator->pushHtml('<'.$this->name);
         $this->generateAttributes();
 
@@ -254,18 +254,18 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         else {
             $this->generator->pushHtml('>');
         }
-        
+
         if ($this->headPrintCondition) {
             $this->generator->doEnd();
         }
     }
-    
+
     public function generateContent($realContent=false)
     {
         if ($this->isEmptyNode()){
             return;
         }
-        
+
         if (!$realContent && count($this->contentAttributes) > 0) {
             foreach ($this->contentAttributes as $att) {
                 $att->start();
@@ -273,13 +273,13 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             }
             return;
         }
-        
+
         parent::generate();
     }
 
     public function generateFoot()
     {
-        if ($this->headFootDisabled) 
+        if ($this->headFootDisabled)
             return;
         if ($this->isEmptyNode())
             return;
@@ -287,7 +287,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         if ($this->footPrintCondition) {
             $this->generator->doIf($this->footPrintCondition);
         }
-        
+
         $this->generator->pushHtml( '</'.$this->name.'>' );
 
         if ($this->footPrintCondition) {
@@ -303,7 +303,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     }
 
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
+
     private function generateAttributes()
     {
         // A phptal attribute can modify any node attribute replacing
@@ -313,13 +313,13 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         // '$__ATT_' value code, it is very usefull for xhtml boolean
         // attributes like selected, checked, etc...
         //
-        // example: 
-        //  
+        // example:
+        //
         //  $tag->generator->pushCode(
         //  '$__ATT_checked = $somecondition ? \'checked="checked"\' : \'\''
         //  );
         //  $tag->attributes['checked'] = '<?php echo $__ATT_checked ?\>';
-        // 
+        //
 
         $fullreplaceRx = PHPTAL_Php_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
         foreach ($this->attributes as $key=>$value) {
@@ -338,9 +338,9 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             else
             {
                 $this->generator->pushHtml(' '.$key.'='.$this->generator->quoteAttributeValue($value));
+            }
         }
     }
-    }    
 
     private function getNodePrefix()
     {
@@ -350,7 +350,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         }
         return $result;
     }
-    
+
     private function isEmptyNode()
     {
         $mode = $this->generator->getOutputMode();
@@ -410,10 +410,10 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             $name = $this->xmlns->unAliasAttribute($key);
             $att = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($name);
             if (array_key_exists($att->getPriority(), $attributes)){
-                $err = sprintf(self::ERR_ATTRIBUTES_CONFLICT, 
-                               $this->name, 
-                               $this->getSourceLine(), 
-                               $key, 
+                $err = sprintf(self::ERR_ATTRIBUTES_CONFLICT,
+                               $this->name,
+                               $this->getSourceLine(),
+                               $key,
                                $attributes[$att->getPriority()][0]
                                );
                 throw new PHPTAL_TemplateException($err);
@@ -423,20 +423,20 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         ksort($attributes);
 
         $this->talHandlers = array();
-        foreach ($attributes as $prio => $dat){        
+        foreach ($attributes as $prio => $dat){
             list($key, $att, $exp) = $dat;
             $handler = $att->createAttributeHandler($this, $exp);
             $this->talHandlers[$prio] = $handler;
-            
+
             if ($att instanceOf PHPTAL_NamespaceAttributeSurround)
                 $this->surroundAttributes[] = $handler;
             else if ($att instanceOf PHPTAL_NamespaceAttributeReplace)
                 $this->replaceAttributes[] = $handler;
             else if ($att instanceOf PHPTAL_NamespaceAttributeContent)
                 $this->contentAttributes[] = $handler;
-            else 
+            else
                 throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($att));
-            
+
         }
     }
 }
@@ -448,11 +448,11 @@ class PHPTAL_Php_Comment extends PHPTAL_Php_Node
 {
 	public function generate()
 	{
-		if (!preg_match('/^<!--\s*!/',$this->node->getValue())) 
+		if (!preg_match('/^<!--\s*!/',$this->node->getValue()))
 		{
-		$this->generator->pushRawHtml($this->node->getValue());
-	}
-}
+		    $this->generator->pushRawHtml($this->node->getValue());
+	    }
+    }
 }
 
 /**
@@ -469,7 +469,7 @@ class PHPTAL_Php_Text extends PHPTAL_Php_Node
 
 /**
  * Comment, preprocessor, etc... representation.
- * 
+ *
  * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -483,7 +483,7 @@ class PHPTAL_Php_Specific extends PHPTAL_Php_Node
 
 /**
  * Document doctype representation.
- * 
+ *
  * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -514,7 +514,7 @@ class PHPTAL_Php_XmlDeclaration extends PHPTAL_Php_Node
         parent::__construct($gen, $node);
         $this->generator->setXmlDeclaration($this);
     }
-    
+
     public function generate()
     {
         $this->generator->doXmlDeclaration();

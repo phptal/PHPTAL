@@ -76,10 +76,10 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
 {
-    const REPEAT = '$__repeat__';
+    const REPEAT = '$__repeat__';    
     
     public function start()
-    {
+    {        
         // alias to repeats handler to avoid calling extra getters on each variable access
         $this->tag->generator->doSetVar( self::REPEAT, '$ctx->repeat' );
 
@@ -99,6 +99,8 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
         // instantiate controller using expression
         $this->tag->generator->doSetVar( $controller, 'new PHPTAL_RepeatController('.$code.')' );
 
+        $this->tag->generator->pushContext();
+
         // Lets loop the iterator with a foreach construct
         $this->tag->generator->doForeach( $item, $controller );
     }
@@ -106,6 +108,7 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
     public function end()
     {
         $this->tag->generator->doEnd();
+        $this->tag->generator->popContext();
     }
            
     private $item;
