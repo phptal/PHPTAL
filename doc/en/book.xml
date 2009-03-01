@@ -621,7 +621,7 @@ catch (Exception $e){
             an associative resource (index otherwise)
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/index</varname>  : return the item index (0 to count-1)
+          <varname>repeat/item/index</varname>  : returns the item index (0 to count-1)
           </para></listitem>
           <listitem><para>
           <varname>repeat/item/number</varname> : returns the item number (1 to count)
