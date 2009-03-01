@@ -296,16 +296,16 @@ catch (Exception $e){
   </article>
 
   <article id="attributelanguage">
-    <title>Template Attribute Language (Атрибутивный Язык Шаблонов)</title>
+    <title>Атрибутивный Язык Шаблонов TAL</title>
 
-    <para>Эта секция описывает <acronym>TAL</acronym> и его расширения. Эта секция предназначена, главным образом, разработчикам шаблонов. Однако, интеграторы с <acronym>PHP</acronym> также должны прочитать ее.</para>
+    <para>Эта секция описывает <acronym>TAL</acronym> и его расширения. Эта секция предназначена, главным образом, для разработчиков шаблонов. Но окажется полезной и для тех, кому предстоит интеграторовать шаблоны с <acronym>PHP</acronym>.</para>
 
     <section id="attributes">
       <title>Приоритет атрибутов</title>
 
-      <para>Обратите внимание, что порядок записи атрибутов не имеет никакого влияния на порядок их обработки.</para>
+      <para>Первым делом запомните: порядок записи атрибутов не имеет никакого влияния на порядок их обработки.</para>
 
-      <para>Например, такая запись:</para>
+      <para>Рассмотрим пример:</para>
 
       <programlisting><![CDATA[<span tal:define="usersList application/listUsers" 
       tal:condition="somecondition"
@@ -321,7 +321,7 @@ catch (Exception $e){
 >...</span>
 ]]></programlisting>
 
-      <para>Приоритет будет таков, каков определен в спецификации <acronym>TAL</acronym>:</para>
+      <para>Приоритет обработки атрибутов, например, tal:define и tal:condition, не будет зависеть от того, в каком порядке они записаны внутри тега SPAN. Порядок обработки определяется спецификацией <acronym>TAL</acronym>:</para>
 
       <orderedlist>
         <listitem><para>define</para></listitem>
@@ -370,36 +370,36 @@ catch (Exception $e){
       <section id="tal-define">
         <title><sgmltag>tal:define</sgmltag></title>
 
-        <para>Этот атрибут определяет одну или более переменных, которые затем могут быть использованы в шаблоне.</para>
+        <para>Этот атрибут объявляет одну или более переменных, которые затем могут быть использованы в шаблоне.</para>
 
-        <para>Определение переменной, содержащей длинный путь:</para>
+        <para>Объявление переменной, содержащей длинный путь:</para>
 
         <programlisting><![CDATA[<span tal:define="global destname path/to/existing/variable" />
 ]]></programlisting>
 
-        <para>Определение строки внутри шаблона:</para>
+        <para>Объявление строки внутри шаблона:</para>
 
         <programlisting><![CDATA[<span tal:define="global destname string:some string" />
 ]]></programlisting>
 
-        <para>Определение более одной переменной одновременно:</para>
+        <para>Объявление нескольких переменных одновременно:</para>
 
         <programlisting><![CDATA[<span tal:define="global fname string:paul; lname string:dupond" />
 ]]></programlisting>
 
-        <para>Определение переменной с использованием другой переменной:</para>
+        <para>Объявление переменной с использованием другой переменной:</para>
   
         <programlisting><![CDATA[<span tal:define="global hello string:hello $fname welcome on this page" />
 ]]></programlisting>
 
-        <para>Трюк с использованием буфера вывода:</para>
+        <para>И маленький трюк с использованием буфера вывода:</para>
 
         <programlisting><![CDATA[<span tal:define="global hello">hello ${fname} welcome on this page</span>
 ]]></programlisting>
 
-        <para>Вы можете использовать <sgmltag>tal:define</sgmltag> вместе с другими атрибутами. Этот атрибут будет всегда обработан в первую очередь.</para>
+        <para><sgmltag>tal:define</sgmltag> можно и удобно использовать вместе с другими атрибутами, но он всегда будет обработан первым.</para>
 
-        <para>В вышеприведенных примерах, тег span не будет отображен, т.к. он не содержит ни текстового значения, ни атрибутов. Даже в последнем примере текст не будет показан, т.к. переменная 'hello' его &quot;съедает&quot; (подменяет своим пустым значением)</para>
+        <para>В предпоследнем примере (объявление переменной с использованием другой переменной) тег span не будет отображен, т.к. он и сам пустой, и не содержит tal атрибутов, которые бы назначели его содержание. Даже в последнем примере текст из span не будет показан, т.к. переменная 'hello' его &quot;съедает&quot; (подменяет своим пустым значением)</para>
 
         <para>Но вот другой пример:</para>
 
@@ -408,25 +408,25 @@ catch (Exception $e){
 />
 ]]></programlisting>
 
-        <para>В этом примере переменная 'hello' будет установлена, а ее содержимое будет назначено для содержания span-а</para>
+        <para>Здесь переменная 'hello' будет установлена, а ее содержимое попадет в тег span</para>
 
         <para>
-	<emphasis>однако</emphasis>, следующий пример неверный (точнее, не отобразит никакого содержания внутри span), т.к. <sgmltag>tal:define</sgmltag> определит содержание переменной 'hello' перед тем, как <sgmltag>tal:content</sgmltag> использует ее для определения того, что должно быть внутри элемента span. Чтобы не было указано внутри span, это будет игнорированно (заменено значением переменной 'hello'). Таким образом, hello не будет определено, и это вызовет исключение (exception).</para>
+	<emphasis>однако</emphasis>, следующий пример неверный (точнее, не отобразит никакого содержания внутри span), т.к. <sgmltag>tal:define</sgmltag> определит содержание переменной 'hello' перед тем, как <sgmltag>tal:content</sgmltag> использует ее для определения того, что должно быть внутри элемента span. Чтобы не было указано внутри span в шаблоне, это будет проигнорированно (заменено значением переменной 'hello'). Но в нашем случае hello не будет определено, и поэтому возникнет исключение (exception).</para>
 
         <programlisting><![CDATA[<span tal:define="hello" tal:content="hello">
   hello ${fname} welcome on this page
 </span>
 ]]></programlisting>
 
-	<para>В вышеприведенном примере, мы не использовали слово 'global' перед определением переменной. В <acronym>PHPTAL</acronym> переменные могут быть определены как глобальные или локальные.</para>
+	<para>Кстати, в этом примере мы не использовали слово 'global' перед определением переменной. В <acronym>PHPTAL</acronym> переменные бывают глобальными и локальными.</para>
 	
-	<para>Глобальная переменная будет доступна из любого <acronym>XML</acronym> элемента шаблона или вкляемого макроса.</para>
+	<para>Глобальная переменная будет доступна во всем шаблоне и в вызываемых из него макросов.</para>
 
 	<programlisting><![CDATA[<span tal:define="global hello string:hello world"/>
 <p tal:content="hello"/>
 ]]></programlisting>
 
-	<para>Локальная же переменная доступна только внутри тега, в котором она определена:</para>
+	<para>Локальная же переменная видна только внутри тега, в котором она определена:</para>
 
 	<programlisting><![CDATA[<span tal:define="hello string:hello world"/>
 <p tal:content="hello"/> <!-- вызовет ошибку "неопределенной переменной" -->
@@ -438,7 +438,7 @@ catch (Exception $e){
       <section id="tal-condition">
         <title><sgmltag>tal:condition</sgmltag></title>
 
-        <para>Элемент и его содержание будет отображено только тогда, когда значение условия true.</para>
+        <para>Тег и его содержимое будет отображено только тогда, когда условие выполняется.</para>
   
         <programlisting><![CDATA[<span tal:condition="identified"> Приветствуем, наш любимый посетитель! </span>
 ]]></programlisting>
@@ -448,13 +448,13 @@ catch (Exception $e){
 </span>
 ]]></programlisting>
 
-        <para>Если разработчики <acronym>PHP</acronym> скрипта не позаботились о том, чтобы снабдить Вас (как разработчика шаблона) достаточным количеством методов и переменных, Вы можете сами вызвать необходимый <acronym>PHP</acronym> код:</para>
+        <para>Если программисты <acronym>PHP</acronym> скрипта не предоставили Вам (разработчику шаблонов) нужные методы и переменные в передаваемых шаблону данных, Вы можете сами выполнить необходимый <acronym>PHP</acronym> код:</para>
 
-        <programlisting><![CDATA[<span tal:comment="отобразить, только если корзина (cart) содержит более 5-и элементов"
+        <programlisting><![CDATA[<span tal:comment="отобразить, только если в корзине больше 5-и позиций"
       tal:condition="php: cart.countItems() GT 5">...</span>
 ]]></programlisting>
 
-        <para>Частое использование инструкций &lt;a0&gt;PHP&lt;/a0&gt; в шаблонах привело бы к тому, что логика скрипта будет сосредоточена в шаблоне, что неверно и неоправдано. Вместо этого, желательно обеспечить разработчиков шаблонов булевыми значениями или методами:</para>
+        <para>Частое использование инструкций &lt;a0&gt;PHP&lt;/a0&gt; в шаблонах привело бы к тому, что логика скрипта была бы разбросана между PHP файлами и шаблонами, что уводит нас от изначальной идеи разделения кода и вида. Поэтому желательно обеспечить разработчиков шаблонов всеми нужными булевыми значениями и методами, например:</para>
 
         <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">...</span>
 ]]></programlisting>
@@ -467,30 +467,30 @@ catch (Exception $e){
       <section id="tal-repeat"> 
         <title><sgmltag>tal:repeat</sgmltag></title>
 
-        <para>Этот атрибут предназначен для работы с перечисляемыми объектам, такими как массивы, ассоциативные массивы и перечисляемые объекты в PHP5</para>
+        <para>Этот атрибут служит для циклов над перечисляемыми данными: массивами, ассоциативными массивами и перечисляемыми объектами в PHP5</para>
 
-        <para>Атрибут repeat повторно выводит свой элемент и его содержание для всех значений перечисляемого ресурса.</para>
+        <para>Атрибут repeat поочередно пробегает по всем значениеям указанного ресурса (например, массива).</para>
 
         <programlisting><![CDATA[<tr tal:repeat="item some/result">
-  <td tal:content="item">текст, который заменится значением item</td>
+  <td tal:content="item">текст, который заменится значением из item</td>
 </tr>
 ]]></programlisting>
 
-        <para>Внутри цикла можно использовать специальные ключевые слова <varname>repeat/<replaceable>*</replaceable></varname>, чтобы получить доступ к информации, относящейся к текущему состоянию цикла.</para>
+        <para>Внутри цикла можно использовать специальные ключевые слова <varname>repeat/<replaceable>*</replaceable></varname>, чтобы получить доступ к информации об состоянии цикле (и всех внешних циклов).</para>
 
-        <para>Для предыдущего примера можно использовать такие ключевые слова:</para>
+        <para>Вот список допустимых ключевых слов:</para>
 
         <itemizedlist>
           <listitem><para>
-            <varname>repeat/item/key</varname> : возвращает ключ элемента item в ассоциативном ресурсе some/result (в противном случае, возвращает индекс этого элемента)</para></listitem>
+            <varname>repeat/item/key</varname> : возвращает ключ элемента item в ассоциативном массиве some/result (если ассоциативности нету, то просто возвращает индекс этого элемента)</para></listitem>
           <listitem><para>
           <varname>repeat/item/index</varname> : возвращает индекс элемента item (от 0 до count-1)</para></listitem>
           <listitem><para>
           <varname>repeat/item/number</varname> : возвращает порядковый номер элемента item (от 1 до count)</para></listitem>
           <listitem><para>
-          <varname>repeat/item/even</varname> : возвращает true, если индекс item-а четный</para></listitem>
+          <varname>repeat/item/even</varname> : возвращает true, если индекс четный</para></listitem>
           <listitem><para>
-          <varname>repeat/item/odd</varname> : возвращает true, если индекс item-а нечетный</para></listitem>
+          <varname>repeat/item/odd</varname> : возвращает true, если индекс нечетный</para></listitem>
           <listitem><para>
           <varname>repeat/item/start</varname> : возвращает true, если элемент является первым</para></listitem>
           <listitem><para>
@@ -499,16 +499,16 @@ catch (Exception $e){
           <varname>repeat/item/length</varname> : возвращает количество элементов в some/result</para></listitem>
         </itemizedlist>
 
-        <para>в этих примерах, вместо названия &quot;item&quot; нужно использовать то же название, что определно в выражении <sgmltag>tal:repeat</sgmltag> (tal:repeat=&quot;item some/result&quot;).</para>
+        <para>в этих примерах, вместо названия &quot;item&quot; нужно использовать то же название, что и в выражении <sgmltag>tal:repeat</sgmltag> (tal:repeat=&quot;item some/result&quot;).</para>
 
-        <para>Наверное, самое распространненное применение атрибута <sgmltag>tal:repeat</sgmltag> - для обработки разультатов запроса к базе данных <acronym>SQL</acronym>. The following code will work if <varname>playersRanking</varname> contains object that implements <acronym>PHP</acronym>'s <constant>Iterator</constant> interface:</para>
+        <para>Одно из самых распространненных применений атрибута <sgmltag>tal:repeat</sgmltag> - отображение разультатов запроса к базе данных. Следующий пример сработает только в том случае, если <varname>playersRanking</varname> является объектом, реализующим интерфейс <acronym>PHP</acronym> <constant>Iterator</constant>:</para>
 
         <programlisting><![CDATA[<table>
   <thead>
     <tr>
-      <th>Position</th>
-      <th>Player</th>
-      <th>Score</th>
+      <th>Позиция</th>
+      <th>Игрок</th>
+      <th>Очки</th>
     </tr>
   </thead>
   <tbody>
@@ -526,7 +526,7 @@ catch (Exception $e){
       <section id="tal-omit-tag">
         <title><sgmltag>tal:omit-tag</sgmltag></title>
 
-        <para>Этот атрибут заставит парсер <acronym>PHPTAL</acronym> игнорировать открывающий и закрывающий теги элемента, однако его содержимое будет по-прежнему выведено.</para>
+        <para>Этот атрибут заставит парсер <acronym>PHPTAL</acronym> проигнорировать открывающий и закрывающий теги элемента и вывести только его содержимое.</para>
 
         <programlisting><![CDATA[<span tal:omit-tag="condition">
   если условие condition верно, то только ЭТОТ текст будет показан (открывающий и закрывающий теги span будут упущены)
@@ -535,12 +535,12 @@ catch (Exception $e){
 
         <para>В результате получим:</para>
 
-        <programlisting><![CDATA[> если условие condition верно, то только ЭТОТ текст будет показан (открывающий и закрывающий теги span будут упущены)
+        <programlisting><![CDATA[если условие condition верно, то только ЭТОТ текст будет показан (открывающий и закрывающий теги span будут упущены)
 ]]></programlisting>
 
         <para>Этот атрибут полезен, чтобы создать &quot;опциональный&quot; элемент. Например, спрятать ссылку, если какое-то условие не выполняется.</para>
         
-        <para>Если же Вы хотите получить элемент, теги которого никогда не будут выведены, используйте <sgmltag>tal:block</sgmltag></para>
+        <para>Если Вам нужен элемент, теги которого никогда не будут выведены, используйте <sgmltag>tal:block</sgmltag></para>
         <programlisting><![CDATA[<tal:block tal:repeat="x php:range(1,10)">только этот текст будет выведен; 10 раз</tal:block>
 ]]></programlisting>
 
@@ -549,7 +549,7 @@ catch (Exception $e){
       <section id="tal-replace">
         <title><sgmltag>tal:replace</sgmltag></title>
 
-        <para>Этот атрибут заменит весь элемент (открывающий и закрывающий тег) на определенное значение, или на пустую строку, если значение не задано.</para>
+        <para>Используя этот атрибут, можно заменить весь элемент целиком (включая открывающий и закрывающий тег) на заданную строку, или на пустую, если значение не задано.</para>
 
         <programlisting><![CDATA[<span tal:replace="string:я - прекрасная строка">
   а я строка плохая!
@@ -562,7 +562,7 @@ catch (Exception $e){
 ]]></programlisting>
 
         <para>
-        <sgmltag>tal:replace</sgmltag> также удобно использовать для создания примеров в шаблоне, которые должны быть удалены при обработке.</para>
+        <sgmltag>tal:replace</sgmltag> удобно использовать для создания примеров в шаблоне, которые должны быть игнорированы при его обработке перед отображением.</para>
 
         <programlisting><![CDATA[<table>
   <tr tal:repeat="item myresult">
@@ -582,7 +582,7 @@ catch (Exception $e){
       <section id="tal-content">
         <title><sgmltag>tal:content</sgmltag></title>
 
-        <para>Этот атрибут заменяет текст внутри тега на выражение, заданное в значении атрибута.</para>
+        <para>Значение этого атрибута станет текстом внутри тега.</para>
 
         <programlisting><![CDATA[<span tal:define="myvar string:моя строка"/>
 <span tal:content="myvar">этот текст будет заменен</span>
@@ -598,12 +598,12 @@ catch (Exception $e){
       <section id="tal-attributes">
         <title><sgmltag>tal:attributes</sgmltag></title>
 
-        <para>Этот атрибут изменяет значение атрибута тега (или нескольких атрибутов сразу).</para>
+        <para>С помощью tal:attributes можно устанавливать на лету значения атрибутов тега.</para>
 
         <programlisting><![CDATA[<a href="http://www.foo.com" title="some foo link"
    tal:attributes="href somelink/href; title somelink/title" 
   tal:content="somelink/text"
->какая-то ссылка</a>
+>какая-нибудь ссылка</a>
 ]]></programlisting>
 
         <para>Для примера, пусть значение '<varname>somelink</varname>' будет таковым:</para>
@@ -619,9 +619,9 @@ $somelink->text = "the google search engine";
 title="google search engine">the google search engine</a>
 ]]></programlisting>
 
-        <para>Точка с запятой (<literal>;</literal>) разделяет несколько атрибутов. Если Вы хотите вывести точку с запятой, то нужно ее продублировать (<literal>;;</literal>).</para>
+        <para>Точка с запятой (<literal>;</literal>) разделяет несколько атрибутов. Чтобы записать точку с запятой как часть значения, необходимо ее продублировать (<literal>;;</literal>).</para>
 
-        <para>Вот отличный (и немного более сложный) пример с использованием <sgmltag>tal:repeat</sgmltag>:</para>
+        <para>Вот пример, где <sgmltag>tal:attributes</sgmltag> используется совместно с <sgmltag>tal:repeat</sgmltag>:</para>
 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
@@ -629,11 +629,11 @@ title="google search engine">the google search engine</a>
 </tr>
 ]]></programlisting>
 
-        <para>Модификатор php: будет описан позже. Итак, рассмотрим наш пример. Если рядок нечетный, тогда будет задан атрибут <sgmltag>class</sgmltag>=&quot;odd&quot; для <sgmltag>tr</sgmltag>. Для четных же рядков, атрибут <sgmltag>class</sgmltag> не будет установлен.</para>
+        <para>Модификатор php: будет описан ниже. Итак, рассмотрим наш пример. Если рядок нечетный, тогда для <sgmltag>tr</sgmltag> будет использован атрибут <sgmltag>class</sgmltag>=&quot;odd&quot;. Для четных же рядков атрибут <sgmltag>class</sgmltag> вообще не будет установлен.</para>
 
-        <para>&quot;<code>condition ? then : else</code>&quot; является специальным выражением <acronym>PHP</acronym>; хотя его польза имеет место быть во многих случаях, используйте его с осторожностью.</para>
+        <para>&quot;<code>condition ? then : else</code>&quot; является специальным выражением <acronym>PHP</acronym>; хотя его польза имеет место быть во многих случаях, лучше попытаться избежать его использувания.</para>
 
-        <para>Более правильным было бы попросить <acronym>PHP</acronym> разработчика обеспечить дизайнера шаблонов специальными модификаторами (см. <acronym>PHP</acronym> интеграция / пользовательские модификаторы), которые могли бы использоваться примерно так:</para>
+        <para>Правильнее было бы попросить <acronym>PHP</acronym> программиста обеспечить дизайнера шаблонов специальными модификаторами (см. <acronym>PHP</acronym> интеграция / пользовательские модификаторы), которые могли бы использоваться примерно так:</para>
                 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class css-odd:repeat/ranking/odd">
@@ -643,20 +643,20 @@ title="google search engine">the google search engine</a>
 
         <para>Модификатор возвратит &quot;odd&quot;, если <varname>repeat/ranking/odd</varname> равен true, а иначе false.</para>
 <section id="optional-attrs"><title>Опциональные атрибуты</title>
-        <para>При использовании альтернативных значений, в <sgmltag>tal:attributes</sgmltag> можно использовать значение <varname>nothing</varname> (или <varname>NULL</varname> в выражении php) как последнее альтернативное значение. Атрибут не будет выведен, если для него не определено значение. Это позволит избежать &quot;пустых&quot; атрибутов:</para>
+        <para>Задавая значение, можно использовать так называемые альтернативные значения, разделяя их знаком |. Если первое значение не определено, парсер попытается подставить следующее в цепочке, если оно тоже не определено - следующе, и т.д. При использовании альтернативных значений, в <sgmltag>tal:attributes</sgmltag> можно использовать значение <varname>nothing</varname> (или <varname>NULL</varname> в выражении php) как последнее альтернативное значение. Тогда атрибут не будет добавлен тегу, если значение для атрибута не определено. Это позволит избежать &quot;пустых&quot; атрибутов:</para>
         <programlisting><![CDATA[... tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
 
-        <para>Такие атрибуты <acronym>XHTML</acronym>, как <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag> и другие также будут правильно обработаны.</para>
+        <para><acronym>XHTML</acronym> атрибуты <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag> и другие подобные  будут также обработаны правильно.</para>
 
         <programlisting><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting>
         
-        <para>Не забывайте, что <acronym>XHTML</acronym> является регистро-зависимым, поэтому запись <sgmltag>SELECTED</sgmltag> ошибочна в <acronym>XHTML</acronym>. Правильная запись - <sgmltag>selected</sgmltag>.</para>
+        <para>Не забывайте, что <acronym>XHTML</acronym> регистро-зависим, поэтому запись <sgmltag>SELECTED</sgmltag> ошибочна в <acronym>XHTML</acronym>. Правильная запись - <sgmltag>selected</sgmltag>.</para>
       </section>
     </section>
       <section id="tal-on-error">
         <title><sgmltag>tal:on-error</sgmltag></title>
 
-        <para>Этот атрибут заменяет тег выражением, заданным в значении <sgmltag>tal:on-error</sgmltag>, если тег содержит внутри себя ошибку пути, или <acronym>PHP</acronym> вызвало исключение во время генерации тега.</para>
+        <para>Значение этого атрибута подставится в тег, если тег содержит внутри себя ошибку (например, неверно заданный путь, или исключение, вызванное <acronym>PHP</acronym> во время генерации тега).</para>
 
         <programlisting><![CDATA[<span tal:on-error="string:Имя пользователя не определено"
       tal:content="user/name">этот текст заменится на имя пользователя</span>
@@ -681,17 +681,17 @@ title="google search engine">the google search engine</a>
       <title>Пространство имен <acronym>METAL</acronym></title>
 
       <para>
-      <acronym>METAL</acronym> обозначает 'Macro Extension for <acronym>TAL</acronym>' (расширение TAL для макросов). Это пространство имен реализовано в <acronym>PHPTAL</acronym> и дает возможность разработчикам шаблонов создавать и вызывать <acronym>XML</acronym>/<acronym>XHTML</acronym> макросы.</para>
+      <acronym>METAL</acronym> обозначает 'Macro Extension for <acronym>TAL</acronym>' (расширение TAL для макросов). Это пространство имен реализовано в <acronym>PHPTAL</acronym> и дает возможность разработчикам создавать и вызывать <acronym>XML</acronym>/<acronym>XHTML</acronym> макросы в своих шаблонах.</para>
 
       <section id="metal-define-macro">
         <title><sgmltag>metal:define-macro</sgmltag></title>
 
-        <para>С помощью этого атрибута можно создать макрос. Макросы можно понимать как библиотеку маленьких шаблончиков, которые могут быть многократно использованы в других шаблонах.</para>
+        <para>Этот атрибут объявляет макрос. По своей сути макросы это обычные шаблоны, которые могут быть многократно вставлены в другие шаблоны.</para>
 
         <programlisting><![CDATA[<div metal:define-macro="main_menu">
   <ul>
     <li><a href="/">Главная</a></li>
-    <li><a href="/products">Продукты</a></li>
+    <li><a href="/products">Продукция</a></li>
     <li><a href="/contact">Контакты</a></li>
   </ul>
 
@@ -702,13 +702,13 @@ title="google search engine">the google search engine</a>
 </div>
 ]]></programlisting>
 
-        <para>Макрос наследует доступные переменные из вызывающей библиотеки. В вышеприведенном примере, значение переменной 'mdate' будет зависеть от шаблона, в который включили этот макрос.</para>
+        <para>Макрос наследует доступные переменные из вызывающего шаблона. В нашем примере значение переменной 'mdate' нужно объявить в шаблоне, в котором используют этот макрос.</para>
       </section>
 
       <section id="metal-use-macro">
         <title><sgmltag>metal:use-macro</sgmltag></title>
 
-        <para>Этот атрибут вызывает макрос и включает результат его выполнения в текущий шаблон</para>
+        <para>Этот атрибут вызывает макрос и включает результат его выполнения в текущий шаблон в то место, откуда он вызван</para>
 
         <programlisting><![CDATA[<span
   tal:comment="шаблон main_menu требует переменную 'mdate'"
@@ -722,7 +722,7 @@ title="google search engine">the google search engine</a>
         <programlisting><![CDATA[<span metal:use-macro="site_macros.html/main_menu"/>
 ]]></programlisting>
 
-        <para>Заметьте, возможность подстановок работает для этого атрибута:</para>
+        <para>При этом можно использовать всю гибкость подстановок переменных:</para>
 
         <programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.html/main_menu"/>
 ]]></programlisting>
@@ -743,13 +743,11 @@ title="google search engine">the google search engine</a>
       <section id="metal-define-slot">
         <title><sgmltag>metal:define-slot</sgmltag></title>
 
-        <para>
-        This attribute must appear inside a <sgmltag>metal:define-macro</sgmltag> tag.
-        </para>
+        <para>Этот атрибут должен быть объявлен внутри тега, объявляющего макрос (<sgmltag>metal:define-macro</sgmltag>).</para>
 
         <para>Слоты могут заменяться вызывающим шаблоном на динамически генерируемый <acronym>XML</acronym>/<acronym>XHTML</acronym>.</para>
 
-        <para>Рассматривайте слоты как элементы кустомизации страниц. Если макрос представить как целую страницу, то слот менял бы содержимое страницы в зависимости от <acronym>URL</acronym>. К примеру, слот выводит свежие новости на главной странице сайта или перечень действий, доступных пользователю после его авторизации.</para>
+        <para>Cлоты помогают разнообразить страницы. Если макрос представить как целую страницу, то слоты можно предствить как секции, варьирующиеся в зависимости от, например, <acronym>URL</acronym>. К примеру, на той же главной странице сайта слот выводит свежие новости или перечень действий, доступных пользователю после его авторизации.</para>
 
         <programlisting><![CDATA[<span metal:define-slot="news_place">
   <table>
@@ -760,7 +758,7 @@ title="google search engine">the google search engine</a>
 </span>
 ]]></programlisting>
 
-        <para>В этом примере мы как бы определяем секцию под названием '<emphasis>news_place</emphasis>', которая может быть перекрыта вызывающим шаблоном. См. ниже в продолжение примера.</para>
+        <para>В этом примере мы определяем секцию под названием '<emphasis>news_place</emphasis>', содержимое которой может быть подменено вызывающим шаблоном. Ниже мы рассмотрим, как использовать слоты, ссылаясь на этот пример.</para>
 
       </section>
 
@@ -768,14 +766,9 @@ title="google search engine">the google search engine</a>
       <section id="metal-fill-slot">
         <title><sgmltag>metal:fill-slot</sgmltag></title>
 
-        <para>
-        This attribute can occur only inside <sgmltag>metal:use-macro</sgmltag> element.
-        </para>
+        <para>Этот атрибут может быть использован только внутри элемента с <sgmltag>metal:use-macro</sgmltag>.</para>
 
-        <para>
-        This explicitly tells <acronym>PHPTAL</acronym> to replace a defined slot with the 
-        content provided inside the <sgmltag>metal:fill-slot</sgmltag> attribute.
-        </para>
+        <para>Он заставит <acronym>PHPTAL</acronym> подменить содержимое объявленного раньше слота.</para>
 
         <programlisting><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
   ]]><![CDATA[<h2>Меню пользователя]]><![CDATA[</h2>
@@ -787,7 +780,7 @@ title="google search engine">the google search engine</a>
 </span>
 ]]></programlisting>
 
-        <para>Таким образом, слоты позволяют с легкостью разнообразить и усложнить шаблоны с помощью простой push-технологии.</para>
+        <para>Таким образом, слоты позволяют с легкостью разнообразить и усложнить шаблоны с помощью простой технологии push.</para>
       </section>
   
     </section><!-- end of METAL namespace -->
@@ -796,12 +789,12 @@ title="google search engine">the google search engine</a>
     <section id="i18n">
       <title>Пространство имен <acronym>I18N</acronym></title>
 
-      <para>К сведению: 'i18n' является акронимом (сокращением) от слова 'internationalization' (интернационализация). Это пространство имен позволяет разработчикам шаблонов указать текст, который должен быть переведен в процессе обработки шаблона.</para>
+      <para>К сведению: 'i18n' является акронимом (сокращением) от слова 'internationalization' (интернационализация). Это пространство имен служит для создания многоязыковых шаблонов. С помощью специальных атрибутов можно указывать текст, который должен быть переведен в процессе обработки шаблона.</para>
 
       <section id="i18n-translate">
         <title><sgmltag>i18n:translate</sgmltag></title>
 
-        <para>Этот атрибут определяет тект, который должен быть переведен с помощью системы перевода <acronym>PHPTAL</acronym>-я.</para>
+        <para>Этот атрибут определяет текст, который должен быть переведен с помощью системы перевода, встроенной в <acronym>PHPTAL</acronym>.</para>
 
         <programlisting><![CDATA[<div i18n:translate="string:welcome_message">Добро пожаловать!</div>
 ]]></programlisting>
@@ -835,11 +828,11 @@ title="google search engine">the google search engine</a>
       <section id="i18n-name">
         <title><sgmltag>i18n:name</sgmltag></title>
 
-        <para>В сам перевод можно динамически посдтавлять значения переменных. Для этого нужно назначить так называемые &quot;переменные перевода&quot;, то есть, необходимо определить, какую переменную в переводе на какую реальную переменную (доступную в шаблоне) необходимо заменить. Для того, чтобы задать такое соответствие, и нужен атрибут i18n:name</para>
+        <para>В сам перевод можно динамически посдтавлять значения переменных. Для этого нужно назначить так называемые &quot;переменные перевода&quot;, то есть, необходимо определить, какую переменную в переводе на какую реальную переменную (доступную в шаблоне) необходимо заменить. Для того, чтобы задать такое соответствие, используйте i18n:name</para>
 
-        <para>В строке перевода напишите <varname>${xxx}</varname>, где &quot;<varname>xxx</varname>&quot; - имя &quot;переменной перевода&quot;, которая должна заменяться динамически на реальную переменную шаблона.</para>
+        <para>В строке перевода можно использовать запись <varname>${xxx}</varname>, где &quot;<varname>xxx</varname>&quot; - название &quot;переменной перевода&quot;, которая должна заменяться динамически на реальную переменную шаблона.</para>
 
-        <para>Соответствующее значение будет подставлено в тег и его содержимое. Если же Вы не хотите, чтобы значение было помещено в теги, используйте <sgmltag>tal:replace</sgmltag> вместо <sgmltag>tal:content</sgmltag>. Атрибут <sgmltag>tal:omit-tag</sgmltag> пригодиться, если значение представляет собой конкатенацию строк.</para>
+        <para>Соответствующее значение будет подставлено в тег и его содержимое. Если же Вы не хотите, чтобы значение было помещено в теги, используйте <sgmltag>tal:replace</sgmltag> вместо <sgmltag>tal:content</sgmltag>. Атрибут <sgmltag>tal:omit-tag</sgmltag> пригодится, если значение представляет собой конкатенацию строк.</para>
 
         <programlisting><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
 <!-- <span>${some/path}</span> -->
@@ -869,13 +862,13 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
         <para>
-        <acronym>PHPTAL</acronym> заменит <varname>${user}</varname> на <varname>${user/name}</varname>, а <varname>${mails}</varname> на <varname>${user/nbrMails}</varname> в переводе.</para>
+        В подставляемом переводе, <acronym>PHPTAL</acronym> заменит <varname>${user}</varname> на <varname>${user/name}</varname>, а <varname>${mails}</varname> на <varname>${user/nbrMails}</varname>.</para>
 
-        <para>Более подробно про связку <acronym>I18N</acronym> с <acronym>PHPTAL</acronym> можно прочитать в разделе <acronym>PHP</acronym> этой книги.</para>
+        <para>Более подробно о связке <acronym>I18N</acronym> с <acronym>PHPTAL</acronym> можно прочитать в разделе <acronym>PHP</acronym> этой справки.</para>
       </section>
       
       <section id="xhtml-in-translations"><title><acronym>XHTML</acronym> в переводах</title>
-          <para>По умолчанию предполагается, что переводы содержат только текст, поэтому <acronym>PHPTAL</acronym> экранирует все символы &quot;&lt;&quot;.</para>
+          <para>По умолчанию предполагается, что переводы содержат только текст и не содержат теги, поэтому <acronym>PHPTAL</acronym> экранирует все символы &quot;&lt;&quot;.</para>
           <para>Начиная с версии 1.1.14, в <sgmltag>i18n:translate</sgmltag> допускается использования ключевого слова structure, чтобы отменить экранирование и выводить переведенный текст &quot;как есть&quot;:</para>
           
            <programlisting><![CDATA[      <div i18n:translate="structure '<b>bold text</b>'" />
@@ -885,7 +878,7 @@ title="google search engine">the google search engine</a>
              <programlisting><![CDATA[        <div><b>bold text</b></div>
         ]]></programlisting>
       
-      <para>Однако, <acronym>TAL</acronym> атрибуты внутри переведенных строк будут игнорированы. И конечно, плохо форматированный <acronym>XHTML</acronym> в переводах испортит хорошо форматированные шаблон.</para>      
+      <para>Однако, <acronym>TAL</acronym> атрибуты внутри переведенных строк будут игнорированы. Конечно, следует помнить, что плохо форматированный <acronym>XHTML</acronym> в переводах испортит хорошо форматированный шаблон.</para>      
     </section>
 
     </section><!-- end of I18N namespace -->
