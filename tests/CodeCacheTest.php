@@ -143,6 +143,8 @@ class CodeCacheTest extends PHPUnit_Framework_TestCase
 
     function testGarbageRemoval()
     {
+        $this->markTestIncomplete("cache doesnt use timestamps anymore");
+        
         $this->phptal->setTemplate('input/code-cache-01.html');
         $this->phptal->execute();
 
