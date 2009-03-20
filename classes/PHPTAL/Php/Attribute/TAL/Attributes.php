@@ -137,7 +137,7 @@ implements PHPTAL_Php_TalesChainReader
     {
         $this->_default_escaped = false;
         $this->_attribute = $attribute;
-        if (array_key_exists($attribute, $this->phpelement->getAttributes())) {
+        if (array_key_exists($attribute, $this->phpelement->getEscapedAttributeValuesByQualifiedName())) {
             $this->_default_escaped = $this->phpelement->getAttributeEscaped($attribute);
         }
         $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);

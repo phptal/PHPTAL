@@ -30,7 +30,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
 {
     function testTreeGeneration()
     {
-        $parser = new PHPTAL_Dom_Parser();
+        $parser = new PHPTAL_Dom_Parser('UTF-8');
         $tree = $parser->parseFile('input/parser.01.xml');
         $state     = new PHPTAL_Php_State();
         $codewriter = new PHPTAL_Php_CodeWriter($state);

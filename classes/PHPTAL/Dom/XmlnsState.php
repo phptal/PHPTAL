@@ -33,10 +33,19 @@
 class PHPTAL_Dom_XmlnsState 
 {
     /** Create a new XMLNS state inheriting provided aliases. */
-    public function __construct($aliases = array())
+    public function __construct(array $prefix_to_prefix, array $prefix_to_uri)
     {
-        assert(is_array($aliases));
-        $this->_aliases = $aliases;
+        $this->prefix_to_prefix = $prefix_to_prefix;
+        $this->prefix_to_uri = $prefix_to_uri; 
+    }
+    
+    public function prefixToNamespaceURI($prefix)
+    {
+        if ($prefix === 'xmlns') return 'http://www.w3.org/2000/xmlns/';
+        if ($prefix === 'xml') return 'http://www.w3.org/XML/1998/namespace';
+        
+        // domdefs provides fallback for all known phptal ns
+        return isset($this->prefix_to_uri[$prefix]) ? $this->prefix_to_uri[$prefix] : PHPTAL_Dom_Defs::getInstance()->prefixToNamespaceURI($prefix);
     }
 
     /** Returns true if $attName is a valid attribute name, false otherwise. */
@@ -56,43 +65,53 @@ class PHPTAL_Dom_XmlnsState
     /** Returns the unaliased name of specified attribute. */
     public function unAliasAttribute($attName)
     {
-        if (count($this->_aliases) == 0) 
+        if (count($this->prefix_to_prefix) == 0) 
             return $attName;
         
         $result = $attName;
-        foreach ($this->_aliases as $alias => $real){
-            $result = str_replace("$alias:", "$real:", $result);
+        foreach ($this->prefix_to_prefix as $prefix => $real){
+            $result = str_replace("$prefix:", "$real:", $result);
         }
         return $result;
     }
     
     /** 
-     * Returns a new XmlnsState inheriting of $currentState if $nodeAttributes contains 
-     * xmlns attributes, returns $currentState otherwise.
+     * Returns a new XmlnsState inheriting of $this if $nodeAttributes contains 
+     * xmlns attributes, returns $this otherwise.
      *
      * This method is used by the PHPTAL parser to keep track of xmlns fluctuation for
      * each encountered node.
      */
-    public static function newElement(PHPTAL_Dom_XmlnsState $currentState, $nodeAttributes)
+    public function newElement(array $nodeAttributes)
     {
-        $aliases = array();
-        foreach ($nodeAttributes as $att => $value){
-            if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($att, $value)){
-                preg_match('/^xmlns:(.*?)$/', $att, $m);
-                list(,$alias) = $m;
-                $aliases[$alias] = PHPTAL_Dom_Defs::getInstance()->xmlnsToLocalName($value);
+        $prefix_to_prefix = $this->prefix_to_prefix;
+        $prefix_to_uri = $this->prefix_to_uri;
+        
+        
+        $changed = false;
+        foreach ($nodeAttributes as $qname => $value)
+        {
+            if (preg_match('/^xmlns:(.+)$/', $qname, $m))
+            {                
+                $changed = true;
+                list(,$prefix) = $m;
+                $prefix_to_uri[$prefix] = $value;
+                if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($qname, $value))
+                {                
+                    $prefix_to_prefix[$prefix] = PHPTAL_Dom_Defs::getInstance()->namespaceURIToPrefix($value);
+                }                
             }
         }
-        if (count($aliases) > 0){
-            // inherit aliases with maybe an overwrite
-            $aliases = array_merge($currentState->_aliases, $aliases);
-            return new PHPTAL_Dom_XmlnsState($aliases);
+        
+        if ($changed) 
+        {
+            return new PHPTAL_Dom_XmlnsState($prefix_to_prefix, $prefix_to_uri);
         }
-        return $currentState;
+        else
+        {
+            return $this;
+        }
     }
 
-    private $_aliases;
+    private $prefix_to_prefix, $prefix_to_uri;
 }
-
-
-?>

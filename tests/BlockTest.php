@@ -18,22 +18,25 @@ class BlockTest extends PHPTAL_TestCase
 		$this->assertEquals('foo', $res);
 	}
 
-	function testUnknownNamespaceBlock(){
+	function testSomeNamespaceBlock()
+	{
 		$t = new PHPTAL();
 		$t->setSource('<foo:block xmlns:foo="http://phptal.example.com">foo</foo:block>');
 		$res = $t->execute();
 		$this->assertEquals('<foo:block xmlns:foo="http://phptal.example.com">foo</foo:block>', $res);
 	}
 	
-	function testInvalidNamespaceBlock(){
+	/**
+     * @expectedException PHPTAL_ParserException
+     */    
+	function testInvalidNamespaceBlock()
+	{
 		$t = new PHPTAL();
 				
 		$this->setExpectedException('PHPTAL_Exception');
 		
 		$t->setSource('<foo:block>foo</foo:block>');		
-		$res = $t->execute();
-		
-		$this->markTestIncomplete('Non-critical error waiting to be fixed');
+		$res = $t->execute();		
 	}	
 }
 

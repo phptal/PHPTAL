@@ -80,9 +80,10 @@ abstract class PHPTAL_XmlParser
       self::ST_ATTR_QUOTE => 'quoted attribute value',
       self::ST_ATTR_VALUE => 'unquoted attribute value',
     );
-    
-    public function __construct() 
+        
+    public function __construct($input_encoding) 
     {
+        $this->input_encoding = $input_encoding; 
         $this->_file = "<string>";
     }
 
@@ -162,7 +163,7 @@ abstract class PHPTAL_XmlParser
                     else if ($c == '!' and substr($src, $i, 8) == '!DOCTYPE') {
                         $state = self::ST_DOCTYPE;
                     }
-                    else if (!self::isAlpha($c)) {
+                    else if (self::isWhiteChar($c)) {
                         $state = self::ST_TEXT;
                     }
                     else {
@@ -351,6 +352,12 @@ abstract class PHPTAL_XmlParser
     {
         return $this->_line;
     }
+    
+    private $input_encoding;
+    function getEncoding()
+    {
+        return $this->input_encoding;
+    }
 
     public static function isWhiteChar($c)
     {
@@ -367,7 +374,7 @@ abstract class PHPTAL_XmlParser
     public abstract function onXmlDecl($decl);
     public abstract function onSpecific($data);
     public abstract function onComment($data);
-    public abstract function onElementStart($name, $attributes);
+    public abstract function onElementStart($name, array $attributes);
     public abstract function onElementClose($name);
     public abstract function onElementData($data);
     public abstract function onDocumentStart();

@@ -56,6 +56,23 @@ abstract class PHPTAL_DOMNode
     private $_line;
 }
 
+class PHPTAL_DOMAttr
+{
+    private $qualified_name, $namespace_uri, $value_escaped, $encoding;
+    
+    function __construct($qualified_name, $namespace_uri, $value_escaped, $encoding)
+    {
+        $this->qualified_name = $qualified_name; 
+        $this->namespace_uri = $namespace_uri; 
+        $this->value_escaped = $value_escaped; 
+        $this->encoding = $encoding; 
+    }
+    
+    function getQualifiedName() {return $this->qualified_name;}
+    function getValueEscaped() {return $this->value_escaped;}
+    function getValue() {return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);}
+}
+
 /**
  * Node container.
  * 
@@ -90,20 +107,15 @@ class PHPTAL_Dom_Tree extends PHPTAL_DOMNode
 class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
 {
     private $qualifiedName;
-    private $attributes = array();
+    private $attribute_nodes = array();
 
-    public function __construct($qualifiedName, $attributes)
+    public function __construct($qualifiedName, PHPTAL_Dom_XmlnsState $state, array $attribute_nodes)
     {
-        if (!preg_match('/^[a-z_:][a-z0-9._:\x80-\xff-]*$/i',$qualifiedName)) throw new PHPTAL_ParserException("Invalid element name '$qualifiedName'");
+        if (!preg_match('/^([a-z_.-]*:)?[a-z\x80-\xff][a-z0-9._:\x80-\xff-]*$/i',$qualifiedName)) throw new PHPTAL_ParserException("Invalid element name '$qualifiedName'");
         parent::__construct();
         $this->qualifiedName = $qualifiedName;
-        $this->attributes = $attributes;
-    }
-
-    public function setXmlnsState(PHPTAL_Dom_XmlnsState $state)
-    {
+        $this->attribute_nodes = $attribute_nodes;
         $this->_xmlns = $state;
-        $this->xmlns = $state;
     }
 
     public function getQualifiedName()
@@ -120,7 +132,10 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
     public function hasAttribute($name)
     {
         $ns = $this->getNodePrefix();
-        foreach ($this->getAttributes() as $key=>$value){
+        foreach ($this->attribute_nodes as $attr)
+        {
+            $key = $attr->getQualifiedName();
+            
             if ($this->_xmlns->unAliasAttribute($key) == $name){
                 return true;
             }
@@ -136,30 +151,53 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
     {
         $ns = $this->getNodePrefix();
         
-        foreach ($this->getAttributes() as $key=>$value){
+        foreach ($this->attribute_nodes as $attr)
+        {
+            $key = $attr->getQualifiedName();
+            
             if ($this->_xmlns->unAliasAttribute($key) == $name){
-                return $value;
+                return $attr->getValueEscaped();
             }
             if ($ns && $this->_xmlns->unAliasAttribute("$ns:$key") == $name){
-                return $value;
+                return $attr->getValueEscaped();
             }
         }
         return false;
     }
     
     /** Returns textual (unescaped) value of specified PHPTAL attribute. */
-    public function getAttributeText($name, $encoding)
+    public function getAttributeText($name)
     {
-        $v = $this->getAttributeEscaped($name); if ($v === false) return false;
+        $ns = $this->getNodePrefix();
         
-        return html_entity_decode($v,ENT_QUOTES,$encoding);
+        foreach ($this->attribute_nodes as $attr)
+        {
+            $key = $attr->getQualifiedName();
+            
+            if ($this->_xmlns->unAliasAttribute($key) == $name){
+                return $attr->getValue();
+            }
+            if ($ns && $this->_xmlns->unAliasAttribute("$ns:$key") == $name){
+                return $attr->getValue();
+            }
+        }
+    }
+    
+    public function getAttributeNodes()
+    {
+        return $this->attribute_nodes;
     }
     
     
-    
-    public function getAttributes()
+    public function getEscapedAttributeValuesByQualifiedName()
     {
-        return $this->attributes;
+        $tmp = array();
+        foreach($this->attribute_nodes as $attr)
+        {
+            assert('$attr instanceof PHPTAL_DOMAttr');
+            $tmp[$attr->getQualifiedName()] = $attr->getValueEscaped();
+        }
+        return $tmp;
     }
 
     /** 

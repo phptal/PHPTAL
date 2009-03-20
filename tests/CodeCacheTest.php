@@ -141,7 +141,7 @@ class CodeCacheTest extends PHPTAL_TestCase
         $this->assertTrue($this->phptal->testHasParsed, "Reparse");
     }
 
-
+/*
     function testGarbageRemoval()
     {
         $this->markTestIncomplete("cache doesnt use timestamps anymore");
@@ -162,4 +162,5 @@ class CodeCacheTest extends PHPTAL_TestCase
 
         $this->assertTrue($this->phptal->testHasParsed, "Reparse");
     }
+*/    
 }

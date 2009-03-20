@@ -38,10 +38,10 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     const ERR_UNSUPPORTED_ATTRIBUTE = "Unsupported attribute '%s'";
     const ERR_ELEMENT_CLOSE_MISMATCH = "Tag closure mismatch, expected '%s' but was '%s'";
   
-    public function __construct($input_encoding = 'UTF-8')
+    public function __construct($input_encoding)
     {
         parent::__construct($input_encoding);
-        $this->_xmlns = new PHPTAL_Dom_XmlnsState();
+        $this->_xmlns = new PHPTAL_Dom_XmlnsState(array(), array());
     }
 
     public function getXmlnsState()
@@ -105,18 +105,37 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
         $this->pushNode(new PHPTAL_DOMSpecific($data));
     }
 
-    public function onElementStart($name, $attributes)
+    public function onElementStart($name, array $attributes)
     {        
-        $this->_xmlns = PHPTAL_Dom_XmlnsState::newElement($this->_xmlns, $attributes);
+        $this->_xmlns = $this->_xmlns->newElement($attributes);
         
-        foreach ($attributes as $key=>$value) {
-            if (!$this->_xmlns->isValidAttribute($key)) {
-                $this->raiseError(self::ERR_UNSUPPORTED_ATTRIBUTE, $key);
-            }
+        if (preg_match('/^([^:]+):/',$name,$m))
+        {
+            $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);            
+            if (false === $namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$name>");
         }
         
-        $node = new PHPTAL_DOMElement($name, $attributes);
-        $node->setXmlnsState($this->getXmlnsState());
+        $attrnodes = array();
+        foreach ($attributes as $qname=>$value) 
+        {
+            if (!$this->_xmlns->isValidAttribute($qname)) {
+                $this->raiseError(self::ERR_UNSUPPORTED_ATTRIBUTE, $key);
+            }
+                        
+            if (preg_match('/^([^:]+):/',$qname,$m))
+            {
+                $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
+                if (false === $namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element <$name>");
+            }
+            else
+            {
+                $namespace_uri = ''; // default NS
+            }
+            
+            $attrnodes[] = new PHPTAL_DOMAttr($qname, $namespace_uri, $value, $this->getEncoding());
+        }
+        
+        $node = new PHPTAL_DOMElement($name,$this->getXmlnsState(), $attrnodes);
         $this->pushNode($node);
         $this->_stack[] =  $this->_current;
         $this->_current = $node;

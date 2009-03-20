@@ -69,7 +69,7 @@ class MyTestParser extends PHPTAL_XmlParser
 
     public function __construct() {
         $this->result = '';
-        parent::__construct();
+        parent::__construct('UTF-8');
     }
 
     public function onDoctype($dt) {
@@ -91,7 +91,7 @@ class MyTestParser extends PHPTAL_XmlParser
         $this->onSpecific($data);
     }
     
-    public function onElementStart($name, $attributes) {
+    public function onElementStart($name, array $attributes) {
         $this->elementStarts++;
         $this->result .= "<$name";
         $pairs = array();

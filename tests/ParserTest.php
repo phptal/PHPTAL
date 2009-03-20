@@ -28,7 +28,7 @@ class ParserTest extends PHPTAL_TestCase
 {
     public function testParseSimpleDocument()
     {
-        $parser = new PHPTAL_Dom_Parser();
+        $parser = new PHPTAL_Dom_Parser('UTF-8');
         $tree = $parser->parseFile('input/parser.01.xml');
 
         if ($tree instanceof DOMNode) $this->markTestSkipped();
@@ -40,7 +40,7 @@ class ParserTest extends PHPTAL_TestCase
 
     public function testByteOrderMark()
     {
-        $parser = new PHPTAL_Dom_Parser();
+        $parser = new PHPTAL_Dom_Parser('UTF-8');
         try {
             $tree = $parser->parseFile('input/parser.02.xml');
             $this->assertTrue(true);
@@ -52,7 +52,7 @@ class ParserTest extends PHPTAL_TestCase
 
     public function testBadAttribute(){
         try {
-            $parser = new PHPTAL_Dom_Parser();
+            $parser = new PHPTAL_Dom_Parser('UTF-8');
             $parser->parseFile('input/parser.03.xml');
         }
         catch (Exception $e){
@@ -62,28 +62,34 @@ class ParserTest extends PHPTAL_TestCase
 
     public function testLegalElementNames()
     {
-        $parser = new PHPTAL_Dom_Parser();
+        $parser = new PHPTAL_Dom_Parser('UTF-8');
         $parser->parseString('<?xml version="1.0" encoding="UTF-8"?>
         <t1 xmlns:foo..._-ą="http://foo.example.com"><foo..._-ą:test-element_name /><t---- /><t___ /><oóźżćń /><d.... /></t1>');        
+    }
+    
+    public function testXMLNS()
+    {
+         $parser = new PHPTAL_Dom_Parser('UTF-8');
+         $parser->parseString('<?xml version="1.0" encoding="UTF-8"?>
+         <t1 xml:lang="foo" xmlns:bla="xx"></t1>');        
     }
 
     public function testIllegalElementNames1()
     {
-        $parser = new PHPTAL_Dom_Parser();
+        $parser = new PHPTAL_Dom_Parser('UTF-8');
         try
         {
             $parser->parseString('<?xml version="1.0" encoding="UTF-8"?>
             <t><1element /></t>');
 
-    		$this->markTestIncomplete('Non-critical error waiting to be fixed');
-//            $this->fail("Accepted invalid element name starting with a number");
+            $this->fail("Accepted invalid element name starting with a number");
         }
         catch(PHPTAL_Exception $e) {}
     }
 
     public function testIllegalElementNames2()
     {
-        $parser = new PHPTAL_Dom_Parser();
+        $parser = new PHPTAL_Dom_Parser('UTF-8');
         try
         {
             $parser->parseString('<t><element~ /></t>');

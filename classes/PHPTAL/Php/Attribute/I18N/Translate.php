@@ -70,7 +70,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                     if ($preserve_tags)
                     {
                         $result .= '<'.$child->getQualifiedName();
-                        foreach($child->getAttributes() as $k => $v)
+                        foreach($child->getEscapedAttributeValuesByQualifiedName() as $k => $v)
                         {
                             $result .= ' '.$k.'="'.$v.'"';
                         }

@@ -139,7 +139,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     {
         parent::__construct( $node);
         $this->qualifiedName = $node->getQualifiedName();
-        $this->attributes = $node->getAttributes();
+        $this->attributes = $node->getEscapedAttributeValuesByQualifiedName();
         $this->xmlns = $node->getXmlnsState();
         $this->prepare();
     }
@@ -179,7 +179,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $this->generateSurroundFoot($codewriter);
     }
 
-    public function getAttributes()
+    public function getEscapedAttributeValuesByQualifiedName()
     {
         return $this->attributes;
     }
@@ -238,7 +238,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     public function hasRealAttributes()
     {
-        return ((count($this->getAttributes()) - count($this->talAttributes)) > 0) || $this->hasAttribute('tal:attributes');
+        return ((count($this->getEscapedAttributeValuesByQualifiedName()) - count($this->talAttributes)) > 0) || $this->hasAttribute('tal:attributes');
     }
 
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
@@ -335,7 +335,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         //
 
         $fullreplaceRx = PHPTAL_Php_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
-        foreach ($this->getAttributes() as $key=>$value) {
+        foreach ($this->getEscapedAttributeValuesByQualifiedName() as $key=>$value) {
             if (preg_match($fullreplaceRx, $value)){
                 $codewriter->pushHtml($value);
             }
@@ -382,7 +382,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             $this->headFootDisabled = true;
             list(,$ns) = $m;
             $attributes = array();
-            foreach ($this->getAttributes() as $key=>$value) {
+            foreach ($this->getEscapedAttributeValuesByQualifiedName() as $key=>$value) {
                 if ($this->xmlns->isPhpTalAttribute("$ns:$key")) {
                     $attributes["$ns:$key"] = $value;
                 }
@@ -398,7 +398,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     {
         $attributes = array();
         $this->talAttributes = array();
-        foreach ($this->getAttributes() as $key=>$value) {
+        foreach ($this->getEscapedAttributeValuesByQualifiedName() as $key=>$value) {
             // remove handled xml namespaces
             if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($key,$value)){
             }
@@ -418,7 +418,8 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     private function orderTalAttributes()
     {
         $attributes = array();
-        foreach ($this->talAttributes as $key=>$exp){
+        foreach ($this->talAttributes as $key=>$exp)
+        {
             $name = $this->xmlns->unAliasAttribute($key);
             $att = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($name);
             if (array_key_exists($att->getPriority(), $attributes)){
@@ -435,7 +436,8 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         ksort($attributes);
 
         $this->talHandlers = array();
-        foreach ($attributes as $prio => $dat){
+        foreach ($attributes as $prio => $dat)
+        {
             list($key, $att, $exp) = $dat;
             $handler = $att->createAttributeHandler($this, $exp);
             $this->talHandlers[$prio] = $handler;

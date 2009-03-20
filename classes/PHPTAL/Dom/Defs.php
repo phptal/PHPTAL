@@ -106,9 +106,14 @@ class PHPTAL_Dom_Defs
         return in_array(strtolower($tagName), self::$XHTML_EMPTY_TAGS);
     }
 
-    public function xmlnsToLocalName($xmlns)
+    public function namespaceURIToPrefix($xmlns)
     {
         return $this->_xmlns[$xmlns];
+    }
+    
+    public function prefixToNamespaceURI($prefix)
+    {
+        return array_search($prefix,$this->_xmlns,true);
     }
     
     /**
