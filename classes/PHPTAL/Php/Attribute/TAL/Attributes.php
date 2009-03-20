@@ -132,12 +132,13 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->overwriteAttributeWithPhpValue($attribute, $attkey);
     }
 
+    private $_default_escaped;
     private function prepareChainedAttribute2(PHPTAL_Php_CodeWriter $codewriter, $attribute, $chain)
     {
-        $this->_default = false;
+        $this->_default_escaped = false;
         $this->_attribute = $attribute;
-        if (array_key_exists($attribute, $this->phpelement->attributes)) {
-            $this->_default = $this->phpelement->attributes[$attribute];
+        if (array_key_exists($attribute, $this->phpelement->getAttributes())) {
+            $this->_default_escaped = $this->phpelement->getAttributeEscaped($attribute);
         }
         $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
         $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $chain, $this);
@@ -184,8 +185,8 @@ implements PHPTAL_Php_TalesChainReader
     {
         $codewriter = $executor->getCodeWriter();
         $executor->doElse();
-        $attr_str = ($this->_default !== false)
-            ? ' '.$this->_attribute.'='.$codewriter->quoteAttributeValue($this->_default)  // default value
+        $attr_str = ($this->_default_escaped !== false)
+            ? ' '.$this->_attribute.'='.$codewriter->quoteAttributeValue($this->_default_escaped)  // default value
             : '';                                 // do not print attribute
         $codewriter->doSetVar($this->_attkey, "'".str_replace("'",'\\\'',$attr_str)."'");
         $executor->breakChain();

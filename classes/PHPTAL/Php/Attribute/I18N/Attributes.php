@@ -60,18 +60,18 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 // we use it and replace the tag attribute with the result of
                 // the translation
                 $key = str_replace('\'', '\\\'', $key);
-                $this->phpelement->attributes[$attribute] = $this->_getTranslationCode($codewriter,"'$key'");
+                $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,"'$key'"));
             } 
             else if ($this->phpelement->isOverwrittenAttribute($attribute)){
                 $varn = $this->phpelement->getOverwrittenAttributeVarName($attribute);
-                $this->phpelement->attributes[$attribute] = $this->_getTranslationCode($codewriter,$varn);
+                $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,$varn));
             }
             // else if the attribute has a default value
             else if ($this->phpelement->hasAttribute($attribute)){
                 // we use this default value as the translation key
                 $key = $this->phpelement->getAttributeText($attribute, $codewriter->getEncoding());
                 $key = str_replace('\'', '\\\'', $key);
-                $this->phpelement->attributes[$attribute] = $this->_getTranslationCode($codewriter,"'$key'");
+                $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,"'$key'"));
             }
             else {
                 // unable to translate the attribute
@@ -86,7 +86,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 
     private function _getTranslationCode(PHPTAL_Php_CodeWriter $codewriter, $key)
     {
-		$code = '<?php ';
+		$code = '';
 		if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
 			array_shift($m);
 			$m = array_shift($m);
@@ -99,7 +99,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
 		$result = $codewriter->escapeCode(sprintf('$_translator->translate(%s, false)', $key));
-        $code .= 'echo '.$result.'?>';
+        $code .= 'echo '.$result;
 		return $code;
     }
 }

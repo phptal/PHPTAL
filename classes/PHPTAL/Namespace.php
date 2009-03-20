@@ -29,23 +29,18 @@ abstract class PHPTAL_NamespaceAttribute
      * @param $name string The attribute name
      * @param $priority int Attribute execution priority
      */
-    public function __construct($name, $priority)
+    public function __construct($local_name, $priority)
     {
-        $this->_name = $name;
+        $this->local_name = $local_name;
         $this->_priority = $priority;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getLocalName()
     { 
-        return $this->_name; 
-    }
-
-    public function getFullName()
-    {
-        return $this->_namespace->getName() . ':' . $this->_name;
+        return $this->local_name; 
     }
     
     public function getPriority(){ return $this->_priority; }
@@ -57,7 +52,7 @@ abstract class PHPTAL_NamespaceAttribute
         return $this->_namespace->createAttributeHandler($this, $tag, $expression);
     }
     
-    private $_name;         /* Attribute name without the namespace: prefix */
+    private $local_name;         /* Attribute name without the namespace: prefix */
     private $_priority;     /* [0 - 1000] */
     private $_namespace;    /* PHPTAL_Namespace */
 }
@@ -67,10 +62,6 @@ abstract class PHPTAL_NamespaceAttribute
  */
 class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute 
 {
-    public function __construct($name, $priority)
-    {
-        parent::__construct($name, $priority);
-    }
 }
 
 /** 
@@ -78,10 +69,6 @@ class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
  */
 class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute 
 {
-    public function __construct($name, $priority)
-    {
-        parent::__construct($name, $priority);
-    }
 }
 
 /** 
@@ -89,30 +76,30 @@ class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
  */
 class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute 
 {
-    public function __construct($name, $priority)
-    {
-        parent::__construct($name, $priority);
-    }
 }
 
 /** 
  * @package phptal
  */
 abstract class PHPTAL_Namespace
-{
-    public $xmlns;
-    public $name;
+{   
+    private $prefix, $namespace_uri;
 
-    public function __construct($name, $xmlns)
+    public function __construct($prefix, $namespace_uri)
     {
         $this->_attributes = array();
-        $this->name = $name;
-        $this->xmlns = $xmlns;
+        $this->prefix = $prefix;
+        $this->namespace_uri = $namespace_uri;
     }
 
-    public function getName()
+    public function getPrefix()
     {
-        return $this->name;
+        return $this->prefix;
+    }
+
+    public function getNamespaceURI()
+    {
+        return $this->namespace_uri;
     }
 
     public function hasAttribute($attributeName)
@@ -128,7 +115,7 @@ abstract class PHPTAL_Namespace
     public function addAttribute(PHPTAL_NamespaceAttribute $attribute)
     {
         $attribute->setNamespace($this);
-        $this->_attributes[strtolower($attribute->getName())] = $attribute;
+        $this->_attributes[strtolower($attribute->getLocalName())] = $attribute;
     }
 
     public function getAttributes()
@@ -148,10 +135,10 @@ class PHPTAL_BuiltinNamespace extends PHPTAL_Namespace
 {
     public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_Php_Element $tag, $expression)
     {
-        $name = $att->getName();
+        $name = $att->getLocalName();
         $name = str_replace('-', '', $name);
         
-        $class = 'PHPTAL_Php_Attribute_'.$this->getName().'_'.$name;
+        $class = 'PHPTAL_Php_Attribute_'.$this->getPrefix().'_'.$name;
         $result = new $class($tag, $expression);
         return $result;
     }

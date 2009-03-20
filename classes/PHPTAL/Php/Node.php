@@ -124,7 +124,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     private $name;
     protected $qualifiedName;
-    public $attributes = array();
+    private $attributes = array();
     protected $talAttributes = array();
     protected $overwrittenAttributes = array();
     protected $replaceAttributes = array();
@@ -179,6 +179,19 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $this->generateSurroundFoot($codewriter);
     }
 
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
+    
+    /**
+     * use PHP code to generate attribute's value. The code must use echo!
+     */
+    public function setAttributePHPCode($qname, $code)
+    {
+        $this->attributes[$qname] = '<?php '.$code.' ?>';
+    }
+
     /** Returns true if the element contains specified PHPTAL attribute. */
     public function hasAttribute($name)
     {
@@ -225,7 +238,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     public function hasRealAttributes()
     {
-        return ((count($this->attributes) - count($this->talAttributes)) > 0) || $this->hasAttribute('tal:attributes');
+        return ((count($this->getAttributes()) - count($this->talAttributes)) > 0) || $this->hasAttribute('tal:attributes');
     }
 
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
@@ -322,7 +335,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         //
 
         $fullreplaceRx = PHPTAL_Php_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
-        foreach ($this->attributes as $key=>$value) {
+        foreach ($this->getAttributes() as $key=>$value) {
             if (preg_match($fullreplaceRx, $value)){
                 $codewriter->pushHtml($value);
             }
@@ -369,7 +382,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             $this->headFootDisabled = true;
             list(,$ns) = $m;
             $attributes = array();
-            foreach ($this->attributes as $key=>$value) {
+            foreach ($this->getAttributes() as $key=>$value) {
                 if ($this->xmlns->isPhpTalAttribute("$ns:$key")) {
                     $attributes["$ns:$key"] = $value;
                 }
@@ -385,7 +398,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     {
         $attributes = array();
         $this->talAttributes = array();
-        foreach ($this->attributes as $key=>$value) {
+        foreach ($this->getAttributes() as $key=>$value) {
             // remove handled xml namespaces
             if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($key,$value)){
             }

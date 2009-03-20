@@ -177,11 +177,11 @@ class PHPTAL_Dom_Defs
      */
     public function registerNamespace(PHPTAL_Namespace $ns)
     {
-        $nsname = strtolower($ns->name);
-        $this->_namespaces[$nsname] = $ns;
-        $this->_xmlns[$ns->xmlns] = $nsname;
+        $prefix = strtolower($ns->getPrefix());
+        $this->_namespaces[$prefix] = $ns;
+        $this->_xmlns[$ns->getNamespaceURI()] = $prefix;
         foreach ($ns->getAttributes() as $name => $attribute){
-            $key = $nsname.':'.strtolower($name);
+            $key = $prefix.':'.strtolower($name);
             $this->_dictionary[$key] = $attribute;
         }
     }

@@ -120,7 +120,7 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
     public function hasAttribute($name)
     {
         $ns = $this->getNodePrefix();
-        foreach ($this->attributes as $key=>$value){
+        foreach ($this->getAttributes() as $key=>$value){
             if ($this->_xmlns->unAliasAttribute($key) == $name){
                 return true;
             }
@@ -136,7 +136,7 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
     {
         $ns = $this->getNodePrefix();
         
-        foreach ($this->attributes as $key=>$value){
+        foreach ($this->getAttributes() as $key=>$value){
             if ($this->_xmlns->unAliasAttribute($key) == $name){
                 return $value;
             }
@@ -154,6 +154,7 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
         
         return html_entity_decode($v,ENT_QUOTES,$encoding);
     }
+    
     
     
     public function getAttributes()

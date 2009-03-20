@@ -96,5 +96,3 @@ class I18NAttributesTest extends PHPTAL_TestCase
 		$this->assertEquals($exp, $res);
 	}
 }
-
-?>

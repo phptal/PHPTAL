@@ -30,20 +30,19 @@ class PHPTAL_Context
     
     public $__line = false;
     public $__file = false;
-    public $__repeat;
+    public $repeat;
     public $__xmlDeclaration;
     public $__docType;
-    public $__nothrow;
-    public $__translator;
+    private $__nothrow;
 
     public function __construct()
     {
-        $this->__repeat = new StdClass();
+        $this->repeat = new StdClass();
     }
 
     public function __clone()
     {
-        $this->__repeat = clone($this->__repeat);
+        $this->repeat = clone($this->repeat);
     }
 
 	public function setParent(PHPTAL_Context $parent)
@@ -181,9 +180,6 @@ class PHPTAL_Context
      */
     public function __get($varname)
     {
-        if ($varname == 'repeat')
-            return $this->__repeat;
-
         if (isset($this->$varname)){
             return $this->$varname;
         }
