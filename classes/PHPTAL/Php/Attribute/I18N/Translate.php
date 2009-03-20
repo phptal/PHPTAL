@@ -46,10 +46,10 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
     {
     }
 
-    private function _getTranslationKey($tag, $preserve_tags, $encoding)
+    private function _getTranslationKey(PHPTAL_Php_Node $tag, $preserve_tags, $encoding)
     {
         $result = '';
-        foreach ($tag->children as $child){
+        foreach ($tag->childNodes as $child){
             if ($child instanceOf PHPTAL_Php_Text){
 				if ($preserve_tags)
 				{
@@ -86,9 +86,9 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         return $result;
     }
 
-    private function _prepareNames(PHPTAL_Php_CodeWriter $codewriter, $tag)
+    private function _prepareNames(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Php_Node $tag)
     {
-        foreach ($tag->children as $child){
+        foreach ($tag->childNodes as $child){
             if ($child instanceOf PHPTAL_Php_Element){
                 if ($child->hasAttribute('i18n:name')){
                     $child->generate($codewriter);

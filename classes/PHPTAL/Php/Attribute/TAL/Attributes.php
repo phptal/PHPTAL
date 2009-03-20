@@ -107,7 +107,7 @@ implements PHPTAL_Php_TalesChainReader
         else
             $value = $codewriter->escapeCode($code);
         $codewriter->doSetVar($attkey, $value);
-        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $attkey);        
+        $this->phpelement->overwriteAttributeWithPhpVariable($attribute, $attkey);        
     }
 
     /**
@@ -129,7 +129,7 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter->doSetVar($attkey, "''");
         $codewriter->doEnd();
             
-        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $attkey);
+        $this->phpelement->overwriteAttributeWithPhpVariable($attribute, $attkey);
     }
 
     private $_default_escaped;
@@ -142,7 +142,7 @@ implements PHPTAL_Php_TalesChainReader
         }
         $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
         $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $chain, $this);
-        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $this->_attkey);
+        $this->phpelement->overwriteAttributeWithPhpVariable($attribute, $this->_attkey);
     }
 
     private function prepareBooleanAttribute(PHPTAL_Php_CodeWriter $codewriter, $attribute, $code)
@@ -162,7 +162,7 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter->doElse();
         $codewriter->doSetVar($attkey, '\'\'');
         $codewriter->doEnd();
-        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $attkey);
+        $this->phpelement->overwriteAttributeWithPhpVariable($attribute, $attkey);
     }
 
     private function getVarName($attribute)

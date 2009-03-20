@@ -188,18 +188,6 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
         return $this->attribute_nodes;
     }
     
-    
-    public function getEscapedAttributeValuesByQualifiedName()
-    {
-        $tmp = array();
-        foreach($this->attribute_nodes as $attr)
-        {
-            assert('$attr instanceof PHPTAL_DOMAttr');
-            $tmp[$attr->getQualifiedName()] = $attr->getValueEscaped();
-        }
-        return $tmp;
-    }
-
     /** 
      * Returns true if this element or one of its PHPTAL attributes has some
      * content to print (an empty text node child does not count).

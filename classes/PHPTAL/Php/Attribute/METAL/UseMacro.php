@@ -53,7 +53,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     {
         $this->pushSlots($codewriter);
         
-        foreach ($this->phpelement->children as $child){
+        foreach ($this->phpelement->childNodes as $child){
             $this->generateFillSlots($codewriter,$child);
         }
 
@@ -106,7 +106,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         }
     }
     
-    private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, $tag)
+    private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Php_Node $tag)
     {
         if (false == ($tag instanceOf PHPTAL_Php_Tree)) 
             return;
@@ -120,7 +120,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         }
         
         // recurse
-        foreach ($tag->children as $child){
+        foreach ($tag->childNodes as $child){
             $this->generateFillSlots($codewriter,$child);
         }
     }

@@ -1,4 +1,5 @@
 <div>
-   <span tal:define="global x a/${foo}/b/${bar}" test="bla" />
+   <span tal:define="global x a/${foo}/b/${bar}" tal:comment="bla" />
+   <span tal:define="global x a/${foo}/b/${bar}" />
    ${x}
 </div>

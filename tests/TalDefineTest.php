@@ -21,6 +21,7 @@
 //  
 
 require_once 'config.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Define.php';
 
@@ -217,6 +218,58 @@ class TalDefineTest extends PHPTAL_TestCase
 
         $this->assertEquals($tal->execute(), '<div class="blank_bg"></div>');
     }
+        
+    function testGlobalDefineEmptySpan()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div>
+           <span tal:define="global x \'ok\'" />
+           ${x}
+        </div>
+        ');
+        $res = trim_string($tpl->execute());
+        $this->assertEquals(trim_string('<div> ok </div>'), $res);
+    }
+    
+    function testGlobalDefineEmptySpan2()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<div>
+           <span tal:define="global x \'ok\'" tal:comment="ignoreme" />
+           ${x}
+        </div>
+        ');
+        $res = trim_string($tpl->execute());
+        $this->assertEquals(trim_string('<div> ok </div>'), $res);
+    }
+    
+        
+    function testGlobalDefineNonEmptySpan()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setOutputMode(PHPTAL::XML);
+        
+        $tpl->setSource('<div>
+           <span tal:define="global x \'ok\'" class="foo" />
+           ${x}
+        </div>
+        ');
+        $res = trim_string($tpl->execute());
+        $this->assertEquals(trim_string('<div> <span class="foo"/> ok </div>'), $res);
+    }
+    
+    function testGlobalDefineNonEmptySpan2()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setOutputMode(PHPTAL::XML);
+        
+        $tpl->setSource('<div>
+           <span tal:define="global x \'ok\'" tal:attributes="class \'foo\'" />
+           ${x}
+        </div>
+        ');
+        $res = trim_string($tpl->execute());
+        $this->assertEquals(trim_string('<div> <span class="foo"/> ok </div>'), $res);
+    }
+    
 }
-
-?>
