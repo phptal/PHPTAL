@@ -65,10 +65,11 @@ class StupidCacheTrigger implements PHPTAL_Trigger
     }
 }
 
-class TriggerTest extends PHPUnit_Framework_TestCase
+class TriggerTest extends PHPTAL_TestCase
 {
     public function setUp()
     {
+        parent::setUp();
         if (file_exists('trigger.10')) unlink('trigger.10');
         if (file_exists('trigger.11')) unlink('trigger.11');
     }

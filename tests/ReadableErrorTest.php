@@ -2,7 +2,7 @@
 
 require_once 'config.php';
 
-class ReadableErrorTest extends PHPUnit_Framework_TestCase
+class ReadableErrorTest extends PHPTAL_TestCase
 {
     function testSimple()
     { 

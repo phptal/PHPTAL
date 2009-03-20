@@ -32,6 +32,15 @@ define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARAT
 require_once "config.php";
 require_once PHPTAL_DIR.'PHPTAL.php';
 
+class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
+{
+    function setUp()
+    {
+        //echo $this->getName();
+        parent::setUp();
+    }
+}
+
 if (isset($argv) && count($argv) >= 2){
     array_shift($argv);
     foreach ($argv as $entry){

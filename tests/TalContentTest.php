@@ -29,7 +29,7 @@ class DummyToStringObject {
     private $_value;
 }
 
-class TalContentTest extends PHPUnit_Framework_TestCase 
+class TalContentTest extends PHPTAL_TestCase 
 {
     function testSimple()
     {

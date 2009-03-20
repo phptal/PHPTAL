@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class CommentTest extends PHPUnit_Framework_TestCase
+class CommentTest extends PHPTAL_TestCase
 {
     function testSimple()
     {

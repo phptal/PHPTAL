@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class TalRepeatTest extends PHPUnit_Framework_TestCase 
+class TalRepeatTest extends PHPTAL_TestCase 
 {
     function testArrayRepeat()
     {

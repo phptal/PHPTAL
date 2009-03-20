@@ -24,12 +24,19 @@ require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Define.php';
 
-class TalDefineTest extends PHPUnit_Framework_TestCase 
+
+if (!class_exists('DummyPhpNode')) {
+    class DummyPhpNode extends PHPTAL_Php_Element {
+        function __construct() {}
+        function generate(PHPTAL_Php_CodeWriter $codewriter) {}
+    }
+}
+
+class TalDefineTest extends PHPTAL_TestCase 
 {
     function testExpressionParser()
     {
-        $att = new PHPTAL_Php_Attribute_Tal_Define();
-        $att->expression = 'a b';
+        $att = new PHPTAL_Php_Attribute_Tal_Define(new DummyPhpNode(),'a b');
         
         list($defineScope, $defineVar, $expression) = $att->parseExpression('local a_234z b');
         $this->assertEquals('local', $defineScope);

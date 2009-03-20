@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class ContentEncodingTest extends PHPUnit_Framework_TestCase
+class ContentEncodingTest extends PHPTAL_TestCase
 {
     function testSimple()
     {

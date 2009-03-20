@@ -14,24 +14,24 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_I18N_Source extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // ensure that a sources stack exists or create it
-        $this->tag->generator->doIf('!isset($__i18n_sources)');
-        $this->tag->generator->pushCode('$__i18n_sources = array()');
-        $this->tag->generator->end();
+        $codewriter->doIf('!isset($__i18n_sources)');
+        $codewriter->pushCode('$__i18n_sources = array()');
+        $codewriter->end();
 
         // push current source and use new one
         $code = '$__i18n_sources[] = $_translator->setSource(\'%s\')';
         $code = sprintf($code, $this->expression);
-        $this->tag->generator->pushCode($code);
+        $codewriter->pushCode($code);
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore source
         $code = '$_translator->setSource(array_pop($__i18n_sources))';
-        $this->tag->generator->pushCode($code);
+        $codewriter->pushCode($code);
     }
 }
 

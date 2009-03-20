@@ -45,7 +45,7 @@ class PhptalPathTest_DummyGetClass
 }
 */
 
-class PhptalPathTest extends PHPUnit_Framework_TestCase
+class PhptalPathTest extends PHPTAL_TestCase
 {
     function testZeroIndex()
     {

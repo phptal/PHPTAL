@@ -23,17 +23,17 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->pushCode('ob_start()');
+        $codewriter->pushCode('ob_start()');
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
         $code = '$_translator->setVar(\'%s\', ob_get_contents())';
         $code = sprintf($code, $this->expression);
-        $this->tag->generator->pushCode($code);
-        $this->tag->generator->pushCode('ob_end_clean()');
+        $codewriter->pushCode($code);
+        $codewriter->pushCode('ob_end_clean()');
     }
 }
 

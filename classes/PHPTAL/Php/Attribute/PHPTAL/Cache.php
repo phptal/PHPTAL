@@ -42,7 +42,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 {  
     private $cache_tag;
 
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/',$this->expression, $matches))
             throw new PHPTAL_ParserException("Cache attribute syntax error: ".$this->expression);
@@ -56,7 +56,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
             case 'm': $cache_len .= '*60'; /* no break */
         }
 
-        $this->cache_tag = '"'.addslashes( $this->tag->node->getName() . ':' . $this->tag->node->getSourceLine()).'"';
+        $this->cache_tag = '"'.addslashes( $this->phpelement->node->getQualifiedName() . ':' . $this->phpelement->node->getSourceLine()).'"';
         
         $cache_per_expression = isset($matches[3])?trim($matches[3]):NULL;
         if ($cache_per_expression == 'url')
@@ -66,27 +66,27 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         else if ($cache_per_expression == 'nothing') {  }
         else if ($cache_per_expression)
         {
-             $code = $this->tag->generator->evaluateExpression($cache_per_expression);
+             $code = $codewriter->evaluateExpression($cache_per_expression);
 
              if (is_array($code)) { throw new PHPTAL_ParserException("Chained expressions in per-cache directive are not supported"); }
             
              $old_cache_tag = $this->cache_tag;
              $this->cache_tag = '$ctx->cache_tag_';
-             $this->tag->generator->doSetVar($this->cache_tag, '('.$code.')."@".' . $old_cache_tag );
+             $codewriter->doSetVar($this->cache_tag, '('.$code.')."@".' . $old_cache_tag );
         }
     
 	    $cond = '!file_exists(__FILE__.md5('.$this->cache_tag.')) || time() - '.$cache_len.' >= @filemtime(__FILE__.md5('.$this->cache_tag.'))';
 
-        $this->tag->generator->doIf($cond);
-        $this->tag->generator->doEval('ob_start()');
+        $codewriter->doIf($cond);
+        $codewriter->doEval('ob_start()');
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->doEval('file_put_contents(__FILE__.md5('.$this->cache_tag.'), ob_get_flush())');
-        $this->tag->generator->doElse();
-        $this->tag->generator->doEval('readfile(__FILE__.md5('.$this->cache_tag.'))');
-        $this->tag->generator->doEnd();
+        $codewriter->doEval('file_put_contents(__FILE__.md5('.$this->cache_tag.'), ob_get_flush())');
+        $codewriter->doElse();
+        $codewriter->doEval('readfile(__FILE__.md5('.$this->cache_tag.'))');
+        $codewriter->doEnd();
     }
 }
 

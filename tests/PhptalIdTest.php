@@ -50,7 +50,7 @@ class MyTrigger implements PHPTAL_Trigger
     }
 }
 
-class PhptalIdTest extends PHPUnit_Framework_TestCase
+class PhptalIdTest extends PHPTAL_TestCase
 {
     function test01()
     {

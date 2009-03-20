@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class DoctypeTest extends PHPUnit_Framework_TestCase
+class DoctypeTest extends PHPTAL_TestCase
 {
 	function testSimple()
 	{

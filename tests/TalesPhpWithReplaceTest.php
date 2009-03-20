@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class TalesPhpWithReplaceTest extends PHPUnit_Framework_TestCase
+class TalesPhpWithReplaceTest extends PHPTAL_TestCase
 {
     function testIt()
     {

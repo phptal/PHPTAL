@@ -30,7 +30,7 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-abstract class PHPTAL_Dom_Node
+abstract class PHPTAL_DOMNode
 {
     public function __construct()
     {
@@ -62,30 +62,20 @@ abstract class PHPTAL_Dom_Node
  * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_Tree extends PHPTAL_Dom_Node
+class PHPTAL_Dom_Tree extends PHPTAL_DOMNode
 {
     public function __construct()
     {
         parent::__construct();
-        $this->_children = array();
+        $this->childNodes = array();
     }
 
-    public function addChild(PHPTAL_Dom_Node $node)
+    public function appendChild(PHPTAL_DOMNode $node)
     {
-        array_push($this->_children, $node);
+        $this->childNodes[] = $node;
     }
     
-    public function &getChildren()
-    {
-        return $this->_children;
-    }
-
-    public function clearChildren()
-    {
-        $this->_children = array();
-    }
-    
-    protected $_children;
+    public $childNodes;
 }
 
 /**
@@ -97,16 +87,16 @@ class PHPTAL_Dom_Tree extends PHPTAL_Dom_Node
  * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
+class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
 {
-    private $name;
-    public $attributes = array();
+    private $qualifiedName;
+    private $attributes = array();
 
-    public function __construct($name, $attributes)
+    public function __construct($qualifiedName, $attributes)
     {
-        if (!preg_match('/^[a-z_:][a-z0-9._:\x80-\xff-]*$/i',$name)) throw new PHPTAL_ParserException("Invalid element name '$name'");
+        if (!preg_match('/^[a-z_:][a-z0-9._:\x80-\xff-]*$/i',$qualifiedName)) throw new PHPTAL_ParserException("Invalid element name '$qualifiedName'");
         parent::__construct();
-        $this->name = $name;
+        $this->qualifiedName = $qualifiedName;
         $this->attributes = $attributes;
     }
 
@@ -116,9 +106,9 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
         $this->xmlns = $state;
     }
 
-    public function getName()
+    public function getQualifiedName()
     {
-        return $this->name;
+        return $this->qualifiedName;
     }
 
     public function getXmlnsState()
@@ -142,7 +132,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
     }
 
     /** Returns HTML-escaped the value of specified PHPTAL attribute. */
-    public function getAttribute($name)
+    public function getAttributeEscaped($name)
     {
         $ns = $this->getNodePrefix();
         
@@ -160,11 +150,16 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
     /** Returns textual (unescaped) value of specified PHPTAL attribute. */
     public function getAttributeText($name, $encoding)
     {
-        $v = $this->getAttribute($name); if ($v === false) return false;
+        $v = $this->getAttributeEscaped($name); if ($v === false) return false;
         
         return html_entity_decode($v,ENT_QUOTES,$encoding);
     }
     
+    
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
 
     /** 
      * Returns true if this element or one of its PHPTAL attributes has some
@@ -172,12 +167,12 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
      */
     public function hasRealContent()
     {
-        if (count($this->_children) == 0)
+        if (count($this->childNodes) == 0)
             return false;
 
-        if (count($this->_children) == 1){
-            $child = $this->_children[0];
-            if ($child instanceOf PHPTAL_Dom_Text && $child->getValue() == ''){
+        if (count($this->childNodes) == 1){
+            $child = $this->childNodes[0];
+            if ($child instanceOf PHPTAL_DOMText && $child->getValue() == ''){
                 return false;
             }
         }
@@ -188,7 +183,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
     private function getNodePrefix()
     {
         $result = false;
-        if (preg_match('/^(.*?):block$/', $this->name, $m)){
+        if (preg_match('/^(.*?):block$/', $this->qualifiedName, $m)){
             list(,$result) = $m;
         }
         return $result;
@@ -196,7 +191,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
     
     private function hasContent()
     {
-        return count($this->_children) > 0;
+        return count($this->childNodes) > 0;
     }
 
     /** 
@@ -209,7 +204,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Tree
 /**
  * @package phptal.dom
  */
-class PHPTAL_Dom_ValueNode extends PHPTAL_Dom_Node
+class PHPTAL_Dom_ValueNode extends PHPTAL_DOMNode
 {
     public function __construct($data)
     {
@@ -228,7 +223,7 @@ class PHPTAL_Dom_ValueNode extends PHPTAL_Dom_Node
  * Document text data representation.
  * @package phptal.dom
  */
-class PHPTAL_Dom_Text extends PHPTAL_Dom_ValueNode{}
+class PHPTAL_DOMText extends PHPTAL_Dom_ValueNode{}
 
 /**
  * Preprocessor, etc... representation.
@@ -236,13 +231,13 @@ class PHPTAL_Dom_Text extends PHPTAL_Dom_ValueNode{}
  * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_Specific extends PHPTAL_Dom_ValueNode {}
+class PHPTAL_DOMSpecific extends PHPTAL_Dom_ValueNode {}
 
 /**
  * Comment nodes.
  * @package phptal.dom
  */
-class PHPTAL_Dom_Comment extends PHPTAL_Dom_ValueNode {}
+class PHPTAL_DOMComment extends PHPTAL_Dom_ValueNode {}
 
 /**
  * Document doctype representation.
@@ -250,7 +245,7 @@ class PHPTAL_Dom_Comment extends PHPTAL_Dom_ValueNode {}
  * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_Doctype extends PHPTAL_Dom_ValueNode {}
+class PHPTAL_DOMDocumentType extends PHPTAL_Dom_ValueNode {}
 
 /**
  * XML declaration node.
@@ -258,6 +253,6 @@ class PHPTAL_Dom_Doctype extends PHPTAL_Dom_ValueNode {}
  * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_ValueNode {}
+class PHPTAL_DOMXmlDeclaration extends PHPTAL_Dom_ValueNode {}
 
 ?>

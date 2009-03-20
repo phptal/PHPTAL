@@ -60,15 +60,15 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->pushCode('ob_start()');
+        $codewriter->pushCode('ob_start()');
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
         $code = '$ctx->fillSlot("'.$this->expression.'", ob_get_clean())';
-        $this->tag->generator->pushCode($code);
+        $codewriter->pushCode($code);
     }
 }
 

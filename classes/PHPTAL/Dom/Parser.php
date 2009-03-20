@@ -85,24 +85,24 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 
     public function onDocType($doctype)
     {
-        $this->pushNode(new PHPTAL_Dom_DocType($doctype));
+        $this->pushNode(new PHPTAL_DOMDocumentType($doctype));
     }
 
     public function onXmlDecl($decl)
     {
-        $this->pushNode(new PHPTAL_Dom_XmlDeclaration($decl));
+        $this->pushNode(new PHPTAL_DOMXmlDeclaration($decl));
     }
     
     public function onComment($data)
     {
         if ($this->_stripComments) 
             return;
-        $this->pushNode(new PHPTAL_Dom_Comment($data));
+        $this->pushNode(new PHPTAL_DOMComment($data));
     }
     
     public function onSpecific($data)
     {
-        $this->pushNode(new PHPTAL_Dom_Specific($data));
+        $this->pushNode(new PHPTAL_DOMSpecific($data));
     }
 
     public function onElementStart($name, $attributes)
@@ -115,33 +115,33 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
             }
         }
         
-        $node = new PHPTAL_Dom_Element($name, $attributes);
+        $node = new PHPTAL_DOMElement($name, $attributes);
         $node->setXmlnsState($this->getXmlnsState());
         $this->pushNode($node);
-        array_push($this->_stack, $this->_current);
+        $this->_stack[] =  $this->_current;
         $this->_current = $node;
     }
     
     public function onElementData($data)
     {
-        $this->pushNode(new PHPTAL_Dom_Text($data));
+        $this->pushNode(new PHPTAL_DOMText($data));
     }
 
     public function onElementClose($name)
     {
-		if (!$this->_current instanceof PHPTAL_Dom_Element) $this->raiseError("Found closing tag for '$name' where there are no open tags");			
-        if ($this->_current->getName() != $name) {
-            $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getName(), $name);
+		if (!$this->_current instanceof PHPTAL_DOMElement) $this->raiseError("Found closing tag for '$name' where there are no open tags");			
+        if ($this->_current->getQualifiedName() != $name) {
+            $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getQualifiedName(), $name);
         }
         $this->_current = array_pop($this->_stack);
-        if ($this->_current instanceOf PHPTAL_Dom_Element)
+        if ($this->_current instanceOf PHPTAL_DOMElement)
             $this->_xmlns = $this->_current->getXmlnsState();
     }
 
-    private function pushNode(PHPTAL_Dom_Node $node)
+    private function pushNode(PHPTAL_DOMNode $node)
     {
         $node->setSource($this->getSourceFile(), $this->getLineNumber());
-        $this->_current->addChild($node);
+        $this->_current->appendChild($node);
     }
     
     private $_tree;    /* PHPTAL_Dom_Parser_NodeTree */

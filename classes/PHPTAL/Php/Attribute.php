@@ -38,17 +38,22 @@ abstract class PHPTAL_Php_Attribute
     const ECHO_TEXT = 'text';
     const ECHO_STRUCTURE = 'structure';
     
-    /** Attribute name (ie: 'tal:content'). */
-    public $name;
     /** Attribute value specified by the element. */
-    public $expression;
+    protected $expression;
+    
     /** Element using this attribute (xml node). */
-    public $tag;
+    protected $phpelement;
 
     /** Called before element printing. */
-    public abstract function start();
+    public abstract function start(PHPTAL_Php_CodeWriter $codewriter);
     /** Called after element printing. */
-    public abstract function end();
+    public abstract function end(PHPTAL_Php_CodeWriter $codewriter);
+
+    function __construct(PHPTAL_Php_Element $phpelement, $expression)
+    {
+        $this->expression = $expression;
+        $this->phpelement = $phpelement; 
+    }
 
     /**
      * Remove structure|text keyword from expression and stores it for later
@@ -72,12 +77,12 @@ abstract class PHPTAL_Php_Attribute
         return trim($expression);
     }
 
-    protected function doEcho($code)
+    protected function doEchoAttribute(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
         if ($this->_echoType == self::ECHO_TEXT)
-            $this->tag->generator->doEcho($code);
+            $codewriter->doEcho($code);
         else
-            $this->tag->generator->doEchoRaw($code);
+            $codewriter->doEchoRaw($code);
     }
 
     protected function parseSetExpression($exp)
@@ -95,4 +100,3 @@ abstract class PHPTAL_Php_Attribute
     protected $_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;
 }
 
-?>

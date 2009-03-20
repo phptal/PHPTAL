@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class XHTMLModeTest extends PHPUnit_Framework_TestCase
+class XHTMLModeTest extends PHPTAL_TestCase
 {
     function testEmpty()
     {

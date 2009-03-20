@@ -18,31 +18,36 @@ class PHPTAL_Php_TalesChainExecutor
     const CHAIN_BREAK = 1;
     const CHAIN_CONT  = 2;
 
-    public function __construct($generator, $chain, $reader)
+    public function __construct(PHPTAL_Php_CodeWriter $codewriter, $chain, $reader)
     {
         assert(is_array($chain));
         $this->_chain = $chain;
         $this->_chainStarted = false;
-        $this->_chainGenerator = $generator;
+        $this->codewriter = $codewriter;
         $this->_reader = $reader;
         $this->_executeChain();
+    }
+    
+    public function getCodeWriter()
+    {
+        return $this->codewriter;
     }
     
     public function doIf($condition)
     {
         if ($this->_chainStarted == false){
             $this->_chainStarted = true;
-            $this->_chainGenerator->doIf($condition);
+            $this->codewriter->doIf($condition);
         }
         else {
-            $this->_chainGenerator->doElseIf($condition);
+            $this->codewriter->doElseIf($condition);
         }
     }
 
     public function doElse()
     {
         if ($this->_chainStarted){
-            $this->_chainGenerator->doElse();
+            $this->codewriter->doElse();
         }
     }
 
@@ -58,7 +63,7 @@ class PHPTAL_Php_TalesChainExecutor
 
     private function _executeChain()
     {
-        $this->_chainGenerator->noThrow(true);
+        $this->codewriter->noThrow(true);
         
         end($this->_chain); $lastkey = key($this->_chain);
         
@@ -86,14 +91,14 @@ class PHPTAL_Php_TalesChainExecutor
                     continue;
             }
         }
-        $this->_chainGenerator->doEnd();
-        $this->_chainGenerator->noThrow(false);
+        $this->codewriter->doEnd();
+        $this->codewriter->noThrow(false);
     }
     
     private $_state = 0;
     private $_chain;
     private $_chainStarted = false;
-    private $_chainGenerator = null;
+    private $codewriter = null;
 }
 
 ?>

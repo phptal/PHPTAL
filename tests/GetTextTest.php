@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/GetTextTranslator.php';
 
-class GetTextTest extends PHPUnit_Framework_TestCase
+class GetTextTest extends PHPTAL_TestCase
 {
     private function getTextTranslator()
     {

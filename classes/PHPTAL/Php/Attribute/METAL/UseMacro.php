@@ -49,38 +49,38 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         'tal:define',
     );
     
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->pushSlots();
+        $this->pushSlots($codewriter);
         
-        foreach ($this->tag->children as $child){
-            $this->generateFillSlots($child);
+        foreach ($this->phpelement->children as $child){
+            $this->generateFillSlots($codewriter,$child);
         }
 
         $macroname = strtr($this->expression,'-','_');
 
         // local macro (no filename specified) and non dynamic macro name
         // can be called directly if it's a known function (just generated or seen in previous compilation)
-        if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $this->tag->generator->functionExists($macroname)) 
+        if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $codewriter->functionExists($macroname)) 
         {
-            $code = $this->tag->generator->getFunctionPrefix() . $macroname . '($_thistpl, $tpl)';
-            $this->tag->generator->pushCode($code);
+            $code = $codewriter->getFunctionPrefix() . $macroname . '($_thistpl, $tpl)';
+            $codewriter->pushCode($code);
         }
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
         else 
         {
-            $code = $this->tag->generator->interpolateTalesVarsInString($this->expression);
-            $this->tag->generator->pushHtml('<?php $tpl->_executeMacroOfTempalte('.$code.', $_thistpl); ?>');
+            $code = $codewriter->interpolateTalesVarsInString($this->expression);
+            $codewriter->pushHtml('<?php $tpl->_executeMacroOfTempalte('.$code.', $_thistpl); ?>');
         }
 
-        $this->popSlots();
+        $this->popSlots($codewriter);
     }
     
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
-    private function pushSlots()
+    private function pushSlots(PHPTAL_Php_CodeWriter $codewriter)
     {
         // reset template slots on each macro call ?
         // 
@@ -93,20 +93,20 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // we may define a member.html macro which use the design.html macro
         // for the general layout, fill the menu slot and let caller templates
         // fill the parent content slot without interfering. 
-        if (!$this->tag->hasAttribute('metal:define-macro')){
-            $this->tag->generator->pushCode('$ctx->pushSlots()');
+        if (!$this->phpelement->hasAttribute('metal:define-macro')){
+            $codewriter->pushCode('$ctx->pushSlots()');
         }
     }
 
-    private function popSlots()
+    private function popSlots(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore slots if not inherited macro
-        if (!$this->tag->hasAttribute('metal:define-macro')){
-            $this->tag->generator->pushCode('$ctx->popSlots()');
+        if (!$this->phpelement->hasAttribute('metal:define-macro')){
+            $codewriter->pushCode('$ctx->popSlots()');
         }
     }
     
-    private function generateFillSlots($tag)
+    private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, $tag)
     {
         if (false == ($tag instanceOf PHPTAL_Php_Tree)) 
             return;
@@ -114,14 +114,14 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // if the tag contains one of the allowed attribute, we generate it
         foreach (self::$ALLOWED_ATTRIBUTES as $attribute){
             if ($tag->hasAttribute($attribute)){
-                $tag->generate();
+                $tag->generate($codewriter);
                 return;
             }
         }
         
         // recurse
         foreach ($tag->children as $child){
-            $this->generateFillSlots($child);
+            $this->generateFillSlots($codewriter,$child);
         }
     }
 }

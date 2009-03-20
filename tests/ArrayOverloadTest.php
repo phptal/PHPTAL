@@ -25,7 +25,7 @@ require_once 'config.php';
 class MyArray
 {
     public function push($value) {
-        array_push($this->_values, $value);
+        $this->_values[] =  $value;
     }
     
     public function __getAt($index){
@@ -39,7 +39,7 @@ class MyArray
     private $_values = array();
 }
 
-class ArrayOverloadTest extends PHPUnit_Framework_TestCase
+class ArrayOverloadTest extends PHPTAL_TestCase
 {
     function testIt()
     {

@@ -42,7 +42,7 @@ class MyPostFilter2 implements PHPTAL_Filter
     }
 }
 
-class PostFilterTest extends PHPUnit_Framework_TestCase
+class PostFilterTest extends PHPTAL_TestCase
 {
     function testIt()
     {

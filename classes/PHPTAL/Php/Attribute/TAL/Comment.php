@@ -27,12 +27,12 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_TAL_Comment extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->doComment($this->expression);
+        $codewriter->doComment($this->expression);
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 }

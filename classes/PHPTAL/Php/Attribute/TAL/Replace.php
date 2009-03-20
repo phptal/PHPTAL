@@ -46,7 +46,7 @@ implements PHPTAL_Php_TalesChainReader
 {
     const REPLACE_VAR = '$__replace__';
     
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // tal:replace="" => do nothing and ignore node
         if (trim($this->expression) == ""){
@@ -54,11 +54,11 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         $expression = $this->extractEchoType($this->expression);
-        $code = $this->tag->generator->evaluateExpression($expression);
+        $code = $codewriter->evaluateExpression($expression);
 
         // chained expression
         if (is_array($code)){
-            return $this->replaceByChainedExpression($code);
+            return $this->replaceByChainedExpression($codewriter,$code);
         }
 
         // nothing do nothing
@@ -68,21 +68,21 @@ implements PHPTAL_Php_TalesChainReader
 
         // default generate default tag content
         if ($code == PHPTAL_TALES_DEFAULT_KEYWORD) {
-            return $this->generateDefault();
+            return $this->generateDefault($codewriter);
         }
 
         // replace tag with result of expression
-        $this->doEcho($code);
+        $this->doEchoAttribute($codewriter,$code);
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
-    private function replaceByChainedExpression($expArray)
+    private function replaceByChainedExpression(PHPTAL_Php_CodeWriter $codewriter, $expArray)
     {
         $executor = new PHPTAL_Php_TalesChainExecutor(
-            $this->tag->generator, $expArray, $this
+            $codewriter, $expArray, $this
         );
     }
 
@@ -94,23 +94,23 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
-        $this->generateDefault();
+        $this->generateDefault($executor->getCodeWriter());
         $executor->breakChain();
     }
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         $executor->doIf('!phptal_isempty('.self::REPLACE_VAR.' = '.$exp.')');
-        $this->doEcho(self::REPLACE_VAR);
+        $this->doEchoAttribute($executor->getCodeWriter(),self::REPLACE_VAR);
     }
 
-    private function generateDefault()
+    private function generateDefault(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generateSurroundHead();
-        $this->tag->generateHead();
-        $this->tag->generateContent();
-        $this->tag->generateFoot();
-        $this->tag->generateSurroundFoot();
+        $this->phpelement->generateSurroundHead($codewriter);
+        $this->phpelement->generateHead($codewriter);
+        $this->phpelement->generateContent($codewriter);
+        $this->phpelement->generateFoot($codewriter);
+        $this->phpelement->generateSurroundFoot($codewriter);
     }
 }
 

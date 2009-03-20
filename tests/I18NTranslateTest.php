@@ -24,7 +24,7 @@ require_once 'config.php';
 
 require_once 'I18NDummyTranslator.php';
 
-class I18NTranslateTest extends PHPUnit_Framework_TestCase 
+class I18NTranslateTest extends PHPTAL_TestCase 
 {
     function testStringTranslate()
     {

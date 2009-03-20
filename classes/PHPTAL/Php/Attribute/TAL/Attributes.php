@@ -55,100 +55,100 @@ implements PHPTAL_Php_TalesChainReader
     // by a php variable or if only its value is replaced.
     const REGEX_FULL_REPLACE = '/<?php echo \$__ATT_.*? ?>/';
     
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes using ; delimiter
-        $attrs = $this->tag->generator->splitExpression($this->expression);
+        $attrs = $codewriter->splitExpression($this->expression);
         foreach ($attrs as $exp) {
             list($attribute, $expression) = $this->parseSetExpression($exp);
             if ($expression) {
-                $this->prepareAttribute($attribute, $expression);
+                $this->prepareAttribute($codewriter,$attribute, $expression);
             }
         }
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
-    private function prepareAttribute($attribute, $expression)
+    private function prepareAttribute(PHPTAL_Php_CodeWriter $codewriter, $attribute, $expression)
     {
         $code = $this->extractEchoType(trim($expression));
-        $code = $this->tag->generator->evaluateExpression($code);
+        $code = $codewriter->evaluateExpression($code);
 
         // if $code is an array then the attribute value is decided by a
         // tales chained expression
         if (is_array($code)) {
-            return $this->prepareChainedAttribute2($attribute, $code);
+            return $this->prepareChainedAttribute2($codewriter,$attribute, $code);
         }
        
         // XHTML boolean attribute does not appear when empty of false
         if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attribute)) {
-            return $this->prepareBooleanAttribute($attribute, $code);
+            return $this->prepareBooleanAttribute($codewriter,$attribute, $code);
         }
         
         // i18n needs to read replaced value of the attribute, which is not possible if attribute is completely replaced with conditional code
-        if ($this->tag->hasAttribute('i18n:attributes'))
-            $this->prepareAttributeUnconditional($attribute,$code);
+        if ($this->phpelement->hasAttribute('i18n:attributes'))
+            $this->prepareAttributeUnconditional($codewriter,$attribute,$code);
         else
-            $this->prepareAttributeConditional($attribute,$code);
+            $this->prepareAttributeConditional($codewriter,$attribute,$code);
         
     }
    
     /**
      * attribute will be output regardless of its evaluated value. NULL behaves just like "".
      */
-    private function prepareAttributeUnconditional($attribute,$code)
+    private function prepareAttributeUnconditional(PHPTAL_Php_CodeWriter $codewriter,$attribute,$code)
     {
         // regular attribute which value is the evaluation of $code
         $attkey = self::ATT_VALUE_REPLACE . $this->getVarName($attribute);
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
             $value = $code;
         else
-            $value = $this->tag->generator->escapeCode($code);
-        $this->tag->generator->doSetVar($attkey, $value);
-        $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);        
+            $value = $codewriter->escapeCode($code);
+        $codewriter->doSetVar($attkey, $value);
+        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $attkey);        
     }
 
     /**
      * If evaluated value of attribute is NULL, it will not be output at all.
      */
-    private function prepareAttributeConditional($attribute,$code)
+    private function prepareAttributeConditional(PHPTAL_Php_CodeWriter $codewriter,$attribute,$code)
     {
         // regular attribute which value is the evaluation of $code
         $attkey = self::ATT_FULL_REPLACE . $this->getVarName($attribute);
                  
-        $this->tag->generator->doIf("NULL !== ($attkey = ($code))");
+        $codewriter->doIf("NULL !== ($attkey = ($code))");
         
         if ($this->_echoType !== PHPTAL_Php_Attribute::ECHO_STRUCTURE)
-            $this->tag->generator->doSetVar($attkey, "' $attribute=\"'.".$this->tag->generator->escapeCode($attkey).".'\"'");
+            $codewriter->doSetVar($attkey, "' $attribute=\"'.".$codewriter->escapeCode($attkey).".'\"'");
         else
-            $this->tag->generator->doSetVar($attkey, "' $attribute=\"'.$attkey.'\"'");
+            $codewriter->doSetVar($attkey, "' $attribute=\"'.$attkey.'\"'");
             
-        $this->tag->generator->doElse();
-        $this->tag->generator->doSetVar($attkey, "''");
-        $this->tag->generator->doEnd();
+        $codewriter->doElse();
+        $codewriter->doSetVar($attkey, "''");
+        $codewriter->doEnd();
             
-        $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);
+        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $attkey);
     }
 
-    private function prepareChainedAttribute2($attribute, $chain)
+    private function prepareChainedAttribute2(PHPTAL_Php_CodeWriter $codewriter, $attribute, $chain)
     {
         $this->_default = false;
         $this->_attribute = $attribute;
-        if (array_key_exists($attribute, $this->tag->attributes)) {
-            $this->_default = $this->tag->attributes[$attribute];
+        if (array_key_exists($attribute, $this->phpelement->attributes)) {
+            $this->_default = $this->phpelement->attributes[$attribute];
         }
         $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
-        $executor = new PHPTAL_Php_TalesChainExecutor($this->tag->generator, $chain, $this);
-        $this->tag->overwriteAttributeWithPhpValue($attribute, $this->_attkey);
+        $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $chain, $this);
+        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $this->_attkey);
     }
 
-    private function prepareBooleanAttribute($attribute, $code)
+    private function prepareBooleanAttribute(PHPTAL_Php_CodeWriter $codewriter, $attribute, $code)
     {
         $attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);
         
-        if ($this->tag->generator->getOutputMode() === PHPTAL::HTML5)
+        if ($codewriter->getOutputMode() === PHPTAL::HTML5)
         {
             $value  = "' $attribute'";
         }
@@ -156,12 +156,12 @@ implements PHPTAL_Php_TalesChainReader
         {
             $value  = "' $attribute=\"$attribute\"'";
         }
-        $this->tag->generator->doIf($code);
-        $this->tag->generator->doSetVar($attkey, $value);
-        $this->tag->generator->doElse();
-        $this->tag->generator->doSetVar($attkey, '\'\'');
-        $this->tag->generator->doEnd();
-        $this->tag->overwriteAttributeWithPhpValue($attribute, $attkey);
+        $codewriter->doIf($code);
+        $codewriter->doSetVar($attkey, $value);
+        $codewriter->doElse();
+        $codewriter->doSetVar($attkey, '\'\'');
+        $codewriter->doEnd();
+        $this->phpelement->overwriteAttributeWithPhpValue($attribute, $attkey);
     }
 
     private function getVarName($attribute)
@@ -171,8 +171,9 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
+        $codewriter = $executor->getCodeWriter();
         $executor->doElse();
-        $this->tag->generator->doSetVar(
+        $codewriter->doSetVar(
             $this->_attkey, 
             "''"
         );
@@ -181,16 +182,19 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
+        $codewriter = $executor->getCodeWriter();
         $executor->doElse();
         $attr_str = ($this->_default !== false)
-            ? ' '.$this->_attribute.'='.$this->tag->generator->quoteAttributeValue($this->_default)  // default value
+            ? ' '.$this->_attribute.'='.$codewriter->quoteAttributeValue($this->_default)  // default value
             : '';                                 // do not print attribute
-        $this->tag->generator->doSetVar($this->_attkey, "'".str_replace("'",'\\\'',$attr_str)."'");
+        $codewriter->doSetVar($this->_attkey, "'".str_replace("'",'\\\'',$attr_str)."'");
         $executor->breakChain();
     }
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
+        $codewriter = $executor->getCodeWriter();
+        
         if (!$islast) {
         $condition = "!phptal_isempty($this->_attkey = $exp)";
         }
@@ -202,9 +206,9 @@ implements PHPTAL_Php_TalesChainReader
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
             $value = $this->_attkey;
         else
-            $value = $this->tag->generator->escapeCode($this->_attkey);
+            $value = $codewriter->escapeCode($this->_attkey);
 
-        $this->tag->generator->doSetVar($this->_attkey, "' $this->_attribute=\"'.$value.'\"'");
+        $codewriter->doSetVar($this->_attkey, "' $this->_attribute=\"'.$value.'\"'");
     }
 }
 

@@ -32,11 +32,9 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 abstract class PHPTAL_Php_Node
 {
     public $node;
-    public $generator;
 
-    public function __construct(PHPTAL_Php_CodeWriter $generator, PHPTAL_Dom_Node $node)
+    public function __construct(PHPTAL_DOMNode $node)
     {
-        $this->generator = $generator;
         $this->node = $node;
     }
 
@@ -50,7 +48,7 @@ abstract class PHPTAL_Php_Node
         return $this->node->getSourceLine();
     }
 
-    public abstract function generate();
+    public abstract function generate(PHPTAL_Php_CodeWriter $gen);
 }
 
 /**
@@ -63,42 +61,43 @@ class PHPTAL_Php_Tree extends PHPTAL_Php_Node
 {
     public $children;
 
-    public function __construct(PHPTAL_Php_CodeWriter $gen, $node)
+    public function __construct(PHPTAL_DOMNode $node) /* must allow documentfragment */
     {
-        parent::__construct($gen,$node);
+        parent::__construct($node);
         $this->children = array();
-        foreach ($node->getChildren() as $child){
-            if ($child instanceOf PHPTAL_Dom_Element){
-                $gen = new PHPTAL_Php_Element($this->generator, $child);
+        foreach ($node->childNodes as $child)
+        {
+            if ($child instanceOf PHPTAL_DOMElement){
+                $gen = new PHPTAL_Php_Element( $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_Text){
-                $gen = new PHPTAL_Php_Text($this->generator, $child);
+            else if ($child instanceOf PHPTAL_DOMText){
+                $gen = new PHPTAL_Php_Text( $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_Doctype){
-                $gen = new PHPTAL_Php_Doctype($this->generator, $child);
+            else if ($child instanceOf PHPTAL_DOMDocumentType){
+                $gen = new PHPTAL_Php_Doctype( $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_XmlDeclaration){
-                $gen = new PHPTAL_Php_XmlDeclaration($this->generator, $child);
+            else if ($child instanceOf PHPTAL_DOMXmlDeclaration){
+                $gen = new PHPTAL_Php_XmlDeclaration( $child);
             }
-            else if ($child instanceOf PHPTAL_Dom_Specific){
-                $gen = new PHPTAL_Php_Specific($this->generator, $child);
+            else if ($child instanceOf PHPTAL_DOMSpecific){
+                $gen = new PHPTAL_Php_Specific( $child);
             }
-			else if ($child instanceOf PHPTAL_Dom_Comment){
-				$gen = new PHPTAL_Php_Comment($this->generator, $child);
+			else if ($child instanceOf PHPTAL_DOMComment){
+				$gen = new PHPTAL_Php_Comment( $child);
 			}
             else {
                 throw new PHPTAL_TemplateException('Unhandled node class '.get_class($child));
             }
-            array_push($this->children, $gen);
+            $this->children[] = $gen;
         }
     }
 
-    public function generate()
+    public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
         try
         {
         foreach ($this->children as $child){
-            $child->generate();
+            $child->generate($codewriter);
         }
     }
         catch(PHPTAL_TemplateException $e)
@@ -123,23 +122,24 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     const ERR_ATTRIBUTES_CONFLICT =
         "Attribute conflict in '%s' at line '%d', '%s' cannot appear with '%s'";
 
-    public $name;
+    private $name;
+    protected $qualifiedName;
     public $attributes = array();
-    public $talAttributes = array();
-    public $overwrittenAttributes = array();
-    public $replaceAttributes = array();
-    public $contentAttributes = array();
-    public $surroundAttributes = array();
+    protected $talAttributes = array();
+    protected $overwrittenAttributes = array();
+    protected $replaceAttributes = array();
+    protected $contentAttributes = array();
+    protected $surroundAttributes = array();
     public $headFootDisabled = false;
     public $headPrintCondition = false;
     public $footPrintCondition = false;
     public $hidden = false;
 
-    public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
+    public function __construct( PHPTAL_DOMElement $node)
     {
-        parent::__construct($generator, $node);
-        $this->name = $node->getName();
-        $this->attributes = $node->attributes;
+        parent::__construct( $node);
+        $this->qualifiedName = $node->getQualifiedName();
+        $this->attributes = $node->getAttributes();
         $this->xmlns = $node->getXmlnsState();
         $this->prepare();
     }
@@ -151,32 +151,32 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $this->orderTalAttributes();
     }
 
-    public function generate()
+    public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if ($this->generator->isDebugOn()){
-            $this->generator->pushCode('$ctx->__line = '.$this->getSourceLine());
-            $this->generator->doComment('tag "'.$this->name.'" from line '.$this->getSourceLine());
+        if ($codewriter->isDebugOn()){
+            $codewriter->pushCode('$ctx->__line = '.$this->getSourceLine());
+            $codewriter->doComment('tag "'.$this->qualifiedName.'" from line '.$this->getSourceLine());
         }
 
 
         if (count($this->replaceAttributes) > 0) {
-            $this->generateSurroundHead();
+            $this->generateSurroundHead($codewriter);
             foreach ($this->replaceAttributes as $att) {
-                $att->start();
-                $att->end();
+                $att->start($codewriter);
+                $att->end($codewriter);
             }
-            $this->generateSurroundFoot();
+            $this->generateSurroundFoot($codewriter);
             return;
         }
 
-        $this->generateSurroundHead();
+        $this->generateSurroundHead($codewriter);
         // a surround tag may decide to hide us (tal:define for example)
         if (!$this->hidden){
-            $this->generateHead();
-            $this->generateContent();
-            $this->generateFoot();
+            $this->generateHead($codewriter);
+            $this->generateContent($codewriter);
+            $this->generateFoot($codewriter);
         }
-        $this->generateSurroundFoot();
+        $this->generateSurroundFoot($codewriter);
     }
 
     /** Returns true if the element contains specified PHPTAL attribute. */
@@ -186,15 +186,15 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     }
 
     /** Returns HTML-escaped the value of specified PHPTAL attribute. */
-    public function getAttribute($name)
+    public function getAttributeEscaped($name)
     {
-        return $this->node->getAttribute($name);
+        return $this->node->getAttributeEscaped($name);
     }
 
     /** Returns textual (unescaped) value of specified PHPTAL attribute. */
-    public function getAttributeText($name)
+    public function getAttributeText($name, $encoding)
     {
-        return $this->node->getAttributeText($name, $this->generator->getEncoding());
+        return $this->node->getAttributeText($name, $encoding);
     }
 
     public function isOverwrittenAttribute($name)
@@ -230,81 +230,81 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     // ~~~~~ Generation methods may be called by some PHPTAL attributes ~~~~~
 
-    public function generateSurroundHead()
+    public function generateSurroundHead(PHPTAL_Php_CodeWriter $codewriter)
     {
         foreach ($this->surroundAttributes as $att) {
-            $att->start();
+            $att->start($codewriter);
         }
     }
 
-    public function generateHead()
+    public function generateHead(PHPTAL_Php_CodeWriter $codewriter)
     {
         if ($this->headFootDisabled) return;
         if ($this->headPrintCondition) {
-            $this->generator->doIf($this->headPrintCondition);
+            $codewriter->doIf($this->headPrintCondition);
         }
 
-        $this->generator->pushHtml('<'.$this->name);
-        $this->generateAttributes();
+        $codewriter->pushHtml('<'.$this->qualifiedName);
+        $this->generateAttributes($codewriter);
 
-        if ($this->generator->getOutputMode() !== PHPTAL::HTML5 && $this->isEmptyNode())
+        if ($codewriter->getOutputMode() !== PHPTAL::HTML5 && $this->isEmptyNode($codewriter->getOutputMode()))
         {
-            $this->generator->pushHtml('/>');
+            $codewriter->pushHtml('/>');
         }
         else {
-            $this->generator->pushHtml('>');
+            $codewriter->pushHtml('>');
         }
 
         if ($this->headPrintCondition) {
-            $this->generator->doEnd();
+            $codewriter->doEnd();
         }
     }
 
-    public function generateContent($realContent=false)
+    public function generateContent(PHPTAL_Php_CodeWriter $codewriter, $realContent=false)
     {
-        if ($this->isEmptyNode()){
+        if ($this->isEmptyNode($codewriter->getOutputMode())){
             return;
         }
 
         if (!$realContent && count($this->contentAttributes) > 0) {
             foreach ($this->contentAttributes as $att) {
-                $att->start();
-                $att->end();
+                $att->start($codewriter);
+                $att->end($codewriter);
             }
             return;
         }
 
-        parent::generate();
+        parent::generate($codewriter);
     }
 
-    public function generateFoot()
+    public function generateFoot(PHPTAL_Php_CodeWriter $codewriter)
     {
         if ($this->headFootDisabled)
             return;
-        if ($this->isEmptyNode())
+        if ($this->isEmptyNode($codewriter->getOutputMode()))
             return;
 
         if ($this->footPrintCondition) {
-            $this->generator->doIf($this->footPrintCondition);
+            $codewriter->doIf($this->footPrintCondition);
         }
 
-        $this->generator->pushHtml( '</'.$this->name.'>' );
+        $codewriter->pushHtml( '</'.$this->qualifiedName.'>' );
 
         if ($this->footPrintCondition) {
-            $this->generator->doEnd();
+            $codewriter->doEnd();
         }
     }
 
-    public function generateSurroundFoot()
+    public function generateSurroundFoot(PHPTAL_Php_CodeWriter $codewriter)
     {
         for ($i = (count($this->surroundAttributes)-1); $i >= 0; $i--) {
-            $this->surroundAttributes[$i]->end();
+            $this->surroundAttributes[$i]->end($codewriter);
         }
     }
 
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    private function generateAttributes()
+    private function generateAttributes(PHPTAL_Php_CodeWriter $codewriter)
     {
         // A phptal attribute can modify any node attribute replacing
         // its value by a <?php echo $somevalue ?\ >.
@@ -315,7 +315,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         //
         // example:
         //
-        //  $tag->generator->pushCode(
+        //  $tag->codewriter->pushCode(
         //  '$__ATT_checked = $somecondition ? \'checked="checked"\' : \'\''
         //  );
         //  $tag->attributes['checked'] = '<?php echo $__ATT_checked ?\>';
@@ -324,20 +324,20 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $fullreplaceRx = PHPTAL_Php_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
         foreach ($this->attributes as $key=>$value) {
             if (preg_match($fullreplaceRx, $value)){
-                $this->generator->pushHtml($value);
+                $codewriter->pushHtml($value);
             }
             else if (strpos($value,'<?php') === 0){
-                $this->generator->pushHtml(' '.$key.'="');
-                $this->generator->pushRawHtml($value);
-                $this->generator->pushHtml('"');
+                $codewriter->pushHtml(' '.$key.'="');
+                $codewriter->pushRawHtml($value);
+                $codewriter->pushHtml('"');
             }
-            elseif ($this->generator->getOutputMode() === PHPTAL::HTML5 && PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($key))
+            elseif ($codewriter->getOutputMode() === PHPTAL::HTML5 && PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($key))
             {
-                $this->generator->pushHtml(' '.$key);
+                $codewriter->pushHtml(' '.$key);
             }
             else
             {
-                $this->generator->pushHtml(' '.$key.'='.$this->generator->quoteAttributeValue($value));
+                $codewriter->pushHtml(' '.$key.'='.$codewriter->quoteAttributeValue($value));
             }
         }
     }
@@ -345,16 +345,15 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     private function getNodePrefix()
     {
         $result = false;
-        if (preg_match('/^(.*?):block$/', $this->name, $m)){
+        if (preg_match('/^(.*?):block$/', $this->qualifiedName, $m)){
             list(,$result) = $m;
         }
         return $result;
     }
 
-    private function isEmptyNode()
+    private function isEmptyNode($mode)
     {
-        $mode = $this->generator->getOutputMode();
-        return (($mode === PHPTAL::XHTML || $mode === PHPTAL::HTML5) && PHPTAL_Dom_Defs::getInstance()->isEmptyTag($this->name)) ||
+        return (($mode === PHPTAL::XHTML || $mode === PHPTAL::HTML5) && PHPTAL_Dom_Defs::getInstance()->isEmptyTag($this->qualifiedName)) ||
                ( $mode === PHPTAL::XML   && !$this->hasContent());
     }
 
@@ -366,7 +365,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     private function prepareAttributes()
     {
         //TODO: use registered namespaces instead of the raw list
-        if (preg_match('/^(tal|metal|phptal|i18n):block$/', $this->name, $m)) {
+        if (preg_match('/^(tal|metal|phptal|i18n):block$/', $this->qualifiedName, $m)) {
             $this->headFootDisabled = true;
             list(,$ns) = $m;
             $attributes = array();
@@ -411,7 +410,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             $att = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($name);
             if (array_key_exists($att->getPriority(), $attributes)){
                 $err = sprintf(self::ERR_ATTRIBUTES_CONFLICT,
-                               $this->name,
+                               $this->qualifiedName,
                                $this->getSourceLine(),
                                $key,
                                $attributes[$att->getPriority()][0]
@@ -439,6 +438,11 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
         }
     }
+    
+    function getQualifiedName()
+    {
+        return $this->qualifiedName;
+    }
 }
 
 /**
@@ -446,11 +450,11 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
  */
 class PHPTAL_Php_Comment extends PHPTAL_Php_Node
 {
-	public function generate()
+	public function generate(PHPTAL_Php_CodeWriter $codewriter)
 	{
 		if (!preg_match('/^<!--\s*!/',$this->node->getValue()))
 		{
-		    $this->generator->pushRawHtml($this->node->getValue());
+		    $codewriter->pushRawHtml($this->node->getValue());
 	    }
     }
 }
@@ -461,9 +465,9 @@ class PHPTAL_Php_Comment extends PHPTAL_Php_Node
  */
 class PHPTAL_Php_Text extends PHPTAL_Php_Node
 {
-    public function generate()
+    public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->generator->pushString($this->node->getValue());
+        $codewriter->pushString($this->node->getValue());
     }
 }
 
@@ -475,9 +479,9 @@ class PHPTAL_Php_Text extends PHPTAL_Php_Node
  */
 class PHPTAL_Php_Specific extends PHPTAL_Php_Node
 {
-    public function generate()
+    public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->generator->pushHtml($this->node->getValue());
+        $codewriter->pushHtml($this->node->getValue());
     }
 }
 
@@ -489,15 +493,15 @@ class PHPTAL_Php_Specific extends PHPTAL_Php_Node
  */
 class PHPTAL_Php_Doctype extends PHPTAL_Php_Node
 {
-    public function __construct(PHPTAL_Php_CodeWriter $generator, $node)
+    public function __construct( PHPTAL_DOMDocumentType $node)
     {
-        parent::__construct($generator, $node);
-        $this->generator->setDocType($this);
+        parent::__construct($node);
     }
 
-    public function generate()
+    public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->generator->doDoctype();
+        $codewriter->setDocType($this);
+        $codewriter->doDoctype();
     }
 }
 
@@ -509,15 +513,15 @@ class PHPTAL_Php_Doctype extends PHPTAL_Php_Node
  */
 class PHPTAL_Php_XmlDeclaration extends PHPTAL_Php_Node
 {
-    public function __construct(PHPTAL_Php_CodeWriter $gen, $node)
+    public function __construct( PHPTAL_DOMXmlDeclaration $node)
     {
-        parent::__construct($gen, $node);
-        $this->generator->setXmlDeclaration($this);
+        parent::__construct($node);
     }
 
-    public function generate()
+    public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->generator->doXmlDeclaration();
+        $codewriter->setXmlDeclaration($this);
+        $codewriter->doXmlDeclaration();
     }
 }
 

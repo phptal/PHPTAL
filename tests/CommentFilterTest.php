@@ -3,7 +3,7 @@
 require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/CommentFilter.php';
 
-class CommentFilterTest extends PHPUnit_Framework_TestCase
+class CommentFilterTest extends PHPTAL_TestCase
 {
 	function testIt(){
 		$t = new PHPTAL('input/comment-filter-01.html');

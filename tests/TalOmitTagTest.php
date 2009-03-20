@@ -23,7 +23,7 @@
 require_once 'config.php';
 
 
-class TalOmitTagTest extends PHPUnit_Framework_TestCase 
+class TalOmitTagTest extends PHPTAL_TestCase 
 {
     function testSimple()
     {

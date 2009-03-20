@@ -152,10 +152,7 @@ class PHPTAL_BuiltinNamespace extends PHPTAL_Namespace
         $name = str_replace('-', '', $name);
         
         $class = 'PHPTAL_Php_Attribute_'.$this->getName().'_'.$name;
-        $result = new $class();
-        $result->tag = $tag;
-        $result->name = strtoupper($att->getFullName());
-        $result->expression = $expression;
+        $result = new $class($tag, $expression);
         return $result;
     }
 }

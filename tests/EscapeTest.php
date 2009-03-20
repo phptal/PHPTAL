@@ -2,7 +2,7 @@
 
 require_once 'config.php';
 
-class EscapeTest extends PHPUnit_Framework_TestCase {
+class EscapeTest extends PHPTAL_TestCase {
 
 	function testDoesNotEscapeHTMLContent(){
 		$tpl = new PHPTAL('input/escape.html');

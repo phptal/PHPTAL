@@ -78,37 +78,37 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
 {
     const REPEAT = '$__repeat__';    
     
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {        
         // alias to repeats handler to avoid calling extra getters on each variable access
-        $this->tag->generator->doSetVar( self::REPEAT, '$ctx->repeat' );
+        $codewriter->doSetVar( self::REPEAT, '$ctx->repeat' );
 
         list( $varName, $expression ) = $this->parseSetExpression( $this->expression );
-        $code = $this->tag->generator->evaluateExpression( $expression );
+        $code = $codewriter->evaluateExpression( $expression );
 
         $item = '$ctx->' . $varName;
         $controller = self::REPEAT . '->' . $varName;
 
         // reset item var into template context
         /* // Is this actually needed?
-        $this->tag->generator->doIf( '!isset('.$this->item.')' );
-        $this->tag->generator->doSetVar( $this->item, 'false' );
-        $this->tag->generator->doEnd();
+        $codewriter->doIf( '!isset('.$this->item.')' );
+        $codewriter->doSetVar( $this->item, 'false' );
+        $codewriter->doEnd();
         */
 
         // instantiate controller using expression
-        $this->tag->generator->doSetVar( $controller, 'new PHPTAL_RepeatController('.$code.')' );
+        $codewriter->doSetVar( $controller, 'new PHPTAL_RepeatController('.$code.')' );
 
-        $this->tag->generator->pushContext();
+        $codewriter->pushContext();
 
         // Lets loop the iterator with a foreach construct
-        $this->tag->generator->doForeach( $item, $controller );
+        $codewriter->doForeach( $item, $controller );
     }
         
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->doEnd();
-        $this->tag->generator->popContext();
+        $codewriter->doEnd();
+        $codewriter->popContext();
     }
            
     private $item;

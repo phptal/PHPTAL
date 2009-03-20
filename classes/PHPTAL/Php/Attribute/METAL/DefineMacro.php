@@ -47,25 +47,25 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         $macroname = strtr(trim($this->expression),'-','_');
         if (!preg_match('/^[a-z0-9_]+$/i', $macroname)){
-            throw new PHPTAL_ParserException('Bad macro name "'.$macroname.'"', $this->tag->getSourceFile(), $this->tag->getSourceLine());
+            throw new PHPTAL_ParserException('Bad macro name "'.$macroname.'"', $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
         
-        $this->tag->generator->doFunction($macroname, 'PHPTAL $_thistpl, PHPTAL $tpl');
-        $this->tag->generator->doSetVar('$tpl', 'clone $tpl');
-        $this->tag->generator->doSetVar('$ctx', '$tpl->getContext()');
-        $this->tag->generator->doSetVar('$glb', '$tpl->getGlobalContext()');
-        $this->tag->generator->doSetVar('$_translator', '$tpl->getTranslator()');
-        $this->tag->generator->doXmlDeclaration();
-        $this->tag->generator->doDoctype();
+        $codewriter->doFunction($macroname, 'PHPTAL $_thistpl, PHPTAL $tpl');
+        $codewriter->doSetVar('$tpl', 'clone $tpl');
+        $codewriter->doSetVar('$ctx', '$tpl->getContext()');
+        $codewriter->doSetVar('$glb', '$tpl->getGlobalContext()');
+        $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
+        $codewriter->doXmlDeclaration();
+        $codewriter->doDoctype();
     }
     
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->doEnd();
+        $codewriter->doEnd();
     }
 }
 

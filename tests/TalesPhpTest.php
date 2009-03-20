@@ -2,7 +2,7 @@
 
 require_once 'config.php';
 
-class TalesPhpTest extends PHPUnit_Framework_TestCase {
+class TalesPhpTest extends PHPTAL_TestCase {
 	
 	function testMix(){
 		$tpl = new PHPTAL('input/php.html');

@@ -50,7 +50,7 @@ class OverloadTestClass
 }
 
 
-class OverloadingTest extends PHPUnit_Framework_TestCase 
+class OverloadingTest extends PHPTAL_TestCase 
 {
     function test()
     {

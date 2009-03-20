@@ -56,23 +56,23 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
 {
     private static $temp_var_num;
     
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (trim($this->expression) == ''){
-            $this->tag->headFootDisabled = true;
+            $this->phpelement->headFootDisabled = true;
         }
         else { 
             
             $varname = '$_omit'.self::$temp_var_num++;
             
             // print tag header/foot only if condition is false
-            $cond = $this->tag->generator->evaluateExpression($this->expression);
-            $this->tag->headPrintCondition = '('.$varname.' = !('.$cond.'))';
-            $this->tag->footPrintCondition = $varname;
+            $cond = $codewriter->evaluateExpression($this->expression);
+            $this->phpelement->headPrintCondition = '('.$varname.' = !('.$cond.'))';
+            $this->phpelement->footPrintCondition = $varname;
         }
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 }

@@ -44,37 +44,37 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
 {
     const ERR_VAR = '$__err__';
     
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->doTry();
-        $this->tag->generator->pushCode('ob_start()');
+        $codewriter->doTry();
+        $codewriter->pushCode('ob_start()');
     }
     
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->pushCode('ob_end_flush()');        
-        $this->tag->generator->doCatch('Exception '.self::ERR_VAR);
-        $this->tag->generator->pushCode('$tpl->addError('.self::ERR_VAR.')');
-        $this->tag->generator->pushCode('ob_end_clean()');
+        $codewriter->pushCode('ob_end_flush()');        
+        $codewriter->doCatch('Exception '.self::ERR_VAR);
+        $codewriter->pushCode('$tpl->addError('.self::ERR_VAR.')');
+        $codewriter->pushCode('ob_end_clean()');
 
         $expression = $this->extractEchoType($this->expression);
 
-        $code = $this->tag->generator->evaluateExpression($expression);
+        $code = $codewriter->evaluateExpression($expression);
         switch ($code) {
             case PHPTAL_TALES_NOTHING_KEYWORD:
                 break;
 
             case PHPTAL_TALES_DEFAULT_KEYWORD:
-                $this->tag->generator->pushHtml('<pre class="phptalError"');
-                $this->tag->generator->doEcho(self::ERR_VAR);
-                $this->tag->generator->pushHtml('</pre>');
+                $codewriter->pushHtml('<pre class="phptalError"');
+                $codewriter->doEcho(self::ERR_VAR);
+                $codewriter->pushHtml('</pre>');
                 break;
                 
             default:
-                $this->doEcho($code);
+                $this->doEchoAttribute($codewriter,$code);
                 break;
         }
-        $this->tag->generator->doEnd();
+        $codewriter->doEnd();
     }
 }
 

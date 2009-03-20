@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class MetalMacroTest extends PHPUnit_Framework_TestCase
+class MetalMacroTest extends PHPTAL_TestCase
 {
     function testSimple()
     {

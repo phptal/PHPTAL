@@ -48,9 +48,9 @@ class PHPTAL_Php_Attribute_TAL_Define
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $expressions = $this->tag->generator->splitExpression($this->expression);
+        $expressions = $codewriter->splitExpression($this->expression);
         $definesAnyNonGlobalVars = false;
 
         foreach ($expressions as $exp){
@@ -64,7 +64,7 @@ implements PHPTAL_Php_TalesChainReader
             if ($defineScope != 'global') $definesAnyNonGlobalVars = true; // <span tal:define="global foo" /> should be invisible, but <img tal:define="bar baz" /> not
 
             if ($this->_defineScope != 'global' && !$this->_pushedContext){
-                $this->tag->generator->pushContext();
+                $codewriter->pushContext();
                 $this->_pushedContext = true;
             }
             
@@ -72,53 +72,53 @@ implements PHPTAL_Php_TalesChainReader
             if ($expression === null) {
                 // no expression give, use content of tag as value for newly defined
                 // var.
-                $this->bufferizeContent();
+                $this->bufferizeContent($codewriter);
                 continue;
             }
             
-            $code = $this->tag->generator->evaluateExpression($expression);
+            $code = $codewriter->evaluateExpression($expression);
             if (is_array($code)){
-                $this->chainedDefine($code);
+                $this->chainedDefine($codewriter,$code);
             }
             elseif ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
-                $this->doDefineVarWith('null');
+                $this->doDefineVarWith($codewriter,'null');
             }
             else {
-                $this->doDefineVarWith($code);
+                $this->doDefineVarWith($codewriter, $code);
             }
         }
 
         // if the content of the tag was buffered or the tag has nothing to tell, we hide it.
-        if ($this->_buffered || (!$definesAnyNonGlobalVars && !$this->tag->hasRealContent() && !$this->tag->hasRealAttributes())){
-            $this->tag->hidden = true;
+        if ($this->_buffered || (!$definesAnyNonGlobalVars && !$this->phpelement->hasRealContent() && !$this->phpelement->hasRealAttributes())){
+            $this->phpelement->hidden = true;
         }
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
         if ($this->_pushedContext){
-            $this->tag->generator->popContext();
+            $codewriter->popContext();
         }
     }
     
-    private function chainedDefine($parts)
+    private function chainedDefine(PHPTAL_Php_CodeWriter $codewriter, $parts)
     {
         $executor = new PHPTAL_Php_TalesChainExecutor(
-            $this->tag->generator, $parts, $this
+            $codewriter, $parts, $this
         );
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
-        $this->doDefineVarWith('null');
+        $this->doDefineVarWith($executor->getCodeWriter(),'null');
         $executor->breakChain();
     }
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
-        $this->bufferizeContent();
+        $this->bufferizeContent($executor->getCodeWriter());
         $executor->breakChain();
     }
 
@@ -153,24 +153,24 @@ implements PHPTAL_Php_TalesChainReader
         return array($defineScope, $defineVar, $exp);
     }
 
-    private function bufferizeContent()
+    private function bufferizeContent(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (!$this->_buffered){
-            $this->tag->generator->pushCode( 'ob_start()' );
-            $this->tag->generateContent();
-            $this->tag->generator->pushCode('$__tmp_content__ = ob_get_clean()');
+            $codewriter->pushCode( 'ob_start()' );
+            $this->phpelement->generateContent($codewriter);
+            $codewriter->pushCode('$__tmp_content__ = ob_get_clean()');
             $this->_buffered = true;
         }
-        $this->doDefineVarWith('$__tmp_content__');
+        $this->doDefineVarWith($codewriter,'$__tmp_content__');
     }
 
-    private function doDefineVarWith($code)
+    private function doDefineVarWith(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
         if ($this->_defineScope == 'global'){
-            $this->tag->generator->doSetVar('$glb->'.$this->_defineVar, $code);
+            $codewriter->doSetVar('$glb->'.$this->_defineVar, $code);
         }
         else {
-            $this->tag->generator->doSetVar('$ctx->'.$this->_defineVar, $code);
+            $codewriter->doSetVar('$ctx->'.$this->_defineVar, $code);
         }
     }
 

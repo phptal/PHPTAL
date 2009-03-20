@@ -24,7 +24,7 @@ require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
 
-class ParserTest extends PHPUnit_Framework_TestCase
+class ParserTest extends PHPTAL_TestCase
 {
     public function testParseSimpleDocument()
     {
@@ -33,9 +33,9 @@ class ParserTest extends PHPUnit_Framework_TestCase
 
         if ($tree instanceof DOMNode) $this->markTestSkipped();
 
-        $children = $tree->getChildren();
+        $children = $tree->childNodes;
         $this->assertEquals(3, count($children));
-        $this->assertEquals(5, count($children[2]->getChildren()));
+        $this->assertEquals(5, count($children[2]->childNodes));
     }
 
     public function testByteOrderMark()

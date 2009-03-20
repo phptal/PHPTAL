@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
 
-class OldTest extends PHPUnit_Framework_TestCase 
+class OldTest extends PHPTAL_TestCase 
 {
     function test03()
     {

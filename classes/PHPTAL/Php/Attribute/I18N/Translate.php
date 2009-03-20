@@ -17,7 +17,7 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         $escape = true;
         if (preg_match('/^(text|structure)(?:\s+(.*)|\s*$)/',$this->expression,$m))
@@ -29,24 +29,24 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         // if no expression is given, the content of the node is used as 
         // a translation key
         if (strlen(trim($this->expression)) == 0){
-            $key = $this->_getTranslationKey($this->tag, !$escape);
-            $key = trim(preg_replace('/\s+/sm'.($this->tag->generator->getEncoding()=='UTF-8'?'u':''), ' ', $key));
+            $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
+            $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
             $code = '\'' . str_replace('\'', '\\\'', $key) . '\'';
         }
         else {
-            $code = $this->tag->generator->evaluateExpression($this->expression);
+            $code = $codewriter->evaluateExpression($this->expression);
         }
-        $this->_prepareNames($this->tag);
+        $this->_prepareNames($codewriter, $this->phpelement);
 
         $php = sprintf('echo $_translator->translate(%s,%s);', $code, $escape ? 'true':'false');
-        $this->tag->generator->pushCode($php);
+        $codewriter->pushCode($php);
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
-    private function _getTranslationKey($tag, $preserve_tags)
+    private function _getTranslationKey($tag, $preserve_tags, $encoding)
     {
         $result = '';
         foreach ($tag->children as $child){
@@ -57,28 +57,28 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
             }
 				else
 				{
-                	$result .= html_entity_decode($child->node->getValue(),ENT_QUOTES,$this->tag->generator->getEncoding());
+                	$result .= html_entity_decode($child->node->getValue(),ENT_QUOTES,$encoding);
 				}
             }
             else if ($child instanceOf PHPTAL_Php_Element){
                 if ($child->hasAttribute('i18n:name')){
-                    $value = $child->getAttribute('i18n:name');
+                    $value = $child->getAttributeText('i18n:name', $encoding);
                     $result .= '${' . $value . '}';
                 }
                 else {
                     
                     if ($preserve_tags)
                     {
-                        $result .= '<'.$child->name;
+                        $result .= '<'.$child->getQualifiedName();
                         foreach($child->attributes as $k => $v)
                         {
                             $result .= ' '.$k.'="'.$v.'"';
                         }
-                        $result .= '>'.$this->_getTranslationKey($child, $preserve_tags).'</'.$child->name.'>';
+                        $result .= '>'.$this->_getTranslationKey($child, $preserve_tags,$encoding) . '</'.$child->getQualifiedName().'>';
                     }
                     else
                     {                    
-                        $result .= $this->_getTranslationKey($child, $preserve_tags);
+                        $result .= $this->_getTranslationKey($child, $preserve_tags, $encoding);
                     }
                 }
             }
@@ -86,15 +86,15 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         return $result;
     }
 
-    private function _prepareNames($tag)
+    private function _prepareNames(PHPTAL_Php_CodeWriter $codewriter, $tag)
     {
         foreach ($tag->children as $child){
             if ($child instanceOf PHPTAL_Php_Element){
                 if ($child->hasAttribute('i18n:name')){
-                    $child->generate();
+                    $child->generate($codewriter);
                 }
                 else {
-                    $this->_prepareNames($child);
+                    $this->_prepareNames($codewriter,$child);
                 }
             }
         }

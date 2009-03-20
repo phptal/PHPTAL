@@ -28,14 +28,14 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_PHPTAL_DEBUG extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->_oldMode = $this->tag->generator->setDebug(true);
+        $this->_oldMode = $codewriter->setDebug(true);
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->setDebug( $this->_oldMode );
+        $codewriter->setDebug( $this->_oldMode );
     }
 
     private $_oldMode;

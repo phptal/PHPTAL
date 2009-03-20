@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class MetalSlotTest extends PHPUnit_Framework_TestCase
+class MetalSlotTest extends PHPTAL_TestCase
 {
     function testSimple()
     {

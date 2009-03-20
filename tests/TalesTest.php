@@ -36,7 +36,7 @@ class MyTalesClass implements PHPTAL_Tales
     }
 }
 
-class TalesTest extends PHPUnit_Framework_TestCase 
+class TalesTest extends PHPTAL_TestCase 
 {
     function testString()
     {

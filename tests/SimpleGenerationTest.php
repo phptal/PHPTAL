@@ -26,19 +26,19 @@ require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/State.php';
 
-class SimpleGenerationTest extends PHPUnit_Framework_TestCase
+class SimpleGenerationTest extends PHPTAL_TestCase
 {
     function testTreeGeneration()
     {
         $parser = new PHPTAL_Dom_Parser();
         $tree = $parser->parseFile('input/parser.01.xml');
         $state     = new PHPTAL_Php_State();
-        $generator = new PHPTAL_Php_CodeWriter($state);
-        $treeGen   = new PHPTAL_Php_Tree($generator, $tree);
-        $generator->doFunction('test', '$tpl');
-        $treeGen->generate();
-        $generator->doEnd();
-        $result = $generator->getResult();
+        $codewriter = new PHPTAL_Php_CodeWriter($state);
+        $treeGen   = new PHPTAL_Php_Tree($tree);
+        $codewriter->doFunction('test', '$tpl');
+        $treeGen->generate($codewriter);
+        $codewriter->doEnd();
+        $result = $codewriter->getResult();
 
         $expected = <<<EOS
 <?php 
@@ -65,15 +65,15 @@ EOS;
     function testFunctionsGeneration()
     {
         $state = new PHPTAL_Php_State();
-        $generator = new PHPTAL_Php_CodeWriter($state);
-        $generator->doFunction('test1', '$tpl');
-        $generator->pushString('test1');
-        $generator->doFunction('test2', '$tpl');
-        $generator->pushString('test2');
-        $generator->doEnd();
-        $generator->pushString('test1');
-        $generator->doEnd();
-        $res = $generator->getResult();
+        $codewriter = new PHPTAL_Php_CodeWriter($state);
+        $codewriter->doFunction('test1', '$tpl');
+        $codewriter->pushString('test1');
+        $codewriter->doFunction('test2', '$tpl');
+        $codewriter->pushString('test2');
+        $codewriter->doEnd();
+        $codewriter->pushString('test1');
+        $codewriter->doEnd();
+        $res = $codewriter->getResult();
         $exp = <<<EOS
 <?php function test2( \$tpl ) {?>test2<?php}?>
 <?php function test1( \$tpl ) {?>test1test1<?php}?>

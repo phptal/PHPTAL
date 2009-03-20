@@ -22,7 +22,7 @@
 
 require_once 'config.php';
 
-class TalesModeTest extends PHPUnit_Framework_TestCase 
+class TalesModeTest extends PHPTAL_TestCase 
 {
     public function testUnsupportedMode()
     {

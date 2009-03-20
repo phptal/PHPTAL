@@ -172,10 +172,10 @@ class PHPTAL_Php_CodeWriter
         $name = $this->_functionPrefix . $name;
         $this->known_functions[$name] = true;
                 
-        $this->pushGeneratorContext();
+        $this->pushCodeWriterContext();
         $this->pushCode("function $name( $params ) {\n");
         $this->indent();
-        array_push($this->_segments, 'function');
+        $this->_segments[] =  'function';
     }
     
     public function doComment($comment)
@@ -191,7 +191,7 @@ class PHPTAL_Php_CodeWriter
                        
     public function doForeach($out, $source)
     {
-        array_push($this->_segments, 'foreach');
+        $this->_segments[] =  'foreach';
         $this->pushCode("foreach ($source as \$__key__ => $out ):");
         $this->indent();
     }
@@ -203,7 +203,7 @@ class PHPTAL_Php_CodeWriter
         if ($segment == 'function') {
             $this->pushCode("\n}\n\n");
             $functionCode = $this->getResult();
-            $this->popGeneratorContext();
+            $this->popCodeWriterContext();
             $this->_result = $functionCode . $this->_result;
         }
         else if ($segment == 'try')
@@ -216,7 +216,7 @@ class PHPTAL_Php_CodeWriter
 
     public function doTry()
     {
-        array_push($this->_segments, 'try');
+        $this->_segments[] =  'try';
         $this->pushCode('try {');
         $this->indent();
     }
@@ -229,7 +229,7 @@ class PHPTAL_Php_CodeWriter
     public function doCatch($catch)
     {
         $this->doEnd();
-        array_push($this->_segments, 'catch');
+        $this->_segments[] =  'catch';
         $code = 'catch(%s) {';
         $this->pushCode(sprintf($code, $catch));
         $this->indent();
@@ -237,7 +237,7 @@ class PHPTAL_Php_CodeWriter
 
     public function doIf($condition)
     {
-        array_push($this->_segments, 'if');
+        $this->_segments[] =  'if';
         $this->pushCode('if ('.$condition.'): ');
         $this->indent();
     }
@@ -273,13 +273,13 @@ class PHPTAL_Php_CodeWriter
     {
         $html = $this->_state->interpolateTalesVarsInHtml($html);
         $this->flushCode();
-        array_push($this->_htmlBuffer, $html);
+        $this->_htmlBuffer[] =  $html;
     }
 
 	public function pushRawHtml($html)
 	{
 		$this->flushCode();
-		array_push($this->_htmlBuffer, $html);
+		$this->_htmlBuffer[] =  $html;
 	}
 
     public function pushString($str)
@@ -291,10 +291,10 @@ class PHPTAL_Php_CodeWriter
             list(,$before,$expression,$after) = $m;
 
             $before = $this->escapeLTandGT($before);
-            array_push($this->_htmlBuffer, $before);
+            $this->_htmlBuffer[] =  $before;
 
             $expression = $this->_state->interpolateTalesVarsInHtml($expression);
-            array_push($this->_htmlBuffer, $expression);
+            $this->_htmlBuffer[] =  $expression;
 
             $str = $after;
         }
@@ -303,7 +303,7 @@ class PHPTAL_Php_CodeWriter
         
         if (strlen($str) > 0){
             $str = $this->escapeLTandGT($str);
-            array_push($this->_htmlBuffer, $str);
+            $this->_htmlBuffer[] =  $str;
         }
     }
 
@@ -311,7 +311,7 @@ class PHPTAL_Php_CodeWriter
     {
         $this->flushHtml();
         $codeLine = $this->indentSpaces() . $codeLine;
-        array_push($this->_codeBuffer, $codeLine);
+        $this->_codeBuffer[] =  $codeLine;
     }
 
     public function escapeLTandGT($str){
@@ -383,9 +383,9 @@ class PHPTAL_Php_CodeWriter
         return str_repeat("\t", $this->_indent); 
     }
 
-    private function pushGeneratorContext()
+    private function pushCodeWriterContext()
     {
-        array_push($this->_contexts, clone $this);
+        $this->_contexts[] =  clone $this;
         $this->_result = "";
         $this->_indent = 0;
         $this->_codeBuffer = array();
@@ -393,7 +393,7 @@ class PHPTAL_Php_CodeWriter
         $this->_segments = array();
     }
     
-    private function popGeneratorContext()
+    private function popCodeWriterContext()
     {
         $oldContext = array_pop($this->_contexts);
         $this->_result = $oldContext->_result;

@@ -24,7 +24,7 @@ require_once 'config.php';
 
 $PhptalCacheTest_random = time().mt_rand();
 
-class PhptalCacheTest extends PHPUnit_Framework_TestCase 
+class PhptalCacheTest extends PHPTAL_TestCase 
 { 
     private function PHPTALWithSource($source)
     {

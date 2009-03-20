@@ -670,7 +670,7 @@ class PHPTAL
      */
     public function addError(Exception $error)
     {
-        array_push($this->_errors, $error);
+        $this->_errors[] =  $error;
         return $this;
     }
 
@@ -733,9 +733,9 @@ class PHPTAL
         $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath());
         $generator->setEncoding($this->_encoding);
         $generator->setOutputMode($this->_outputMode);
-        $generator->generate($tree);
+        $result = $generator->generate($tree);
 
-        if (!@file_put_contents($this->getCodePath(), $generator->getResult())) {
+        if (!@file_put_contents($this->getCodePath(), $result)) {
             throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
         }
 
@@ -756,7 +756,7 @@ class PHPTAL
             return;
         }
 
-        array_push($this->_resolvers, new PHPTAL_FileSourceResolver($this->_repositories));
+        $this->_resolvers[] =  new PHPTAL_FileSourceResolver($this->_repositories);
         foreach ($this->_resolvers as $resolver){
             $source = $resolver->resolve($this->_path);
             if ($source != null){

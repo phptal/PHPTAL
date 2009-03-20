@@ -1,7 +1,7 @@
 <?php
 require_once 'config.php';
 
-class PhptalUsageTest extends PHPUnit_Framework_TestCase 
+class PhptalUsageTest extends PHPTAL_TestCase 
 {
 	function testMultiUse()
 	{

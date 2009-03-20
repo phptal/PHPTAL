@@ -32,7 +32,7 @@ if (!class_exists('OnErrorDummyObject')) {
     }
 }
 
-class TalOnErrorTest extends PHPUnit_Framework_TestCase 
+class TalOnErrorTest extends PHPTAL_TestCase 
 {
     function testSimple()
     {

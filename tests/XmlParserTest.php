@@ -23,7 +23,7 @@
 require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
 
-class XmlParserTest extends PHPUnit_Framework_TestCase
+class XmlParserTest extends PHPTAL_TestCase
 {
     public function testSimpleParse(){
         $parser = new MyTestParser();
@@ -95,7 +95,7 @@ class MyTestParser extends PHPTAL_XmlParser
         $this->elementStarts++;
         $this->result .= "<$name";
         $pairs = array();
-        foreach ($attributes as $key=>$value) array_push($pairs, "$key=\"$value\"");
+        foreach ($attributes as $key=>$value) $pairs[] =  "$key=\"$value\"";
         if (count($pairs) > 0) {
             $this->result .= ' ' . join(' ', $pairs);
         }

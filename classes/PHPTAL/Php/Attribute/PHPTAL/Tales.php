@@ -28,7 +28,7 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         $mode = trim($this->expression);
         $mode = strtolower($mode);
@@ -40,17 +40,17 @@ class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
         {
             throw new PHPTAL_TemplateException(
                 "Unsupported TALES mode '$mode'", 
-                $this->tag->getSourceFile(), 
-                $this->tag->getSourceLine()
+                $this->phpelement->getSourceFile(), 
+                $this->phpelement->getSourceLine()
             ); 
         }
         
-        $this->_oldMode = $this->tag->generator->setTalesMode( $mode );
+        $this->_oldMode = $codewriter->setTalesMode( $mode );
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->setTalesMode( $this->_oldMode );
+        $codewriter->setTalesMode( $this->_oldMode );
     }
 
     private $_oldMode;

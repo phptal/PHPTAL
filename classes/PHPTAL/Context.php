@@ -150,7 +150,7 @@ class PHPTAL_Context
      */
     public function pushSlots()
     {
-        array_push($this->_slotsStack, $this->_slots);
+        $this->_slotsStack[] =  $this->_slots;
         $this->_slots = array();
     }
 

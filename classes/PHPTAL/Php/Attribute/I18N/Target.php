@@ -25,8 +25,8 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_I18N_Target extends PHPTAL_Php_Attribute
 {
-    public function start(){}
-    public function end(){}
+    public function start(PHPTAL_Php_CodeWriter $codewriter){}
+    public function end(PHPTAL_Php_CodeWriter $codewriter){}
 }
 
 ?>

@@ -42,14 +42,14 @@ class PHPTAL_Php_Attribute_TAL_Content
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         $expression = $this->extractEchoType($this->expression);
         
-        $code = $this->tag->generator->evaluateExpression($expression);
+        $code = $codewriter->evaluateExpression($expression);
 
         if (is_array($code)) {
-            return $this->generateChainedContent($code);
+            return $this->generateChainedContent($codewriter,$code);
         }
 
         if ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
@@ -57,30 +57,30 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         if ($code == PHPTAL_TALES_DEFAULT_KEYWORD) {
-            return $this->generateDefault();
+            return $this->generateDefault($codewriter);
         }
         
-        $this->doEcho($code);
+        $this->doEchoAttribute($codewriter,$code);
     }
     
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
-    private function generateDefault()
+    private function generateDefault(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generateContent(true);
+        $this->phpelement->generateContent($codewriter,true);
     }
     
-    private function generateChainedContent($code)
+    private function generateChainedContent(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
-        $executor = new PHPTAL_Php_TalesChainExecutor($this->tag->generator, $code, $this);
+        $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $code, $this);
     }
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         $executor->doIf('!phptal_isempty($__content__ = '.$exp.')');
-        $this->doEcho('$__content__');
+        $this->doEchoAttribute($executor->getCodeWriter(),'$__content__');
     }
     
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
@@ -91,7 +91,7 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
-        $this->generateDefault();
+        $this->generateDefault($executor->getCodeWriter());
         $executor->breakChain();
     }
 }

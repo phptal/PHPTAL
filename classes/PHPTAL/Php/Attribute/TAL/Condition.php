@@ -44,14 +44,14 @@ implements PHPTAL_Php_TalesChainReader
 {
     private $expressions = array();
 
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $code = $this->tag->generator->evaluateExpression($this->expression);
+        $code = $codewriter->evaluateExpression($this->expression);
 
         // If it's a chained expression build a new code path
         if (is_array($code)) {
             $this->expressions = array();
-            $executor = new PHPTAL_Php_TalesChainExecutor( $this->tag->generator, $code, $this );
+            $executor = new PHPTAL_Php_TalesChainExecutor( $codewriter, $code, $this );
             return;
         }
 
@@ -60,12 +60,12 @@ implements PHPTAL_Php_TalesChainReader
             $code = 'false';
         }        
 
-        $this->tag->generator->doIf($code);
+        $codewriter->doIf($code);
     }
 
-    public function end() 
+    public function end(PHPTAL_Php_CodeWriter $codewriter) 
     {
-        $this->tag->generator->doEnd();
+        $codewriter->doEnd();
     }
 
 
@@ -78,7 +78,7 @@ implements PHPTAL_Php_TalesChainReader
 
         if ( $islast ) {
             // for the last one in the chain build a ORed condition
-            $this->tag->generator->doIf( implode(' || ', $this->expressions ) );
+            $executor->getCodeWriter()->doIf( implode(' || ', $this->expressions ) );
             // The executor will always end an if so we output a dummy if
             $executor->doIf('false');
         } 

@@ -10,7 +10,7 @@ class PHPTAL_CodeCacheTest extends PHPTAL
     }
 }
 
-class CodeCacheTest extends PHPUnit_Framework_TestCase
+class CodeCacheTest extends PHPTAL_TestCase
 {
     private $phptal;
     private $codeDestination;
@@ -36,6 +36,7 @@ class CodeCacheTest extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        parent::setUp();
         $this->resetPHPTAL();
         $this->clearCache();
     }

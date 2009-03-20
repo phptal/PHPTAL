@@ -48,10 +48,10 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes to translate
-        $expressions = $this->tag->generator->splitExpression($this->expression);
+        $expressions = $codewriter->splitExpression($this->expression);
         // foreach attribute
         foreach ($expressions as $exp){
             list($attribute, $key) = $this->parseSetExpression($exp);
@@ -60,18 +60,18 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 // we use it and replace the tag attribute with the result of
                 // the translation
                 $key = str_replace('\'', '\\\'', $key);
-                $this->tag->attributes[$attribute] = $this->_getTranslationCode("'$key'");
+                $this->phpelement->attributes[$attribute] = $this->_getTranslationCode($codewriter,"'$key'");
             } 
-            else if ($this->tag->isOverwrittenAttribute($attribute)){
-                $varn = $this->tag->getOverwrittenAttributeVarName($attribute);
-                $this->tag->attributes[$attribute] = $this->_getTranslationCode($varn);
+            else if ($this->phpelement->isOverwrittenAttribute($attribute)){
+                $varn = $this->phpelement->getOverwrittenAttributeVarName($attribute);
+                $this->phpelement->attributes[$attribute] = $this->_getTranslationCode($codewriter,$varn);
             }
             // else if the attribute has a default value
-            else if ($this->tag->hasAttribute($attribute)){
+            else if ($this->phpelement->hasAttribute($attribute)){
                 // we use this default value as the translation key
-                $key = $this->tag->getAttributeText($attribute);
+                $key = $this->phpelement->getAttributeText($attribute, $codewriter->getEncoding());
                 $key = str_replace('\'', '\\\'', $key);
-                $this->tag->attributes[$attribute] = $this->_getTranslationCode("'$key'");
+                $this->phpelement->attributes[$attribute] = $this->_getTranslationCode($codewriter,"'$key'");
             }
             else {
                 // unable to translate the attribute
@@ -80,11 +80,11 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
         }
     }
    
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
-    private function _getTranslationCode($key)
+    private function _getTranslationCode(PHPTAL_Php_CodeWriter $codewriter, $key)
     {
 		$code = '<?php ';
 		if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
@@ -98,10 +98,10 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
-		$result = $this->tag->generator->escapeCode(sprintf('$_translator->translate(%s, false)', $key));
+		$result = $codewriter->escapeCode(sprintf('$_translator->translate(%s, false)', $key));
         $code .= 'echo '.$result.'?>';
 		return $code;
     }
 }
 
-?>
+

@@ -29,7 +29,7 @@ if (!class_exists('DummyTag')) {
     class DummyTag {}
 }
 
-class TalConditionTest extends PHPUnit_Framework_TestCase 
+class TalConditionTest extends PHPTAL_TestCase 
 {
     function testSimple()
     {

@@ -15,26 +15,26 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // ensure a domain stack exists or create it
-        $this->tag->generator->doIf('!isset($__i18n_domains)');
-        $this->tag->generator->pushCode('$__i18n_domains = array()');
-        $this->tag->generator->doEnd();
+        $codewriter->doIf('!isset($__i18n_domains)');
+        $codewriter->pushCode('$__i18n_domains = array()');
+        $codewriter->doEnd();
 
         //\''.str_replace(array('\\',"'"),array('\\\\',"\\'"),$expression).'\'
-        $expression = $this->tag->generator->interpolateTalesVarsInString($this->expression);
+        $expression = $codewriter->interpolateTalesVarsInString($this->expression);
 
         // push current domain and use new domain
         $code = '$__i18n_domains[] = $_translator->useDomain('.$expression.')';
-        $this->tag->generator->pushCode($code);
+        $codewriter->pushCode($code);
     }
 
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore domain
         $code = '$_translator->useDomain(array_pop($__i18n_domains))';
-        $this->tag->generator->pushCode($code);
+        $codewriter->pushCode($code);
     }
 }
 

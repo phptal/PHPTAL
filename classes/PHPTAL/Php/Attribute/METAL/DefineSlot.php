@@ -57,18 +57,18 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute
 {
-    public function start()
+    public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         $cond = sprintf('$ctx->hasSlot("%s")', $this->expression);
-        $this->tag->generator->doIf($cond);
+        $codewriter->doIf($cond);
         $code = sprintf('<?php echo $ctx->getSlot("%s") ?>', $this->expression);
-        $this->tag->generator->pushHtml($code);
-        $this->tag->generator->doElse();
+        $codewriter->pushHtml($code);
+        $codewriter->doElse();
     }
     
-    public function end()
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->tag->generator->doEnd();
+        $codewriter->doEnd();
     }
 }
 
