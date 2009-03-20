@@ -71,9 +71,9 @@ require_once PHPTAL_DIR.'PHPTAL/Filter.php';
  */
 class PHPTAL
 {
-    const XHTML = 1;
-    const XML   = 2;
-    const HTML5 = 5;
+    const XHTML = 111;
+    const XML   = 222;
+    const HTML5 = 555;
 
     /**
      * PHPTAL Constructor.
@@ -203,6 +203,8 @@ class PHPTAL
      */
     public function setOutputMode($mode)
     {
+        $this->_prepared = false;
+        $this->_functionName = NULL;
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
         }
@@ -641,7 +643,7 @@ class PHPTAL
             // that changes code in compiled template         
             $this->_functionName = 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
                 substr(preg_replace('/[^a-zA-Z]/','_',basename($this->_source->getRealPath())),0,15) . 
-                md5($this->_source->getRealPath() . ($this->_prefilter ? get_class($this->_prefilter) : '-'));
+                md5($this->_source->getRealPath() . ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode());
         }
         return $this->_functionName;
     }
@@ -730,8 +732,7 @@ class PHPTAL
         $tree = $parser->parseString($data, $realpath);
 
         require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
-        $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath());
-        $generator->setEncoding($this->_encoding);
+        $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding);
         $generator->setOutputMode($this->_outputMode);
         $result = $generator->generate($tree);
 
