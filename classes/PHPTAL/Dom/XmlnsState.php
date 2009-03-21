@@ -33,10 +33,11 @@
 class PHPTAL_Dom_XmlnsState 
 {
     /** Create a new XMLNS state inheriting provided aliases. */
-    public function __construct(array $prefix_to_prefix, array $prefix_to_uri)
+    public function __construct(array $prefix_to_prefix, array $prefix_to_uri, $current_default = '')
     {
         $this->prefix_to_prefix = $prefix_to_prefix;
         $this->prefix_to_uri = $prefix_to_uri; 
+        $this->current_default = $current_default; 
     }
     
     public function prefixToNamespaceURI($prefix)
@@ -86,7 +87,7 @@ class PHPTAL_Dom_XmlnsState
     {
         $prefix_to_prefix = $this->prefix_to_prefix;
         $prefix_to_uri = $this->prefix_to_uri;
-        
+        $current_default = $this->current_default;
         
         $changed = false;
         foreach ($nodeAttributes as $qname => $value)
@@ -101,11 +102,13 @@ class PHPTAL_Dom_XmlnsState
                     $prefix_to_prefix[$prefix] = PHPTAL_Dom_Defs::getInstance()->namespaceURIToPrefix($value);
                 }                
             }
+            
+            if ($qname == 'xmlns') {$changed=true;$current_default = $value;}
         }
         
         if ($changed) 
         {
-            return new PHPTAL_Dom_XmlnsState($prefix_to_prefix, $prefix_to_uri);
+            return new PHPTAL_Dom_XmlnsState($prefix_to_prefix, $prefix_to_uri, $current_default);
         }
         else
         {
@@ -113,5 +116,10 @@ class PHPTAL_Dom_XmlnsState
         }
     }
 
-    private $prefix_to_prefix, $prefix_to_uri;
+    function getCurrentDefaultNamespaceURI()
+    {
+        return $this->current_default;
+}
+
+    private $prefix_to_prefix, $prefix_to_uri, $current_default;
 }

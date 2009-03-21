@@ -1,4 +1,4 @@
-<?php
+1<?php
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 //
 //  Copyright (c) 2004-2005 Laurent Bedubourg
@@ -27,12 +27,18 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 
 class PHPTAL_Php_Attr
 {
-    private $value_escaped, $qualified_name;
+    private $value_escaped, $qualified_name, $namespace_uri;
     
-    function __construct($qualified_name, $value_escaped)
+    function __construct($namespace_uri, $qualified_name, $value_escaped)
     {
         $this->value_escaped = $value_escaped;
         $this->qualified_name = $qualified_name;
+        $this->namespace_uri = $namespace_uri; 
+    }
+    
+    function getNamespaceURI()
+    {
+        return $this->namespace_uri;
     }
     
     function getQualifiedName()
@@ -176,8 +182,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     const ERR_ATTRIBUTES_CONFLICT =
         "Attribute conflict in '%s' at line '%d', '%s' cannot appear with '%s'";
 
-    private $name;
-    protected $qualifiedName;
+    protected $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
     protected $talAttributes = array();
     protected $replaceAttributes = array();
@@ -193,6 +198,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         parent::__construct($node);
         $this->qualifiedName = $node->getQualifiedName();
         $this->attribute_nodes = array();
+        $this->namespace_uri = $node->getNamespaceURI();
         $this->xmlns = $node->getXmlnsState();   
         
         //TODO: use registered namespaces instead of the raw list
@@ -215,7 +221,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
                 $qname = "$prefix:$qname";
             }
             
-            $this->attribute_nodes[] = new PHPTAL_Php_Attr($qname, $attr->getValueEscaped());
+            $this->attribute_nodes[] = new PHPTAL_Php_Attr($node->getNamespaceURI(), $qname, $attr->getValueEscaped());
         }
                 
         $this->separateAttributes();
@@ -254,7 +260,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     {
         foreach($this->attribute_nodes as $attr) if ($attr->getQualifiedName() == $qname) return $attr;    
         
-        $attr = new PHPTAL_Php_Attr($qname, NULL);    
+        $attr = new PHPTAL_Php_Attr("FIXME", $qname, NULL);    
         $this->attribute_nodes[] = $attr;
         return $attr;
     }
@@ -264,17 +270,6 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         return $this->attribute_nodes;
     }
 
-    public function getEscapedAttributeValuesByQualifiedName()
-    {
-        $tmp = array();
-        foreach($this->attribute_nodes as $attr)
-        {
-            assert('$attr instanceof PHPTAL_Php_Attr');
-            $tmp[$attr->getQualifiedName()] = $attr->getValueEscaped();
-        }
-        return $tmp;
-    }    
-    
     /**
      * use PHP code to generate attribute's value. The code must use echo!
      */
@@ -287,6 +282,20 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     public function hasAttribute($qname)
     {
         return $this->node->hasAttribute($qname);
+    }
+
+    public function hasAttributeNS($ns_uri,$localname)
+    {
+        return NULL !== $this->getAttributeNodeNS($ns_uri, $localname);
+    }
+    
+    public function getAttributeNodeNS($ns_uri,$localname)
+    {
+        foreach($this->attribute_nodes as $attr) 
+        {
+            if ($attr->getNamespaceURI() === $ns_uri && $attr->getLocalName() === $localname) {echo "FOUND!\n\n\n";return $attr;}
+        }
+        return NULL;
     }
 
     /** Returns HTML-escaped the value of specified PHPTAL attribute. */
@@ -426,8 +435,11 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
 
         $fullreplaceRx = PHPTAL_Php_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
-        foreach ($this->getEscapedAttributeValuesByQualifiedName() as $key=>$value) 
+        foreach ($this->getAttributeNodes() as $attr) 
         {
+            $key = $attr->getQualifiedName();
+            $value = $attr->getValueEscaped();
+            
             if (preg_match($fullreplaceRx, $value)){
                 $codewriter->pushHtml($value);
             }
@@ -542,9 +554,9 @@ class PHPTAL_Php_Comment extends PHPTAL_Php_Node
 {
 	public function generate(PHPTAL_Php_CodeWriter $codewriter)
 	{
-		if (!preg_match('/^<!--\s*!/',$this->node->getValue()))
+		if (!preg_match('/^<!--\s*!/',$this->node->getValueEscaped()))
 		{
-		    $codewriter->pushRawHtml($this->node->getValue());
+		    $codewriter->pushRawHtml($this->node->getValueEscaped());
 	    }
     }
 }
@@ -557,7 +569,7 @@ class PHPTAL_Php_Text extends PHPTAL_Php_Node
 {
     public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushString($this->node->getValue());
+        $codewriter->pushString($this->node->getValueEscaped());
     }
 }
 
@@ -571,7 +583,7 @@ class PHPTAL_Php_Specific extends PHPTAL_Php_Node
 {
     public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushHtml($this->node->getValue());
+        $codewriter->pushHtml($this->node->getValueEscaped());
     }
 }
 

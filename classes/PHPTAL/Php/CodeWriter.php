@@ -42,12 +42,12 @@ class PHPTAL_Php_CodeWriter
 
     public function setDocType(PHPTAL_Php_Doctype $dt)
     {
-        $this->_doctype = str_replace('\'', '\\\'', $dt->node->getValue());
+        $this->_doctype = str_replace('\'', '\\\'', $dt->node->getValueEscaped());
     }
 
     public function setXmlDeclaration(PHPTAL_Php_XmlDeclaration $dt)
     {
-        $this->_xmldeclaration = str_replace('\'', '\\\'', $dt->node->getValue());
+        $this->_xmldeclaration = str_replace('\'', '\\\'', $dt->node->getValueEscaped());
     }
 
     public function setFunctionPrefix($prefix)

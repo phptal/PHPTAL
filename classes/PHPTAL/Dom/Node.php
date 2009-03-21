@@ -62,15 +62,23 @@ class PHPTAL_DOMAttr
     
     function __construct($qualified_name, $namespace_uri, $value_escaped, $encoding)
     {
+        assert('$namespace_uri !== "" || false === strpos($qualified_name,":")');
         $this->qualified_name = $qualified_name; 
         $this->namespace_uri = $namespace_uri; 
         $this->value_escaped = $value_escaped; 
         $this->encoding = $encoding; 
     }
     
+    function getNamespaceURI() {return $this->namespace_uri;}
     function getQualifiedName() {return $this->qualified_name;}
     function getValueEscaped() {return $this->value_escaped;}
     function getValue() {return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);}
+    
+    function getLocalName()
+    {
+        $n = explode(':',$this->qualified_name,2);
+        return end($n);
+}
 }
 
 /**
@@ -106,7 +114,7 @@ class PHPTAL_Dom_Tree extends PHPTAL_DOMNode
  */
 class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
 {
-    private $qualifiedName;
+    private $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
 
     public function __construct($qualifiedName, PHPTAL_Dom_XmlnsState $state, array $attribute_nodes)
@@ -115,8 +123,11 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
         parent::__construct();
         $this->qualifiedName = $qualifiedName;
         $this->attribute_nodes = $attribute_nodes;
+        $this->namespace_uri = $state->getCurrentDefaultNamespaceURI(); 
         $this->_xmlns = $state;
     }
+
+    function getNamespaceURI() {return $this->namespace_uri;}
 
     public function getQualifiedName()
     {
@@ -189,23 +200,17 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
     }
     
     /** 
-     * Returns true if this element or one of its PHPTAL attributes has some
+     * Returns true if this element has some
      * content to print (an empty text node child does not count).
      */
     public function hasRealContent()
     {
-        if (count($this->childNodes) == 0)
-            return false;
-
-        if (count($this->childNodes) == 1){
-            $child = $this->childNodes[0];
-            if ($child instanceOf PHPTAL_DOMText && $child->getValue() == ''){
-                return false;
-            }
+        foreach($this->childNodes as $node)
+        {
+            if (!$child instanceOf PHPTAL_DOMText || $child->getValueEscaped() !== '') return true;
         }
-
-        return true;
-    }
+            return false;
+            }
 
     private function getNodePrefix()
     {
@@ -238,7 +243,7 @@ class PHPTAL_Dom_ValueNode extends PHPTAL_DOMNode
         $this->_value = $data;
     }
 
-    public function getValue()
+    public function getValueEscaped()
     {
         return $this->_value;
     }

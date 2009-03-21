@@ -73,16 +73,16 @@ implements PHPTAL_Php_TalesChainReader
 
     private function prepareAttribute(PHPTAL_Php_CodeWriter $codewriter, $attribute, $expression)
     {
-        $code = $this->extractEchoType(trim($expression));
+        $code = $this->extractEchoType($expression);
         $code = $codewriter->evaluateExpression($code);
 
         // if $code is an array then the attribute value is decided by a
         // tales chained expression
         if (is_array($code)) {
-            return $this->prepareChainedAttribute2($codewriter,$attribute, $code);
+            return $this->prepareChainedAttribute($codewriter,$attribute, $code);
         }
        
-        // XHTML boolean attribute does not appear when empty of false
+        // XHTML boolean attribute does not appear when empty or false
         if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attribute)) {
             return $this->prepareBooleanAttribute($codewriter,$attribute, $code);
         }
@@ -133,11 +133,12 @@ implements PHPTAL_Php_TalesChainReader
     }
 
     private $_default_escaped;
-    private function prepareChainedAttribute2(PHPTAL_Php_CodeWriter $codewriter, $attribute, $chain)
+    private function prepareChainedAttribute(PHPTAL_Php_CodeWriter $codewriter, $attribute, $chain)
     {
         $this->_default_escaped = false;
         $this->_attribute = $attribute;
-        if (array_key_exists($attribute, $this->phpelement->getEscapedAttributeValuesByQualifiedName())) {
+        if ($this->phpelement->hasAttribute($attribute)) 
+        {
             $this->_default_escaped = $this->phpelement->getAttributeEscaped($attribute);
         }
         $this->_attkey = self::ATT_FULL_REPLACE.$this->getVarName($attribute);

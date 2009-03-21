@@ -53,11 +53,11 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
             if ($child instanceOf PHPTAL_Php_Text){
 				if ($preserve_tags)
 				{
-                $result .= $child->node->getValue();
+                    $result .= $child->node->getValueEscaped();
             }
 				else
 				{
-                	$result .= html_entity_decode($child->node->getValue(),ENT_QUOTES,$encoding);
+                	$result .= html_entity_decode($child->node->getValueEscaped(),ENT_QUOTES,$encoding);
 				}
             }
             else if ($child instanceOf PHPTAL_Php_Element){
@@ -70,9 +70,9 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                     if ($preserve_tags)
                     {
                         $result .= '<'.$child->getQualifiedName();
-                        foreach($child->getEscapedAttributeValuesByQualifiedName() as $k => $v)
+                        foreach($child->getAttributeNodes() as $attr)
                         {
-                            $result .= ' '.$k.'="'.$v.'"';
+                            $result .= ' '.$attr->getQualifiedName().'="'.$attr->getValueEscaped().'"';
                         }
                         $result .= '>'.$this->_getTranslationKey($child, $preserve_tags,$encoding) . '</'.$child->getQualifiedName().'>';
                     }
