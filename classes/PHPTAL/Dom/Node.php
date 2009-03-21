@@ -73,6 +73,7 @@ class PHPTAL_DOMAttr
     function getQualifiedName() {return $this->qualified_name;}
     function getValueEscaped() {return $this->value_escaped;}
     function getValue() {return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);}
+    function getEncoding() {return $this->encoding;}
     
     function getLocalName()
     {
@@ -142,86 +143,9 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
         return $this->_xmlns;
     }
 
-    /** Returns true if the element contains specified PHPTAL attribute. */
-    public function hasAttribute($name)
-    {
-        $ns = $this->getNodePrefix();
-        foreach ($this->attribute_nodes as $attr)
-        {
-            $key = $attr->getQualifiedName();
-            
-            if ($this->_xmlns->unAliasAttribute($key) == $name){
-                return true;
-            }
-            if ($ns && $this->_xmlns->unAliasAttribute("$ns:$key") == $name){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /** Returns HTML-escaped the value of specified PHPTAL attribute. */
-    public function getAttributeEscaped($name)
-    {
-        $ns = $this->getNodePrefix();
-        
-        foreach ($this->attribute_nodes as $attr)
-        {
-            $key = $attr->getQualifiedName();
-            
-            if ($this->_xmlns->unAliasAttribute($key) == $name){
-                return $attr->getValueEscaped();
-            }
-            if ($ns && $this->_xmlns->unAliasAttribute("$ns:$key") == $name){
-                return $attr->getValueEscaped();
-            }
-        }
-        return false;
-    }
-    
-    /** Returns textual (unescaped) value of specified PHPTAL attribute. */
-    public function getAttributeText($name)
-    {
-        $ns = $this->getNodePrefix();
-        
-        foreach ($this->attribute_nodes as $attr)
-        {
-            $key = $attr->getQualifiedName();
-            
-            if ($this->_xmlns->unAliasAttribute($key) == $name){
-                return $attr->getValue();
-            }
-            if ($ns && $this->_xmlns->unAliasAttribute("$ns:$key") == $name){
-                return $attr->getValue();
-            }
-        }
-    }
-    
     public function getAttributeNodes()
     {
         return $this->attribute_nodes;
-    }
-    
-    /** 
-     * Returns true if this element has some
-     * content to print (an empty text node child does not count).
-     */
-    public function hasRealContent()
-    {
-        foreach($this->childNodes as $node)
-        {
-            if (!$child instanceOf PHPTAL_DOMText || $child->getValueEscaped() !== '') return true;
-        }
-        return false;
-    }
-
-    private function getNodePrefix()
-    {
-        $result = false;
-        if (preg_match('/^(.*?):block$/', $this->qualifiedName, $m)){
-            list(,$result) = $m;
-        }
-        return $result;
     }
     
     private function hasContent()

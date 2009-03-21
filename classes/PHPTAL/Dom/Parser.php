@@ -41,7 +41,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     public function __construct($input_encoding)
     {
         parent::__construct($input_encoding);
-        $this->_xmlns = new PHPTAL_Dom_XmlnsState(array(), array());
+        $this->_xmlns = new PHPTAL_Dom_XmlnsState(array(), '');
     }
 
     public function getXmlnsState()

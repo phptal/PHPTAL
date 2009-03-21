@@ -56,7 +56,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
             case 'm': $cache_len .= '*60'; /* no break */
         }
 
-        $this->cache_tag = '"'.addslashes( $this->phpelement->node->getQualifiedName() . ':' . $this->phpelement->node->getSourceLine()).'"';
+        $this->cache_tag = '"'.addslashes( $this->phpelement->getQualifiedName() . ':' . $this->phpelement->getSourceLine()).'"';
         
         $cache_per_expression = isset($matches[3])?trim($matches[3]):NULL;
         if ($cache_per_expression == 'url')

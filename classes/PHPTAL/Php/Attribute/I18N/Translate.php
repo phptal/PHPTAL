@@ -53,17 +53,17 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
             if ($child instanceOf PHPTAL_Php_Text){
 				if ($preserve_tags)
 				{
-                    $result .= $child->node->getValueEscaped();
+                    $result .= $child->getValueEscaped();
                 }
 				else
 				{
-                	$result .= html_entity_decode($child->node->getValueEscaped(),ENT_QUOTES,$encoding);
+                	$result .= html_entity_decode($child->getValueEscaped(),ENT_QUOTES,$encoding);
 				}
             }
             else if ($child instanceOf PHPTAL_Php_Element){
-                if ($child->hasAttribute('i18n:name')){
-                    $value = $child->getAttributeText('i18n:name', $encoding);
-                    $result .= '${' . $value . '}';
+                if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n','name'))
+                {
+                    $result .= '${' . $attr->getValue() . '}';
                 }
                 else {
                     
@@ -72,6 +72,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                         $result .= '<'.$child->getQualifiedName();
                         foreach($child->getAttributeNodes() as $attr)
                         {
+                            if ($attr->isHidden()) continue;
                             $result .= ' '.$attr->getQualifiedName().'="'.$attr->getValueEscaped().'"';
                         }
                         $result .= '>'.$this->_getTranslationKey($child, $preserve_tags,$encoding) . '</'.$child->getQualifiedName().'>';
@@ -90,7 +91,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
     {
         foreach ($tag->childNodes as $child){
             if ($child instanceOf PHPTAL_Php_Element){
-                if ($child->hasAttribute('i18n:name')){
+                if ($child->hasAttributeNS('http://xml.zope.org/namespaces/i18n','name')){
                     $child->generate($codewriter);
                 }
                 else {

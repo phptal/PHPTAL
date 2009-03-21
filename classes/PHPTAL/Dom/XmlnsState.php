@@ -33,9 +33,8 @@
 class PHPTAL_Dom_XmlnsState 
 {
     /** Create a new XMLNS state inheriting provided aliases. */
-    public function __construct(array $prefix_to_prefix, array $prefix_to_uri, $current_default = '')
+    public function __construct(array $prefix_to_uri, $current_default)
     {
-        $this->prefix_to_prefix = $prefix_to_prefix;
         $this->prefix_to_uri = $prefix_to_uri; 
         $this->current_default = $current_default; 
     }
@@ -60,19 +59,6 @@ class PHPTAL_Dom_XmlnsState
         return PHPTAL_Dom_Defs::getInstance()->isHandledNamespace($namespace_uri);   
     }
     
-    /** Returns the unaliased name of specified attribute. */
-    public function unAliasAttribute($attName)
-    {
-        if (count($this->prefix_to_prefix) == 0) 
-            return $attName;
-        
-        $result = $attName;
-        foreach ($this->prefix_to_prefix as $prefix => $real){
-            $result = str_replace("$prefix:", "$real:", $result);
-        }
-        return $result;
-    }
-    
     /** 
      * Returns a new XmlnsState inheriting of $this if $nodeAttributes contains 
      * xmlns attributes, returns $this otherwise.
@@ -82,7 +68,6 @@ class PHPTAL_Dom_XmlnsState
      */
     public function newElement(array $nodeAttributes)
     {
-        $prefix_to_prefix = $this->prefix_to_prefix;
         $prefix_to_uri = $this->prefix_to_uri;
         $current_default = $this->current_default;
         
@@ -94,10 +79,6 @@ class PHPTAL_Dom_XmlnsState
                 $changed = true;
                 list(,$prefix) = $m;
                 $prefix_to_uri[$prefix] = $value;
-                if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($qname, $value))
-                {                
-                    $prefix_to_prefix[$prefix] = PHPTAL_Dom_Defs::getInstance()->namespaceURIToPrefix($value);
-                }                
             }
             
             if ($qname == 'xmlns') {$changed=true;$current_default = $value;}
@@ -105,7 +86,7 @@ class PHPTAL_Dom_XmlnsState
         
         if ($changed) 
         {
-            return new PHPTAL_Dom_XmlnsState($prefix_to_prefix, $prefix_to_uri, $current_default);
+            return new PHPTAL_Dom_XmlnsState($prefix_to_uri, $current_default);
         }
         else
         {
@@ -118,5 +99,5 @@ class PHPTAL_Dom_XmlnsState
         return $this->current_default;
     }
 
-    private $prefix_to_prefix, $prefix_to_uri, $current_default;
+    private $prefix_to_uri, $current_default;
 }

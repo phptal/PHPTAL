@@ -88,7 +88,7 @@ implements PHPTAL_Php_TalesChainReader
         }
         
         // i18n needs to read replaced value of the attribute, which is not possible if attribute is completely replaced with conditional code
-        if ($this->phpelement->hasAttribute('i18n:attributes'))
+        if ($this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/i18n','attributes'))
             $this->prepareAttributeUnconditional($codewriter,$attribute,$code);
         else
             $this->prepareAttributeConditional($codewriter,$attribute,$code);

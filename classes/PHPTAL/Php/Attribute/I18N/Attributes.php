@@ -67,9 +67,9 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,$varn));
             }
             // else if the attribute has a default value
-            else if ($this->phpelement->hasAttribute($attribute)){
+            else if ($attr = $this->phpelement->getAttributeNode($attribute)){
                 // we use this default value as the translation key
-                $key = $this->phpelement->getAttributeText($attribute, $codewriter->getEncoding());
+                $key = $attr->getValue();
                 $key = str_replace('\'', '\\\'', $key);
                 $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,"'$key'"));
             }

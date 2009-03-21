@@ -40,14 +40,16 @@ class PHPTAL_Php_CodeWriter
         return $this->_result;
     }
 
-    public function setDocType(PHPTAL_Php_Doctype $dt)
+    public function setDocType($dt)
     {
-        $this->_doctype = str_replace('\'', '\\\'', $dt->node->getValueEscaped());
+        assert('is_string($dt)');
+        $this->_doctype = $dt;
     }
 
-    public function setXmlDeclaration(PHPTAL_Php_XmlDeclaration $dt)
+    public function setXmlDeclaration($dt)
     {
-        $this->_xmldeclaration = str_replace('\'', '\\\'', $dt->node->getValueEscaped());
+        assert('is_string($dt)');
+        $this->_xmldeclaration = $dt;
     }
 
     public function setFunctionPrefix($prefix)
@@ -147,7 +149,7 @@ class PHPTAL_Php_CodeWriter
     public function doDoctype()
     {
         if ($this->_doctype){
-            $code = '$ctx->setDocType(\''.$this->_doctype.'\')';
+            $code = '$ctx->setDocType(\''.str_replace('\'', '\\\'', $this->_doctype).'\')';
             $this->pushCode($code);
         }
     }
@@ -155,7 +157,7 @@ class PHPTAL_Php_CodeWriter
     public function doXmlDeclaration()
     {
         if ($this->_xmldeclaration){
-            $code = '$ctx->setXmlDeclaration(\''.$this->_xmldeclaration.'\')';
+            $code = '$ctx->setXmlDeclaration(\''.str_replace('\'', '\\\'', $this->_xmldeclaration).'\')';
             $this->pushCode($code);
         }
     }
