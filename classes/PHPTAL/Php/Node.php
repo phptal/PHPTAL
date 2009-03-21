@@ -184,7 +184,6 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     protected $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
-    protected $talAttributes = array();
     protected $replaceAttributes = array();
     protected $contentAttributes = array();
     protected $surroundAttributes = array();
@@ -201,31 +200,29 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $this->namespace_uri = $node->getNamespaceURI();
         $this->xmlns = $node->getXmlnsState();   
         
-        //TODO: use registered namespaces instead of the raw list
-        if (preg_match('/^(tal|metal|phptal|i18n):block$/', $this->qualifiedName, $m)) 
+        
+        if ($this->xmlns->isHandledNamespace($this->namespace_uri)) 
         {
             $this->headFootDisabled = true;
-            $prefix = $m[1];
-        }
-        else
-        {
-            $prefix = '';
-        }          
-        
+        }        
         
         foreach($node->getAttributeNodes() as $attr)
         {
             $qname = $attr->getQualifiedName();
-            if ($this->xmlns->isPhpTalAttribute("$prefix:$qname")) 
+            $attr_namespace_uri = $attr->getNamespaceURI();
+            
+            // it'll work only when qname == localname, which is good
+            if ($this->xmlns->isValidAttributeNS($node->getNamespaceURI(),$qname)) 
             {
+                $attr_namespace_uri = $node->getNamespaceURI();
+                $prefix = PHPTAL_Dom_Defs::getInstance()->namespaceURIToPrefix($attr_namespace_uri);
                 $qname = "$prefix:$qname";
             }
-            
-            $this->attribute_nodes[] = new PHPTAL_Php_Attr($node->getNamespaceURI(), $qname, $attr->getValueEscaped());
+            $this->attribute_nodes[] = new PHPTAL_Php_Attr($attr_namespace_uri, $qname, $attr->getValueEscaped());
         }
                 
-        $this->separateAttributes();
-        $this->orderTalAttributes();
+        $talAttributes = $this->separateAttributes();
+        $this->orderTalAttributes($talAttributes);
     }
 
     public function generate(PHPTAL_Php_CodeWriter $codewriter)
@@ -482,7 +479,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     private function separateAttributes()
     {
-        $this->talAttributes = array();
+        $talAttributes = array();
         foreach ($this->attribute_nodes as $index => $attr) 
         {
             // remove handled xml namespaces
@@ -490,9 +487,9 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             {
                 unset($this->attribute_nodes[$index]);
             }
-            else if ($this->xmlns->isPhpTalAttribute($attr->getQualifiedName())) 
+            else if ($this->xmlns->isHandledNamespace($attr->getNamespaceURI())) 
             {
-                $this->talAttributes[$attr->getQualifiedName()] = $attr->getValueEscaped();
+                $talAttributes[$attr->getQualifiedName()] = $attr;
                 unset($this->attribute_nodes[$index]);
             }
             else if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) 
@@ -500,43 +497,43 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
                 $attr->setValue($attr->getLocalName());
             }            
         }
+        return $talAttributes;
     }
 
-    private function orderTalAttributes()
+    private function orderTalAttributes(array $talAttributes)
     {
-        $talAttributes = array();
-        foreach ($this->talAttributes as $key=>$exp)
+        $temp = array();
+        foreach ($talAttributes as $domattr)
         {
-            $name = $this->xmlns->unAliasAttribute($key);
-            $att = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($name);
-            if (array_key_exists($att->getPriority(), $talAttributes))
+            $nsattr = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($domattr->getNamespaceURI(), $domattr->getLocalName());
+            if (array_key_exists($nsattr->getPriority(), $temp))
             {      
                 throw new PHPTAL_TemplateException(sprintf(self::ERR_ATTRIBUTES_CONFLICT,
                                $this->qualifiedName,
                                $this->getSourceLine(),
                                $key,
-                               $talAttributes[$att->getPriority()][0]
+                               $temp[$nsattr->getPriority()][0]
                                ));
             }
-            $talAttributes[$att->getPriority()] = array($key, $att, $exp);
+            $temp[$nsattr->getPriority()] = array($nsattr, $domattr);
         }
-        ksort($talAttributes);
+        ksort($temp);
 
         $this->talHandlers = array();
-        foreach ($talAttributes as $prio => $dat)
+        foreach ($temp as $prio => $dat)
         {
-            list($key, $att, $exp) = $dat;
-            $handler = $att->createAttributeHandler($this, $exp);
+            list($nsattr, $domattr) = $dat;
+            $handler = $nsattr->createAttributeHandler($this, $domattr->getValueEscaped());
             $this->talHandlers[$prio] = $handler;
 
-            if ($att instanceOf PHPTAL_NamespaceAttributeSurround)
+            if ($nsattr instanceOf PHPTAL_NamespaceAttributeSurround)
                 $this->surroundAttributes[] = $handler;
-            else if ($att instanceOf PHPTAL_NamespaceAttributeReplace)
+            else if ($nsattr instanceOf PHPTAL_NamespaceAttributeReplace)
                 $this->replaceAttributes[] = $handler;
-            else if ($att instanceOf PHPTAL_NamespaceAttributeContent)
+            else if ($nsattr instanceOf PHPTAL_NamespaceAttributeContent)
                 $this->contentAttributes[] = $handler;
             else
-                throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($att));
+                throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($nsattr));
 
         }
     }

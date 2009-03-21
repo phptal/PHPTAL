@@ -78,7 +78,7 @@ class PHPTAL_DOMAttr
     {
         $n = explode(':',$this->qualified_name,2);
         return end($n);
-}
+    }
 }
 
 /**
@@ -117,16 +117,19 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
     private $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
 
-    public function __construct($qualifiedName, PHPTAL_Dom_XmlnsState $state, array $attribute_nodes)
+    public function __construct($qualifiedName, $namespace_uri, PHPTAL_Dom_XmlnsState $state, array $attribute_nodes)
     {
         if (!preg_match('/^([a-z_.-]*:)?[a-z\x80-\xff][a-z0-9._:\x80-\xff-]*$/i',$qualifiedName)) throw new PHPTAL_ParserException("Invalid element name '$qualifiedName'");
         parent::__construct();
         $this->qualifiedName = $qualifiedName;
         $this->attribute_nodes = $attribute_nodes;
-        $this->namespace_uri = $state->getCurrentDefaultNamespaceURI(); 
+        $this->namespace_uri = $namespace_uri; 
+        
+        assert('$this->namespace_uri !== "" || false === strpos($qualifiedName,":")');
+        
         $this->_xmlns = $state;
     }
-
+    
     function getNamespaceURI() {return $this->namespace_uri;}
 
     public function getQualifiedName()
@@ -209,8 +212,8 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
         {
             if (!$child instanceOf PHPTAL_DOMText || $child->getValueEscaped() !== '') return true;
         }
-            return false;
-            }
+        return false;
+    }
 
     private function getNodePrefix()
     {

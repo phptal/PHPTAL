@@ -54,7 +54,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 				if ($preserve_tags)
 				{
                     $result .= $child->node->getValueEscaped();
-            }
+                }
 				else
 				{
                 	$result .= html_entity_decode($child->node->getValueEscaped(),ENT_QUOTES,$encoding);

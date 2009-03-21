@@ -92,30 +92,23 @@ class PHPTAL_Dom_Defs
     {
         self::$_instance = $instance;
     }
-
-    
-    public function __construct()
-    {
-        $this->_dictionary = array();
-        $this->_namespaces = array();
-        $this->_xmlns = array();
-    }
     
     public function isEmptyTag($tagName)
     {
         return in_array(strtolower($tagName), self::$XHTML_EMPTY_TAGS);
     }
 
-    public function namespaceURIToPrefix($xmlns)
-    {
-        return $this->_xmlns[$xmlns];
-    }
-    
     public function prefixToNamespaceURI($prefix)
     {
-        return array_search($prefix,$this->_xmlns,true);
+        return isset($this->prefix_to_uri[$prefix]) ? $this->prefix_to_uri[$prefix] : false;
     }
     
+    public function namespaceURIToPrefix($uri)
+    {
+        return array_search($uri,$this->prefix_to_uri,true);
+    }
+
+
     /**
      * Returns true if the attribute is an xhtml boolean attribute.
      *
@@ -125,36 +118,26 @@ class PHPTAL_Dom_Defs
     {
         return in_array($att, self::$XHTML_BOOLEAN_ATTRIBUTES);
     }
-
-    /**
-     * Returns true if the attribute is in the phptal dictionnary.
-     *
-     * @return bool
-     */
-    public function isPhpTalAttribute($att)
-    {
-        return array_key_exists(strtolower($att), $this->_dictionary);
-    }
     
     /**
-     * Returns true if the attribute is a valid phptal attribute or an unknown
-     * attribute.
+     * Returns true if the attribute is a valid phptal attribute 
      *
      * Examples of valid attributes: tal:content, metal:use-slot
      * Examples of invalid attributes: tal:unknown, metal:content
      *
      * @return bool
      */
-    public function isValidAttribute($att)
+    public function isValidAttributeNS($namespace_uri, $local_name)
     {
-        if (preg_match('/^(.*):(.*)$/', $att, $m)) {
-            list (,$ns,$sub) = $m;
-            if (array_key_exists(strtolower($ns), $this->_namespaces)
-                && !$this->isPhpTalAttribute($att)) {
-                return false;
-            }
-        }
-        return true;
+        if (!$this->isHandledNamespace($namespace_uri)) return false;
+               
+        $attrs = $this->namespaces_by_uri[$namespace_uri]->getAttributes();
+        return isset($attrs[$local_name]);
+    }
+    
+    public function isHandledNamespace($namespace_uri)
+    {
+        return isset($this->namespaces_by_uri[$namespace_uri]);
     }
 
     /**
@@ -165,16 +148,15 @@ class PHPTAL_Dom_Defs
      *
      * @return bool
      */
-    public function isHandledXmlNs($att, $value)
+    public function isHandledXmlNs($qname, $value)
     {
-        $att = strtolower($att);
-        return substr($att, 0, 6) == 'xmlns:'
-            && array_key_exists($value, $this->_xmlns);
+        return substr(strtolower($qname), 0, 6) == 'xmlns:' && $this->isHandledNamespace($value);
     }
-
-    public function getNamespaceAttribute($attName)
-    {
-        return $this->_dictionary[strtolower($attName)];
+    
+    public function getNamespaceAttribute($namespace_uri, $local_name)
+    {    
+        $attrs = $this->namespaces_by_uri[$namespace_uri]->getAttributes();
+        return $attrs[$local_name];
     }
 
     /**
@@ -184,17 +166,20 @@ class PHPTAL_Dom_Defs
     {
         $prefix = strtolower($ns->getPrefix());
         $this->_namespaces[$prefix] = $ns;
+        $this->namespaces_by_uri[$ns->getNamespaceURI()] = $ns;
         $this->_xmlns[$ns->getNamespaceURI()] = $prefix;
+        $this->prefix_to_uri[$ns->getPrefix()] = $ns->getNamespaceURI();
         foreach ($ns->getAttributes() as $name => $attribute){
             $key = $prefix.':'.strtolower($name);
             $this->_dictionary[$key] = $attribute;
         }
     }
-
+    
     private static $_instance = null;
-    private $_dictionary;
-    private $_namespaces;
-    private $_xmlns;
+    private $_dictionary = array();
+    private $_namespaces = array(), $namespaces_by_uri = array();
+    private $_xmlns = array();
+    private $prefix_to_uri = array();
 
     /**
      * This array contains XHTML tags that must be echoed in a &lt;tag/&gt; form
@@ -238,5 +223,3 @@ class PHPTAL_Dom_Defs
         'selected',
     );
 }
-
-?>

@@ -50,19 +50,16 @@ class PHPTAL_Dom_XmlnsState
     }
 
     /** Returns true if $attName is a valid attribute name, false otherwise. */
-    public function isValidAttribute($attName)
+    public function isValidAttributeNS($namespace_uri, $local_name)
     {
-        $unaliased = $this->unAliasAttribute($attName);
-        return PHPTAL_Dom_Defs::getInstance()->isValidAttribute($unaliased);
+        return PHPTAL_Dom_Defs::getInstance()->isValidAttributeNS($namespace_uri, $local_name);
     }
-
-    /** Returns true if $attName is a PHPTAL attribute, false otherwise. */
-    public function isPhpTalAttribute($attName)
+    
+    public function isHandledNamespace($namespace_uri)
     {
-        $unaliased = $this->unAliasAttribute($attName);
-        return PHPTAL_Dom_Defs::getInstance()->isPhpTalAttribute($unaliased);
+        return PHPTAL_Dom_Defs::getInstance()->isHandledNamespace($namespace_uri);   
     }
-
+    
     /** Returns the unaliased name of specified attribute. */
     public function unAliasAttribute($attName)
     {
@@ -115,11 +112,11 @@ class PHPTAL_Dom_XmlnsState
             return $this;
         }
     }
-
+    
     function getCurrentDefaultNamespaceURI()
     {
         return $this->current_default;
-}
+    }
 
     private $prefix_to_prefix, $prefix_to_uri, $current_default;
 }
