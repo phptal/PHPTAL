@@ -43,15 +43,16 @@ abstract class PHPTAL_XmlParser
     const ST_TAG_CLOSE = 4;
     const ST_TAG_SINGLE = 5;
     const ST_TAG_ATTRIBUTES = 6;
-    const ST_CDATA = 7;
-    const ST_COMMENT = 8;
-    const ST_DOCTYPE = 9;
-    const ST_XMLDEC = 15;
-    const ST_PREPROC = 10;
-    const ST_ATTR_KEY = 11;
-    const ST_ATTR_EQ = 12;
-    const ST_ATTR_QUOTE = 13;
-    const ST_ATTR_VALUE = 14;
+    const ST_TAG_BETWEEN_ATTRIBUTE = 7;
+    const ST_CDATA = 8;
+    const ST_COMMENT = 9;
+    const ST_DOCTYPE = 10;
+    const ST_XMLDEC = 11;
+    const ST_PREPROC = 12;
+    const ST_ATTR_KEY = 13;
+    const ST_ATTR_EQ = 14;
+    const ST_ATTR_QUOTE = 15;
+    const ST_ATTR_VALUE = 16;
 
     // exceptions error messages
     const ERR_CHARS_BEFORE_DOC_START = 
@@ -70,6 +71,7 @@ abstract class PHPTAL_XmlParser
       self::ST_TAG_CLOSE => 'closing tag',
       self::ST_TAG_SINGLE => 'self-closing tag',
       self::ST_TAG_ATTRIBUTES => 'tag',
+      self::ST_TAG_BETWEEN_ATTRIBUTE => 'tag attributes',
       self::ST_CDATA => 'CDATA',
       self::ST_COMMENT => 'comment',
       self::ST_DOCTYPE => 'doctype',
@@ -99,10 +101,7 @@ abstract class PHPTAL_XmlParser
     {        
         $this->_file = $filename;
         
-        // remove BOM (utf8 byte order mark)... 
-        if (substr($src,0,3) == self::BOM_STR){
-            $src = substr($src, 3);
-        }
+        
         
         $this->_line = 1;
         $state = self::ST_ROOT;
@@ -117,7 +116,14 @@ abstract class PHPTAL_XmlParser
         $customDoctype = false;
 
         $this->onDocumentStart();
-        for ($i=0; $i<$len; $i++) {        
+        
+        
+        $i=0;
+        // remove BOM (utf8 byte order mark)... 
+        if (substr($src,0,3) == self::BOM_STR){
+            $i=3;
+        }
+        for (; $i<$len; $i++) {        
             $c = $src[$i];
 
             if ($c == "\n") $this->_line++;
@@ -187,6 +193,7 @@ abstract class PHPTAL_XmlParser
                         $tagname = substr($src, $mark, $i-$mark);
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
+                        if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");
                         $this->onElementStart($tagname, $attributes);
                     }
                     break;
@@ -206,25 +213,30 @@ abstract class PHPTAL_XmlParser
                     }
                     $mark = $i+1;   // mark text start
                     $state = self::ST_TEXT;
+                    if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");                    
                     $this->onElementStart($tagname, $attributes);
                     $this->onElementClose($tagname);
                     break;
-
+                
+                case self::ST_TAG_BETWEEN_ATTRIBUTE:    
                 case self::ST_TAG_ATTRIBUTES:
                     if ($c == '>') {
                         $mark = $i+1;   // mark text start
                         $state = self::ST_TEXT;
+                        if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");                        
                         $this->onElementStart($tagname, $attributes);
                     }
                     else if ($c == '/') {
                         $state = self::ST_TAG_SINGLE;
                     }
                     else if (self::isWhiteChar($c)) {
+                        $state = self::ST_TAG_ATTRIBUTES;
                     }
-                    else {
+                    else if ($state === self::ST_TAG_ATTRIBUTES) {
                         $mark = $i; // mark attribute key start
                         $state = self::ST_ATTR_KEY;
                     }
+                    else $this->raiseError("Unexpected character '$c' between attributes of <$tagname>");
                     break;
 
                 case self::ST_COMMENT:
@@ -318,9 +330,10 @@ abstract class PHPTAL_XmlParser
 
                 case self::ST_ATTR_QUOTE:
                     if ($c == $quoteStyle) {
+                        if (!$this->isValidQName($attribute)) $this->raiseError("Invalid attribute name '$attribute'");                        
                         if (isset($attributes[$attribute])) $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
                         $attributes[$attribute] = substr($src, $mark, $i-$mark);
-                        $state = self::ST_TAG_ATTRIBUTES;
+                        $state = self::ST_TAG_BETWEEN_ATTRIBUTE;
                     }
                     break;
             }
@@ -341,6 +354,11 @@ abstract class PHPTAL_XmlParser
         }
         
         $this->onDocumentEnd();
+    }
+    
+    private function isValidQName($name)
+    {        
+        return preg_match('/^([a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*:)?[a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*$/i',$name);
     }
 
     public function getSourceFile()
@@ -395,5 +413,3 @@ abstract class PHPTAL_XmlParser
     private $_source;
 }
 
-
-?>

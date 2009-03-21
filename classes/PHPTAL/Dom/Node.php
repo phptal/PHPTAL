@@ -32,10 +32,6 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 abstract class PHPTAL_DOMNode
 {
-    public function __construct()
-    {
-    }
-
     public function setSource($file, $line)
     {
         $this->_file = $file;
@@ -90,18 +86,12 @@ class PHPTAL_DOMAttr
  */
 class PHPTAL_Dom_Tree extends PHPTAL_DOMNode
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->childNodes = array();
-    }
-
     public function appendChild(PHPTAL_DOMNode $node)
     {
         $this->childNodes[] = $node;
     }
     
-    public $childNodes;
+    public $childNodes = array();
 }
 
 /**
@@ -120,8 +110,6 @@ class PHPTAL_DOMElement extends PHPTAL_Dom_Tree
 
     public function __construct($qualifiedName, $namespace_uri, PHPTAL_Dom_XmlnsState $state, array $attribute_nodes)
     {
-        if (!preg_match('/^([a-z_.-]*:)?[a-z\x80-\xff][a-z0-9._:\x80-\xff-]*$/i',$qualifiedName)) throw new PHPTAL_ParserException("Invalid element name '$qualifiedName'");
-        parent::__construct();
         $this->qualifiedName = $qualifiedName;
         $this->attribute_nodes = $attribute_nodes;
         $this->namespace_uri = $namespace_uri; 

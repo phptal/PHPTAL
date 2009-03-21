@@ -103,10 +103,10 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     public function onSpecific($data)
     {
         $this->pushNode(new PHPTAL_DOMSpecific($data));
-    }
+    }    
 
     public function onElementStart($name, array $attributes)
-    {        
+    {                
         $this->_xmlns = $this->_xmlns->newElement($attributes);
         
         if (preg_match('/^([^:]+):/',$name,$m))
@@ -121,7 +121,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
         
         $attrnodes = array();
         foreach ($attributes as $qname=>$value) 
-        {
+        {            
             $local_name = $qname;
             if (preg_match('/^([^:]+):(.+)$/',$qname,$m))
             {

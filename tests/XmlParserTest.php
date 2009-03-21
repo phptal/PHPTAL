@@ -56,6 +56,41 @@ class XmlParserTest extends PHPTAL_TestCase
         // the onElementData() method
         $this->assertEquals(7, $parser->datas);
     }
+    
+	
+	/**
+     * @expectedException PHPTAL_ParserException
+     */
+    public function testRejectsInvalidAttributes1()
+    {
+        $parser = new MyTestParser();
+        $parser->parseString('<foo bar="bar"baz="baz"/>');
+        $this->fail($parser->result);
+    }
+    
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    public function testRejectsInvalidAttributes2()
+    {
+        $parser = new MyTestParser();
+        $parser->parseString('<foo bar;="bar"/>');
+        $this->fail($parser->result);
+    }
+    
+    public function testSkipsBom()
+    {
+        $parser = new MyTestParser();
+        $parser->parseString("\xef\xbb\xbf<foo/>");
+        $this->assertEquals("<foo></foo>", $parser->result);
+    }
+        
+    public function testAllowsTrickyQnames()
+    {
+        $parser = new MyTestParser();
+        $parser->parseString("\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>");
+        $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $parser->result);
+    }
 }
 
 
