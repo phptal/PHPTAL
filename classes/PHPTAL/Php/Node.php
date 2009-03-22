@@ -69,25 +69,43 @@ class PHPTAL_Php_Attr
         $this->value_escaped = '<?php '.$code.' ?>';
     }
     
-    private $hidden;
-    function setHidden($tf) {$this->hidden = $tf;}
-    function isHidden() {return $this->hidden;}
     
-    function overwriteWithVariable($phpVariable)
+    function hide() {$this->replacedState = self::HIDDEN;}
+    
+    function overwriteValueWithVariable($phpVariable)
     {
+        $this->replacedState = self::VALUE_REPLACED;
+        $this->phpVariable = $phpVariable;
+        $this->setPHPCode('echo '.$phpVariable);
+    }
+
+    function overwriteFullWithVariable($phpVariable)
+    {
+        $this->replacedState = self::FULLY_REPLACED;
         $this->phpVariable = $phpVariable;
         $this->setPHPCode('echo '.$phpVariable);
     }
     
     private $phpVariable;
-    function isOverwritten()
-    {
-        return $this->phpVariable !== NULL;
-    }
-    
     function getOverwrittenVariableName()
     {
         return $this->phpVariable;
+    }
+    
+    const HIDDEN = -1;
+    const NOT_REPLACED = 0;
+    const VALUE_REPLACED = 1;
+    const FULLY_REPLACED = 2;
+    private $replacedState = 0;
+    
+    function getReplacedState()
+    {
+        if ($this->replacedState === self::HIDDEN || $this->replacedState === self::FULLY_REPLACED) return $this->replacedState;
+        if (0===strpos($this->value_escaped,'<?php'))
+        {            
+            return self::VALUE_REPLACED;
+        }
+        return $this->replacedState;
     }
 }
 
@@ -131,8 +149,6 @@ abstract class PHPTAL_Php_Node
 class PHPTAL_Php_Tree extends PHPTAL_Php_Node
 {
     public $childNodes;
-
-    private $attributes; // cause error FIXME
 
     public function __construct(PHPTAL_DOMNode $node) /* must allow documentfragment */
     {
@@ -266,15 +282,6 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         $this->generateSurroundFoot($codewriter);
     }
 
-    private function getOrCreateAttributeNodeByQName($qname)
-    {
-        foreach($this->attribute_nodes as $attr) if ($attr->getQualifiedName() == $qname) return $attr;    
-        
-        $attr = new PHPTAL_Php_Attr("FIXME", $qname, NULL, 'UTF-8');
-        $this->attribute_nodes[] = $attr;
-        return $attr;
-    }
-
     public function getAttributeNodes()
     {
         return $this->attribute_nodes;
@@ -285,7 +292,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
      */
     public function setAttributePHPCode($qname, $code)
     {
-        $this->getOrCreateAttributeNodeByQName($qname)->setPHPCode($code);
+        $this->getOrCreateAttributeNode($qname)->setPHPCode($code);
     }
 
     /** Returns true if the element contains specified PHPTAL attribute. */
@@ -311,11 +318,17 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     public function getAttributeNode($qname)
     {
-        foreach($this->attribute_nodes as $attr) 
-        {
-            if ($attr->getQualifiedName() === $qname) return $attr;
-        }
+        foreach($this->attribute_nodes as $attr) if ($attr->getQualifiedName() === $qname) return $attr;
         return NULL;
+    }
+        
+    public function getOrCreateAttributeNode($qname)
+    {
+        if ($attr = $this->getAttributeNode($qname)) return $attr;
+        
+        $attr = new PHPTAL_Php_Attr("FIXME", $qname, NULL, 'UTF-8'); // FIXME: should find namespace and encoding
+        $this->attribute_nodes[] = $attr;
+        return $attr;
     }
 
     /** Returns HTML-escaped the value of specified PHPTAL attribute. */
@@ -332,21 +345,6 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             return $n->getValue();
         }
         return '';
-    }
-
-    public function isOverwrittenAttribute($qname)
-    {
-        return $this->getOrCreateAttributeNodeByQName($qname)->isOverwritten();
-    }
-
-    public function getOverwrittenAttributeVarName($qname)
-    {
-        return $this->getOrCreateAttributeNodeByQName($qname)->getOverwrittenVariableName();
-    }
-
-    public function overwriteAttributeWithPhpVariable($qname, $phpVariable)
-    {
-        $this->getOrCreateAttributeNodeByQName($qname)->overwriteWithVariable($phpVariable);
     }
 
     /**
@@ -368,7 +366,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         if ($this->hasAttributeNS('http://xml.zope.org/namespaces/tal','attributes')) return true;
         foreach($this->attribute_nodes as $attr)
         {
-            if (!$attr->isHidden()) return true;
+            if ($attr->getReplacedState() !== PHPTAL_Php_Attr::HIDDEN) return true;
         }
         return false;
     }
@@ -466,30 +464,30 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         //  $tag->attributes['checked'] = '<?php echo $__ATT_checked ?\>';
         //
 
-
-        $fullreplaceRx = PHPTAL_Php_Attribute_TAL_Attributes::REGEX_FULL_REPLACE;
         foreach ($this->getAttributeNodes() as $attr) 
         {
-            if ($attr->isHidden()) continue;
-            
-            $key = $attr->getQualifiedName();
-            $value = $attr->getValueEscaped();
-            
-            if (preg_match($fullreplaceRx, $value)){
-                $codewriter->pushHtml($value);
-            }
-            else if (strpos($value,'<?php') === 0){
-                $codewriter->pushHtml(' '.$key.'="');
-                $codewriter->pushRawHtml($value);
-                $codewriter->pushHtml('"');
-            }
-            elseif ($codewriter->getOutputMode() === PHPTAL::HTML5 && PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($key))
+            switch($attr->getReplacedState())
             {
-                $codewriter->pushHtml(' '.$key);
-            }
-            else
-            {
-                $codewriter->pushHtml(' '.$key.'='.$codewriter->quoteAttributeValue($value));
+                case PHPTAL_Php_Attr::NOT_REPLACED:
+                    $codewriter->pushHtml(' '.$attr->getQualifiedName());                    
+                    if ($codewriter->getOutputMode() !== PHPTAL::HTML5 || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName()))
+                    {
+                        $codewriter->pushHtml('='.$codewriter->quoteAttributeValue($attr->getValueEscaped()));
+                    }
+                    break;
+                    
+                case PHPTAL_Php_Attr::HIDDEN:
+                    break;
+                    
+                case PHPTAL_Php_Attr::FULLY_REPLACED:
+                    $codewriter->pushHtml($attr->getValueEscaped());
+                    break;
+                
+                case PHPTAL_Php_Attr::VALUE_REPLACED:
+                    $codewriter->pushHtml(' '.$attr->getQualifiedName().'="');
+                    $codewriter->pushRawHtml($attr->getValueEscaped());
+                    $codewriter->pushHtml('"');
+                    break;
             }
         }
     }
@@ -518,7 +516,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
             else if ($this->xmlns->isHandledNamespace($attr->getNamespaceURI())) 
             {
                 $talAttributes[$attr->getQualifiedName()] = $attr;
-                $attr->setHidden(true);
+                $attr->hide();
             }
             else if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) 
             {

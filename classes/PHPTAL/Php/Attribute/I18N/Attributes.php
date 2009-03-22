@@ -51,32 +51,38 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes to translate
-        $expressions = $codewriter->splitExpression($this->expression);
-        // foreach attribute
-        foreach ($expressions as $exp){
-            list($attribute, $key) = $this->parseSetExpression($exp);
-            //   if the translation key is specified 
-            if ($key != null){
-                // we use it and replace the tag attribute with the result of
-                // the translation
-                $key = str_replace('\'', '\\\'', $key);
-                $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,"'$key'"));
+        foreach($codewriter->splitExpression($this->expression) as $exp)
+        {            
+            list($qname, $key) = $this->parseSetExpression($exp);
+                        
+            if ($key != NULL) // if the translation key is specified 
+            {
+                // we use it and replace the tag attribute with the result of the translation
+                $code = "'".str_replace('\'', '\\\'', $key)."'";
             } 
-            else if ($this->phpelement->isOverwrittenAttribute($attribute)){
-                $varn = $this->phpelement->getOverwrittenAttributeVarName($attribute);
-                $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,$varn));
+            else
+            {                
+                $attr = $this->phpelement->getAttributeNode($qname);
+                if (!$attr)
+                {
+                    throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because there is no translation key specified");
+                }
+
+                switch($attr->getReplacedState())
+                {
+                    case PHPTAL_Php_Attr::VALUE_REPLACED:
+                        $code = $attr->getOverwrittenVariableName();
+                        break;
+                    case PHPTAL_Php_Attr::NOT_REPLACED:
+                        $code = "'".str_replace('\'', '\\\'', $attr->getValue())."'";  
+                        break;
+                    
+                    default:
+                        throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it");
+                }
             }
-            // else if the attribute has a default value
-            else if ($attr = $this->phpelement->getAttributeNode($attribute)){
-                // we use this default value as the translation key
-                $key = $attr->getValue();
-                $key = str_replace('\'', '\\\'', $key);
-                $this->phpelement->setAttributePHPCode($attribute, $this->_getTranslationCode($codewriter,"'$key'"));
-            }
-            else {
-                // unable to translate the attribute
-                throw new PHPTAL_TemplateException("Unable to translate attribute $attribute");
-            }
+            
+            $this->phpelement->getOrCreateAttributeNode($qname)->setPHPCode($this->_getTranslationCode($codewriter,$code));
         }
     }
    

@@ -72,7 +72,8 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                         $result .= '<'.$child->getQualifiedName();
                         foreach($child->getAttributeNodes() as $attr)
                         {
-                            if ($attr->isHidden()) continue;
+                            if ($attr->getReplacedState() === PHPTAL_Php_Attr::HIDDEN) continue;
+                            
                             $result .= ' '.$attr->getQualifiedName().'="'.$attr->getValueEscaped().'"';
                         }
                         $result .= '>'.$this->_getTranslationKey($child, $preserve_tags,$encoding) . '</'.$child->getQualifiedName().'>';
