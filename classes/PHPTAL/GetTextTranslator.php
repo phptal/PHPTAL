@@ -107,7 +107,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         $value = gettext($key);
         
         if ($htmlencode){
-            $value = @htmlspecialchars($value, ENT_QUOTES, $this->_encoding); // silence unsupported encoding error for ISO-8859-x, which doesn't matter.
+            $value = htmlspecialchars($value, ENT_QUOTES); 
         }
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src,$var) = $m;

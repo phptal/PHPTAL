@@ -106,7 +106,7 @@ class PHPTAL_Php_State
     }
 
     private function _interpolateTalesVarsEscaped($matches) {
-        return '<?php echo phptal_escape('.phptal_tale($matches[1]).', ENT_QUOTES, \''.$this->_encoding.'\');?>';
+        return '<?php echo '.$this->htmlchars(phptal_tale($matches[1])).';?>';
     }
 
     public function interpolateTalesVarsInHtml($src)
@@ -137,7 +137,12 @@ class PHPTAL_Php_State
 
     public function htmlchars($php)
     {
-        return 'phptal_escape('.$php.', ENT_QUOTES, \''.$this->_encoding.'\')';
+        // PHP strings can be escaped at compile time
+        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/',$php, $m))
+        {
+            return "'".htmlspecialchars(str_replace('\\\'',"'",$m[1]), ENT_QUOTES)."'";
+        }        
+        return 'phptal_escape('.$php.')';
     }
 }
 
