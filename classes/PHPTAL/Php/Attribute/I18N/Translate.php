@@ -31,15 +31,14 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         if (strlen(trim($this->expression)) == 0){
             $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
             $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
-            $code = '\'' . str_replace('\'', '\\\'', $key) . '\'';
+            $code = $codewriter->str($key);
         }
         else {
             $code = $codewriter->evaluateExpression($this->expression);
         }
         $this->_prepareNames($codewriter, $this->phpelement);
 
-        $php = sprintf('echo $_translator->translate(%s,%s);', $code, $escape ? 'true':'false');
-        $codewriter->pushCode($php);
+        $codewriter->pushCode('echo $_translator->translate('.$code.','.($escape ? 'true':'false').');');
     }
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)

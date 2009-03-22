@@ -58,23 +58,21 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
             if ($key != NULL) // if the translation key is specified 
             {
                 // we use it and replace the tag attribute with the result of the translation
-                $code = "'".str_replace('\'', '\\\'', $key)."'";
+                $code = $this->_getTranslationCode($codewriter,$key);
             } 
             else
             {                
                 $attr = $this->phpelement->getAttributeNode($qname);
-                if (!$attr)
-                {
-                    throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because there is no translation key specified");
-                }
+                if (!$attr) throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because there is no translation key specified");
 
                 switch($attr->getReplacedState())
                 {
                     case PHPTAL_Php_Attr::VALUE_REPLACED:
-                        $code = $attr->getOverwrittenVariableName();
+                        // sadly variables won't be interpolated in this translation
+                        $code = 'echo '.$codewriter->escapeCode('$_translator->translate('.$attr->getOverwrittenVariableName().', false)');
                         break;
                     case PHPTAL_Php_Attr::NOT_REPLACED:
-                        $code = "'".str_replace('\'', '\\\'', $attr->getValue())."'";  
+                        $code = $this->_getTranslationCode($codewriter,$attr->getValue());
                         break;
                     
                     default:
@@ -82,7 +80,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 }
             }
             
-            $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithCode($this->_getTranslationCode($codewriter,$code));
+            $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithCode($code);
         }
     }
    
@@ -90,6 +88,9 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
     {
     }
 
+    /**
+     * @param key - unescaped string (not PHP code) for the key
+     */
     private function _getTranslationCode(PHPTAL_Php_CodeWriter $codewriter, $key)
     {
 		$code = '';
@@ -97,15 +98,14 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 			array_shift($m);
 			$m = array_shift($m);
 			foreach ($m as $name){
-				$code .= "\n".'$_translator->setVar(\''.$name.'\','.phptal_tale($name).');'; // allow more complex TAL expressions
+				$code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.phptal_tale($name).');'; // allow more complex TAL expressions
 			}
 			$code .= "\n";
 		}
 
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
-		$result = $codewriter->escapeCode(sprintf('$_translator->translate(%s, false)', $key));
-        $code .= 'echo '.$result;
+        $code .= 'echo '.$codewriter->escapeCode('$_translator->translate('.$codewriter->str($key).', false)');
 		return $code;
     }
 }

@@ -28,25 +28,18 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
  */
 class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
 {
-    private $id;
-    
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->id = str_replace('"', '\\\"', $this->expression);
-        
         // retrieve trigger
         $codewriter->doSetVar(
             '$trigger', 
-            '$tpl->getTrigger("'.$this->id.'")'
+            '$tpl->getTrigger('.$codewriter->str($this->expression).')'
         );
 
         // if trigger found and trigger tells to proceed, we execute
         // the node content
-        $cond = '$trigger && '
-              . '$trigger->start("%s", $tpl) == PHPTAL_Trigger::PROCEED';
-        $cond = sprintf($cond, $this->id);
-
-        $codewriter->doIf($cond);
+        $codewriter->doIf('$trigger && 
+            $trigger->start('.$codewriter->str($this->expression).', $tpl) === PHPTAL_Trigger::PROCEED');
     }
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)
@@ -57,10 +50,9 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
         // if trigger found, notify the end of the node
         $codewriter->doIf('$trigger');
         $codewriter->pushCode(
-            '$trigger->end("'.$this->id.'", $tpl)'
+            '$trigger->end('.$codewriter->str($this->expression).', $tpl)'
         );
         $codewriter->doEnd();
     }
 }
 
-?>

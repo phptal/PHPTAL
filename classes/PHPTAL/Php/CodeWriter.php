@@ -149,7 +149,7 @@ class PHPTAL_Php_CodeWriter
     public function doDoctype()
     {
         if ($this->_doctype){
-            $code = '$ctx->setDocType(\''.str_replace('\'', '\\\'', $this->_doctype).'\')';
+            $code = '$ctx->setDocType('.$this->str($this->_doctype).')';
             $this->pushCode($code);
         }
     }
@@ -157,7 +157,7 @@ class PHPTAL_Php_CodeWriter
     public function doXmlDeclaration()
     {
         if ($this->_xmldeclaration){
-            $code = '$ctx->setXmlDeclaration(\''.str_replace('\'', '\\\'', $this->_xmldeclaration).'\')';
+            $code = '$ctx->setXmlDeclaration('.$this->str($this->_xmldeclaration).')';
             $this->pushCode($code);
         }
     }
@@ -315,6 +315,14 @@ class PHPTAL_Php_CodeWriter
         $codeLine = $this->indentSpaces() . $codeLine;
         $this->_codeBuffer[] =  $codeLine;
     }
+    
+    /**
+     * php string with escaped text
+     */
+    public function str($string)
+    {
+        return '\''.str_replace('\'', '\\\'', $string).'\'';
+    }
 
     public function escapeLTandGT($str){
         $str = str_replace('<', '&lt;', $str);
@@ -417,4 +425,4 @@ class PHPTAL_Php_CodeWriter
     private $_xmldeclaration = "";
 }
 
-?>
+

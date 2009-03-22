@@ -22,7 +22,6 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
         $codewriter->pushCode('$__i18n_domains = array()');
         $codewriter->doEnd();
 
-        //\''.str_replace(array('\\',"'"),array('\\\\',"\\'"),$expression).'\'
         $expression = $codewriter->interpolateTalesVarsInString($this->expression);
 
         // push current domain and use new domain

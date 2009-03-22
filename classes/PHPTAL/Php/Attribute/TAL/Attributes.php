@@ -188,7 +188,7 @@ implements PHPTAL_Php_TalesChainReader
         $attr_str = ($this->_default_escaped !== false)
             ? ' '.$this->_attribute.'='.$codewriter->quoteAttributeValue($this->_default_escaped)  // default value
             : '';                                 // do not print attribute
-        $codewriter->doSetVar($this->_attkey, "'".str_replace("'",'\\\'',$attr_str)."'");
+        $codewriter->doSetVar($this->_attkey, $codewriter->str($attr_str));
         $executor->breakChain();
     }
 
