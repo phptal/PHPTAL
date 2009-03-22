@@ -64,11 +64,10 @@ class PHPTAL_Php_Attr
         return $this->value_escaped;
     }
     
-    function setPHPCode($code)
+    private function setPHPCode($code)
     {
         $this->value_escaped = '<?php '.$code.' ?>';
     }
-    
     
     function hide() {$this->replacedState = self::HIDDEN;}
     
@@ -86,6 +85,13 @@ class PHPTAL_Php_Attr
         $this->setPHPCode('echo '.$phpVariable);
     }
     
+    function overwriteValueWithCode($code)
+    {
+        $this->replacedState = self::VALUE_REPLACED;
+        $this->phpVariable = NULL;
+        $this->setPHPCode($code);
+    }    
+    
     private $phpVariable;
     function getOverwrittenVariableName()
     {
@@ -100,11 +106,6 @@ class PHPTAL_Php_Attr
     
     function getReplacedState()
     {
-        if ($this->replacedState === self::HIDDEN || $this->replacedState === self::FULLY_REPLACED) return $this->replacedState;
-        if (0===strpos($this->value_escaped,'<?php'))
-        {            
-            return self::VALUE_REPLACED;
-        }
         return $this->replacedState;
     }
 }
@@ -286,15 +287,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     {
         return $this->attribute_nodes;
     }
-
-    /**
-     * use PHP code to generate attribute's value. The code must use echo!
-     */
-    public function setAttributePHPCode($qname, $code)
-    {
-        $this->getOrCreateAttributeNode($qname)->setPHPCode($code);
-    }
-
+    
     /** Returns true if the element contains specified PHPTAL attribute. */
     public function hasAttribute($qname)
     {

@@ -82,7 +82,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 }
             }
             
-            $this->phpelement->getOrCreateAttributeNode($qname)->setPHPCode($this->_getTranslationCode($codewriter,$code));
+            $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithCode($this->_getTranslationCode($codewriter,$code));
         }
     }
    
