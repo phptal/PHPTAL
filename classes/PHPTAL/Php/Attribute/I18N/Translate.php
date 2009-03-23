@@ -56,7 +56,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                 }
 				else
 				{
-                	$result .= html_entity_decode($child->getValueEscaped(),ENT_QUOTES,$encoding);
+                	$result .= $child->getValue($encoding);
 				}
             }
             else if ($child instanceOf PHPTAL_Php_Element){

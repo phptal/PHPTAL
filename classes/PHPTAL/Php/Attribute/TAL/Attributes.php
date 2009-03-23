@@ -136,9 +136,9 @@ implements PHPTAL_Php_TalesChainReader
     {
         $this->_default_escaped = false;
         $this->_attribute = $qname;
-        if ($this->phpelement->hasAttribute($qname)) 
+        if ($default_attr = $this->phpelement->getAttributeNode($qname)) 
         {
-            $this->_default_escaped = $this->phpelement->getAttributeEscaped($qname);
+            $this->_default_escaped = $default_attr->getValueEscaped();
         }
         $this->_attkey = $this->getVarName($qname);
         $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $chain, $this);

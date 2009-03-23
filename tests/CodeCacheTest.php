@@ -48,12 +48,10 @@ class CodeCacheTest extends PHPTAL_TestCase
 
     function testNoParseOnReexecution()
     {
-        $this->phptal->setSource('<p phptal:cache="1d">hello1</p>');
+        $this->phptal->setSource('<p>hello</p>');
         $this->phptal->execute();
 
         $this->assertTrue($this->phptal->testHasParsed, "Initial parse");
-
-        $this->phptal->cleanUpGarbage(); // shouldn't do anything
 
         $this->phptal->testHasParsed = false;
         $this->phptal->execute();
@@ -63,21 +61,20 @@ class CodeCacheTest extends PHPTAL_TestCase
 
     function testNoParseOnReset()
     {
-        $this->phptal->setTemplate('input/code-cache-01.html');
+        $this->phptal->setSource('<p>hello2</p>');
         $this->phptal->execute();
 
         $this->assertTrue($this->phptal->testHasParsed, "Initial parse");
+        
         $this->resetPHPTAL();
 
-        $this->phptal->cleanUpGarbage(); // shouldn't do anything
-
-        $this->phptal->setTemplate('input/code-cache-01.html');
+        $this->phptal->setSource('<p>hello2</p>');
         $this->phptal->execute();
 
         $this->assertFalse($this->phptal->testHasParsed, "No reparse");
     }
 
-    function testReparseAfterUnlink()
+    function testReparseOnClear()
     {
         $this->phptal->setSource('<p>hello3</p>');
         $this->phptal->execute();
