@@ -25,7 +25,27 @@ class EscapeTest extends PHPTAL_TestCase {
         $this->assertNotContains('&amp;',$res);
     }
     
+    function testEntityDecodingBeforePHP()
+    {
+        /* PHP block in attributes gets raw input (that's not XML style, but PHP style) */
+        $res = $this->executeString('<div title="${php:strlen(\'&quot;&amp;\')}" class="<?php echo strlen(\'&quot;&amp;\')?>">'.
+            '<tal:block tal:content="php:strlen(\'&quot;&amp;\')" />,${php:strlen(\'&quot;&amp;\')}</div>');
+        $this->assertEquals('<div title="2" class="11">2,2</div>',$res);
+    }
     
+    function testEntityEncodingAfterPHP()
+    {
+        $res = $this->executeString('<div title="${php:urldecode(\'%26%22%3C\')}"><tal:block tal:content="php:urldecode(\'%26%22%3C\')" />,${php:urldecode(\'%26%22%3C\')}</div>');
+        $this->assertEquals('<div title="&amp;&quot;&lt;">&amp;&quot;&lt;,&amp;&quot;&lt;</div>',$res);
+    }
+
+    function testNoEntityEncodingAfterStructurePHP()
+    {
+        $res = $this->executeString('<div title="${structure php:urldecode(\'%26%20%3E%27\')}" class="<?php echo urldecode(\'%26%20%3E%27\')?>">'.
+            '<tal:block tal:content="structure php:urldecode(\'%26%20%3E%22\')" />,${structure php:urldecode(\'%26%20%3E%22\')},<?php echo urldecode(\'%26%20%3E%22\')?></div>');
+        $this->assertEquals('<div title="& >\'" class="& >\'">& >",& >",& >"</div>',$res);
+    }
+
     function testDecodingBeforeStructure()
     {
         $res = $this->executeString('<div tal:content="structure php:\'&amp; quote character\'" />');

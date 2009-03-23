@@ -477,7 +477,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
                     $codewriter->pushRawHtml(' '.$attr->getQualifiedName());                    
                     if ($codewriter->getOutputMode() !== PHPTAL::HTML5 || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName()))
                     {
-                        $codewriter->pushHtml('='.$codewriter->quoteAttributeValue($attr->getValueEscaped()));
+                        $codewriter->pushStringEscaped('='.$codewriter->quoteAttributeValue($attr->getValueEscaped()));
                     }
                     break;
                     

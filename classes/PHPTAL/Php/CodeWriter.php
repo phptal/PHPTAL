@@ -363,11 +363,11 @@ class PHPTAL_Php_CodeWriter
     {
         if ($this->getEncoding() == 'UTF-8') // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
         {
-            $attr_regex = '/^[^&\/=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]+$/u';
+            $attr_regex = '/^[^$&\/=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]+$/u'; // FIXME: interpolation is done _after_ that function, so $ must be forbidden for now
         }
         else
         {
-            $attr_regex = '/^[^&\/=\'"><\s`\0177-\377]+$/';
+            $attr_regex = '/^[^$&\/=\'"><\s`\0177-\377]+$/';
         }
         
         if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex,$value)) 
