@@ -20,25 +20,11 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //
 
-define('PHPTAL_VERSION', '1_2_0a');
+define('PHPTAL_VERSION', '1_2_0a1');
 
 //{{{PHPTAL_DIR
 if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR);
 else assert('substr(PHPTAL_DIR,-1) == DIRECTORY_SEPARATOR');
-//}}}
-
-/* Please don't use the following constants. They have been replaced by methods in the PHPTAL class and are kept for backwards compatibility only. */
-//{{{
-if (!defined('PHPTAL_PHP_CODE_DESTINATION')) {
-    if (function_exists('sys_get_temp_dir')) define('PHPTAL_PHP_CODE_DESTINATION',rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR);
-    else if (substr(PHP_OS,0,3) == 'WIN') {
-        if (file_exists('c:\\WINNT\\Temp\\')) define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINNT\\Temp\\');
-        else define('PHPTAL_PHP_CODE_DESTINATION', 'c:\\WINDOWS\\Temp\\');
-    }
-    else define('PHPTAL_PHP_CODE_DESTINATION', '/tmp/');
-}
-if (!defined('PHPTAL_DEFAULT_ENCODING')) define('PHPTAL_DEFAULT_ENCODING', 'UTF-8');
-if (!defined('PHPTAL_PHP_CODE_EXTENSION')) define('PHPTAL_PHP_CODE_EXTENSION', 'php');
 //}}}
 
 require_once PHPTAL_DIR.'PHPTAL/FileSource.php';
@@ -91,6 +77,17 @@ class PHPTAL
         $this->_globalContext = new StdClass();
         $this->_context = new PHPTAL_Context();
         $this->_context->setGlobal($this->_globalContext);
+        
+        if (function_exists('sys_get_temp_dir')) 
+        {
+            $this->setPhpCodeDestination(sys_get_temp_dir());
+        }
+        else if (substr(PHP_OS,0,3) == 'WIN') 
+        {
+            if (file_exists('c:\\WINNT\\Temp\\')) $this->setPhpCodeDestination('c:\\WINNT\\Temp');
+            else $this->setPhpCodeDestination('c:\\WINDOWS\\Temp\\');
+        }
+        else $this->setPhpCodeDestination('/tmp/');
     }
 
     /**
@@ -804,14 +801,14 @@ class PHPTAL
     // list of on-error caught exceptions
     protected $_errors = array();
 
-    protected $_encoding = PHPTAL_DEFAULT_ENCODING;
+    protected $_encoding = 'UTF-8';
     protected $_outputMode = PHPTAL::XHTML;
     protected $_stripComments = false;
 
     // configuration properties
     protected $_forceReparse = NULL;
-    protected $_phpCodeDestination = PHPTAL_PHP_CODE_DESTINATION;
-    protected $_phpCodeExtension = PHPTAL_PHP_CODE_EXTENSION;
+    protected $_phpCodeDestination;
+    protected $_phpCodeExtension = 'php';
 
     protected $_cacheLifetime = 30;
     protected $_cachePurgeFrequency = 50;
