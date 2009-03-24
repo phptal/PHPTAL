@@ -43,7 +43,7 @@ class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
 
 if (isset($argv) && count($argv) >= 2){
     array_shift($argv);
-    foreach ($argv as $entry){
+    foreach($argv as $entry){
         echo "-> running standalone test units $entry\n";
         try
         {

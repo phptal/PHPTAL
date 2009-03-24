@@ -97,7 +97,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 		if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
 			array_shift($m);
 			$m = array_shift($m);
-			foreach ($m as $name){
+			foreach($m as $name){
 				$code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.phptal_tale($name).');'; // allow more complex TAL expressions
 			}
 			$code .= "\n";

@@ -1813,7 +1813,7 @@ class FilterChain implements PHPTAL_Filter {
     }
 
     public function filter($source){
-        foreach ($this->_filters as $filter){
+        foreach($this->_filters as $filter){
             $source = $filter->filter($source);
         }
         return $source;
@@ -2038,7 +2038,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 ...
     public function setLanguage(){
         $langs = func_get_args();
-        foreach ($langs as $lang){
+        foreach($langs as $lang){
             // if $lang known use it and stop the loop
             $this->_currentLang = $lang;
             return;
@@ -2507,7 +2507,7 @@ function phptal_tales_money( $src, $nothrow )
 
     <programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -exec rm -v {} \;</programlisting>
   </article>
-  <article id="usefulllinks">
+  <article id="usefullinks">
     <title>Nützliche Verweise</title>
 
     <itemizedlist>

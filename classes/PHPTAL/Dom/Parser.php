@@ -120,7 +120,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
         }
         
         $attrnodes = array();
-        foreach ($attributes as $qname=>$value) 
+        foreach($attributes as $qname=>$value) 
         {            
             $local_name = $qname;
             if (preg_match('/^([^:]+):(.+)$/',$qname,$m))

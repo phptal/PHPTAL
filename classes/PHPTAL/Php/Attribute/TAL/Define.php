@@ -53,7 +53,7 @@ implements PHPTAL_Php_TalesChainReader
         $expressions = $codewriter->splitExpression($this->expression);
         $definesAnyNonGlobalVars = false;
 
-        foreach ($expressions as $exp){
+        foreach($expressions as $exp){
             list($defineScope, $defineVar, $expression) = $this->parseExpression($exp);
             if (!$defineVar) {
                 continue;

@@ -98,7 +98,7 @@ class PHPTAL_Dom_Tree extends PHPTAL_DOMNode
  * Document Tag representation.
  *
  * This is the main class used by PHPTAL because TAL is a Template Attribute
- * Language, other Node kinds are (usefull) toys.
+ * Language, other Node kinds are (useful) toys.
  *
  * @package phptal.dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>

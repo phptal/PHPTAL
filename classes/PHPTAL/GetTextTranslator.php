@@ -63,7 +63,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     public function setLanguage()
     {
         $langs = func_get_args();
-        foreach ($langs as $langCode){
+        foreach($langs as $langCode){
             putenv("LANG=$langCode");
             putenv("LC_ALL=$langCode");
             putenv("LANGUAGE=$langCode");

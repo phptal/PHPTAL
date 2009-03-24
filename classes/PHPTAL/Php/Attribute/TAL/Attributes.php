@@ -58,7 +58,7 @@ implements PHPTAL_Php_TalesChainReader
     {
         // split attributes using ; delimiter
         $attrs = $codewriter->splitExpression($this->expression);
-        foreach ($attrs as $exp) {
+        foreach($attrs as $exp) {
             list($qname, $expression) = $this->parseSetExpression($exp);
             if ($expression) {
                 $this->prepareAttribute($codewriter,$qname, $expression);

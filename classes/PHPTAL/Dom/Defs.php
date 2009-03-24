@@ -72,7 +72,7 @@ require_once PHPTAL_DIR.'PHPTAL/Namespace/PHPTAL.php';
  * This is a pseudo singleton class, a user may decide to provide 
  * his own singleton instance which will then be used by PHPTAL.
  *
- * This behaviour is mainly usefull to remove builtin namespaces 
+ * This behaviour is mainly useful to remove builtin namespaces 
  * and provide custom ones.
  * 
  * @package phptal.dom
@@ -169,7 +169,7 @@ class PHPTAL_Dom_Defs
         $this->namespaces_by_uri[$ns->getNamespaceURI()] = $ns;
         $this->_xmlns[$ns->getNamespaceURI()] = $prefix;
         $this->prefix_to_uri[$ns->getPrefix()] = $ns->getNamespaceURI();
-        foreach ($ns->getAttributes() as $name => $attribute){
+        foreach($ns->getAttributes() as $name => $attribute){
             $key = $prefix.':'.strtolower($name);
             $this->_dictionary[$key] = $attribute;
         }

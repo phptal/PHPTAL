@@ -72,7 +72,7 @@ class PHPTAL_Dom_XmlnsState
         $current_default = $this->current_default;
         
         $changed = false;
-        foreach ($nodeAttributes as $qname => $value)
+        foreach($nodeAttributes as $qname => $value)
         {
             if (preg_match('/^xmlns:(.+)$/', $qname, $m))
             {                

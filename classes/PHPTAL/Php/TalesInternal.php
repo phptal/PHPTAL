@@ -32,7 +32,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
 		static $registered = false;
 
-		if($registered) {
+		if ($registered) {
 			return;
 		}
 
@@ -141,7 +141,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    // generate the array of sub expressions and return it.
 	    if (count($exps) > 1 || isset($string)) {
 	        $result = array();
-	        foreach ($exps as $exp) {
+	        foreach($exps as $exp) {
 	            $result[] = phptal_tales(trim($exp), true);
 	        }
 	        if (isset($string)){

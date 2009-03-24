@@ -53,7 +53,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     {
         $this->pushSlots($codewriter);
         
-        foreach ($this->phpelement->childNodes as $child){
+        foreach($this->phpelement->childNodes as $child){
             $this->generateFillSlots($codewriter,$child);
         }
 

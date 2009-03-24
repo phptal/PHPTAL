@@ -127,7 +127,7 @@ class PHPTAL_Php_CodeWriter
         }
     
         $this->_result .= '<?php '."\n";
-        foreach ($this->_codeBuffer as $codeLine) {
+        foreach($this->_codeBuffer as $codeLine) {
             // avoid adding ; after } and {
             if (!preg_match('/\}|\{\s+$/', $codeLine))
                 $this->_result .= $codeLine . ' ;'."\n";
@@ -194,7 +194,7 @@ class PHPTAL_Php_CodeWriter
     public function doForeach($out, $source)
     {
         $this->_segments[] =  'foreach';
-        $this->pushCode("foreach ($source as \$__key__ => $out ):");
+        $this->pushCode("foreach($source as \$__key__ => $out ):");
         $this->indent();
     }
 

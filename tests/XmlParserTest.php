@@ -130,7 +130,7 @@ class MyTestParser extends PHPTAL_XmlParser
         $this->elementStarts++;
         $this->result .= "<$name";
         $pairs = array();
-        foreach ($attributes as $key=>$value) $pairs[] =  "$key=\"$value\"";
+        foreach($attributes as $key=>$value) $pairs[] =  "$key=\"$value\"";
         if (count($pairs) > 0) {
             $this->result .= ' ' . join(' ', $pairs);
         }

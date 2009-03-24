@@ -31,10 +31,9 @@ class SimpleGenerationTest extends PHPTAL_TestCase
     function testTreeGeneration()
     {
         $parser = new PHPTAL_Dom_Parser('UTF-8');
-        $tree = $parser->parseFile('input/parser.01.xml');
+        $treeGen = $parser->parseFile('input/parser.01.xml');
         $state     = new PHPTAL_Php_State();
-        $codewriter = new PHPTAL_Php_CodeWriter($state);
-        $treeGen   = new PHPTAL_Php_Tree($tree);
+        $codewriter = new PHPTAL_Php_CodeWriter($state);        
         $codewriter->doFunction('test', '$tpl');
         $treeGen->generate($codewriter);
         $codewriter->doEnd();
@@ -88,7 +87,7 @@ EOS;
     {
         $lines = explode("\n", $code);
         $code = "";
-        foreach ($lines as $line){
+        foreach($lines as $line){
             $code .= trim($line);
         }
         return $code;

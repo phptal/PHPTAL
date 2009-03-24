@@ -91,7 +91,7 @@ function phptal_tales($expression, $nothrow=false)
     }
     
     // is a registered TALES expression modifier
-    if(PHPTAL_TalesRegistry::getInstance()->isRegistered($typePrefix)) {
+    if (PHPTAL_TalesRegistry::getInstance()->isRegistered($typePrefix)) {
     	$callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);
 		return call_user_func($callback, $expression, $nothrow);
     }
@@ -100,11 +100,11 @@ function phptal_tales($expression, $nothrow=false)
     if (strpos($typePrefix, '.')){
         $classCallback = explode('.', $typePrefix, 2);
         $callbackName  = NULL;
-        if(!is_callable($classCallback, FALSE, $callbackName)) {
+        if (!is_callable($classCallback, FALSE, $callbackName)) {
             throw new PHPTAL_ParserException(sprintf('Unknown phptal modifier %s. Function %s does not exists or is not statically callable.', $typePrefix, $callbackName));
         }
         $ref = new ReflectionClass($classCallback[0]);
-        if(!$ref->implementsInterface('PHPTAL_Tales'))
+        if (!$ref->implementsInterface('PHPTAL_Tales'))
         {
             throw new PHPTAL_ParserException(sprintf('Unable to use phptal modifier %s as the class %s does not implement the PHPTAL_Tales interface.', $typePrefix, $callbackName));
         }

@@ -207,7 +207,7 @@ class PHPTAL_Php_Tree extends PHPTAL_Php_Node
  * Document Tag representation.
  *
  * This is the main class used by PHPTAL because TAL is a Template Attribute
- * Language, other Node kinds are (usefull) toys.
+ * Language, other Node kinds are (useful) toys.
  *
  * @package phptal.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
@@ -380,7 +380,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
 
     public function generateSurroundHead(PHPTAL_Php_CodeWriter $codewriter)
     {
-        foreach ($this->surroundAttributes as $att) {
+        foreach($this->surroundAttributes as $att) {
             $att->start($codewriter);
         }
     }
@@ -458,7 +458,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         // its value by a <?php echo $somevalue ?\ >.
         //
         // The entire attribute (key="value") can be replaced using the
-        // '$__ATT_' value code, it is very usefull for xhtml boolean
+        // '$__ATT_' value code, it is very useful for xhtml boolean
         // attributes like selected, checked, etc...
         //
         // example:
@@ -469,7 +469,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         //  $tag->attributes['checked'] = '<?php echo $__ATT_checked ?\>';
         //
 
-        foreach ($this->getAttributeNodes() as $attr) 
+        foreach($this->getAttributeNodes() as $attr) 
         {
             switch($attr->getReplacedState())
             {
@@ -511,7 +511,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     private function separateAttributes()
     {
         $talAttributes = array();
-        foreach ($this->attribute_nodes as $index => $attr) 
+        foreach($this->attribute_nodes as $index => $attr) 
         {
             // remove handled xml namespaces
             if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($attr->getQualifiedName(),$attr->getValueEscaped()))
@@ -534,7 +534,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
     private function orderTalAttributes(array $talAttributes)
     {
         $temp = array();
-        foreach ($talAttributes as $domattr)
+        foreach($talAttributes as $domattr)
         {
             $nsattr = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($domattr->getNamespaceURI(), $domattr->getLocalName());
             if (array_key_exists($nsattr->getPriority(), $temp))
@@ -551,7 +551,7 @@ class PHPTAL_Php_Element extends PHPTAL_Php_Tree
         ksort($temp);
 
         $this->talHandlers = array();
-        foreach ($temp as $prio => $dat)
+        foreach($temp as $prio => $dat)
         {
             list($nsattr, $domattr) = $dat;
             $handler = $nsattr->createAttributeHandler($this, $domattr->getValue());

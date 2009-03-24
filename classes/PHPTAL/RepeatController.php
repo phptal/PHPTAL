@@ -65,7 +65,7 @@ class PHPTAL_RepeatController implements Iterator
             $this->iterator = $source;
         } else if ( $source instanceof SimpleXMLElement) { // has non-unique keys!
             $array = array();
-            foreach ( $source as $v ) {
+            foreach( $source as $v ) {
                 $array[] = $v;
             }
             $this->iterator = new ArrayIterator($array);
@@ -74,7 +74,7 @@ class PHPTAL_RepeatController implements Iterator
             // To make it fully iterable we traverse the set to populate
             // an array which will be actually used for iteration.
             $array = array();
-            foreach ( $source as $k=>$v ) {
+            foreach( $source as $k=>$v ) {
                 $array[$k] = $v;
             }
             $this->iterator = new ArrayIterator($array);
@@ -299,7 +299,7 @@ class PHPTAL_RepeatController implements Iterator
         );
         
         $roman = '';
-        foreach ( $lookup as $max => $letters ) {
+        foreach( $lookup as $max => $letters ) {
             while ( $int >= $max ) {
                 $roman .= $letters;
                 $int -= $max;

@@ -755,7 +755,7 @@ class PHPTAL
         }
 
         $this->_resolvers[] =  new PHPTAL_FileSourceResolver($this->_repositories);
-        foreach ($this->_resolvers as $resolver){
+        foreach($this->_resolvers as $resolver){
             $source = $resolver->resolve($this->_path);
             if ($source != null){
                 $this->_source = $source;

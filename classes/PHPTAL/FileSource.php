@@ -44,7 +44,7 @@ class PHPTAL_FileSourceResolver implements PHPTAL_SourceResolver
 
     public function resolve($path)
     {
-        foreach ($this->_repositories as $repository){
+        foreach($this->_repositories as $repository){
             $file = $repository . DIRECTORY_SEPARATOR . $path;
             if (file_exists($file)){
                 return new PHPTAL_FileSource($file);

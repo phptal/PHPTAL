@@ -40,7 +40,7 @@ class PHPTAL_TalesRegistry {
 	 * @return PHPTAL_TalesRegistry
 	 */
 	static public function getInstance() {
-		if(!(self::$instance instanceof PHPTAL_TalesRegistry)) {
+		if (!(self::$instance instanceof PHPTAL_TalesRegistry)) {
 			self::initialize();
 		}
 
@@ -60,30 +60,30 @@ class PHPTAL_TalesRegistry {
 	 * @param unknown_type $callback
 	 */
 	public function registerPrefix($prefix, $callback) {
-		if($this->isRegistered($prefix)) {
+		if ($this->isRegistered($prefix)) {
 			throw new PHPTAL_ConfigurationException(sprintf('Expression modifier "%s" is already registered.',$prefix));
 		}
 
 		// Check if valid callback
 
-		if(is_array($callback)) {
+		if (is_array($callback)) {
 
 			$class = new ReflectionClass($callback[0]);
 
-			if(!$class->isSubclassOf('PHPTAL_Tales')) {
+			if (!$class->isSubclassOf('PHPTAL_Tales')) {
 				throw new PHPTAL_ConfigurationException('The class you want to register does not implement "PHPTAL_Tales".');
 			}
 
 			$method = new ReflectionMethod($callback[0], $callback[1]);
 
-			if(!$method->isStatic()) {
+			if (!$method->isStatic()) {
 				throw new PHPTAL_ConfigurationException('The method you want to register is not static.');
 			}
 
 			// maybe we want to check the parameters the method takes
 
 		} else {
-			if(!function_exists($callback)) {
+			if (!function_exists($callback)) {
 				throw new PHPTAL_ConfigurationException('The function you are trying to register does not exist.');
 			}
 		}
@@ -97,7 +97,7 @@ class PHPTAL_TalesRegistry {
 	}
 
 	public function getCallback($prefix) {
-		if(!$this->isRegistered($prefix)) {
+		if (!$this->isRegistered($prefix)) {
 			throw new PHPTAL_ConfigurationException(sprintf('Expression modifier "%s" is not registered.', $prefix));
 		}
 		return $this->_callbacks[$prefix];

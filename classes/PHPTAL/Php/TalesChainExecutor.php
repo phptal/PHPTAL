@@ -67,7 +67,7 @@ class PHPTAL_Php_TalesChainExecutor
         
         end($this->_chain); $lastkey = key($this->_chain);
         
-        foreach ($this->_chain as $key => $exp){
+        foreach($this->_chain as $key => $exp){
             $this->_state = 0;
             if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
                 $this->_reader->talesChainNothingKeyword($this);
