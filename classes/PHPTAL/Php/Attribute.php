@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'PHPTAL/Dom/Node.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
 
 /**
  * Base class for all PHPTAL attributes.
@@ -49,7 +49,7 @@ abstract class PHPTAL_Php_Attribute
     /** Called after element printing. */
     public abstract function end(PHPTAL_Php_CodeWriter $codewriter);
 
-    function __construct(PHPTAL_Php_Element $phpelement, $expression)
+    function __construct(PHPTAL_DOMElement $phpelement, $expression)
     {
         $this->expression = $expression;
         $this->phpelement = $phpelement; 

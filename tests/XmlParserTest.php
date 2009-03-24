@@ -117,13 +117,13 @@ class MyTestParser extends PHPTAL_XmlParser
         $this->result .= $decl;
     }
     
-    public function onSpecific($data) { 
+    public function onOther($data) { 
         $this->specifics++;
         $this->result .= $data; 
     }
 
     public function onComment($data) {
-        $this->onSpecific($data);
+        $this->onOther($data);
     }
     
     public function onElementStart($name, array $attributes) {

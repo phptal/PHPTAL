@@ -255,7 +255,7 @@ abstract class PHPTAL_XmlParser
 
                 case self::ST_CDATA:
                     if ($c == '>' and substr($src, $i-2, 2) == ']]') {
-                        $this->onSpecific(substr($src, $mark, $i-$mark+1));
+                        $this->onOther(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
@@ -290,7 +290,7 @@ abstract class PHPTAL_XmlParser
 
                 case self::ST_PREPROC:
                     if ($c == '>' and $src[$i-1] == '?') {
-                        $this->onSpecific(substr($src, $mark, $i-$mark+1));
+                        $this->onOther(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
@@ -390,7 +390,7 @@ abstract class PHPTAL_XmlParser
 
     public abstract function onDocType($doctype);
     public abstract function onXmlDecl($decl);
-    public abstract function onSpecific($data);
+    public abstract function onOther($data);
     public abstract function onComment($data);
     public abstract function onElementStart($name, array $attributes);
     public abstract function onElementClose($name);

@@ -21,7 +21,7 @@
 //  
 
 require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
-require_once PHPTAL_DIR.'PHPTAL/Dom/Node.php';
+require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/XmlnsState.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
@@ -70,7 +70,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     
     public function onDocumentStart()
     {
-        $this->_tree = new PHPTAL_Dom_Tree();
+        $this->_tree = new PHPTAL_DOMElement('root','http://xml.zope.org/namespaces/tal',array(),$this->getXmlnsState());
         $this->_tree->setSource($this->getSourceFile(), $this->getLineNumber());
         $this->_stack = array();
         $this->_current = $this->_tree;
@@ -85,34 +85,34 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 
     public function onDocType($doctype)
     {
-        $this->pushNode(new PHPTAL_DOMDocumentType($doctype));
+        $this->pushNode(new PHPTAL_DOMDocumentType($doctype, $this->getEncoding()));
     }
 
     public function onXmlDecl($decl)
     {
-        $this->pushNode(new PHPTAL_DOMXmlDeclaration($decl));
+        $this->pushNode(new PHPTAL_DOMXmlDeclaration($decl, $this->getEncoding()));
     }
     
     public function onComment($data)
     {
         if ($this->_stripComments) 
             return;
-        $this->pushNode(new PHPTAL_DOMComment($data));
+        $this->pushNode(new PHPTAL_DOMComment($data, $this->getEncoding()));
     }
     
-    public function onSpecific($data)
+    public function onOther($data)
     {
-        $this->pushNode(new PHPTAL_DOMSpecific($data));
+        $this->pushNode(new PHPTAL_DOMOtherNode($data, $this->getEncoding()));
     }    
 
-    public function onElementStart($name, array $attributes)
+    public function onElementStart($element_qname, array $attributes)
     {                
         $this->_xmlns = $this->_xmlns->newElement($attributes);
         
-        if (preg_match('/^([^:]+):/',$name,$m))
+        if (preg_match('/^([^:]+):/',$element_qname,$m))
         {
             $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);            
-            if (false === $namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$name>");
+            if (false === $namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$element_qname>");
         }
         else 
         {
@@ -127,7 +127,7 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
             {
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
-                if (false === $attr_namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element <$name>");
+                if (false === $attr_namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element <$element_qname>");
             }
             else
             {
@@ -138,10 +138,10 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
                 $this->raiseError(self::ERR_UNSUPPORTED_ATTRIBUTE, $qname);
             }
       
-            $attrnodes[] = new PHPTAL_DOMAttr($qname, $attr_namespace_uri, $value, $this->getEncoding());
+            $attrnodes[] = new PHPTAL_Php_Attr($qname, $attr_namespace_uri, $value, $this->getEncoding());
         }
         
-        $node = new PHPTAL_DOMElement($name, $namespace_uri, $this->getXmlnsState(), $attrnodes);
+        $node = new PHPTAL_DOMElement($element_qname, $namespace_uri, $attrnodes, $this->getXmlnsState());
         $this->pushNode($node);
         $this->_stack[] =  $this->_current;
         $this->_current = $node;
@@ -149,14 +149,14 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     
     public function onElementData($data)
     {
-        $this->pushNode(new PHPTAL_DOMText($data));
+        $this->pushNode(new PHPTAL_DOMText($data, $this->getEncoding()));
     }
 
-    public function onElementClose($name)
+    public function onElementClose($qname)
     {
-		if (!$this->_current instanceof PHPTAL_DOMElement) $this->raiseError("Found closing tag for '$name' where there are no open tags");			
-        if ($this->_current->getQualifiedName() != $name) {
-            $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getQualifiedName(), $name);
+		if (!$this->_current instanceof PHPTAL_DOMElement) $this->raiseError("Found closing tag for '$qname' where there are no open tags");			
+        if ($this->_current->getQualifiedName() != $qname) {
+            $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getQualifiedName(), $qname);
         }
         $this->_current = array_pop($this->_stack);
         if ($this->_current instanceOf PHPTAL_DOMElement)

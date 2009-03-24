@@ -59,7 +59,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                 	$result .= $child->getValue($encoding);
 				}
             }
-            else if ($child instanceOf PHPTAL_Php_Element){
+            else if ($child instanceOf PHPTAL_DOMElement){
                 if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n','name'))
                 {
                     $result .= '${' . $attr->getValue() . '}';

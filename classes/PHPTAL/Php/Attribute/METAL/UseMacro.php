@@ -44,9 +44,9 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
 {
     static $ALLOWED_ATTRIBUTES = array(
-        'metal:fill-slot', 
-        'metal:define-macro', 
-        'tal:define',
+        'fill-slot'=>'http://xml.zope.org/namespaces/metal', 
+        'define-macro'=>'http://xml.zope.org/namespaces/metal', 
+        'define'=>'http://xml.zope.org/namespaces/tal',
     );
     
     public function start(PHPTAL_Php_CodeWriter $codewriter)
@@ -106,21 +106,21 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         }
     }
     
-    private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Php_Node $tag)
+    private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_DOMNode $phpelement)
     {
-        if (false == ($tag instanceOf PHPTAL_Php_Tree)) 
+        if (false == ($phpelement instanceOf PHPTAL_DOMElement)) 
             return;
 
         // if the tag contains one of the allowed attribute, we generate it
-        foreach (self::$ALLOWED_ATTRIBUTES as $attribute){
-            if ($tag->hasAttribute($attribute)){
-                $tag->generate($codewriter);
+        foreach(self::$ALLOWED_ATTRIBUTES as $qname => $uri){
+            if ($phpelement->hasAttributeNS($uri,$qname)){
+                $phpelement->generate($codewriter);
                 return;
             }
         }
         
         // recurse
-        foreach ($tag->childNodes as $child){
+        foreach($phpelement->childNodes as $child){
             $this->generateFillSlots($codewriter,$child);
         }
     }

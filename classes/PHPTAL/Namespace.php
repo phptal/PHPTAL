@@ -47,7 +47,7 @@ abstract class PHPTAL_NamespaceAttribute
     public function getNamespace(){ return $this->_namespace; }
     public function setNamespace(PHPTAL_Namespace $ns){ $this->_namespace = $ns; }
 
-    public function createAttributeHandler(PHPTAL_Php_Element $tag, $expression)
+    public function createAttributeHandler(PHPTAL_DOMElement $tag, $expression)
     {
         return $this->_namespace->createAttributeHandler($this, $tag, $expression);
     }
@@ -123,7 +123,7 @@ abstract class PHPTAL_Namespace
         return $this->_attributes;
     }
 
-    abstract public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_Php_Element $tag, $expression);
+    abstract public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_DOMElement $tag, $expression);
 
     protected $_attributes;
 }
@@ -133,7 +133,7 @@ abstract class PHPTAL_Namespace
  */
 class PHPTAL_BuiltinNamespace extends PHPTAL_Namespace
 {
-    public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_Php_Element $tag, $expression)
+    public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_DOMElement $tag, $expression)
     {
         $name = $att->getLocalName();
         $name = str_replace('-', '', $name);

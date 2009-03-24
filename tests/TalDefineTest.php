@@ -27,7 +27,7 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Define.php';
 
 
 if (!class_exists('DummyPhpNode')) {
-    class DummyPhpNode extends PHPTAL_Php_Element {
+    class DummyPhpNode extends PHPTAL_DOMElement {
         function __construct() {}
         function generate(PHPTAL_Php_CodeWriter $codewriter) {}
     }
