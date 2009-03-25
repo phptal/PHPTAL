@@ -77,12 +77,12 @@ class PHPTAL
         $this->_globalContext = new StdClass();
         $this->_context = new PHPTAL_Context();
         $this->_context->setGlobal($this->_globalContext);
-        
-        if (function_exists('sys_get_temp_dir')) 
+
+        if (function_exists('sys_get_temp_dir'))
         {
             $this->setPhpCodeDestination(sys_get_temp_dir());
         }
-        else if (substr(PHP_OS,0,3) == 'WIN') 
+        else if (substr(PHP_OS,0,3) == 'WIN')
         {
             if (file_exists('c:\\WINNT\\Temp\\')) $this->setPhpCodeDestination('c:\\WINNT\\Temp');
             else $this->setPhpCodeDestination('c:\\WINDOWS\\Temp\\');
@@ -121,6 +121,7 @@ class PHPTAL
     {
         $this->_prepared = false;
         $this->_functionName = null;
+        $this->_codeFile = null;
         $this->_path = $path;
         $this->_source = null;
         return $this;
@@ -142,6 +143,7 @@ class PHPTAL
         require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
         $this->_prepared = false;
         $this->_functionName = null;
+        $this->_codeFile = null;
         $this->_source = new PHPTAL_StringSource($src, $path);
         $this->_path = $path;
         return $this;
@@ -244,6 +246,9 @@ class PHPTAL
     public function setPhpCodeDestination($path)
     {
         $this->_phpCodeDestination = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+        $this->_functionName = null;
+        $this->_codeFile = null;
+        $this->_prepared = false;
         return $this;
     }
 
@@ -262,6 +267,8 @@ class PHPTAL
     public function setPhpCodeExtension($extension)
     {
         $this->_phpCodeExtension = $extension;
+        $this->_codeFile = null;
+        $this->_prepared = false;
         return $this;
     }
 
@@ -295,7 +302,7 @@ class PHPTAL
 
     /**
      * Set I18N translator.
-     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator. 
+     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator.
      */
     public function setTranslator(PHPTAL_TranslationService $t)
     {
@@ -310,7 +317,7 @@ class PHPTAL
     public function setPreFilter(PHPTAL_Filter $filter)
     {
         $this->_prepared = false;
-        $this->_functionName = null;        
+        $this->_functionName = null;
         $this->_prefilter = $filter;
         return $this;
     }
@@ -441,7 +448,7 @@ class PHPTAL
     {
         $this->_executeMacroOfTempalte($path, $this);
     }
-    
+
     /**
      * This is PHPTAL's internal function that handles execution of macros from templates.
      *
@@ -451,7 +458,7 @@ class PHPTAL
      */
     public function _executeMacroOfTempalte($path, PHPTAL $local_tpl)
     {
-        // extract macro source file from macro name, if macro path does not contain filename, 
+        // extract macro source file from macro name, if macro path does not contain filename,
         // then the macro is assumed to be local
         if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m))
         {
@@ -466,7 +473,7 @@ class PHPTAL
                 $tpl = new PHPTAL($file);
                 $tpl->setConfigurationFrom($this);
                 $tpl->prepare();
-                
+
                 if (count($this->externalMacroTempaltesCache) > 10) $this->externalMacroTempaltesCache = array(); // keep it small (typically only 1 or 2 external files are used)
                 $this->externalMacroTempaltesCache[$file] = $tpl;
             }
@@ -483,7 +490,7 @@ class PHPTAL
             }
             catch(PHPTAL_TemplateException $e)
             {
-                $e->hintSrcPosition($tpl->_context->__file.'/'.$macroName,$tpl->_context->__line);                
+                $e->hintSrcPosition($tpl->_context->__file.'/'.$macroName,$tpl->_context->__line);
                 $this->_context->__file = $currentFile;
                 throw $e;
             }
@@ -491,7 +498,7 @@ class PHPTAL
             // restore current file
             $this->_context->__file = $currentFile;
         }
-        else 
+        else
         {
             // call local macro
             $fun = $local_tpl->getFunctionName() . '_' . strtr($path,"-","_");
@@ -502,6 +509,7 @@ class PHPTAL
 
     private function setCodeFile()
     {
+        $this->findTemplate();
         $this->_codeFile = $this->getPhpCodeDestination() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
     }
 
@@ -512,12 +520,11 @@ class PHPTAL
     {
         // clear just in case settings changed and cache is out of date
         $this->externalMacroTempaltesCache = array();
-        
-        // find the template source file
-        $this->findTemplate();
-        $this->__file = $this->_source->getRealPath();
+
+        // find the template source file and update function name
 		$this->setCodeFile();
-		
+        $this->__file = $this->_source->getRealPath();
+
         // parse template if php generated code does not exists or template
         // source file modified since last generation of PHPTAL_FORCE_REPARSE
         // is defined.
@@ -529,9 +536,9 @@ class PHPTAL
     		}
             $this->parse();
         }
-        
+
         require_once $this->getCodePath();
-        
+
         $this->_prepared = true;
         return $this;
     }
@@ -588,7 +595,7 @@ class PHPTAL
 	        foreach($phptalCacheFiles as $file)
 	        {
 	            $time = filemtime($file);
-	            if ($time && $time < $phptalCacheFilesExpire) @unlink($file);			 
+	            if ($time && $time < $phptalCacheFilesExpire) @unlink($file);
 		    }
 	    }
 	}
@@ -599,13 +606,7 @@ class PHPTAL
 	 */
 	public function cleanUpCache()
 	{
-		if (!$this->getCodePath()) 
-		{
-			$this->findTemplate(); $this->setCodeFile();
-			if (!$this->getCodePath()) throw new PHPTAL_ConfigurationException("No codefile");
-		}
-		
-		$filename = $this->getCodePath();		
+		$filename = $this->getCodePath();
 		$phptalCacheFiles = glob($filename . '*');
 		if ($phptalCacheFiles) foreach($phptalCacheFiles as $file)
 		{
@@ -613,7 +614,7 @@ class PHPTAL
 			@unlink($file);
 	    }
         $this->_prepared = false;
-	}	
+	}
 
     /**
      * Returns the path of the intermediate PHP code file.
@@ -625,6 +626,7 @@ class PHPTAL
      */
     public function getCodePath()
     {
+        if (!$this->_codeFile) $this->setCodeFile();
         return $this->_codeFile;
     }
 
@@ -634,12 +636,12 @@ class PHPTAL
      */
     public function getFunctionName()
     {
-        if (!$this->_functionName) 
-        {   
+        if (!$this->_functionName)
+        {
             // function name is used as base for caching, so it must be unique for every combination of settings
-            // that changes code in compiled template         
+            // that changes code in compiled template
             $this->_functionName = 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
-                substr(preg_replace('/[^a-zA-Z]/','_',basename($this->_source->getRealPath())),0,15) . 
+                substr(preg_replace('/[^a-zA-Z]/','_',basename($this->_source->getRealPath())),0,15) .
                 md5($this->_source->getRealPath() . ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode());
         }
         return $this->_functionName;
