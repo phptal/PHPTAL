@@ -26,18 +26,18 @@ require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
 class XmlParserTest extends PHPTAL_TestCase
 {
     public function testSimpleParse(){
-        $parser = new MyTestParser();
-        $parser->parseFile('input/xml.01.xml');
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.01.xml')->getResult();
         $expected = trim(join('', file('input/xml.01.xml')));
-        $this->assertEquals($expected, $parser->result);
-        $this->assertEquals(7, $parser->elementStarts);
-        $this->assertEquals(7, $parser->elementCloses);
+        $this->assertEquals($expected, $builder->result);
+        $this->assertEquals(7, $builder->elementStarts);
+        $this->assertEquals(7, $builder->elementCloses);
     }
 
     public function testCharactersBeforeBegining() {
-        $parser = new MyTestParser();
+        $parser = new PHPTAL_XmlParser('UTF-8');
         try {
-            $parser->parseFile('input/xml.02.xml');
+            $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.02.xml')->getResult();
             $this->assertTrue( false );
         }
         catch (Exception $e) {
@@ -46,15 +46,15 @@ class XmlParserTest extends PHPTAL_TestCase
     }
 
     public function testAllowGtAndLtInTextNodes() {
-        $parser = new MyTestParser();
-        $parser->parseFile('input/xml.03.xml');
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.03.xml')->getResult();
         $expected = trim(join('', file('input/xml.03.xml')));
-        $this->assertEquals($expected, $parser->result);
-        $this->assertEquals(3, $parser->elementStarts);
-        $this->assertEquals(3, $parser->elementCloses);
+        $this->assertEquals($expected, $builder->result);
+        $this->assertEquals(3, $builder->elementStarts);
+        $this->assertEquals(3, $builder->elementCloses);
         // a '<' character withing some text data make the parser call 2 times
         // the onElementData() method
-        $this->assertEquals(7, $parser->datas);
+        $this->assertEquals(7, $builder->datas);
     }
     
 	
@@ -63,9 +63,9 @@ class XmlParserTest extends PHPTAL_TestCase
      */
     public function testRejectsInvalidAttributes1()
     {
-        $parser = new MyTestParser();
-        $parser->parseString('<foo bar="bar"baz="baz"/>');
-        $this->fail($parser->result);
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar="bar"baz="baz"/>')->getResult();
+        $this->fail($builder->result);
     }
     
     /**
@@ -73,28 +73,28 @@ class XmlParserTest extends PHPTAL_TestCase
      */
     public function testRejectsInvalidAttributes2()
     {
-        $parser = new MyTestParser();
-        $parser->parseString('<foo bar;="bar"/>');
-        $this->fail($parser->result);
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar;="bar"/>')->getResult();
+        $this->fail($builder->result);
     }
     
     public function testSkipsBom()
     {
-        $parser = new MyTestParser();
-        $parser->parseString("\xef\xbb\xbf<foo/>");
-        $this->assertEquals("<foo></foo>", $parser->result);
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<foo/>")->getResult();
+        $this->assertEquals("<foo></foo>", $builder->result);
     }
         
     public function testAllowsTrickyQnames()
     {
-        $parser = new MyTestParser();
-        $parser->parseString("\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>");
-        $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $parser->result);
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>")->getResult();
+        $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $builder->result);
     }
 }
 
 
-class MyTestParser extends PHPTAL_XmlParser
+class MyDocumentBuilder extends PHPTAL_DOM_DocumentBuilder
 {
     public $result;
     public $elementStarts = 0;
@@ -104,7 +104,7 @@ class MyTestParser extends PHPTAL_XmlParser
 
     public function __construct() {
         $this->result = '';
-        parent::__construct('UTF-8');
+        parent::__construct();
     }
 
     public function onDoctype($dt) {

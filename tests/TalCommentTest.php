@@ -21,7 +21,7 @@
 //  
 
 require_once 'config.php';
-require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/State.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';

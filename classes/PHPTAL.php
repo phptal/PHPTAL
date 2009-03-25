@@ -715,18 +715,19 @@ class PHPTAL
 
     protected function parse()
     {
-        require_once PHPTAL_DIR.'PHPTAL/Dom/Parser.php';
+        require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
 
         // instantiate the PHPTAL source parser
-        $parser = new PHPTAL_Dom_Parser($this->_encoding);
-        $parser->stripComments($this->_stripComments);
+        $parser = new PHPTAL_XmlParser($this->_encoding);
+        $builder = new PHPTAL_DOM_DocumentBuilder();
+        $builder->stripComments($this->_stripComments);
 
         $data = $this->_source->getData();
         $realpath = $this->_source->getRealPath();
 
         if ($this->_prefilter)
             $data = $this->_prefilter->filter($data);
-        $tree = $parser->parseString($data, $realpath);
+        $tree = $parser->parseString($builder,$data, $realpath)->getResult();
 
         require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
         $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding);

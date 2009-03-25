@@ -29,11 +29,9 @@
  * parser was created and can be manipulated to accept some user errors 
  * like < and < in attribute values or inside text nodes.
  *
- * @package phptal
- * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @see PHPTAL_Dom_Parser
+ * @see PHPTAL_DOM_DocumentBuilder
  */
-abstract class PHPTAL_XmlParser
+class PHPTAL_XmlParser
 {
     // available parser states
     const ST_ROOT = 0;
@@ -54,12 +52,6 @@ abstract class PHPTAL_XmlParser
     const ST_ATTR_QUOTE = 15;
     const ST_ATTR_VALUE = 16;
 
-    // exceptions error messages
-    const ERR_CHARS_BEFORE_DOC_START = 
-        "Characters found before the beginning of the document!";
-    const ERR_EXPECT_VALUE_QUOTE =
-        "Unexpected '%s' character, expecting attribute single or double quote";
-        
     const BOM_STR = "\xef\xbb\xbf";
     
     
@@ -82,26 +74,28 @@ abstract class PHPTAL_XmlParser
       self::ST_ATTR_QUOTE => 'quoted attribute value',
       self::ST_ATTR_VALUE => 'unquoted attribute value',
     );
-        
+    
+    private $input_encoding;    
     public function __construct($input_encoding) 
     {
         $this->input_encoding = $input_encoding; 
         $this->_file = "<string>";
     }
 
-    public function parseFile($src) 
+    public function parseFile(PHPTAL_DocumentBuilder $builder, $src) 
     {
         if (!file_exists($src)) {
             throw new PHPTAL_IOException("file $src not found");
         }
-        $this->parseString(file_get_contents($src), $src);
+        return $this->parseString($builder, file_get_contents($src), $src);
     }
 
-    public function parseString($src, $filename = '<string>') 
+    public function parseString(PHPTAL_DocumentBuilder $builder, $src, $filename = '<string>') 
     {        
+        try
+        {
+        $builder->setEncoding($this->input_encoding);
         $this->_file = $filename;
-        
-        
         
         $this->_line = 1;
         $state = self::ST_ROOT;
@@ -115,8 +109,8 @@ abstract class PHPTAL_XmlParser
 
         $customDoctype = false;
 
-        $this->onDocumentStart();
-        
+        $builder->setSource($this->_file,$this->_line);
+        $builder->onDocumentStart();
         
         $i=0;
         // remove BOM (utf8 byte order mark)... 
@@ -135,14 +129,15 @@ abstract class PHPTAL_XmlParser
                         $state = self::ST_LT;
                     }
                     else if (!self::isWhiteChar($c)) {
-                        $this->raiseError(self::ERR_CHARS_BEFORE_DOC_START);
+                        $this->raiseError("Characters found before the beginning of the document!");
                     }
                     break;
 
                 case self::ST_TEXT:
                     if ($c == '<') {
                         if ($mark != $i) {
-                            $this->onElementData(substr($src, $mark, $i-$mark));
+                            $builder->setSource($this->_file,$this->_line);
+                            $builder->onElementData(substr($src, $mark, $i-$mark));
                         }
                         $mark = $i;
                         $state = self::ST_LT;
@@ -194,14 +189,16 @@ abstract class PHPTAL_XmlParser
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                         if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");
-                        $this->onElementStart($tagname, $attributes);
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onElementStart($tagname, $attributes);
                     }
                     break;
 
                 case self::ST_TAG_CLOSE:
                     if ($c == '>') {
                         $tagname = rtrim(substr($src, $mark, $i-$mark));
-                        $this->onElementClose($tagname);
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onElementClose($tagname);
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
@@ -214,8 +211,9 @@ abstract class PHPTAL_XmlParser
                     $mark = $i+1;   // mark text start
                     $state = self::ST_TEXT;
                     if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");                    
-                    $this->onElementStart($tagname, $attributes);
-                    $this->onElementClose($tagname);
+                    $builder->setSource($this->_file,$this->_line);
+                    $builder->onElementStart($tagname, $attributes);
+                    $builder->onElementClose($tagname);
                     break;
                 
                 case self::ST_TAG_BETWEEN_ATTRIBUTE:    
@@ -224,7 +222,8 @@ abstract class PHPTAL_XmlParser
                         $mark = $i+1;   // mark text start
                         $state = self::ST_TEXT;
                         if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");                        
-                        $this->onElementStart($tagname, $attributes);
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onElementStart($tagname, $attributes);
                     }
                     else if ($c == '/') {
                         $state = self::ST_TAG_SINGLE;
@@ -247,23 +246,28 @@ abstract class PHPTAL_XmlParser
                             $this->raiseError("Ill-formed comment. XML comments are not allowed to contain '--' or start/end with '-': ".substr($src, $mark+4, $i-$mark+1-7));
                         }
                         
-                        $this->onComment(substr($src, $mark, $i-$mark+1));
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onComment(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
                     break;
 
                 case self::ST_CDATA:
-                    if ($c == '>' and substr($src, $i-2, 2) == ']]') {
-                        $this->onOther(substr($src, $mark, $i-$mark+1));
+                    if ($c == '>' and substr($src, $i-2, 2) == ']]') 
+                    {
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onOther(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
                     break;
 
                 case self::ST_XMLDEC:
-                    if ($c == '?' && substr($src, $i, 2) == '?>') {
-                        $this->onXmlDecl(substr($src, $mark, $i-$mark+2));
+                    if ($c == '?' && substr($src, $i, 2) == '?>') 
+                    {
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onXmlDecl(substr($src, $mark, $i-$mark+2));
                         $i++; // skip '>'
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -274,23 +278,29 @@ abstract class PHPTAL_XmlParser
                     if ($c == '[') {
                         $customDoctype = true;
                     }
-                    else if ($customDoctype && $c == '>' && substr($src, $i-1, 2) == ']>'){
+                    else if ($customDoctype && $c == '>' && substr($src, $i-1, 2) == ']>')
+                    {
                         $customDoctype = false;
-                        $this->onDocType(substr($src, $mark, $i-$mark+1));
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onDocType(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
-                    else if (!$customDoctype && $c == '>') {
+                    else if (!$customDoctype && $c == '>') 
+                    {
                         $customDoctype = false;
-                        $this->onDocType(substr($src, $mark, $i-$mark+1));
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onDocType(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
                     break;
 
                 case self::ST_PREPROC:
-                    if ($c == '>' and $src[$i-1] == '?') {
-                        $this->onOther(substr($src, $mark, $i-$mark+1));
+                    if ($c == '>' and $src[$i-1] == '?') 
+                    {
+                        $builder->setSource($this->_file,$this->_line);
+                        $builder->onOther(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
@@ -321,10 +331,8 @@ abstract class PHPTAL_XmlParser
                         $state = self::ST_ATTR_QUOTE;
                         $mark = $i+1; // mark attribute real value start
                     }
-                    else {
-                        $err = self::ERR_EXPECT_VALUE_QUOTE;
-                        $err = sprintf($err, $c);                            
-                        $this->raiseError($err);
+                    else {                         
+                        $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
                     }
                     break;
 
@@ -344,7 +352,7 @@ abstract class PHPTAL_XmlParser
             if ($i > $mark)
             {
                 $text = substr($src, $mark, $i-$mark);
-                //if (!ctype_space($text)) $this->onElementData($text);
+                //if (!ctype_space($text)) $builder->onElementData($text);
                 if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element");
             }
         }
@@ -353,7 +361,15 @@ abstract class PHPTAL_XmlParser
             throw new PHPTAL_ParserException("Finished document in unexpected state: ".self::$state_names[$state]." is not finished");
         }
         
-        $this->onDocumentEnd();
+            $builder->setSource($this->_file,$this->_line);
+            $builder->onDocumentEnd();
+        }
+        catch(PHPTAL_TemplateException $e)
+        {
+            $e->hintSrcPosition($this->_file,$this->_line);
+            throw $e;
+        }
+        return $builder;
     }
     
     private function isValidQName($name)
@@ -371,12 +387,6 @@ abstract class PHPTAL_XmlParser
         return $this->_line;
     }
     
-    private $input_encoding;
-    function getEncoding()
-    {
-        return $this->input_encoding;
-    }
-
     public static function isWhiteChar($c)
     {
         return strpos(" \t\n\r\0", $c) !== false;
@@ -387,16 +397,6 @@ abstract class PHPTAL_XmlParser
         $char = strtolower($c);
         return ($char >= 'a' && $char <= 'z');
     }
-
-    public abstract function onDocType($doctype);
-    public abstract function onXmlDecl($decl);
-    public abstract function onOther($data);
-    public abstract function onComment($data);
-    public abstract function onElementStart($name, array $attributes);
-    public abstract function onElementClose($name);
-    public abstract function onElementData($data);
-    public abstract function onDocumentStart();
-    public abstract function onDocumentEnd();
     
     protected function raiseError($errFmt)
     {
@@ -411,5 +411,21 @@ abstract class PHPTAL_XmlParser
     private $_file;
     private $_line;
     private $_source;
+}
+
+interface PHPTAL_DocumentBuilder
+{
+    function setEncoding($encoding);
+    function setSource($file,$line);
+    
+    function onDocType($doctype);
+    function onXmlDecl($decl);
+    function onOther($data);
+    function onComment($data);
+    function onElementStart($name, array $attributes);
+    function onElementClose($name);
+    function onElementData($data);
+    function onDocumentStart();
+    function onDocumentEnd();
 }
 

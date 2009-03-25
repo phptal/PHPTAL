@@ -17,8 +17,6 @@
 //  License along with this library; if not, write to the Free Software
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
 
 require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
@@ -27,21 +25,18 @@ require_once PHPTAL_DIR.'PHPTAL/Dom/XmlnsState.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 /**
- * Template parser.
- * 
- * @package phptal.dom
- * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * DOM Builder
  */
-class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
-{
-    const ERR_DOCUMENT_END_STACK_NOT_EMPTY = "Not all elements were closed before end of the document (element stack not empty)";
-    const ERR_UNSUPPORTED_ATTRIBUTE = "Unsupported attribute '%s'";
-    const ERR_ELEMENT_CLOSE_MISMATCH = "Tag closure mismatch, expected '%s' but was '%s'";
-  
-    public function __construct($input_encoding)
+class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
+{  
+    public function __construct()
     {
-        parent::__construct($input_encoding);
         $this->_xmlns = new PHPTAL_Dom_XmlnsState(array(), '');
+    }
+    
+    public function getResult()
+    {
+        return $this->_tree;
     }
 
     public function getXmlnsState()
@@ -54,24 +49,12 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
         $this->_stripComments = $b;
     }
     
-    public function parseString($src, $filename = '<string>') 
-    {
-        parent::parseString($src, $filename);
-        return $this->_tree;
-    }
-    
-    public function parseFile($path)
-    {
-        parent::parseFile($path);
-        return $this->_tree;
-    }
-
     // ~~~~~ XmlParser implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
     public function onDocumentStart()
     {
         $this->_tree = new PHPTAL_DOMElement('root','http://xml.zope.org/namespaces/tal',array(),$this->getXmlnsState());
-        $this->_tree->setSource($this->getSourceFile(), $this->getLineNumber());
+        $this->_tree->setSource($this->file, $this->line);
         $this->_stack = array();
         $this->_current = $this->_tree;
     }
@@ -79,30 +62,30 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     public function onDocumentEnd()
     {
         if (count($this->_stack) > 0) {
-            $this->raiseError(self::ERR_DOCUMENT_END_STACK_NOT_EMPTY);
+            throw new PHPTAL_ParserException("Not all elements were closed before end of the document (element stack not empty)");
         }
     }
 
     public function onDocType($doctype)
     {
-        $this->pushNode(new PHPTAL_DOMDocumentType($doctype, $this->getEncoding()));
+        $this->pushNode(new PHPTAL_DOMDocumentType($doctype, $this->encoding));
     }
 
     public function onXmlDecl($decl)
     {
-        $this->pushNode(new PHPTAL_DOMXmlDeclaration($decl, $this->getEncoding()));
+        $this->pushNode(new PHPTAL_DOMXmlDeclaration($decl, $this->encoding));
     }
     
     public function onComment($data)
     {
         if ($this->_stripComments) 
             return;
-        $this->pushNode(new PHPTAL_DOMComment($data, $this->getEncoding()));
+        $this->pushNode(new PHPTAL_DOMComment($data, $this->encoding));
     }
     
     public function onOther($data)
     {
-        $this->pushNode(new PHPTAL_DOMOtherNode($data, $this->getEncoding()));
+        $this->pushNode(new PHPTAL_DOMOtherNode($data, $this->encoding));
     }    
 
     public function onElementStart($element_qname, array $attributes)
@@ -135,10 +118,10 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
             }
 
             if ($this->_xmlns->isHandledNamespace($attr_namespace_uri) && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
-                $this->raiseError(self::ERR_UNSUPPORTED_ATTRIBUTE, $qname);
+                throw new PHPTAL_ParserException("Unsupported attribute '$qname'");
             }
       
-            $attrnodes[] = new PHPTAL_Php_Attr($qname, $attr_namespace_uri, $value, $this->getEncoding());
+            $attrnodes[] = new PHPTAL_Php_Attr($qname, $attr_namespace_uri, $value, $this->encoding);
         }
         
         $node = new PHPTAL_DOMElement($element_qname, $namespace_uri, $attrnodes, $this->getXmlnsState());
@@ -149,14 +132,14 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
     
     public function onElementData($data)
     {
-        $this->pushNode(new PHPTAL_DOMText($data, $this->getEncoding()));
+        $this->pushNode(new PHPTAL_DOMText($data, $this->encoding));
     }
 
     public function onElementClose($qname)
     {
 		if (!$this->_current instanceof PHPTAL_DOMElement) $this->raiseError("Found closing tag for '$qname' where there are no open tags");			
         if ($this->_current->getQualifiedName() != $qname) {
-            $this->raiseError(self::ERR_ELEMENT_CLOSE_MISMATCH, $this->_current->getQualifiedName(), $qname);
+            throw new PHPTAL_ParserException("Tag closure mismatch, expected '".$this->_current->getQualifiedName()."' but was '".$qname."'");
         }
         $this->_current = array_pop($this->_stack);
         if ($this->_current instanceOf PHPTAL_DOMElement)
@@ -165,15 +148,28 @@ class PHPTAL_Dom_Parser extends PHPTAL_XmlParser
 
     private function pushNode(PHPTAL_DOMNode $node)
     {
-        $node->setSource($this->getSourceFile(), $this->getLineNumber());
+        $node->setSource($this->file, $this->line);
         $this->_current->appendChild($node);
     }
     
-    private $_tree;    /* PHPTAL_Dom_Parser_NodeTree */
-    private $_stack;   /* array<PHPTAL_Dom_Parser_Node> */
-    private $_current; /* PHPTAL_Dom_Parser_Node */
-    private $_xmlns;   /* PHPTAL_Dom_Parser_XmlnsState */
+    public function setSource($file,$line)
+    {
+        $this->file = $file; $this->line = $line; 
+    }
+    
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding; 
+    }
+    
+    private $file,$line;
+    
+    private $encoding;
+    private $_tree;    /* PHPTAL_DOMElement */
+    private $_stack;   /* array<PHPTAL_DOMNode> */
+    private $_current; /* PHPTAL_DOMNode */
+    private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
     private $_stripComments = false;
 }
 
-?>
+

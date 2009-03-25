@@ -90,6 +90,6 @@ Parsetime classes
 - PHPTAL_XmlParser
 - PHPTAL_Php_Attribute
 - PHPTAL_DOMNode
-- PHPTAL_Dom_Parser
+- PHPTAL_XmlParser
 
 
