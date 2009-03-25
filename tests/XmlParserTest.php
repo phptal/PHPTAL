@@ -22,6 +22,7 @@
 
 require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
+require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
 
 class XmlParserTest extends PHPTAL_TestCase
 {
@@ -91,8 +92,90 @@ class XmlParserTest extends PHPTAL_TestCase
         $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>")->getResult();
         $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $builder->result);
     }
-}
+    
+    public function testAllowsXMLStylesheet()
+    {
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $src = "<foo>
+        <?xml-stylesheet href='foo1' ?>
+        <?xml-stylesheet href='foo2' ?>
+        </foo>";
+        $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+        $this->assertEquals($src, $builder->result);        
+    }
+    
+    public function testLineAccuracy()
+    {
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        try
+        {
+            $parser->parseString(new PHPTAL_DOM_DocumentBuilder(),
+"<x>1
 
+3
+ 4
+<!-- 5 -->
+            <x:y/> error in line 6!
+            </x>
+        ");
+            $this->fail("Accepted invalid XML");
+        }
+        catch(PHPTAL_ParserException $e)
+        {
+            $this->assertEquals(6,$e->srcLine);
+        }        
+    }
+    
+    public function testLineAccuracy2()
+    {
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        try
+        {
+            $parser->parseString(new PHPTAL_DOM_DocumentBuilder(),
+"<x foo1='
+2'
+
+bar4='baz'
+
+/>
+<!------->
+
+
+");
+            $this->fail("Accepted invalid XML");
+        }
+        catch(PHPTAL_ParserException $e)
+        {
+            $this->assertEquals(7,$e->srcLine);
+        }        
+    }    
+    
+    public function testLineAccuracy3()
+    {
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        try
+        {
+            $parser->parseString(new PHPTAL_DOM_DocumentBuilder(),
+"
+
+<x foo1='
+2'
+
+bar4='baz'
+
+xxxx/>
+
+
+");
+            $this->fail("Accepted invalid XML");
+        }
+        catch(PHPTAL_ParserException $e)
+        {
+            $this->assertEquals(8,$e->srcLine);
+        }        
+    }    
+    
+}
 
 class MyDocumentBuilder extends PHPTAL_DOM_DocumentBuilder
 {
@@ -101,6 +184,7 @@ class MyDocumentBuilder extends PHPTAL_DOM_DocumentBuilder
     public $elementCloses = 0;
     public $specifics = 0;
     public $datas = 0;
+    public $allow_xmldec = true;
 
     public function __construct() {
         $this->result = '';
@@ -109,24 +193,30 @@ class MyDocumentBuilder extends PHPTAL_DOM_DocumentBuilder
 
     public function onDoctype($dt) {
         $this->specifics++;
+        $this->allow_xmldec = false;
         $this->result .= $dt;
     }
 
     public function onXmlDecl($decl){
+        if (!$this->allow_xmldec) throw new Exception("more than one xml decl");
         $this->specifics++;
+        $this->allow_xmldec = false;
         $this->result .= $decl;
     }
     
     public function onOther($data) { 
         $this->specifics++;
+        $this->allow_xmldec = false;        
         $this->result .= $data; 
     }
 
     public function onComment($data) {
+        $this->allow_xmldec = false;        
         $this->onOther($data);
     }
     
     public function onElementStart($name, array $attributes) {
+        $this->allow_xmldec = false;        
         $this->elementStarts++;
         $this->result .= "<$name";
         $pairs = array();
@@ -138,6 +228,7 @@ class MyDocumentBuilder extends PHPTAL_DOM_DocumentBuilder
     }
     
     public function onElementClose($name){
+        $this->allow_xmldec = false;        
         $this->elementCloses++;
         $this->result .= "</$name>";
     }

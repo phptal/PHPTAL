@@ -114,17 +114,17 @@ class PHPTAL_XmlParser
         
         $i=0;
         // remove BOM (utf8 byte order mark)... 
-        if (substr($src,0,3) == self::BOM_STR){
+        if (substr($src,0,3) === self::BOM_STR){
             $i=3;
         }
         for (; $i<$len; $i++) {        
             $c = $src[$i];
 
-            if ($c == "\n") $this->_line++;
+            if ($c === "\n") $builder->setSource($this->_file,++$this->_line);
 
             switch ($state) {
                 case self::ST_ROOT:
-                    if ($c == '<') {
+                    if ($c === '<') {
                         $mark = $i; // mark tag start
                         $state = self::ST_LT;
                     }
@@ -134,9 +134,8 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_TEXT:
-                    if ($c == '<') {
+                    if ($c === '<') {
                         if ($mark != $i) {
-                            $builder->setSource($this->_file,$this->_line);
                             $builder->onElementData(substr($src, $mark, $i-$mark));
                         }
                         $mark = $i;
@@ -145,23 +144,23 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_LT:
-                    if ($c == '/') {
+                    if ($c === '/') {
                         $mark = $i+1;
                         $state = self::ST_TAG_CLOSE;
                     }
-                    else if ($c == '?' and substr($src, $i, 4) == '?xml') {
+                    else if ($c === '?' and strtolower(substr($src, $i, 5)) === '?xml ') {
                         $state = self::ST_XMLDEC;
                     }
-                    else if ($c == '?') {
+                    else if ($c === '?') {
                         $state = self::ST_PREPROC;
                     }
-                    else if ($c == '!' and substr($src, $i, 3) == '!--') {
+                    else if ($c === '!' and substr($src, $i, 3) === '!--') {
                         $state = self::ST_COMMENT;
                     }
-                    else if ($c == '!' and substr($src, $i, 8) == '![CDATA[') {
+                    else if ($c === '!' and substr($src, $i, 8) === '![CDATA[') {
                         $state = self::ST_CDATA;
                     }
-                    else if ($c == '!' and substr($src, $i, 8) == '!DOCTYPE') {
+                    else if ($c === '!' and strtoupper(substr($src, $i, 8)) === '!DOCTYPE') {
                         $state = self::ST_DOCTYPE;
                     }
                     else if (self::isWhiteChar($c)) {
@@ -176,28 +175,28 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_TAG_NAME:
-                    if (self::isWhiteChar($c)) {
+                    if (self::isWhiteChar($c) || $c === '/' || $c === '>')
+                    {
                         $tagname = substr($src, $mark, $i-$mark);
-                        $state = self::ST_TAG_ATTRIBUTES;
-                    }
-                    else if ($c == '/') {
-                        $tagname = substr($src, $mark, $i-$mark);
-                        $state = self::ST_TAG_SINGLE;
-                    }
-                    else if ($c == '>') {
-                        $tagname = substr($src, $mark, $i-$mark);
-                        $mark = $i+1; // mark text start
-                        $state = self::ST_TEXT;
-                        if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");
-                        $builder->setSource($this->_file,$this->_line);
-                        $builder->onElementStart($tagname, $attributes);
+                        if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");                        
+                        
+                        if ($c === '/') {
+                            $state = self::ST_TAG_SINGLE;
+                        }
+                        else if ($c === '>') {
+                            $mark = $i+1; // mark text start
+                            $state = self::ST_TEXT;
+                            $builder->onElementStart($tagname, $attributes);
+                        }
+                        else /* isWhiteChar */ {
+                            $state = self::ST_TAG_ATTRIBUTES;
+                        }
                     }
                     break;
 
                 case self::ST_TAG_CLOSE:
-                    if ($c == '>') {
+                    if ($c === '>') {
                         $tagname = rtrim(substr($src, $mark, $i-$mark));
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onElementClose($tagname);
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -210,22 +209,18 @@ class PHPTAL_XmlParser
                     }
                     $mark = $i+1;   // mark text start
                     $state = self::ST_TEXT;
-                    if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");                    
-                    $builder->setSource($this->_file,$this->_line);
                     $builder->onElementStart($tagname, $attributes);
                     $builder->onElementClose($tagname);
                     break;
                 
                 case self::ST_TAG_BETWEEN_ATTRIBUTE:    
                 case self::ST_TAG_ATTRIBUTES:
-                    if ($c == '>') {
+                    if ($c === '>') {
                         $mark = $i+1;   // mark text start
                         $state = self::ST_TEXT;
-                        if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");                        
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onElementStart($tagname, $attributes);
                     }
-                    else if ($c == '/') {
+                    else if ($c === '/') {
                         $state = self::ST_TAG_SINGLE;
                     }
                     else if (self::isWhiteChar($c)) {
@@ -239,14 +234,13 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_COMMENT:
-                    if ($c == '>' && $i > $mark+4 && substr($src, $i-2, 2) == '--') {
+                    if ($c === '>' && $i > $mark+4 && substr($src, $i-2, 2) === '--') {
                         
                         if (preg_match('/^-|--|-$/', substr($src, $mark +4, $i-$mark+1 -7)))
                         {
                             $this->raiseError("Ill-formed comment. XML comments are not allowed to contain '--' or start/end with '-': ".substr($src, $mark+4, $i-$mark+1-7));
                         }
                         
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onComment(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -254,9 +248,8 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_CDATA:
-                    if ($c == '>' and substr($src, $i-2, 2) == ']]') 
+                    if ($c === '>' and substr($src, $i-2, 2) === ']]') 
                     {
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onOther(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -264,9 +257,8 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_XMLDEC:
-                    if ($c == '?' && substr($src, $i, 2) == '?>') 
+                    if ($c === '?' && substr($src, $i, 2) === '?>') 
                     {
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onXmlDecl(substr($src, $mark, $i-$mark+2));
                         $i++; // skip '>'
                         $mark = $i+1; // mark text start
@@ -275,21 +267,19 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_DOCTYPE:
-                    if ($c == '[') {
+                    if ($c === '[') {
                         $customDoctype = true;
                     }
-                    else if ($customDoctype && $c == '>' && substr($src, $i-1, 2) == ']>')
+                    else if ($customDoctype && $c === '>' && substr($src, $i-1, 2) === ']>')
                     {
                         $customDoctype = false;
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onDocType(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
                     }
-                    else if (!$customDoctype && $c == '>') 
+                    else if (!$customDoctype && $c === '>') 
                     {
                         $customDoctype = false;
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onDocType(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -297,9 +287,8 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_PREPROC:
-                    if ($c == '>' and $src[$i-1] == '?') 
+                    if ($c === '>' and $src[$i-1] === '?') 
                     {
-                        $builder->setSource($this->_file,$this->_line);
                         $builder->onOther(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -307,26 +296,33 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_ATTR_KEY:
-                    if (self::isWhiteChar($c)) {
+                    if ($c === '=' || self::isWhiteChar($c)) 
+                    {
                         $attribute = substr($src, $mark, $i-$mark);
-                        $state = self::ST_ATTR_EQ;
-                    }
-                    else if ($c == '=') {
+                        if (!$this->isValidQName($attribute)) $this->raiseError("Invalid attribute name '$attribute'"); 
+                        if (isset($attributes[$attribute])) $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
+                        
+                        if ($c === '=') $state = self::ST_ATTR_VALUE;
+                        else /* white char */ $state = self::ST_ATTR_EQ;                   
+                    }                    
+                    else if ($c === '/' || $c==='>')
+                    {
                         $attribute = substr($src, $mark, $i-$mark);
-                        $state = self::ST_ATTR_VALUE;
+                        $this->raiseError("Could not find value for attribute $attribute before end of tag <$tagname>");
                     }
                     break;
-
+                    
                 case self::ST_ATTR_EQ:
-                    if ($c == '=') {
+                    if ($c === '=') {
                         $state = self::ST_ATTR_VALUE;
                     }
+                    else if (!self::isWhiteChar($c)) $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
                     break;
 
                 case self::ST_ATTR_VALUE:
                     if (self::isWhiteChar($c)){
                     }
-                    else if ($c == '"' or $c == '\'') {
+                    else if ($c === '"' or $c === '\'') {
                         $quoteStyle = $c;
                         $state = self::ST_ATTR_QUOTE;
                         $mark = $i+1; // mark attribute real value start
@@ -337,9 +333,7 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_ATTR_QUOTE:
-                    if ($c == $quoteStyle) {
-                        if (!$this->isValidQName($attribute)) $this->raiseError("Invalid attribute name '$attribute'");                        
-                        if (isset($attributes[$attribute])) $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
+                    if ($c === $quoteStyle) {
                         $attributes[$attribute] = substr($src, $mark, $i-$mark);
                         $state = self::ST_TAG_BETWEEN_ATTRIBUTE;
                     }
@@ -347,7 +341,7 @@ class PHPTAL_XmlParser
             }
         }
         
-        if ($state == self::ST_TEXT) // allows text past root node, which is in violation of XML spec
+        if ($state === self::ST_TEXT) // allows text past root node, which is in violation of XML spec
         {
             if ($i > $mark)
             {
@@ -361,7 +355,6 @@ class PHPTAL_XmlParser
             throw new PHPTAL_ParserException("Finished document in unexpected state: ".self::$state_names[$state]." is not finished");
         }
         
-            $builder->setSource($this->_file,$this->_line);
             $builder->onDocumentEnd();
         }
         catch(PHPTAL_TemplateException $e)
