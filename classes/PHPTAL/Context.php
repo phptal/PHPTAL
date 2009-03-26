@@ -227,16 +227,14 @@ if (!function_exists('property_exists')){
  */
 function phptal_path($base, $path, $nothrow=false)
 {//{{{
-    $parts   = explode('/', $path);
-    $current = true;
-
 	if ($base === null) 
 	{
 		if ($nothrow) return null;
 		throw new PHPTAL_VariableNotFoundException("Trying to read property '$path' from NULL");
 	}
 
-    while (($current = array_shift($parts)) !== null){
+    foreach(explode('/', $path) as $current)
+    {
         // object handling
         if (is_object($base)){
             // look for method
@@ -282,31 +280,24 @@ function phptal_path($base, $path, $nothrow=false)
             }
 
             // magic method call
-            if (method_exists($base, '__call')){
+            if (method_exists($base, '__call')) {
                 try
                 {
-                    $base = $base->$current();
+                    $base = $base->__call($current,array());
                     continue;
                 }
                 catch(BadMethodCallException $e){}
             }
 
-            // emulate array behaviour
-            if (is_numeric($current) && method_exists($base, '__getAt')){
-                $base = $base->__getAt($current);
-                continue;
-            }
-            
             if ($nothrow)
                 return null;
 
-            $err = 'Unable to find part "%s" in path "%s" inside '.(is_object($base)?get_class($base):gettype($base));
-            $err = sprintf($err, $current, $path);
-            throw new PHPTAL_VariableNotFoundException($err);
+            phptal_path_error($base,$path,$current);
         }
 
         // array handling
-        if (is_array($base)) {
+        if (is_array($base)) 
+        {
             // key or index
             if (array_key_exists((string)$current, $base)){
                 $base = $base[$current];
@@ -322,9 +313,7 @@ function phptal_path($base, $path, $nothrow=false)
             if ($nothrow)
                 return null;
 
-            $err = 'Unable to find array key "%s" in path "%s"';
-            $err = sprintf($err, $current, $path);
-            throw new PHPTAL_VariableNotFoundException($err);
+            phptal_path_error($base,$path,$current);
         }
 
         // string handling
@@ -347,12 +336,31 @@ function phptal_path($base, $path, $nothrow=false)
         if ($nothrow)
             return null;
         
-        $err = 'Unable to find part "%s" in path "%s" with base "%s"';
-        $err = sprintf($err, $current, $path, is_scalar($base)?"$base":(is_object($base)?get_class($base):gettype($base)));
-        throw new PHPTAL_VariableNotFoundException($err);
+        phptal_path_error($base,$path,$current);
     }
 
     return $base;
+}
+
+/**
+ * helper method for phptal_path(). Please don't use it directly.
+ */
+function phptal_path_error($base,$path,$current)
+{
+    $basename = '';
+    if ($current !== $path) 
+    {
+        $pathinfo = " (in path '.../$path')";
+        if (preg_match('!([^/]+)/'.preg_quote($current,'!').'(?:/|$)!',$path,$m))
+        {
+            $basename = "'".$m[1]."' ";
+        }        
+    }
+    else $pathinfo = '';
+        
+    if (is_array($base)) throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
+    if (is_object($base)) throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
+    throw new PHPTAL_VariableNotFoundException(ucfirst(gettype($base))." {$basename}doesn't have property '$current'$pathinfo");    
 }
 
 function phptal_true($ctx, $path)

@@ -22,18 +22,26 @@
 
 require_once 'config.php';
 
-class MyArray
+class MyArray implements ArrayAccess
 {
     public function push($value) {
         $this->_values[] =  $value;
     }
     
-    public function __getAt($index){
+    public function offsetGet($index){
         return $this->_values[$index];
     }
 
-    public function __setAt($index, $value){
+    public function offsetSet($index, $value){
         $this->_values[$index] = $value;
+    }
+
+    public function offsetExists($of){
+        return isset($this->_values[$of]);
+    }
+    
+    public function offsetUnset($of){
+        unset($this->_values[$of]);
     }
 
     private $_values = array();

@@ -430,7 +430,7 @@ class PHPTAL_RepeatController_Groups {
         }
         
         // Find the requested variable
-        $value = @phptal_path( $this->data, $var, true );
+        $value = phptal_path( $this->data, $var, true );
         
         // Check if it's an object or an array
         if ( is_array($value) || is_object($value) ) {
