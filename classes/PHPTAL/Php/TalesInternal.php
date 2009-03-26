@@ -332,6 +332,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	 */
 	static public function number($src, $nothrow)
 	{
+	    if (!is_numeric(trim($src))) throw new PHPTAL_ParserException("'$src' is not a number");
 	    return trim($src);
 	}
 }
