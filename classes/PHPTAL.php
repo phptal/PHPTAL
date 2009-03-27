@@ -27,11 +27,10 @@ if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPA
 else assert('substr(PHPTAL_DIR,-1) == DIRECTORY_SEPARATOR');
 //}}}
 
-require_once PHPTAL_DIR.'PHPTAL/FileSource.php';
-require_once PHPTAL_DIR.'PHPTAL/RepeatController.php';
-require_once PHPTAL_DIR.'PHPTAL/Context.php';
-require_once PHPTAL_DIR.'PHPTAL/Exception.php';
-require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
+require PHPTAL_DIR.'PHPTAL/FileSource.php';
+require PHPTAL_DIR.'PHPTAL/RepeatController.php';
+require PHPTAL_DIR.'PHPTAL/Context.php';
+require PHPTAL_DIR.'PHPTAL/Exception.php';
 require_once PHPTAL_DIR.'PHPTAL/Filter.php';
 
 /**
@@ -69,11 +68,6 @@ class PHPTAL
     public function __construct($path=false)
     {
         $this->_path = $path;
-        $this->_repositories = array();
-        if (defined('PHPTAL_TEMPLATE_REPOSITORY')){
-            $this->_repositories[] = PHPTAL_TEMPLATE_REPOSITORY;
-        }
-        $this->_resolvers = array();
         $this->_globalContext = new StdClass();
         $this->_context = new PHPTAL_Context();
         $this->_context->setGlobal($this->_globalContext);
@@ -179,6 +173,17 @@ class PHPTAL
     public function clearTemplateRepositories()
     {
         $this->_repositories = array();
+        return $this;
+    }
+
+    /**
+     * Specify how to look for templates.
+     *
+     * @param $resolver PHPTAL_SourceResolver
+     */
+    public function addSourceResolver(PHPTAL_SourceResolver $resolver)
+    {
+        $this->_resolvers[] = $rep;        
         return $this;
     }
 
@@ -537,7 +542,10 @@ class PHPTAL
             $this->parse();
         }
 
-        require_once $this->getCodePath();
+        if (!function_exists($this->getFunctionName()))
+        {
+            require $this->getCodePath();
+        }
 
         $this->_prepared = true;
         return $this;
@@ -717,6 +725,7 @@ class PHPTAL
 
     protected function parse()
     {
+        require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
         require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
 
         // instantiate the PHPTAL source parser
