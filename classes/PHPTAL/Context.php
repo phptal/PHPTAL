@@ -26,8 +26,6 @@
  */
 class PHPTAL_Context
 {
-    public static $USE_GLOBAL = false;
-    
     public $__line = false;
     public $__file = false;
     public $repeat;
@@ -57,7 +55,6 @@ class PHPTAL_Context
 
     public function pushContext()
     {
-        if (self::$USE_GLOBAL) return $this;
         $res = clone $this;
         $res->setParent($this);
         return $res;
@@ -65,7 +62,6 @@ class PHPTAL_Context
 
     public function popContext()
     {
-        if (self::$USE_GLOBAL) return $this;
         return $this->_parentContext;
     }
 
@@ -172,8 +168,6 @@ class PHPTAL_Context
         }
         $this->$varname = $value;
     }
-
-   
 
     /**
      * Context getter.
@@ -404,5 +398,8 @@ function phptal_escape($var)
     elseif (is_bool($var)){
         return (int)$var;
     }
-    return $var;	
+    elseif (is_array($var)){
+        return htmlspecialchars(implode(', ',$var),ENT_QUOTES);
+    }
+    return $var;
 }
