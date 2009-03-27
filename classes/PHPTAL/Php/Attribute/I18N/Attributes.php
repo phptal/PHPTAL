@@ -65,21 +65,20 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                 $attr = $this->phpelement->getAttributeNode($qname);
                 if (!$attr) throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because there is no translation key specified");
 
-                switch($attr->getReplacedState())
+                if ($attr->getReplacedState() === PHPTAL_Php_Attr::NOT_REPLACED)
                 {
-                    case PHPTAL_Php_Attr::VALUE_REPLACED:
+                    $code = $this->_getTranslationCode($codewriter,$attr->getValue());
+                }
+                else if ($attr->getReplacedState() === PHPTAL_Php_Attr::VALUE_REPLACED && $attr->getOverwrittenVariableName())
+                {
                         // sadly variables won't be interpolated in this translation
                         $code = 'echo '.$codewriter->escapeCode('$_translator->translate('.$attr->getOverwrittenVariableName().', false)');
-                        break;
-                    case PHPTAL_Php_Attr::NOT_REPLACED:
-                        $code = $this->_getTranslationCode($codewriter,$attr->getValue());
-                        break;
-                    
-                    default:
+                }
+                else
+                {
                         throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it");
                 }
             }
-            
             $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithCode($code);
         }
     }

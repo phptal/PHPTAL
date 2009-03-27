@@ -66,11 +66,11 @@ EOS;
         $state = new PHPTAL_Php_State();
         $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doFunction('test1', '$tpl');
-        $codewriter->pushStringEscaped('test1');
+        $codewriter->pushHtml('test1');
         $codewriter->doFunction('test2', '$tpl');
-        $codewriter->pushStringEscaped('test2');
+        $codewriter->pushHtml('test2');
         $codewriter->doEnd();
-        $codewriter->pushStringEscaped('test1');
+        $codewriter->pushHtml('test1');
         $codewriter->doEnd();
         $res = $codewriter->getResult();
         $exp = <<<EOS

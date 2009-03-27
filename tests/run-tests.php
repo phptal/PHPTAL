@@ -60,7 +60,7 @@ if (isset($argv) && count($argv) >= 2){
         }
         catch(Exception $e)
         {
-            echo "Exception during execution of $entry";
+            echo "Exception during execution of $entry: ".$e->getMessage()."\n\n";
         }
         
     }

@@ -221,15 +221,29 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
         return $this->xmlns;
     }
     
+    /**
+     * support <?php ?> inside attributes
+     */
     private function replacePHPAttributes()
     {
         foreach($this->attribute_nodes as $attr)
         {
-            if (preg_match('/^\s*<\?php(.*)\?>\s*$/',$attr->getValueEscaped(),$m))
+            $split = preg_split("/<\?(php|=|)(.*?)\?>/",$attr->getValueEscaped(),NULL,PREG_SPLIT_DELIM_CAPTURE);
+            if (count($split)==1) continue;
+                        
+            $new_value = '';            
+            for($i=0; $i < count($split); $i += 3)
             {
-                $attr->overwriteValueWithCode($m[1]);
+                if (strlen($split[$i])) $new_value .= 'echo \''.str_replace('\'','\\\'',$split[$i]).'\';';
+
+                if (isset($split[$i+2]))
+                {          
+                    if ($split[$i+1] === '=') $new_value .= 'echo ';
+                    $new_value .= rtrim($split[$i+2],"; \n\r").';';
             }
         }
+            $attr->overwriteValueWithCode($new_value);
+    }
     }
  
     public function appendChild(PHPTAL_DOMNode $child)
@@ -451,7 +465,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
                     $codewriter->pushRawHtml(' '.$attr->getQualifiedName());                    
                     if ($codewriter->getOutputMode() !== PHPTAL::HTML5 || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName()))
                     {
-                        $codewriter->pushStringEscaped('='.$codewriter->quoteAttributeValue($attr->getValueEscaped()));
+                        $codewriter->pushHtml('='.$codewriter->quoteAttributeValue($attr->getValueEscaped()));
                     }
                     break;
                     
@@ -567,7 +581,7 @@ class PHPTAL_DOMText extends PHPTAL_DOMNode
 {
     public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushStringEscaped($this->getValueEscaped());
+        $codewriter->pushHtml($this->getValueEscaped());
     }
 }
 

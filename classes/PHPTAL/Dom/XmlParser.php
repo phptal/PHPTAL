@@ -136,7 +136,7 @@ class PHPTAL_XmlParser
                 case self::ST_TEXT:
                     if ($c === '<') {
                         if ($mark != $i) {
-                            $builder->onElementData(substr($src, $mark, $i-$mark));
+                            $builder->onElementData($this->sanitizeEscapedText(substr($src, $mark, $i-$mark)));
                         }
                         $mark = $i;
                         $state = self::ST_LT;
@@ -334,7 +334,7 @@ class PHPTAL_XmlParser
 
                 case self::ST_ATTR_QUOTE:
                     if ($c === $quoteStyle) {
-                        $attributes[$attribute] = substr($src, $mark, $i-$mark);
+                        $attributes[$attribute] = $this->sanitizeEscapedText(substr($src, $mark, $i-$mark));
                         $state = self::ST_TAG_BETWEEN_ATTRIBUTE;
                     }
                     break;
@@ -346,7 +346,6 @@ class PHPTAL_XmlParser
             if ($i > $mark)
             {
                 $text = substr($src, $mark, $i-$mark);
-                //if (!ctype_space($text)) $builder->onElementData($text);
                 if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element");
             }
         }
@@ -368,6 +367,29 @@ class PHPTAL_XmlParser
     private function isValidQName($name)
     {        
         return preg_match('/^([a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*:)?[a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*$/i',$name);
+    }
+
+    /**
+     * This is where this parser violates XML and refuses to be an annoying bastard.
+     * FIXME: check encoding here.
+     */
+    public function sanitizeEscapedText($str)
+    {
+        /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
+        $types = ini_get('short_open_tag')?'php|=|':'php';
+        $split = preg_split("/(<\?(?:$types).*?\?>)/",$str, NULL, PREG_SPLIT_DELIM_CAPTURE);        
+        
+        for($i=0; $i < count($split); $i+=2)
+        {
+            // escape invalid entities and < >
+            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i','&amp;',$split[$i]),array('<'=>'&lt;','>'=>'&gt;'));
+        }
+        return implode('',$split);
+    }
+
+    public static function _htmlspecialchars($m)
+    {
+        return htmlspecialchars($m[0]);
     }
 
     public function getSourceFile()

@@ -98,6 +98,39 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
+    
+    
+    public function testPHPBlock()
+    {
+        $tpl = new PHPTAL();
+        $tpl->setSource('<p test=\'te&amp;st<?php echo "<x>"; ?>test<?php print("&amp;") ?>test\'/>');
+        $this->assertEquals('<p test="te&amp;st<x>test&amp;test"></p>', $tpl->execute());
 }
 
-?>
+    public function testPHPBlockShort()
+    {
+        ini_set('short_open_tag',1);
+        if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
+        
+        $tpl = new PHPTAL();
+        $tpl->setSource('<p test=\'te&amp;st<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
+        $this->assertEquals('<p test="te&amp;st<x>test&amp;test"></p>', $tpl->execute());
+        ini_restore('short_open_tag');
+    }
+    
+    public function testPHPBlockNoShort()
+    {
+        ini_set('short_open_tag',0);
+        if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
+                
+        $tpl = new PHPTAL();
+        $tpl->setSource('<p test=\'te&amp;st<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
+        try
+        {
+            $this->assertEquals('<p test="te&amp;st&lt;? print("&lt;x&gt;"); ?&gt;test&lt;?= "&amp;" ?&gt;test"></p>', $tpl->execute());
+        }
+        catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
+        ini_restore('short_open_tag');
+    }
+}
+

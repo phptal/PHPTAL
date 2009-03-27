@@ -106,7 +106,7 @@ class PHPTAL_Php_State
     }
 
     private function _interpolateTalesVarsEscaped($matches) {
-        return '<?php echo '.$this->htmlchars(phptal_tale($matches[1])).';?>';
+        return '<?php echo '.$this->htmlchars(phptal_tale(html_entity_decode($matches[1],ENT_QUOTES,$this->getEncoding()))).';?>';
     }
 
     public function interpolateTalesVarsInHtml($src)
