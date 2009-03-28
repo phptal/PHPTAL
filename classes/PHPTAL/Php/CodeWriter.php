@@ -237,8 +237,7 @@ class PHPTAL_Php_CodeWriter
     {
         $this->doEnd();
         $this->_segments[] =  'catch';
-        $code = 'catch(%s) {';
-        $this->pushCode(sprintf($code, $catch));
+        $this->pushCode('catch('.$catch.') {');
         $this->indent();
     }
 
@@ -266,9 +265,7 @@ class PHPTAL_Php_CodeWriter
     public function doEcho($code)
     {
         $this->flush();
-        $html = '<?php echo %s ?>';
-        $html = sprintf($html, $this->escapeCode($code));
-        $this->pushHtml($html);
+        $this->pushHtml('<?php echo '.$this->escapeCode($code).' ?>');
     }
 
     public function doEchoRaw($code)

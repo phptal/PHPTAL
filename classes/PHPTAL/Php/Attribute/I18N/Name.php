@@ -30,11 +30,8 @@ class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $code = '$_translator->setVar(\'%s\', ob_get_contents())';
-        $code = sprintf($code, $this->expression);
-        $codewriter->pushCode($code);
+        $codewriter->pushCode('$_translator->setVar('.$codewriter->str($this->expression).', ob_get_contents())');
         $codewriter->pushCode('ob_end_clean()');
     }
 }
 
-?>

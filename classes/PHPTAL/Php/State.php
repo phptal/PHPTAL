@@ -104,9 +104,7 @@ class PHPTAL_Php_State
         while (preg_match('/(?<!\$)\$\{([^\}]+)\}/ism', $string, $m)){
             list($ori, $exp) = $m;
             $php  = PHPTAL_TalesInternal::php($exp);
-            $repl = '\'.%s.\''; 
-            $repl = sprintf($repl, $php, $this->_encoding);
-            $string = str_replace($ori, $repl, $string);
+            $string = str_replace($ori, '\'.'.$php.'.\'', $string); // FIXME: that is not elegant
         }
 		$string = str_replace('$${', '${', $string);
         return '\''.$string.'\'';

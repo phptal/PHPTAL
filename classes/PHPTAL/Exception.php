@@ -41,19 +41,8 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
 
     public function __toString()
     {
-        if (empty($this->srcFile)){
-            return parent::__toString();
-        }
-        $res = sprintf('From %s around line %d'."\n", $this->srcFile, $this->srcLine);
-        $res .= parent::__toString();
-        return $res;
-    }
-
-    public static function formatted($format /*, ...*/)
-    {
-        $args = func_get_args();
-        $msg  = call_user_func('sprintf', $args);
-        return new PHPTAL_Exception($format);
+        if (!$this->srcFile) return parent::__toString();
+        return "From {$this->srcFile} around line {$this->srcLine}\n".parent::__toString();
     }
     
     /**

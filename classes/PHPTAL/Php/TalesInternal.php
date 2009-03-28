@@ -51,7 +51,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
     static public function true($src, $nothrow)
     {
-	    return sprintf('phptal_true($ctx, %s)', self::string(trim($src), $nothrow));
+	    return 'phptal_true($ctx, '.self::string(trim($src), $nothrow).')';
     }
 
 	//
@@ -322,7 +322,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	 */
 	static public function exists($src, $nothrow)
 	{
-	    return sprintf('phptal_exists($ctx, %s)', self::string(trim($src), $nothrow));
+	    return 'phptal_exists($ctx, '.self::string(trim($src), $nothrow).')';
 	}
 
 	/**

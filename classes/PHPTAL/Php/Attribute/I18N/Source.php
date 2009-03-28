@@ -22,9 +22,7 @@ class PHPTAL_Php_Attribute_I18N_Source extends PHPTAL_Php_Attribute
         $codewriter->end();
 
         // push current source and use new one
-        $code = '$__i18n_sources[] = $_translator->setSource(\'%s\')';
-        $code = sprintf($code, $this->expression);
-        $codewriter->pushCode($code);
+        $codewriter->pushCode('$__i18n_sources[] = $_translator->setSource('.$codewriter->str($this->expression).')');
     }
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)

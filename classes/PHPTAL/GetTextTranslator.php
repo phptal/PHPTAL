@@ -112,8 +112,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src,$var) = $m;
             if (!array_key_exists($var, $this->_vars)){
-                $err = sprintf('Interpolation error, var "%s" not set', $var);
-                throw new PHPTAL_VariableNotFoundException($err);
+                throw new PHPTAL_VariableNotFoundException('Interpolation error, var "'.$var.'" not set');
             }
             $value = str_replace($src, $this->_vars[$var], $value);
         }

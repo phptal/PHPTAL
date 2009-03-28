@@ -61,7 +61,7 @@ class PHPTAL_TalesRegistry {
 	 */
 	public function registerPrefix($prefix, $callback) {
 		if ($this->isRegistered($prefix)) {
-			throw new PHPTAL_ConfigurationException(sprintf('Expression modifier "%s" is already registered.',$prefix));
+			throw new PHPTAL_ConfigurationException("Expression modifier '$prefix' is already registered");
 		}
 
 		// Check if valid callback
@@ -98,7 +98,7 @@ class PHPTAL_TalesRegistry {
 
 	public function getCallback($prefix) {
 		if (!$this->isRegistered($prefix)) {
-			throw new PHPTAL_ConfigurationException(sprintf('Expression modifier "%s" is not registered.', $prefix));
+			throw new PHPTAL_ConfigurationException("Expression modifier '$prefix' is not registered");
 		}
 		return $this->_callbacks[$prefix];
 	}

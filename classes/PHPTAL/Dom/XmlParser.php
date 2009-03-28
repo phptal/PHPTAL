@@ -413,14 +413,9 @@ class PHPTAL_XmlParser
         return ($char >= 'a' && $char <= 'z');
     }
     
-    protected function raiseError($errFmt)
+    protected function raiseError($errStr)
     {
-        $args = func_get_args();
-        $errStr = call_user_func_array('sprintf', $args);
-        
-        $str = "%s error: %s in %s:%d";
-        $str = sprintf($str, get_class($this), $errStr, $this->_file, $this->_line);
-        throw new PHPTAL_ParserException($str,$this->_file, $this->_line);
+        throw new PHPTAL_ParserException($errStr,$this->_file, $this->_line);
     }
     
     private $_file;

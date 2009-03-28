@@ -171,8 +171,6 @@ abstract class PHPTAL_DOMNode
  */
 class PHPTAL_DOMElement extends PHPTAL_DOMNode
 {
-    const ERR_ATTRIBUTES_CONFLICT =
-        "Attribute conflict in '%s' at line '%d', '%s' cannot appear with '%s'";
 
     protected $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
@@ -527,7 +525,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
             $nsattr = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($domattr->getNamespaceURI(), $domattr->getLocalName());
             if (array_key_exists($nsattr->getPriority(), $temp))
             {      
-                throw new PHPTAL_TemplateException(sprintf(self::ERR_ATTRIBUTES_CONFLICT,
+                throw new PHPTAL_TemplateException(sprintf("Attribute conflict in '%s' at line '%d', '%s' cannot appear with '%s'",
                                $this->qualifiedName,
                                $this->getSourceLine(),
                                $key,

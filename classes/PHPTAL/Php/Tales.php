@@ -101,12 +101,12 @@ function phptal_tales($expression, $nothrow=false)
         $classCallback = explode('.', $typePrefix, 2);
         $callbackName  = NULL;
         if (!is_callable($classCallback, FALSE, $callbackName)) {
-            throw new PHPTAL_ParserException(sprintf('Unknown phptal modifier %s. Function %s does not exists or is not statically callable.', $typePrefix, $callbackName));
+            throw new PHPTAL_ParserException("Unknown phptal modifier $typePrefix. Function $callbackName does not exists or is not statically callable");
         }
         $ref = new ReflectionClass($classCallback[0]);
         if (!$ref->implementsInterface('PHPTAL_Tales'))
         {
-            throw new PHPTAL_ParserException(sprintf('Unable to use phptal modifier %s as the class %s does not implement the PHPTAL_Tales interface.', $typePrefix, $callbackName));
+            throw new PHPTAL_ParserException("Unable to use phptal modifier $typePrefix as the class $callbackName does not implement the PHPTAL_Tales interface");
         }
         return call_user_func($classCallback, $expression, $nothrow);
     }
