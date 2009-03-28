@@ -542,12 +542,21 @@ class PHPTAL
         		    $this->cleanUpGarbage();
         		}
 	
-                if (!file_put_contents($this->getCodePath(), $this->parse())) {
-                    throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
+	            $result = $this->parse();
+	            
+	            if (!$this->getForceReparse())
+	            {
+                    if (!file_put_contents($this->getCodePath(), $result)) {
+                        throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
+                    }
                 }
+        
+                eval('?>'.$result);
             }
-
-            require $this->getCodePath();
+            else
+            {
+                require $this->getCodePath();
+            }
         }
         
         $this->_prepared = true;
@@ -744,9 +753,7 @@ class PHPTAL
         $tree = $parser->parseString($builder,$data, $realpath)->getResult();
 
         require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
-        $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding);
-        $generator->setOutputMode($this->_outputMode);
-
+        $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding, $this->_outputMode, $this->getCodePath());
         $result = $generator->generate($tree);
         
         return $result;

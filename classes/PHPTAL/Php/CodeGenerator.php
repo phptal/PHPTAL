@@ -9,18 +9,16 @@ require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
  */
 class PHPTAL_Php_CodeGenerator
 {
-    public function __construct($function_name, $source_path, $enc)
+    public function __construct($function_name, $source_path, $enc, $mode, $cachepath)
     {
         $this->_functionName = $function_name;
         $this->_sourceFile = $source_path;
         $this->_state = new PHPTAL_Php_State();
         $this->_state->setEncoding($enc);
+        $this->_state->setCacheFilesBaseName($cachepath);
+        $this->_state->setOutputMode($mode);
     }
 
-    public function setOutputMode($mode)
-    { 
-        $this->_state->setOutputMode($mode);
-    }    
 
     public function generate(PHPTAL_DOMElement $treeGen)
     {

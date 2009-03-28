@@ -75,7 +75,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
              $codewriter->doSetVar($this->cache_tag, '('.$code.')."@".' . $old_cache_tag );
         }
     
-	    $cond = '!file_exists(__FILE__.md5('.$this->cache_tag.')) || time() - '.$cache_len.' >= @filemtime(__FILE__.md5('.$this->cache_tag.'))';
+	    $cond = '!file_exists('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.')) || time() - '.$cache_len.' >= filemtime('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'))';
 
         $codewriter->doIf($cond);
         $codewriter->doEval('ob_start()');
@@ -83,9 +83,9 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEval('file_put_contents(__FILE__.md5('.$this->cache_tag.'), ob_get_flush())');
+        $codewriter->doEval('file_put_contents('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'), ob_get_flush())');
         $codewriter->doElse();
-        $codewriter->doEval('readfile(__FILE__.md5('.$this->cache_tag.'))');
+        $codewriter->doEval('readfile('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'))');
         $codewriter->doEnd();
     }
 }

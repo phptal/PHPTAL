@@ -31,6 +31,17 @@ class PHPTAL_Php_State
     private $_talesMode  = 'tales';
     private $_encoding   = 'UTF-8';
     private $_outputMode = PHPTAL::XHTML;
+    private $cache_basename = '/tmp/phptal';
+
+    public function setCacheFilesBaseName($name)
+    {
+        $this->cache_basename = $name;
+    }
+    
+    public function getCacheFilesBaseName()
+    {
+        return $this->cache_basename;
+    }
 
     public function setDebug($bool)
     {

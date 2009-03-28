@@ -33,6 +33,11 @@ class PHPTAL_Php_CodeWriter
         $this->_state = $state;
     }
 
+    public function getCacheFilesBaseName()
+    {
+        return $this->_state->getCacheFilesBaseName();
+    }
+
     public function getResult()
     {
         $this->flush();

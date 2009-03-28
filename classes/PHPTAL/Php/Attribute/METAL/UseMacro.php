@@ -70,7 +70,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         else 
         {
             $code = $codewriter->interpolateTalesVarsInString($this->expression);
-            $codewriter->pushRawHtml('<?php $tpl->_executeMacroOfTempalte('.$code.', $_thistpl); ?>');
+            $codewriter->pushCode('$tpl->_executeMacroOfTempalte('.$code.', $_thistpl)');
         }
 
         $this->popSlots($codewriter);
