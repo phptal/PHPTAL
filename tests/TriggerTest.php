@@ -83,7 +83,7 @@ class TriggerTest extends PHPTAL_TestCase
     public function testSimple()
     {
         $trigger = new StupidCacheTrigger();
-        $tpl = new PHPTAL('input/trigger.01.html');
+        $tpl = $this->newPHPTAL('input/trigger.01.html');
         $tpl->addTrigger('someid', $trigger);
         $exp = trim_file('output/trigger.01.html');
 

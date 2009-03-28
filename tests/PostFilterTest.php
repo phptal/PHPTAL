@@ -47,7 +47,7 @@ class PostFilterTest extends PHPTAL_TestCase
     function testIt()
     {
         $filter = new MyPostFilter();
-        $tpl = new PHPTAL('input/postfilter.01.html');
+        $tpl = $this->newPHPTAL('input/postfilter.01.html');
         $tpl->setPostFilter($filter);
         $tpl->value = 'my value';
         $res = trim_string($tpl->execute());
@@ -57,7 +57,7 @@ class PostFilterTest extends PHPTAL_TestCase
     
     function testMacro()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setPostFilter(new MyPostFilter2());
         $tpl->setSource('<x><y metal:define-macro="macro">test2</y>
         test1

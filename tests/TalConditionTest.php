@@ -33,7 +33,7 @@ class TalConditionTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/tal-condition.01.html');
+        $tpl = $this->newPHPTAL('input/tal-condition.01.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-condition.01.html');
         $this->assertEquals($exp, $res);
@@ -41,7 +41,7 @@ class TalConditionTest extends PHPTAL_TestCase
 
     function testNot()
     {
-        $tpl = new PHPTAL('input/tal-condition.02.html');
+        $tpl = $this->newPHPTAL('input/tal-condition.02.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-condition.02.html');
         $this->assertEquals($exp, $res);        
@@ -49,7 +49,7 @@ class TalConditionTest extends PHPTAL_TestCase
 
     function testExists()
     {
-        $tpl = new PHPTAL('input/tal-condition.03.html');
+        $tpl = $this->newPHPTAL('input/tal-condition.03.html');
         $tpl->somevar = true;
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-condition.03.html');
@@ -58,7 +58,7 @@ class TalConditionTest extends PHPTAL_TestCase
 
     function testException()
     {
-        $tpl = new PHPTAL('input/tal-condition.04.html');
+        $tpl = $this->newPHPTAL('input/tal-condition.04.html');
         $tpl->somevar = true;
         try {
             $tpl->execute();
@@ -72,7 +72,7 @@ class TalConditionTest extends PHPTAL_TestCase
     
     function testChainedFalse()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block tal:condition="foo | bar | baz | nothing">fail!</tal:block>');
         $res = $tpl->execute();
         $this->assertEquals($res,'');
@@ -80,7 +80,7 @@ class TalConditionTest extends PHPTAL_TestCase
     
     function testChainedTrue()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block tal:condition="foo | bar | baz | \'ok!\'">ok</tal:block>');
         $res = $tpl->execute();
         $this->assertEquals($res,'ok');
@@ -88,7 +88,7 @@ class TalConditionTest extends PHPTAL_TestCase
         
     function testChainedShortCircuit()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block tal:condition="foo | \'ok!\' | bar | nothing">ok</tal:block>');
         $res = $tpl->execute();
         $this->assertEquals($res,'ok');

@@ -2,11 +2,11 @@
 
 require_once 'config.php';
 
-class HTML5ModeTest extends PHPUnit_Framework_TestCase
+class HTML5ModeTest extends PHPTAL_TestCase
 {
     function testEmpty()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml">
         <head>
@@ -57,7 +57,7 @@ class HTML5ModeTest extends PHPUnit_Framework_TestCase
     
     function testBoolean()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -97,7 +97,7 @@ class HTML5ModeTest extends PHPUnit_Framework_TestCase
 
    function testMixedModes()
    {
-       $tpl = new PHPTAL();
+       $tpl = $this->newPHPTAL();
        $tpl->setOutputMode(PHPTAL::HTML5);
        $tpl->setSource('<input checked="checked"/>');
        $this->assertEquals('<input checked>',$tpl->execute());

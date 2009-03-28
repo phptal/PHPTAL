@@ -26,7 +26,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 {
     function testArrayRepeat()
     {
-        $tpl = new PHPTAL('input/tal-repeat.01.html');
+        $tpl = $this->newPHPTAL('input/tal-repeat.01.html');
         $tpl->array = range(0,4);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-repeat.01.html');
@@ -35,7 +35,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testOddEventAndFriends()
     {
-        $tpl = new PHPTAL('input/tal-repeat.02.html');
+        $tpl = $this->newPHPTAL('input/tal-repeat.02.html');
         $tpl->array = range(0,2);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-repeat.02.html');
@@ -44,7 +44,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testIterableUsage()
     {
-        $tpl = new PHPTAL('input/tal-repeat.03.html');
+        $tpl = $this->newPHPTAL('input/tal-repeat.03.html');
         $tpl->result = new MyIterableWithSize(4);
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -54,7 +54,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testArrayObject()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"></p></div>');
         $tpl->aobj = new MyArrayObj(array(1,2,3));
         
@@ -63,7 +63,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testArrayObjectOneElement()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"></p></div>');
         $tpl->aobj = new MyArrayObj(array(1));
         
@@ -72,7 +72,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testArrayObjectZeroElements()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"/></div>');
         $tpl->aobj = new MyArrayObj(array());
         
@@ -81,7 +81,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testArrayObjectAggregated()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj">${a}${repeat/a/length}</p></div>');
         $tpl->aobj = new MyArrayObj(new MyArrayObj(array("1","2","3",NULL)));
         
@@ -90,7 +90,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testArrayObjectNested()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj">${a}<b tal:repeat="b aobj" tal:content="b"/></p></div>');
         $tpl->aobj = new MyArrayObj(array("1","2"));
         
@@ -99,7 +99,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testHashKey()
     {
-        $tpl = new PHPTAL('input/tal-repeat.04.html');
+        $tpl = $this->newPHPTAL('input/tal-repeat.04.html');
         $tpl->result = array('a'=>0, 'b'=>1, 'c'=>2, 'd'=>3);
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -109,7 +109,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testRepeatAttributesWithPhp()
     {
-        $tpl = new PHPTAL('input/tal-repeat.05.html');
+        $tpl = $this->newPHPTAL('input/tal-repeat.05.html');
         $tpl->data = array(1,2,3);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-repeat.05.html');
@@ -119,7 +119,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testRepeatAttributesWithMacroPhp()
     {
-        $tpl = new PHPTAL('input/tal-repeat.06.html');
+        $tpl = $this->newPHPTAL('input/tal-repeat.06.html');
         $tpl->data = array(1,2,3);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-repeat.06.html');
@@ -129,7 +129,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testPhpMode()
     {
-        $tpl = new PHPTAL('input/tal-repeat.07.html');
+        $tpl = $this->newPHPTAL('input/tal-repeat.07.html');
         $tpl->result = array('a'=>0, 'b'=>1, 'c'=>2, 'd'=>3);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-repeat.07.html');
@@ -141,7 +141,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $doc = new DOMDocument();
         $doc->loadXML('<a><b/><c/><d/><e/><f/><g/></a>');
                 
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block tal:repeat="node nodes"><tal:block tal:condition="php:repeat.node.index==4">(len=${repeat/node/length})</tal:block>${repeat/node/key}${node/tagName}</tal:block>');
         $tpl->nodes = $doc->getElementsByTagName('*');
         
@@ -151,7 +151,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testLetter()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource( '<span tal:omit-tag="" tal:repeat="item items" tal:content="repeat/item/letter"/>' );
         $tpl->items = range( 0, 32 );
         $res = trim_string( $tpl->execute() );
@@ -161,7 +161,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testRoman()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource( '<span tal:omit-tag="" tal:repeat="item items" tal:content="string:${repeat/item/roman},"/>' );
         $tpl->items = range( 0, 16 );
         $res = trim_string( $tpl->execute() );
@@ -171,7 +171,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testGrouping()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('
             <div tal:omit-tag="" tal:repeat="item items">
                 <h1 tal:condition="repeat/item/first" tal:content="item"></h1>
@@ -201,7 +201,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testGroupingPath()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('
             <div tal:omit-tag="" tal:repeat="item items">
                 <h1 tal:condition="repeat/item/first/type" tal:content="item/type"></h1>
@@ -236,7 +236,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testSimpleXML()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource("<tal:block tal:repeat='s php:sxml'><b tal:content='s' />\n</tal:block>");
         $tpl->sxml = new SimpleXMLElement("<x><y>test</y><y attr=\"test\"><z>test</z></y><y/></x>");
         $this->assertEquals("<b><y>test</y></b>\n<b><y attr=\"test\"><z>test</z></y></b>\n<b><y/></b>\n", $tpl->execute());
@@ -253,7 +253,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
         $controller = new LogIteratorCalls(array(1,2,3));
         
-        $phptal = new PHPTAL();
+        $phptal = $this->newPHPTAL();
         $phptal->iter = $controller;
         $phptal->setSource('<tal:block tal:repeat="x iter" />');
         $phptal->execute();
@@ -263,7 +263,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testCountIsLazy()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->i = new MyIterableThrowsOnSize(10);
         $tpl->setSource('<tal:block tal:repeat="i i">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block>');
         $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
@@ -280,7 +280,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testReset()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->iter = $i = new LogIteratorCalls(new MyIterableThrowsOnSize(10));
                 
         $tpl->setSource('<tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block><tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}]${repeat/i/end}</tal:block>');
@@ -293,7 +293,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testFakedLength()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->iter = new MyIterable(10);            
         $tpl->setSource('<tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}/${repeat/i/length}]${repeat/i/end}</tal:block>');
         $this->assertEquals("1[0/]00[1/]00[2/]00[3/]00[4/]00[5/]00[6/]00[7/]00[8/]00[9/10]1", $tpl->execute(),$tpl->getCodePath());        
@@ -301,7 +301,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     
     function testPushesContext()
     {
-        $phptal = new PHPTAL();
+        $phptal = $this->newPHPTAL();
         $phptal->setSource('
         <x>
         original=${user}

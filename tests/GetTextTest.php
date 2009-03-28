@@ -45,7 +45,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test');
         $gettext->useDomain('test');
         
-        $tpl = new PHPTAL('input/gettext.01.html');
+        $tpl = $this->newPHPTAL('input/gettext.01.html');
         $tpl->setTranslator($gettext);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/gettext.01.html');
@@ -59,7 +59,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test');
         $gettext->useDomain('test');
         
-        $tpl = new PHPTAL('input/gettext.02.html');
+        $tpl = $this->newPHPTAL('input/gettext.02.html');
         $tpl->setTranslator($gettext);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/gettext.02.html');
@@ -74,7 +74,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test');
         $gettext->useDomain('test');
         
-        $tpl = new PHPTAL('input/gettext.03.html');
+        $tpl = $this->newPHPTAL('input/gettext.03.html');
         $tpl->setTranslator($gettext);
         $tpl->login = 'john';
         $tpl->lastCxDate = '2004-12-25';
@@ -92,7 +92,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test2');
         $gettext->useDomain('test');
         
-        $tpl = new PHPTAL('input/gettext.04.html');
+        $tpl = $this->newPHPTAL('input/gettext.04.html');
         $tpl->setEncoding('UTF-8');
         $tpl->setTranslator($gettext);
         $tpl->login = 'john';
@@ -109,7 +109,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test');
         $gettext->useDomain('test');
         
-        $tpl = new PHPTAL('input/gettext.05.html');
+        $tpl = $this->newPHPTAL('input/gettext.05.html');
         $tpl->login = 'john smith';
         $tpl->setTranslator($gettext);
         $res = trim_string($tpl->execute());
@@ -125,7 +125,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->useDomain('test');
         $gettext->setCanonicalize(true);
 
-        $tpl = new PHPTAL('input/gettext.06.html');
+        $tpl = $this->newPHPTAL('input/gettext.06.html');
         $tpl->setTranslator($gettext);
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -140,7 +140,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test');
         $gettext->useDomain('test');
 
-        $tpl = new PHPTAL('input/gettext.06.html');
+        $tpl = $this->newPHPTAL('input/gettext.06.html');
         $tpl->setTranslator($gettext);
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -160,7 +160,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test');
         $gettext->useDomain('test');
 
-        $tpl = new PHPTAL('input/gettext.07.html');
+        $tpl = $this->newPHPTAL('input/gettext.07.html');
         $tpl->setTranslator($gettext);
         $res = $tpl->execute();
         $res = trim_string($res);

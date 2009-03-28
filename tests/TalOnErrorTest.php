@@ -36,7 +36,7 @@ class TalOnErrorTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/tal-on-error.01.html');
+        $tpl = $this->newPHPTAL('input/tal-on-error.01.html');
         $tpl->dummy = new OnErrorDummyObject();
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-on-error.01.html');
@@ -48,7 +48,7 @@ class TalOnErrorTest extends PHPTAL_TestCase
 
     function testEmpty()
     {
-        $tpl = new PHPTAL('input/tal-on-error.02.html');
+        $tpl = $this->newPHPTAL('input/tal-on-error.02.html');
         $tpl->dummy = new OnErrorDummyObject();
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-on-error.02.html');
@@ -60,7 +60,7 @@ class TalOnErrorTest extends PHPTAL_TestCase
 
     function testReplaceStructure()
     {
-        $tpl = new PHPTAL('input/tal-on-error.03.html');
+        $tpl = $this->newPHPTAL('input/tal-on-error.03.html');
         $tpl->dummy = new OnErrorDummyObject();
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-on-error.03.html');

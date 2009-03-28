@@ -27,7 +27,7 @@ class TalesExistTest extends PHPTAL_TestCase
 {
     function testLevel1()
     {
-        $tpl = new PHPTAL('input/tales-exist-01.html');
+        $tpl = $this->newPHPTAL('input/tales-exist-01.html');
         $tpl->foo = 1;
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -39,7 +39,7 @@ class TalesExistTest extends PHPTAL_TestCase
     {
         $o = new StdClass();
         $o->foo = 1;
-        $tpl = new PHPTAL('input/tales-exist-02.html');
+        $tpl = $this->newPHPTAL('input/tales-exist-02.html');
         $tpl->o = $o;
         $res = $tpl->execute();
         $res = trim_string($res);

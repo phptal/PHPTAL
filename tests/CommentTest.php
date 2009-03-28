@@ -27,7 +27,7 @@ class CommentTest extends PHPTAL_TestCase
     function testSimple()
     {
         $source = '<html><!-- \${variable} --></html>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
         $res = $tpl->execute();
         $this->assertEquals($source, $res);
@@ -36,7 +36,7 @@ class CommentTest extends PHPTAL_TestCase
     function testNoEntities()
     {
         $source = '<html><!-- <foo> --></html>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($source, __FILE__);
         $res = $tpl->execute();
         $this->assertEquals($source, $res);
@@ -45,7 +45,7 @@ class CommentTest extends PHPTAL_TestCase
     function testShortComments()
     {
         $source = '<html><!--><--></html>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
         $res = $tpl->execute();
         $this->assertEquals($source, $res);
@@ -57,7 +57,7 @@ class CommentTest extends PHPTAL_TestCase
     function testNestedComments()
     {
         $source = '<html><!--<!--<!--></html>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
         $res = $tpl->execute();
         $this->fail("Ill-formed comment accepted");
@@ -69,7 +69,7 @@ class CommentTest extends PHPTAL_TestCase
     function testDashedComment()
     {
         $source = '<html><!--- XML hates you ---></html>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
         $res = $tpl->execute();
         $this->fail("Ill-formed comment accepted");
@@ -80,7 +80,7 @@ class CommentTest extends PHPTAL_TestCase
     {
         $source = '<html><!--!
         removed --><!-- left --><!-- !removed --></html>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
         $res = $tpl->execute();
         $this->assertEquals('<html><!-- left --></html>', $res);

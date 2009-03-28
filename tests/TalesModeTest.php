@@ -27,7 +27,7 @@ class TalesModeTest extends PHPTAL_TestCase
     public function testUnsupportedMode()
     {
         try {
-            $tpl = new PHPTAL('input/tales.mode.01.xml');
+            $tpl = $this->newPHPTAL('input/tales.mode.01.xml');
             $tpl->execute();
             $this->assertTrue(false);
         }

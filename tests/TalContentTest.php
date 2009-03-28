@@ -33,7 +33,7 @@ class TalContentTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/tal-content.01.html');
+        $tpl = $this->newPHPTAL('input/tal-content.01.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-content.01.html');
         $this->assertEquals($exp, $res);
@@ -41,7 +41,7 @@ class TalContentTest extends PHPTAL_TestCase
 
     function testVar()
     {
-        $tpl = new PHPTAL('input/tal-content.02.html');
+        $tpl = $this->newPHPTAL('input/tal-content.02.html');
         $tpl->content = 'my content';
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-content.02.html');
@@ -50,7 +50,7 @@ class TalContentTest extends PHPTAL_TestCase
 
     function testStructure()
     {
-        $tpl = new PHPTAL('input/tal-content.03.html');
+        $tpl = $this->newPHPTAL('input/tal-content.03.html');
         $tpl->content = '<foo><bar/></foo>';
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-content.03.html');
@@ -59,7 +59,7 @@ class TalContentTest extends PHPTAL_TestCase
 
     function testNothing()
     {
-        $tpl = new PHPTAL('input/tal-content.04.html');
+        $tpl = $this->newPHPTAL('input/tal-content.04.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-content.04.html');
         $this->assertEquals($exp, $res);
@@ -67,7 +67,7 @@ class TalContentTest extends PHPTAL_TestCase
     
     function testDefault()
     {
-        $tpl = new PHPTAL('input/tal-content.05.html');
+        $tpl = $this->newPHPTAL('input/tal-content.05.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-content.05.html');
         $this->assertEquals($exp, $res);
@@ -75,7 +75,7 @@ class TalContentTest extends PHPTAL_TestCase
 
     function testChain()
     {
-        $tpl = new PHPTAL('input/tal-content.06.html');
+        $tpl = $this->newPHPTAL('input/tal-content.06.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-content.06.html');
         $this->assertEquals($exp, $res);
@@ -95,7 +95,7 @@ class TalContentTest extends PHPTAL_TestCase
 <span>default</span>
 </root>
 ';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->nullv = null;
         $tpl->falsev = false;
@@ -114,7 +114,7 @@ EOT;
         $exp = <<<EOT
 <root>foo value</root>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->foo = $foo;
         $res = $tpl->execute();
@@ -130,7 +130,7 @@ EOT;
         $exp = <<<EOT
 <root>foo value</root>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->foo = $foo;
         $res = $tpl->execute();

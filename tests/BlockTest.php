@@ -5,14 +5,14 @@ require_once 'config.php';
 class BlockTest extends PHPTAL_TestCase
 {
 	function testTalBlock(){
-		$t = new PHPTAL();
+		$t = $this->newPHPTAL();
 		$t->setSource('<tal:block content="string:content"></tal:block>');
 		$res = $t->execute();
 		$this->assertEquals('content', $res);
 	}
 
 	function testMetalBlock(){
-		$t = new PHPTAL();
+		$t = $this->newPHPTAL();
 		$t->setSource('<metal:block>foo</metal:block>');
 		$res = $t->execute();
 		$this->assertEquals('foo', $res);
@@ -20,7 +20,7 @@ class BlockTest extends PHPTAL_TestCase
 
 	function testSomeNamespaceBlock()
 	{
-		$t = new PHPTAL();
+		$t = $this->newPHPTAL();
 		$t->setSource('<foo:block xmlns:foo="http://phptal.example.com">foo</foo:block>');
 		$res = $t->execute();
 		$this->assertEquals('<foo:block xmlns:foo="http://phptal.example.com">foo</foo:block>', $res);
@@ -31,7 +31,7 @@ class BlockTest extends PHPTAL_TestCase
      */    
 	function testInvalidNamespaceBlock()
 	{
-		$t = new PHPTAL();
+		$t = $this->newPHPTAL();
 				
 		$this->setExpectedException('PHPTAL_Exception');
 		

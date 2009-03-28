@@ -54,7 +54,7 @@ class OverloadingTest extends PHPTAL_TestCase
 {
     function test()
     {
-        $tpl = new PHPTAL('input/overloading-01.html');
+        $tpl = $this->newPHPTAL('input/overloading-01.html');
         $tpl->object = new OverloadTestClass();
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/overloading-01.html');

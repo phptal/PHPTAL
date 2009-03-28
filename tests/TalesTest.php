@@ -72,7 +72,7 @@ class TalesTest extends PHPTAL_TestCase
 
     function testTrue()
     {
-        $tpl = new PHPTAL('input/tales-true.html');
+        $tpl = $this->newPHPTAL('input/tales-true.html');
         $tpl->isNotTrue = false;
         $tpl->isTrue = true;
         $res = $tpl->execute();

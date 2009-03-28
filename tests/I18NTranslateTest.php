@@ -28,7 +28,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
 {
     function testStringTranslate()
     {
-        $tpl = new PHPTAL('input/i18n-translate-01.html');
+        $tpl = $this->newPHPTAL('input/i18n-translate-01.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -38,7 +38,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
 
     function testEvalTranslate()
     {
-        $tpl = new PHPTAL('input/i18n-translate-02.html');
+        $tpl = $this->newPHPTAL('input/i18n-translate-02.html');
         $tpl->setTranslator( new DummyTranslator() );
         $tpl->message = "my translate key &";
         $res = $tpl->execute();
@@ -49,7 +49,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
     
     function testStructureTranslate()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setTranslator( new DummyTranslator() );
         $tpl->setSource('<p i18n:translate="structure \'translate<b>this</b>\'"/>');
         $this->assertEquals('<p>translate<b>this</b></p>',$tpl->execute());
@@ -57,7 +57,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
     
     function testStructureTranslate2()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setTranslator( new DummyTranslator() );
         $tpl->setSource('<p i18n:translate="structure">
         translate
@@ -70,7 +70,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
     
     function testStructureTranslate3()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setTranslator( $t = new DummyTranslator() );
         $t->setTranslation('msg','<b class="foo&amp;bar">translated&nbsp;key</b>');
         $tpl->var = 'msg';

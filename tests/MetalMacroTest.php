@@ -26,7 +26,7 @@ class MetalMacroTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/metal-macro.01.html');
+        $tpl = $this->newPHPTAL('input/metal-macro.01.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-macro.01.html');
         $this->assertEquals($exp, $res);
@@ -34,7 +34,7 @@ class MetalMacroTest extends PHPTAL_TestCase
 
     function testExternalMacro()
     {
-        $tpl = new PHPTAL('input/metal-macro.02.html');
+        $tpl = $this->newPHPTAL('input/metal-macro.02.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-macro.02.html');
         $this->assertEquals($exp, $res);
@@ -42,7 +42,7 @@ class MetalMacroTest extends PHPTAL_TestCase
 
     function testBlock()
     {
-        $tpl = new PHPTAL('input/metal-macro.03.html');
+        $tpl = $this->newPHPTAL('input/metal-macro.03.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-macro.03.html');
         $this->assertEquals($exp, $res);
@@ -50,7 +50,7 @@ class MetalMacroTest extends PHPTAL_TestCase
 
     function testMacroInsideMacro()
     {
-        $tpl = new PHPTAL('input/metal-macro.04.html');
+        $tpl = $this->newPHPTAL('input/metal-macro.04.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-macro.04.html');
         $this->assertEquals($exp, $res);
@@ -62,7 +62,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $call->first = 1;
         $call->second = 2;
         
-        $tpl = new PHPTAL('input/metal-macro.05.html');
+        $tpl = $this->newPHPTAL('input/metal-macro.05.html');
         $tpl->call = $call;
 
         $res = trim_string($tpl->execute());
@@ -76,7 +76,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $call->first = 1;
         $call->second = 2;
         
-        $tpl = new PHPTAL('input/metal-macro.06.html');
+        $tpl = $this->newPHPTAL('input/metal-macro.06.html');
         $tpl->call = $call;
 
         $res = trim_string($tpl->execute());
@@ -86,7 +86,7 @@ class MetalMacroTest extends PHPTAL_TestCase
 
     function testInheritedMacroSlots()
     {
-        $tpl = new PHPTAL('input/metal-macro.07.html');
+        $tpl = $this->newPHPTAL('input/metal-macro.07.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-macro.07.html');
         $this->assertEquals($exp, $res);
@@ -97,7 +97,7 @@ class MetalMacroTest extends PHPTAL_TestCase
      */
     function testBadMacroNameException()
     {
-            $tpl = new PHPTAL('input/metal-macro.08.html');
+            $tpl = $this->newPHPTAL('input/metal-macro.08.html');
             $res = $tpl->execute();
         $this->fail('Bad macro name exception not thrown');
         }
@@ -107,7 +107,7 @@ class MetalMacroTest extends PHPTAL_TestCase
      */
     function testExternalMacroMissingException()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.07.html/this-macro-doesnt-exist"/>');
         $res = $tpl->execute();
         $this->fail('Bad macro name exception not thrown');
@@ -118,7 +118,7 @@ class MetalMacroTest extends PHPTAL_TestCase
      */
     function testMacroMissingException()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block metal:use-macro="this-macro-doesnt-exist"/>');
         $res = $tpl->execute();
         $this->fail('Bad macro name exception not thrown');
@@ -126,7 +126,7 @@ class MetalMacroTest extends PHPTAL_TestCase
     
     function testMixedCallerDefiner()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->defined_later_var = 'defined_later';
         $tpl->ok_var = '??'; // fallback in case test fails
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.09.html/defined_earlier" />');

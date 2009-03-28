@@ -57,7 +57,7 @@ class TalesStringTest extends PHPTAL_TestCase {
 
     function testQuote()
     {
-        $tpl = new PHPTAL('input/tales-string-01.html');
+        $tpl = $this->newPHPTAL('input/tales-string-01.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tales-string-01.html');
@@ -73,7 +73,7 @@ class TalesStringTest extends PHPTAL_TestCase {
 
     function testDoubleDotComa()
     {
-        $tpl = new PHPTAL('input/tales-string-02.html');
+        $tpl = $this->newPHPTAL('input/tales-string-02.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tales-string-02.html');
@@ -82,7 +82,7 @@ class TalesStringTest extends PHPTAL_TestCase {
 
     function testEscape()
     {
-        $tpl = new PHPTAL('input/tales-string-03.html');
+        $tpl = $this->newPHPTAL('input/tales-string-03.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tales-string-03.html');

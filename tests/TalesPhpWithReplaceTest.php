@@ -26,7 +26,7 @@ class TalesPhpWithReplaceTest extends PHPTAL_TestCase
 {
     function testIt()
     {
-        $tpl = new PHPTAL('input/talesphpwithreplace.01.html');
+        $tpl = $this->newPHPTAL('input/talesphpwithreplace.01.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/talesphpwithreplace.01.html');
         $this->assertEquals($exp, $res);

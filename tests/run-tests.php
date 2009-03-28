@@ -29,7 +29,7 @@ error_reporting( E_ALL | E_STRICT );
 
 define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR);
 
-require_once "config.php";
+require_once dirname(__FILE__)."/config.php";
 require_once PHPTAL_DIR.'PHPTAL.php';
 
 class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
@@ -38,6 +38,13 @@ class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
     {
         //echo $this->getName();
         parent::setUp();
+    }
+    
+    protected function newPHPTAL($tpl = false)
+    {
+        $p = new PHPTAL($tpl);
+        $p->setForceReparse(true);
+        return $p;
     }
 }
 

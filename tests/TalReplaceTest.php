@@ -27,7 +27,7 @@ class TalReplaceTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/tal-replace.01.html');
+        $tpl = $this->newPHPTAL('input/tal-replace.01.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.01.html');
         $this->assertEquals($exp, $res);
@@ -35,7 +35,7 @@ class TalReplaceTest extends PHPTAL_TestCase
 
     function testVar()
     {
-        $tpl = new PHPTAL('input/tal-replace.02.html');
+        $tpl = $this->newPHPTAL('input/tal-replace.02.html');
         $tpl->replace = 'my replace';
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.02.html');
@@ -44,7 +44,7 @@ class TalReplaceTest extends PHPTAL_TestCase
 
     function testStructure()
     {
-        $tpl = new PHPTAL('input/tal-replace.03.html');
+        $tpl = $this->newPHPTAL('input/tal-replace.03.html');
         $tpl->replace = '<foo><bar/></foo>';
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.03.html');
@@ -53,7 +53,7 @@ class TalReplaceTest extends PHPTAL_TestCase
 
     function testNothing()
     {
-        $tpl = new PHPTAL('input/tal-replace.04.html');
+        $tpl = $this->newPHPTAL('input/tal-replace.04.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.04.html');
         $this->assertEquals($exp, $res);
@@ -61,7 +61,7 @@ class TalReplaceTest extends PHPTAL_TestCase
 
     function testDefault()
     {
-        $tpl = new PHPTAL('input/tal-replace.05.html');
+        $tpl = $this->newPHPTAL('input/tal-replace.05.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.05.html');
         $this->assertEquals($exp, $res);
@@ -69,7 +69,7 @@ class TalReplaceTest extends PHPTAL_TestCase
 
     function testChain()
     {
-        $tpl = new PHPTAL('input/tal-replace.06.html');
+        $tpl = $this->newPHPTAL('input/tal-replace.06.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.06.html');
         $this->assertEquals($exp, $res);
@@ -77,7 +77,7 @@ class TalReplaceTest extends PHPTAL_TestCase
 
     function testBlock()
     {
-        $tpl = new PHPTAL('input/tal-replace.07.html');
+        $tpl = $this->newPHPTAL('input/tal-replace.07.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.07.html');
         $this->assertEquals($exp, $res);        
@@ -97,7 +97,7 @@ EOT;
 <span>default</span>
 </root>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src, __FILE__);
         $tpl->nullv = null;
         $tpl->falsev = false;

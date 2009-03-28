@@ -78,7 +78,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testMulti()
     {
-        $tpl = new PHPTAL('input/tal-define.01.html');
+        $tpl = $this->newPHPTAL('input/tal-define.01.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.01.html');
@@ -87,7 +87,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testBuffered()
     {
-        $tpl = new PHPTAL('input/tal-define.02.html');
+        $tpl = $this->newPHPTAL('input/tal-define.02.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.02.html');
@@ -96,7 +96,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testMultiChained()
     {
-        $tpl = new PHPTAL('input/tal-define.03.html');
+        $tpl = $this->newPHPTAL('input/tal-define.03.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.03.html');
@@ -105,7 +105,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineZero()
     {
-        $tpl = new PHPTAL('input/tal-define.04.html');
+        $tpl = $this->newPHPTAL('input/tal-define.04.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.04.html');
@@ -114,7 +114,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineZeroTalesPHP()
     {
-        $tpl = new PHPTAL('input/tal-define.05.html');
+        $tpl = $this->newPHPTAL('input/tal-define.05.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.05.html');
@@ -123,7 +123,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineInMacro()
     {
-        $tpl = new PHPTAL('input/tal-define.06.html');
+        $tpl = $this->newPHPTAL('input/tal-define.06.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.06.html');
@@ -132,7 +132,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineDoNotStealOutput()
     {
-        $tpl = new PHPTAL('input/tal-define.07.html');
+        $tpl = $this->newPHPTAL('input/tal-define.07.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.07.html');
@@ -141,7 +141,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineWithRepeatAndContent()
     {
-        $tpl = new PHPTAL('input/tal-define.08.html');
+        $tpl = $this->newPHPTAL('input/tal-define.08.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.08.html');
@@ -150,7 +150,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineWithUseMacro()
     {
-        $tpl = new PHPTAL('input/tal-define.09.html');
+        $tpl = $this->newPHPTAL('input/tal-define.09.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.09.html');
@@ -159,7 +159,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineAndPrint()
     {
-        $tpl = new PHPTAL('input/tal-define.10.html');
+        $tpl = $this->newPHPTAL('input/tal-define.10.html');
         $tpl->fname = 'Roger';
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -169,7 +169,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineContent()
     {
-        $tpl = new PHPTAL('input/tal-define.11.html');
+        $tpl = $this->newPHPTAL('input/tal-define.11.html');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -179,7 +179,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
     function testDefineAndAttributes()
     {
-        $tpl = new PHPTAL('input/tal-define.12.html');
+        $tpl = $this->newPHPTAL('input/tal-define.12.html');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -190,7 +190,7 @@ class TalDefineTest extends PHPTAL_TestCase
     function testDefineGlobal()
     {
         $exp = trim_file('output/tal-define.13.html');
-        $tpl = new PHPTAL('input/tal-define.13.html');
+        $tpl = $this->newPHPTAL('input/tal-define.13.html');
         $res = trim_string($tpl->execute());
         $this->assertEquals($exp, $res);
     }
@@ -198,21 +198,21 @@ class TalDefineTest extends PHPTAL_TestCase
     function testDefineAlter()
     {
         $exp = trim_file('output/tal-define.14.html');
-        $tpl = new PHPTAL('input/tal-define.14.html');
+        $tpl = $this->newPHPTAL('input/tal-define.14.html');
         $res = trim_string($tpl->execute());
         $this->assertEquals($exp, $res);
     }
     
     function testDefineSemicolon()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:define="one \';;\'; two string:;;;;; three php:\';;;;;;\'">${one}-${two}-${three}</p>');
         $this->assertEquals('<p>;-;;-;;;</p>',$tpl->execute());
     }
     
     function testEmpty()
     {
-        $tal = new PHPTAL();
+        $tal = $this->newPHPTAL();
         $tal->setSource('<div class="blank_bg" tal:define="book relative/book" tal:condition="php: count(book)>0"></div>');
         $tal->relative = array('book'=>1);
 
@@ -221,7 +221,7 @@ class TalDefineTest extends PHPTAL_TestCase
         
     function testGlobalDefineEmptySpan()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div>
            <span tal:define="global x \'ok\'" />
            ${x}
@@ -233,7 +233,7 @@ class TalDefineTest extends PHPTAL_TestCase
     
     function testGlobalDefineEmptySpan2()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div>
            <span tal:define="global x \'ok\'" tal:comment="ignoreme" />
            ${x}
@@ -246,7 +246,7 @@ class TalDefineTest extends PHPTAL_TestCase
         
     function testGlobalDefineNonEmptySpan()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::XML);
         
         $tpl->setSource('<div>
@@ -260,7 +260,7 @@ class TalDefineTest extends PHPTAL_TestCase
     
     function testGlobalDefineNonEmptySpan2()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::XML);
         
         $tpl->setSource('<div>

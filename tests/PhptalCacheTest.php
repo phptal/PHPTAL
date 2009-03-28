@@ -30,7 +30,7 @@ class PhptalCacheTest extends PHPTAL_TestCase
     {
         global $PhptalCacheTest_random;
         
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setForceReparse(false);
         $tpl->setSource($source."<!-- $PhptalCacheTest_random -->"); // avoid cached templates from previous test runs
         return $tpl;

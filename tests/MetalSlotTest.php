@@ -26,7 +26,7 @@ class MetalSlotTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/metal-slot.01.html');
+        $tpl = $this->newPHPTAL('input/metal-slot.01.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-slot.01.html');
         $this->assertEquals($exp, $res);
@@ -34,7 +34,7 @@ class MetalSlotTest extends PHPTAL_TestCase
 
     function testRecusiveFill()
     {
-        $tpl = new PHPTAL('input/metal-slot.02.html');
+        $tpl = $this->newPHPTAL('input/metal-slot.02.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-slot.02.html');
         $this->assertEquals($exp, $res);
@@ -42,7 +42,7 @@ class MetalSlotTest extends PHPTAL_TestCase
 
     function testBlock()
     {
-        $tpl = new PHPTAL('input/metal-slot.03.html');
+        $tpl = $this->newPHPTAL('input/metal-slot.03.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-slot.03.html');
         $this->assertEquals($exp, $res);
@@ -50,7 +50,7 @@ class MetalSlotTest extends PHPTAL_TestCase
 
     function testFillAndCondition()
     {
-        $tpl = new PHPTAL('input/metal-slot.04.html');
+        $tpl = $this->newPHPTAL('input/metal-slot.04.html');
         $tpl->fillit = true;
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-slot.04.html');

@@ -5,7 +5,7 @@ class PhptalUsageTest extends PHPTAL_TestCase
 {
 	function testMultiUse()
 	{
-		$t = new PHPTAL();
+		$t = $this->newPHPTAL();
 		$t->title = 'hello';
 		$t->setTemplate('input/multiuse.01.html');
 		$a = $t->execute();
@@ -18,7 +18,7 @@ class PhptalUsageTest extends PHPTAL_TestCase
 		
     function testSetSourceReset()
     {
-        $t = new PHPTAL();        
+        $t = $this->newPHPTAL();        
         $t->setSource('<p>Hello</p>');
         $res1 = $t->execute();
         $t->setSource('<p>World</p>');

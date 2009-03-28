@@ -25,9 +25,6 @@ chdir($testDir);
 
 date_default_timezone_set('Europe/Paris');
 
-define('PHPTAL_FORCE_REPARSE', 1);
-ini_set('short_open_tag', 'Off');
-
 function trim_file( $src ){
     return trim_string( join('', file($src) ) );
 }
@@ -42,10 +39,10 @@ function trim_string( $src ){
     return $src;
 }
 
-function throw_all($errmsg, $errno, $file, $line){
-    $e = sprintf("--> $errmsg, $errno, $file, $line");
-    throw new Exception($e);
+function exception_error_handler($errno, $errstr, $errfile, $errline ) 
+{
+    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }
-set_error_handler('throw_all');
+set_error_handler("exception_error_handler");
 
-?>
+

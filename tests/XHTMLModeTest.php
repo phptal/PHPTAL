@@ -26,7 +26,7 @@ class XHTMLModeTest extends PHPTAL_TestCase
 {
     function testEmpty()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<html xmlns="http://www.w3.org/1999/xhtml">
         <head>
             <title tal:content="nonexistant | nothing" />
@@ -76,7 +76,7 @@ class XHTMLModeTest extends PHPTAL_TestCase
     
     function testBoolean()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('
         <html xmlns="http://www.w3.org/1999/xhtml">
         <body>

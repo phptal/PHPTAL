@@ -10,7 +10,7 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $t = new DummyTranslator();
         $t->setTranslation('my-title', 'mon titre');
         
-        $tpl = new PHPTAL('input/i18n-attributes-01.html');
+        $tpl = $this->newPHPTAL('input/i18n-attributes-01.html');
         $tpl->setTranslator($t);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/i18n-attributes-01.html');
@@ -22,7 +22,7 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $t = new DummyTranslator();
         $t->setTranslation('my-title', 'mon titre');
         
-        $tpl = new PHPTAL('input/i18n-attributes-02.html');
+        $tpl = $this->newPHPTAL('input/i18n-attributes-02.html');
         $tpl->setTranslator($t);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/i18n-attributes-02.html');
@@ -34,7 +34,7 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $t = new DummyTranslator();
         $t->setTranslation('my-title', 'mon titre');
         
-        $tpl = new PHPTAL('input/i18n-attributes-03.html');
+        $tpl = $this->newPHPTAL('input/i18n-attributes-03.html');
         $tpl->sometitle = 'my-title';
         $tpl->setTranslator($t);
         $res = trim_string($tpl->execute());
@@ -47,7 +47,7 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $t = new DummyTranslator();
         $t->setTranslation('my\'title', 'mon\'titre');
         
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><a title="my\'title" class="my&#039;title" i18n:attributes="class;title">test</a></div>');
         $tpl->sometitle = 'my-title';
         $tpl->setTranslator($t);
@@ -61,7 +61,7 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $t = new DummyTranslator();
         $t->setTranslation('my\'title', 'mon\'titre');
         
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><a title="foo" tal:attributes="title sometitle; class php:sometitle" i18n:attributes="class;title">test</a></div>');
         $tpl->sometitle = 'my\'title';
         $tpl->setTranslator($t);
@@ -74,7 +74,7 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $t->setTranslation('my-title', 'mon titre');
         $t->setTranslation('my-dummy', 'mon machin');
         
-        $tpl = new PHPTAL('input/i18n-attributes-04.html');
+        $tpl = $this->newPHPTAL('input/i18n-attributes-04.html');
         $tpl->sometitle = 'my-title';
         $tpl->setTranslator($t);
         $res = trim_string($tpl->execute());
@@ -87,7 +87,7 @@ class I18NAttributesTest extends PHPTAL_TestCase
 		$t = new DummyTranslator();
 		$t->setTranslation('foo ${someObject/method} bar ${otherObject/method} buz','ok ${someObject/method} ok ${otherObject/method} ok');
 		
-		$tpl = new PHPTAL('input/i18n-attributes-05.html');
+		$tpl = $this->newPHPTAL('input/i18n-attributes-05.html');
 		$tpl->setTranslator($t);
 		$tpl->someObject = array('method' => 'good');
 		$tpl->otherObject = array('method' => 'great');

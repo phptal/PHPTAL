@@ -7,7 +7,7 @@ class I18NNameTest extends PHPTAL_TestCase
 {
     function testSet()
     {
-        $tpl = new PHPTAL('input/i18n-name-01.html');
+        $tpl = $this->newPHPTAL('input/i18n-name-01.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
         $this->assertEquals(true, array_key_exists('test', $tpl->getTranslator()->vars));
@@ -16,7 +16,7 @@ class I18NNameTest extends PHPTAL_TestCase
 
     function testInterpolation()
     {
-        $tpl = new PHPTAL('input/i18n-name-02.html');
+        $tpl = $this->newPHPTAL('input/i18n-name-02.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -26,7 +26,7 @@ class I18NNameTest extends PHPTAL_TestCase
 
     function testMultipleInterpolation()
     {
-        $tpl = new PHPTAL('input/i18n-name-03.html');
+        $tpl = $this->newPHPTAL('input/i18n-name-03.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -36,7 +36,7 @@ class I18NNameTest extends PHPTAL_TestCase
 
     function testBlock()
     {
-        $tpl = new PHPTAL('input/i18n-name-04.html');
+        $tpl = $this->newPHPTAL('input/i18n-name-04.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -46,7 +46,7 @@ class I18NNameTest extends PHPTAL_TestCase
 
     function testI18NBlock()
     {
-        $tpl = new PHPTAL('input/i18n-name-05.html');
+        $tpl = $this->newPHPTAL('input/i18n-name-05.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -56,7 +56,7 @@ class I18NNameTest extends PHPTAL_TestCase
 
     function testNamespace()
     {
-        $tpl = new PHPTAL('input/i18n-name-06.html');
+        $tpl = $this->newPHPTAL('input/i18n-name-06.html');
         $tpl->username = 'john';
         $tpl->mails = 100;
         $tpl->setTranslator( new DummyTranslator() );

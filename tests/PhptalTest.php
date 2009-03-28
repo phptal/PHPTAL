@@ -26,7 +26,7 @@ class PhptalTest extends PHPTAL_TestCase
 {
     function test01()
     {
-        $tpl = new PHPTAL('input/phptal.01.html');
+        $tpl = $this->newPHPTAL('input/phptal.01.html');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
         $this->assertEquals('<dummy/>', $res);
@@ -34,7 +34,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testXmlHeader()
     {
-        $tpl = new PHPTAL('input/phptal.02.html');
+        $tpl = $this->newPHPTAL('input/phptal.02.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/phptal.02.html');
         $this->assertEquals($exp, $res);
@@ -42,7 +42,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testExceptionNoEcho()
     {
-        $tpl = new PHPTAL('input/phptal.03.html');
+        $tpl = $this->newPHPTAL('input/phptal.03.html');
         ob_start();
         try {
             $res = $tpl->execute();
@@ -56,7 +56,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testRepositorySingle()
     {
-        $tpl = new PHPTAL('phptal.01.html');
+        $tpl = $this->newPHPTAL('phptal.01.html');
         $tpl->setTemplateRepository('input');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
@@ -65,7 +65,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testRepositorySingleWithSlash()
     {
-        $tpl = new PHPTAL('phptal.01.html');
+        $tpl = $this->newPHPTAL('phptal.01.html');
         $tpl->setTemplateRepository('input/');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
@@ -74,7 +74,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testRepositoryMuliple()
     {
-        $tpl = new PHPTAL('phptal.01.html');
+        $tpl = $this->newPHPTAL('phptal.01.html');
         $tpl->setTemplateRepository(array('bar', 'input/'));
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
@@ -83,7 +83,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testSetTemplate()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setTemplateRepository(array('bar', 'input/'));
         $tpl->setOutputMode(PHPTAL::XML);
         $tpl->setTemplate('phptal.01.html');
@@ -93,7 +93,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testXmlMode()
     {
-        $tpl = new PHPTAL('input/xml.04.xml');
+        $tpl = $this->newPHPTAL('input/xml.04.xml');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = trim_string($tpl->execute());
         $exp = trim_file('input/xml.04.xml');
@@ -103,7 +103,7 @@ class PhptalTest extends PHPTAL_TestCase
     function testSource()
     {
         $source = '<span tal:content="foo"/>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->foo = 'foo value';
         $tpl->setSource($source);
         $res = $tpl->execute();
@@ -116,7 +116,7 @@ class PhptalTest extends PHPTAL_TestCase
     function testSourceWithPath()
     {
         $source = '<span tal:content="foo"/>';
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->foo = 'foo value';
         $tpl->setSource($source, '123');
         $res = $tpl->execute();
@@ -128,7 +128,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testStripComments()
     {
-        $tpl = new PHPTAL('input/phptal.04.html');
+        $tpl = $this->newPHPTAL('input/phptal.04.html');
         $exp = trim_file('output/phptal.04.html');
         $tpl->stripComments(true);
         $res = $tpl->execute();
@@ -139,7 +139,7 @@ class PhptalTest extends PHPTAL_TestCase
     function testUnknownOutputMode()
     {
         try {
-            $tpl = new PHPTAL();
+            $tpl = $this->newPHPTAL();
             $tpl->setOutputMode('unknown');
             $this->assertTrue(false);
         }
@@ -150,7 +150,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testZeroedContent()
     {
-        $tpl = new PHPTAL('input/phptal.05.html');
+        $tpl = $this->newPHPTAL('input/phptal.05.html');
         $res = $tpl->execute();
         $exp = trim_file('input/phptal.05.html');
         $this->assertEquals($exp, $res);
@@ -158,7 +158,7 @@ class PhptalTest extends PHPTAL_TestCase
 
     function testOnlineExpression()
     {
-        $tpl = new PHPTAL('input/phptal.06.html');
+        $tpl = $this->newPHPTAL('input/phptal.06.html');
         $tpl->foo = '<p>hello</p>';
         $res = $tpl->execute();
         $exp = trim_file('output/phptal.06.html');

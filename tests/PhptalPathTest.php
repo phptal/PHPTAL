@@ -57,7 +57,7 @@ class PhptalPathTest extends PHPTAL_TestCase
     /* protected get/isset doesn't work in PHP 5.3 
     function testProtectedIsset()
     {
-        $tpl = new PHPTAL(); 
+        $tpl = $this->newPHPTAL(); 
         $tpl->protected = new PhptalPathTest_DummyIssetClass;
         $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
         $res = $tpl->execute();
@@ -66,7 +66,7 @@ class PhptalPathTest extends PHPTAL_TestCase
     
     function testProtectedGet()
     {
-        $tpl = new PHPTAL(); 
+        $tpl = $this->newPHPTAL(); 
         $tpl->protected = new PhptalPathTest_DummyGetClass;
         $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
         $res = $tpl->execute();
@@ -87,7 +87,7 @@ EOS;
 ok
 EOS;
 
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src, __FILE__);
         $tpl->o = new PhptalPathTest_DummyClass();
         $res = $tpl->execute();

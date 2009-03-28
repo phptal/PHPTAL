@@ -6,14 +6,14 @@ class EscapeTest extends PHPTAL_TestCase {
 
     private function executeString($str, $params = array())
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         foreach($params as $k => $v) $tpl->set($k,$v);
         $tpl->setSource($str);
         return $tpl->execute();
     }
 
 	function testDoesEscapeHTMLContent(){
-		$tpl = new PHPTAL('input/escape.html');
+		$tpl = $this->newPHPTAL('input/escape.html');
 		$exp = trim_file('output/escape.html');
 		$res = trim_string($tpl->execute());
 		$this->assertEquals($exp, $res);

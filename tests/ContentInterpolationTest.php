@@ -1,6 +1,6 @@
 <?php
 
-class ContentInterpolationTest extends PHPUnit_Framework_Testcase
+class ContentInterpolationTest extends PHPTAL_TestCase
 {
     public function testInterpol()
     {
@@ -10,7 +10,7 @@ EOT;
         $exp = <<<EOT
 <span>foo value</span>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->foo = 'foo value';
         $res = $tpl->execute();
@@ -25,7 +25,7 @@ EOT;
         $exp = <<<EOT
 <span>{foo2 &lt;img /&gt;} x foo value y foo value{foo2 <img />}</span><img/>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->foo = 'foo value';
         $tpl->foo2 = '{foo2 <img />}';
@@ -41,7 +41,7 @@ EOT;
         $exp = <<<EOT
 <span>foo valuefoo value</span>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->foo = 'foo value';
         $res = $tpl->execute();
@@ -56,7 +56,7 @@ EOT;
         $exp = <<<EOT
 <span>\${foo}</span>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->foo = 'foo value';
         $res = $tpl->execute();
@@ -71,7 +71,7 @@ EOT;
         $exp = <<<EOT
 <span>$\${foo}</span>
 EOT;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource($src);
         $tpl->foo = 'foo value';
         $res = $tpl->execute();
@@ -80,7 +80,7 @@ EOT;
     
     public function testPHPBlock()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>test<?php echo "<x>"; ?>test<?php print("&amp;") ?>test</p>');
         $this->assertEquals('<p>test<x>test&amp;test</p>', $tpl->execute());
 }
@@ -90,7 +90,7 @@ EOT;
         ini_set('short_open_tag',1);
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
         
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
         $this->assertEquals('<p>test<x>test&amp;test</p>', $tpl->execute());
         ini_restore('short_open_tag');
@@ -101,7 +101,7 @@ EOT;
         ini_set('short_open_tag',0);
         if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");        
         
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
         try
         {
@@ -117,7 +117,7 @@ EOT;
      */
     function testErrorsThrow()
     {
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${error}</p>');
     }
 }

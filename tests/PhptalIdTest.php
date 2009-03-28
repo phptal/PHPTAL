@@ -57,7 +57,7 @@ class PhptalIdTest extends PHPTAL_TestCase
         $trigger = new MyTrigger();
         
         $exp = trim_file('output/phptal.id.01.html');
-        $tpl = new PHPTAL('input/phptal.id.01.html');
+        $tpl = $this->newPHPTAL('input/phptal.id.01.html');
         $tpl->addTrigger('myTable', $trigger);
         $tpl->result = range(0,3);
         

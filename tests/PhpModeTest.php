@@ -26,7 +26,7 @@ class PhpModeTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/php-mode.01.xml');
+        $tpl = $this->newPHPTAL('input/php-mode.01.xml');
         $res = $tpl->execute();
         $exp = trim_file('output/php-mode.01.xml');
         $res = trim_string($res);
@@ -35,7 +35,7 @@ class PhpModeTest extends PHPTAL_TestCase
 
     function testInContent()
     {
-        $tpl = new PHPTAL('input/php-mode.02.xml');
+        $tpl = $this->newPHPTAL('input/php-mode.02.xml');
         $res = $tpl->execute();
         $exp = trim_file('output/php-mode.02.xml');
         $res = trim_string($res);

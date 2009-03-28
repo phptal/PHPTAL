@@ -27,7 +27,7 @@ class OldTest extends PHPTAL_TestCase
 {
     function test03()
     {
-        $tpl = new PHPTAL('input/old-03.html');
+        $tpl = $this->newPHPTAL('input/old-03.html');
         $tpl->title = 'My dynamic title';
         $tpl->content = '<p>my content</p>';
         $res = trim_string($tpl->execute());
@@ -37,7 +37,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test06()
     {
-        $tpl = new PHPTAL('input/old-06.html');
+        $tpl = $this->newPHPTAL('input/old-06.html');
         $tpl->title = 'my title';
         $res = $tpl->execute();
         $res = trim_string($res);
@@ -47,7 +47,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test08()
     {
-        $tpl = new PHPTAL('input/old-08.html');
+        $tpl = $this->newPHPTAL('input/old-08.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-08.html');
         $this->assertEquals($exp, $res);                
@@ -55,7 +55,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test11()
     {
-        $tpl = new PHPTAL('input/old-11.html');
+        $tpl = $this->newPHPTAL('input/old-11.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-11.html');
         $this->assertEquals($exp, $res);                
@@ -63,7 +63,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test12()
     {
-        $tpl = new PHPTAL('input/old-12.html');
+        $tpl = $this->newPHPTAL('input/old-12.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-12.html');
         $this->assertEquals($exp, $res);                
@@ -71,7 +71,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test13()  // default keyword
     {
-        $tpl = new PHPTAL('input/old-13.html');
+        $tpl = $this->newPHPTAL('input/old-13.html');
         $l = new StdClass(); // DummyTag();
         $l->href= "http://www.example.com";
         $l->title = "example title";
@@ -86,7 +86,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test15() // boolean attributes 
     {
-        $tpl = new PHPTAL('input/old-15.html');
+        $tpl = $this->newPHPTAL('input/old-15.html');
         $tpl->checked = true;
         $tpl->notchecked = false;
         $res = $tpl->execute();
@@ -97,7 +97,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test16() // default in attributes
     {
-        $tpl = new PHPTAL('input/old-16.html');
+        $tpl = $this->newPHPTAL('input/old-16.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/old-16.html');
@@ -106,7 +106,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test17() // test indents
     {
-        $tpl = new PHPTAL('input/old-17.html');
+        $tpl = $this->newPHPTAL('input/old-17.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/old-17.html');
@@ -116,7 +116,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test19() // attribute override
     {
-        $tpl = new PHPTAL('input/old-19.html');
+        $tpl = $this->newPHPTAL('input/old-19.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/old-19.html');
@@ -126,7 +126,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test20() // remove xmlns:tal, xmlns:phptal, xmlns:metal, xmlns:i18n
     {
-        $tpl = new PHPTAL('input/old-20.html');
+        $tpl = $this->newPHPTAL('input/old-20.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/old-20.html');
@@ -136,7 +136,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test21() // ensure xhtml reduced tags are reduced
     {
-        $tpl = new PHPTAL('input/old-21.html');
+        $tpl = $this->newPHPTAL('input/old-21.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-21.html');
         $this->assertEquals($res, $exp);
@@ -145,7 +145,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test23() // test custom modifier
     {
-        $tpl = new PHPTAL('input/old-23.html');
+        $tpl = $this->newPHPTAL('input/old-23.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-23.html');
         $this->assertEquals($res, $exp);
@@ -154,7 +154,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test29() // test doctype inherited from macro
     {
-        $tpl = new PHPTAL('input/old-29.html');
+        $tpl = $this->newPHPTAL('input/old-29.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-29.html');
         $this->assertEquals($exp, $res);
@@ -162,7 +162,7 @@ class OldTest extends PHPTAL_TestCase
 
     function test30() // test blocks
     {
-        $tpl = new PHPTAL('input/old-30.html');
+        $tpl = $this->newPHPTAL('input/old-30.html');
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/old-30.html');
@@ -176,7 +176,7 @@ class OldTest extends PHPTAL_TestCase
         $a->fooval->b = new stdclass;
         $a->fooval->b->barval = "it's working";
         
-        $tpl = new PHPTAL('input/old-31.html');
+        $tpl = $this->newPHPTAL('input/old-31.html');
         $tpl->a = $a;
         $tpl->foo = 'fooval';
         $tpl->bar = 'barval';
@@ -199,7 +199,7 @@ class OldTest extends PHPTAL_TestCase
             )
         );
         
-        $tpl = new PHPTAL('input/old-32.html');
+        $tpl = $this->newPHPTAL('input/old-32.html');
         $tpl->object = $o;
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-32.html');

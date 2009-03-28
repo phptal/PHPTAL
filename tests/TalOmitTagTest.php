@@ -27,7 +27,7 @@ class TalOmitTagTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
-        $tpl = new PHPTAL('input/tal-omit-tag.01.html');
+        $tpl = $this->newPHPTAL('input/tal-omit-tag.01.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-omit-tag.01.html');
         $this->assertEquals($exp, $res);
@@ -35,7 +35,7 @@ class TalOmitTagTest extends PHPTAL_TestCase
 
     function testWithCondition()
     {
-        $tpl = new PHPTAL('input/tal-omit-tag.02.html');
+        $tpl = $this->newPHPTAL('input/tal-omit-tag.02.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-omit-tag.02.html');
         $this->assertEquals($exp, $res);
@@ -50,7 +50,7 @@ class TalOmitTagTest extends PHPTAL_TestCase
     function testCalledOnlyOnce()
     {
         $this->call_count=0;
-        $tpl = new PHPTAL();        
+        $tpl = $this->newPHPTAL();        
         $tpl->setSource('<p tal:omit-tag="test/callCount" />');
         
         $tpl->test = $this;
@@ -64,7 +64,7 @@ class TalOmitTagTest extends PHPTAL_TestCase
     function testNestedConditions()
     {
         $this->call_count=0;
-        $tpl = new PHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<span tal:omit-tag="php:true">a<span tal:omit-tag="php:false">b<span tal:omit-tag="php:true">c<span tal:omit-tag="php:false">d<span tal:omit-tag="php:false">e<span tal:omit-tag="php:true">f<span tal:omit-tag="php:true">g</span>h</span>i</span>j</span>k</span></span></span>');
         
         $this->assertEquals('a<span>bc<span>d<span>efghi</span>j</span>k</span>',$tpl->execute());

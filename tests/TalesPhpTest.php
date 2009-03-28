@@ -6,7 +6,7 @@ class TalesPhpTest extends PHPTAL_TestCase {
 	
 	function testMix()
 	{
-		$tpl = new PHPTAL('input/php.html');
+		$tpl = $this->newPHPTAL('input/php.html');
 		$tpl->real = 'real value';
 		$tpl->foo = 'real';
 		$res = trim_string($tpl->execute());
@@ -16,7 +16,7 @@ class TalesPhpTest extends PHPTAL_TestCase {
 	
 	function testPHPAttribute()
 	{
-	    $tpl = new PHPTAL();
+	    $tpl = $this->newPHPTAL();
 	    $tpl->setSource('<foo bar="<?php  echo  \'baz\' ; ?>"/>');
 	    $this->assertEquals('<foo bar="baz"></foo>',$tpl->execute());
     }

@@ -6,7 +6,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
 {
     function testSimple()
     { 
-        $tpl = new PHPTAL('input/error-01.html');
+        $tpl = $this->newPHPTAL('input/error-01.html');
         try {
             $tpl->prepare();
             $res = $tpl->execute();
@@ -26,7 +26,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
         $expected = 'input' . DIRECTORY_SEPARATOR . 'error-02.macro.html';
         
         try {
-            $tpl = new PHPTAL('input/error-02.html');
+            $tpl = $this->newPHPTAL('input/error-02.html');
             $res = $tpl->execute();
             $this->assertTrue(false);
         }
@@ -42,7 +42,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
     function testAfterMacro()
     {
         try {
-            $tpl = new PHPTAL('input/error-03.html');
+            $tpl = $this->newPHPTAL('input/error-03.html');
             $res = $tpl->execute();
             $this->assertTrue(false);
         }

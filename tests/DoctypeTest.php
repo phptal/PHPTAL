@@ -26,7 +26,7 @@ class DoctypeTest extends PHPTAL_TestCase
 {
 	function testSimple()
 	{
-		$tpl = new PHPTAL('input/doctype.01.html');
+		$tpl = $this->newPHPTAL('input/doctype.01.html');
 		$res = $tpl->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/doctype.01.html');
@@ -35,7 +35,7 @@ class DoctypeTest extends PHPTAL_TestCase
 
 	function testMacro()
 	{
-		$tpl = new PHPTAL('input/doctype.02.user.html');
+		$tpl = $this->newPHPTAL('input/doctype.02.user.html');
 		$res = $tpl->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/doctype.02.html');
@@ -44,7 +44,7 @@ class DoctypeTest extends PHPTAL_TestCase
 
 	function testDeepMacro()
 	{
-		$tpl = new PHPTAL('input/doctype.03.html');
+		$tpl = $this->newPHPTAL('input/doctype.03.html');
 		$res = $tpl->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/doctype.03.html');
@@ -53,7 +53,7 @@ class DoctypeTest extends PHPTAL_TestCase
 
 	function testDtdInline()
 	{
-		$tpl = new PHPTAL('input/doctype.04.html');
+		$tpl = $this->newPHPTAL('input/doctype.04.html');
 		$res = $tpl->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/doctype.04.html');
