@@ -20,19 +20,21 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
-
-$PhptalCacheTest_random = time().mt_rand();
-
 class PhptalCacheTest extends PHPTAL_TestCase 
 { 
+    function setUp()
+    {
+        parent::setUp();
+        $this->PhptalCacheTest_random =  time().mt_rand();
+    }
+    
     private function PHPTALWithSource($source)
     {
         global $PhptalCacheTest_random;
         
-        $tpl = $this->newPHPTAL();
+        $tpl = new PHPTAL();
         $tpl->setForceReparse(false);
-        $tpl->setSource($source."<!-- $PhptalCacheTest_random -->"); // avoid cached templates from previous test runs
+        $tpl->setSource($source."<!-- {$this->PhptalCacheTest_random} -->"); // avoid cached templates from previous test runs
         return $tpl;
     }
     
@@ -65,6 +67,8 @@ class PhptalCacheTest extends PHPTAL_TestCase
         
     function testTimedExpiry()
     {
+        $this->markTestSkipped("slow tests are no fun");
+        
         $tpl = $this->PHPTALWithSource('<div phptal:cache="1s" tal:content="var" />');
         $tpl->var = 'FIRST';
         $this->assertContains( "FIRST", $tpl->execute() );        

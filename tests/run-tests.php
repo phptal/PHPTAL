@@ -40,6 +40,8 @@ class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
         parent::setUp();
     }
     
+    protected $backupGlobals = FALSE;
+    
     protected function newPHPTAL($tpl = false)
     {
         $p = new PHPTAL($tpl);

@@ -530,23 +530,26 @@ class PHPTAL
 		$this->setCodeFile();
         $this->__file = $this->_source->getRealPath();
 
-        // parse template if php generated code does not exists or template
-        // source file modified since last generation of PHPTAL_FORCE_REPARSE
-        // is defined.
-        if ($this->getForceReparse() || !file_exists($this->getCodePath()))
-		{
-	        if ($this->getCachePurgeFrequency() && mt_rand()%$this->getCachePurgeFrequency() == 0)
-    		{
-    		    $this->cleanUpGarbage();
-    		}
-            $this->parse();
-        }
-
         if (!function_exists($this->getFunctionName()))
         {
+            // parse template if php generated code does not exists or template
+            // source file modified since last generation of PHPTAL_FORCE_REPARSE
+            // is defined.
+            if ($this->getForceReparse() || !file_exists($this->getCodePath()))
+    		{
+    	        if ($this->getCachePurgeFrequency() && mt_rand()%$this->getCachePurgeFrequency() == 0)
+        		{
+        		    $this->cleanUpGarbage();
+        		}
+	
+                if (!file_put_contents($this->getCodePath(), $this->parse())) {
+                    throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
+                }
+            }
+
             require $this->getCodePath();
         }
-
+        
         $this->_prepared = true;
         return $this;
     }
@@ -615,7 +618,7 @@ class PHPTAL
 	public function cleanUpCache()
 	{
 		$filename = $this->getCodePath();
-		$phptalCacheFiles = glob($filename . '*');
+		$phptalCacheFiles = glob($filename . '?*');
 		if ($phptalCacheFiles) foreach($phptalCacheFiles as $file)
 		{
 		    if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
@@ -743,13 +746,10 @@ class PHPTAL
         require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
         $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding);
         $generator->setOutputMode($this->_outputMode);
+
         $result = $generator->generate($tree);
-
-        if (!@file_put_contents($this->getCodePath(), $result)) {
-            throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
-        }
-
-        return $this;
+        
+        return $result;
     }
 
     /**

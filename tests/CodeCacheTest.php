@@ -6,7 +6,7 @@ class PHPTAL_CodeCacheTest extends PHPTAL
     function parse()
     {
         $this->testHasParsed = true;
-        parent::parse();
+        return parent::parse();
     }
 }
 
@@ -73,46 +73,6 @@ class CodeCacheTest extends PHPTAL_TestCase
 
         $this->assertFalse($this->phptal->testHasParsed, "No reparse");
     }
-
-    function testReparseOnClear()
-    {
-        $this->phptal->setSource('<p>hello3</p>');
-        $this->phptal->execute();
-
-        $this->assertTrue($this->phptal->testHasParsed, "Initial parse");
-
-        $this->resetPHPTAL();
-        $this->clearCache();
-
-        $this->phptal->setSource('<p>hello3</p>');
-        $this->phptal->execute();
-
-        $this->assertTrue($this->phptal->testHasParsed, "Reparse");
-    }
-
-    function testReparseAfterCleanUp()
-    {
-        $this->phptal->setSource('<p>hello4</p>');
-        $this->phptal->execute();
-
-        $this->assertTrue($this->phptal->testHasParsed, "Initial parse");
-
-        $this->resetPHPTAL();
-
-        $this->phptal->setSource('<p>hello4</p>');
-        $this->phptal->cleanUpCache();
-        $this->phptal->execute();
-
-        $this->assertTrue($this->phptal->testHasParsed, "Reparse");
-
-        $this->phptal->cleanUpGarbage(); // shouldn't do anything
-
-        $this->phptal->testHasParsed = false;
-        $this->phptal->execute();
-
-        $this->assertFalse($this->phptal->testHasParsed, "No reparse");
-    }
-
 
     function testReparseAfterTouch()
     {
