@@ -119,5 +119,13 @@ EOT;
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${error}</p>');
+        $tpl->execute();
+    }
+    
+    function testErrorsSilenced()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p>${error | nothing}</p>');
+        $this->assertEquals('<p></p>',$tpl->execute());
     }
 }
