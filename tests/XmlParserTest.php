@@ -49,7 +49,7 @@ class XmlParserTest extends PHPTAL_TestCase
     public function testAllowGtAndLtInTextNodes() {
         $parser = new PHPTAL_XmlParser('UTF-8');
         $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.03.xml')->getResult();
-        $expected = trim(join('', file('input/xml.03.xml')));
+        $expected = trim(join('', file('output/xml.03.xml')));
         $this->assertEquals($expected, $builder->result);
         $this->assertEquals(3, $builder->elementStarts);
         $this->assertEquals(3, $builder->elementCloses);
@@ -102,6 +102,18 @@ class XmlParserTest extends PHPTAL_TestCase
         </foo>";
         $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
         $this->assertEquals($src, $builder->result);        
+    }
+        
+    public function testFixOrRejectEntities()
+    {
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        $src = '<a href="?foo=1&bar=baz&copy=true&reg=x"> & ; &#x100; &nbsp; &#10; &--;</a>';
+        try
+        {
+            $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+            $this->assertEquals('<a href="?foo=1&amp;bar=baz&amp;copy=true&amp;reg=x"> &amp; ; &#x100; &nbsp; &#10; &amp;--;</a>', $builder->result);
+        }
+        catch(PHPTAL_ParserException $e) { /* ok - rejecting is one way to do it */ }
     }
     
     public function testLineAccuracy()
@@ -173,8 +185,38 @@ xxxx/>
         {
             $this->assertEquals(8,$e->srcLine);
         }        
-    }    
+    }
     
+    public function testClosingRoot()
+    {
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        try
+        {
+            $parser->parseString(new PHPTAL_DOM_DocumentBuilder(),"<imrootelement/></ishallnotbeclosed>");
+            $this->fail("Accepted invalid XML");
+        }
+        catch(PHPTAL_ParserException $e)
+        {
+            $this->assertContains('ishallnotbeclosed',$e->getMessage());
+            $this->assertNotContains('imrootelement',$e->getMessage());
+            $this->assertNotContains("documentElement",$e->getMessage());
+        }        
+    }
+    
+    public function testNotClosing()
+    {
+        $parser = new PHPTAL_XmlParser('UTF-8');
+        try
+        {
+            $parser->parseString(new PHPTAL_DOM_DocumentBuilder(),"<element_a><element_b><element_x/><element_c><element_d><element_e>");
+            $this->fail("Accepted invalid XML");
+        }
+        catch(PHPTAL_ParserException $e)
+        {
+            $this->assertNotContains("documentElement",$e->getMessage());
+            $this->assertRegExp("/element_e.*element_d.*element_c.*element_b.*element_a/",$e->getMessage());
+        }        
+    }
 }
 
 class MyDocumentBuilder extends PHPTAL_DOM_DocumentBuilder

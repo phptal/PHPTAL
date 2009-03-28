@@ -36,7 +36,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     
     public function getResult()
     {
-        return $this->_tree;
+        return $this->documentElement;
     }
 
     public function getXmlnsState()
@@ -53,16 +53,18 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     
     public function onDocumentStart()
     {
-        $this->_tree = new PHPTAL_DOMElement('root','http://xml.zope.org/namespaces/tal',array(),$this->getXmlnsState());
-        $this->_tree->setSource($this->file, $this->line);
+        $this->documentElement = new PHPTAL_DOMElement('documentElement','http://xml.zope.org/namespaces/tal',array(),$this->getXmlnsState());
+        $this->documentElement->setSource($this->file, $this->line);
         $this->_stack = array();
-        $this->_current = $this->_tree;
+        $this->_current = $this->documentElement;
     }
     
     public function onDocumentEnd()
     {
         if (count($this->_stack) > 0) {
-            throw new PHPTAL_ParserException("Not all elements were closed before end of the document (element stack not empty)");
+            $left='</'.$this->_current->getQualifiedName().'>'; 
+            for($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->_stack[$i]->getQualifiedName().'>';
+            throw new PHPTAL_ParserException("Not all elements were closed before end of the document. Missing: ".$left);
         }
     }
 
@@ -137,9 +139,9 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onElementClose($qname)
     {
-		if (!$this->_current instanceof PHPTAL_DOMElement) $this->raiseError("Found closing tag for '$qname' where there are no open tags");			
+		if ($this->_current === $this->documentElement) throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");			
         if ($this->_current->getQualifiedName() != $qname) {
-            throw new PHPTAL_ParserException("Tag closure mismatch, expected '".$this->_current->getQualifiedName()."' but was '".$qname."'");
+            throw new PHPTAL_ParserException("Tag closure mismatch, expected </".$this->_current->getQualifiedName()."> but found </".$qname.">");
         }
         $this->_current = array_pop($this->_stack);
         if ($this->_current instanceOf PHPTAL_DOMElement)
@@ -165,7 +167,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     private $file,$line;
     
     private $encoding;
-    private $_tree;    /* PHPTAL_DOMElement */
+    private $documentElement;    /* PHPTAL_DOMElement */
     private $_stack;   /* array<PHPTAL_DOMNode> */
     private $_current; /* PHPTAL_DOMNode */
     private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
