@@ -109,7 +109,7 @@ class PhptalTest extends PHPTAL_TestCase
         $this->assertEquals('<span>foo value</span>', $res);
         $this->assertRegExp('/^tpl_/', $tpl->getFunctionName());
         $this->assertContains(PHPTAL_VERSION, $tpl->getFunctionName());
-        $this->assertContains(md5('<string> '.md5($source) . '-'.PHPTAL::XHTML), $tpl->getFunctionName());
+        $this->assertContains(md5('<string '.md5($source) . '>-'.PHPTAL::XHTML), $tpl->getFunctionName());
     }
 
     function testSourceWithPath()

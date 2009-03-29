@@ -115,6 +115,12 @@ class PHPTAL_Dom_Defs
         return in_array($att, self::$XHTML_BOOLEAN_ATTRIBUTES);
     }
     
+    public function isCDATAElementInHTML($namespace_uri, $local_name)
+    {
+        return ($local_name === 'script' || $local_name === 'style') 
+            && ($namespace_uri === 'http://www.w3.org/1999/xhtml' || $namespace_uri === '');            
+    }
+    
     /**
      * Returns true if the attribute is a valid phptal attribute 
      *

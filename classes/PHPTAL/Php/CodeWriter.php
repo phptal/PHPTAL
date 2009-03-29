@@ -280,6 +280,13 @@ class PHPTAL_Php_CodeWriter
         $this->_htmlBuffer[] =  $html;
     }
 
+    public function pushCDATA($html)
+    {
+        $html = $this->_state->interpolateTalesVarsInCDATA($html);
+        $this->flushCode();
+        $this->_htmlBuffer[] =  $html;
+    }
+
 	public function pushRawHtml($html)
 	{
 		$this->flushCode();

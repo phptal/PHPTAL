@@ -118,6 +118,8 @@ class PHPTAL_DOMAttr
  */
 abstract class PHPTAL_DOMNode
 {
+    public $parentNode;
+    
     private $value_escaped, $source_file, $source_line, $encoding;
 
     public function __construct($value_escaped, $encoding)
@@ -239,6 +241,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
  
     public function appendChild(PHPTAL_DOMNode $child)
     {
+        $child->parentNode = $this;
         $this->childNodes[] = $child;
     }
 
@@ -553,6 +556,17 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
     function getQualifiedName()
     {
         return $this->qualifiedName;
+    }    
+    
+    function getNamespaceURI()
+    {
+        return $this->namespace_uri;
+    }
+        
+    function getLocalName()
+    {
+        $n = explode(':',$this->qualifiedName,2);
+        return end($n);
     }
 }
 
@@ -579,16 +593,50 @@ class PHPTAL_DOMText extends PHPTAL_DOMNode
 }
 
 /**
- * Comment, preprocessor, etc... representation.
+ * processing instructions, including <?php blocks
  *
  */
-class PHPTAL_DOMOtherNode extends PHPTAL_DOMNode
+class PHPTAL_DOMProcessingInstruction extends PHPTAL_DOMNode
 {
     public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->pushHtml($this->getValueEscaped());
     }
 }
+
+/**
+ * processing instructions, including <?php blocks
+ *
+ */
+class PHPTAL_DOMCDATASection extends PHPTAL_DOMNode
+{
+    public function generate(PHPTAL_Php_CodeWriter $codewriter)
+    {
+        $mode = $codewriter->getOutputMode();
+        $value = $this->getValueEscaped();
+        $inCDATAelement = PHPTAL_Dom_Defs::getInstance()->isCDATAElementInHTML($this->parentNode->getNamespaceURI(), $this->parentNode->getLocalName());
+        
+        // in HTML5 must limit it to <script> and <style>
+        if ($mode === PHPTAL::HTML5 && $inCDATAelement)
+        {
+            $codewriter->pushCDATA(str_replace('</','<\/',$value));
+        }            
+        elseif (($mode === PHPTAL::XHTML && $inCDATAelement)  // safe for text/html
+             || ($mode === PHPTAL::XML && preg_match('/[<>&]/',$value))  // non-useless in XML
+             || ($mode !== PHPTAL::HTML5 && preg_match('/<\?|\${structure/',$value)))  // hacks with structure (in X[HT]ML) may need it
+        {
+            // in text/html "</" is dangerous and the only sensible way to escape is ECMAScript string escapes.
+            if ($mode === PHPTAL::XHTML) $value = str_replace('</','<\/',$value);
+
+            $codewriter->pushCDATA('<![CDATA['.$value.']]>');
+        }
+        else
+        {
+            $codewriter->pushHtml(htmlspecialchars($value));            
+        }
+    }
+}
+
 
 /**
  * Document doctype representation.

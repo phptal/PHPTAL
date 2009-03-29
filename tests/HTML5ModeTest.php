@@ -1,9 +1,29 @@
 <?php
 
-require_once 'config.php';
 
 class HTML5ModeTest extends PHPTAL_TestCase
 {
+    function testCDATAScript()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setOutputMode(PHPTAL::HTML5);
+        $tpl->setSource('<!DOCTYPE html><script><![CDATA[
+            if (2 < 5) {
+                alert("</foo>");
+            }
+        ]]></script>');
+        
+        $this->assertEquals(trim_string('<!DOCTYPE html><script> if (2 < 5) { alert("<\/foo>"); } </script>'),trim_string($tpl->execute()));
+    }
+
+    function testCDATAContent()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setOutputMode(PHPTAL::HTML5);
+        $tpl->setSource('<!DOCTYPE html><p><![CDATA[<hello>]]></p>');        
+        $this->assertEquals(trim_string('<!DOCTYPE html><p>&lt;hello&gt;</p>'),trim_string($tpl->execute()));
+    }
+    
     function testEmpty()
     {
         $tpl = $this->newPHPTAL();

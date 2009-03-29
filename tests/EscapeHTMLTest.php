@@ -1,8 +1,7 @@
 <?php
 
-require_once 'config.php';
 
-class EscapeTest extends PHPTAL_TestCase {
+class EscapeHTMLTest extends PHPTAL_TestCase {
 
     private function executeString($str, $params = array())
     {

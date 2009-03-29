@@ -83,9 +83,14 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
         $this->pushNode(new PHPTAL_DOMComment($data, $this->encoding));
     }
     
-    public function onOther($data)
+    public function onCDATASection($data)
     {
-        $this->pushNode(new PHPTAL_DOMOtherNode($data, $this->encoding));
+        $this->pushNode(new PHPTAL_DOMCDATASection($data, $this->encoding));
+    }    
+
+    public function onProcessingInstruction($data)
+    {
+        $this->pushNode(new PHPTAL_DOMProcessingInstruction($data, $this->encoding));
     }    
 
     public function onElementStart($element_qname, array $attributes)

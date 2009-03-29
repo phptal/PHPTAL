@@ -245,15 +245,21 @@ class MyDocumentBuilder extends PHPTAL_DOM_DocumentBuilder
         $this->result .= $decl;
     }
     
-    public function onOther($data) { 
+    public function onCDATASection($data) { 
         $this->specifics++;
         $this->allow_xmldec = false;        
-        $this->result .= $data; 
+        $this->result .= '<![CDATA['.$data.']]>'; 
+    }
+        
+    public function onProcessingInstruction($data) 
+    {
+        $this->specifics++;
+        $this->allow_xmldec = false;        
+        $this->result .= $data;
     }
 
-    public function onComment($data) {
-        $this->allow_xmldec = false;        
-        $this->onOther($data);
+    public function onComment($data) {     
+        $this->onProcessingInstruction($data); // doesn't matter
     }
     
     public function onElementStart($name, array $attributes) {

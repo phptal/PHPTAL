@@ -110,38 +110,63 @@ class PHPTAL_Php_State
         return '\''.$string.'\'';
     }
 
-    private function _interpolateTalesVarsStructure($matches) {
-        return '<?php echo '.phptal_tale($matches[1]).' ?>';
+    private function _interpolateTalesVarsStructure($matches) 
+    {        
+        if ($this->_talesMode == 'tales') $code = phptal_tale($matches[1]);      
+        else $code = PHPTAL_TalesInternal::php($matches[1]);
+
+        return '<?php echo '.$code.' ?>';
     }
 
-    private function _interpolateTalesVarsEscaped($matches) {
-        return '<?php echo '.$this->htmlchars(phptal_tale(html_entity_decode($matches[1],ENT_QUOTES,$this->getEncoding()))).';?>';
+    private function _interpolateTalesVarsHTML($matches) 
+    {
+        if ($this->_talesMode == 'tales')
+        {
+            $code = phptal_tale(html_entity_decode($matches[1],ENT_QUOTES,$this->getEncoding()));
+        }
+        else $code = PHPTAL_TalesInternal::php($matches[1]);     
+        
+        return '<?php echo '.$this->htmlchars($code).' ?>';
+    }
+
+    private function _interpolateTalesVarsCDATA($matches) 
+    {
+        if ($this->_talesMode == 'tales')
+        {
+            $code = phptal_tale($matches[1],ENT_QUOTES,$this->getEncoding());
+        }
+        else $code = PHPTAL_TalesInternal::php($matches[1]);     
+        
+        // quite complex for an "unescaped" section, isn't it?
+        if ($this->getOutputMode() === PHPTAL::HTML5)
+        {
+            return "<?php echo str_replace('</','<\\\\/', $code) ?>";
+        }
+        elseif ($this->getOutputMode() === PHPTAL::XHTML)
+        {
+            // both XML and HMTL, because people will inevitably send it as text/html :(
+            return "<?php echo strtr($code ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>";
+        }
+        else
+        {
+            return "<?php echo str_replace(']]>',']]]]><![CDATA[>',$code) ?>";
+        }
     }
 
     public function interpolateTalesVarsInHtml($src)
     {
-        if ($this->_talesMode == 'tales'){
-            $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
-            $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/s', array($this,'_interpolateTalesVarsEscaped'), $result);
-			$result = str_replace('$${', '${', $result);
-			return $result;
-        }
+        $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
+        $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/is', array($this,'_interpolateTalesVarsHTML'), $result);
+		$result = str_replace('$${', '${', $result);
+		return $result;       
+    }
 
-        while (preg_match('/(?<!\$)\${((?:text|structure) )?([^\}]+)\}/s', $src, $m)){
-            list($ori, $struct, $exp) = $m;
-            $php  = PHPTAL_TalesInternal::php($exp);
-            // when structure keyword is specified the output is not html 
-            // escaped
-            if ($struct === 'structure'){
-                $repl = '<?php echo '.$php.'; ?>';
-            }
-            else {
-                $repl = '<?php echo '.$this->htmlchars($php).'; ?>';
-            }
-            $src  = str_replace($ori, $repl, $src);
-        }
-		
-        return str_replace('$${','${', $src);
+    public function interpolateTalesVarsInCDATA($src)
+    {
+        $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
+        $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/is', array($this,'_interpolateTalesVarsCDATA'), $result);
+		$result = str_replace('$${', '${', $result);
+		return $result;       
     }
 
     public function htmlchars($php)
