@@ -265,7 +265,7 @@ class PHPTAL_Php_CodeWriter
     public function doEcho($code)
     {
         $this->flush();
-        $this->pushHtml('<?php echo '.$this->escapeCode($code).' ?>');
+        $this->pushRawHtml('<?php echo '.$this->escapeCode($code).' ?>');
     }
 
     public function doEchoRaw($code)

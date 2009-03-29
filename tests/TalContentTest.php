@@ -136,6 +136,40 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($res, $exp);
     }
+    
+      /**
+       * @expectedException PHPTAL_VariableNotFoundException
+       */
+      function testErrorsThrow()
+      {
+          $tpl = $this->newPHPTAL();
+          $tpl->setSource('<p tal:content="error"/>');
+          $tpl->execute();
+      }
+
+      /**
+       * @expectedException PHPTAL_VariableNotFoundException
+       */
+      function testErrorsThrow2()
+      {
+          $tpl = $this->newPHPTAL();
+          $tpl->setSource('<p tal:content="error | error"/>');
+          $tpl->execute();
+      }
+
+      function testErrorsSilenced()
+      {
+          $tpl = $this->newPHPTAL();
+          $tpl->setSource('<p tal:content="error | nothing"/>');
+          $this->assertEquals('<p></p>',$tpl->execute());
+      }
+
+      function testZeroIsNotEmpty()
+      {
+          $tpl = $this->newPHPTAL();
+          $tpl->zero = '0';
+          $tpl->setSource('<p tal:content="zero | error"/>');
+          $this->assertEquals('<p>0</p>',$tpl->execute());
+      }
 }
 
-?>

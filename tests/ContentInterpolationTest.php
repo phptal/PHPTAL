@@ -122,10 +122,28 @@ EOT;
         $tpl->execute();
     }
     
+    /**
+     * @expectedException PHPTAL_VariableNotFoundException
+     */
+    function testErrorsThrow2()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p>${error | error}</p>');
+        $tpl->execute();
+    }
+    
     function testErrorsSilenced()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${error | nothing}</p>');
         $this->assertEquals('<p></p>',$tpl->execute());
+    }
+    
+    function testZeroIsNotEmpty()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->zero = '0';
+        $tpl->setSource('<p>${zero | error}</p>');
+        $this->assertEquals('<p>0</p>',$tpl->execute());
     }
 }

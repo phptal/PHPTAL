@@ -66,7 +66,7 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
 
             case PHPTAL_TALES_DEFAULT_KEYWORD:
                 $codewriter->pushRawHtml('<pre class="phptalError"');
-                $codewriter->doEcho(self::ERR_VAR);
+                $codewriter->doEchoRaw(self::ERR_VAR);
                 $codewriter->pushRawHtml('</pre>');
                 break;
                 

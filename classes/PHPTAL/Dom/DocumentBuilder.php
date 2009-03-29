@@ -123,7 +123,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
                 throw new PHPTAL_ParserException("Unsupported attribute '$qname'");
             }
       
-            $attrnodes[] = new PHPTAL_Php_Attr($qname, $attr_namespace_uri, $value, $this->encoding);
+            $attrnodes[] = new PHPTAL_DOMAttr($qname, $attr_namespace_uri, $value, $this->encoding);
         }
         
         $node = new PHPTAL_DOMElement($element_qname, $namespace_uri, $attrnodes, $this->getXmlnsState());

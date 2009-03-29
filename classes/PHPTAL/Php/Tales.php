@@ -58,7 +58,7 @@ function _phptal_tale_wrap($array, $nothrow)
 	
 	$expr = array_shift($array);
 	
-	return "((\$tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$tmp5:"._phptal_tale_wrap($array, $nothrow).')';
+	return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:"._phptal_tale_wrap($array, $nothrow).')';
 }
 
 /** translates array of alternative expressions into single PHP expression. Identical to phptal_tales() for singular expressions. */

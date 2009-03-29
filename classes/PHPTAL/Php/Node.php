@@ -25,7 +25,7 @@ require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 
 
-class PHPTAL_Php_Attr
+class PHPTAL_DOMAttr
 {
     private $value_escaped, $qualified_name, $namespace_uri, $encoding;
     
@@ -196,7 +196,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
             // it'll work only when qname == localname, which is good
             if ($this->xmlns->isValidAttributeNS($namespace_uri,$attr->getQualifiedName())) 
             {
-                $this->attribute_nodes[$index] = new PHPTAL_Php_Attr($attr->getQualifiedName(), $namespace_uri, $attr->getValueEscaped(), $attr->getEncoding());
+                $this->attribute_nodes[$index] = new PHPTAL_DOMAttr($attr->getQualifiedName(), $namespace_uri, $attr->getValueEscaped(), $attr->getEncoding());
             }
         }
         
@@ -204,11 +204,6 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
         {
             $this->headFootDisabled = true;
         }        
-        else
-        {
-            // FIXME: add interpolation here?
-            $this->replacePHPAttributes();
-        }
 
         $talAttributes = $this->separateAttributes();
         $this->orderTalAttributes($talAttributes);
@@ -253,6 +248,8 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
     {
         try
         {
+            $this->replacePHPAttributes();
+            
             if ($codewriter->isDebugOn())
             {
                 $codewriter->pushCode('$ctx->__line = '.$this->getSourceLine());
@@ -321,7 +318,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
     {
         if ($attr = $this->getAttributeNode($qname)) return $attr;
         
-        $attr = new PHPTAL_Php_Attr($qname, "", NULL, 'UTF-8'); // FIXME: should find namespace and encoding
+        $attr = new PHPTAL_DOMAttr($qname, "", NULL, 'UTF-8'); // FIXME: should find namespace and encoding
         $this->attribute_nodes[] = $attr;
         return $attr;
     }
@@ -355,7 +352,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
         if ($this->hasAttributeNS('http://xml.zope.org/namespaces/tal','attributes')) return true;
         foreach($this->attribute_nodes as $attr)
         {
-            if ($attr->getReplacedState() !== PHPTAL_Php_Attr::HIDDEN) return true;
+            if ($attr->getReplacedState() !== PHPTAL_DOMAttr::HIDDEN) return true;
         }
         return false;
     }
@@ -459,7 +456,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
         {
             switch($attr->getReplacedState())
             {
-                case PHPTAL_Php_Attr::NOT_REPLACED:
+                case PHPTAL_DOMAttr::NOT_REPLACED:
                     $codewriter->pushRawHtml(' '.$attr->getQualifiedName());                    
                     if ($codewriter->getOutputMode() !== PHPTAL::HTML5 || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName()))
                     {
@@ -467,14 +464,14 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
                     }
                     break;
                     
-                case PHPTAL_Php_Attr::HIDDEN:
+                case PHPTAL_DOMAttr::HIDDEN:
                     break;
                     
-                case PHPTAL_Php_Attr::FULLY_REPLACED:
+                case PHPTAL_DOMAttr::FULLY_REPLACED:
                     $codewriter->pushRawHtml($attr->getValueEscaped());
                     break;
                 
-                case PHPTAL_Php_Attr::VALUE_REPLACED:
+                case PHPTAL_DOMAttr::VALUE_REPLACED:
                     $codewriter->pushRawHtml(' '.$attr->getQualifiedName().'="');
                     $codewriter->pushRawHtml($attr->getValueEscaped());
                     $codewriter->pushRawHtml('"');
@@ -621,4 +618,3 @@ class PHPTAL_DOMXmlDeclaration extends PHPTAL_DOMNode
     }
 }
 
-?>

@@ -101,7 +101,7 @@ class PHPTAL_Php_State
         }
         
         // replace ${var} found in expression
-        while (preg_match('/(?<!\$)\$\{([^\}]+)\}/ism', $string, $m)){
+        while (preg_match('/(?<!\$)\$\{([^\}]+)\}/s', $string, $m)){
             list($ori, $exp) = $m;
             $php  = PHPTAL_TalesInternal::php($exp);
             $string = str_replace($ori, '\'.'.$php.'.\'', $string); // FIXME: that is not elegant
@@ -121,13 +121,13 @@ class PHPTAL_Php_State
     public function interpolateTalesVarsInHtml($src)
     {
         if ($this->_talesMode == 'tales'){
-            $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/ism', array($this,'_interpolateTalesVarsStructure'), $src);
-            $result = preg_replace_callback('/(?<!\$)\$\{(.*?)\}/ism', array($this,'_interpolateTalesVarsEscaped'), $result);
+            $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
+            $result = preg_replace_callback('/(?<!\$)\$\{(.*?)\}/s', array($this,'_interpolateTalesVarsEscaped'), $result);
 			$result = str_replace('$${', '${', $result);
 			return $result;
         }
 
-        while (preg_match('/(?<!\$)\${(structure )?([^\}]+)\}/ism', $src, $m)){
+        while (preg_match('/(?<!\$)\${(structure )?([^\}]+)\}/s', $src, $m)){
             list($ori, $struct, $exp) = $m;
             $php  = PHPTAL_TalesInternal::php($exp);
             // when structure keyword is specified the output is not html 
