@@ -37,6 +37,12 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
         parent::__construct($msg);
         $this->srcFile = $srcFile;
         $this->srcLine = $srcLine;
+                
+        if ($srcFile) 
+        {
+            $this->file = $srcFile;
+            $this->line = $srcLine;
+        }
     }
 
     public function __toString()
@@ -52,6 +58,9 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
     {
         if ($srcFile && !$this->srcFile) {$this->srcFile = $srcFile; $this->srcLine = $srcLine;}
         elseif ($srcLine && $this->srcFile === $srcFile && !$this->srcLine) $this->srcLine = $srcLine;
+        
+        $this->file = $this->srcFile;
+        $this->line = $this->srcLine;
     }
 }
 

@@ -134,7 +134,7 @@ class PHPTAL
     public function setSource($src, $path=false)
     {
         if ($path == false)
-            $path = '<string> '.md5($src);
+            $path = '<string '.md5($src).'>';
 
         require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
         $this->_prepared = false;
