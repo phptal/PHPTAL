@@ -122,17 +122,17 @@ class PHPTAL_Php_State
     {
         if ($this->_talesMode == 'tales'){
             $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
-            $result = preg_replace_callback('/(?<!\$)\$\{(.*?)\}/s', array($this,'_interpolateTalesVarsEscaped'), $result);
+            $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/s', array($this,'_interpolateTalesVarsEscaped'), $result);
 			$result = str_replace('$${', '${', $result);
 			return $result;
         }
 
-        while (preg_match('/(?<!\$)\${(structure )?([^\}]+)\}/s', $src, $m)){
+        while (preg_match('/(?<!\$)\${((?:text|structure) )?([^\}]+)\}/s', $src, $m)){
             list($ori, $struct, $exp) = $m;
             $php  = PHPTAL_TalesInternal::php($exp);
             // when structure keyword is specified the output is not html 
             // escaped
-            if ($struct){
+            if ($struct === 'structure'){
                 $repl = '<?php echo '.$php.'; ?>';
             }
             else {
