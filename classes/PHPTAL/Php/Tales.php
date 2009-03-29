@@ -126,7 +126,7 @@ function phptal_tales($expression, $nothrow=false)
     throw new PHPTAL_ParserException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist");
 }
 
-// Register internal Tales expression modifiers
-require_once PHPTAL_DIR.'PHPTAL/Php/TalesInternal.php';
-PHPTAL_TalesInternal::registerInternalTales();
 
+// Register internal Tales expression modifiers
+require PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
+require PHPTAL_DIR.'PHPTAL/Php/TalesInternal.php';

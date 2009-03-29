@@ -1,6 +1,5 @@
 <?php
 
-require_once 'config.php';
 
 class TalesPhpTest extends PHPTAL_TestCase {
 	

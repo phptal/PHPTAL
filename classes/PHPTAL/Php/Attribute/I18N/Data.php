@@ -1,7 +1,5 @@
 <?php
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-
 // i18n:data
 //
 // Since TAL always returns strings, we need a way in ZPT to translate 

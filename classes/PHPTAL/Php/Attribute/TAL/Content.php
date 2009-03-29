@@ -20,8 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-
 // TAL Specifications 1.4
 //
 //      argument ::= (['text'] | 'structure') expression
@@ -31,8 +29,6 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 //      <p tal:content="user/name">Fred Farkas</p>
 //
 //
-
-require_once PHPTAL_DIR.'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * @package phptal.php.attribute.tal

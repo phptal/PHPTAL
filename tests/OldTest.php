@@ -20,9 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
-require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
-
 class OldTest extends PHPTAL_TestCase 
 {
     function test03()

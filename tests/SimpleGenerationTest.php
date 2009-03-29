@@ -20,12 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
-require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/State.php';
-
 class SimpleGenerationTest extends PHPTAL_TestCase
 {
     function testTreeGeneration()

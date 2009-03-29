@@ -20,9 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Define.php';
 
 

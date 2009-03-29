@@ -1,6 +1,5 @@
 <?php
 
-require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/CommentFilter.php';
 
 class CommentFilterTest extends PHPTAL_TestCase

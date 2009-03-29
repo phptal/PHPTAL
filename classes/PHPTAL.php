@@ -27,6 +27,8 @@ if (!defined('PHPTAL_DIR')) define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPA
 else assert('substr(PHPTAL_DIR,-1) == DIRECTORY_SEPARATOR');
 //}}}
 
+require PHPTAL_DIR.'PHPTAL/Source.php';
+require PHPTAL_DIR.'PHPTAL/SourceResolver.php';
 require PHPTAL_DIR.'PHPTAL/FileSource.php';
 require PHPTAL_DIR.'PHPTAL/RepeatController.php';
 require PHPTAL_DIR.'PHPTAL/Context.php';
@@ -737,8 +739,8 @@ class PHPTAL
 
     protected function parse()
     {
-        require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
         require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
+        require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
 
         // instantiate the PHPTAL source parser
         $parser = new PHPTAL_XmlParser($this->_encoding);
@@ -752,7 +754,6 @@ class PHPTAL
             $data = $this->_prefilter->filter($data);
         $tree = $parser->parseString($builder,$data, $realpath)->getResult();
 
-        require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
         $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding, $this->_outputMode, $this->getCodePath());
         $result = $generator->generate($tree);
         

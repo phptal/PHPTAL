@@ -61,10 +61,6 @@
 // 
 
 require_once PHPTAL_DIR.'PHPTAL/Namespace.php';
-require_once PHPTAL_DIR.'PHPTAL/Namespace/TAL.php';
-require_once PHPTAL_DIR.'PHPTAL/Namespace/METAL.php';
-require_once PHPTAL_DIR.'PHPTAL/Namespace/I18N.php';
-require_once PHPTAL_DIR.'PHPTAL/Namespace/PHPTAL.php';
 
 /**
  * PHPTAL constants.

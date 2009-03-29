@@ -1,5 +1,4 @@
 <?php
-require_once 'config.php';
 
 class PhptalUsageTest extends PHPTAL_TestCase 
 {

@@ -20,9 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
-require_once PHPTAL_DIR.'PHPTAL/Tales.php';
 
 function phptal_tales_custom($src,$nothrow)
 {

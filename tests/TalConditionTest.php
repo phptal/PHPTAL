@@ -20,10 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Comment.php';
 
 if (!class_exists('DummyTag')) {
     class DummyTag {}

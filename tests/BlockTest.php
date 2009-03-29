@@ -1,6 +1,5 @@
 <?php
 
-require_once 'config.php';
 
 class BlockTest extends PHPTAL_TestCase
 {

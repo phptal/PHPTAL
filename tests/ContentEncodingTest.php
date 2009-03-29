@@ -20,7 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
 
 class ContentEncodingTest extends PHPTAL_TestCase
 {

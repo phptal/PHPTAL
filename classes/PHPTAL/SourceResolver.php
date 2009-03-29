@@ -1,7 +1,5 @@
 <?php
 
-require_once PHPTAL_DIR.'PHPTAL/Source.php';
-
 /** 
  * @package phptal
  */
@@ -12,5 +10,3 @@ interface PHPTAL_SourceResolver
      */
     public function resolve($path);
 }
-
-?>

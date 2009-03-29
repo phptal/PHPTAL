@@ -20,8 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-
 // METAL Specification 1.0
 //
 //      argument ::= expression

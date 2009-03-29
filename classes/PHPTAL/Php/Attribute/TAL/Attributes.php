@@ -20,8 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-
 // TAL Specifications 1.4
 //
 //       argument             ::= attribute_statement [';' attribute_statement]*
@@ -38,8 +36,6 @@ require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 //
 // IN PHPTAL: attributes will not work on structured replace.
 //
-
-require_once PHPTAL_DIR.'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * @package phptal.php.attribute.tal

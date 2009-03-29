@@ -20,8 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-
 /**
  * @package phptal.php.attribute.phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>

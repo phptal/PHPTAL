@@ -20,7 +20,7 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
+require PHPTAL_DIR.'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * Base class for all PHPTAL attributes.

@@ -20,6 +20,12 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
+require PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
+require PHPTAL_DIR.'PHPTAL/Namespace/TAL.php';
+require PHPTAL_DIR.'PHPTAL/Namespace/METAL.php';
+require PHPTAL_DIR.'PHPTAL/Namespace/I18N.php';
+require PHPTAL_DIR.'PHPTAL/Namespace/PHPTAL.php';
+
 /** 
  * @package phptal
  */

@@ -1,7 +1,5 @@
 <?php
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-
 // i18n:target
 //
 // The i18n:target attribute specifies the language of the translation we 

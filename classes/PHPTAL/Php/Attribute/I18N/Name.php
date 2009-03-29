@@ -1,7 +1,5 @@
 <?php
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-
 // i18n:name
 //
 // Name the content of the current element for use in interpolation within 

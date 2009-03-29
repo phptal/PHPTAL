@@ -31,9 +31,6 @@
 //
 //
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/TalesChainExecutor.php';
-
 /**
  * @package phptal.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>

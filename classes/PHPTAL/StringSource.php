@@ -1,7 +1,5 @@
 <?php
 
-require_once PHPTAL_DIR.'PHPTAL/Source.php';
-
 /**
  * @package phptal
  */
@@ -31,4 +29,3 @@ class PHPTAL_StringSource implements PHPTAL_Source
     }
 }
 
-?>

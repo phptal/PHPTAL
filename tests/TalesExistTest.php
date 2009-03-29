@@ -20,7 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 class TalesExistTest extends PHPTAL_TestCase 

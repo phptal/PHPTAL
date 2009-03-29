@@ -20,7 +20,6 @@
 //  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
 //  
 
-require_once 'config.php';
 
 require_once 'I18NDummyTranslator.php';
 

@@ -1,6 +1,5 @@
 <?php
 
-require_once 'config.php';
 require_once 'I18NDummyTranslator.php';
 
 class I18NAttributesTest extends PHPTAL_TestCase

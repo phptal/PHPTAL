@@ -1,8 +1,5 @@
 <?php
 
-require_once PHPTAL_DIR.'PHPTAL/Source.php';
-require_once PHPTAL_DIR.'PHPTAL/SourceResolver.php';
-
 /** 
  * @package phptal
  */

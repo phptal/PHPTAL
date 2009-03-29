@@ -18,11 +18,9 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //  
 
-require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
 require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
-require_once PHPTAL_DIR.'PHPTAL/Dom/XmlnsState.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
+require PHPTAL_DIR.'PHPTAL/Dom/XmlnsState.php';
 
 /**
  * DOM Builder

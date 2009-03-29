@@ -21,8 +21,6 @@
 //			 Moritz Bechler <mbechler@eenterphace.org>
 //
 
-require_once PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
-
 class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
 	//
@@ -337,4 +335,5 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	}
 }
 
-?>
+
+PHPTAL_TalesInternal::registerInternalTales();

@@ -21,8 +21,6 @@
 //
 
 require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
 
 
 class PHPTAL_DOMAttr
