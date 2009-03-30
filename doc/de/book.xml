@@ -1,5 +1,5 @@
-<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.4//EN"
-"http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd">
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book lang="de">
 
   <bookinfo>
@@ -2375,9 +2375,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       </para>
 
       <para>
-      Modifiers are used at parse time. If you change the behaviour of a
-      modifier, you'll have to delete generated <acronym>PHP</acronym> files and reparse 
-      all templates using it.
+        Operatoren werden während der Vorlagenzerlegung angewendet. Wenn sie das Verhalten eines Operators verändern, müssen sie alle vorher erzeugten <acronym>PHP</acronym> Dateien löschen und die Vorlagen neu zerlegen lassen.
       </para>
   
       <para>
@@ -2385,12 +2383,11 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       </para>
 
       <para>
-      Any <acronym>PHP</acronym> function starting with "<constant>phptal_tales_</constant>" is usuable as a 
-      modifier.
+        Jede <acronym>PHP</acronym> Funktion die mit "<constant>phptal_tales_</constant>" beginnt, ist als Operator verwendbar.
       </para>
 
       <para>
-      Modifiers takes two arguments:
+        Operatoren erwarten zwei Argumente::
       </para>
 
       <itemizedlist>
@@ -2439,8 +2436,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       </itemizedlist>
 
       <para>
-      Remember, path: is the implicit modifier used when no other 
-      modifier is specified.
+        Zur Erinnerung: path: wird implizit verwendet, sollte kein anderer Operator angegeben sein.
       </para>
 
       <para>
@@ -2498,11 +2494,11 @@ function phptal_tales_money( $src, $nothrow )
     </para>
 
     <para>
-      <acronym>PHPTAL</acronym> creates one file for each different template file and one file for each tag if using <sgmltag>phptal:cache</sgmltag>. It doesn't create separate files for macros (which are simply compiled as <acronym>PHP</acronym> functions inside the compiled template file). These files are automatically cleaned up once in a while, more specifically, each time a template is compiled there is random probability, controlled by <methodname>setCachePurgeFrequency()</methodname> method, which will just delete files older than set by <methodname>setCacheLifetime()</methodname> method.
+      <acronym>PHPTAL</acronym> erzeugt zu jeder Vorlagendatei und, falls <sgmltag>phptal:cache</sgmltag> verwendet wird, auch für jedes Element  eine (php) Datei. Für Makros werden keine separaten Dateien angelegt. (Sie werden einfach als <acronym>PHP</acronym> Funktionen in die erzeugte Datei eingefügt.) Diese Dateien werden ab und an automatisch gelöscht, genauer: jedes mal, wenn eine Vorlage bearbeitet wird, wird die alte Datei mit einer gewissen, durch <methodname>setCachePurgeFrequency()</methodname> bestimmten Wahrscheinlichkeit, gelöscht, falls ihre durch <methodname>setCacheLifetime()</methodname> festgelegte Lebensdauer abgelaufen ist.
     </para>
 
     <para>
-      Alternatively you can also schedule the deletion of old/unused files by running this from an Unix-like shell (z.B. als cron Job):
+      Natürlich kann man alte bzw. unbenutzte Dateien auch via cron Job und shell löschen (hier: UNIXartige Shell):
     </para>
 
     <programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -exec rm -v {} \;</programlisting>
