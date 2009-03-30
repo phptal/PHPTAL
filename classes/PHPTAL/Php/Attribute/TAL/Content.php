@@ -75,8 +75,12 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
-        $executor->doIf('!phptal_isempty($__content__ = '.$exp.')');
-        $this->doEchoAttribute($executor->getCodeWriter(),'$__content__');
+        $var = $executor->getCodeWriter()->createTempVariable();
+        
+        $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
+        $this->doEchoAttribute($executor->getCodeWriter(),$var);
+        
+        $executor->getCodeWriter()->recycleTempVariable($var);
     }
     
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)

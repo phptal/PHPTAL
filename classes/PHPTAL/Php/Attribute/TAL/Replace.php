@@ -39,9 +39,7 @@
 class PHPTAL_Php_Attribute_TAL_Replace 
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
-{
-    const REPLACE_VAR = '$__replace__';
-    
+{   
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // tal:replace="" => do nothing and ignore node
@@ -96,8 +94,10 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
-        $executor->doIf('!phptal_isempty('.self::REPLACE_VAR.' = '.$exp.')');
-        $this->doEchoAttribute($executor->getCodeWriter(),self::REPLACE_VAR);
+        $var = $executor->getCodeWriter()->createTempVariable();
+        $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
+        $this->doEchoAttribute($executor->getCodeWriter(),$var);
+        $executor->getCodeWriter()->recycleTempVariable($var);
     }
 
     private function generateDefault(PHPTAL_Php_CodeWriter $codewriter)
@@ -110,4 +110,3 @@ implements PHPTAL_Php_TalesChainReader
     }
 }
 
-?>

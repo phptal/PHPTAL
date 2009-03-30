@@ -40,8 +40,6 @@
  */
 class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
 {
-    const ERR_VAR = '$__err__';
-    
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doTry();
@@ -50,9 +48,11 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
     
     public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
+        $var = $codewriter->createTempVariable();
+        
         $codewriter->pushCode('ob_end_flush()');        
-        $codewriter->doCatch('Exception '.self::ERR_VAR);
-        $codewriter->pushCode('$tpl->addError('.self::ERR_VAR.')');
+        $codewriter->doCatch('Exception '.$var);
+        $codewriter->pushCode('$tpl->addError('.$var.')');
         $codewriter->pushCode('ob_end_clean()');
 
         $expression = $this->extractEchoType($this->expression);
@@ -64,7 +64,7 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
 
             case PHPTAL_TALES_DEFAULT_KEYWORD:
                 $codewriter->pushRawHtml('<pre class="phptalError"');
-                $codewriter->doEchoRaw(self::ERR_VAR);
+                $codewriter->doEchoRaw($var);
                 $codewriter->pushRawHtml('</pre>');
                 break;
                 
@@ -73,7 +73,8 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
                 break;
         }
         $codewriter->doEnd();
+        
+        $codewriter->recycleTempVariable($var);
     }
 }
 
-?>

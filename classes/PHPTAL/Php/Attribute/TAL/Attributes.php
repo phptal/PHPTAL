@@ -45,11 +45,6 @@ class PHPTAL_Php_Attribute_TAL_Attributes
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
-    const ATT_VALUE_REPLACE = '$__att_';
-    // this regex is used to determine if an attribute is entirely replaced
-    // by a php variable or if only its value is replaced.
-    const REGEX_FULL_REPLACE = '/<?php echo \$__ATT_.*? ?>/';
-    
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes using ; delimiter
@@ -60,10 +55,6 @@ implements PHPTAL_Php_TalesChainReader
                 $this->prepareAttribute($codewriter,$qname, $expression);
             }
         }
-    }
-
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
-    {
     }
 
     private function prepareAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $expression)
@@ -96,7 +87,7 @@ implements PHPTAL_Php_TalesChainReader
     private function prepareAttributeUnconditional(PHPTAL_Php_CodeWriter $codewriter,$qname,$code)
     {
         // regular attribute which value is the evaluation of $code
-        $attkey = $this->getVarName($qname);
+        $attkey = $this->getVarName($qname, $codewriter);
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
             $value = $code;
         else
@@ -111,7 +102,7 @@ implements PHPTAL_Php_TalesChainReader
     private function prepareAttributeConditional(PHPTAL_Php_CodeWriter $codewriter,$qname,$code)
     {
         // regular attribute which value is the evaluation of $code
-        $attkey = $this->getVarName($qname);
+        $attkey = $this->getVarName($qname, $codewriter);
                  
         $codewriter->doIf("NULL !== ($attkey = ($code))");
         
@@ -136,14 +127,14 @@ implements PHPTAL_Php_TalesChainReader
         {
             $this->_default_escaped = $default_attr->getValueEscaped();
         }
-        $this->_attkey = $this->getVarName($qname);
+        $this->_attkey = $this->getVarName($qname, $codewriter);
         $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $chain, $this);
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($this->_attkey);
     }
 
     private function prepareBooleanAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $code)
     {
-        $attkey = $this->getVarName($qname);
+        $attkey = $this->getVarName($qname, $codewriter);
         
         if ($codewriter->getOutputMode() === PHPTAL::HTML5)
         {
@@ -161,9 +152,19 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
 
-    private function getVarName($qname)
+    private $vars_to_recycle = array();
+    
+    private function getVarName($qname, PHPTAL_Php_CodeWriter $codewriter)
     {
-        return '$_Attr_'.strtr($qname,':-', '__');
+        $var = $codewriter->createTempVariable();
+        $this->vars_to_recycle[] = $var;
+        return $var;
+    }
+
+
+    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    {
+        foreach($this->vars_to_recycle as $var) $codewriter->recycleTempVariable($var);
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
@@ -208,5 +209,4 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter->doSetVar($this->_attkey, "' $this->_attribute=\"'.$value.'\"'");
     }
 }
-
 

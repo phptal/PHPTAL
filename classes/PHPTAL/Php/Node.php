@@ -438,21 +438,6 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
 
     private function generateAttributes(PHPTAL_Php_CodeWriter $codewriter)
     {
-        // A phptal attribute can modify any node attribute replacing
-        // its value by a <?php echo $somevalue ?\ >.
-        //
-        // The entire attribute (key="value") can be replaced using the
-        // '$__ATT_' value code, it is very useful for xhtml boolean
-        // attributes like selected, checked, etc...
-        //
-        // example:
-        //
-        //  $tag->codewriter->pushCode(
-        //  '$__ATT_checked = $somecondition ? \'checked="checked"\' : \'\''
-        //  );
-        //  $tag->attributes['checked'] = '<?php echo $__ATT_checked ?\>';
-        //
-
         foreach($this->getAttributeNodes() as $attr) 
         {
             switch($attr->getReplacedState())

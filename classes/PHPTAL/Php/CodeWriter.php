@@ -33,6 +33,20 @@ class PHPTAL_Php_CodeWriter
         $this->_state = $state;
     }
 
+    private $temp_var_counter=0;
+    private $temp_recycling=array();
+    public function createTempVariable()
+    {
+        if (count($this->temp_recycling)) return array_shift($this->temp_recycling);
+        return '$_tmp_'.(++$this->temp_var_counter);
+    }
+    
+    public function recycleTempVariable($var)
+    {
+        assert('substr($var,0,6)===\'$_tmp_\'');
+        $this->temp_recycling[] = $var;
+    }
+
     public function getCacheFilesBaseName()
     {
         return $this->_state->getCacheFilesBaseName();
@@ -199,7 +213,7 @@ class PHPTAL_Php_CodeWriter
     public function doForeach($out, $source)
     {
         $this->_segments[] =  'foreach';
-        $this->pushCode("foreach($source as \$__key__ => $out ):");
+        $this->pushCode("foreach($source as $out ):");
         $this->indent();
     }
 

@@ -70,7 +70,7 @@ implements PHPTAL_Php_TalesChainReader
     {
         // check if the expression is empty
         if ( $exp !== 'false' ) {
-            $this->expressions[] = '!phptal_isempty($__content__ = ' . $exp . ')';
+            $this->expressions[] = '!phptal_isempty(' . $exp . ')';
         }
 
         if ( $islast ) {
@@ -90,7 +90,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
-        throw new PHPTAL_ParserException('\'default\' keyword not allowed on condition expressions');
+        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions');
     }
 
 }

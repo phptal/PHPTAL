@@ -92,6 +92,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
+        if ($this->tmp_content_var) $codewriter->recycleTempVariable($this->tmp_content_var);
         if ($this->_pushedContext){
             $codewriter->popContext();
         }
@@ -149,15 +150,18 @@ implements PHPTAL_Php_TalesChainReader
         return array($defineScope, $defineVar, $exp);
     }
 
+
+    private $tmp_content_var;
     private function bufferizeContent(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (!$this->_buffered){
+            $this->tmp_content_var = $codewriter->createTempVariable();
             $codewriter->pushCode( 'ob_start()' );
             $this->phpelement->generateContent($codewriter);
-            $codewriter->pushCode('$__tmp_content__ = ob_get_clean()');
+            $codewriter->doSetVar($this->tmp_content_var,'ob_get_clean()');
             $this->_buffered = true;
         }
-        $this->doDefineVarWith($codewriter,'$__tmp_content__');
+        $this->doDefineVarWith($codewriter,$this->tmp_content_var);
     }
 
     private function doDefineVarWith(PHPTAL_Php_CodeWriter $codewriter, $code)

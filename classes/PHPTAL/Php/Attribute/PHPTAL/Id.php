@@ -26,18 +26,21 @@
  */
 class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
 {
+    private $var;
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // retrieve trigger
+        $this->var = $codewriter->createTempVariable();        
+                
         $codewriter->doSetVar(
-            '$trigger', 
+            $this->var, 
             '$tpl->getTrigger('.$codewriter->str($this->expression).')'
         );
 
         // if trigger found and trigger tells to proceed, we execute
         // the node content
-        $codewriter->doIf('$trigger && 
-            $trigger->start('.$codewriter->str($this->expression).', $tpl) === PHPTAL_Trigger::PROCEED');
+        $codewriter->doIf($this->var.' && 
+            '.$this->var.'->start('.$codewriter->str($this->expression).', $tpl) === PHPTAL_Trigger::PROCEED');
     }
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)
@@ -46,11 +49,12 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
         $codewriter->doEnd();
         
         // if trigger found, notify the end of the node
-        $codewriter->doIf('$trigger');
+        $codewriter->doIf($this->var);
         $codewriter->pushCode(
-            '$trigger->end('.$codewriter->str($this->expression).', $tpl)'
+            $this->var.'->end('.$codewriter->str($this->expression).', $tpl)'
         );
         $codewriter->doEnd();
+        $codewriter->recycleTempVariable($this->var);
     }
 }
 

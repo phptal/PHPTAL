@@ -74,43 +74,32 @@
  */
 class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
 {
-    const REPEAT = '$__repeat__';    
-    
+    private $var;
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {        
+        $this->var = $codewriter->createTempVariable();
+        
         // alias to repeats handler to avoid calling extra getters on each variable access
-        $codewriter->doSetVar( self::REPEAT, '$ctx->repeat' );
+        $codewriter->doSetVar( $this->var, '$ctx->repeat' );
 
         list( $varName, $expression ) = $this->parseSetExpression( $this->expression );
         $code = $codewriter->evaluateExpression( $expression );
 
-        $item = '$ctx->' . $varName;
-        $controller = self::REPEAT . '->' . $varName;
-
-        // reset item var into template context
-        /* // Is this actually needed?
-        $codewriter->doIf( '!isset('.$this->item.')' );
-        $codewriter->doSetVar( $this->item, 'false' );
-        $codewriter->doEnd();
-        */
-
         // instantiate controller using expression
-        $codewriter->doSetVar( $controller, 'new PHPTAL_RepeatController('.$code.')' );
+        $codewriter->doSetVar( $this->var.'->'.$varName, 'new PHPTAL_RepeatController('.$code.')' );
 
         $codewriter->pushContext();
 
         // Lets loop the iterator with a foreach construct
-        $codewriter->doForeach( $item, $controller );
+        $codewriter->doForeach( '$ctx->'.$varName, $this->var.'->'.$varName );
     }
         
     public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEnd();
         $codewriter->popContext();
+        
+        $codewriter->recycleTempVariable($this->var);
     }
-           
-    private $item;
-    private $controller;
 }
 
-?>

@@ -52,8 +52,7 @@
  */
 class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
 {
-    private static $temp_var_num;
-    
+    private $varname;
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (trim($this->expression) == ''){
@@ -61,18 +60,19 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
         }
         else { 
             
-            $varname = '$_omit'.self::$temp_var_num++;
+            $this->varname = $codewriter->createTempVariable();
             
             // print tag header/foot only if condition is false
             $cond = $codewriter->evaluateExpression($this->expression);
-            $this->phpelement->headPrintCondition = '('.$varname.' = !('.$cond.'))';
-            $this->phpelement->footPrintCondition = $varname;
+            $this->phpelement->headPrintCondition = '('.$this->varname.' = !('.$cond.'))';
+            $this->phpelement->footPrintCondition = $this->varname;
         }
     }
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)
     {
+        if ($this->varname) $codewriter->recycleTempVariable($this->varname);
     }
 }
 
-?>
+
