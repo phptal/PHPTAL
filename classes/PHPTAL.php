@@ -552,8 +552,20 @@ class PHPTAL
                         throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
                     }
                 }
-        
+
+                // the awesome thing about eval() is that parse errors don't stop PHP.
+                ob_start();
                 eval('?>'.$result);
+                if (!function_exists($this->getFunctionName()))
+                {
+                    $msg = str_replace("eval()'d code",$this->getCodePath(), ob_get_clean());
+                    
+                    if ($this->getForceReparse()) @file_put_contents($this->getCodePath(), $result); // save file if it wasn't saved already
+                    
+                    if (preg_match('/on line (\d+)$/m',$msg, $m)) $line =$m[1]; else $line=0;
+                    throw new PHPTAL_TemplateException($msg, $this->getCodePath(), $line);
+                }
+                ob_end_clean();
             }
             else
             {
@@ -834,4 +846,3 @@ class PHPTAL
     protected $_cachePurgeFrequency = 50;
 }
 
-?>
