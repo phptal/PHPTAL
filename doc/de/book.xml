@@ -218,7 +218,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
     </para>
 
     <para>
-      Ihre Vorlage ist ein gültiges XML-/HTML-Dokument (samt Wurzelelement). Die Datei nennen wir 'my_template_file.html':
+      Ihre Vorlage ist ein gültiges XML-/HTML-Dokument (samt Wurzelelement). Die Datei nennen wir 'my_template_file.xhtml':
     </para>
   
     <programlisting><![CDATA[<?xml version="1.0"?>
@@ -264,7 +264,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 require_once 'PHPTAL.php';
 
 // create a new template object 
-$template = new PHPTAL('my_template_file.html');
+$template = new PHPTAL('my_template_file.xhtml');
 
 // the Person class 
 class Person {
@@ -880,14 +880,14 @@ title="google search engine">the google search engine</a>
           Makros lassen sich über deren Dateiname auch aus externen Vorlagen ansprechen.
         </para>
 
-        <programlisting><![CDATA[<span metal:use-macro="site_macros.html/main_menu"/>
+        <programlisting><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
 ]]></programlisting>
 
         <para>
           Der <acronym>PHPTAL</acronym> Ersetzungsmechanismus läßt sich auch innerhalb von <sgmltag>metal:use-macro</sgmltag> Werten nutzen:
         </para>
 
-        <programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.html/main_menu"/>
+        <programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
 ]]></programlisting>
 
 
@@ -1464,7 +1464,7 @@ php:SomeClass::$staticVar
   no some/var and no other/path found here
 </span>
 
-<a href="unknown.html" title="Unknown page"
+<a href="unknown.xhtml" title="Unknown page"
    tal:attributes="href item/href | default; title item/title | default"
    tal:content="item/title | default">Unknown page</a>
 ]]></programlisting>
@@ -1652,7 +1652,7 @@ php:SomeClass::$staticVar
 require_once 'PHPTAL.php';
 
 // instantiate a new PHPTAL object using specified template file
-$tpl = new PHPTAL('mytemplate.html');
+$tpl = new PHPTAL('mytemplate.xhtml');
 
 // setting some template context variables
 $tpl->title  = 'my title';
@@ -1684,7 +1684,7 @@ $tpl->set('title', 'my title');
 $tpl->set('values', array(1,2,3,4));
 $tpl->set('user', new User('Joe'));
 
-$tpl->setTemplate('mytemplate.html');
+$tpl->setTemplate('mytemplate.xhtml');
 
 ?>
 ]]></programlisting>
@@ -1788,7 +1788,7 @@ class MyPostFilter implements PHPTAL_Filter {
     }
 }
 
-$tpl = new PHPTAL('mytemplate.html');
+$tpl = new PHPTAL('mytemplate.xhtml');
 $tpl->setPreFilter(new MyPreFilter());
 $tpl->setPostFilter(new MyPostFilter());
 echo $tpl->execute();
@@ -1824,7 +1824,7 @@ $myfilter = new FilterChain();
 $myfilter->add(new CommentFilter());  // imaginary filter
 $myfilter->add(new TidyFilter());     // imaginary filter
 
-$tpl = new PHPTAL('mytemplate.html');
+$tpl = new PHPTAL('mytemplate.xhtml');
 $tpl->setPostFilter($myFilter);
 echo $tpl->execute();
 ?>
@@ -1975,7 +1975,7 @@ require_once 'CacheTrigger.php'; // our custom trigger
 
 $trigger = new CacheTrigger();
 
-$tpl = new PHPTAL('test.html');
+$tpl = new PHPTAL('test.xhtml');
     
 // this trigger will only be called for phptal:id="triggerId"
 $tpl->addTrigger('somePossiblyUniqueKeyword', $trigger);
@@ -2307,7 +2307,7 @@ try {
     // specify current domain
     $tr->useDomain('mydomain');
 
-    $tpl = new PHPTAL('mytemplate.html');
+    $tpl = new PHPTAL('mytemplate.xhtml');
 
     // tell PHPTAL to use our translator
     $tpl->setTranslator($tr);
