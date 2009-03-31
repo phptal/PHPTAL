@@ -16,9 +16,9 @@
 
 class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
-	//
-	// This function registers all internal expression modifiers
-	//
+	/**
+	 * This function registers all internal expression modifiers
+	 */
     static public function registerInternalTales() {
 
 		static $registered = false;
@@ -45,69 +45,69 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    return 'phptal_true($ctx, '.self::string(trim($src), $nothrow).')';
     }
 
-	//
-	// not:
-	//
-	//      not: Expression
-	//
-	// evaluate the expression string (recursively) as a full expression,
-	// and returns the boolean negation of its value
-	//
-	// return boolean based on the following rules:
-	//
-	//     1. integer 0 is false
-	//     2. integer > 0 is true
-	//     3. an empty string or other sequence is false
-	//     4. a non-empty string or other sequence is true
-	//     5. a non-value (e.g. void, None, Nil, NULL, etc) is false
-	//     6. all other values are implementation-dependent.
-	//
-	// Examples:
-	//
-	//      not: exists: foo/bar/baz
-	//      not: php: object.hasChildren()
-	//      not: string:${foo}
-	//      not: foo/bar/booleancomparable
-	//
+	/**
+	 * not:
+	 *
+	 *      not: Expression
+	 *
+	 * evaluate the expression string (recursively) as a full expression,
+	 * and returns the boolean negation of its value
+	 *
+	 * return boolean based on the following rules:
+	 *
+	 *     1. integer 0 is false
+	 *     2. integer > 0 is true
+	 *     3. an empty string or other sequence is false
+	 *     4. a non-empty string or other sequence is true
+	 *     5. a non-value (e.g. void, None, Nil, NULL, etc) is false
+	 *     6. all other values are implementation-dependent.
+	 *
+	 * Examples:
+	 *
+	 *      not: exists: foo/bar/baz
+	 *      not: php: object.hasChildren()
+	 *      not: string:${foo}
+	 *      not: foo/bar/booleancomparable
+	 */
 	static public function not($expression, $nothrow)
 	{
 		return '!(' . phptal_tales($expression, $nothrow) . ')';
 	}
 
 
-	//
-	// path:
-	//
-	//      PathExpr  ::= Path [ '|' Path ]*
-	//      Path      ::= variable [ '/' URL_Segment ]*
-	//      variable  ::= Name
-	//
-	// Examples:
-	//
-	//      path: username
-	//      path: user/name
-	//      path: object/method/10/method/member
-	//      path: object/${dynamicmembername}/method
-	//      path: maybethis | path: maybethat | path: default
-	//
-	// PHPTAL:
-	//
-	// 'default' may lead to some 'difficult' attributes implementation
-	//
-	// For example, the tal:content will have to insert php code like:
-	//
-	// if (isset($ctx->maybethis)) {
-	//     echo $ctx->maybethis;
-	// }
-	// elseif (isset($ctx->maybethat) {
-	//     echo $ctx->maybethat;
-	// }
-	// else {
-	//     // process default tag content
-	// }
-	//
-	// @returns string or array
-	//
+	/**
+	 * path:
+	 *
+	 *      PathExpr  ::= Path [ '|' Path ]*
+	 *      Path      ::= variable [ '/' URL_Segment ]*
+	 *      variable  ::= Name
+	 *
+	 * Examples:
+	 *
+	 *      path: username
+	 *      path: user/name
+	 *      path: object/method/10/method/member
+	 *      path: object/${dynamicmembername}/method
+	 *      path: maybethis | path: maybethat | path: default
+	 *
+	 * PHPTAL:
+	 *
+	 * 'default' may lead to some 'difficult' attributes implementation
+	 *
+	 * For example, the tal:content will have to insert php code like:
+	 *
+	 * if (isset($ctx->maybethis)) {
+	 *     echo $ctx->maybethis;
+	 * }
+	 * elseif (isset($ctx->maybethat) {
+	 *     echo $ctx->maybethat;
+	 * }
+	 * else {
+	 *     // process default tag content
+	 * }
+	 *
+	 * @returns string or array
+	 */
 	static public function path($expression, $nothrow=false)
 	{
 	    $expression = trim($expression);
@@ -176,21 +176,21 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
         return preg_match('/^[a-z_][a-z0-9_]*$/i', $expression);
     }
 
-	//
-	// string:
-	//
-	//      string_expression ::= ( plain_string | [ varsub ] )*
-	//      varsub            ::= ( '$' Path ) | ( '${' Path '}' )
-	//      plain_string      ::= ( '$$' | non_dollar )*
-	//      non_dollar        ::= any character except '$'
-	//
-	// Examples:
-	//
-	//      string:my string
-	//      string:hello, $username how are you
-	//      string:hello, ${user/name}
-	//      string:you have $$130 in your bank account
-	//
+	/**
+	 * string:
+	 *
+	 *      string_expression ::= ( plain_string | [ varsub ] )*
+	 *      varsub            ::= ( '$' Path ) | ( '${' Path '}' )
+	 *      plain_string      ::= ( '$$' | non_dollar )*
+	 *      non_dollar        ::= any character except '$'
+	 *
+	 * Examples:
+	 *
+	 *      string:my string
+	 *      string:hello, $username how are you
+	 *      string:hello, ${user/name}
+	 *      string:you have $$130 in your bank account
+	 */
 	static public function string($expression, $nothrow=false)
 	{
 	    // This is a simple parser which evaluates ${foo} inside

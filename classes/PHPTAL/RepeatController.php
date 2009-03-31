@@ -241,7 +241,7 @@ class PHPTAL_RepeatController implements Iterator
     /**
      * Converts an integer number (1 based) to a sequence of letters
      *     
-     * @param $int Int  The number to convert
+     * @param int $int  The number to convert
      * @return String   The letters equivalent as a, b, c-z ... aa, ab, ac-zz ...
      * @access protected
      */
@@ -262,7 +262,7 @@ class PHPTAL_RepeatController implements Iterator
     /**
      * Converts an integer number (1 based) to a roman numeral
      *     
-     * @param $int Int  The number to convert
+     * @param int $int  The number to convert
      * @return String   The roman numeral
      * @access protected
      */
@@ -329,7 +329,7 @@ class PHPTAL_RepeatController_Groups {
     /**
      * Checks if the data passed is the first one in a group
      * 
-     * @param $data Mixed   The data to evaluate
+     * @param mixed $data   The data to evaluate
      * @return Mixed    True if the first item in the group, false if not and
      *                  this same object if the path is not finished
      */ 
@@ -363,7 +363,7 @@ class PHPTAL_RepeatController_Groups {
     /**
      * Checks if the data passed is the last one in a group
      * 
-     * @param $data Mixed   The data to evaluate
+     * @param mixed $data   The data to evaluate
      * @return Mixed    True if the last item in the group, false if not and
      *                  this same object if the path is not finished
      */ 
@@ -400,7 +400,7 @@ class PHPTAL_RepeatController_Groups {
     /**
      * Handles variable accesses for the tal path resolver
      *
-     * @param $var String   The variable name to check
+     * @param string $var   The variable name to check
      * @return Mixed    An object/array if the path is not over or a boolean
      *
      * @todo    replace the phptal_path() with custom code
@@ -457,7 +457,7 @@ class PHPTAL_RepeatController_Groups {
     /**
      * Adds a variable name to the current path of variables
      *
-     * @param $varname String  The variable name to store as a path part
+     * @param string $varname  The variable name to store as a path part
      * @access protected
      */
     protected function addVarName( $varname )

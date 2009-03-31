@@ -68,6 +68,9 @@ require_once PHPTAL_DIR.'PHPTAL/Namespace.php';
  */
 class PHPTAL_Dom_Defs
 {
+    /**
+     * this is a singleton
+     */
     public static function getInstance()
     {
         if (self::$_instance == null) {
@@ -75,22 +78,27 @@ class PHPTAL_Dom_Defs
         }
         return self::$_instance;
     }
-
-    public static function setInstance(PHPTAL_Dom_Defs $instance)
-    {
-        self::$_instance = $instance;
-    }
     
+    /**
+     * @param string $tagName local name of the tag
+     * @return true if it's empty in XHTML (e.g. <img/>)
+     */
     public function isEmptyTag($tagName)
     {
         return in_array(strtolower($tagName), self::$XHTML_EMPTY_TAGS);
     }
 
+    /**
+     * gives namespace URI for given registered (built-in) prefix
+     */
     public function prefixToNamespaceURI($prefix)
     {
         return isset($this->prefix_to_uri[$prefix]) ? $this->prefix_to_uri[$prefix] : false;
     }
     
+    /**
+     * gives typical prefix for given (built-in) namespace
+     */
     public function namespaceURIToPrefix($uri)
     {
         return array_search($uri, $this->prefix_to_uri,true);
@@ -107,6 +115,9 @@ class PHPTAL_Dom_Defs
         return in_array($att, self::$XHTML_BOOLEAN_ATTRIBUTES);
     }
     
+    /**
+     * true if elements content is parsed as CDATA in text/html
+     */
     public function isCDATAElementInHTML($namespace_uri, $local_name)
     {
         return ($local_name === 'script' || $local_name === 'style') 
@@ -129,6 +140,9 @@ class PHPTAL_Dom_Defs
         return isset($attrs[$local_name]);
     }
     
+    /**
+     * is URI registered (built-in) namespace
+     */
     public function isHandledNamespace($namespace_uri)
     {
         return isset($this->namespaces_by_uri[$namespace_uri]);
@@ -147,6 +161,9 @@ class PHPTAL_Dom_Defs
         return substr(strtolower($qname), 0, 6) == 'xmlns:' && $this->isHandledNamespace($value);
     }
     
+    /**
+     * return objects that holds information about given TAL attribute
+     */
     public function getNamespaceAttribute($namespace_uri, $local_name)
     {    
         $attrs = $this->namespaces_by_uri[$namespace_uri]->getAttributes();

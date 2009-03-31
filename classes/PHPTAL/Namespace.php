@@ -24,8 +24,8 @@ require PHPTAL_DIR.'PHPTAL/Namespace/PHPTAL.php';
 abstract class PHPTAL_NamespaceAttribute
 {
     /** 
-     * @param $name string The attribute name
-     * @param $priority int Attribute execution priority
+     * @param string $name The attribute name
+     * @param int $priority Attribute execution priority
      */
     public function __construct($local_name, $priority)
     {

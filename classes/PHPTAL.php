@@ -108,7 +108,9 @@ class PHPTAL
 
     /**
      * Set template from file path.
-     * @param $path string
+     * 
+     * @param string $path filesystem path, or any path that will be accepted by source resolver
+     * @return $this
      */
     public function setTemplate($path)
     {
@@ -125,13 +127,15 @@ class PHPTAL
      *
      * Should be used only with temporary template sources. Use setTemplate() whenever possible.
      *
-     * @param $src string The phptal template source.
-     * @param path string Fake and 'unique' template path.
+     * @param string $src The phptal template source.
+     * @param string $path Fake and 'unique' template path.
+     * @return $this
      */
     public function setSource($src, $path=false)
     {
-        if ($path == false)
+        if ($path == false) {
             $path = '<string '.md5($src).'>';
+        }
 
         require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
         $this->_prepared = false;
@@ -145,7 +149,8 @@ class PHPTAL
     /**
      * Specify where to look for templates.
      *
-     * @param $rep mixed string or Array of repositories
+     * @param mixed $rep string or Array of repositories
+     * @return $this
      */
     public function setTemplateRepository($rep)
     {
@@ -178,6 +183,7 @@ class PHPTAL
      * Specify how to look for templates.
      *
      * @param $resolver PHPTAL_SourceResolver
+     * @return $this
      */
     public function addSourceResolver(PHPTAL_SourceResolver $resolver)
     {
@@ -186,8 +192,11 @@ class PHPTAL
     }
 
     /**
-     * Ignore XML/XHTML comments on parsing.
-     * @param $bool bool
+     * Ignore XML/XHTML comments on parsing. 
+     * Comments starting with <!--! are always stripped.
+     * 
+     * @param bool $bool
+     * @return $this
      */
     public function stripComments($bool)
     {
@@ -201,7 +210,9 @@ class PHPTAL
      * and threats attributes like selected, checked to be boolean attributes.
      *
      * XML output mode outputs XML without such modifications and is neccessary to generate RSS feeds properly.
-     * @param $mode int (PHPTAL::XML or PHPTAL::XHTML).
+     * 
+     * @param int $mode (PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5).
+     * @return $this
      */
     public function setOutputMode($mode)
     {
@@ -216,6 +227,7 @@ class PHPTAL
 
     /**
      * Get output mode
+     * @see setOutputMode()
      */
     public function getOutputMode()
     {
@@ -224,7 +236,8 @@ class PHPTAL
 
     /**
      * Set input and ouput encoding.
-     * @param $enc string example: 'UTF-8'
+     * @param string $enc example: 'UTF-8'
+     * @return $this
      */
     public function setEncoding($enc)
     {
@@ -235,7 +248,8 @@ class PHPTAL
 
     /**
      * Get input and ouput encoding.
-     * @param $enc string example: 'UTF-8'
+     * @param string $enc example: 'UTF-8'
+     * @return $this
      */
     public function getEncoding()
     {
@@ -336,7 +350,7 @@ class PHPTAL
 
     /**
      * Register a trigger for specified phptal:id.
-     * @param $id string phptal:id to look for
+     * @param string $id phptal:id to look for
      */
     public function addTrigger($id, PHPTAL_Trigger $trigger)
     {
@@ -346,7 +360,7 @@ class PHPTAL
 
     /**
      * Returns trigger for specified phptal:id.
-     * @param $id string phptal:id
+     * @param string $id phptal:id
      */
     public function getTrigger($id)
     {
@@ -358,8 +372,8 @@ class PHPTAL
 
     /**
      * Set a context variable.
-     * @param $varname string
-     * @param $value mixed
+     * @param string $varname
+     * @param mixed $value
      */
     public function __set($varname, $value)
     {
@@ -368,8 +382,8 @@ class PHPTAL
 
     /**
      * Set a context variable.
-     * @param $varname string
-     * @param $value mixed
+     * @param string $varname
+     * @param mixed $value
      */
     public function set($varname, $value)
     {
@@ -421,6 +435,9 @@ class PHPTAL
         return $res;
     }
 
+    /**
+     * copies state of PHPTAL class. for internal use only.
+     */
     protected function setConfigurationFrom(PHPTAL $from)
     {
         // use references - this way config of both objects will be more-or-less in sync
@@ -445,7 +462,7 @@ class PHPTAL
      * Execute a template macro.
      * Should be used only from within generated template code!
      *
-     * @param $path string Template macro path
+     * @param string $path Template macro path
      */
     public function executeMacro($path)
     {
@@ -560,13 +577,17 @@ class PHPTAL
         return $this;
     }
 
+    /**
+     * get how long compiled templates and phptal:cache files are kept, in days
+     */
     public function getCacheLifetime()
     {
         return $this->_cacheLifetime;
     }
 
     /**
-     * how long compiled templates and phptal:cache files are kept, in days
+     * set how long compiled templates and phptal:cache files are kept
+     * @param $days number of days
      */
     public function setCacheLifetime($days)
     {
@@ -584,6 +605,10 @@ class PHPTAL
         return $this;
     }
 
+    /**
+     * how likely cache cleaning can happen
+     * @see self::setCachePurgeFrequency()
+     */
     public function getCachePurgeFrequency()
     {
         return $this->_cachePurgeFrequency;
@@ -591,7 +616,7 @@ class PHPTAL
 
 
     /**
-     * Removes all compiled templates from cache after PHPTAL_CACHE_LIFETIME days
+     * Removes all compiled templates from cache that are older than getCacheLifetime() days
      */
     public function cleanUpGarbage()
     {
@@ -614,7 +639,7 @@ class PHPTAL
     }
 
     /**
-     * Removes single compiled template from cache and all its fragments cached by phptal:cache.
+     * Removes content cached with phptal:cache for currently set template
      * Must be called after setSource/setTemplate.
      */
     public function cleanUpCache()
@@ -726,6 +751,10 @@ class PHPTAL
         return $this->_context;
     }
 
+    /**
+     * parse currently set template
+     * @return string (compiled PHP code)
+     */
     protected function parse()
     {
         require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
@@ -751,6 +780,7 @@ class PHPTAL
 
     /**
      * Search template source location.
+     * @return void
      */
     protected function findTemplate()
     {

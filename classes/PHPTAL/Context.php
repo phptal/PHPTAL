@@ -14,6 +14,7 @@
  */
 /**
  * This class handles template execution context.
+ * Holds template variables and carries state/scope across macro executions.
  * @package PHPTAL
  */
 class PHPTAL_Context
@@ -35,16 +36,27 @@ class PHPTAL_Context
         $this->repeat = clone($this->repeat);
     }
 
+    /**
+     * will switch to this context when popContext() is called
+     */
     public function setParent(PHPTAL_Context $parent)
     {
         $this->_parentContext = $parent;
     }
 
+    /**
+     * set StdClass object which has property of every global variable
+     * It can use __isset() and __get() [none of them or both]
+     */
     public function setGlobal(StdClass $globalContext)
     {
         $this->_globalContext = $globalContext;
     }
 
+    /**
+     * save current execution context
+     * @return Context (new)
+     */
     public function pushContext()
     {
         $res = clone $this;
@@ -52,6 +64,10 @@ class PHPTAL_Context
         return $res;
     }
 
+    /**
+     * get previously saved execution context
+     * @return Context (old)
+     */
     public function popContext()
     {
         return $this->_parentContext;
@@ -162,6 +178,7 @@ class PHPTAL_Context
 
     /**
      * Context getter.
+     * If variable doesn't exist, it will throw an exception, unless noThrow(true) has been called
      */
     public function __get($varname)
     {
@@ -208,6 +225,8 @@ if (!function_exists('property_exists')) {
  * The nothrow param is used by phptal_exists() and prevent this function to
  * throw an exception when a part of the path cannot be resolved, null is
  * returned instead.
+ * 
+ * This function is very important for PHPTAL performance.
  */
 function phptal_path($base, $path, $nothrow=false)
 {//{{{
@@ -337,6 +356,9 @@ function phptal_path_error($base, $path, $current)
     throw new PHPTAL_VariableNotFoundException(ucfirst(gettype($base))." {$basename}doesn't have property '$current'$pathinfo");    
 }
 
+/**
+ * implements true: modifier
+ */
 function phptal_true($ctx, $path)
 {
     $ctx->noThrow(true);
@@ -359,19 +381,26 @@ function phptal_exists($ctx, $path)
     return $res !== null;
 }
 
+/**
+ * helper function for conditional expressions
+ */
 function phptal_isempty($var)
 {
     return $var === null || $var === false || $var === ''  
            || ((is_array($var) || $var instanceof Countable) && count($var)===0);
 }
 
+/**
+ * convert to string and html-escape given value (of any type)
+ */
 function phptal_escape($var)
 {
     if (is_string($var)) {
         return htmlspecialchars($var, ENT_QUOTES);
     } elseif (is_object($var)) {
-        if ($var instanceof SimpleXMLElement) return $var->asXML();
-        
+        if ($var instanceof SimpleXMLElement) {
+            return $var->asXML();
+        }
         return htmlspecialchars((string)$var, ENT_QUOTES);
     } elseif (is_bool($var)) {
         return (int)$var;
@@ -379,4 +408,21 @@ function phptal_escape($var)
         return htmlspecialchars(implode(', ', $var),ENT_QUOTES);
     }
     return $var;
+}
+
+/**
+ * convert anything to string
+ */
+function phptal_tostring($var)
+{
+    if (is_string($var)) {
+        return $var;
+    } elseif (is_bool($var)) {
+        return (int)$var;
+    } elseif (is_array($var)) {
+        return implode(', ', $var);
+    } elseif ($var instanceof SimpleXMLElement) {
+        return $var->asXML();        
+    }
+    return (string)$var;
 }
