@@ -1,29 +1,21 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 /**
  * Helps generate php representation of a template.
  *
- * @package phptal.php
+ * @package PHPTAL.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_CodeWriter
@@ -93,7 +85,7 @@ class PHPTAL_Php_CodeWriter
     {
         preg_match_all('/(?:[^;]+|;;)+/sm', $src, $array);
         $array = $array[0];
-        foreach($array as &$a) $a = str_replace(';;',';',$a);
+        foreach ($array as &$a) $a = str_replace(';;',';', $a);
         return $array;
     }
 
@@ -120,10 +112,9 @@ class PHPTAL_Php_CodeWriter
 
     public function noThrow($bool)
     {
-        if ($bool){
+        if ($bool) {
             $this->pushCode('$ctx->noThrow(true)');
-        }
-        else {
+        } else {
             $this->pushCode('$ctx->noThrow(false)');
         }
     }
@@ -134,7 +125,7 @@ class PHPTAL_Php_CodeWriter
             return;
 
         // special treatment for one code line
-        if (count($this->_codeBuffer) == 1){
+        if (count($this->_codeBuffer) == 1) {
             $codeLine = $this->_codeBuffer[0];
             // avoid adding ; after } and {
             if (!preg_match('/\}|\{\s+$/', $codeLine))
@@ -146,7 +137,7 @@ class PHPTAL_Php_CodeWriter
         }
     
         $this->_result .= '<?php '."\n";
-        foreach($this->_codeBuffer as $codeLine) {
+        foreach ($this->_codeBuffer as $codeLine) {
             // avoid adding ; after } and {
             if (!preg_match('/\}|\{\s+$/', $codeLine))
                 $this->_result .= $codeLine . ' ;'."\n";
@@ -167,7 +158,7 @@ class PHPTAL_Php_CodeWriter
 
     public function doDoctype()
     {
-        if ($this->_doctype){
+        if ($this->_doctype) {
             $code = '$ctx->setDocType('.$this->str($this->_doctype).')';
             $this->pushCode($code);
         }
@@ -175,7 +166,7 @@ class PHPTAL_Php_CodeWriter
 
     public function doXmlDeclaration()
     {
-        if ($this->_xmldeclaration){
+        if ($this->_xmldeclaration) {
             $code = '$ctx->setXmlDeclaration('.$this->str($this->_xmldeclaration).')';
             $this->pushCode($code);
         }
@@ -213,7 +204,7 @@ class PHPTAL_Php_CodeWriter
     public function doForeach($out, $source)
     {
         $this->_segments[] =  'foreach';
-        $this->pushCode("foreach($source as $out ):");
+        $this->pushCode("foreach ($source as $out):");
         $this->indent();
     }
 
@@ -226,10 +217,9 @@ class PHPTAL_Php_CodeWriter
             $functionCode = $this->getResult();
             $this->popCodeWriterContext();
             $this->_result = $functionCode . $this->_result;
-        }
-        else if ($segment == 'try')
+        } elseif ($segment == 'try')
             $this->pushCode('}');
-        else if ($segment == 'catch')
+        elseif ($segment == 'catch')
             $this->pushCode('}');
         else 
             $this->pushCode("end$segment");
@@ -303,7 +293,7 @@ class PHPTAL_Php_CodeWriter
 
 	public function pushRawHtml($html)
 	{
-		$this->flushCode();
+    	$this->flushCode();
 		$this->_htmlBuffer[] =  $html;
 	}
 
@@ -357,13 +347,11 @@ class PHPTAL_Php_CodeWriter
         if ($this->getEncoding() == 'UTF-8') // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
         {
             $attr_regex = '/^[^$&\/=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]+$/u'; // FIXME: interpolation is done _after_ that function, so $ must be forbidden for now
-        }
-        else
-        {
+        } else {
             $attr_regex = '/^[^$&\/=\'"><\s`\0177-\377]+$/';
         }
         
-        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex,$value)) 
+        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex, $value)) 
             return $value;
         else return '"'.$value.'"';
     }

@@ -42,38 +42,30 @@
 //
 
 /**
- * @package phptal.php.attribute
+ * @package PHPTAL.php.attribute
  */
 class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 {
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes to translate
-        foreach($codewriter->splitExpression($this->expression) as $exp)
-        {            
+        foreach ($codewriter->splitExpression($this->expression) as $exp) {            
             list($qname, $key) = $this->parseSetExpression($exp);
                         
-            if ($key != NULL) // if the translation key is specified 
+            if ($key != null) // if the translation key is specified 
             {
                 // we use it and replace the tag attribute with the result of the translation
-                $code = $this->_getTranslationCode($codewriter,$key);
-            } 
-            else
-            {                
+                $code = $this->_getTranslationCode($codewriter, $key);
+            } else {                
                 $attr = $this->phpelement->getAttributeNode($qname);
                 if (!$attr) throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because there is no translation key specified");
 
-                if ($attr->getReplacedState() === PHPTAL_DOMAttr::NOT_REPLACED)
-                {
-                    $code = $this->_getTranslationCode($codewriter,$attr->getValue());
-                }
-                else if ($attr->getReplacedState() === PHPTAL_DOMAttr::VALUE_REPLACED && $attr->getOverwrittenVariableName())
-                {
+                if ($attr->getReplacedState() === PHPTAL_DOMAttr::NOT_REPLACED) {
+                    $code = $this->_getTranslationCode($codewriter, $attr->getValue());
+                } elseif ($attr->getReplacedState() === PHPTAL_DOMAttr::VALUE_REPLACED && $attr->getOverwrittenVariableName()) {
                         // sadly variables won't be interpolated in this translation
                         $code = 'echo '.$codewriter->escapeCode('$_translator->translate('.$attr->getOverwrittenVariableName().', false)');
-                }
-                else
-                {
+                } else {
                         throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it");
                 }
             }
@@ -91,10 +83,10 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
     private function _getTranslationCode(PHPTAL_Php_CodeWriter $codewriter, $key)
     {
 		$code = '';
-		if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
+    	if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
 			array_shift($m);
 			$m = array_shift($m);
-			foreach($m as $name){
+			foreach ($m as $name) {
 				$code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.phptal_tale($name).');'; // allow more complex TAL expressions
 			}
 			$code .= "\n";

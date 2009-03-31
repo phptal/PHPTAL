@@ -1,32 +1,25 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//			 Moritz Bechler <mbechler@eenterphace.org>
-//
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author	 Moritz Bechler <mbechler@eenterphace.org>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+*/
 
 class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
 	//
 	// This function registers all internal expression modifiers
 	//
-	static public function registerInternalTales() {
+    static public function registerInternalTales() {
 
 		static $registered = false;
 
@@ -106,7 +99,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	// if (isset($ctx->maybethis)) {
 	//     echo $ctx->maybethis;
 	// }
-	// else if (isset($ctx->maybethat) {
+	// elseif (isset($ctx->maybethat) {
 	//     echo $ctx->maybethat;
 	// }
 	// else {
@@ -123,11 +116,11 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    if ($expression == '')        return PHPTAL_TALES_NOTHING_KEYWORD;
 
 	    // split OR expressions terminated by a string
-	    if (preg_match('/^(.*?)\s*\|\s*?(string:.*)$/sm', $expression, $m)){
+	    if (preg_match('/^(.*?)\s*\|\s*?(string:.*)$/sm', $expression, $m)) {
 	        list(, $expression, $string) = $m;
 	    }
 	    // split OR expressions terminated by a 'fast' string
-	    else if (preg_match('/^(.*?)\s*\|\s*\'((?:[^\'\\\\]|\\\\.)*)\'\s*$/sm', $expression, $m)){
+	    elseif (preg_match('/^(.*?)\s*\|\s*\'((?:[^\'\\\\]|\\\\.)*)\'\s*$/sm', $expression, $m)) {
 	        list(, $expression, $string) = $m;
 	        $string = 'string:'.stripslashes($string);
 	    }
@@ -139,10 +132,10 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	    // generate the array of sub expressions and return it.
 	    if (count($exps) > 1 || isset($string)) {
 	        $result = array();
-	        foreach($exps as $exp) {
+	        foreach ($exps as $exp) {
 	            $result[] = phptal_tales(trim($exp), true);
 	        }
-	        if (isset($string)){
+	        if (isset($string)) {
 	            $result[] = phptal_tales($string, true);
 	        }
 	        return $result;
@@ -150,27 +143,24 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
 	    
         // see if there are subexpressions, but skip interpolated parts, i.e. ${a/b}/c is 2 parts
-        if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/',$expression, $m))
+        if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/', $expression, $m))
         {
             if (!self::checkExpressionPart($m[1]))  throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
             
             $next = self::string($m[1]);
             $expression = self::string($m[2]);
-        }
-        else
-        {
+        } else {
 	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name");
 
             $next = self::string($expression); 
-            $expression = NULL;
+            $expression = null;
         }
 
-        if (preg_match('/^\'[a-z][a-z0-9_]*\'$/i',$next)) $next = substr($next,1,-1); else $next = '{'.$next.'}';
+        if (preg_match('/^\'[a-z][a-z0-9_]*\'$/i', $next)) $next = substr($next,1,-1); else $next = '{'.$next.'}';
 
 	    // if no sub part for this expression, just optimize the generated code
 	    // and access the $ctx->var
-        if ($expression === NULL)
-        {
+        if ($expression === null) {
             return '$ctx->'.$next;            
         }
     	    
@@ -182,8 +172,8 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
     private static function checkExpressionPart($expression)
     {
-        $expression = preg_replace('/\${[^}]+}/','a',$expression); // pretend interpolation is done                
-        return preg_match('/^[a-z_][a-z0-9_]*$/i',$expression);
+        $expression = preg_replace('/\${[^}]+}/','a', $expression); // pretend interpolation is done                
+        return preg_match('/^[a-z_][a-z0-9_]*$/i', $expression);
     }
 
 	//
@@ -219,8 +209,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	            case '$':
 	                if ($lastWasDollar) {
 	                    $lastWasDollar = false;
-	                }
-	                else {
+	                } else {
 	                    $lastWasDollar = true;
 	                    $c = '';
 	                }
@@ -264,18 +253,15 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                    $inPath = true;
 	                    $subPath = $c;
 	                    $c = '';
-	                }
-	                else if ($inAccoladePath) {
+	                } elseif ($inAccoladePath) {
 	                    $subPath .= $c;
 	                    $c = '';
-	                }
-	                else if ($inPath) {
+	                } elseif ($inPath) {
 	                    $t = strtolower($c);
-	                    if (($t >= 'a' && $t <= 'z') || ($t >= '0' && $t <= '9') || ($t == '_')){
+	                    if (($t >= 'a' && $t <= 'z') || ($t >= '0' && $t <= '9') || ($t == '_')) {
 	                        $subPath .= $c;
 	                        $c = '';
-	                    }
-	                    else {
+	                    } else {
 	                        $inPath = false;
 	                        $subEval = self::path($subPath);
 	                        if (is_array($subEval)) {
@@ -289,9 +275,9 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	        }
 	        $result .= $c;
 	    }
-	    if ($inPath){
+	    if ($inPath) {
 	        $subEval = self::path($subPath);
-	        if (is_array($subEval)){
+	        if (is_array($subEval)) {
 	            $err = 'cannot use | operator in evaluated expressions';
 	            throw new PHPTAL_ParserException($err);
 	        }

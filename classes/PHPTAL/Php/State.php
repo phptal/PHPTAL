@@ -1,29 +1,21 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 /** 
- * @package phptal.php
+ * @package PHPTAL.php
  */
 class PHPTAL_Php_State
 {
@@ -96,7 +88,7 @@ class PHPTAL_Php_State
 
     public function interpolateTalesVarsInString($string)
     {
-        if ($this->_talesMode == 'tales'){
+        if ($this->_talesMode == 'tales') {
             return PHPTAL_TalesInternal::string($string);
         }
         
@@ -106,7 +98,7 @@ class PHPTAL_Php_State
             $php  = PHPTAL_TalesInternal::php($exp);
             $string = str_replace($ori, '\'.'.$php.'.\'', $string); // FIXME: that is not elegant
         }
-		$string = str_replace('$${', '${', $string);
+	    $string = str_replace('$${', '${', $string);
         return '\''.$string.'\'';
     }
 
@@ -120,36 +112,27 @@ class PHPTAL_Php_State
 
     private function _interpolateTalesVarsHTML($matches) 
     {
-        if ($this->_talesMode == 'tales')
-        {
-            $code = phptal_tale(html_entity_decode($matches[1],ENT_QUOTES,$this->getEncoding()));
-        }
-        else $code = PHPTAL_TalesInternal::php($matches[1]);     
+        if ($this->_talesMode == 'tales') {
+            $code = phptal_tale(html_entity_decode($matches[1],ENT_QUOTES, $this->getEncoding()));
+        } else $code = PHPTAL_TalesInternal::php($matches[1]);     
         
         return '<?php echo '.$this->htmlchars($code).' ?>';
     }
 
     private function _interpolateTalesVarsCDATA($matches) 
     {
-        if ($this->_talesMode == 'tales')
-        {
-            $code = phptal_tale($matches[1],ENT_QUOTES,$this->getEncoding());
-        }
-        else $code = PHPTAL_TalesInternal::php($matches[1]);     
+        if ($this->_talesMode == 'tales') {
+            $code = phptal_tale($matches[1],ENT_QUOTES, $this->getEncoding());
+        } else $code = PHPTAL_TalesInternal::php($matches[1]);     
         
         // quite complex for an "unescaped" section, isn't it?
-        if ($this->getOutputMode() === PHPTAL::HTML5)
-        {
+        if ($this->getOutputMode() === PHPTAL::HTML5) {
             return "<?php echo str_replace('</','<\\\\/', $code) ?>";
-        }
-        elseif ($this->getOutputMode() === PHPTAL::XHTML)
-        {
+        } elseif ($this->getOutputMode() === PHPTAL::XHTML) {
             // both XML and HMTL, because people will inevitably send it as text/html :(
             return "<?php echo strtr($code ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>";
-        }
-        else
-        {
-            return "<?php echo str_replace(']]>',']]]]><![CDATA[>',$code) ?>";
+        } else {
+            return "<?php echo str_replace(']]>',']]]]><![CDATA[>', $code) ?>";
         }
     }
 
@@ -172,9 +155,9 @@ class PHPTAL_Php_State
     public function htmlchars($php)
     {
         // PHP strings can be escaped at compile time
-        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/',$php, $m))
+        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/', $php, $m))
         {
-            return "'".htmlspecialchars(str_replace('\\\'',"'",$m[1]), ENT_QUOTES)."'";
+            return "'".htmlspecialchars(str_replace('\\\'',"'", $m[1]), ENT_QUOTES)."'";
         }        
         return 'phptal_escape('.$php.')';
     }

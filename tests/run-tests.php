@@ -1,25 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 require_once 'PHPUnit/Framework/Test.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 require_once 'PHPUnit/Framework/TestSuite.php';
@@ -50,9 +42,9 @@ class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
     }
 }
 
-if (isset($argv) && count($argv) >= 2){
+if (isset($argv) && count($argv) >= 2) {
     array_shift($argv);
-    foreach($argv as $entry){
+    foreach ($argv as $entry) {
         echo "-> running standalone test units $entry\n";
         try
         {
@@ -77,12 +69,10 @@ if (isset($argv) && count($argv) >= 2){
 }
 
 $alltests = new PHPUnit_Framework_TestSuite();
-foreach(new DirectoryIterator( dirname(__FILE__) ) as $f) 
-{
+foreach (new DirectoryIterator( dirname(__FILE__) ) as $f) {
     if ($f->isDot() || !$f->isFile()) continue;
     
-    if (preg_match('/(.*?Test).php$/', $f->getFileName(), $m)) 
-    {
+    if (preg_match('/(.*?Test).php$/', $f->getFileName(), $m)) {
         require_once $f->getPathName();
         $alltests->addTestSuite(new PHPUnit_Framework_TestSuite($m[1]));
     }

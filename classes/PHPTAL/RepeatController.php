@@ -1,25 +1,18 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @author   Iván Montes <drslump@pollinimini.net>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 /**
  * Stores tal:repeat information during template execution.
  *
@@ -34,7 +27,7 @@
  * 'repeat' is an StdClass instance created to handle RepeatControllers, 
  * 'item' is an instance of this class. 
  * 
- * @package phptal
+ * @package PHPTAL
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_RepeatController implements Iterator
@@ -57,28 +50,28 @@ class PHPTAL_RepeatController implements Iterator
     {
         if ( is_string($source) ) {
             $this->iterator = new ArrayIterator( str_split($source) );  // FIXME: invalid for UTF-8 encoding, use preg_match_all('/./u') trick
-        } else if ( is_array($source) ) {
+        } elseif ( is_array($source) ) {
             $this->iterator = new ArrayIterator($source);
-        } else if ( $source instanceof IteratorAggregate ) {
+        } elseif ( $source instanceof IteratorAggregate ) {
             $this->iterator = $source->getIterator();
-        } else if ( $source instanceof Iterator ) {        
+        } elseif ( $source instanceof Iterator ) {        
             $this->iterator = $source;
-        } else if ( $source instanceof SimpleXMLElement) { // has non-unique keys!
+        } elseif ( $source instanceof SimpleXMLElement) { // has non-unique keys!
             $array = array();
-            foreach( $source as $v ) {
+            foreach ( $source as $v ) {
                 $array[] = $v;
             }
             $this->iterator = new ArrayIterator($array);
-        } else if ( $source instanceof Traversable || $source instanceof DOMNodeList ) {
+        } elseif ( $source instanceof Traversable || $source instanceof DOMNodeList ) {
             // PDO Statements implement an internal Traversable interface. 
             // To make it fully iterable we traverse the set to populate
             // an array which will be actually used for iteration.
             $array = array();
-            foreach( $source as $k=>$v ) {
+            foreach ( $source as $k=>$v ) {
                 $array[$k] = $v;
             }
             $this->iterator = new ArrayIterator($array);
-        } else if ( $source instanceof stdClass ) {
+        } elseif ( $source instanceof stdClass ) {
             $this->iterator = new ArrayIterator( (array) $source );
         } else {
             $this->iterator = new ArrayIterator( array() );
@@ -120,24 +113,17 @@ class PHPTAL_RepeatController implements Iterator
         return $valid;
     }
 
-    private $length = NULL;
+    private $length = null;
     public function length()
     {
-        if ($this->length === NULL)
-        {
-            if ( $this->iterator instanceof Countable ) 
-            {
+        if ($this->length === null) {
+            if ( $this->iterator instanceof Countable ) {
                 return $this->length = count($this->iterator);
-            }
-            else if ( is_object($this->iterator) ) 
-            {
+            } elseif ( is_object($this->iterator) ) {
                 // for backwards compatibility with existing PHPTAL templates
-                if ( method_exists( $this->iterator, 'size' ) ) 
-                {
+                if ( method_exists( $this->iterator, 'size' ) ) {
                     return $this->length = $this->iterator->size();                
-                } 
-                else if ( method_exists( $this->iterator, 'length' ) ) 
-                {
+                } elseif ( method_exists( $this->iterator, 'length' ) ) {
                     return $this->length = $this->iterator->length();
                 }
             }            
@@ -146,7 +132,7 @@ class PHPTAL_RepeatController implements Iterator
         
         if ($this->length === '_PHPTAL_LENGTH_UNKNOWN_') // return length if end is discovered
         {
-            return $this->end ? $this->index + 1 : NULL;
+            return $this->end ? $this->index + 1 : null;
         }
         return $this->length;
     }
@@ -158,7 +144,7 @@ class PHPTAL_RepeatController implements Iterator
     public function rewind()
     {
         $this->index = 0;
-        $this->length = NULL;
+        $this->length = null;
         $this->end = false;
         
         $this->iterator->rewind();
@@ -299,7 +285,7 @@ class PHPTAL_RepeatController implements Iterator
         );
         
         $roman = '';
-        foreach( $lookup as $max => $letters ) {
+        foreach ( $lookup as $max => $letters ) {
             while ( $int >= $max ) {
                 $roman .= $letters;
                 $int -= $max;
@@ -314,8 +300,7 @@ class PHPTAL_RepeatController implements Iterator
 /**
  * Keeps track of variable contents when using grouping in a path (first/ and last/)
  *
- * @package phptal
- * @author Iván Montes <drslump@pollinimini.net>
+ * @package PHPTAL
  */
 class PHPTAL_RepeatController_Groups {
 
@@ -393,7 +378,7 @@ class PHPTAL_RepeatController_Groups {
                 if (empty($this->dict['L'])) {
                     $this->dict['L'] = $hash;
                     $res = false;
-                } else if ( $this->dict['L'] !== $hash ) {
+                } elseif ( $this->dict['L'] !== $hash ) {
                     $this->dict['L'] = $hash;
                     $res = true;
                 } else {

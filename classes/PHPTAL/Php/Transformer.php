@@ -1,25 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 
 /**
  * Tranform php: expressions into their php equivalent.
@@ -38,7 +30,7 @@
  *      $res = PHPTAL_Php_Transformer::transform('a.b.c[x]', '$ctx->');
  *      $res == '$ctx->a->b->c[$ctx->x]';
  *
- * @package phptal.php
+ * @package PHPTAL.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Transformer
@@ -79,31 +71,31 @@ class PHPTAL_Php_Transformer
                 // no state defined, just eat char and see what to do with it.
                 case self::ST_NONE:
                     // begin of eval without {
-                    if ($c == '$' && $i < $len && self::isAlpha($str[$i+1])){
+                    if ($c == '$' && $i < $len && self::isAlpha($str[$i+1])) {
                         $state = self::ST_EVAL;
                         $mark = $i+1;
                         $result .= $prefix.'{';
                     } 
                     // that an alphabetic char, then it should be the begining
                     // of a var
-                    else if (self::isAlpha($c) || $c==='_') {
+                    elseif (self::isAlpha($c) || $c==='_') {
                         $state = self::ST_VAR;
                         $mark = $i;
                     }
                     // begining of double quoted string 
-                    else if ($c == '"') {
+                    elseif ($c == '"') {
                         $state = self::ST_ESTR;
                         $mark = $i;
                         $inString = true;
                     }
                     // begining of single quoted string
-                    else if ($c == '\'') {
+                    elseif ($c == '\'') {
                         $state = self::ST_STR;
                         $mark = $i;
                         $inString = true;
                     }
                     // closing a method, an array access or an evaluation
-                    else if ($c == ')' || $c == ']' || $c == '}') {
+                    elseif ($c == ')' || $c == ']' || $c == '}') {
                         $result .= $c;
                         // if next char is dot then an object member must
                         // follow
@@ -115,7 +107,7 @@ class PHPTAL_Php_Transformer
                         }
                     }
                     // @ is an access to some defined variable
-                    else if ($c == '@') { 
+                    elseif ($c == '@') { 
                         $state = self::ST_DEFINE;
                         $mark = $i+1;
                     }
@@ -127,7 +119,7 @@ class PHPTAL_Php_Transformer
                
                 // $xxx
                 case self::ST_EVAL:
-                    if (!self::isVarNameChar($c)){
+                    if (!self::isVarNameChar($c)) {
                         $result .= $prefix . substr($str, $mark, $i-$mark);
                         $result .= '}';
                         $state = self::ST_NONE;
@@ -138,12 +130,11 @@ class PHPTAL_Php_Transformer
                 case self::ST_STR: 
                     if ($c == '\\') {
                         $backslashed = true;
-                    }
-                    else if ($backslashed) {
+                    } elseif ($backslashed) {
                         $backslashed = false;
                     }
                     // end of string, back to none state
-                    else if ($c == '\'') {
+                    elseif ($c == '\'') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $inString = false;
                         $state = self::ST_NONE;
@@ -154,27 +145,25 @@ class PHPTAL_Php_Transformer
                 case self::ST_ESTR: 
                     if ($c == '\\') {
                         $backslashed = true;
-                    }
-                    else if ($backslashed) {
+                    } elseif ($backslashed) {
                         $backslashed = false;
                     }
                     // end of string, back to none state
-                    else if ($c == '"') {
+                    elseif ($c == '"') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $inString = false;
                         $state = self::ST_NONE;
                     }
                     // instring interpolation, search } and transform the
                     // interpollation to insert it into the string
-                    else if ($c == '$' && $i < $len && $str[$i+1] == '{') {
+                    elseif ($c == '$' && $i < $len && $str[$i+1] == '{') {
                         $result .= substr( $str, $mark, $i-$mark ) . '{';
                         
                         $sub = 0;
                         for ($j = $i; $j<$len; $j++) {
                             if ($str[$j] == '{') {
                                 $sub++;
-                            }
-                            elseif ($str[$j] == '}' && (--$sub) == 0) {
+                            } elseif ($str[$j] == '}' && (--$sub) == 0) {
                                 $part = substr( $str, $i+2, $j-$i-2 );
                                 $result .= self::transform($part, $prefix);
                                 $i = $j;
@@ -189,14 +178,14 @@ class PHPTAL_Php_Transformer
                     if (self::isVarNameChar($c)) {
                     }
                     // end of var, begin of member (method or var)
-                    else if ($c == '.') {
+                    elseif ($c == '.') {
                         $result .= $prefix . substr( $str, $mark, $i-$mark );
                         $result .= '->';
                         $state = self::ST_MEMBER;
                         $mark = $i+1;
                     }
                     // static call, the var is a class name
-                    else if ($c == ':') {
+                    elseif ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $mark = $i+1;
                         $i++;
@@ -204,16 +193,15 @@ class PHPTAL_Php_Transformer
                         break;
                     }
                     // function invocation, the var is a function name
-                    else if ($c == '(') {
+                    elseif ($c == '(') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_NONE;
                     }
                     // array index, the var is done
-                    else if ($c == '[') {
+                    elseif ($c == '[') {
                         if ($str[$mark]==='_') { // superglobal?
                             $result .= '$' . substr( $str, $mark, $i-$mark+1 );
-                        }
-                        else {
+                        } else {
                             $result .= $prefix . substr( $str, $mark, $i-$mark+1 );
                         }
                         $state = self::ST_NONE;
@@ -228,16 +216,16 @@ class PHPTAL_Php_Transformer
                             $result .= $var;
                         }
                         // lt, gt, ge, eq, ...
-                        else if (array_key_exists($low, self::$TranslationTable)){
+                        elseif (array_key_exists($low, self::$TranslationTable)) {
                             $result .= self::$TranslationTable[$low];
                         }
                         // instanceof keyword
-                        else if ($low == 'instanceof'){
+                        elseif ($low == 'instanceof') {
                             $result .= $var;
                             $instanceOf = true;
                         }
                         // previous was instanceof
-                        else if ($instanceOf){
+                        elseif ($instanceOf) {
                             // last was instanceof, this var is a class name
                             $result .= $var;
                             $instanceOf = false;
@@ -255,14 +243,14 @@ class PHPTAL_Php_Transformer
                 case self::ST_MEMBER:
                     if (self::isVarNameChar($c)) {
                     }
-                    // eval mode ${foo}
-                    else if ($c == '$') {
+                    // eval mode ${foo} 
+                    elseif ($c == '$') {
                         $result .= '{' . $prefix;
                         $mark++;
                         $eval = true;
                     }
                     // end of var member var, begin of new member
-                    else if ($c == '.') {
+                    elseif ($c == '.') {
                         $result .= substr( $str, $mark, $i-$mark );
                         if ($eval) { $result .='}'; $eval = false; }
                         $result .= '->';
@@ -270,14 +258,14 @@ class PHPTAL_Php_Transformer
                         $state = self::ST_MEMBER;
                     }
                     // begin of static access
-                    else if ($c == ':') {
+                    elseif ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_STATIC;
                         break;
                     }
                     // the member is a method or an array
-                    else if ($c == '(' || $c == '[') {
+                    elseif ($c == '(' || $c == '[') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_NONE;
@@ -294,8 +282,7 @@ class PHPTAL_Php_Transformer
                 // wait for separator
                 case self::ST_DEFINE:
                     if (self::isVarNameChar($c)) {
-                    }
-                    else {
+                    } else {
                         $state = self::ST_NONE;
                         $result .= substr( $str, $mark, $i-$mark );
                         $i--;
@@ -311,23 +298,23 @@ class PHPTAL_Php_Transformer
                     if (self::isVarNameChar($c)) {
                     }
                     // static var 
-                    else if ($c == '$') {
+                    elseif ($c == '$') {
                     }
                     // end of static var which is an object and begin of member
-                    else if ($c == '.') {
+                    elseif ($c == '.') {
                         $result .= substr( $str, $mark, $i-$mark );
                         $result .= '->';
                         $mark = $i+1;
                         $state = self::ST_MEMBER;
                     }
                     // end of static var which is a class name
-                    else if ($c == ':') {
+                    elseif ($c == ':') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_STATIC;
                         break;
                     }
                     // static method or array
-                    else if ($c == '(' || $c == '[') {
+                    elseif ($c == '(' || $c == '[') {
                         $result .= substr( $str, $mark, $i-$mark+1 );
                         $state = self::ST_NONE;
                     }

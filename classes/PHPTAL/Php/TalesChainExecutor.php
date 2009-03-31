@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package phptal.php
+ * @package PHPTAL.php
  */
 interface PHPTAL_Php_TalesChainReader
 {
@@ -11,7 +11,7 @@ interface PHPTAL_Php_TalesChainReader
 }
 
 /**
- * @package phptal.php
+ * @package PHPTAL.php
  */
 class PHPTAL_Php_TalesChainExecutor
 {
@@ -35,18 +35,17 @@ class PHPTAL_Php_TalesChainExecutor
     
     public function doIf($condition)
     {
-        if ($this->_chainStarted == false){
+        if ($this->_chainStarted == false) {
             $this->_chainStarted = true;
             $this->codewriter->doIf($condition);
-        }
-        else {
+        } else {
             $this->codewriter->doElseIf($condition);
         }
     }
 
     public function doElse()
     {
-        if ($this->_chainStarted){
+        if ($this->_chainStarted) {
             $this->codewriter->doElse();
         }
     }
@@ -67,23 +66,21 @@ class PHPTAL_Php_TalesChainExecutor
         
         end($this->_chain); $lastkey = key($this->_chain);
         
-        foreach($this->_chain as $key => $exp){
+        foreach ($this->_chain as $key => $exp) {
             $this->_state = 0;
-            if ($exp == PHPTAL_TALES_NOTHING_KEYWORD){
+            if ($exp == PHPTAL_TALES_NOTHING_KEYWORD) {
                 $this->_reader->talesChainNothingKeyword($this);
                 if ($this->_state == self::CHAIN_BREAK)
                     break;
                 if ($this->_state == self::CHAIN_CONT)
                     continue;
-            }
-            else if ($exp == PHPTAL_TALES_DEFAULT_KEYWORD){
+            } elseif ($exp == PHPTAL_TALES_DEFAULT_KEYWORD) {
                 $this->_reader->talesChainDefaultKeyword($this);
                 if ($this->_state == self::CHAIN_BREAK)
                     break;
                 if ($this->_state == self::CHAIN_CONT)
                     continue;
-            }
-            else {
+            } else {
                 $this->_reader->talesChainPart($this, $exp, $lastkey === $key);
                 if ($this->_state == self::CHAIN_BREAK)
                     break;

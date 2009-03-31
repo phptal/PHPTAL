@@ -1,25 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 define('PHPTAL_TALES_DEFAULT_KEYWORD', '_DEFAULT_DEFAULT_DEFAULT_DEFAULT_');
 define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 
@@ -53,7 +45,7 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 function _phptal_tale_wrap($array, $nothrow)
 {
 	if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
-		($array[0]==PHPTAL_TALES_NOTHING_KEYWORD?'NULL':$array[0]).
+		($array[0]==PHPTAL_TALES_NOTHING_KEYWORD?'null':$array[0]).
 		'):"")';
 	
 	$expr = array_shift($array);
@@ -78,10 +70,10 @@ function phptal_tales($expression, $nothrow=false)
     // Look for tales modifier (string:, exists:, etc...)
     //if (preg_match('/^([-a-z]+):(.*?)$/', $expression, $m)) {
     if (preg_match('/^([a-z][.a-z_-]*[a-z]):(.*?)$/i', $expression, $m)) {
-        list(,$typePrefix,$expression) = $m;
+        list(,$typePrefix, $expression) = $m;
     }
     // may be a 'string'
-    else if (preg_match('/^\'((?:[^\']|\\\\.)*)\'$/', $expression, $m)) {
+    elseif (preg_match('/^\'((?:[^\']|\\\\.)*)\'$/', $expression, $m)) {
         $expression = stripslashes($m[1]);
         $typePrefix = 'string';
     }
@@ -97,28 +89,27 @@ function phptal_tales($expression, $nothrow=false)
     }
 
     // class method
-    if (strpos($typePrefix, '.')){
+    if (strpos($typePrefix, '.')) {
         $classCallback = explode('.', $typePrefix, 2);
-        $callbackName  = NULL;
+        $callbackName  = null;
         if (!is_callable($classCallback, FALSE, $callbackName)) {
             throw new PHPTAL_ParserException("Unknown phptal modifier $typePrefix. Function $callbackName does not exists or is not statically callable");
         }
         $ref = new ReflectionClass($classCallback[0]);
-        if (!$ref->implementsInterface('PHPTAL_Tales'))
-        {
+        if (!$ref->implementsInterface('PHPTAL_Tales')) {
             throw new PHPTAL_ParserException("Unable to use phptal modifier $typePrefix as the class $callbackName does not implement the PHPTAL_Tales interface");
         }
         return call_user_func($classCallback, $expression, $nothrow);
     }
 
     // check if it is implemented via code-generating function
-    $func = 'phptal_tales_'.str_replace('-','_',$typePrefix);
+    $func = 'phptal_tales_'.str_replace('-','_', $typePrefix);
     if (function_exists($func)) {
         return $func($expression, $nothrow);
     }
     
     // check if it is implemented via runtime function
-    $runfunc = 'phptal_runtime_tales_'.str_replace('-','_',$typePrefix);
+    $runfunc = 'phptal_runtime_tales_'.str_replace('-','_', $typePrefix);
     if (function_exists($runfunc)) {
         return "$runfunc(".phptal_tale($expression, $nothrow).")";
     }

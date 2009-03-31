@@ -1,25 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 /**
@@ -30,7 +22,7 @@ require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
  *
  * Please refer to the PHPTAL documentation for usage examples.
  * 
- * @package phptal
+ * @package PHPTAL
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
@@ -38,7 +30,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     public function __construct()
     {
 	    if (!function_exists('gettext')) throw new PHPTAL_ConfigurationException("Gettext not installed");
-	    $this->useDomain("messages"); // PHP bug #21965
+        $this->useDomain("messages"); // PHP bug #21965
     }
 
     private $_vars = array();
@@ -63,7 +55,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     public function setLanguage()
     {
         $langs = func_get_args();
-        foreach($langs as $langCode){
+        foreach ($langs as $langCode) {
             putenv("LANG=$langCode");
             putenv("LC_ALL=$langCode");
             putenv("LANGUAGE=$langCode");
@@ -81,7 +73,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     public function addDomain($domain, $path='./locale/')
     {
         bindtextdomain($domain, $path);
-        if ($this->_encoding){
+        if ($this->_encoding) {
             bind_textdomain_codeset($domain, $this->_encoding);
         }
         $this->useDomain($domain);
@@ -106,12 +98,12 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         
         $value = gettext($key);
         
-        if ($htmlencode){
+        if ($htmlencode) {
             $value = htmlspecialchars($value, ENT_QUOTES); 
         }
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src,$var) = $m;
-            if (!array_key_exists($var, $this->_vars)){
+            if (!array_key_exists($var, $this->_vars)) {
                 throw new PHPTAL_VariableNotFoundException('Interpolation error, var "'.$var.'" not set');
             }
             $value = str_replace($src, $this->_vars[$var], $value);
@@ -128,10 +120,9 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         for ($i = 0; $i<strlen($key_); $i++){
             $c = $key_[$i];
             $o = ord($c);
-            if ($o < 5 || $o > 127){
+            if ($o < 5 || $o > 127) {
                 $result .= 'C<'.$o.'>';
-            }
-            else {
+            } else {
                 $result .= $c;
             }
         }

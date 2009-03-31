@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package phptal
+ * @package PHPTAL
  */
 interface PHPTAL_Source
 {

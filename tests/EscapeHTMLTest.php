@@ -6,7 +6,7 @@ class EscapeHTMLTest extends PHPTAL_TestCase {
     private function executeString($str, $params = array())
     {
         $tpl = $this->newPHPTAL();
-        foreach($params as $k => $v) $tpl->set($k,$v);
+        foreach ($params as $k => $v) $tpl->set($k,$v);
         $tpl->setSource($str);
         return $tpl->execute();
     }

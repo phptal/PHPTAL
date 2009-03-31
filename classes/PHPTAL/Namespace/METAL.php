@@ -6,7 +6,7 @@ require PHPTAL_DIR.'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
 require PHPTAL_DIR.'PHPTAL/Php/Attribute/METAL/FillSlot.php';
 
 /** 
- * @package phptal.namespace
+ * @package PHPTAL.namespace
  */
 class PHPTAL_Namespace_METAL extends PHPTAL_BuiltinNamespace
 {
@@ -22,4 +22,3 @@ class PHPTAL_Namespace_METAL extends PHPTAL_BuiltinNamespace
 
 PHPTAL_Dom_Defs::getInstance()->registerNamespace(new PHPTAL_Namespace_METAL());
 
-?>

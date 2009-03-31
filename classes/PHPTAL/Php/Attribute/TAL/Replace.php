@@ -1,25 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 // TAL Specifications 1.4
 //
 //      argument ::= (['text'] | 'structure') expression
@@ -33,7 +25,7 @@
 //  
 
 /**
- * @package phptal.php.attribute.tal
+ * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_TAL_Replace 
@@ -43,7 +35,7 @@ implements PHPTAL_Php_TalesChainReader
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         // tal:replace="" => do nothing and ignore node
-        if (trim($this->expression) == ""){
+        if (trim($this->expression) == "") {
             return;
         }
 
@@ -51,8 +43,8 @@ implements PHPTAL_Php_TalesChainReader
         $code = $codewriter->evaluateExpression($expression);
 
         // chained expression
-        if (is_array($code)){
-            return $this->replaceByChainedExpression($codewriter,$code);
+        if (is_array($code)) {
+            return $this->replaceByChainedExpression($codewriter, $code);
         }
 
         // nothing do nothing
@@ -66,7 +58,7 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         // replace tag with result of expression
-        $this->doEchoAttribute($codewriter,$code);
+        $this->doEchoAttribute($codewriter, $code);
     }
 
     public function end(PHPTAL_Php_CodeWriter $codewriter)

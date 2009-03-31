@@ -1,25 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 require_once PHPTAL_DIR.'PHPTAL/Trigger.php';
 
 class MyTrigger implements PHPTAL_Trigger
@@ -29,7 +21,7 @@ class MyTrigger implements PHPTAL_Trigger
     
     public function start($id, $tpl)
     {
-        if ($this->_cache){
+        if ($this->_cache) {
             $this->useCache = true;
             return PHPTAL_Trigger::SKIPTAG;
         }
@@ -41,7 +33,7 @@ class MyTrigger implements PHPTAL_Trigger
     
     public function end($id, $tpl)
     {
-        if ($this->_cache == null){
+        if ($this->_cache == null) {
             $this->_cache = ob_get_contents();
             ob_end_clean();
         }
@@ -58,7 +50,7 @@ class PhptalIdTest extends PHPTAL_TestCase
         $exp = trim_file('output/phptal.id.01.html');
         $tpl = $this->newPHPTAL('input/phptal.id.01.html');
         $tpl->addTrigger('myTable', $trigger);
-        $tpl->result = range(0,3);
+        $tpl->result = range(0, 3);
         
         $res = $tpl->execute();
         $res = trim_string($res);

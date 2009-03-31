@@ -1,28 +1,20 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 /**
  * This class handles template execution context.
- * @package phptal
+ * @package PHPTAL
  */
 class PHPTAL_Context
 {
@@ -43,10 +35,10 @@ class PHPTAL_Context
         $this->repeat = clone($this->repeat);
     }
 
-	public function setParent(PHPTAL_Context $parent)
-	{
-		$this->_parentContext = $parent;
-	}
+    public function setParent(PHPTAL_Context $parent)
+    {
+        $this->_parentContext = $parent;
+    }
 
     public function setGlobal(StdClass $globalContext)
     {
@@ -73,13 +65,13 @@ class PHPTAL_Context
      */
     public function setDocType($doctype)
     {
-		if ($this->_parentContext != null){
-			return $this->_parentContext->setDocType($doctype);
-		}
-        if ($this->_parentContext != null){
+        if ($this->_parentContext != null) {
             return $this->_parentContext->setDocType($doctype);
         }
-        if (!$this->__docType){
+        if ($this->_parentContext != null) {
+            return $this->_parentContext->setDocType($doctype);
+        }
+        if (!$this->__docType) {
             $this->__docType = $doctype;
         }
     }
@@ -93,13 +85,13 @@ class PHPTAL_Context
      */
     public function setXmlDeclaration($xmldec)
     {
-		if ($this->_parentContext != null){
-			return $this->_parentContext->setXmlDeclaration($xmldec);
-		}
-        if ($this->_parentContext != null){
+        if ($this->_parentContext != null) {
             return $this->_parentContext->setXmlDeclaration($xmldec);
         }
-        if (!$this->__xmlDeclaration){
+        if ($this->_parentContext != null) {
+            return $this->_parentContext->setXmlDeclaration($xmldec);
+        }
+        if (!$this->__xmlDeclaration) {
             $this->__xmlDeclaration = $xmldec;
         }
     }
@@ -118,7 +110,7 @@ class PHPTAL_Context
      */
     public function hasSlot($key)
     {
-		if ($this->_parentContext) return $this->_parentContext->hasSlot($key); // setting slots in any context
+        if ($this->_parentContext) return $this->_parentContext->hasSlot($key); // setting slots in any context
         return array_key_exists($key, $this->_slots);
     }
 
@@ -127,7 +119,7 @@ class PHPTAL_Context
      */
     public function getSlot($key)
     {
-		if ($this->_parentContext) return $this->_parentContext->getSlot($key); // setting slots in any context
+        if ($this->_parentContext) return $this->_parentContext->getSlot($key); // setting slots in any context
         return $this->_slots[$key];
     }
 
@@ -136,8 +128,8 @@ class PHPTAL_Context
      */
     public function fillSlot($key, $content)
     {
-		if ($this->_parentContext) $this->_parentContext->fillSlot($key,$content); // setting slots in any context
-		else $this->_slots[$key] = $content;
+        if ($this->_parentContext) $this->_parentContext->fillSlot($key, $content); // setting slots in any context
+        else $this->_slots[$key] = $content;
     }
 
     /**
@@ -162,8 +154,7 @@ class PHPTAL_Context
      */
     public function __set($varname, $value)
     {
-        if (preg_match('/^_|\s/',$varname))
-        {
+        if (preg_match('/^_|\s/', $varname)) {
             throw new PHPTAL_InvalidVariableNameException('Template variable error \''.$varname.'\' must not begin with underscore or contain spaces');
         }
         $this->$varname = $value;
@@ -174,16 +165,15 @@ class PHPTAL_Context
      */
     public function __get($varname)
     {
-        if (isset($this->$varname)){
+        if (isset($this->$varname)) {
             return $this->$varname;
         }
 
-        if (isset($this->_globalContext->$varname)){
+        if (isset($this->_globalContext->$varname)) {
             return $this->_globalContext->$varname;
         }
         
-        if (defined($varname))
-        {
+        if (defined($varname)) {
             return constant($varname);
         }
         
@@ -195,13 +185,13 @@ class PHPTAL_Context
 
     private $_slots = array();
     private $_slotsStack = array();
-	private $_parentContext = null;
+    private $_parentContext = null;
     private $_globalContext = null;
 }
 
 // emulate property_exists() function, this is slow but much better than
 // isset(), use next release of PHP5 as soon as available !
-if (!function_exists('property_exists')){
+if (!function_exists('property_exists')) {
     function property_exists($o, $property)
     {
         return array_key_exists($property, get_object_vars($o));
@@ -221,53 +211,47 @@ if (!function_exists('property_exists')){
  */
 function phptal_path($base, $path, $nothrow=false)
 {//{{{
-	if ($base === null) 
-	{
-		if ($nothrow) return null;
-		throw new PHPTAL_VariableNotFoundException("Trying to read property '$path' from NULL");
-	}
+    if ($base === null) {
+        if ($nothrow) return null;
+        throw new PHPTAL_VariableNotFoundException("Trying to read property '$path' from NULL");
+    }
 
-    foreach(explode('/', $path) as $current)
-    {
+    foreach (explode('/', $path) as $current) {
         // object handling
-        if (is_object($base)){
+        if (is_object($base)) {
             // look for method
-            if (method_exists($base, $current)){
+            if (method_exists($base, $current)) {
                 $base = $base->$current();
                 continue;
             }
             
             // look for variable
-            if (property_exists($base, $current)){
+            if (property_exists($base, $current)) {
                 $base = $base->$current;
                 continue;
             }
             
-            if ($base instanceof ArrayAccess && $base->offsetExists($current))
-            {
+            if ($base instanceof ArrayAccess && $base->offsetExists($current)) {
                 $base = $base->offsetGet($current);
                 continue;
             }
             
-            if ($base instanceof Countable && ($current === 'length' || $current === 'size'))
-            {
+            if ($base instanceof Countable && ($current === 'length' || $current === 'size')) {
                 $base = count($base);
                 continue;
             }
                         
             // look for isset (priority over __get)
-            if (method_exists($base,'__isset') && is_callable(array($base, '__isset')))
-            {
-                if ($base->__isset($current)){
+            if (method_exists($base,'__isset') && is_callable(array($base, '__isset'))) {
+                if ($base->__isset($current)) {
                     $base = $base->$current;
                     continue;
                 }
             }
             // ask __get and discard if it returns null
-            else if (method_exists($base,'__get') && is_callable(array($base, '__get')))
-            {
+            elseif (method_exists($base,'__get') && is_callable(array($base, '__get'))) {
                 $tmp = $base->$current;
-                if (NULL !== $tmp){
+                if (null !== $tmp) {
                     $base = $tmp;
                     continue;
                 }
@@ -286,20 +270,19 @@ function phptal_path($base, $path, $nothrow=false)
             if ($nothrow)
                 return null;
 
-            phptal_path_error($base,$path,$current);
+            phptal_path_error($base, $path, $current);
         }
 
         // array handling
-        if (is_array($base)) 
-        {
+        if (is_array($base)) {
             // key or index
-            if (array_key_exists((string)$current, $base)){
+            if (array_key_exists((string)$current, $base)) {
                 $base = $base[$current];
                 continue;
             }
 
             // virtual methods provided by phptal
-            if ($current == 'length' || $current == 'size'){
+            if ($current == 'length' || $current == 'size') {
                 $base = count($base);
                 continue;
             }
@@ -307,19 +290,19 @@ function phptal_path($base, $path, $nothrow=false)
             if ($nothrow)
                 return null;
 
-            phptal_path_error($base,$path,$current);
+            phptal_path_error($base, $path, $current);
         }
 
         // string handling
         if (is_string($base)) {
             // virtual methods provided by phptal
-            if ($current == 'length' || $current == 'size'){
+            if ($current == 'length' || $current == 'size') {
                 $base = strlen($base);
                 continue;
             }
 
             // access char at index
-            if (is_numeric($current)){
+            if (is_numeric($current)) {
                 $base = $base[$current];
                 continue;
             }
@@ -330,7 +313,7 @@ function phptal_path($base, $path, $nothrow=false)
         if ($nothrow)
             return null;
         
-        phptal_path_error($base,$path,$current);
+        phptal_path_error($base, $path, $current);
     }
 
     return $base;
@@ -339,18 +322,15 @@ function phptal_path($base, $path, $nothrow=false)
 /**
  * helper method for phptal_path(). Please don't use it directly.
  */
-function phptal_path_error($base,$path,$current)
+function phptal_path_error($base, $path, $current)
 {
     $basename = '';
-    if ($current !== $path) 
-    {
+    if ($current !== $path) {
         $pathinfo = " (in path '.../$path')";
-        if (preg_match('!([^/]+)/'.preg_quote($current,'!').'(?:/|$)!',$path,$m))
-        {
+        if (preg_match('!([^/]+)/'.preg_quote($current,'!').'(?:/|$)!', $path, $m)) {
             $basename = "'".$m[1]."' ";
         }        
-    }
-    else $pathinfo = '';
+    } else $pathinfo = '';
         
     if (is_array($base)) throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
     if (is_object($base)) throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
@@ -376,30 +356,27 @@ function phptal_exists($ctx, $path)
     $ctx->noThrow(true);
     $res = phptal_path($ctx, $path, true);
     $ctx->noThrow(false);
-    return $res !== NULL;
+    return $res !== null;
 }
 
 function phptal_isempty($var)
 {
-	return $var === null || $var === false || $var === ''  
-	       || ((is_array($var) || $var instanceof Countable) && count($var)===0);
+    return $var === null || $var === false || $var === ''  
+           || ((is_array($var) || $var instanceof Countable) && count($var)===0);
 }
 
 function phptal_escape($var)
 {
     if (is_string($var)) {
         return htmlspecialchars($var, ENT_QUOTES);
-    }
-    elseif (is_object($var)) {
+    } elseif (is_object($var)) {
         if ($var instanceof SimpleXMLElement) return $var->asXML();
         
         return htmlspecialchars((string)$var, ENT_QUOTES);
-    }
-    elseif (is_bool($var)){
+    } elseif (is_bool($var)) {
         return (int)$var;
-    }
-    elseif (is_array($var)){
-        return htmlspecialchars(implode(', ',$var),ENT_QUOTES);
+    } elseif (is_array($var)) {
+        return htmlspecialchars(implode(', ', $var),ENT_QUOTES);
     }
     return $var;
 }

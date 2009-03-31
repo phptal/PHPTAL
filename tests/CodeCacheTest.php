@@ -28,8 +28,7 @@ class CodeCacheTest extends PHPTAL_TestCase
     private function clearCache()
     {
         $this->assertContains(dirname(__FILE__),$this->codeDestination);
-        foreach(glob($this->codeDestination.'tpl_*') as $tpl)
-        {
+        foreach (glob($this->codeDestination.'tpl_*') as $tpl) {
             $this->assertTrue(unlink($tpl), "Delete $tpl");
         }
     }
@@ -106,8 +105,7 @@ class CodeCacheTest extends PHPTAL_TestCase
         $this->phptal->setTemplate('input/code-cache-01.html');
         $this->phptal->execute();
 
-        foreach(glob($this->codeDestination.'*') as $file)
-        {
+        foreach (glob($this->codeDestination.'*') as $file) {
             touch($file, time() - 3600*24*100);
         }
 

@@ -11,7 +11,7 @@ require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/OnError.php';
 require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/OmitTag.php';
 
 /**
- * @package phptal.namespace
+ * @package PHPTAL.namespace
  */
 class PHPTAL_Namespace_TAL extends PHPTAL_BuiltinNamespace
 {

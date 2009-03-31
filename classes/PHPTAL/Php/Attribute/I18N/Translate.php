@@ -11,27 +11,25 @@
 // 
 
 /**
- * @package phptal.php.attribute.i18n
+ * @package PHPTAL.php.attribute.i18n
  */
 class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 {
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
         $escape = true;
-        if (preg_match('/^(text|structure)(?:\s+(.*)|\s*$)/',$this->expression,$m))
-        {
+        if (preg_match('/^(text|structure)(?:\s+(.*)|\s*$)/', $this->expression, $m)) {
             if ($m[1]=='structure') $escape=false;
             $this->expression = isset($m[2])?$m[2]:'';
         }
                 
         // if no expression is given, the content of the node is used as 
         // a translation key
-        if (strlen(trim($this->expression)) == 0){
+        if (strlen(trim($this->expression)) == 0) {
             $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
             $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
             $code = $codewriter->str($key);
-        }
-        else {
+        } else {
             $code = $codewriter->evaluateExpression($this->expression);
         }
         $this->_prepareNames($codewriter, $this->phpelement);
@@ -46,37 +44,27 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
     private function _getTranslationKey(PHPTAL_DOMNode $tag, $preserve_tags, $encoding)
     {
         $result = '';
-        foreach($tag->childNodes as $child){
-            if ($child instanceOf PHPTAL_DOMText){
-				if ($preserve_tags)
-				{
+        foreach ($tag->childNodes as $child) {
+            if ($child instanceOf PHPTAL_DOMText) {
+				if ($preserve_tags) {
                     $result .= $child->getValueEscaped();
-                }
-				else
-				{
+                } else {
                 	$result .= $child->getValue($encoding);
-				}
-            }
-            else if ($child instanceOf PHPTAL_DOMElement){
-                if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n','name'))
-                {
+	    		}
+            } elseif ($child instanceOf PHPTAL_DOMElement) {
+                if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n','name')) {
                     $result .= '${' . $attr->getValue() . '}';
-                }
-                else {
+                } else {
                     
-                    if ($preserve_tags)
-                    {
+                    if ($preserve_tags) {
                         $result .= '<'.$child->getQualifiedName();
-                        foreach($child->getAttributeNodes() as $attr)
-                        {
+                        foreach ($child->getAttributeNodes() as $attr) {
                             if ($attr->getReplacedState() === PHPTAL_DOMAttr::HIDDEN) continue;
                             
                             $result .= ' '.$attr->getQualifiedName().'="'.$attr->getValueEscaped().'"';
                         }
-                        $result .= '>'.$this->_getTranslationKey($child, $preserve_tags,$encoding) . '</'.$child->getQualifiedName().'>';
-                    }
-                    else
-                    {                    
+                        $result .= '>'.$this->_getTranslationKey($child, $preserve_tags, $encoding) . '</'.$child->getQualifiedName().'>';
+                    } else {                    
                         $result .= $this->_getTranslationKey($child, $preserve_tags, $encoding);
                     }
                 }
@@ -87,13 +75,12 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 
     private function _prepareNames(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_DOMNode $tag)
     {
-        foreach($tag->childNodes as $child){
-            if ($child instanceOf PHPTAL_DOMElement){
-                if ($child->hasAttributeNS('http://xml.zope.org/namespaces/i18n','name')){
+        foreach ($tag->childNodes as $child) {
+            if ($child instanceOf PHPTAL_DOMElement) {
+                if ($child->hasAttributeNS('http://xml.zope.org/namespaces/i18n','name')) {
                     $child->generate($codewriter);
-                }
-                else {
-                    $this->_prepareNames($codewriter,$child);
+                } else {
+                    $this->_prepareNames($codewriter, $child);
                 }
             }
         }

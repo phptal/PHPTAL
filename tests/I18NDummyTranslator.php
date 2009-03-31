@@ -24,10 +24,9 @@ class DummyTranslator implements PHPTAL_TranslationService
     }
     
     public function translate($key, $escape = true){ 
-        if (array_key_exists($key, $this->translations)){
+        if (array_key_exists($key, $this->translations)) {
             $v = $this->translations[$key];
-        }
-        else {
+        } else {
             $v = $key;
         }
         

@@ -4,7 +4,7 @@ require PHPTAL_DIR.'PHPTAL/Php/State.php';
 require PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
 
 /**
- * @package phptal.php
+ * @package PHPTAL.php
  */
 class PHPTAL_Php_CodeGenerator
 {

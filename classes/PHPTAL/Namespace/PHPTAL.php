@@ -6,7 +6,7 @@ require PHPTAL_DIR.'PHPTAL/Php/Attribute/PHPTAL/Id.php';
 require PHPTAL_DIR.'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
 
 /**
- * @package phptal.namespace
+ * @package PHPTAL.namespace
  */
 class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
 {

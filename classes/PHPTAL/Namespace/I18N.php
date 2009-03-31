@@ -6,7 +6,7 @@ require PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Domain.php';
 require PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Attributes.php';
 
 /**
- * @package phptal.namespace
+ * @package PHPTAL.namespace
  */
 class PHPTAL_Namespace_I18N extends PHPTAL_BuiltinNamespace
 {

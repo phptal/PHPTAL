@@ -1,22 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 //  Authors: Kornel Lesiński <kornel@aardvarkmedia.co.uk>
 //  
 
@@ -42,7 +37,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
     public function start(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/',$this->expression, $matches))
+        if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/', $this->expression, $matches))
             throw new PHPTAL_ParserException("Cache attribute syntax error: ".$this->expression);
             
         $cache_len = $matches[1];
@@ -56,14 +51,12 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
         $this->cache_tag = '"'.addslashes( $this->phpelement->getQualifiedName() . ':' . $this->phpelement->getSourceLine()).'"';
         
-        $cache_per_expression = isset($matches[3])?trim($matches[3]):NULL;
-        if ($cache_per_expression == 'url')
-        {
+        $cache_per_expression = isset($matches[3])?trim($matches[3]):null;
+        if ($cache_per_expression == 'url') {
             $this->cache_tag .= '.$_SERVER["REQUEST_URI"]';
-        }
-        else if ($cache_per_expression == 'nothing') {  }
-        else if ($cache_per_expression)
-        {
+        } elseif ($cache_per_expression == 'nothing') {
+            /* do nothing */
+        } elseif ($cache_per_expression) {
              $code = $codewriter->evaluateExpression($cache_per_expression);
 
              if (is_array($code)) { throw new PHPTAL_ParserException("Chained expressions in per-cache directive are not supported"); }

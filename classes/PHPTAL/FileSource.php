@@ -1,7 +1,7 @@
 <?php
 
 /** 
- * @package phptal
+ * @package PHPTAL
  */
 class PHPTAL_FileSource implements PHPTAL_Source
 {
@@ -30,7 +30,7 @@ class PHPTAL_FileSource implements PHPTAL_Source
 }
 
 /** 
- * @package phptal
+ * @package PHPTAL
  */
 class PHPTAL_FileSourceResolver implements PHPTAL_SourceResolver
 {
@@ -41,14 +41,14 @@ class PHPTAL_FileSourceResolver implements PHPTAL_SourceResolver
 
     public function resolve($path)
     {
-        foreach($this->_repositories as $repository){
+        foreach ($this->_repositories as $repository) {
             $file = $repository . DIRECTORY_SEPARATOR . $path;
-            if (file_exists($file)){
+            if (file_exists($file)) {
                 return new PHPTAL_FileSource($file);
             }
         }
 
-        if (file_exists($path)){
+        if (file_exists($path)) {
             return new PHPTAL_FileSource($path);
         }
 

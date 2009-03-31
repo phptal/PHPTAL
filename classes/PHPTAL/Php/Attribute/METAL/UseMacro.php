@@ -1,25 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//  
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 // METAL Specification 1.0
 //
 //      argument ::= expression
@@ -36,7 +28,7 @@
 //
 
 /**
- * @package phptal.php.attribute.metal
+ * @package PHPTAL.php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
@@ -51,22 +43,20 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     {
         $this->pushSlots($codewriter);
         
-        foreach($this->phpelement->childNodes as $child){
-            $this->generateFillSlots($codewriter,$child);
+        foreach ($this->phpelement->childNodes as $child) {
+            $this->generateFillSlots($codewriter, $child);
         }
 
         $macroname = strtr($this->expression,'-','_');
 
         // local macro (no filename specified) and non dynamic macro name
         // can be called directly if it's a known function (just generated or seen in previous compilation)
-        if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $codewriter->functionExists($macroname)) 
-        {
+        if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $codewriter->functionExists($macroname)) {
             $code = $codewriter->getFunctionPrefix() . $macroname . '($_thistpl, $tpl)';
             $codewriter->pushCode($code);
         }
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
-        else 
-        {
+        else {
             $code = $codewriter->interpolateTalesVarsInString($this->expression);
             $codewriter->pushCode('$tpl->_executeMacroOfTempalte('.$code.', $_thistpl)');
         }
@@ -91,7 +81,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // we may define a member.html macro which use the design.html macro
         // for the general layout, fill the menu slot and let caller templates
         // fill the parent content slot without interfering. 
-        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')){
+        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')) {
             $codewriter->pushCode('$ctx->pushSlots()');
         }
     }
@@ -99,7 +89,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     private function popSlots(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore slots if not inherited macro
-        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')){
+        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')) {
             $codewriter->pushCode('$ctx->popSlots()');
         }
     }
@@ -110,16 +100,16 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
             return;
 
         // if the tag contains one of the allowed attribute, we generate it
-        foreach(self::$ALLOWED_ATTRIBUTES as $qname => $uri){
-            if ($phpelement->hasAttributeNS($uri,$qname)){
+        foreach (self::$ALLOWED_ATTRIBUTES as $qname => $uri) {
+            if ($phpelement->hasAttributeNS($uri, $qname)) {
                 $phpelement->generate($codewriter);
                 return;
             }
         }
         
         // recurse
-        foreach($phpelement->childNodes as $child){
-            $this->generateFillSlots($codewriter,$child);
+        foreach ($phpelement->childNodes as $child) {
+            $this->generateFillSlots($codewriter, $child);
         }
     }
 }

@@ -1,24 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 
 /**
  * Simple sax like xml parser for PHPTAL.
@@ -109,12 +102,12 @@ class PHPTAL_XmlParser
 
         $customDoctype = false;
 
-        $builder->setSource($this->_file,$this->_line);
+        $builder->setSource($this->_file, $this->_line);
         $builder->onDocumentStart();
 
         $i=0;
         // remove BOM (utf8 byte order mark)...
-        if (substr($src,0,3) === self::BOM_STR){
+        if (substr($src, 0, 3) === self::BOM_STR) {
             $i=3;
         }
         for (; $i<$len; $i++) {
@@ -127,8 +120,7 @@ class PHPTAL_XmlParser
                     if ($c === '<') {
                         $mark = $i; // mark tag start
                         $state = self::ST_LT;
-                    }
-                    else if (!self::isWhiteChar($c)) {
+                    } elseif (!self::isWhiteChar($c)) {
                         $this->raiseError("Characters found before the beginning of the document!");
                     }
                     break;
@@ -147,27 +139,20 @@ class PHPTAL_XmlParser
                     if ($c === '/') {
                         $mark = $i+1;
                         $state = self::ST_TAG_CLOSE;
-                    }
-                    else if ($c === '?' and strtolower(substr($src, $i, 5)) === '?xml ') {
+                    } elseif ($c === '?' and strtolower(substr($src, $i, 5)) === '?xml ') {
                         $state = self::ST_XMLDEC;
-                    }
-                    else if ($c === '?') {
+                    } elseif ($c === '?') {
                         $state = self::ST_PREPROC;
-                    }
-                    else if ($c === '!' and substr($src, $i, 3) === '!--') {
+                    } elseif ($c === '!' and substr($src, $i, 3) === '!--') {
                         $state = self::ST_COMMENT;
-                    }
-                    else if ($c === '!' and substr($src, $i, 8) === '![CDATA[') {
+                    } elseif ($c === '!' and substr($src, $i, 8) === '![CDATA[') {
                         $state = self::ST_CDATA;
                         $mark = $i+8; // past opening tag
-                    }
-                    else if ($c === '!' and strtoupper(substr($src, $i, 8)) === '!DOCTYPE') {
+                    } elseif ($c === '!' and strtoupper(substr($src, $i, 8)) === '!DOCTYPE') {
                         $state = self::ST_DOCTYPE;
-                    }
-                    else if (self::isWhiteChar($c)) {
+                    } elseif (self::isWhiteChar($c)) {
                         $state = self::ST_TEXT;
-                    }
-                    else {
+                    } else {
                         $mark = $i; // mark node name start
                         $attributes = array();
                         $attribute = "";
@@ -176,20 +161,17 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_TAG_NAME:
-                    if (self::isWhiteChar($c) || $c === '/' || $c === '>')
-                    {
+                    if (self::isWhiteChar($c) || $c === '/' || $c === '>') {
                         $tagname = substr($src, $mark, $i-$mark);
                         if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");
 
                         if ($c === '/') {
                             $state = self::ST_TAG_SINGLE;
-                        }
-                        else if ($c === '>') {
+                        } elseif ($c === '>') {
                             $mark = $i+1; // mark text start
                             $state = self::ST_TEXT;
                             $builder->onElementStart($tagname, $attributes);
-                        }
-                        else /* isWhiteChar */ {
+                        } else /* isWhiteChar */ {
                             $state = self::ST_TAG_ATTRIBUTES;
                         }
                     }
@@ -220,25 +202,20 @@ class PHPTAL_XmlParser
                         $mark = $i+1;   // mark text start
                         $state = self::ST_TEXT;
                         $builder->onElementStart($tagname, $attributes);
-                    }
-                    else if ($c === '/') {
+                    } elseif ($c === '/') {
                         $state = self::ST_TAG_SINGLE;
-                    }
-                    else if (self::isWhiteChar($c)) {
+                    } elseif (self::isWhiteChar($c)) {
                         $state = self::ST_TAG_ATTRIBUTES;
-                    }
-                    else if ($state === self::ST_TAG_ATTRIBUTES) {
+                    } elseif ($state === self::ST_TAG_ATTRIBUTES) {
                         $mark = $i; // mark attribute key start
                         $state = self::ST_ATTR_KEY;
-                    }
-                    else $this->raiseError("Unexpected character '$c' between attributes of <$tagname>");
+                    } else $this->raiseError("Unexpected character '$c' between attributes of <$tagname>");
                     break;
 
                 case self::ST_COMMENT:
                     if ($c === '>' && $i > $mark+4 && substr($src, $i-2, 2) === '--') {
 
-                        if (preg_match('/^-|--|-$/', substr($src, $mark +4, $i-$mark+1 -7)))
-                        {
+                        if (preg_match('/^-|--|-$/', substr($src, $mark +4, $i-$mark+1 -7))) {
                             $this->raiseError("Ill-formed comment. XML comments are not allowed to contain '--' or start/end with '-': ".substr($src, $mark+4, $i-$mark+1-7));
                         }
 
@@ -249,8 +226,7 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_CDATA:
-                    if ($c === '>' and substr($src, $i-2, 2) === ']]')
-                    {
+                    if ($c === '>' and substr($src, $i-2, 2) === ']]') {
                         $builder->onCDATASection(substr($src, $mark, $i-$mark-2));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -258,8 +234,7 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_XMLDEC:
-                    if ($c === '?' && substr($src, $i, 2) === '?>')
-                    {
+                    if ($c === '?' && substr($src, $i, 2) === '?>') {
                         $builder->onXmlDecl(substr($src, $mark, $i-$mark+2));
                         $i++; // skip '>'
                         $mark = $i+1; // mark text start
@@ -270,16 +245,12 @@ class PHPTAL_XmlParser
                 case self::ST_DOCTYPE:
                     if ($c === '[') {
                         $customDoctype = true;
-                    }
-                    else if ($customDoctype && $c === '>' && substr($src, $i-1, 2) === ']>')
-                    {
+                    } elseif ($customDoctype && $c === '>' && substr($src, $i-1, 2) === ']>') {
                         $customDoctype = false;
                         $builder->onDocType(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
-                    }
-                    else if (!$customDoctype && $c === '>')
-                    {
+                    } elseif (!$customDoctype && $c === '>') {
                         $customDoctype = false;
                         $builder->onDocType(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
@@ -288,8 +259,7 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_PREPROC:
-                    if ($c === '>' and $src[$i-1] === '?')
-                    {
+                    if ($c === '>' and $src[$i-1] === '?') {
                         $builder->onProcessingInstruction(substr($src, $mark, $i-$mark+1));
                         $mark = $i+1; // mark text start
                         $state = self::ST_TEXT;
@@ -297,17 +267,14 @@ class PHPTAL_XmlParser
                     break;
 
                 case self::ST_ATTR_KEY:
-                    if ($c === '=' || self::isWhiteChar($c))
-                    {
+                    if ($c === '=' || self::isWhiteChar($c)) {
                         $attribute = substr($src, $mark, $i-$mark);
                         if (!$this->isValidQName($attribute)) $this->raiseError("Invalid attribute name '$attribute'");
                         if (isset($attributes[$attribute])) $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
 
                         if ($c === '=') $state = self::ST_ATTR_VALUE;
                         else /* white char */ $state = self::ST_ATTR_EQ;
-                    }
-                    else if ($c === '/' || $c==='>')
-                    {
+                    } elseif ($c === '/' || $c==='>') {
                         $attribute = substr($src, $mark, $i-$mark);
                         $this->raiseError("Could not find value for attribute $attribute before end of tag <$tagname>");
                     }
@@ -316,19 +283,16 @@ class PHPTAL_XmlParser
                 case self::ST_ATTR_EQ:
                     if ($c === '=') {
                         $state = self::ST_ATTR_VALUE;
-                    }
-                    else if (!self::isWhiteChar($c)) $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
+                    } elseif (!self::isWhiteChar($c)) $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
                     break;
 
                 case self::ST_ATTR_VALUE:
-                    if (self::isWhiteChar($c)){
-                    }
-                    else if ($c === '"' or $c === '\'') {
+                    if (self::isWhiteChar($c)) {
+                    } elseif ($c === '"' or $c === '\'') {
                         $quoteStyle = $c;
                         $state = self::ST_ATTR_QUOTE;
                         $mark = $i+1; // mark attribute real value start
-                    }
-                    else {
+                    } else {
                         $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
                     }
                     break;
@@ -344,14 +308,11 @@ class PHPTAL_XmlParser
 
         if ($state === self::ST_TEXT) // allows text past root node, which is in violation of XML spec
         {
-            if ($i > $mark)
-            {
+            if ($i > $mark) {
                 $text = substr($src, $mark, $i-$mark);
                 if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element");
             }
-        }
-        else
-        {
+        } else {
             throw new PHPTAL_ParserException("Finished document in unexpected state: ".self::$state_names[$state]." is not finished");
         }
 
@@ -359,7 +320,7 @@ class PHPTAL_XmlParser
         }
         catch(PHPTAL_TemplateException $e)
         {
-            $e->hintSrcPosition($this->_file,$this->_line);
+            $e->hintSrcPosition($this->_file, $this->_line);
             throw $e;
         }
         return $builder;
@@ -367,7 +328,7 @@ class PHPTAL_XmlParser
 
     private function isValidQName($name)
     {
-        return preg_match('/^([a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*:)?[a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*$/i',$name);
+        return preg_match('/^([a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*:)?[a-z_\x80-\xff]+[a-z0-9._\x80-\xff-]*$/i', $name);
     }
 
     /**
@@ -378,14 +339,14 @@ class PHPTAL_XmlParser
     {
         /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
         $types = ini_get('short_open_tag')?'php|=|':'php';
-        $split = preg_split("/(<\?(?:$types).*?\?>)/",$str, NULL, PREG_SPLIT_DELIM_CAPTURE);
+        $split = preg_split("/(<\?(?:$types).*?\?>)/", $str, null, PREG_SPLIT_DELIM_CAPTURE);
 
         for($i=0; $i < count($split); $i+=2)
         {
             // escape invalid entities and < >
-            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i','&amp;',$split[$i]),array('<'=>'&lt;','>'=>'&gt;'));
+            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i','&amp;', $split[$i]),array('<'=>'&lt;','>'=>'&gt;'));
         }
-        return implode('',$split);
+        return implode('', $split);
     }
 
     public static function _htmlspecialchars($m)
@@ -410,7 +371,7 @@ class PHPTAL_XmlParser
 
     protected function raiseError($errStr)
     {
-        throw new PHPTAL_ParserException($errStr,$this->_file, $this->_line);
+        throw new PHPTAL_ParserException($errStr, $this->_file, $this->_line);
     }
 
     private $_file;
@@ -421,7 +382,7 @@ class PHPTAL_XmlParser
 interface PHPTAL_DocumentBuilder
 {
     function setEncoding($encoding);
-    function setSource($file,$line);
+    function setSource($file, $line);
 
     function onDocType($doctype);
     function onXmlDecl($decl);

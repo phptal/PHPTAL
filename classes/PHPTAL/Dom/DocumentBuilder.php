@@ -1,22 +1,17 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//  
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//  
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//  
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//  
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//  
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id$
+ * @link     http://phptal.motion-twin.com/ 
+ */
 
 require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
 require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
@@ -51,7 +46,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     
     public function onDocumentStart()
     {
-        $this->documentElement = new PHPTAL_DOMElement('documentElement','http://xml.zope.org/namespaces/tal',array(),$this->getXmlnsState());
+        $this->documentElement = new PHPTAL_DOMElement('documentElement','http://xml.zope.org/namespaces/tal',array(), $this->getXmlnsState());
         $this->documentElement->setSource($this->file, $this->line);
         $this->_stack = array();
         $this->_current = $this->documentElement;
@@ -97,28 +92,21 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     {                
         $this->_xmlns = $this->_xmlns->newElement($attributes);
         
-        if (preg_match('/^([^:]+):/',$element_qname,$m))
-        {
+        if (preg_match('/^([^:]+):/', $element_qname, $m)) {
             $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);            
             if (false === $namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$element_qname>");
-        }
-        else 
-        {
+        } else {
             $namespace_uri = $this->_xmlns->getCurrentDefaultNamespaceURI();
         }
         
         $attrnodes = array();
-        foreach($attributes as $qname=>$value) 
-        {            
+        foreach ($attributes as $qname=>$value) {            
             $local_name = $qname;
-            if (preg_match('/^([^:]+):(.+)$/',$qname,$m))
-            {
+            if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
                 if (false === $attr_namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element <$element_qname>");
-            }
-            else
-            {
+            } else {
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
             }
 
@@ -142,7 +130,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onElementClose($qname)
     {
-		if ($this->_current === $this->documentElement) throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");			
+	    if ($this->_current === $this->documentElement) throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");			
         if ($this->_current->getQualifiedName() != $qname) {
             throw new PHPTAL_ParserException("Tag closure mismatch, expected </".$this->_current->getQualifiedName()."> but found </".$qname.">");
         }
@@ -157,7 +145,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
         $this->_current->appendChild($node);
     }
     
-    public function setSource($file,$line)
+    public function setSource($file, $line)
     {
         $this->file = $file; $this->line = $line; 
     }
@@ -167,7 +155,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
         $this->encoding = $encoding; 
     }
     
-    private $file,$line;
+    private $file, $line;
     
     private $encoding;
     private $documentElement;    /* PHPTAL_DOMElement */

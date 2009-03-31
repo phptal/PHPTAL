@@ -6,7 +6,7 @@ class EscapeCDATATest extends PHPTAL_TestCase {
     private function executeString($str, $params = array())
     {
         $tpl = $this->newPHPTAL();
-        foreach($params as $k => $v) $tpl->set($k,$v);
+        foreach ($params as $k => $v) $tpl->set($k,$v);
         $tpl->setSource($str);
         return $tpl->execute();
     }
@@ -23,12 +23,9 @@ class EscapeCDATATest extends PHPTAL_TestCase {
         $res = $this->executeString('<div><![CDATA[${text \'"< & &amp; &quot; &lt;\'},${false | string:"< & &amp; &quot; &lt;}]]></div>');
         
         // either way is good
-        if (false !== strpos($res,'<![CDATA['))
-        {
+        if (false !== strpos($res,'<![CDATA[')) {
             $this->assertEquals('<div><![CDATA["< & &amp; &quot; &lt;,"< & &amp; &quot; &lt;]]></div>', $res);
-        }
-        else
-        {
+        } else {
             $this->assertEquals('<div>&quot;&lt; &amp; &amp;amp; &amp;quot; &amp;lt;,&quot;&lt; &amp; &amp;amp; &amp;quot; &amp;lt;</div>', $res);
         }
     }

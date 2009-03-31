@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @package phptal
+ * @package PHPTAL
  */
 class PHPTAL_StringSource implements PHPTAL_Source
 {
