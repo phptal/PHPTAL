@@ -30,7 +30,7 @@ class PHPTAL_TalesRegistry {
 	}
 
 	/**
-	 * Enter description here...
+	 * This is a singleton
 	 *
 	 * @return PHPTAL_TalesRegistry
 	 */
@@ -51,8 +51,8 @@ class PHPTAL_TalesRegistry {
 	 * Expects an either a function name or an array of class and method as
 	 * callback.
 	 *
-	 * @param unknown_type $prefix
-	 * @param unknown_type $callback
+	 * @param string $prefix
+	 * @param mixed $callback
 	 */
 	public function registerPrefix($prefix, $callback) {
 		if ($this->isRegistered($prefix)) {
@@ -87,10 +87,16 @@ class PHPTAL_TalesRegistry {
 		$this->_callbacks[$prefix] = $callback;
 	}
 
+    /**
+     * true if given prefix is taken
+     */
 	public function isRegistered($prefix) {
 		return (array_key_exists($prefix, $this->_callbacks));
 	}
 
+    /**
+     * get callback for the prefix
+     */
 	public function getCallback($prefix) {
 		if (!$this->isRegistered($prefix)) {
 			throw new PHPTAL_ConfigurationException("Expression modifier '$prefix' is not registered");

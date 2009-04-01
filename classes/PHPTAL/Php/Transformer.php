@@ -45,15 +45,11 @@ class PHPTAL_Php_Transformer
     const ST_STATIC = 7;  // class::[$]static|const
     const ST_DEFINE = 8;  // @MY_DEFINE
 
+    /**
+     * transform PHPTAL's php-like syntax into real PHP
+     */
     public static function transform( $str, $prefix='$' )
-    {
-
-        // 
-        // Here comes the good old state machine.
-        // TODO: benchmark this version and then benchmark a refactored version
-        // with states behaviour separated into methods, keep the fastest.
-        // 
-        
+    {        
         $len = strlen($str);
         $state = self::ST_NONE;
         $result = '';

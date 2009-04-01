@@ -521,6 +521,9 @@ class PHPTAL
         }
     }
 
+    /**
+     * ensure that getCodePath will return up-to-date path
+     */
     private function setCodeFile()
     {
         $this->findTemplate();

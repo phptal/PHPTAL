@@ -42,6 +42,10 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 //      * repeat - the repeat variables (see RepeatVariable).
 // 
 
+/**
+ *  helper function for phptal_tale
+ * @access private
+ */
 function _phptal_tale_wrap($array, $nothrow)
 {
 	if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
@@ -53,7 +57,11 @@ function _phptal_tale_wrap($array, $nothrow)
 	return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:"._phptal_tale_wrap($array, $nothrow).')';
 }
 
-/** translates array of alternative expressions into single PHP expression. Identical to phptal_tales() for singular expressions. */
+/** 
+ * translates array of alternative expressions into single PHP expression. Identical to phptal_tales() for singular expressions. 
+ * @see phptal_tales()
+ * @return string
+*/
 function phptal_tale($expression, $nothrow=false)
 {
 	$r = phptal_tales($expression,true);
@@ -63,6 +71,16 @@ function phptal_tale($expression, $nothrow=false)
 	return '($ctx->noThrow(true)||1?'._phptal_tale_wrap($r, $nothrow).':"")';
 }
 
+/**
+ * returns PHP code that will evaluate given TALES expression.
+ * e.g. "string:foo${bar}" may be transformed to "'foo'.phptal_escape($ctx->bar)"
+ * 
+ * Expressions with alternatives ("foo | bar") will cause it to return array
+ * Use phptal_tale() if you always want string.
+ *
+ * @param bool $nothrow if true, invalid expression will return NULL (at run time) rather than throwing exception
+ * @return string or array
+ */
 function phptal_tales($expression, $nothrow=false)
 {
 	$expression = trim($expression);

@@ -1,33 +1,34 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4: */
-//
-//  Copyright (c) 2004-2005 Laurent Bedubourg
-//
-//  This library is free software; you can redistribute it and/or
-//  modify it under the terms of the GNU Lesser General Public
-//  License as published by the Free Software Foundation; either
-//  version 2.1 of the License, or (at your option) any later version.
-//
-//  This library is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-//  Lesser General Public License for more details.
-//
-//  You should have received a copy of the GNU Lesser General Public
-//  License along with this library; if not, write to the Free Software
-//  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-//
-//  Authors: Laurent Bedubourg <lbedubourg@motion-twin.com>
-//
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: Cache.php 500 2009-03-31 13:05:37Z kornel $
+ * @link     http://phptal.motion-twin.com/ 
+ */
 
 require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
 
-
+/**
+ * node that represents element's attribute
+ */
 class PHPTAL_DOMAttr
 {
     private $value_escaped, $qualified_name, $namespace_uri, $encoding;
     
-    function __construct($qualified_name, $namespace_uri,$value_escaped, $encoding)
+    /**
+     * @param string $qualified_name attribute name with prefix
+     * @param string $namespace_uri full namespace URI or empty string
+     * @param string $value_escaped value with HTML-escaping
+     * @param string $encoding character encoding used by the value
+     */
+    function __construct($qualified_name, $namespace_uri, $value_escaped, $encoding)
     {
         $this->value_escaped = $value_escaped;
         $this->qualified_name = $qualified_name;
@@ -62,6 +63,11 @@ class PHPTAL_DOMAttr
     }
     function getValue() {return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);}    
     
+    /**
+     * depends on replaced state
+     * @see getReplacedState()
+     * @see overwriteValueWithVariable()
+     */
     function getValueEscaped()
     {
         return $this->value_escaped;
@@ -74,6 +80,9 @@ class PHPTAL_DOMAttr
     
     function hide() {$this->replacedState = self::HIDDEN;}
     
+    /**
+     * generate value of this attribute from variable
+     */
     function overwriteValueWithVariable($phpVariable)
     {
         $this->replacedState = self::VALUE_REPLACED;
@@ -81,6 +90,9 @@ class PHPTAL_DOMAttr
         $this->setPHPCode('echo '.$phpVariable);
     }
 
+    /**
+     * generate complete syntax of this attribute using variable
+     */
     function overwriteFullWithVariable($phpVariable)
     {
         $this->replacedState = self::FULLY_REPLACED;
@@ -88,6 +100,9 @@ class PHPTAL_DOMAttr
         $this->setPHPCode('echo '.$phpVariable);
     }
     
+    /**
+     * use any PHP code to generate this attribute's value
+     */
     function overwriteValueWithCode($code)
     {
         $this->replacedState = self::VALUE_REPLACED;
@@ -96,6 +111,9 @@ class PHPTAL_DOMAttr
     }    
     
     private $phpVariable;
+    /**
+     * if value was overwritten with variable, get its name
+     */
     function getOverwrittenVariableName()
     {
         return $this->phpVariable;
@@ -107,6 +125,9 @@ class PHPTAL_DOMAttr
     const FULLY_REPLACED = 2;
     private $replacedState = 0;
     
+    /**
+     * whether getValueEscaped() returns real value or PHP code
+     */
     function getReplacedState()
     {
         return $this->replacedState;
@@ -128,6 +149,9 @@ abstract class PHPTAL_DOMNode
         $this->encoding = $encoding; 
     }
     
+    /**
+     * hint where this node is in source code
+     */
     public function setSource($file,$line)
     {
         $this->source_file = $file;
@@ -159,6 +183,9 @@ abstract class PHPTAL_DOMNode
         return $this->encoding;
     }
 
+    /**
+     * use CodeWriter to compile this element to PHP code
+     */
     public abstract function generate(PHPTAL_Php_CodeWriter $gen);
 }
 

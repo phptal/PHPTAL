@@ -38,6 +38,12 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     private $_encoding = 'UTF-8';
     private $_canonicalize = false;
 
+    /**
+     * set encoding that is used by template and is expected from gettext
+     * the default is UTF-8
+     * 
+     * @param string $enc encoding name
+     */
     public function setEncoding($enc)
     {
         $this->_encoding = $enc;
@@ -46,6 +52,10 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     /**
      * if true, all non-ASCII characters in keys will be converted to C<xxx> form. This impacts performance.
      * by default keys will be passed to gettext unmodified.
+     *
+     * This function is only for backwards compatibility
+     *
+     * @param bool $bool enable old behavior
      */
     public function setCanonicalize($bool)
     {
@@ -87,6 +97,9 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         return $old;
     }
     
+    /**
+     * used by generated PHP code
+     */
     public function setVar($key, $value)
     {
         $this->_vars[$key] = $value;
