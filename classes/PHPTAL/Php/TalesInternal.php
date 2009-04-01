@@ -42,6 +42,8 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
     static public function true($src, $nothrow)
     {
+        if (ctype_alnum($src)) return '!empty($ctx->'.$src.')';
+	    
 	    return 'phptal_true($ctx, '.self::string(trim($src), $nothrow).')';
     }
 
@@ -306,6 +308,8 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	 */
 	static public function exists($src, $nothrow)
 	{
+	    if (ctype_alnum($src)) return 'isset($ctx->'.$src.')';
+	    
 	    return 'phptal_exists($ctx, '.self::string(trim($src), $nothrow).')';
 	}
 

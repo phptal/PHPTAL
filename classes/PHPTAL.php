@@ -13,7 +13,7 @@
  * @link     http://phptal.motion-twin.com/ 
  */
 
-define('PHPTAL_VERSION', '1_2_0a4');
+define('PHPTAL_VERSION', '1_2_0a5');
 
 if (!defined('PHPTAL_DIR')) {
     define('PHPTAL_DIR', dirname(__FILE__).DIRECTORY_SEPARATOR);
