@@ -27,7 +27,6 @@ class PHPTAL_Php_CodeGenerator
         $codewriter->doFunction($this->_functionName, '$tpl, $ctx');
         $codewriter->setFunctionPrefix($this->_functionName . "_");
         $codewriter->doSetVar('$_thistpl', '$tpl');
-        $codewriter->doSetVar('$glb', '$tpl->getGlobalContext()');
         $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
         $treeGen->generate($codewriter);
         $codewriter->doEnd();

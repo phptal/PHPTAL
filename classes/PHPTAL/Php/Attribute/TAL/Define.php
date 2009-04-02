@@ -112,7 +112,7 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         if ($this->_defineScope == 'global') {
-            $executor->doIf('($glb->'.$this->_defineVar.' = '.$exp.') !== null');
+            $executor->doIf('($tpl->getGlobalContext()->'.$this->_defineVar.' = '.$exp.') !== null');
         } else {
             $executor->doIf('($ctx->'.$this->_defineVar.' = '.$exp.') !== null');
         }
@@ -156,7 +156,7 @@ implements PHPTAL_Php_TalesChainReader
     private function doDefineVarWith(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
         if ($this->_defineScope == 'global') {
-            $codewriter->doSetVar('$glb->'.$this->_defineVar, $code);
+            $codewriter->doSetVar('$tpl->getGlobalContext()->'.$this->_defineVar, $code);
         } else {
             $codewriter->doSetVar('$ctx->'.$this->_defineVar, $code);
         }
