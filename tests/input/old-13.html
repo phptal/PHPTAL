@@ -11,28 +11,28 @@
     <span tal:replace="a"/>
     </span>
 
-    <span tal:omit-tag="" tal:on-error="string:error cached for content test">
+    <span tal:omit-tag="" tal:on-error="string:error caught for content test">
     <span tal:content="some/path | default">default content value</span>
     </span>
 
-    <span tal:omit-tag="" tal:on-error="string:error cached for content test">
+    <span tal:omit-tag="" tal:on-error="string:error caught for content test">
     <span tal:content="a | default">default content value</span>
     </span>
 
-    <span tal:omit-tag="" tal:on-error="string:error cached for replace test">
+    <span tal:omit-tag="" tal:on-error="string:error caught for replace test">
     <span tal:replace="some/path | default">default replacement value</span>
     </span>
-    <span tal:omit-tag="" tal:on-error="string:error cached for replace test">
+    <span tal:omit-tag="" tal:on-error="string:error caught for replace test">
     <span tal:replace="a2 | default">default replacement value</span>
     </span>
 
-    <span tal:omit-tag="" tal:on-error="string:error cached for attributes test">
+    <span tal:omit-tag="" tal:on-error="string:error caught for attributes test">
     <a href="http://www.default.com" title="default title"
        tal:attributes="href link/href | default; title link/title | default"
        tal:content="link/name | default">default content</a>
     </span>
     
-    <span tal:omit-tag="" tal:on-error="string:error cached for attributes test">
+    <span tal:omit-tag="" tal:on-error="string:error caught for attributes test">
     <a href="http://www.default.com" title="default title"
        tal:attributes="href link2/href | default; title link2/title | default"
        tal:content="link2/name | default">default content</a>

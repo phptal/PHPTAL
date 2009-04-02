@@ -97,5 +97,3 @@ class PHPTAL_Php_TalesChainExecutor
     private $_chainStarted = false;
     private $codewriter = null;
 }
-
-?>

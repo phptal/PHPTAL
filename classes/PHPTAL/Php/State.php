@@ -108,7 +108,7 @@ class PHPTAL_Php_State
     /**
      * @return string with PHP code or array with expressions for TalesChainExecutor
      */
-    public function evalTalesExpression($expression)
+    public function evaluateExpression($expression)
     {
         if ($this->_talesMode == 'php')
             return PHPTAL_TalesInternal::php($expression);

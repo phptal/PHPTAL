@@ -91,7 +91,7 @@ class PHPTAL_Php_CodeWriter
 
     public function evaluateExpression($src)
     {
-        return $this->_state->evalTalesExpression($src);
+        return $this->_state->evaluateExpression($src);
     }
     
     public function indent() 
