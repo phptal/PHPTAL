@@ -176,17 +176,23 @@ class PHPTAL_Context
         $this->$varname = $value;
     }
 
+    public function __isset($varname)
+    {
+        // it doesn't need to check isset($this->$varname), because PHP does that _before_ calling __isset()
+        return isset($this->_globalContext->$varname) || defined($varname);
+    }
+
     /**
      * Context getter.
      * If variable doesn't exist, it will throw an exception, unless noThrow(true) has been called
      */
     public function __get($varname)
     {
-        if (isset($this->$varname)) {
-            return $this->$varname;
+        if (property_exists($this,$varname)) { // must use property_exists to avoid calling own __isset().
+            return $this->$varname;            // edge case with NULL will be weird
         }
 
-        if (isset($this->_globalContext->$varname)) {
+        if (isset($this->_globalContext->$varname)) { // must use isset() to allow custom global contexts with __isset()/__get()
             return $this->_globalContext->$varname;
         }
         
