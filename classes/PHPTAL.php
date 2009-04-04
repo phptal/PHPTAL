@@ -814,45 +814,96 @@ class PHPTAL
     protected $_prefilter = null;
     protected $_postfilter = null;
 
-    // list of template source repositories
+    /**
+     *  list of template source repositories
+     */
     protected $_repositories = array();
-    // template path
+    /**
+     *  template path
+     */
     protected $_path = null;
-    // template source resolvers
+    /**
+     *  template source resolvers
+     */
     protected $_resolvers = array();
-    // template source (only set when not working with file)
+    /**
+     *  template source (only set when not working with file)
+     */
     protected $_source = null;
-    // destination of PHP intermediate file
+    /**
+     * destination of PHP intermediate file
+     */
     protected $_codeFile = null;
-    // php function generated for the template
+    /**
+     * php function generated for the template
+     */
     protected $_functionName = null;
-    // set to true when template is ready for execution
+    /**
+     * set to true when template is ready for execution
+     */
     protected $_prepared = false;
 
-    // associative array of phptal:id => PHPTAL_Trigger
+    /**
+     * associative array of phptal:id => PHPTAL_Trigger
+     */
     protected $_triggers = array();
-    // i18n translator
+    /**
+     * i18n translator
+     */
     protected $_translator = null;
 
-    // global execution context
+    /**
+     * global execution context
+     */
     protected $_globalContext = null;
-    // current execution context
+    /**
+     * current execution context
+     */
     protected $_context = null;
-    // current template file (changes within macros)
+    /**
+     * current template file (changes within macros)
+     */
     public  $__file = false;
-    // list of on-error caught exceptions
+    /**
+     * list of on-error caught exceptions
+     */
     protected $_errors = array();
 
+    /**
+     * encoding used throughout
+     */
     protected $_encoding = 'UTF-8';
+    
+    /**
+     * type of syntax used in generated templates
+     */
     protected $_outputMode = PHPTAL::XHTML;
+    /**
+     * should all comments be stripped
+     */
     protected $_stripComments = false;
 
     // configuration properties
+    
+    /**
+     * don't use code cache
+     */
     protected $_forceReparse = null;
+    
+    /**
+     * directory where code cache is
+     */
     protected $_phpCodeDestination;
     protected $_phpCodeExtension = 'php';
 
+    /**
+     * number of days
+     */
     protected $_cacheLifetime = 30;
+    
+    /**
+     * 1/x
+     */
     protected $_cachePurgeFrequency = 50;
 }
 

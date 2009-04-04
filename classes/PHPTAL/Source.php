@@ -1,16 +1,31 @@
 <?php
 
 /**
+ * You can implement this interface to load templates from various sources (see SourceResolver)
+ * 
  * @package PHPTAL
  */
 interface PHPTAL_Source
 {
-    /** Returns string, unique path identifying the template source. */
+    /** 
+     * unique path identifying the template source. 
+     * 
+     * @return string
+     */
     public function getRealPath();
-    /** Returns long, the template source last modified time. */
+    
+    /** 
+     * template source last modified time (unix timestamp)
+     * Return 0 if unknown
+     *
+     * @return long
+     */
     public function getLastModifiedTime();
-    /** Returns string, the template source. */
+    
+    /** 
+     * the template source
+     * 
+     * @return string
+     */
     public function getData();
 }
-
-?>

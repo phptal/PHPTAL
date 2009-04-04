@@ -12,7 +12,11 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
+ 
+ 
 /**
+ * Interface for Triggers (phptal:id)
+ * 
  * @package PHPTAL
  */
 interface PHPTAL_Trigger
@@ -24,5 +28,3 @@ interface PHPTAL_Trigger
 
     public function end($id, $tpl);
 }
-
-?>

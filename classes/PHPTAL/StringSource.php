@@ -1,6 +1,8 @@
 <?php
 
 /**
+ * Fake template source that makes PHPTAL->setString() work
+ * 
  * @package PHPTAL
  */
 class PHPTAL_StringSource implements PHPTAL_Source

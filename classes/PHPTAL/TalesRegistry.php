@@ -13,6 +13,11 @@
  * @link     http://phptal.motion-twin.com/ 
  */
 
+/**
+ * You can implement this interface to create custom tales modifiers
+ * 
+ * Methods suitable for modifiers must be static.
+ */
 interface PHPTAL_Tales
 {
 }

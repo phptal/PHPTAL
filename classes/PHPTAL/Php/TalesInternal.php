@@ -152,7 +152,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
             $next = self::string($m[1]);
             $expression = self::string($m[2]);
         } else {
-	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name");
+	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name. Complex expression need php: modifier.");
 
             $next = self::string($expression); 
             $expression = null;
@@ -172,6 +172,9 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
     	return 'phptal_path($ctx->'.$next.', '.$expression.($nothrow ? ', true' : '').')';
 	}
 
+    /**
+     * check if part of exprssion (/foo/ or /foo${bar}/) is alphanumeric
+     */
     private static function checkExpressionPart($expression)
     {
         $expression = preg_replace('/\${[^}]+}/','a', $expression); // pretend interpolation is done                

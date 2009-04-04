@@ -19,6 +19,8 @@ require PHPTAL_DIR.'PHPTAL/Namespace/I18N.php';
 require PHPTAL_DIR.'PHPTAL/Namespace/PHPTAL.php';
 
 /** 
+ * Information about TAL attributes (in which order they are executed and how they generate the code)
+ * 
  * @package PHPTAL
  */
 abstract class PHPTAL_NamespaceAttribute
@@ -50,12 +52,18 @@ abstract class PHPTAL_NamespaceAttribute
         return $this->_namespace->createAttributeHandler($this, $tag, $expression);
     }
     
-    private $local_name;         /* Attribute name without the namespace: prefix */
-    private $_priority;     /* [0 - 1000] */
-    private $_namespace;    /* PHPTAL_Namespace */
+    /** Attribute name without the namespace: prefix */
+    private $local_name;
+    
+    /** [0 - 1000] */         
+    private $_priority;     
+    
+    /** PHPTAL_Namespace */
+    private $_namespace;    
 }
 
 /** 
+ * This type of attribute wraps element
  * @package PHPTAL
  */
 class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute 
@@ -63,6 +71,7 @@ class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
 }
 
 /** 
+ * This type of attribute replaces element entirely
  * @package PHPTAL
  */
 class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute 
@@ -70,6 +79,7 @@ class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
 }
 
 /** 
+ * This type of attribute replaces element's content entirely
  * @package PHPTAL
  */
 class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute 
@@ -142,4 +152,3 @@ class PHPTAL_BuiltinNamespace extends PHPTAL_Namespace
     }
 }
 
-?>

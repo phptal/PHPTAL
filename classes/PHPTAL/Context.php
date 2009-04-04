@@ -225,7 +225,7 @@ class PHPTAL_Context
  * This function is very important for PHPTAL performance.
  */
 function phptal_path($base, $path, $nothrow=false)
-{//{{{
+{
     if ($base === null) {
         if ($nothrow) return null;
         throw new PHPTAL_VariableNotFoundException("Trying to read property '$path' from NULL");
@@ -340,6 +340,9 @@ function phptal_path($base, $path, $nothrow=false)
 function phptal_path_error($base, $path, $current)
 {
     $basename = '';
+    // phptal_path gets data in format ($object, "rest/of/the/path"),
+    // so name of the object is not really known and something in its place
+    // needs to be figured out
     if ($current !== $path) {
         $pathinfo = " (in path '.../$path')";
         if (preg_match('!([^/]+)/'.preg_quote($current,'!').'(?:/|$)!', $path, $m)) {
