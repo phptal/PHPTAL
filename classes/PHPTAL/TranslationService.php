@@ -13,6 +13,8 @@ interface PHPTAL_TranslationService
      * You can specify a list of possible language for exemple :
      *
      * setLanguage('fr_FR', 'fr_FR@euro')
+     * 
+     * @return string - chosen language
      */
     function setLanguage(/*...*/);
 
@@ -29,6 +31,8 @@ interface PHPTAL_TranslationService
 
     /**
      * Set an interpolation var.
+     * 
+     * Replace all ${key}s with values in translated strings.
      */
     function setVar($key, $value);
 

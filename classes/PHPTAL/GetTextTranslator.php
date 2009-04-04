@@ -62,7 +62,15 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         $this->_canonicalize = $bool;
     }
     
-    public function setLanguage()
+    /**
+     * It expects locale names as arguments.
+     * Choses first one that works.
+     * 
+     * setLanguage("en_US.utf8","en_US","en_GB","en")
+     * 
+     * @return string - chosen language
+     */
+    public function setLanguage(/*...*/)
     {
         $langs = func_get_args();
         foreach ($langs as $langCode) {
@@ -70,7 +78,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
             putenv("LC_ALL=$langCode");
             putenv("LANGUAGE=$langCode");
             if (setlocale(LC_ALL, $langCode)) {
-                return;
+                return $langCode;
             }
         }
 
@@ -78,7 +86,9 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     }
     
     /**
-     * encoding must be set before calling addDomain
+     * Adds translation domain (usually it's the same as name of .po file [without extension])
+     * 
+     * Encoding must be set before calling addDomain!
      */
     public function addDomain($domain, $path='./locale/')
     {
@@ -89,6 +99,12 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         $this->useDomain($domain);
     }
     
+    /**
+     * Switches to one of the domains previously set via addDomain()
+     * 
+     * @param string $domain name of translation domain to be used.
+     * @return string - old domain
+     */
     public function useDomain($domain)
     {
         $old = $this->_currentDomain;
@@ -98,13 +114,18 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     }
     
     /**
-     * used by generated PHP code
+     * used by generated PHP code. Don't use directly.
      */
     public function setVar($key, $value)
     {
         $this->_vars[$key] = $value;
     }
     
+    /**
+     * translate given key. 
+     * 
+     * @param bool $htmlencode if true, output will be HTML-escaped.
+     */
     public function translate($key, $htmlencode=true)
     {
         if ($this->_canonicalize) $key = self::_canonicalizeKey($key);
@@ -117,14 +138,17 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src,$var) = $m;
             if (!array_key_exists($var, $this->_vars)) {
-                throw new PHPTAL_VariableNotFoundException('Interpolation error, var "'.$var.'" not set');
+                throw new PHPTAL_VariableNotFoundException('Interpolation error. Translation uses ${'.$var.'}, which is not defined in the template (via i18n:name)');
             }
             $value = str_replace($src, $this->_vars[$var], $value);
         }
         return $value;
     }
-
-    static function _canonicalizeKey($key_)
+    
+    /**
+     * For backwards compatibility only.
+     */
+    private static function _canonicalizeKey($key_)
     {
         $result = "";
         $key_ = trim($key_);
