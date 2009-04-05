@@ -240,7 +240,7 @@ class PHPTAL_Php_Transformer
                     if (self::isVarNameChar($c)) {
                     }
                     // eval mode ${foo} 
-                    elseif ($c == '$') {
+                    elseif ($c == '$' && $str[$i+1] !== '{') {
                         $result .= '{' . $prefix;
                         $mark++;
                         $eval = true;
