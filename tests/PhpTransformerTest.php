@@ -77,6 +77,12 @@ class PhpTransformerTest extends PHPTAL_TestCase
         $this->assertEquals('$a->{$x->y}()', PHPTAL_Php_Transformer::transform('a.{x.y}()'));
     }
     
+    function testEvals2()
+    {
+        $this->assertEquals('$prefix->{$prefix->var} + $prefix->{$prefix->var}', PHPTAL_Php_Transformer::transform('${var} + ${var}','$prefix->'));
+        $this->assertEquals('$prefix->{MyClass::CONSTANT}', PHPTAL_Php_Transformer::transform('${MyClass::CONSTANT}','$prefix->'));
+    }
+    
     function testOperators()
     {
         $this->assertEquals('$a + 100 / $b == $d', PHPTAL_Php_Transformer::transform('a + 100 / b == d'));
@@ -85,11 +91,11 @@ class PhpTransformerTest extends PHPTAL_TestCase
 
     function testStatics()
     {
+        $this->assertEquals('$prefix->x->{MyClass::CONSTANT_UNDER6}', PHPTAL_Php_Transformer::transform('x.${MyClass::CONSTANT_UNDER6}','$prefix->'));
         $this->assertEquals('MyClass::method()', PHPTAL_Php_Transformer::transform('MyClass::method()'));
         $this->assertEquals('MyClass::CONSTANT', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT'));
         $this->assertEquals('MyClass::CONSTANT_UNDER', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT_UNDER'));
         $this->assertEquals('MyClass::CONSTANT_UNDER6', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT_UNDER6'));
-        $this->assertEquals('$prefix->x->${MyClass::CONSTANT_UNDER6}', PHPTAL_Php_Transformer::transform('x.${MyClass::CONSTANT_UNDER6}','$prefix->'));
         $this->assertEquals('MyClass::ConsTant', PHPTAL_Php_Transformer::transform('MyClass::ConsTant'));
         $this->assertEquals('MyClass::$static', PHPTAL_Php_Transformer::transform('MyClass::$static','$prefix->'));
         $this->assertEquals('MyClass::$static->foo()', PHPTAL_Php_Transformer::transform('MyClass::$static.foo()','$prefix->'));
