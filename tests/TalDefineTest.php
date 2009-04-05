@@ -262,4 +262,32 @@ class TalDefineTest extends PHPTAL_TestCase
         $this->assertEquals(trim_string('<div> <span class="foo"/> ok </div>'), $res);
     }
     
+    function testDefineTALESInterpolated()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->varvar = 'ok';
+        $tpl->varname = 'varvar';
+        $tpl->setSource('<div tal:define="test ${varname}">${test}</div>');
+        $this->assertEquals('<div>ok</div>',$tpl->execute());
+    }
+
+    function testDefinePHPInterpolated()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->varvar = 'ok';
+        $tpl->varname = 'varvar';
+        $tpl->setSource('<div tal:define="test php:${varname}">${test}</div>');
+        $this->assertEquals('<div>ok</div>',$tpl->execute());
+    }
+    
+    const VARNAME = 'varvar';
+    
+    function testDefinePHPConstInterpolated()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->varvar = 'ok';
+        $tpl->varname = 'varvar';
+        $tpl->setSource('<div tal:define="test php:${TalDefineTest::VARNAME}">${test}</div>');
+        $this->assertEquals('<div>ok</div>',$tpl->execute());
+    }
 }
