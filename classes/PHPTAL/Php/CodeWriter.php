@@ -128,7 +128,7 @@ class PHPTAL_Php_CodeWriter
         if (count($this->_codeBuffer) == 1) {
             $codeLine = $this->_codeBuffer[0];
             // avoid adding ; after } and {
-            if (!preg_match('/\}|\{\s+$/', $codeLine))
+            if (!preg_match('/\}\s*$|\{\s*$/', $codeLine))
                 $this->_result .= '<?php '.$codeLine.'; ?>';
             else
                 $this->_result .= '<?php '.$codeLine.' ?>';
@@ -139,7 +139,7 @@ class PHPTAL_Php_CodeWriter
         $this->_result .= '<?php '."\n";
         foreach ($this->_codeBuffer as $codeLine) {
             // avoid adding ; after } and {
-            if (!preg_match('/\}|\{\s+$/', $codeLine))
+            if (!preg_match('/\}\s*$|\{\s*$/', $codeLine))
                 $this->_result .= $codeLine . ' ;'."\n";
             else 
                 $this->_result .= $codeLine;
@@ -358,12 +358,12 @@ class PHPTAL_Php_CodeWriter
 
     public function pushContext()
     {
-        $this->pushCode('$ctx = $tpl->pushContext()');
+        $this->doSetVar('$ctx','$tpl->pushContext()');
     }
 
     public function popContext()
     {
-        $this->pushCode('$ctx = $tpl->popContext()');
+        $this->doSetVar('$ctx','$tpl->popContext()');
     }
     
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

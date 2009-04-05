@@ -78,7 +78,7 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
         $code = $codewriter->evaluateExpression( $expression );
 
         // instantiate controller using expression
-        $codewriter->doSetVar( $this->var.'->'.$varName, 'new PHPTAL_RepeatController('.$code.')' );
+        $codewriter->doSetVar( $this->var.'->'.$varName, 'new PHPTAL_RepeatController('.$code.')'."\n" );
 
         $codewriter->pushContext();
 

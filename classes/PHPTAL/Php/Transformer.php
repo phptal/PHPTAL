@@ -354,7 +354,12 @@ class PHPTAL_Php_Transformer
             }            
         }
 
-        return trim($result);
+        $result = trim($result); 
+        
+        // CodeWriter doesn't like expressions that look like blocks
+        if ($result[strlen($result)-1] === '}') return '('.$result.')'; 
+        
+        return $result;
     }
 
     private static function isAlpha($c)

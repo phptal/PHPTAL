@@ -71,7 +71,7 @@ class PhpTransformerTest extends PHPTAL_TestCase
 
     function testEvals()
     {
-        $this->assertEquals('$prefix->{$prefix->a}', PHPTAL_Php_Transformer::transform('$a','$prefix->'));
+        $this->assertEquals('$prefix->{$prefix->a}', trim(PHPTAL_Php_Transformer::transform('$a','$prefix->'),'()'));
         $this->assertEquals('$a->{$b}->c', PHPTAL_Php_Transformer::transform('a.$b.c'));
         $this->assertEquals('$prefix->a->{$prefix->x->y}->z', PHPTAL_Php_Transformer::transform('a.{x.y}.z','$prefix->'));
         $this->assertEquals('$a->{$x->y}()', PHPTAL_Php_Transformer::transform('a.{x.y}()'));
@@ -79,8 +79,8 @@ class PhpTransformerTest extends PHPTAL_TestCase
     
     function testEvals2()
     {
-        $this->assertEquals('$prefix->{$prefix->var} + $prefix->{$prefix->var}', PHPTAL_Php_Transformer::transform('${var} + ${var}','$prefix->'));
-        $this->assertEquals('$prefix->{MyClass::CONSTANT}', PHPTAL_Php_Transformer::transform('${MyClass::CONSTANT}','$prefix->'));
+        $this->assertEquals('$prefix->{$prefix->var} + $prefix->{$prefix->var}', trim(PHPTAL_Php_Transformer::transform('${var} + ${var}','$prefix->'),'()'));
+        $this->assertEquals('$prefix->{MyClass::CONSTANT}', trim(PHPTAL_Php_Transformer::transform('${MyClass::CONSTANT}','$prefix->'),'()'));
     }
     
     function testOperators()
@@ -91,7 +91,7 @@ class PhpTransformerTest extends PHPTAL_TestCase
 
     function testStatics()
     {
-        $this->assertEquals('$prefix->x->{MyClass::CONSTANT_UNDER6}', PHPTAL_Php_Transformer::transform('x.${MyClass::CONSTANT_UNDER6}','$prefix->'));
+        $this->assertEquals('$prefix->x->{MyClass::CONSTANT_UNDER6}', trim(PHPTAL_Php_Transformer::transform('x.${MyClass::CONSTANT_UNDER6}','$prefix->'),'()'));
         $this->assertEquals('MyClass::method()', PHPTAL_Php_Transformer::transform('MyClass::method()'));
         $this->assertEquals('MyClass::CONSTANT', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT'));
         $this->assertEquals('MyClass::CONSTANT_UNDER', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT_UNDER'));

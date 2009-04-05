@@ -127,6 +127,15 @@ class TalRepeatTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);        
     }
     
+    function testInterpolatedPHP()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->y = 'somearray';
+        $tpl->somearray = array(1=>9,9,9);
+        $tpl->setSource('<div tal:repeat="x php:${y}">${repeat/x/key}</div>');
+        $this->assertEquals('<div>1</div><div>2</div><div>3</div>',$tpl->execute());
+    }
+    
     function testTraversableRepeat()
     {
         $doc = new DOMDocument();
