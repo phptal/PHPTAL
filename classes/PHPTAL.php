@@ -7,13 +7,13 @@
  * @category HTML
  * @package  PHPTAL
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
- * @author   Kornel Lesinski <kornel@aardvarkmedia.co.uk>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
 
-define('PHPTAL_VERSION', '1_2_0a5');
+define('PHPTAL_VERSION', '1_2_0a6');
 
 if (!defined('PHPTAL_DIR')) {
     define('PHPTAL_DIR', dirname(__FILE__).DIRECTORY_SEPARATOR);

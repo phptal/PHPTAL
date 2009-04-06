@@ -12,21 +12,21 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// TAL Specifications 1.4
-//
-//      argument ::= (['text'] | 'structure') expression
-//
-// Example:
-// 
-//      <p tal:on-error="string: Error! This paragraph is buggy!">
-//      My name is <span tal:replace="here/SlimShady" />.<br />
-//      (My login name is 
-//      <b tal:on-error="string: Username is not defined!" 
-//         tal:content="user">Unknown</b>)
-//      </p>
-//  
 
 /**
+ * TAL Specifications 1.4
+ * 
+ *      argument ::= (['text'] | 'structure') expression
+ * 
+ * Example:
+ * 
+ *      <p tal:on-error="string: Error! This paragraph is buggy!">
+ *      My name is <span tal:replace="here/SlimShady" />.<br />
+ *      (My login name is 
+ *      <b tal:on-error="string: Username is not defined!" 
+ *         tal:content="user">Unknown</b>)
+ *      </p>
+ * 
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

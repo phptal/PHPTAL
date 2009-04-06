@@ -14,6 +14,9 @@
  * @link     http://phptal.motion-twin.com/ 
 */
 
+/**
+ * @package PHPTAL.php
+ */
 class PHPTAL_TalesInternal implements PHPTAL_Tales {
 
 	/**

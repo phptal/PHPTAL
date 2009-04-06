@@ -13,21 +13,24 @@
  * @link     http://phptal.motion-twin.com/ 
  */
 
-/** phptal:cache (note that's not tal:cache) caches element's HTML for a given time. Time is a number with 'd', 'h', 'm' or 's' suffix.
-    There's optional parameter that defines how cache should be shared. By default cache is not sensitive to template's context at all 
-    - it's shared between all pages that use that template. 
-    You can add per url to have separate copy of given element for every URL.
-    
-    You can add per expression to have different cache copy for every different value of an expression (which MUST evaluate to a string). 
-    Expression cannot refer to variables defined using tal:define on the same element.
-
-    NB:
-    * phptal:cache blocks can be nested, but outmost block will cache other blocks regardless of their freshness.
-    * you cannot use metal:fill-slot inside elements with phptal:cache
-
-    Examples:
-    <div phptal:cache="3h">...</div> <!-- <div> to be evaluated at most once per 3 hours. -->
-    <ul phptal:cache="1d per object/id">...</ul> <!-- <ul> be cached for one day, separately for each object. -->
+/** 
+ *  phptal:cache (note that's not tal:cache) caches element's HTML for a given time. Time is a number with 'd', 'h', 'm' or 's' suffix.
+ *  There's optional parameter that defines how cache should be shared. By default cache is not sensitive to template's context at all 
+ *  - it's shared between all pages that use that template. 
+ *  You can add per url to have separate copy of given element for every URL.
+ *  
+ *  You can add per expression to have different cache copy for every different value of an expression (which MUST evaluate to a string). 
+ *  Expression cannot refer to variables defined using tal:define on the same element.
+ *
+ *  NB:
+ *  * phptal:cache blocks can be nested, but outmost block will cache other blocks regardless of their freshness.
+ *  * you cannot use metal:fill-slot inside elements with phptal:cache
+ *
+ *  Examples:
+ *  <div phptal:cache="3h">...</div> <!-- <div> to be evaluated at most once per 3 hours. -->
+ *  <ul phptal:cache="1d per object/id">...</ul> <!-- <ul> be cached for one day, separately for each object. -->
+ *  
+ * @package PHPTAL.php.attribute.phptal
 */
 class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 {  

@@ -15,7 +15,7 @@
 /**
  * This class handles template execution context.
  * Holds template variables and carries state/scope across macro executions.
- * @package PHPTAL
+ * 
  */
 class PHPTAL_Context
 {
@@ -223,6 +223,8 @@ class PHPTAL_Context
  * returned instead.
  * 
  * This function is very important for PHPTAL performance.
+ * 
+ * @access private
  */
 function phptal_path($base, $path, $nothrow=false)
 {
@@ -336,6 +338,8 @@ function phptal_path($base, $path, $nothrow=false)
 
 /**
  * helper method for phptal_path(). Please don't use it directly.
+ * 
+ * @access private
  */
 function phptal_path_error($base, $path, $current)
 {
@@ -357,6 +361,8 @@ function phptal_path_error($base, $path, $current)
 
 /**
  * implements true: modifier
+ * 
+ * @access private
  */
 function phptal_true($ctx, $path)
 {
@@ -368,6 +374,8 @@ function phptal_true($ctx, $path)
 
 /** 
  * Returns true if $path can be fully resolved in $ctx context. 
+ * 
+ * @access private
  */
 function phptal_exists($ctx, $path)
 {
@@ -382,6 +390,8 @@ function phptal_exists($ctx, $path)
 
 /**
  * helper function for conditional expressions
+ * 
+ * @access private
  */
 function phptal_isempty($var)
 {
@@ -391,6 +401,8 @@ function phptal_isempty($var)
 
 /**
  * convert to string and html-escape given value (of any type)
+ * 
+ * @access private
  */
 function phptal_escape($var)
 {
@@ -408,6 +420,8 @@ function phptal_escape($var)
 
 /**
  * convert anything to string
+ * 
+ * @access private
  */
 function phptal_tostring($var)
 {

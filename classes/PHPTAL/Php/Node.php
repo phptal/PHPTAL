@@ -17,6 +17,8 @@ require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
 
 /**
  * node that represents element's attribute
+ * 
+ * @package PHPTAL.dom
  */
 class PHPTAL_DOMAttr
 {
@@ -136,6 +138,8 @@ class PHPTAL_DOMAttr
 
 /**
  * Document node abstract class.
+ * 
+ * @package PHPTAL.dom
  */
 abstract class PHPTAL_DOMNode
 {
@@ -192,9 +196,7 @@ abstract class PHPTAL_DOMNode
 /**
  * Document Tag representation.
  *
- * This is the main class used by PHPTAL because TAL is a Template Attribute
- * Language, other Node kinds are (useful) toys.
- *
+ * @package PHPTAL.dom
  */
 class PHPTAL_DOMElement extends PHPTAL_DOMNode
 {
@@ -582,6 +584,9 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
     }
 }
 
+/**
+ * @package PHPTAL.dom
+ */
 class PHPTAL_DOMComment extends PHPTAL_DOMNode
 {
 	public function generate(PHPTAL_Php_CodeWriter $codewriter)
@@ -595,6 +600,8 @@ class PHPTAL_DOMComment extends PHPTAL_DOMNode
 
 /**
  * Document text data representation.
+ * 
+ * @package PHPTAL.dom
  */
 class PHPTAL_DOMText extends PHPTAL_DOMNode
 {
@@ -610,6 +617,7 @@ class PHPTAL_DOMText extends PHPTAL_DOMNode
 /**
  * processing instructions, including <?php blocks
  *
+ * @package PHPTAL.dom
  */
 class PHPTAL_DOMProcessingInstruction extends PHPTAL_DOMNode
 {
@@ -622,6 +630,7 @@ class PHPTAL_DOMProcessingInstruction extends PHPTAL_DOMNode
 /**
  * processing instructions, including <?php blocks
  *
+ * @package PHPTAL.dom
  */
 class PHPTAL_DOMCDATASection extends PHPTAL_DOMNode
 {
@@ -655,7 +664,8 @@ class PHPTAL_DOMCDATASection extends PHPTAL_DOMNode
 
 /**
  * Document doctype representation.
- *
+ * 
+ * @package PHPTAL.dom
  */
 class PHPTAL_DOMDocumentType extends PHPTAL_DOMNode
 {
@@ -669,6 +679,7 @@ class PHPTAL_DOMDocumentType extends PHPTAL_DOMNode
 /**
  * XML declaration node.
  *
+ * @package PHPTAL.dom
  */
 class PHPTAL_DOMXmlDeclaration extends PHPTAL_DOMNode
 {

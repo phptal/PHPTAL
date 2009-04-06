@@ -22,6 +22,7 @@
  * parser was created and can be manipulated to accept some user errors
  * like < and < in attribute values or inside text nodes.
  *
+ * @package PHPTAL.dom
  * @see PHPTAL_DOM_DocumentBuilder
  */
 class PHPTAL_XmlParser
@@ -379,6 +380,9 @@ class PHPTAL_XmlParser
     private $_source;
 }
 
+/**
+ * @package PHPTAL.dom
+ */
 interface PHPTAL_DocumentBuilder
 {
     function setEncoding($encoding);

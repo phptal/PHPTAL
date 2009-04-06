@@ -13,24 +13,24 @@
  * @link     http://phptal.motion-twin.com/ 
  */
 
-// TAL Specifications 1.4
-//
-//       argument             ::= attribute_statement [';' attribute_statement]*
-//       attribute_statement  ::= attribute_name expression
-//       attribute_name       ::= [namespace ':'] Name
-//       namespace            ::= Name
-//
-// examples:
-//
-//      <a href="/sample/link.html"
-//         tal:attributes="href here/sub/absolute_url">
-//      <textarea rows="80" cols="20"
-//         tal:attributes="rows request/rows;cols request/cols">
-//
-// IN PHPTAL: attributes will not work on structured replace.
-//
 
 /**
+ * TAL Specifications 1.4
+ * 
+ *       argument             ::= attribute_statement [';' attribute_statement]*
+ *       attribute_statement  ::= attribute_name expression
+ *       attribute_name       ::= [namespace ':'] Name
+ *       namespace            ::= Name
+ * 
+ * examples:
+ * 
+ *      <a href="/sample/link.html"
+ *         tal:attributes="href here/sub/absolute_url">
+ *      <textarea rows="80" cols="20"
+ *         tal:attributes="rows request/rows;cols request/cols">
+ * 
+ * IN PHPTAL: attributes will not work on structured replace.
+ * 
  * @package phptal.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

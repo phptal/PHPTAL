@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 
 <project name="PHPTAL" basedir="./" default="main">
-  <property name="version" value="1.2.0a4"/>
+  
+  <php expression="preg_match('/PHPTAL_VERSION[^\d]*([\da-z_.-]+)/',@file_get_contents('./classes/PHPTAL.php'),$m) ? strtr($m[1],'_','.') : NULL" returnProperty="version" />
+  <echo message="Version is ${version}"/>
+
   <property name="build.base.dir" value="./build"/>
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
@@ -9,6 +12,8 @@
 	<fileset dir="classes" id="classes">
 	  <include name="**"/>
 		<exclude name="**/.svn/**"/>
+		<exclude name="**/.rej"/>
+		<exclude name="**/.orig"/>
 	</fileset>
 	
   <fileset dir="." id="gendocs">
@@ -24,7 +29,7 @@
   </target>
 
   <target name="doc">
-    <php expression="`phpdoc -d classes -t docs -p`"/>
+    <exec command="phpdoc -d classes -t docs -p" />
   </target>
 
   <target name="test">

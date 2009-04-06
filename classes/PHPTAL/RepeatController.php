@@ -27,7 +27,7 @@
  * 'repeat' is an StdClass instance created to handle RepeatControllers, 
  * 'item' is an instance of this class. 
  * 
- * @package PHPTAL
+ * @package PHPTAL.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_RepeatController implements Iterator
@@ -300,7 +300,7 @@ class PHPTAL_RepeatController implements Iterator
 /**
  * Keeps track of variable contents when using grouping in a path (first/ and last/)
  *
- * @package PHPTAL
+ * @package PHPTAL.php
  */
 class PHPTAL_RepeatController_Groups {
 

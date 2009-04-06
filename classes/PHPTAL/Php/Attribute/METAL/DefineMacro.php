@@ -12,26 +12,26 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// METAL Specification 1.0
-//
-//      argument ::= Name
-//
-// Example:
-//
-//      <p metal:define-macro="copyright">
-//      Copyright 2001, <em>Foobar</em> Inc.
-//      </p>
-//
-// PHPTAL:
-//      
-//      <?php function XXX_macro_copyright( $tpl ) { ? >
-//        <p>
-//        Copyright 2001, <em>Foobar</em> Inc.
-//        </p>
-//      <?php } ? >
-//
 
 /**
+ * METAL Specification 1.0
+ * 
+ *      argument ::= Name
+ * 
+ * Example:
+ * 
+ *      <p metal:define-macro="copyright">
+ *      Copyright 2001, <em>Foobar</em> Inc.
+ *      </p>
+ * 
+ * PHPTAL:
+ *      
+ *      <?php function XXX_macro_copyright( $tpl ) { ? >
+ *        <p>
+ *        Copyright 2001, <em>Foobar</em> Inc.
+ *        </p>
+ *      <?php } ? >
+ * 
  * @package PHPTAL.php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

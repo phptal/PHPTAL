@@ -42,7 +42,7 @@
 //
 
 /**
- * @package PHPTAL.php.attribute
+ * @package PHPTAL.php.attribute.i18n
  */
 class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 {
