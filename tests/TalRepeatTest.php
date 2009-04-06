@@ -237,7 +237,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     function testSimpleXML()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setSource("<tal:block tal:repeat='s php:sxml'><b tal:content='s' />\n</tal:block>");
+        $tpl->setSource("<tal:block tal:repeat='s php:sxml'><b tal:content='structure s' />\n</tal:block>");
         $tpl->sxml = new SimpleXMLElement("<x><y>test</y><y attr=\"test\"><z>test</z></y><y/></x>");
         $this->assertEquals("<b><y>test</y></b>\n<b><y attr=\"test\"><z>test</z></y></b>\n<b><y/></b>\n", $tpl->execute());
     }

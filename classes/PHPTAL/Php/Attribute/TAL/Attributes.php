@@ -82,7 +82,7 @@ implements PHPTAL_Php_TalesChainReader
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
-            $value = $code;
+            $value = $codewriter->stringifyCode($code);
         else
             $value = $codewriter->escapeCode($code);
         $codewriter->doSetVar($attkey, $value);
@@ -100,9 +100,9 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter->doIf("NULL !== ($attkey = ($code))");
         
         if ($this->_echoType !== PHPTAL_Php_Attribute::ECHO_STRUCTURE)
-            $codewriter->doSetVar($attkey, "' $qname=\"'.".$codewriter->escapeCode($attkey).".'\"'");
+            $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->escapeCode($attkey).".'\"'");
         else
-            $codewriter->doSetVar($attkey, "' $qname=\"'.$attkey.'\"'");
+            $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->stringifyCode($attkey).".'\"'");
             
         $codewriter->doElse();
         $codewriter->doSetVar($attkey, "''");
@@ -187,19 +187,19 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter = $executor->getCodeWriter();
         
         if (!$islast) {
-        $condition = "!phptal_isempty($this->_attkey = $exp)";
+            $condition = "!phptal_isempty($this->_attkey = ($exp))";
         }
         else {
-            $condition = "NULL !== ($this->_attkey = $exp)";
-        }
-        
+            $condition = "NULL !== ($this->_attkey = ($exp))";
+        }        
         $executor->doIf($condition);
+        
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
-            $value = $this->_attkey;
+            $value = $codewriter->stringifyCode($this->_attkey);
         else
             $value = $codewriter->escapeCode($this->_attkey);
 
-        $codewriter->doSetVar($this->_attkey, "' $this->_attribute=\"'.$value.'\"'");
+        $codewriter->doSetVar($this->_attkey, $codewriter->str(" {$this->_attribute}=\"").".$value.'\"'");
     }
 }
 

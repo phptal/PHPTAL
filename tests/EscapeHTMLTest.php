@@ -153,4 +153,24 @@ class EscapeHTMLTest extends PHPTAL_TestCase {
         $this->assertNotContains('&amp;amp;',$res);
         $this->assertNotContains('&amp;&amp;',$res);
     }
+    
+    function testSimpleXML()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p>${x}</p>');
+        $simplexml = new SimpleXMLElement('<foo title="bar&amp;&lt;">foo&amp;&lt;</foo>');
+        
+        $tpl->x = $simplexml['title'];
+        $this->assertEquals('<p>bar&amp;&lt;</p>',$tpl->execute());
+    }
+    
+    function testStructureSimpleXML()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p>${structure x}</p>');
+        $simplexml = new SimpleXMLElement('<foo title="bar&amp;&lt;">foo&amp;&lt;</foo>');
+        
+        $tpl->x = $simplexml['title'];
+        $this->assertEquals('<p>bar&<</p>',$tpl->execute());
+    }
 }

@@ -139,7 +139,7 @@ class PHPTAL_Php_State
         if ($this->_talesMode == 'tales') $code = phptal_tale($matches[1]);
         else $code = PHPTAL_TalesInternal::php($matches[1]);
 
-        return '<?php echo '.$code.' ?>';
+        return '<?php echo '.$this->stringify($code).' ?>';
     }
 
     private function _interpolateTalesVarsHTML($matches)
@@ -195,6 +195,8 @@ class PHPTAL_Php_State
     /**
      * expects PHP code and returns PHP code that will generate escaped string
      * Optimizes case when PHP string is given.
+     * 
+     * @return php code
      */
     public function htmlchars($php)
     {
@@ -204,6 +206,17 @@ class PHPTAL_Php_State
             return "'".htmlspecialchars(str_replace('\\\'',"'", $m[1]), ENT_QUOTES)."'";
         }
         return 'phptal_escape('.$php.')';
+    }
+    
+    /**
+     * allow proper printing of any object 
+     * (without escaping - for use with structure keyword)
+     * 
+     * @return php code
+     */
+    public function stringify($php)
+    {
+        return 'phptal_tostring('.$php.')';
     }
 }
 

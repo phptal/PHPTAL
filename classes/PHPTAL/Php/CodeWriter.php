@@ -268,17 +268,20 @@ class PHPTAL_Php_CodeWriter
 
     public function doEcho($code)
     {
+        if ($code === "''") return;
         $this->flush();
         $this->pushRawHtml('<?php echo '.$this->escapeCode($code).' ?>');
     }
 
     public function doEchoRaw($code)
     {
-        $this->pushHtml('<?php echo '.$code.' ?>');
+        if ($code === "''") return;
+        $this->pushHtml('<?php echo '.$this->stringifyCode($code).' ?>');
     }
 
     public function pushHtml($html)
     {
+        if ($html === "") return;
         $html = $this->_state->interpolateTalesVarsInHtml($html);
         $this->flushCode();
         $this->_htmlBuffer[] =  $html;
@@ -293,7 +296,8 @@ class PHPTAL_Php_CodeWriter
 
 	public function pushRawHtml($html)
 	{
-    	$this->flushCode();
+        if ($html === "") return;
+        $this->flushCode();
 		$this->_htmlBuffer[] =  $html;
 	}
 
@@ -315,6 +319,11 @@ class PHPTAL_Php_CodeWriter
     public function escapeCode($code)
     {
         return $this->_state->htmlchars($code);
+    }
+    
+    public function stringifyCode($code)
+    {
+        return $this->_state->stringify($code);
     }
     
     public function getEncoding()

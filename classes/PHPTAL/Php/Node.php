@@ -600,7 +600,10 @@ class PHPTAL_DOMText extends PHPTAL_DOMNode
 {
     public function generate(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushHtml($this->getValueEscaped());
+        if ($this->getValueEscaped() !== '')
+        {
+            $codewriter->pushHtml($this->getValueEscaped());
+        }
     }
 }
 
