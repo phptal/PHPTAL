@@ -76,7 +76,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	 */
 	static public function not($expression, $nothrow)
 	{
-		return '!(' . phptal_tales($expression, $nothrow) . ')';
+		return '!(' . phptal_tale($expression, $nothrow) . ')';
 	}
 
 
@@ -155,7 +155,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
             $next = self::string($m[1]);
             $expression = self::string($m[2]);
         } else {
-	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name. Complex expression need php: modifier.");
+	        if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name. Complex expressions need php: modifier.");
 
             $next = self::string($expression); 
             $expression = null;
@@ -243,12 +243,8 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	            case '}':
 	                if ($inAccoladePath) {
 	                    $inAccoladePath = false;
-	                    $subEval = self::path($subPath);
-	                    if (is_array($subEval)) {
-	                        $err = 'cannot use | operator in evaluated expressions';
-	                        throw new PHPTAL_ParserException($err);
-	                    }
-	                    $result .= "'." . $subEval . ".'";
+	                    $subEval = phptal_tale($subPath,false);
+	                    $result .= "'.(" . $subEval . ").'";
 	                    $subPath = '';
 	                    $lastWasDollar = false;
 	                    $c = '';
@@ -271,12 +267,8 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	                        $c = '';
 	                    } else {
 	                        $inPath = false;
-	                        $subEval = self::path($subPath);
-	                        if (is_array($subEval)) {
-	                            $err = 'cannot use | operator in evaluated expressions';
-	                            throw new PHPTAL_ParserException($err);
-	                        }
-	                        $result .= "'." . $subEval . ".'";
+	                        $subEval = phptal_tale($subPath,false);
+	                        $result .= "'.(" . $subEval . ").'";
 	                    }
 	                }
 	                break;
@@ -284,16 +276,16 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales {
 	        $result .= $c;
 	    }
 	    if ($inPath) {
-	        $subEval = self::path($subPath);
-	        if (is_array($subEval)) {
-	            $err = 'cannot use | operator in evaluated expressions';
-	            throw new PHPTAL_ParserException($err);
-	        }
-	        $result .= "'." . $subEval . ".'";
+	        $subEval = phptal_tale($subPath,false);
+	        $result .= "'.(" . $subEval . ").'";
 	    }
 	    
 	    // optimize ''.foo.'' to foo
-	    return preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/",'\1','\''.$result.'\'');        
+	    $result = preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/",'\1','\''.$result.'\'');        
+	    
+	    // optimize (foo()) to foo()
+	    $result = preg_replace("/^\(((?:[^()]+|\([^()]*\))*)\)$/",'\1',$result);        
+	    return $result;
 	}
 
 	/**

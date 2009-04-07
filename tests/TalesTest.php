@@ -107,10 +107,24 @@ class TalesTest extends PHPTAL_TestCase
         $this->assertEquals('phptal_path($ctx->{\'_GET\'}, \'a\')',phptal_tales('_GET/a'));
     }
     
-    function testInterpolatedPHP()
+    function testInterpolatedPHP1()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->somearray = array(9,9,9);
+        $tpl->setSource('<div tal:content="string:foo${php:true?&apos;bar&apos;:0}baz"/>');
+        $this->assertEquals('<div>foobarbaz</div>',$tpl->execute());
+    }
+    
+    function testInterpolatedTALES()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<div tal:content="string:foo${nonexistant | string:bar}baz"/>');
+        $this->assertEquals('<div>foobarbaz</div>',$tpl->execute());
+    }
+    
+    function testInterpolatedPHP2()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->somearray = array(1=>9,9,9);
         $tpl->setSource('<div tal:repeat="x php:somearray"><x tal:replace=\'repeat/${php:"x"}/key\'/></div>');
         $this->assertEquals('<div>1</div><div>2</div><div>3</div>',$tpl->execute());
     }
