@@ -338,6 +338,8 @@ class PHPTAL_XmlParser
      */
     public function sanitizeEscapedText($str)
     {
+        $str = str_replace('&apos;','&#39;',$str); // PHP's html_entity_decode doesn't seem to support that!
+        
         /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
         $types = ini_get('short_open_tag')?'php|=|':'php';
         $split = preg_split("/(<\?(?:$types).*?\?>)/", $str, null, PREG_SPLIT_DELIM_CAPTURE);
