@@ -81,10 +81,10 @@ class PHPTAL_Context
      */
     public function setDocType($doctype)
     {
-        if ($this->_parentContext != null) {
+        if ($this->_parentContext) {
             return $this->_parentContext->setDocType($doctype);
         }
-        if ($this->_parentContext != null) {
+        if ($this->_parentContext) {
             return $this->_parentContext->setDocType($doctype);
         }
         if (!$this->__docType) {
@@ -101,10 +101,10 @@ class PHPTAL_Context
      */
     public function setXmlDeclaration($xmldec)
     {
-        if ($this->_parentContext != null) {
+        if ($this->_parentContext) {
             return $this->_parentContext->setXmlDeclaration($xmldec);
         }
-        if ($this->_parentContext != null) {
+        if ($this->_parentContext) {
             return $this->_parentContext->setXmlDeclaration($xmldec);
         }
         if (!$this->__xmlDeclaration) {

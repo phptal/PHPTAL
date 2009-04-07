@@ -35,7 +35,7 @@ class PHPTAL_Dom_Defs
      */
     public static function getInstance()
     {
-        if (self::$_instance == null) {
+        if (!self::$_instance) {
             self::$_instance = new PHPTAL_Dom_Defs();
         }
         return self::$_instance;

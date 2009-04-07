@@ -14,6 +14,8 @@
  */
  
 /** 
+ * Reads template from the filesystem
+ *
  * @package PHPTAL
  */
 class PHPTAL_FileSource implements PHPTAL_Source
@@ -43,6 +45,8 @@ class PHPTAL_FileSource implements PHPTAL_Source
 }
 
 /** 
+ * Finds template on disk by looking through repositories first
+ *
  * @package PHPTAL
  */
 class PHPTAL_FileSourceResolver implements PHPTAL_SourceResolver
@@ -70,5 +74,3 @@ class PHPTAL_FileSourceResolver implements PHPTAL_SourceResolver
 
     private $_repositories;
 }
-
-?>

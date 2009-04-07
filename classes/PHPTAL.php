@@ -429,7 +429,7 @@ class PHPTAL
             $res = $xmlDec . "\n" . $res;
         }
 
-        if ($this->_postfilter != null) {
+        if ($this->_postfilter) {
             return $this->_postfilter->filter($res);
         }
         return $res;
@@ -792,21 +792,22 @@ class PHPTAL
         }
 
         // template source already defined
-        if ($this->_source != null) {
+        if ($this->_source) {
             return;
         }
 
-        $this->_resolvers[] =  new PHPTAL_FileSourceResolver($this->_repositories);
         foreach ($this->_resolvers as $resolver) {
             $source = $resolver->resolve($this->_path);
-            if ($source != null) {
+            if ($source) {
                 $this->_source = $source;
-                break;
+                return;
             }
         }
-        array_pop($this->_resolvers);
+        
+        $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
+        $this->_source = $resolver->resolve($this->_path);
 
-        if ($this->_source == null) {
+        if (!$this->_source) {
             throw new PHPTAL_IOException('Unable to locate template file '.$this->_path);
         }
     }

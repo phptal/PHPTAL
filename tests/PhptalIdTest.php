@@ -17,11 +17,11 @@ require_once PHPTAL_DIR.'PHPTAL/Trigger.php';
 class MyTrigger implements PHPTAL_Trigger
 {
     public $useCache = false;
-    private $_cache  = false;
+    private $_cache  = null;
     
     public function start($id, $tpl)
     {
-        if ($this->_cache) {
+        if ($this->_cache !== null) {
             $this->useCache = true;
             return PHPTAL_Trigger::SKIPTAG;
         }
@@ -33,7 +33,7 @@ class MyTrigger implements PHPTAL_Trigger
     
     public function end($id, $tpl)
     {
-        if ($this->_cache == null) {
+        if ($this->_cache === null) {
             $this->_cache = ob_get_contents();
             ob_end_clean();
         }
