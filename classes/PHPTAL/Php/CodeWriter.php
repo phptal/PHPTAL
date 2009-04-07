@@ -152,7 +152,7 @@ class PHPTAL_Php_CodeWriter
     {
         if (count($this->_htmlBuffer) == 0) return;
         
-        $this->_result .= join( '', $this->_htmlBuffer );
+        $this->_result .= implode( '', $this->_htmlBuffer );
         $this->_htmlBuffer = array();
     }
 
@@ -270,31 +270,26 @@ class PHPTAL_Php_CodeWriter
     {
         if ($code === "''") return;
         $this->flush();
-        $this->pushRawHtml('<?php echo '.$this->escapeCode($code).' ?>');
+        $this->pushCode('echo '.$this->escapeCode($code));
     }
 
     public function doEchoRaw($code)
     {
         if ($code === "''") return;
-        $this->pushHtml('<?php echo '.$this->stringifyCode($code).' ?>');
+        $this->pushCode('echo '.$this->stringifyCode($this->interpolateHTML($code)));
     }
 
-    public function pushHtml($html)
+    public function interpolateHTML($html)
     {
-        if ($html === "") return;
-        $html = $this->_state->interpolateTalesVarsInHtml($html);
-        $this->flushCode();
-        $this->_htmlBuffer[] =  $html;
+        return $this->_state->interpolateTalesVarsInHtml($html);
     }
 
-    public function pushCDATA($html)
+    public function interpolateCDATA($str)
     {
-        $html = $this->_state->interpolateTalesVarsInCDATA($html);
-        $this->flushCode();
-        $this->_htmlBuffer[] =  $html;
+        return $this->_state->interpolateTalesVarsInCDATA($str);
     }
 
-	public function pushRawHtml($html)
+	public function pushHTML($html)
 	{
         if ($html === "") return;
         $this->flushCode();

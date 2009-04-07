@@ -39,7 +39,7 @@
   Getting the latest development version
   ======================================
 
-  You can checkout the latest subversion trunk content using :
+  You can checkout the latest subversion trunk content using:
 
     svn co https://svn.motion-twin.com/phptal/trunk phptal
 
@@ -48,7 +48,7 @@
   ===============================
 
   If you want to hack PHPTAL (don't forget to send me patches), you will
-  require :
+  require:
 
   - The PHPTAL development package 
   - PEAR[0]
