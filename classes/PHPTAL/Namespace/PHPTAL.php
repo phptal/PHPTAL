@@ -25,7 +25,7 @@ class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
 {
     public function __construct()
     {
-        parent::__construct('phptal', 'http://xml.zope.org/namespaces/phptal');
+        parent::__construct('phptal', 'http://phptal.motion-twin.com/ns/phptal');
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('tales', -1));
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('debug', -2));
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('id', 7));
