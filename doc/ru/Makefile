@@ -1,5 +1,5 @@
 XMLTO=xmlto
-PARMS=-m config.xsl
+PARMS=-m ../config.xsl
 BOOK=book.xml
 
 .PHONY:split onepage plaintext

@@ -1,5 +1,5 @@
 #!/bin/bash
-LANGS="en ru de"
+LANGS="en ru de" #  ru de
 DEST=./build/
 
 for lang in $LANGS
@@ -21,8 +21,8 @@ do
         mkdir $DEST/$lang/split
     fi
 
-    cp style.css $DEST/$lang/
-    cp style.css $DEST/$lang/split/
+    cp *.css $DEST/$lang/
+    cp *.css $DEST/$lang/split/
 
     cp $lang/plaintext/book.txt $DEST/$lang/phptal.txt
     cp $lang/xhtml/* $DEST/$lang/split/

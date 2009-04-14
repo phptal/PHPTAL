@@ -24,7 +24,7 @@
       <firstname>Axel</firstname><surname>Zöllich</surname>
     </author>
 
-    <revhistory>
+    <revhistory id="revhistory">
       <revision>
         <revnumber>v1.6</revnumber>
         <date>2008-10-03</date>
@@ -107,7 +107,7 @@
     
   </article>
 
-  <article id="whyusingphptal">
+  <article id="whyusephptal">
     <title>Warum <acronym>PHPTAL?</acronym></title>
 
     <para>

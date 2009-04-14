@@ -23,7 +23,7 @@
       <address><email>x.meglio@gmail.com</email></address>
 	</author>	
 
-    <revhistory>
+    <revhistory id="revhistory">
         <revision>
 			  <revnumber>v1.6</revnumber>
 				<date>3 Окт. 2008</date>
@@ -95,7 +95,7 @@
     
   </article>
 
-  <article id="whyusingphptal">
+  <article id="whyusephptal">
     <title>Почему <acronym>PHPTAL</acronym>?</title>
 
     <para>

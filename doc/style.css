@@ -3,6 +3,54 @@
  * Author: Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 
+
+ .nav {
+ text-align: right;
+ }
+ .nav a {
+ color: #b3a963;
+ font-weight: bold;
+ letter-spacing: 1px;
+ text-decoration: none;
+ }
+
+ #menu {
+ padding-top: 15px;
+ text-align: center;
+ margin-bottom: 2em;
+ }
+ #menu ul, #menu li {
+ list-style: none;
+ padding: 0px;
+ }
+ #menu li {
+ display: inline;
+ }
+ #menu li a {
+ font-weight: bold;
+ font-size: 1.3em;
+ padding: 0px 10px 0px 10px;
+ color: #777;
+ text-decoration: none;
+ }
+
+ #menu li a:hover {
+ color: #000;
+ color: #8e864e;
+ }
+
+ #menu li.current a {
+ color: #000;
+ }
+
+ code em, code i {font-style:normal;color:#6e2600}
+
+ a {
+ color: #00E;
+ }
+ a:visited {
+   color: #808;
+ }
 body {
 font-family: sans-serif;
 font-size: 0.9em;
@@ -13,9 +61,10 @@ background-attachment: fixed;
 padding-left: 80px;
 }
 
-.book, .article, .section {
+.book, .article, .section, .appendix {
 margin: auto;
-width: 640px;
+max-width: 720px;
+width:65%;
 min-width: 640px;
 }
 

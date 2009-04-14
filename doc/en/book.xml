@@ -3,7 +3,7 @@
 <book lang="en">
 
   <bookinfo>
-    <title>PHPTAL</title>
+    <title>PHPTAL Manual</title>
     <subtitle>PHP Template Attribute Language</subtitle>
     <date>2008-10-03</date>
     <author>
@@ -23,7 +23,7 @@
       <address><email>x.meglio@gmail.com</email></address>
 	</author>	
 
-    <revhistory>
+    <revhistory id="revhistory">
         <revision>
 			  <revnumber>v1.6</revnumber>
 				<date>2008-10-03</date>
@@ -107,7 +107,7 @@
     
   </article>
 
-  <article id="whyusingphptal">
+  <article id="whyusephptal">
     <title>Why use <acronym>PHPTAL</acronym></title>
 
     <para>
@@ -2247,7 +2247,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     </section> <!-- end of PHPTAL_TranslationService -->
 
 
-    <section id="gettext">
+    <section id="gettext">    <?dbhtml stop-chunking?>  
       <title>Working with gettext</title>
       
       <para>
@@ -2287,7 +2287,7 @@ else
 }
 ]]></programlisting>
 
-      <section id="i18n-directory">
+      <section id="i18n-directory"><?dbhtml stop-chunking?>
         <title>Creating the translation directory structure</title>
 
         <para>
@@ -2317,7 +2317,7 @@ else
 
       </section>
 
-      <section id="po-files">
+      <section id="po-files"><?dbhtml stop-chunking?>
         <title>Portable Object files</title>
 
         <para>
@@ -2603,7 +2603,7 @@ function phptal_tales_money( $src, $nothrow )
 
   </article>
   
-  <article id="sysadmin">
+  <appendix id="sysadmin">
       <title>Note for system administrators</title>
       <para>
           <acronym>PHPTAL</acronym> functions by generating <acronym>PHP</acronym> files from the template's logic,
@@ -2633,8 +2633,8 @@ function phptal_tales_money( $src, $nothrow )
           Alternatively you can also schedule the deletion of old/unused files
           by running this from an Unix-like shell (e.g. in a cron job):
 </para><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -exec rm -v {} \;</programlisting>
-</article>
-  <article id="usefullinks">
+</appendix>
+  <appendix id="usefullinks">
     <title>Useful links</title>
 
     <itemizedlist>
@@ -2658,9 +2658,9 @@ url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TALES"><acronym>TALES</acron
 the <acronym>TAL</acronym> Expression Syntax.
       </para></listitem>
     </itemizedlist>
-  </article>
+  </appendix>
 
-  <article id="greetings">
+  <appendix id="greetings">
     <title>Greetings</title>
 
     <para>Big thanks goes to:</para>
@@ -2679,5 +2679,5 @@ the <acronym>TAL</acronym> Expression Syntax.
       Olivier Parisy, the first enthusiastic <acronym>PHPTAL</acronym> user and bug finder,
       </para></listitem>
     </itemizedlist>
-  </article>
+  </appendix>
 </book>
