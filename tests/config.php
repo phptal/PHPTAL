@@ -15,7 +15,10 @@
 $testDir = dirname(__FILE__);
 chdir($testDir);
 
-date_default_timezone_set('Europe/Paris');
+if (function_exists('date_default_timezone_set'))
+{
+    date_default_timezone_set(@date_default_timezone_get());
+}
 
 function trim_file( $src ){
     return trim_string( join('', file($src) ) );
