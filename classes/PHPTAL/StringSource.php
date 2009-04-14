@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Defs.php 508 2009-04-04 15:40:32Z kornel $
+ * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
 /**

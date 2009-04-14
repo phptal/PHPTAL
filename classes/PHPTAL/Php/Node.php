@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: Cache.php 500 2009-03-31 13:05:37Z kornel $
+ * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/
  */
 
