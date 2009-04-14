@@ -384,7 +384,7 @@ catch (Exception $e){
       <programlisting><![CDATA[<span tal:define="usersList application/listUsers" 
       tal:condition="somecondition"
       tal:repeat="user usersList"
->...</span>
+>…</span>
 ]]></programlisting>
 
       <para>
@@ -394,7 +394,7 @@ catch (Exception $e){
       <programlisting><![CDATA[<span tal:repeat="user usersList"
       tal:condition="somecondition"
       tal:define="usersList application/listUsers" 
->...</span>
+>…</span>
 ]]></programlisting>
 
       <para>
@@ -555,7 +555,7 @@ catch (Exception $e){
         is evaluated to true.
         </para>
   
-        <programlisting><![CDATA[<span tal:condition="identified"> Welcome member ...  </span>
+        <programlisting><![CDATA[<span tal:condition="identified"> Welcome member …  </span>
 ]]></programlisting>
 
         <programlisting><![CDATA[<span tal:condition="not: identified">
@@ -570,7 +570,7 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[<span tal:comment="show only if more than five items in the cart"
-      tal:condition="php: cart.countItems() GT 5">...</span>
+      tal:condition="php: cart.countItems() GT 5">…</span>
 ]]></programlisting>
 
         <para>
@@ -579,10 +579,10 @@ catch (Exception $e){
         methods to the template:
         </para>
 
-        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">...</span>
+        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
 ]]></programlisting>
 
-        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">...</span>
+        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">…</span>
 ]]></programlisting>
 
       </section>
@@ -803,7 +803,7 @@ title="google search engine">the google search engine</a>
 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
-    ...
+    …
 </tr>
 ]]></programlisting>
 
@@ -827,7 +827,7 @@ title="google search engine">the google search engine</a>
                 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class css-odd:repeat/ranking/odd">
-  ...
+  …
 </tr>
 ]]></programlisting>
 
@@ -838,7 +838,7 @@ title="google search engine">the google search engine</a>
 <section id="optional-attrs"><title>Optional attributes</title>
         <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in php) as last alternative,
             attribute won't be added at all if there's no value for it (this avoids adding empty attributes):</para>
-        <programlisting><![CDATA[... tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
+        <programlisting><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
 
         <para><acronym>XHTML</acronym> attributes like <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag>, etc. are properly handled automatically.</para>
 
@@ -1081,7 +1081,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
-  <div i18n:translate="welcome">...</div>
+  <div i18n:translate="welcome">…</div>
 </div>]]></programlisting>
 
       </section>
@@ -1202,16 +1202,16 @@ title="google search engine">the google search engine</a>
         
         <programlisting><![CDATA[<html>
   <head>
-    ...
+    …
   </head>
   <body>
     <div id="menu">
-      ...
+      …
     </div>
     <div id="leftPane" phptal:debug=""
       tal:comment="this div seems buggy, keep
       trace of where errors are thrown">
-          ...
+          …
     </div>
   </body>
 </html>
@@ -1231,26 +1231,26 @@ title="google search engine">the google search engine</a>
               
                 <para>Content of this attribute is a duration (how long element should be kept in cache) written as number with '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' or '<constant>s</constant>' suffix.
             </para>
-            <programlisting><![CDATA[<div class="footer" phptal:cache="3h">...</div>]]></programlisting> 
+            <programlisting><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting> 
             <para>                  <sgmltag>&lt;div></sgmltag> will be evaluated at most once per 3 hours.</para>
             
             <para>Duration can be followed by optional "<varname>per</varname>" parameter that defines how cache should be shared. By default cache is shared between all pages that use that template. 
                   You can add "<varname>per url</varname>" to have separate copy of given element for every <acronym>URL</acronym>.
 </para>
 
-            <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">...</ol>]]></programlisting>
+            <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting>
           <para><sgmltag>&lt;ol></sgmltag> will be cached for one day, separately for each page.</para>
 <para>
                   You can add "<varname>per expression</varname>" to have different cache copy for every different value of an expression (which MUST evaluate to a string). 
                   Expression cannot refer to variables defined using <sgmltag>tal:define</sgmltag> on the same element.
 </para>
-<programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">...</ul>]]></programlisting>
+<programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting>
              <para><sgmltag>&lt;ul></sgmltag> will be cached for 25 minutes, separately for each object ID.</para>
 
              <section id="cache-refresh"><title>Instant refreshing</title>
 
                  <para>Instead of clearing cache, it might be a better idea to put version or last modification timestamp in the <varname>per</varname> parameter. This will cause cached template to be refreshed as soon as version/timestamp changes and no special cache clearing will be neccessary.</para>
-<programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">...</div>]]></programlisting>
+<programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting>
 
                  </section>
 
@@ -1386,7 +1386,7 @@ title="google search engine">the google search engine</a>
       <para>
       <acronym>PHPTALES</acronym> is the expression syntax used inside tal, metal, <acronym>PHPTAL</acronym> 
       attributes. From above examples, you should have seen some
-      <acronym>PHPTALES</acronym> examples (string:, php:, not:, ...). This chapter 
+      <acronym>PHPTALES</acronym> examples (string:, php:, not:, …). This chapter 
       describes the usage of <acronym>PHPTALES</acronym> in templates.
       </para>
 
@@ -1759,7 +1759,7 @@ catch (Exception $e){
       </para>
 
       <programlisting><![CDATA[<?php
-...
+…
 $tpl = new PHPTAL();
 
 // it is a matter of taste but you can use the set() method instead of 
@@ -1769,7 +1769,7 @@ $tpl->set('values', array(1,2,3,4));
 $tpl->set('user', new User('Joe'));
 
 $tpl->setTemplate('mytemplate.xhtml');
-...
+…
 ?>
 ]]></programlisting>
 
@@ -1953,13 +1953,13 @@ echo $tpl->execute();
       </para>
 
       <programlisting><![CDATA[<html>
-  ...
+  …
   <div>
-    ...
+    …
     foo bar baz <span tal:replace="id"/> foo bar baz
-    ...
+    …
   </div>
-  ...
+  …
 </html>
 ]]></programlisting>
 
@@ -1969,13 +1969,13 @@ echo $tpl->execute();
       </para>
 
       <programlisting><![CDATA[<html>
-  ...
+  …
   <div phptal:id="somePossiblyUniqueKeyword">
-    ...
+    …
     foo bar baz <span tal:replace="id"/> foo bar baz
-    ...
+    …
   </div>
-  ...
+  …
 </html>
 ]]></programlisting>
 
@@ -2077,8 +2077,8 @@ echo $tpl->execute();
 
       <para>
       You can add as many triggers as you like to your templates.  A 
-      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>...  
-      etc...
+      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>…  
+      etc…
       </para>
     </section>
 
@@ -2109,7 +2109,7 @@ echo $tpl->execute();
       </para>
 
       <section id="i18n-setlanguage">
-        <title>method setLanguage(...)</title>
+        <title>method setLanguage(…)</title>
 
         <para>
         This method may be called by the template to change the current 
@@ -2126,7 +2126,7 @@ echo $tpl->execute();
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-...
+…
     public function setLanguage(){
         $langs = func_get_args();
         foreach($langs as $lang){
@@ -2135,7 +2135,7 @@ class MyTranslator implements PHPTAL_TranslationService {
             return;
         }
     }
-    ...
+    …
     private $_currentLang;
 }
 ?>
@@ -2155,7 +2155,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function useDomain($domain){
         if (!array_key_exists($domain, $this->_domains)){
             $file = "domains/$this->_currentLang/$domain.php";
@@ -2163,7 +2163,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         }
         $this->_currentDomain = $this->_domains[$domain];
     }
-    ...
+    …
     private $_currentDomain;
     private $_domains = array();
 }
@@ -2189,11 +2189,11 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function setVar($key, $value){
         $this->_context[$key] = $value;
     }
-    ...
+    …
     private $_context = array();
 }
 ?>
@@ -2213,7 +2213,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function translate($key){
         $value = $this->_currentDomain[$key];
         
@@ -2230,7 +2230,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         
         return $value;
     }
-    ...
+    …
 }
 ?>
 ]]></programlisting>
@@ -2299,13 +2299,13 @@ else
 /path/to/your/translation_root/en_GB/LC_MESSAGES/
 /path/to/your/translation_root/fr_FR/LC_MESSAGES/
 /path/to/your/translation_root/es_ES/LC_MESSAGES/
-... and so on ...
+… and so on …
 ]]></programlisting>
 
         <para>
         The language code is composed of two characters defining the 
-        language itself (en, fr, es, ...) and two characters defining 
-        the country (US, GB, FR, ES, ...).
+        language itself (en, fr, es, …) and two characters defining 
+        the country (US, GB, FR, ES, …).
         </para>
 
         <para>
@@ -2437,11 +2437,11 @@ catch (Exception $e){
 
         <programlisting><![CDATA[# english 
 msgid "welcome"
-msgstr "Welcome ${name} you have ${n} mails !"
+msgstr "Welcome ${name} you have ${n} mails!"
 
 # french  
 msgid "welcome"
-msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
+msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
 ]]></programlisting>
 
         <para>
@@ -2453,7 +2453,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
   <span i18n:name="name" tal:replace="user/name"/>
   you currently have
   <span i18n:name="n" tal:replace="user/unreadeMails"/>
-  unread messages !
+  unread messages!
 </span>
 ]]></programlisting>
 
@@ -2478,7 +2478,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       <para>
       These modifiers are defined by <acronym>ZPT</acronym> specifications but <acronym>PHPTALES</acronym> can 
       be extended with your own modifiers to manipulate strings, date, 
-      money numbers, objects, whatever...
+      money numbers, objects, whatever…
       </para>
 
       <para>

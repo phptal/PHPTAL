@@ -310,7 +310,7 @@ catch (Exception $e){
       <programlisting><![CDATA[<span tal:define="usersList application/listUsers" 
       tal:condition="somecondition"
       tal:repeat="user usersList"
->...</span>
+>…</span>
 ]]></programlisting>
 
       <para><emphasis>абсолютно</emphasis> идентична такой:</para>
@@ -318,7 +318,7 @@ catch (Exception $e){
       <programlisting><![CDATA[<span tal:repeat="user usersList"
       tal:condition="somecondition"
       tal:define="usersList application/listUsers" 
->...</span>
+>…</span>
 ]]></programlisting>
 
       <para>Приоритет обработки атрибутов, например, tal:define и tal:condition, не будет зависеть от того, в каком порядке они записаны внутри тега SPAN. Порядок обработки определяется спецификацией <acronym>TAL</acronym>:</para>
@@ -451,15 +451,15 @@ catch (Exception $e){
         <para>Если программисты <acronym>PHP</acronym> скрипта не предоставили Вам (разработчику шаблонов) нужные методы и переменные в передаваемых шаблону данных, Вы можете сами выполнить необходимый <acronym>PHP</acronym> код:</para>
 
         <programlisting><![CDATA[<span tal:comment="отобразить, только если в корзине больше 5-и позиций"
-      tal:condition="php: cart.countItems() GT 5">...</span>
+      tal:condition="php: cart.countItems() GT 5">…</span>
 ]]></programlisting>
 
         <para>Частое использование инструкций &lt;a0&gt;PHP&lt;/a0&gt; в шаблонах привело бы к тому, что логика скрипта была бы разбросана между PHP файлами и шаблонами, что уводит нас от изначальной идеи разделения кода и вида. Поэтому желательно обеспечить разработчиков шаблонов всеми нужными булевыми значениями и методами, например:</para>
 
-        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">...</span>
+        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
 ]]></programlisting>
 
-        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">...</span>
+        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">…</span>
 ]]></programlisting>
 
       </section>
@@ -625,7 +625,7 @@ title="google search engine">the google search engine</a>
 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
-    ...
+    …
 </tr>
 ]]></programlisting>
 
@@ -637,14 +637,14 @@ title="google search engine">the google search engine</a>
                 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class css-odd:repeat/ranking/odd">
-  ...
+  …
 </tr>
 ]]></programlisting>
 
         <para>Модификатор возвратит &quot;odd&quot;, если <varname>repeat/ranking/odd</varname> равен true, а иначе false.</para>
 <section id="optional-attrs"><title>Опциональные атрибуты</title>
         <para>Задавая значение, можно использовать так называемые альтернативные значения, разделяя их знаком |. Если первое значение не определено, парсер попытается подставить следующее в цепочке, если оно тоже не определено - следующе, и т.д. При использовании альтернативных значений, в <sgmltag>tal:attributes</sgmltag> можно использовать значение <varname>nothing</varname> (или <varname>NULL</varname> в выражении php) как последнее альтернативное значение. Тогда атрибут не будет добавлен тегу, если значение для атрибута не определено. Это позволит избежать &quot;пустых&quot; атрибутов:</para>
-        <programlisting><![CDATA[... tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
+        <programlisting><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
 
         <para><acronym>XHTML</acronym> атрибуты <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag> и другие подобные  будут также обработаны правильно.</para>
 
@@ -811,7 +811,7 @@ title="google search engine">the google search engine</a>
         <para>Мало того, ключ может задаваться переменной:</para>
 
         <programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
-  <div i18n:translate="welcome">...</div>
+  <div i18n:translate="welcome">…</div>
 </div>]]></programlisting>
 
       </section>
@@ -905,16 +905,16 @@ title="google search engine">the google search engine</a>
         
         <programlisting><![CDATA[<html>
   <head>
-    ...
+    …
   </head>
   <body>
     <div id="menu">
-      ...
+      …
     </div>
     <div id="leftPane" phptal:debug=""
       tal:comment="похоже, что этот div содержит ошибки,
       посмотрим-ка, где они возникают">
-          ...
+          …
     </div>
   </body>
 </html>
@@ -931,21 +931,21 @@ title="google search engine">the google search engine</a>
               <note><para>Использование кеша рекомендуется только для элементов со сложными выражениями, вычислениями, макросами из внешних файлов или <acronym>PHP</acronym> доступа к БД. Во всех других случаях, некешированные шаблоны будут настолько же быстро обрабатываться, как и кешированные.</para></note>
               
                 <para>В атрибуте необходимо указать, как долго должен сохраниться кеш. Для этого нужно записать число с суффиксом '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' или '<constant>s</constant>'.</para>
-            <programlisting><![CDATA[<div class="footer" phptal:cache="3h">...</div>]]></programlisting> 
+            <programlisting><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting> 
             <para>                  <sgmltag>&lt;div&gt;</sgmltag> будет заново обработан как минимум раз в 3 часа.</para>
             
             <para>Можно ограничить &quot;видимость&quot; кеша, дописав &quot;<varname>per</varname>&quot;. По умолчанию, кеш видим всем страницам, использующим этот шаблон. Используйте &quot;<varname>per url</varname>&quot;, чтобы заданный элемент кешировался отдельно для разных <acronym>URL</acronym>.</para>
 
-            <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">...</ol>]]></programlisting>
+            <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting>
           <para><sgmltag>&lt;ol&gt;</sgmltag> будет кеширован на один день, отдельно для каждой страницы.</para>
 <para>Можно указать &quot;<varname>per expression</varname>&quot;, где expression - некое выражение. Тогда отдельные значения в кеше будут генерироваться для каждого разного значения этого выражения (выражение ДОЛЖНО в результате давать строку). Выражение не может использовать переменные, определенные в том же элементе с помощью <sgmltag>tal:define</sgmltag>.</para>
-<programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">...</ul>]]></programlisting>
+<programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting>
              <para><sgmltag>&lt;ul&gt;</sgmltag> будет кешироваться каждые 25 минут, отдельно для каждого ID объекта.</para>
 
              <section id="cache-refresh"><title>Принудительное обновление</title>
 
                  <para>Вместо того, чтобы очищать кеш, разумно использовать версию или время последних изменений вместе с <varname>per</varname>. Это повлечет за собой регенерацию кеша каждый раз, когда версия или время правки будут изменены. В этом случае, можно обойтись без очистки кеша.</para>
-<programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">...</div>]]></programlisting>
+<programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting>
 
                  </section>
 
@@ -1047,7 +1047,7 @@ title="google search engine">the google search engine</a>
       <para>
       <acronym>PHPTALES</acronym> is the expression syntax used inside tal, metal, <acronym>PHPTAL</acronym> 
       attributes. From above examples, you should have seen some
-      <acronym>PHPTALES</acronym> examples (string:, php:, not:, ...). This chapter 
+      <acronym>PHPTALES</acronym> examples (string:, php:, not:, …). This chapter 
       describes the usage of <acronym>PHPTALES</acronym> in templates.
       </para>
 
@@ -1420,7 +1420,7 @@ catch (Exception $e){
       </para>
 
       <programlisting><![CDATA[<?php
-...
+…
 $tpl = new PHPTAL();
 
 // it is a matter of taste but you can use the set() method instead of 
@@ -1430,7 +1430,7 @@ $tpl->set('values', array(1,2,3,4));
 $tpl->set('user', new User('Joe'));
 
 $tpl->setTemplate('mytemplate.xhtml');
-...
+…
 ?>
 ]]></programlisting>
 
@@ -1614,13 +1614,13 @@ echo $tpl->execute();
       </para>
 
       <programlisting><![CDATA[<html>
-  ...
+  …
   <div>
-    ...
+    …
     foo bar baz <span tal:replace="id"/> foo bar baz
-    ...
+    …
   </div>
-  ...
+  …
 </html>
 ]]></programlisting>
 
@@ -1630,13 +1630,13 @@ echo $tpl->execute();
       </para>
 
       <programlisting><![CDATA[<html>
-  ...
+  …
   <div phptal:id="somePossiblyUniqueKeyword">
-    ...
+    …
     foo bar baz <span tal:replace="id"/> foo bar baz
-    ...
+    …
   </div>
-  ...
+  …
 </html>
 ]]></programlisting>
 
@@ -1738,8 +1738,8 @@ echo $tpl->execute();
 
       <para>
       You can add as many triggers as you like to your templates.  A 
-      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>...  
-      etc...
+      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>…  
+      etc…
       </para>
     </section>
 
@@ -1770,7 +1770,7 @@ echo $tpl->execute();
       </para>
 
       <section id="i18n-setlanguage">
-        <title>method setLanguage(...)</title>
+        <title>method setLanguage(…)</title>
 
         <para>
         This method may be called by the template to change the current 
@@ -1787,7 +1787,7 @@ echo $tpl->execute();
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-...
+…
     public function setLanguage(){
         $langs = func_get_args();
         foreach($langs as $lang){
@@ -1796,7 +1796,7 @@ class MyTranslator implements PHPTAL_TranslationService {
             return;
         }
     }
-    ...
+    …
     private $_currentLang;
 }
 ?>
@@ -1816,7 +1816,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function useDomain($domain){
         if (!array_key_exists($domain, $this->_domains)){
             $file = "domains/$this->_currentLang/$domain.php";
@@ -1824,7 +1824,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         }
         $this->_currentDomain = $this->_domains[$domain];
     }
-    ...
+    …
     private $_currentDomain;
     private $_domains = array();
 }
@@ -1850,11 +1850,11 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function setVar($key, $value){
         $this->_context[$key] = $value;
     }
-    ...
+    …
     private $_context = array();
 }
 ?>
@@ -1874,7 +1874,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function translate($key){
         $value = $this->_currentDomain[$key];
         
@@ -1891,7 +1891,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         
         return $value;
     }
-    ...
+    …
 }
 ?>
 ]]></programlisting>
@@ -1960,13 +1960,13 @@ else
 /path/to/your/translation_root/en_GB/LC_MESSAGES/
 /path/to/your/translation_root/fr_FR/LC_MESSAGES/
 /path/to/your/translation_root/es_ES/LC_MESSAGES/
-... and so on ...
+… and so on …
 ]]></programlisting>
 
         <para>
         The language code is composed of two characters defining the 
-        language itself (en, fr, es, ...) and two characters defining 
-        the country (US, GB, FR, ES, ...).
+        language itself (en, fr, es, …) and two characters defining 
+        the country (US, GB, FR, ES, …).
         </para>
 
         <para>
@@ -2098,11 +2098,11 @@ catch (Exception $e){
 
         <programlisting><![CDATA[# english 
 msgid "welcome"
-msgstr "Welcome ${name} you have ${n} mails !"
+msgstr "Welcome ${name} you have ${n} mails!"
 
 # french  
 msgid "welcome"
-msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
+msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
 ]]></programlisting>
 
         <para>
@@ -2114,7 +2114,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
   <span i18n:name="name" tal:replace="user/name"/>
   you currently have
   <span i18n:name="n" tal:replace="user/unreadeMails"/>
-  unread messages !
+  unread messages!
 </span>
 ]]></programlisting>
 
@@ -2139,7 +2139,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
       <para>
       These modifiers are defined by <acronym>ZPT</acronym> specifications but <acronym>PHPTALES</acronym> can 
       be extended with your own modifiers to manipulate strings, date, 
-      money numbers, objects, whatever...
+      money numbers, objects, whatever…
       </para>
 
       <para>

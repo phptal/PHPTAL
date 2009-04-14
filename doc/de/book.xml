@@ -360,7 +360,7 @@ catch (Exception $e){
       <programlisting><![CDATA[<span tal:define="usersList application/listUsers" 
       tal:condition="somecondition"
       tal:repeat="user usersList"
->...</span>
+>…</span>
 ]]></programlisting>
 
       <para>
@@ -370,7 +370,7 @@ catch (Exception $e){
       <programlisting><![CDATA[<span tal:repeat="user usersList"
       tal:condition="somecondition"
       tal:define="usersList application/listUsers" 
->...</span>
+>…</span>
 ]]></programlisting>
 
       <para>
@@ -520,7 +520,7 @@ catch (Exception $e){
           Das Element und sein Inhalt werden nur angezeigt, wenn das Ergebnis der Bedingung wahr ist.
         </para>
   
-        <programlisting><![CDATA[<span tal:condition="identified"> Welcome member ...  </span>
+        <programlisting><![CDATA[<span tal:condition="identified"> Welcome member …  </span>
 ]]></programlisting>
 
         <programlisting><![CDATA[<span tal:condition="not: identified">
@@ -533,17 +533,17 @@ catch (Exception $e){
         </para>
 
         <programlisting><![CDATA[<span tal:comment="show only if more than five items in the cart"
-      tal:condition="php: cart.countItems() GT 5">...</span>
+      tal:condition="php: cart.countItems() GT 5">…</span>
 ]]></programlisting>
 
         <para>
           Dadurch kann unerwünscht viel Logik in der Vorlage landen. Manchmal ist es daher besser der Vorlage boolsche Ausdrücke oder Methoden anzubieten.
         </para>
 
-        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">...</span>
+        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
 ]]></programlisting>
 
-        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">...</span>
+        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">…</span>
 ]]></programlisting>
 
       </section>
@@ -754,7 +754,7 @@ title="google search engine">the google search engine</a>
 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
-    ...
+    …
 </tr>
 ]]></programlisting>
 
@@ -772,7 +772,7 @@ title="google search engine">the google search engine</a>
                 
         <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class css-odd:repeat/ranking/odd">
-  ...
+  …
 </tr>
 ]]></programlisting>
 
@@ -785,7 +785,7 @@ title="google search engine">the google search engine</a>
           <para>
             Verwenden Sie in <sgmltag>tal:attributes</sgmltag> <acronym>TALES</acronym> Alternativen (die a|b|c Notation) und ist <varname>nothing</varname> (oder <varname>NULL</varname> in <acronym>PHP</acronym>) die letzte der Alternativen, wird das Attribut garnicht ausgegeben wenn kein Wert dafür vorhanden ist. (Hierdurch werden leere Attribute vermieden.):
           </para>
-          <programlisting><![CDATA[... tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
+          <programlisting><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
   
           <para>
             <acronym>XHTML</acronym> Attribute wie <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag>, usw. werden automatisch richtig verwendet.
@@ -1001,7 +1001,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
-  <div i18n:translate="welcome">...</div>
+  <div i18n:translate="welcome">…</div>
 </div>]]></programlisting>
 
       </section>
@@ -1120,16 +1120,16 @@ title="google search engine">the google search engine</a>
 
         <programlisting><![CDATA[<html>
   <head>
-    ...
+    …
   </head>
   <body>
     <div id="menu">
-      ...
+      …
     </div>
     <div id="leftPane" phptal:debug=""
       tal:comment="this div seems buggy, keep
       trace of where errors are thrown">
-          ...
+          …
     </div>
   </body>
 </html>
@@ -1152,7 +1152,7 @@ title="google search engine">the google search engine</a>
           Der Inhalt dieses Attributes ist eine Zeitspanne (wie lange soll das Element gepuffert werden), die als Zahl mit'<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' oder '<constant>s</constant>' als Einheit geschrieben wird.
         </para>
 
-        <programlisting><![CDATA[<div class="footer" phptal:cache="3h">...</div>]]></programlisting> 
+        <programlisting><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting> 
 
         <para>
           <sgmltag>&lt;div></sgmltag> wird maximale alle 3 Stunden einmal ausgeführt.
@@ -1162,7 +1162,7 @@ title="google search engine">the google search engine</a>
           Der Zeitspanne kann wahlweise ein "<varname>per</varname>" Parameter folgen, der festlegt, ob der Puffer geteilt wird. In der Grundeinstellung wird ein Elementpuffer von allen Seiten genutzt, die die entsprechende Vorlage nutzen. Sie können ein "<varname>per url</varname>" hinzufügen, so daß jeder <acronym>URL</acronym> einen eigenen Puffer für das betreffende Element erhält.
         </para>
 
-        <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">...</ol>]]></programlisting>
+        <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting>
 
         <para>
           <sgmltag>&lt;ol></sgmltag> wird für jede Seite seperat einen Tag lang gepuffert.
@@ -1172,7 +1172,7 @@ title="google search engine">the google search engine</a>
           Um für jeden einzelnen Wert eines Ausdrucks (der im Ergebnis eine Zeichenkette liefern muß) einen eigenen Puffer zu erhalten, können Sie "<varname>per expression</varname>" verwenden. Dabei dürfen sich die Ausdrücke nicht auf Variablen beziehen, die via <sgmltag>tal:define</sgmltag> im der selben Auszeichnug definiert werden.
         </para>
 
-        <programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">...</ul>]]></programlisting>
+        <programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting>
 
         <para>
           <sgmltag>&lt;ul></sgmltag> wird für jede object ID einzelnd 25 Minuten lang gepuffert.
@@ -1184,7 +1184,7 @@ title="google search engine">the google search engine</a>
             Es ist eine gute Idee, anstatt einen Puffer zu löschen, in den <varname>per</varname> Parameter eine Versionsnummer oder einen Zeitstempel einzufügen. Dadurch wird die gepufferte Vorlage erneuert, sobald sich die Version oder der Zeitstempel ändert. Ein separates Pufferlöschen ist dann nicht nötig.
           </para>
 
-          <programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">...</div>]]></programlisting>
+          <programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting>
 
         </section>
 
@@ -1226,7 +1226,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-          Natürlich ist das ein extremes Beispiel, und da das Ganze schnell genug ist, interessiert es zumeist nicht. Was geschieht aber, wenn ein solcher Pfad innerhalb eines großen <sgmltag>tal:repeat</sgmltag> aufgerufen wird? Hmm... Hier kann <sgmltag>phptal:tales</sgmltag> hilfreich sein:
+          Natürlich ist das ein extremes Beispiel, und da das Ganze schnell genug ist, interessiert es zumeist nicht. Was geschieht aber, wenn ein solcher Pfad innerhalb eines großen <sgmltag>tal:repeat</sgmltag> aufgerufen wird? Hmm… Hier kann <sgmltag>phptal:tales</sgmltag> hilfreich sein:
         </para>
 
         <programlisting><![CDATA[<html>
@@ -1307,7 +1307,7 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTALES</acronym></title>
 
       <para>
-        Zum Formulieren von Ausdrücken innerhalb von tal, metal, <acronym>PHPTAL</acronym> Attributen wird <acronym>PHPTALES</acronym> verwendet. In den vorhergehenden Beispielen sind ihnen schon einige <acronym>PHPTALES</acronym> Beispielverwendungen (string:, php:, not:, ...) begegnet. Dieses Kapitel beschreibt nun die Anwendung <acronym>PHPTALES</acronym> in Vorlagen.
+        Zum Formulieren von Ausdrücken innerhalb von tal, metal, <acronym>PHPTAL</acronym> Attributen wird <acronym>PHPTALES</acronym> verwendet. In den vorhergehenden Beispielen sind ihnen schon einige <acronym>PHPTALES</acronym> Beispielverwendungen (string:, php:, not:, …) begegnet. Dieses Kapitel beschreibt nun die Anwendung <acronym>PHPTALES</acronym> in Vorlagen.
       </para>
 
       <para>
@@ -1881,13 +1881,13 @@ echo $tpl->execute();
       </para>
 
       <programlisting><![CDATA[<html>
-  ...
+  …
   <div phptal:id="somePossiblyUniqueKeyword">
-    ...
+    …
     foo bar baz <span tal:replace="id"/> foo bar baz
-    ...
+    …
   </div>
-  ...
+  …
 </html>
 ]]></programlisting>
 
@@ -1989,8 +1989,8 @@ echo $tpl->execute();
 
       <para>
       You can add as many triggers as you like to your templates.  A 
-      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>...  
-      etc...
+      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>…  
+      etc…
       </para>
     </section>
 
@@ -2021,7 +2021,7 @@ echo $tpl->execute();
       </para>
 
       <section id="i18n-setlanguage">
-        <title>method setLanguage(...)</title>
+        <title>method setLanguage(…)</title>
 
         <para>
         Diese Methode kann durch die Vorlage aufgerufen werden um die aktuelle Ausgabesprache zu ändern.
@@ -2035,7 +2035,7 @@ echo $tpl->execute();
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-...
+…
     public function setLanguage(){
         $langs = func_get_args();
         foreach($langs as $lang){
@@ -2044,7 +2044,7 @@ class MyTranslator implements PHPTAL_TranslationService {
             return;
         }
     }
-    ...
+    …
     private $_currentLang;
 }
 ?>
@@ -2069,7 +2069,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function useDomain($domain){
         if (!array_key_exists($domain, $this->_domains)){
             $file = "domains/$this->_currentLang/$domain.php";
@@ -2077,7 +2077,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         }
         $this->_currentDomain = $this->_domains[$domain];
     }
-    ...
+    …
     private $_currentDomain;
     private $_domains = array();
 }
@@ -2101,11 +2101,11 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function setVar($key, $value){
         $this->_context[$key] = $value;
     }
-    ...
+    …
     private $_context = array();
 }
 ?>
@@ -2125,7 +2125,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
-    ...
+    …
     public function translate($key){
         $value = $this->_currentDomain[$key];
         
@@ -2142,7 +2142,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         
         return $value;
     }
-    ...
+    …
 }
 ?>
 ]]></programlisting>
@@ -2195,11 +2195,11 @@ else
 /path/to/your/translation_root/en_GB/LC_MESSAGES/
 /path/to/your/translation_root/fr_FR/LC_MESSAGES/
 /path/to/your/translation_root/es_ES/LC_MESSAGES/
-... and so on ...
+… and so on …
 ]]></programlisting>
 
         <para>
-          Die Sprachkode besteht aus zwei Zeichen, die die eigentliche Sprache (fr, de, it,...) und zwei Zeichen, die das Land (CH, DE, IT, ...) festlegen.
+          Die Sprachkode besteht aus zwei Zeichen, die die eigentliche Sprache (fr, de, it, …) und zwei Zeichen, die das Land (CH, DE, IT, …) festlegen.
         </para>
 
         <para>
@@ -2328,11 +2328,11 @@ catch (Exception $e){
 
         <programlisting><![CDATA[# english 
 msgid "welcome"
-msgstr "Welcome ${name} you have ${n} mails !"
+msgstr "Welcome ${name} you have ${n} mails!"
 
 # french  
 msgid "welcome"
-msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
+msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
 ]]></programlisting>
 
         <para>
@@ -2344,7 +2344,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages !"
   <span i18n:name="name" tal:replace="user/name"/>
   you currently have
   <span i18n:name="n" tal:replace="user/unreadeMails"/>
-  unread messages !
+  unread messages!
 </span>
 ]]></programlisting>
 
