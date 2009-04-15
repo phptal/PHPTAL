@@ -81,6 +81,14 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
                 return $langCode;
             }
         }
+        foreach ($langs as $langCode) {
+            putenv("LANG=$langCode");
+            putenv("LC_ALL=$langCode");
+            putenv("LANGUAGE=$langCode");
+            if (setlocale(LC_MESSAGES, $langCode)) {
+                return $langCode;
+            }
+        }
 
         throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');
     }
