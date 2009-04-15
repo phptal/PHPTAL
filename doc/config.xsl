@@ -127,8 +127,8 @@
   <code>
     <xsl:if test="@language">
       <xsl:attribute name="class"><xsl:value-of select="@language"/></xsl:attribute>
-      <xsl:apply-templates/>
-    </xsl:if>  
+    </xsl:if>    
+    <xsl:apply-templates/>    
   </code>  
 </xsl:template>  
  
