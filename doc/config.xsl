@@ -1,9 +1,10 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+              
+                xmlns="http://www.w3.org/1999/xhtml"
                 version="1.0">
 
-  <xsl:param name="html.stylesheet" select="'style.css'"/>
+  <xsl:param name="html.stylesheet" select="'new.css'"/>
   <xsl:param name="html.extra.head.links" select="1"></xsl:param>
   <xsl:param name="navig.showtitles">1</xsl:param>
     
@@ -99,59 +100,37 @@
   </xsl:template>
   
   <xsl:template name="user.header.navigation">
-  <div xmlns="http://www.w3.org/1999/xhtml">
-
-      <div id="page">
-
-      <div id="menu">
-      <ul>
-        <li class="0">
-          <a href="/index.html">News</a>
-        </li>
-        <li class="0">
-          <a href="/introduction.html">Introduction</a>
-        </li>
-        <li class="current">
-          <a href="/manuals.html">Manuals</a>
-        </li>
-        <li class="0">
-          <a href="/faq.html">FAQ</a>
-        </li>
-        <li class="0">
-          <a href="/download.html">Download</a>
-        </li>
-        <li class="0">
-          <a href="/contact.html">Contact</a>
-        </li>
-      </ul>
-      </div>
-  </div></div>
-  </xsl:template>
-  <!-- <xsl:template name="user.header.navigation">
-    <div id="header" xmlns="http://www.w3.org/1999/xhtml"><div>
+    <div id="header"><div>
       <h1><abbr>PHPTAL</abbr> PHP Template Attribute Language</h1>
     </div>    
       </div>
       <div id="menu">
       <ul>
-          <li class="news"><a href="index.html">News</a></li>
-          <li class="introduction"><a href="introduction.html">Introduction</a></li>
-          <li class="download"><a href="download.html">Download</a></li>
-          <li class="current manuals"> Manuals</li>
-          <li class="faq">     <a href="faq.html">FAQ</a></li>
-          <li class="contact"> <a href="contact.html">Mailinglist</a></li>
+          <li class="news"><a href="/index.html">News</a></li>
+          <li class="introduction"><a href="/introduction.html">Introduction</a></li>
+          <li class="download"><a href="/download.html">Download</a></li>
+          <li class="current manuals"><a href="/manuals.html">Manuals</a></li>
+          <li class="faq">     <a href="/faq.html">FAQ</a></li>
+          <li class="contact"> <a href="/contact.html">Mailinglist</a></li>
       </ul>
       </div>
 
      
       <xsl:text disable-output-escaping="yes">&lt;div id="page"></xsl:text>
      
- </xsl:template>-->
- 
- <xsl:template name="user.footer.content">
-     <!-- desperate hack -->
-   <xsl:text disable-output-escaping="yes">&lt;/div></xsl:text>
  </xsl:template>
+ 
+<xsl:template name="apply-highlighting">
+  <!-- 
+    xslthl = saxon = java = pain, and if that wasn't enough, docbook-xsl drops language attribute.
+  -->
+  <code>
+    <xsl:if test="@language">
+      <xsl:attribute name="class"><xsl:value-of select="@language"/></xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:if>  
+  </code>  
+</xsl:template>  
  
  
  <xsl:template name="breadcrumbs">
