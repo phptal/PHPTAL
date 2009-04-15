@@ -25,7 +25,7 @@ BUILD=$(BUILDBASEDIR)/$(SRCLANG)
 all: $(LANGS)
 
 # recursive make
-$(LANGS):: 
+$(LANGS):
 	@echo "Generating $@"
 	$(MAKE) --no-builtin-rules -$(MAKEFLAGS) SRCLANG="$@" lang
 
