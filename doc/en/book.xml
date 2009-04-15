@@ -138,7 +138,7 @@
     have encountered something looking like:
     </para>
   
-    <programlisting><![CDATA[<table>
+    <programlisting language="xml"><![CDATA[<table>
   <%loop myarray as myitem %>
   <tr>
     <td><% myitem %></td>
@@ -151,7 +151,7 @@
     Well, with <acronym>PHPTAL</acronym> you now can write:
     </para>
 
-    <programlisting><![CDATA[<table>
+    <programlisting language="xml"><![CDATA[<table>
   <tr tal:repeat="myitem myarray">
     <td tal:content="myitem">
       text replaced by the item value
@@ -240,7 +240,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
     Here's a file named 'my_template_file.xhtml'.
     </para>
   
-    <programlisting><![CDATA[<?xml version="1.0"?>
+    <programlisting language="xml"><![CDATA[<?xml version="1.0"?>
 <html>
   <head>
     <title tal:content="title">
@@ -323,7 +323,7 @@ catch (Exception $e){
     what follows.
     </para>
 
-    <programlisting><![CDATA[<?xml version="1.0"?>
+    <programlisting language="xml"><![CDATA[<?xml version="1.0"?>
 <html>
   <head>
     <title>The title value</title>
@@ -381,7 +381,7 @@ catch (Exception $e){
       For example,
       </para>
 
-      <programlisting><![CDATA[<span tal:define="usersList application/listUsers" 
+      <programlisting language="xml"><![CDATA[<span tal:define="usersList application/listUsers" 
       tal:condition="somecondition"
       tal:repeat="user usersList"
 >…</span>
@@ -391,7 +391,7 @@ catch (Exception $e){
       Is <emphasis>exactly</emphasis> the same as:
       </para>
 
-      <programlisting><![CDATA[<span tal:repeat="user usersList"
+      <programlisting language="xml"><![CDATA[<span tal:repeat="user usersList"
       tal:condition="somecondition"
       tal:define="usersList application/listUsers" 
 >…</span>
@@ -457,35 +457,35 @@ catch (Exception $e){
         Making a shortcut to a long path:
         </para>
 
-        <programlisting><![CDATA[<span tal:define="global destname path/to/existing/variable" />
+        <programlisting language="xml"><![CDATA[<span tal:define="global destname path/to/existing/variable" />
 ]]></programlisting>
 
         <para>
         Creating a string inside the template:
         </para>
 
-        <programlisting><![CDATA[<span tal:define="global destname string:some string" />
+        <programlisting language="xml"><![CDATA[<span tal:define="global destname string:some string" />
 ]]></programlisting>
 
         <para>
         Defining more than one variable at the same time:
         </para>
 
-        <programlisting><![CDATA[<span tal:define="global fname string:paul; lname string:dupond" />
+        <programlisting language="xml"><![CDATA[<span tal:define="global fname string:paul; lname string:dupond" />
 ]]></programlisting>
 
         <para>
         Defining a string containing another variable:
         </para>
   
-        <programlisting><![CDATA[<span tal:define="global hello string:hello $fname welcome on this page" />
+        <programlisting language="xml"><![CDATA[<span tal:define="global hello string:hello $fname welcome on this page" />
 ]]></programlisting>
 
         <para>
         A small trick which uses output buffers:
         </para>
 
-        <programlisting><![CDATA[<span tal:define="global hello">hello ${fname} welcome on this page</span>
+        <programlisting language="xml"><![CDATA[<span tal:define="global hello">hello ${fname} welcome on this page</span>
 ]]></programlisting>
 
         <para>
@@ -503,7 +503,7 @@ catch (Exception $e){
         On the other hand:
         </para>
 
-        <programlisting><![CDATA[<span tal:define="hello string:hello ${fname} welcome on this page"
+        <programlisting language="xml"><![CDATA[<span tal:define="hello string:hello ${fname} welcome on this page"
       tal:content="hello"
 />
 ]]></programlisting>
@@ -520,7 +520,7 @@ catch (Exception $e){
 	exception will be thrown.
         </para>
 
-        <programlisting><![CDATA[<span tal:define="hello" tal:content="hello">
+        <programlisting language="xml"><![CDATA[<span tal:define="hello" tal:content="hello">
   hello ${fname} welcome on this page
 </span>
 ]]></programlisting>
@@ -532,7 +532,7 @@ catch (Exception $e){
 	A global variable will be accessible from any <acronym>XML</acronym> node of your templates or called macros.
 	</para>
 
-	<programlisting><![CDATA[<span tal:define="global hello string:hello world"/>
+	<programlisting language="xml"><![CDATA[<span tal:define="global hello string:hello world"/>
 <p tal:content="hello"/>
 ]]></programlisting>
 
@@ -540,7 +540,7 @@ catch (Exception $e){
 	On the contrary, a local variable is only available inside the tag it is defined in:
 	</para>
 
-	<programlisting><![CDATA[<span tal:define="hello string:hello world"/>
+	<programlisting language="xml"><![CDATA[<span tal:define="hello string:hello world"/>
 <p tal:content="hello"/> <!-- will produce an undefined variable error -->
 ]]></programlisting>
 
@@ -555,10 +555,10 @@ catch (Exception $e){
         is evaluated to true.
         </para>
   
-        <programlisting><![CDATA[<span tal:condition="identified"> Welcome member …  </span>
+        <programlisting language="xml"><![CDATA[<span tal:condition="identified"> Welcome member …  </span>
 ]]></programlisting>
 
-        <programlisting><![CDATA[<span tal:condition="not: identified">
+        <programlisting language="xml"><![CDATA[<span tal:condition="not: identified">
   Please login before accessing this page
 </span>
 ]]></programlisting>
@@ -569,7 +569,7 @@ catch (Exception $e){
         conditions:
         </para>
 
-        <programlisting><![CDATA[<span tal:comment="show only if more than five items in the cart"
+        <programlisting language="xml"><![CDATA[<span tal:comment="show only if more than five items in the cart"
       tal:condition="php: cart.countItems() GT 5">…</span>
 ]]></programlisting>
 
@@ -579,10 +579,10 @@ catch (Exception $e){
         methods to the template:
         </para>
 
-        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
+        <programlisting language="xml"><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
 ]]></programlisting>
 
-        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">…</span>
+        <programlisting language="xml"><![CDATA[<span tal:condition="fullfillNumerousItems">…</span>
 ]]></programlisting>
 
       </section>
@@ -600,7 +600,7 @@ catch (Exception $e){
         the end of the specified resource.
         </para>
 
-        <programlisting><![CDATA[<tr tal:repeat="item some/result">
+        <programlisting language="xml"><![CDATA[<tr tal:repeat="item some/result">
   <td tal:content="item">text replaced by item</td>
 </tr>
 ]]></programlisting>
@@ -654,7 +654,7 @@ catch (Exception $e){
         database result.  The following code will work if <varname>playersRanking</varname> contains object that implements <acronym>PHP</acronym>'s <constant>Iterator</constant> interface:
         </para>
 
-        <programlisting><![CDATA[<table>
+        <programlisting language="xml"><![CDATA[<table>
   <thead>
     <tr>
       <th>Position</th>
@@ -682,7 +682,7 @@ catch (Exception $e){
         close tag, its content will still be evaluated.
         </para>
 
-        <programlisting><![CDATA[<span tal:omit-tag="condition">
+        <programlisting language="xml"><![CDATA[<span tal:omit-tag="condition">
   if the condition is true, then only this text will appear and span open and close will be removed
 </span>
 ]]></programlisting>
@@ -699,7 +699,7 @@ catch (Exception $e){
         </para>
         
         <para>If you want element that is never output, you can use <sgmltag>tal:block</sgmltag></para>
-        <programlisting><![CDATA[<tal:block tal:repeat="x php:range(1,10)">only this text will appear, ten times.</tal:block>
+        <programlisting language="xml"><![CDATA[<tal:block tal:repeat="x php:range(1,10)">only this text will appear, ten times.</tal:block>
 ]]></programlisting>
 
       </section>
@@ -712,7 +712,7 @@ catch (Exception $e){
         nothing if no value is given.
         </para>
 
-        <programlisting><![CDATA[<span tal:replace="string:this beautyful string">
+        <programlisting language="xml"><![CDATA[<span tal:replace="string:this beautyful string">
   this ugly string and span
 </span>
 ]]></programlisting>
@@ -729,7 +729,7 @@ catch (Exception $e){
         templates, but remove them from final output.
         </para>
 
-        <programlisting><![CDATA[<table>
+        <programlisting language="xml"><![CDATA[<table>
   <tr tal:repeat="item myresult">
     <td tal:content="item">item value</td>
   </tr>
@@ -752,7 +752,7 @@ catch (Exception $e){
         its expression.
         </para>
 
-        <programlisting><![CDATA[<span tal:define="myvar string:my string"/>
+        <programlisting language="xml"><![CDATA[<span tal:define="myvar string:my string"/>
 <span tal:content="myvar">will be replaced</span>
 ]]></programlisting>
 
@@ -760,7 +760,7 @@ catch (Exception $e){
         Will produce:
         </para>
 
-        <programlisting><![CDATA[<span>my string</span>
+        <programlisting language="xml"><![CDATA[<span>my string</span>
 ]]></programlisting>
 
       </section>
@@ -772,7 +772,7 @@ catch (Exception $e){
         This attribute changes tag attribute(s) value(s).
         </para>
 
-        <programlisting><![CDATA[<a href="http://www.foo.com" title="some foo link"
+        <programlisting language="xml"><![CDATA[<a href="http://www.foo.com" title="some foo link"
    tal:attributes="href somelink/href; title somelink/title" 
   tal:content="somelink/text"
 >sample link</a>
@@ -791,7 +791,7 @@ $somelink->text = "the google search engine";
         Will produce:
         </para>
 
-        <programlisting><![CDATA[<a href="http://www.google.com" 
+        <programlisting language="xml"><![CDATA[<a href="http://www.google.com" 
 title="google search engine">the google search engine</a>
 ]]></programlisting>
 
@@ -801,7 +801,7 @@ title="google search engine">the google search engine</a>
         A somewhat complicated example involving <sgmltag>tal:repeat</sgmltag>:
         </para>
 
-        <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
+        <programlisting language="xml"><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
     …
 </tr>
@@ -825,7 +825,7 @@ title="google search engine">the google search engine</a>
         integration / custom modifiers) which would be used as follows:
         </para>
                 
-        <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
+        <programlisting language="xml"><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class css-odd:repeat/ranking/odd">
   …
 </tr>
@@ -838,11 +838,11 @@ title="google search engine">the google search engine</a>
 <section id="optional-attrs"><title>Optional attributes</title>
         <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in php) as last alternative,
             attribute won't be added at all if there's no value for it (this avoids adding empty attributes):</para>
-        <programlisting><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
+        <programlisting language="xml"><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
 
         <para><acronym>XHTML</acronym> attributes like <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag>, etc. are properly handled automatically.</para>
 
-        <programlisting><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting>
+        <programlisting language="xml"><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting>
         
         <para>
             Remember that <acronym>XHTML</acronym> is case-sensitive, so <sgmltag>SELECTED</sgmltag> attribute is an error in <acronym>XHTML</acronym>. Use <sgmltag>selected</sgmltag>.
@@ -858,7 +858,7 @@ title="google search engine">the google search engine</a>
         any <acronym>PHP</acronym> exception is thrown in the tag content.
         </para>
 
-        <programlisting><![CDATA[<span tal:on-error="string:No username defined here"
+        <programlisting language="xml"><![CDATA[<span tal:on-error="string:No username defined here"
       tal:content="user/name">the user name here</span>
 ]]></programlisting>
 
@@ -871,7 +871,7 @@ title="google search engine">the google search engine</a>
         This also works on more than one level of template:
         </para>
 
-        <programlisting><![CDATA[<span tal:on-error="string:error occurred somewhere">
+        <programlisting language="xml"><![CDATA[<span tal:on-error="string:error occurred somewhere">
   <span tal:content="user/firstname"/>
   <span tal:content="user/lastname"/>
   <span metal:use-macro="userMenu" />
@@ -899,7 +899,7 @@ title="google search engine">the google search engine</a>
         small templates which can be reused in any other template.
         </para>
 
-        <programlisting><![CDATA[<div metal:define-macro="main_menu">
+        <programlisting language="xml"><![CDATA[<div metal:define-macro="main_menu">
   <ul>
     <li><a href="/">home</a></li>
     <li><a href="/products">products</a></li>
@@ -928,7 +928,7 @@ title="google search engine">the google search engine</a>
         current template.
         </para>
 
-        <programlisting><![CDATA[<span
+        <programlisting language="xml"><![CDATA[<span
   tal:comment="main_menu template requires 'mdate' variable"
   tal:define="mdate page/last_modified"
   metal:use-macro="main_menu"
@@ -940,7 +940,7 @@ title="google search engine">the google search engine</a>
         specifying the template source file.
         </para>
 
-        <programlisting><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
+        <programlisting language="xml"><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
 ]]></programlisting>
 
         <para>
@@ -948,12 +948,12 @@ title="google search engine">the google search engine</a>
         replacement feature inside the use-macro attribute value:
         </para>
 
-        <programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
+        <programlisting language="xml"><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
 ]]></programlisting>
 
 
         <para>Macro can call itself. This way you can output arrays recursively:</para>
-        <programlisting><![CDATA[        <ul metal:define-macro="show-list">
+        <programlisting language="xml"><![CDATA[        <ul metal:define-macro="show-list">
             <li tal:repeat="item list">
                 <tal:block tal:condition="php:is_array(item)" tal:define="list item" metal:use-macro="show-list" />
                 <tal:block tal:condition="php:!is_array(item)" tal:content="item" />
@@ -983,7 +983,7 @@ title="google search engine">the google search engine</a>
         or user actions when the member is logged in.
         </para>
 
-        <programlisting><![CDATA[<span metal:define-slot="news_place">
+        <programlisting language="xml"><![CDATA[<span metal:define-slot="news_place">
   <table>
     <tr tal:repeat="item php:latestNews()">
       <td tal:content="item/value">news description</td>
@@ -1014,7 +1014,7 @@ title="google search engine">the google search engine</a>
         content provided inside the <sgmltag>metal:fill-slot</sgmltag> attribute.
         </para>
 
-        <programlisting><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
+        <programlisting language="xml"><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
   <h2>user menu</h2>
   <ul>
     <li><a href="/user/action/inbox">inbox</a></li>
@@ -1050,7 +1050,7 @@ title="google search engine">the google search engine</a>
         using <acronym>PHPTAL</acronym>'s translation system.
         </para>
 
-        <programlisting><![CDATA[<div i18n:translate="string:welcome_message">Welcome here</div>
+        <programlisting language="xml"><![CDATA[<div i18n:translate="string:welcome_message">Welcome here</div>
 ]]></programlisting>
 
         <para>
@@ -1059,7 +1059,7 @@ title="google search engine">the google search engine</a>
         with the equivalent in currently requested language.
         </para>
 
-        <programlisting><![CDATA[<div i18n:translate="">Welcome here</div>
+        <programlisting language="xml"><![CDATA[<div i18n:translate="">Welcome here</div>
 ]]></programlisting>
 
         <para>
@@ -1080,7 +1080,7 @@ title="google search engine">the google search engine</a>
         variable, to allow dynamic key selection.
         </para>
 
-        <programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
+        <programlisting language="xml"><![CDATA[<div tal:define="welcome random_welcome_message">
   <div i18n:translate="welcome">…</div>
 </div>]]></programlisting>
 
@@ -1092,7 +1092,7 @@ title="google search engine">the google search engine</a>
           <para>
               Defines which attributes should be translated. Takes semicolon-separated list of attributes and keys similar to those for <sgmltag>i18n:translate</sgmltag>.
           </para>      
-          <programlisting><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
+          <programlisting language="xml"><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
 ]]></programlisting>
   
       </section>      
@@ -1116,7 +1116,7 @@ title="google search engine">the google search engine</a>
         value is a concatenation of strings.
         </para>
 
-        <programlisting><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
+        <programlisting language="xml"><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
 <!-- <span>${some/path}</span> -->
 
 <span i18n:name="myVar" tal:replace="some/path"/>
@@ -1133,7 +1133,7 @@ title="google search engine">the google search engine</a>
         An example of i18n usage:
         </para>
 
-        <programlisting><![CDATA[<div i18n:translate="">
+        <programlisting language="xml"><![CDATA[<div i18n:translate="">
   Welcome <span i18n:name="user" tal:replace="user/name"/>,
   you have <span i18n:name="mails" tal:replace="user/nbrMails"/>
   unread mails.
@@ -1162,11 +1162,11 @@ title="google search engine">the google search engine</a>
           <para>By defaults translations are assumed to contain only text, so <acronym>PHPTAL</acronym> escapes all "&lt;" characters.</para>
           <para>As of 1.1.14 you can use structure keyword in <sgmltag>i18n:translate</sgmltag> to disable escaping and use translated text as-is:</para>
           
-           <programlisting><![CDATA[      <div i18n:translate="structure '<b>bold text</b>'" />
+           <programlisting language="xml"><![CDATA[      <div i18n:translate="structure '<b>bold text</b>'" />
       ]]></programlisting>
       <para>Gives:</para>
           
-             <programlisting><![CDATA[        <div><b>bold text</b></div>
+             <programlisting language="xml"><![CDATA[        <div><b>bold text</b></div>
         ]]></programlisting>
       
       <para>Caveats: This will only work in simplest cases – <acronym>TAL</acronym> attributes inside translated strings are ignored. Ill-formed <acronym>XHTML</acronym> in translations will break page well-formedness.</para>      
@@ -1200,7 +1200,7 @@ title="google search engine">the google search engine</a>
         thrown.
         </para>
         
-        <programlisting><![CDATA[<html>
+        <programlisting language="xml"><![CDATA[<html>
   <head>
     …
   </head>
@@ -1231,26 +1231,26 @@ title="google search engine">the google search engine</a>
               
                 <para>Content of this attribute is a duration (how long element should be kept in cache) written as number with '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' or '<constant>s</constant>' suffix.
             </para>
-            <programlisting><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting> 
+            <programlisting language="xml"><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting> 
             <para>                  <sgmltag>&lt;div></sgmltag> will be evaluated at most once per 3 hours.</para>
             
             <para>Duration can be followed by optional "<varname>per</varname>" parameter that defines how cache should be shared. By default cache is shared between all pages that use that template. 
                   You can add "<varname>per url</varname>" to have separate copy of given element for every <acronym>URL</acronym>.
 </para>
 
-            <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting>
+            <programlisting language="xml"><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting>
           <para><sgmltag>&lt;ol></sgmltag> will be cached for one day, separately for each page.</para>
 <para>
                   You can add "<varname>per expression</varname>" to have different cache copy for every different value of an expression (which MUST evaluate to a string). 
                   Expression cannot refer to variables defined using <sgmltag>tal:define</sgmltag> on the same element.
 </para>
-<programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting>
+<programlisting language="xml"><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting>
              <para><sgmltag>&lt;ul></sgmltag> will be cached for 25 minutes, separately for each object ID.</para>
 
              <section id="cache-refresh"><title>Instant refreshing</title>
 
                  <para>Instead of clearing cache, it might be a better idea to put version or last modification timestamp in the <varname>per</varname> parameter. This will cause cached template to be refreshed as soon as version/timestamp changes and no special cache clearing will be neccessary.</para>
-<programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting>
+<programlisting language="xml"><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting>
 
                  </section>
 
@@ -1305,7 +1305,7 @@ title="google search engine">the google search engine</a>
         <sgmltag>phptal:tales</sgmltag> can help us here:
         </para>
 
-        <programlisting><![CDATA[<html>
+        <programlisting language="xml"><![CDATA[<html>
   <body>
     <table phptal:tales="php">
       <tr tal:repeat="myobject document.getChildren()">
@@ -1321,7 +1321,7 @@ title="google search engine">the google search engine</a>
         Please note that the above example does the same as:
         </para>
 
-        <programlisting><![CDATA[<html>
+        <programlisting language="xml"><![CDATA[<html>
   <body>
     <table>
       <tr tal:repeat="myobject php:document.getChildren()">
@@ -1348,21 +1348,21 @@ title="google search engine">the google search engine</a>
       attributes which are not to be echoed.
       </para>
 
-      <programlisting><![CDATA[<tal:block define="myvar string:Some value"/>
+      <programlisting language="xml"><![CDATA[<tal:block define="myvar string:Some value"/>
 ]]></programlisting>
 
       <para>
       is the same as:
       </para>
 
-      <programlisting><![CDATA[<span tal:define="myvar string:Some value" tal:omit-tag=""/>
+      <programlisting language="xml"><![CDATA[<span tal:define="myvar string:Some value" tal:omit-tag=""/>
 ]]></programlisting>
 
       <para>
       Another example:
       </para>
 
-      <programlisting><![CDATA[<tal:block condition="someCondition" repeat="item someRepeat">
+      <programlisting language="xml"><![CDATA[<tal:block condition="someCondition" repeat="item someRepeat">
   <div metal:use-macro="x"/>
 </tal:block>
 ]]></programlisting>
@@ -1371,7 +1371,7 @@ title="google search engine">the google search engine</a>
       is the same as:
       </para>
 
-      <programlisting><![CDATA[<div tal:omit-tag=""
+      <programlisting language="xml"><![CDATA[<div tal:omit-tag=""
      tal:condition="someCondition"
      tal:repeat="item someRepeat">
   <div metal:use-macro="x"/>
@@ -1408,7 +1408,7 @@ title="google search engine">the google search engine</a>
         The following lines will give the same result:
         </para>
 
-        <programlisting><![CDATA[<span tal:content="data/user/name"/>
+        <programlisting language="xml"><![CDATA[<span tal:content="data/user/name"/>
 <span tal:content="path:data/user/name"/>
 <span>${data/user/name}</span>
 ]]></programlisting>
@@ -1419,7 +1419,7 @@ title="google search engine">the google search engine</a>
         ${path/to/my/variable}
         </para>
 
-        <programlisting><![CDATA[<h1>${document/title}</h1>
+        <programlisting language="xml"><![CDATA[<h1>${document/title}</h1>
 <span tal:replace="string:welcome ${user/name}, 
 this page has been readed ${page/countRead} times"/>
 ]]></programlisting>
@@ -1472,7 +1472,7 @@ this page has been readed ${page/countRead} times"/>
           </para></listitem>
         </itemizedlist>
 
-        <programlisting><![CDATA[<span tal:replace="string:this is a $$100 page"/>
+        <programlisting language="xml"><![CDATA[<span tal:replace="string:this is a $$100 page"/>
 string:foo $bar baz       <!-- will replace $bar -->
 string:foo $$bar baz      <!-- no interpolation -->
 string:foo ; php:doFoo()  <!-- two different expressions -->
@@ -1524,7 +1524,7 @@ php:SomeClass::$staticVar
         statements.
         </para>
 
-        <programlisting><![CDATA[<span tal:condition="not: logged">not logged</span>
+        <programlisting language="xml"><![CDATA[<span tal:condition="not: logged">not logged</span>
 ]]></programlisting>
       </section>
 
@@ -1538,7 +1538,7 @@ php:SomeClass::$staticVar
         Normally using a path which doesn't exist throws an error like "Cannot find variable '<varname>foo</varname>' in current scope". Thus, uncertain paths must be checked first:
         </para>
               
-        <programlisting><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
+        <programlisting language="xml"><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
   Use user/preferences here if defined
 </span>
 ]]></programlisting>
@@ -1554,7 +1554,7 @@ php:SomeClass::$staticVar
         if an error occurs, or if something is not defined.
         </para>
 
-        <programlisting><![CDATA[<span tal:define="myVar path/to/possible/var | default">
+        <programlisting language="xml"><![CDATA[<span tal:define="myVar path/to/possible/var | default">
   default my var value
 </span>
 
@@ -1590,7 +1590,7 @@ php:SomeClass::$staticVar
         Sometimes, you may use <acronym>HTML</acronym>/<acronym>XML</acronym> variables which must be echoed as is.
         </para>
 
-        <programlisting><![CDATA[<h1 tal:content="structure document/title"/>
+        <programlisting language="xml"><![CDATA[<h1 tal:content="structure document/title"/>
 <span tal:replace="structure document/content"/>
 ]]></programlisting>
 
@@ -1625,7 +1625,7 @@ php:SomeClass::$staticVar
         other expression.
         </para>
 
-        <programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting>
+        <programlisting language="xml"><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting>
       </section>
  
     </section><!-- end of PHPTALES -->
@@ -1952,7 +1952,7 @@ echo $tpl->execute();
       ob_end_clean() in end().
       </para>
 
-      <programlisting><![CDATA[<html>
+      <programlisting language="xml"><![CDATA[<html>
   …
   <div>
     …
@@ -1968,7 +1968,7 @@ echo $tpl->execute();
       introduce a <sgmltag>phptal:id</sgmltag> into the template:
       </para>
 
-      <programlisting><![CDATA[<html>
+      <programlisting language="xml"><![CDATA[<html>
   …
   <div phptal:id="somePossiblyUniqueKeyword">
     …
@@ -2435,7 +2435,7 @@ catch (Exception $e){
         translations.
         </para>
 
-        <programlisting><![CDATA[# english 
+        <programlisting language="gettext"><![CDATA[# english 
 msgid "welcome"
 msgstr "Welcome ${name} you have ${n} mails!"
 
@@ -2448,7 +2448,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
         A template can use this interpolation as follows:
         </para>
 
-        <programlisting><![CDATA[<span i18n:translate="welcome">
+        <programlisting language="xml"><![CDATA[<span i18n:translate="welcome">
   Welcome
   <span i18n:name="name" tal:replace="user/name"/>
   you currently have
@@ -2521,7 +2521,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       For example, in the following <acronym>TAL</acronym> template,
       </para>
 
-      <programlisting><![CDATA[<span tal:replace="some-modifier: my/path/value"/>
+      <programlisting language="xml"><![CDATA[<span tal:replace="some-modifier: my/path/value"/>
 ]]></programlisting>
 
       <para>
@@ -2534,7 +2534,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       An expression like:
       </para>
 
-      <programlisting><![CDATA[<span tal:replace="some-modifier: my/path/value | other/path"/>
+      <programlisting language="xml"><![CDATA[<span tal:replace="some-modifier: my/path/value | other/path"/>
 ]]></programlisting>
 
       <para>
