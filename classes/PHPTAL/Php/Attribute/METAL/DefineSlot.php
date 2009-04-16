@@ -12,36 +12,36 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// METAL Specification 1.0
-//
-//      argument ::= Name
-//
-// Example:
-//
-//      <table metal:define-macro="sidebar">
-//        <tr><th>Links</th></tr>
-//        <tr><td metal:define-slot="links">
-//          <a href="/">A Link</a>
-//        </td></tr>
-//      </table>
-//
-// PHPTAL: (access to slots may be renamed)
-//
-//  <?php function XXXX_macro_sidebar( $tpl ) { ? >
-//      <table>
-//        <tr><th>Links</th></tr>
-//        <tr>
-//        <?php if (isset($tpl->slots->links)): ? >
-//          <?php echo $tpl->slots->links ? >
-//        <?php else: ? >  
-//        <td>
-//          <a href="/">A Link</a>
-//        </td></tr>
-//      </table>
-//  <?php } ? >
-//
-
+ 
 /**
+ * METAL Specification 1.0
+ *
+ *      argument ::= Name
+ *
+ * Example:
+ *
+ *      <table metal:define-macro="sidebar">
+ *        <tr><th>Links</th></tr>
+ *        <tr><td metal:define-slot="links">
+ *          <a href="/">A Link</a>
+ *        </td></tr>
+ *      </table>
+ *
+ * PHPTAL: (access to slots may be renamed)
+ *
+ *  <?php function XXXX_macro_sidebar( $tpl ) { ? >
+ *      <table>
+ *        <tr><th>Links</th></tr>
+ *        <tr>
+ *        <?php if (isset($tpl->slots->links)): ? >
+ *          <?php echo $tpl->slots->links ? >
+ *        <?php else: ? >  
+ *        <td>
+ *          <a href="/">A Link</a>
+ *        </td></tr>
+ *      </table>
+ *  <?php } ? >
+ *
  * @package PHPTAL.php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -60,4 +60,3 @@ class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute
     }
 }
 
-?>

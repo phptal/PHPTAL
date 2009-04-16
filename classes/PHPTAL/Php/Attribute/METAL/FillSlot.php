@@ -12,39 +12,40 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// METAL Specification 1.0
-//
-//      argument ::= Name
-//
-// Example:
-//
-//       <table metal:use-macro="here/doc1/macros/sidebar">
-//        <tr><th>Links</th></tr>
-//        <tr><td metal:fill-slot="links">
-//          <a href="http://www.goodplace.com">Good Place</a><br>
-//          <a href="http://www.badplace.com">Bad Place</a><br>
-//          <a href="http://www.otherplace.com">Other Place</a>
-//        </td></tr>
-//      </table>
-//
-// PHPTAL: 
-// 
-// 1. evaluate slots
-// 
-// <?php ob_start(); ? >
-// <td>
-//   <a href="http://www.goodplace.com">Good Place</a><br>
-//   <a href="http://www.badplace.com">Bad Place</a><br>
-//   <a href="http://www.otherplace.com">Other Place</a>
-// </td>
-// <?php $tpl->slots->links = ob_get_contents(); ob_end_clean(); ? >
-// 
-// 2. call the macro (here not supported)
-//
-// <?php echo phptal_macro($tpl, 'master_page.html/macros/sidebar'); ? >
-// 
  
 /**
+ *  METAL Specification 1.0
+ *
+ *      argument ::= Name
+ *
+ * Example:
+ *
+ *       <table metal:use-macro="here/doc1/macros/sidebar">
+ *        <tr><th>Links</th></tr>
+ *        <tr><td metal:fill-slot="links">
+ *          <a href="http://www.goodplace.com">Good Place</a><br>
+ *          <a href="http://www.badplace.com">Bad Place</a><br>
+ *          <a href="http://www.otherplace.com">Other Place</a>
+ *        </td></tr>
+ *      </table>
+ *
+ * PHPTAL: 
+ * 
+ * 1. evaluate slots
+ * 
+ * <?php ob_start(); ? >
+ * <td>
+ *   <a href="http://www.goodplace.com">Good Place</a><br>
+ *   <a href="http://www.badplace.com">Bad Place</a><br>
+ *   <a href="http://www.otherplace.com">Other Place</a>
+ * </td>
+ * <?php $tpl->slots->links = ob_get_contents(); ob_end_clean(); ? >
+ * 
+ * 2. call the macro (here not supported)
+ *
+ * <?php echo phptal_macro($tpl, 'master_page.html/macros/sidebar'); ? >
+ * 
+ *
  * @package PHPTAL.php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

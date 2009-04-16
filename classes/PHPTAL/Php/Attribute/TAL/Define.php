@@ -12,23 +12,24 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// TAL spec 1.4 for tal:define content
-//
-// argument       ::= define_scope [';' define_scope]*
-// define_scope   ::= (['local'] | 'global') define_var
-// define_var     ::= variable_name expression
-// variable_name  ::= Name
-//
-// Note: If you want to include a semi-colon (;) in an expression, it must be escaped by doubling it (;;).*
-//
-// examples:
-// 
-//   tal:define="mytitle template/title; tlen python:len(mytitle)"
-//   tal:define="global company_name string:Digital Creations, Inc."
-//
-          
-
+ 
 /**
+ * TAL spec 1.4 for tal:define content
+ *
+ * argument       ::= define_scope [';' define_scope]*
+ * define_scope   ::= (['local'] | 'global') define_var
+ * define_var     ::= variable_name expression
+ * variable_name  ::= Name
+ *
+ * Note: If you want to include a semi-colon (;) in an expression, it must be escaped by doubling it (;;).*
+ *
+ * examples:
+ * 
+ *   tal:define="mytitle template/title; tlen python:len(mytitle)"
+ *   tal:define="global company_name string:Digital Creations, Inc."
+ *
+ *        
+ *
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

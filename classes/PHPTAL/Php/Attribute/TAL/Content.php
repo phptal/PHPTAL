@@ -12,17 +12,19 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// TAL Specifications 1.4
-//
-//      argument ::= (['text'] | 'structure') expression
-//
-// Example:
-// 
-//      <p tal:content="user/name">Fred Farkas</p>
-//
-//
-
-/**
+ 
+ 
+/** TAL Specifications 1.4
+ *
+ *     argument ::= (['text'] | 'structure') expression
+ *
+ * Example:
+ *
+ *     <p tal:content="user/name">Fred Farkas</p>
+ *
+ *
+ *
+ *
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

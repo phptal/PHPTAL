@@ -12,22 +12,24 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// METAL Specification 1.0
-//
-//      argument ::= expression
-//
-// Example:
-// 
-//      <hr />
-//      <p metal:use-macro="here/master_page/macros/copyright">
-//      <hr />
-//
-// PHPTAL: (here not supported)
-//
-//      <?php echo phptal_macro( $tpl, 'master_page.html/macros/copyright'); ? >
-//
-
+ 
 /**
+ * METAL Specification 1.0
+ *
+ *      argument ::= expression
+ *
+ * Example:
+ * 
+ *      <hr />
+ *      <p metal:use-macro="here/master_page/macros/copyright">
+ *      <hr />
+ *
+ * PHPTAL: (here not supported)
+ *
+ *      <?php echo phptal_macro( $tpl, 'master_page.html/macros/copyright'); ? >
+ *
+ *
+ *
  * @package PHPTAL.php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

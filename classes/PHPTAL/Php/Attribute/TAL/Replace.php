@@ -12,19 +12,20 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// TAL Specifications 1.4
-//
-//      argument ::= (['text'] | 'structure') expression
-//
-//  Default behaviour : text
-//
-//      <span tal:replace="template/title">Title</span>
-//      <span tal:replace="text template/title">Title</span>
-//      <span tal:replace="structure table" />
-//      <span tal:replace="nothing">This element is a comment.</span>
-//  
-
 /**
+ * TAL Specifications 1.4
+ * 
+ *      argument ::= (['text'] | 'structure') expression
+ * 
+ *  Default behaviour : text
+ * 
+ *      <span tal:replace="template/title">Title</span>
+ *      <span tal:replace="text template/title">Title</span>
+ *      <span tal:replace="structure table" />
+ *      <span tal:replace="nothing">This element is a comment.</span>
+ *  
+ * 
+ * 
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */

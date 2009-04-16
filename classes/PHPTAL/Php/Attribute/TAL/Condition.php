@@ -12,18 +12,20 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-// TAL Specifications 1.4
-//
-//      argument ::= expression
-//
-// Example:
-//
-//      <p tal:condition="here/copyright"
-//         tal:content="here/copyright">(c) 2000</p>
-//
-//
-
+ 
 /**
+ * TAL Specifications 1.4
+ * 
+ *      argument ::= expression
+ * 
+ * Example:
+ * 
+ *      <p tal:condition="here/copyright"
+ *         tal:content="here/copyright">(c) 2000</p>
+ * 
+ * 
+ * 
+ * 
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
