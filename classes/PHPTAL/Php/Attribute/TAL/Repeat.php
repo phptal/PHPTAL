@@ -67,7 +67,7 @@
 class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
 {
     private $var;
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {        
         $this->var = $codewriter->createTempVariable();
         
@@ -86,7 +86,7 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
         $codewriter->doForeach( '$ctx->'.$varName, $this->var.'->'.$varName );
     }
         
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEnd();
         $codewriter->popContext();

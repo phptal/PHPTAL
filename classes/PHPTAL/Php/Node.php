@@ -190,7 +190,7 @@ abstract class PHPTAL_DOMNode
     /**
      * use CodeWriter to compile this element to PHP code
      */
-    public abstract function generate(PHPTAL_Php_CodeWriter $gen);
+    public abstract function generate(PHPTAL_Php_CodeWriter $gen);    
 }
 
 /**
@@ -289,8 +289,8 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
             if (count($this->replaceAttributes) > 0) {
                 $this->generateSurroundHead($codewriter);
                 foreach($this->replaceAttributes as $att) {
-                    $att->start($codewriter);
-                    $att->end($codewriter);
+                    $att->before($codewriter);
+                    $att->after($codewriter);
                 }
                 $this->generateSurroundFoot($codewriter);
                 return;
@@ -392,7 +392,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
     public function generateSurroundHead(PHPTAL_Php_CodeWriter $codewriter)
     {
         foreach($this->surroundAttributes as $att) {
-            $att->start($codewriter);
+            $att->before($codewriter);
         }
     }
 
@@ -432,8 +432,8 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
             }
             else foreach($this->contentAttributes as $att)
             {
-                $att->start($codewriter);
-                $att->end($codewriter);
+                $att->before($codewriter);
+                $att->after($codewriter);
             }
         }
     }
@@ -459,7 +459,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
     public function generateSurroundFoot(PHPTAL_Php_CodeWriter $codewriter)
     {
         for ($i = (count($this->surroundAttributes)-1); $i >= 0; $i--) {
-            $this->surroundAttributes[$i]->end($codewriter);
+            $this->surroundAttributes[$i]->after($codewriter);
         }
     }
 

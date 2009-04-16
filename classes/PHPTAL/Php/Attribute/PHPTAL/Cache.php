@@ -36,7 +36,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 {  
     private $cache_tag;
 
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/', $this->expression, $matches))
             throw new PHPTAL_ParserException("Cache attribute syntax error: ".$this->expression);
@@ -73,7 +73,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         $codewriter->doEval('ob_start()');
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEval('file_put_contents('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'), ob_get_flush())');
         $codewriter->doElse();

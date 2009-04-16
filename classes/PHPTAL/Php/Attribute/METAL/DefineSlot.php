@@ -47,14 +47,14 @@
  */
 class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doIf('$ctx->hasSlot('.$codewriter->str($this->expression).')');
         $codewriter->pushCode('echo $ctx->getSlot('.$codewriter->str($this->expression).')');
         $codewriter->doElse();
     }
     
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEnd();
     }

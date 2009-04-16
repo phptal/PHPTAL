@@ -36,7 +36,7 @@
  */
 class PHPTAL_Php_Attribute_I18N_Target extends PHPTAL_Php_Attribute
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter){}
-    public function end(PHPTAL_Php_CodeWriter $codewriter){}
+    public function before(PHPTAL_Php_CodeWriter $codewriter){}
+    public function after(PHPTAL_Php_CodeWriter $codewriter){}
 }
 

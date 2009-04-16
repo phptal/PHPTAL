@@ -37,7 +37,7 @@
  */
 class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $macroname = strtr(trim($this->expression),'-','_');
         if (!preg_match('/^[a-z0-9_]+$/i', $macroname)) {
@@ -52,7 +52,7 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
         $codewriter->doDoctype();
     }
     
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEnd();
     }

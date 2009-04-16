@@ -33,7 +33,7 @@ implements PHPTAL_Php_TalesChainReader
 {
     private $expressions = array();
 
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $code = $codewriter->evaluateExpression($this->expression);
 
@@ -52,7 +52,7 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter->doIf($code);
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter) 
+    public function after(PHPTAL_Php_CodeWriter $codewriter) 
     {
         $codewriter->doEnd();
     }

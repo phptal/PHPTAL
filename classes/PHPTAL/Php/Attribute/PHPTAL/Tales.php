@@ -18,7 +18,7 @@
  */
 class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $mode = trim($this->expression);
         $mode = strtolower($mode);
@@ -37,7 +37,7 @@ class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
         $this->_oldMode = $codewriter->setTalesMode( $mode );
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->setTalesMode( $this->_oldMode );
     }

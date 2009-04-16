@@ -19,7 +19,7 @@
 class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
 {
     private $var;
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // retrieve trigger
         $this->var = $codewriter->createTempVariable();        
@@ -35,7 +35,7 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
             '.$this->var.'->start('.$codewriter->str($this->expression).', $tpl) === PHPTAL_Trigger::PROCEED');
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         // end of if PROCEED
         $codewriter->doEnd();

@@ -32,7 +32,7 @@ class PHPTAL_Php_Attribute_TAL_Replace
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {   
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // tal:replace="" => do nothing and ignore node
         if (trim($this->expression) == "") {
@@ -61,7 +61,7 @@ implements PHPTAL_Php_TalesChainReader
         $this->doEchoAttribute($codewriter, $code);
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 

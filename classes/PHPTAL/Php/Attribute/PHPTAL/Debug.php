@@ -18,12 +18,12 @@
  */
 class PHPTAL_Php_Attribute_PHPTAL_DEBUG extends PHPTAL_Php_Attribute
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $this->_oldMode = $codewriter->setDebug(true);
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->setDebug( $this->_oldMode );
     }

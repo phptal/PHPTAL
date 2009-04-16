@@ -36,7 +36,7 @@ class PHPTAL_Php_Attribute_TAL_Define
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $expressions = $codewriter->splitExpression($this->expression);
         $definesAnyNonGlobalVars = false;
@@ -80,7 +80,7 @@ implements PHPTAL_Php_TalesChainReader
         }
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         if ($this->tmp_content_var) $codewriter->recycleTempVariable($this->tmp_content_var);
         if ($this->_pushedContext){

@@ -38,7 +38,7 @@ class PHPTAL_Php_Attribute_TAL_Attributes
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes using ; delimiter
         $attrs = $codewriter->splitExpression($this->expression);
@@ -155,7 +155,7 @@ implements PHPTAL_Php_TalesChainReader
     }
 
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         foreach($this->vars_to_recycle as $var) $codewriter->recycleTempVariable($var);
     }

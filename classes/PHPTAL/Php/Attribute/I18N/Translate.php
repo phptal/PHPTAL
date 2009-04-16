@@ -28,7 +28,7 @@
  */
 class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $escape = true;
         if (preg_match('/^(text|structure)(?:\s+(.*)|\s*$)/', $this->expression, $m)) {
@@ -50,7 +50,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         $codewriter->pushCode('echo $_translator->translate('.$code.','.($escape ? 'true':'false').');');
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 

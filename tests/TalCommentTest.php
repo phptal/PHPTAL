@@ -41,8 +41,8 @@ class TalCommentTest extends PHPTAL_TestCase
     function testComment()
     {
         $this->newComment( 'my dummy comment');
-        $this->_att->start($this->_gen);
-        $this->_att->end($this->_gen);
+        $this->_att->before($this->_gen);
+        $this->_att->after($this->_gen);
         $res = $this->_gen->getResult();
         $this->assertEquals('<?php /* my dummy comment */; ?>', $res);
     }
@@ -51,8 +51,8 @@ class TalCommentTest extends PHPTAL_TestCase
     {
         $comment = "my dummy comment\non more than one\nline";
         $this->newComment($comment);
-        $this->_att->start($this->_gen);
-        $this->_att->end($this->_gen);
+        $this->_att->before($this->_gen);
+        $this->_att->after($this->_gen);
         $res = $this->_gen->getResult();
         $this->assertEquals("<?php /* $comment */; ?>", $res);
     }
@@ -61,8 +61,8 @@ class TalCommentTest extends PHPTAL_TestCase
     {
         $comment = "my dummy */ comment\non more than one\nline";
         $this->newComment(  $comment);
-        $this->_att->start($this->_gen);
-        $this->_att->end($this->_gen);
+        $this->_att->before($this->_gen);
+        $this->_att->after($this->_gen);
         $res = $this->_gen->getResult();
         $comment = str_replace('*/', '* /', $comment);
         $this->assertEquals("<?php /* $comment */; ?>", $res);
@@ -88,5 +88,3 @@ class TalCommentTest extends PHPTAL_TestCase
     private $_gen;
     private $_att;
 }
-        
-?>

@@ -25,7 +25,7 @@
  */
 class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
 {
-    public function start(PHPTAL_Php_CodeWriter $codewriter)
+    public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // ensure a domain stack exists or create it
         $codewriter->doIf('!isset($__i18n_domains)');
@@ -39,7 +39,7 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
         $codewriter->pushCode($code);
     }
 
-    public function end(PHPTAL_Php_CodeWriter $codewriter)
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore domain
         $code = '$_translator->useDomain(array_pop($__i18n_domains))';

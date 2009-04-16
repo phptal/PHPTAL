@@ -36,10 +36,34 @@ abstract class PHPTAL_Php_Attribute
     /** Element using this attribute (xml node). */
     protected $phpelement;
 
-    /** Called before element printing. */
-    public abstract function start(PHPTAL_Php_CodeWriter $codewriter);
-    /** Called after element printing. */
-    public abstract function end(PHPTAL_Php_CodeWriter $codewriter);
+    /** 
+      * Called before element printing. 
+      * Default implementation is for backwards compatibility only. Please always override both before() and after().
+      */
+    public function before(PHPTAL_Php_CodeWriter $codewriter) 
+    {
+        $this->tag = $this->phpelement; $this->phpelement->generator = $codewriter; $this->start(); // FIXME: remove
+    }
+    /**
+      * Called after element printing. 
+      * Default implementation is for backwards compatibility only. Please always override both before() and after().      
+      */
+    public function after(PHPTAL_Php_CodeWriter $codewriter) 
+    { 
+        $this->tag = $this->phpelement; $this->phpelement->generator = $codewriter; $this->end(); // FIXME: remove
+    }
+
+    /**
+     * for backwards compatibility ONLY. Do not use!
+     * @deprecated
+     */
+    public function start() { throw new PHPTAL_Exception('Do not use'); }
+    /**
+     * for backwards compatibility ONLY. Do not use!
+     * @deprecated
+     */
+    public function end() { throw new PHPTAL_Exception('Do not use'); }
+
 
     function __construct(PHPTAL_DOMElement $phpelement, $expression)
     {
@@ -88,6 +112,6 @@ abstract class PHPTAL_Php_Attribute
         return array($exp, null);
     }
 
-    protected $_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;
+    protected $_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;    
 }
 
