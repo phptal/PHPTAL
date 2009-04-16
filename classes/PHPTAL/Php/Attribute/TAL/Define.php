@@ -112,10 +112,22 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         if ($this->_defineScope == 'global') {
-            $executor->doIf('($tpl->getGlobalContext()->'.$this->_defineVar.' = '.$exp.') !== null');
+            $var = '$tpl->getGlobalContext()->'.$this->_defineVar;
         } else {
-            $executor->doIf('($ctx->'.$this->_defineVar.' = '.$exp.') !== null');
+            $var = '$ctx->'.$this->_defineVar;
         }
+        
+        $cw = $executor->getCodeWriter();
+        
+        if (!$islast) {
+            // must use temp variable, because expression could refer to itself
+            $tmp = $cw->createTempVariable();
+                $executor->doIf('('.$tmp.' = '.$exp.') !== null');
+                $cw->doSetVar($var,$tmp);
+            $cw->recycleTempVariable($tmp);
+        } else {
+            $executor->doIf('('.$var.' = '.$exp.') !== null');
+        }    
     }
     
     /**

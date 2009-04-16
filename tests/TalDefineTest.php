@@ -290,4 +290,24 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl->setSource('<div tal:define="test php:${TalDefineTest::VARNAME}">${test}</div>');
         $this->assertEquals('<div>ok</div>',$tpl->execute());
     }
+    
+    function testRedefineSelf()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->label = 'label var';
+        $tpl->fail = 'not an array';
+        $tpl->setSource('<tal:block tal:define="label fail/label|label" tal:replace="structure label"/>');
+        
+        $this->assertEquals('label var', $tpl->execute());
+    }
+    
+    function testRedefineSelf2()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->label = 'label var';
+        $tpl->fail = 'not an array';
+        $tpl->setSource('<tal:block tal:define="label fail/label|label|somethingelse" tal:replace="structure label"/>');
+        
+        $this->assertEquals('label var', $tpl->execute());
+    }
 }
