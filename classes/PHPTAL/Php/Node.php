@@ -444,8 +444,11 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
         }
     }
 
-    public function generateContent(PHPTAL_Php_CodeWriter $codewriter, $realContent=false)
+    public function generateContent(PHPTAL_Php_CodeWriter $codewriter = NULL, $realContent=false)
     {
+        // For backwards compatibility only!
+        if ($codewriter===NULL) $codewriter = self::$_codewriter_bc_hack_; // FIXME!
+        
         if (!$this->isEmptyNode($codewriter->getOutputMode()))
         {
             if ($realContent || !count($this->contentAttributes))
@@ -608,12 +611,27 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
         return end($n);
     }
     
-    
+    /**
+     * For backwards compatibility only
+     * @deprecated
+     */
     function __get($prop)
     {
         if ($prop === 'children') return $this->childNodes;
-        throw new Exception("Unknown prop $prop");
+        if ($prop === 'node') return $this;
+        if ($prop === 'attributes')
+        {
+            $tmp = array(); foreach($this->getAttributeNodes() as $att) $tmp[$att->getQualifiedName()] = $att->getValueEscaped();
+            return $tmp;
+        }
+        throw new PHPTAL_Exception("There is no property $prop on ".get_class($this));
     }
+    
+    /**
+     * For backwards compatibility only
+     * @deprecated
+     */
+    function getName(){ return $this->getQualifiedName(); }
 }
 
 /**
