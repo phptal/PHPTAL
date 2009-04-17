@@ -776,7 +776,7 @@ class PHPTAL
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
         $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding, $this->_outputMode, $this->getCodePath());
-        $result = $generator->generate($tree);
+        $result = $generator->generateCode($tree);
         
         return $result;
     }

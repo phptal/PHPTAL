@@ -18,7 +18,7 @@ require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
 if (!class_exists('DummyPhpNode')) {
     class DummyPhpNode extends PHPTAL_DOMElement {
         function __construct() {}
-        function generate(PHPTAL_Php_CodeWriter $codewriter) {}
+        function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}
     }
 }
 

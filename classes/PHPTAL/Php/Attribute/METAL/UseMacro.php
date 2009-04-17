@@ -104,7 +104,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // if the tag contains one of the allowed attribute, we generate it
         foreach (self::$ALLOWED_ATTRIBUTES as $qname => $uri) {
             if ($phpelement->hasAttributeNS($uri, $qname)) {
-                $phpelement->generate($codewriter);
+                $phpelement->generateCode($codewriter);
                 return;
             }
         }
@@ -115,5 +115,3 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         }
     }
 }
-
-?>

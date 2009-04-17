@@ -21,7 +21,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $state     = new PHPTAL_Php_State();
         $codewriter = new PHPTAL_Php_CodeWriter($state);        
         $codewriter->doFunction('test', '$tpl');
-        $treeGen->generate($codewriter);
+        $treeGen->generateCode($codewriter);
         $codewriter->doEnd();
         $result = $codewriter->getResult();
 

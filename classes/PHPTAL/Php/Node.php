@@ -16,6 +16,14 @@
 require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
 
 /**
+ * For backwards compatibility only. Do not use!
+ * @deprecated
+ */
+interface PHPTAL_Php_Tree
+{
+}
+
+/**
  * node that represents element's attribute
  *
  * @package PHPTAL.dom
@@ -190,7 +198,21 @@ abstract class PHPTAL_DOMNode
     /**
      * use CodeWriter to compile this element to PHP code
      */
-    public abstract function generate(PHPTAL_Php_CodeWriter $gen);    
+    public abstract function generateCode(PHPTAL_Php_CodeWriter $gen);    
+        
+    /**
+     * For backwards compatibility only! Do not use!
+     * @deprecated
+     */
+    public function generate()
+    {
+        $this->generateCode(self::$_codewriter_bc_hack_);
+    }
+
+    /**
+     * @deprecated
+     */
+    static $_codewriter_bc_hack_;
 }
 
 /**
@@ -198,7 +220,7 @@ abstract class PHPTAL_DOMNode
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMElement extends PHPTAL_DOMNode
+class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
 {
 
     protected $qualifiedName, $namespace_uri;
@@ -274,8 +296,11 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
         $this->childNodes[] = $child;
     }
 
-    public function generate(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
+        // For backwards compatibility only!
+        self::$_codewriter_bc_hack_ = $codewriter; // FIXME
+        
         try
         {
             $this->replacePHPAttributes();
@@ -427,7 +452,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
             {
                 foreach($this->childNodes as $child)
                 {
-                    $child->generate($codewriter);
+                    $child->generateCode($codewriter);
                 }
             }
             else foreach($this->contentAttributes as $att)
@@ -582,6 +607,13 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
         $n = explode(':',$this->qualifiedName,2);
         return end($n);
     }
+    
+    
+    function __get($prop)
+    {
+        if ($prop === 'children') return $this->childNodes;
+        throw new Exception("Unknown prop $prop");
+    }
 }
 
 /**
@@ -589,7 +621,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode
  */
 class PHPTAL_DOMComment extends PHPTAL_DOMNode
 {
-	public function generate(PHPTAL_Php_CodeWriter $codewriter)
+	public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
 	{
 		if (!preg_match('/^<!--\s*!/',$this->getValueEscaped()))
 		{
@@ -605,7 +637,7 @@ class PHPTAL_DOMComment extends PHPTAL_DOMNode
  */
 class PHPTAL_DOMText extends PHPTAL_DOMNode
 {
-    public function generate(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
         if ($this->getValueEscaped() !== '')
         {
@@ -621,7 +653,7 @@ class PHPTAL_DOMText extends PHPTAL_DOMNode
  */
 class PHPTAL_DOMProcessingInstruction extends PHPTAL_DOMNode
 {
-    public function generate(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->pushHTML($codewriter->interpolateHTML($this->getValueEscaped()));
     }
@@ -634,7 +666,7 @@ class PHPTAL_DOMProcessingInstruction extends PHPTAL_DOMNode
  */
 class PHPTAL_DOMCDATASection extends PHPTAL_DOMNode
 {
-    public function generate(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
         $mode = $codewriter->getOutputMode();
         $value = $this->getValueEscaped();
@@ -669,7 +701,7 @@ class PHPTAL_DOMCDATASection extends PHPTAL_DOMNode
  */
 class PHPTAL_DOMDocumentType extends PHPTAL_DOMNode
 {
-    public function generate(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->setDocType($this->getValueEscaped());
         $codewriter->doDoctype();
@@ -683,7 +715,7 @@ class PHPTAL_DOMDocumentType extends PHPTAL_DOMNode
  */
 class PHPTAL_DOMXmlDeclaration extends PHPTAL_DOMNode
 {
-    public function generate(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->setXmlDeclaration($this->getValueEscaped());
         $codewriter->doXmlDeclaration();

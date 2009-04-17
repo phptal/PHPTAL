@@ -32,7 +32,7 @@ class PHPTAL_Php_CodeGenerator
     }
 
 
-    public function generate(PHPTAL_DOMElement $treeGen)
+    public function generateCode(PHPTAL_DOMElement $treeGen)
     {   
         $codewriter = new PHPTAL_Php_CodeWriter($this->_state);
 
@@ -41,7 +41,7 @@ class PHPTAL_Php_CodeGenerator
         $codewriter->setFunctionPrefix($this->_functionName . "_");
         $codewriter->doSetVar('$_thistpl', '$tpl');
         $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
-        $treeGen->generate($codewriter);
+        $treeGen->generateCode($codewriter);
         $codewriter->doEnd();
         
         return $codewriter->getResult();
