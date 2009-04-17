@@ -33,7 +33,7 @@ abstract class PHPTAL_Php_Attribute
     /** Attribute value specified by the element. */
     protected $expression;
     
-    /** Element using this attribute (xml node). */
+    /** Element using this attribute (PHPTAL's counterpart of XML node) */
     protected $phpelement;
 
     /** 
@@ -44,6 +44,7 @@ abstract class PHPTAL_Php_Attribute
     {
         $this->tag = $this->phpelement; $this->phpelement->generator = $codewriter; $this->start(); // FIXME: remove
     }
+    
     /**
       * Called after element printing. 
       * Default implementation is for backwards compatibility only. Please always override both before() and after().      
@@ -58,12 +59,18 @@ abstract class PHPTAL_Php_Attribute
      * @deprecated
      */
     public function start() { throw new PHPTAL_Exception('Do not use'); }
+    
     /**
      * for backwards compatibility ONLY. Do not use!
      * @deprecated
      */
     public function end() { throw new PHPTAL_Exception('Do not use'); }
-
+    
+    /**
+     * for backwards compatibility ONLY. Do not use!
+     * @deprecated
+     */
+    public function doEcho($code) { $this->doEchoAttribute($this->tag->generator, $code); }
 
     function __construct(PHPTAL_DOMElement $phpelement, $expression)
     {
@@ -95,7 +102,7 @@ abstract class PHPTAL_Php_Attribute
 
     protected function doEchoAttribute(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
-        if ($this->_echoType == self::ECHO_TEXT)
+        if ($this->_echoType === self::ECHO_TEXT)
             $codewriter->doEcho($code);
         else
             $codewriter->doEchoRaw($code);
