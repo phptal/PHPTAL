@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 define('PHPTAL_VERSION', '1_2_0a6');
@@ -108,7 +108,7 @@ class PHPTAL
 
     /**
      * Set template from file path.
-     * 
+     *
      * @param string $path filesystem path, or any path that will be accepted by source resolver
      * @return $this
      */
@@ -187,14 +187,14 @@ class PHPTAL
      */
     public function addSourceResolver(PHPTAL_SourceResolver $resolver)
     {
-        $this->_resolvers[] = $rep;        
+        $this->_resolvers[] = $rep;
         return $this;
     }
 
     /**
-     * Ignore XML/XHTML comments on parsing. 
+     * Ignore XML/XHTML comments on parsing.
      * Comments starting with <!--! are always stripped.
-     * 
+     *
      * @param bool $bool
      * @return $this
      */
@@ -210,7 +210,7 @@ class PHPTAL
      * and threats attributes like selected, checked to be boolean attributes.
      *
      * XML output mode outputs XML without such modifications and is neccessary to generate RSS feeds properly.
-     * 
+     *
      * @param int $mode (PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5).
      * @return $this
      */
@@ -550,9 +550,9 @@ class PHPTAL
                 if ($this->getCachePurgeFrequency() && mt_rand()%$this->getCachePurgeFrequency() == 0) {
                     $this->cleanUpGarbage();
                 }
-    
+
                 $result = $this->parse();
-                
+
                 if (!$this->getForceReparse()) {
                     if (!file_put_contents($this->getCodePath(), $result)) {
                         throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
@@ -561,21 +561,31 @@ class PHPTAL
 
                 // the awesome thing about eval() is that parse errors don't stop PHP.
                 ob_start();
-                eval('?>'.$result);
+                try {
+                    eval('?>'.$result);                    
+                }
+                catch(Exception $e) {
+                    ob_end_clean();
+                    // save file if it wasn't saved already - this is needed for debugging
+                    if ($this->getForceReparse()) @file_put_contents($this->getCodePath(), $result);
+                    throw $e;
+                }
                 if (!function_exists($this->getFunctionName())) {
                     $msg = str_replace("eval()'d code",$this->getCodePath(), ob_get_clean());
-                    
-                    if ($this->getForceReparse()) @file_put_contents($this->getCodePath(), $result); // save file if it wasn't saved already
-                    
+
+                    // save file if it wasn't saved already
+                    if ($this->getForceReparse()) @file_put_contents($this->getCodePath(), $result); 
+
                     if (preg_match('/on line (\d+)$/m',$msg, $m)) $line =$m[1]; else $line=0;
                     throw new PHPTAL_TemplateException($msg, $this->getCodePath(), $line);
                 }
                 ob_end_clean();
+                
             } else {
                 require $this->getCodePath();
             }
         }
-        
+
         $this->_prepared = true;
         return $this;
     }
@@ -777,7 +787,7 @@ class PHPTAL
 
         $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding, $this->_outputMode, $this->getCodePath());
         $result = $generator->generateCode($tree);
-        
+
         return $result;
     }
 
@@ -803,7 +813,7 @@ class PHPTAL
                 return;
             }
         }
-        
+
         $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
         $this->_source = $resolver->resolve($this->_path);
 
@@ -874,7 +884,7 @@ class PHPTAL
      * encoding used throughout
      */
     protected $_encoding = 'UTF-8';
-    
+
     /**
      * type of syntax used in generated templates
      */
@@ -885,12 +895,12 @@ class PHPTAL
     protected $_stripComments = false;
 
     // configuration properties
-    
+
     /**
      * don't use code cache
      */
     protected $_forceReparse = null;
-    
+
     /**
      * directory where code cache is
      */
@@ -901,7 +911,7 @@ class PHPTAL
      * number of days
      */
     protected $_cacheLifetime = 30;
-    
+
     /**
      * 1/x
      */
