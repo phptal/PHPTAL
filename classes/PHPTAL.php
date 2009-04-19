@@ -571,12 +571,12 @@ class PHPTAL
                     throw $e;
                 }
                 if (!function_exists($this->getFunctionName())) {
-                    $msg = str_replace("eval()'d code",$this->getCodePath(), ob_get_clean());
+                    $msg = str_replace("eval()'d code", $this->getCodePath(), ob_get_clean());
 
                     // save file if it wasn't saved already
                     if ($this->getForceReparse()) @file_put_contents($this->getCodePath(), $result); 
 
-                    if (preg_match('/on line (\d+)$/m',$msg, $m)) $line =$m[1]; else $line=0;
+                    if (preg_match('/on line (\d+)$/m', $msg, $m)) $line =$m[1]; else $line=0;
                     throw new PHPTAL_TemplateException($msg, $this->getCodePath(), $line);
                 }
                 ob_end_clean();
@@ -690,7 +690,7 @@ class PHPTAL
             // function name is used as base for caching, so it must be unique for every combination of settings
             // that changes code in compiled template
             $this->_functionName = 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
-                substr(preg_replace('/[^a-zA-Z]/','_',basename($this->_source->getRealPath())), 0,15) .
+                substr(preg_replace('/[^a-zA-Z]/', '_',basename($this->_source->getRealPath())), 0,15) .
                 md5($this->_source->getRealPath() . ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode());
         }
         return $this->_functionName;

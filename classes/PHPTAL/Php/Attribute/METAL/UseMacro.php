@@ -49,7 +49,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
             $this->generateFillSlots($codewriter, $child);
         }
 
-        $macroname = strtr($this->expression,'-','_');
+        $macroname = strtr($this->expression, '-', '_');
 
         // local macro (no filename specified) and non dynamic macro name
         // can be called directly if it's a known function (just generated or seen in previous compilation)
@@ -83,7 +83,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // we may define a member.html macro which use the design.html macro
         // for the general layout, fill the menu slot and let caller templates
         // fill the parent content slot without interfering. 
-        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')) {
+        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal', 'define-macro')) {
             $codewriter->pushCode('$ctx->pushSlots()');
         }
     }
@@ -91,7 +91,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     private function popSlots(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore slots if not inherited macro
-        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')) {
+        if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal', 'define-macro')) {
             $codewriter->pushCode('$ctx->popSlots()');
         }
     }

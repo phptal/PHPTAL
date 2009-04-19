@@ -85,7 +85,7 @@ class PHPTAL_Php_CodeWriter
     {
         preg_match_all('/(?:[^;]+|;;)+/sm', $src, $array);
         $array = $array[0];
-        foreach ($array as &$a) $a = str_replace(';;',';', $a);
+        foreach ($array as &$a) $a = str_replace(';;', ';', $a);
         return $array;
     }
 
@@ -362,12 +362,12 @@ class PHPTAL_Php_CodeWriter
 
     public function pushContext()
     {
-        $this->doSetVar('$ctx','$tpl->pushContext()');
+        $this->doSetVar('$ctx', '$tpl->pushContext()');
     }
 
     public function popContext()
     {
-        $this->doSetVar('$ctx','$tpl->popContext()');
+        $this->doSetVar('$ctx', '$tpl->popContext()');
     }
     
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -69,7 +69,7 @@ implements PHPTAL_Php_TalesChainReader
             if (is_array($code)) {
                 $this->chainedDefine($codewriter, $code);
             } elseif ( $code == PHPTAL_TALES_NOTHING_KEYWORD) {
-                $this->doDefineVarWith($codewriter,'null');
+                $this->doDefineVarWith($codewriter, 'null');
             } else {
                 $this->doDefineVarWith($codewriter, $code);
             }
@@ -99,7 +99,7 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         $executor->doElse();
-        $this->doDefineVarWith($executor->getCodeWriter(),'null');
+        $this->doDefineVarWith($executor->getCodeWriter(), 'null');
         $executor->breakChain();
     }
 
@@ -124,7 +124,7 @@ implements PHPTAL_Php_TalesChainReader
             // must use temp variable, because expression could refer to itself
             $tmp = $cw->createTempVariable();
                 $executor->doIf('('.$tmp.' = '.$exp.') !== null');
-                $cw->doSetVar($var,$tmp);
+                $cw->doSetVar($var, $tmp);
             $cw->recycleTempVariable($tmp);
         } else {
             $executor->doIf('('.$var.' = '.$exp.') !== null');
@@ -160,10 +160,10 @@ implements PHPTAL_Php_TalesChainReader
             $this->tmp_content_var = $codewriter->createTempVariable();
             $codewriter->pushCode( 'ob_start()' );
             $this->phpelement->generateContent($codewriter);
-            $codewriter->doSetVar($this->tmp_content_var,'ob_get_clean()');
+            $codewriter->doSetVar($this->tmp_content_var, 'ob_get_clean()');
             $this->_buffered = true;
         }
-        $this->doDefineVarWith($codewriter,$this->tmp_content_var);
+        $this->doDefineVarWith($codewriter, $this->tmp_content_var);
     }
 
     private function doDefineVarWith(PHPTAL_Php_CodeWriter $codewriter, $code)

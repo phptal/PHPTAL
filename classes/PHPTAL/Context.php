@@ -202,7 +202,7 @@ class PHPTAL_Context
      */
     public function __get($varname)
     {
-        if (property_exists($this,$varname)) { // must use property_exists to avoid calling own __isset().
+        if (property_exists($this, $varname)) { // must use property_exists to avoid calling own __isset().
             return $this->$varname;            // edge case with NULL will be weird
         }
 
@@ -276,14 +276,14 @@ function phptal_path($base, $path, $nothrow=false)
             }
                         
             // look for isset (priority over __get)
-            if (method_exists($base,'__isset') && is_callable(array($base, '__isset'))) {
+            if (method_exists($base, '__isset') && is_callable(array($base, '__isset'))) {
                 if ($base->__isset($current)) {
                     $base = $base->$current;
                     continue;
                 }
             }
             // ask __get and discard if it returns null
-            elseif (method_exists($base,'__get') && is_callable(array($base, '__get'))) {
+            elseif (method_exists($base, '__get') && is_callable(array($base, '__get'))) {
                 $tmp = $base->$current;
                 if (null !== $tmp) {
                     $base = $tmp;
@@ -295,7 +295,7 @@ function phptal_path($base, $path, $nothrow=false)
             if (method_exists($base, '__call')) {
                 try
                 {
-                    $base = $base->__call($current,array());
+                    $base = $base->__call($current, array());
                     continue;
                 }
                 catch(BadMethodCallException $e){}
@@ -367,7 +367,7 @@ function phptal_path_error($base, $path, $current)
     // needs to be figured out
     if ($current !== $path) {
         $pathinfo = " (in path '.../$path')";
-        if (preg_match('!([^/]+)/'.preg_quote($current,'!').'(?:/|$)!', $path, $m)) {
+        if (preg_match('!([^/]+)/'.preg_quote($current, '!').'(?:/|$)!', $path, $m)) {
             $basename = "'".$m[1]."' ";
         }        
     } else $pathinfo = '';
@@ -436,7 +436,7 @@ function phptal_escape($var)
     } elseif (is_bool($var)) {
         return (int)$var;
     } elseif (is_array($var)) {
-        return htmlspecialchars(implode(', ', $var),ENT_QUOTES);
+        return htmlspecialchars(implode(', ', $var), ENT_QUOTES);
     }
     return $var;
 }

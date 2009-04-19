@@ -48,7 +48,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onDocumentStart()
     {
-        $this->documentElement = new PHPTAL_DOMElement('documentElement','http://xml.zope.org/namespaces/tal',array(), $this->getXmlnsState());
+        $this->documentElement = new PHPTAL_DOMElement('documentElement', 'http://xml.zope.org/namespaces/tal',array(), $this->getXmlnsState());
         $this->documentElement->setSource($this->file, $this->line);
         $this->_stack = array();
         $this->_current = $this->documentElement;

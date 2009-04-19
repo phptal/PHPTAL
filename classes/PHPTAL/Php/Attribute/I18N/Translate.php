@@ -65,7 +65,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                     $result .= $child->getValue($encoding);
                 }
             } elseif ($child instanceOf PHPTAL_DOMElement) {
-                if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n','name')) {
+                if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n', 'name')) {
                     $result .= '${' . $attr->getValue() . '}';
                 } else {
                     
@@ -90,7 +90,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
     {
         foreach ($tag->childNodes as $child) {
             if ($child instanceOf PHPTAL_DOMElement) {
-                if ($child->hasAttributeNS('http://xml.zope.org/namespaces/i18n','name')) {
+                if ($child->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'name')) {
                     $child->generateCode($codewriter);
                 } else {
                     $this->_prepareNames($codewriter, $child);

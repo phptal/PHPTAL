@@ -114,7 +114,7 @@ class PHPTAL_XmlParser
         for (; $i<$len; $i++) {
             $c = $src[$i];
 
-            if ($c === "\n") $builder->setSource($this->_file,++$this->_line);
+            if ($c === "\n") $builder->setSource($this->_file, ++$this->_line);
 
             switch ($state) {
                 case self::ST_ROOT:
@@ -338,7 +338,7 @@ class PHPTAL_XmlParser
      */
     public function sanitizeEscapedText($str)
     {
-        $str = str_replace('&apos;','&#39;',$str); // PHP's html_entity_decode doesn't seem to support that!
+        $str = str_replace('&apos;','&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
         
         /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
         $types = ini_get('short_open_tag')?'php|=|':'php';
@@ -347,7 +347,7 @@ class PHPTAL_XmlParser
         for($i=0; $i < count($split); $i+=2)
         {
             // escape invalid entities and < >
-            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i','&amp;', $split[$i]),array('<'=>'&lt;','>'=>'&gt;'));
+            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $split[$i]),array('<'=>'&lt;', '>'=>'&gt;'));
         }
         return implode('', $split);
     }

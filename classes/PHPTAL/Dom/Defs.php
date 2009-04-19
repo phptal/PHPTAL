@@ -63,7 +63,7 @@ class PHPTAL_Dom_Defs
      */
     public function namespaceURIToPrefix($uri)
     {
-        return array_search($uri, $this->prefix_to_uri,true);
+        return array_search($uri, $this->prefix_to_uri, true);
     }
 
 

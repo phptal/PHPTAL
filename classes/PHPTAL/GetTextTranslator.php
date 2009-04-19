@@ -144,7 +144,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
             $value = htmlspecialchars($value, ENT_QUOTES); 
         }
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
-            list($src,$var) = $m;
+            list($src, $var) = $m;
             if (!array_key_exists($var, $this->_vars)) {
                 throw new PHPTAL_VariableNotFoundException('Interpolation error. Translation uses ${'.$var.'}, which is not defined in the template (via i18n:name)');
             }

@@ -65,7 +65,7 @@ function _phptal_tale_wrap($array, $nothrow)
 */
 function phptal_tale($expression, $nothrow=false)
 {
-    $r = phptal_tales($expression,$nothrow);
+    $r = phptal_tales($expression, $nothrow);
     if (!is_array($r)) return $r;
     
     // this weird ternary operator construct is to execute noThrow inside the expression

@@ -94,13 +94,13 @@ implements PHPTAL_Php_TalesChainReader
         {
             $var = $executor->getCodeWriter()->createTempVariable();
             $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
-            $this->doEchoAttribute($executor->getCodeWriter(),$var);
+            $this->doEchoAttribute($executor->getCodeWriter(), $var);
             $executor->getCodeWriter()->recycleTempVariable($var);
         }
         else 
         {
             $executor->doElse();
-            $this->doEchoAttribute($executor->getCodeWriter(),$exp);
+            $this->doEchoAttribute($executor->getCodeWriter(), $exp);
         }
     }
 

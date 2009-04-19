@@ -45,7 +45,7 @@ implements PHPTAL_Php_TalesChainReader
         foreach($attrs as $exp) {
             list($qname, $expression) = $this->parseSetExpression($exp);
             if ($expression) {
-                $this->prepareAttribute($codewriter,$qname, $expression);
+                $this->prepareAttribute($codewriter, $qname, $expression);
             }
         }
     }
@@ -58,26 +58,26 @@ implements PHPTAL_Php_TalesChainReader
         // if $code is an array then the attribute value is decided by a
         // tales chained expression
         if (is_array($code)) {
-            return $this->prepareChainedAttribute($codewriter,$qname, $code);
+            return $this->prepareChainedAttribute($codewriter, $qname, $code);
         }
        
         // XHTML boolean attribute does not appear when empty or false
         if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($qname)) {
-            return $this->prepareBooleanAttribute($codewriter,$qname, $code);
+            return $this->prepareBooleanAttribute($codewriter, $qname, $code);
         }
         
         // i18n needs to read replaced value of the attribute, which is not possible if attribute is completely replaced with conditional code
-        if ($this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/i18n','attributes'))
-            $this->prepareAttributeUnconditional($codewriter,$qname,$code);
+        if ($this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'attributes'))
+            $this->prepareAttributeUnconditional($codewriter, $qname, $code);
         else
-            $this->prepareAttributeConditional($codewriter,$qname,$code);
+            $this->prepareAttributeConditional($codewriter, $qname, $code);
         
     }
    
     /**
      * attribute will be output regardless of its evaluated value. NULL behaves just like "".
      */
-    private function prepareAttributeUnconditional(PHPTAL_Php_CodeWriter $codewriter,$qname,$code)
+    private function prepareAttributeUnconditional(PHPTAL_Php_CodeWriter $codewriter, $qname, $code)
     {
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
@@ -92,7 +92,7 @@ implements PHPTAL_Php_TalesChainReader
     /**
      * If evaluated value of attribute is NULL, it will not be output at all.
      */
-    private function prepareAttributeConditional(PHPTAL_Php_CodeWriter $codewriter,$qname,$code)
+    private function prepareAttributeConditional(PHPTAL_Php_CodeWriter $codewriter, $qname, $code)
     {
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);

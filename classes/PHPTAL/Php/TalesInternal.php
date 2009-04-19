@@ -180,7 +180,7 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales
      */
     private static function checkExpressionPart($expression)
     {
-        $expression = preg_replace('/\${[^}]+}/','a', $expression); // pretend interpolation is done                
+        $expression = preg_replace('/\${[^}]+}/', 'a', $expression); // pretend interpolation is done                
         return preg_match('/^[a-z_][a-z0-9_]*$/i', $expression);
     }
 
@@ -281,10 +281,10 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales
         }
         
         // optimize ''.foo.'' to foo
-        $result = preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/",'\1','\''.$result.'\'');        
+        $result = preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/", '\1', '\''.$result.'\'');        
         
         // optimize (foo()) to foo()
-        $result = preg_replace("/^\(((?:[^()]+|\([^()]*\))*)\)$/",'\1',$result);        
+        $result = preg_replace("/^\(((?:[^()]+|\([^()]*\))*)\)$/", '\1', $result);        
         return $result;
     }
 
