@@ -9,13 +9,13 @@
   <property name="pkgname" value="${phing.project.name}-${version}"/>
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
 
-	<fileset dir="classes" id="classes">
-	  <include name="**"/>
-		<exclude name="**/.svn/**"/>
-		<exclude name="**/.rej"/>
-		<exclude name="**/.orig"/>
-	</fileset>
-	
+  <fileset dir="classes" id="classes">
+    <include name="**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/.rej"/>
+    <exclude name="**/.orig"/>
+  </fileset>
+  
   <fileset dir="." id="gendocs">
     <include name="README"/>
     <include name="COPYING"/>
@@ -51,7 +51,7 @@
   <target name="build">
     <delete dir="${build.base.dir}"/>
     <copy todir="${build.src.dir}">
-			<fileset refid="classes"/>
+      <fileset refid="classes"/>
       <fileset refid="gendocs"/>
     </copy>
   </target>
@@ -61,7 +61,7 @@
       name="${phing.project.name}" 
       dir="${build.src.dir}" 
       destfile="${build.base.dir}/package.xml">
-			<fileset refid="classes"/>
+      <fileset refid="classes"/>
       <fileset refid="gendocs"/>
 
       <option name="notes">Zope Page Template implementation for PHP5</option>
@@ -69,8 +69,17 @@
       <option name="summary">PHPTAL for PHP5 supports tal, metal and i18n namespaces</option>
       <option name="version" value="${version}"/>
       <option name="state" value="alpha"/>
-		  <option name="baseinstalldir" value=""/>
-		  <option name="license" value="LGPL"/>
+      <option name="baseinstalldir" value=""/>
+      <option name="license" value="LGPL"/>
+
+
+      <mapping name="deps">
+        <element>
+          <element key="type" value="php" />
+          <element key="version" value="5.1.0" />
+          <element key="rel" value="ge" />
+        </element>
+      </mapping>
 
       <mapping name="maintainers">
         <element>
@@ -103,6 +112,6 @@
     <property name="tarfile" value="${build.base.dir}/${pkgname}.tar.gz"/>
     <delete file="${tarfile}"/>
     <tar destfile="${tarfile}" basedir="${build.base.dir}"/>
-	</target>
+  </target>
 
 </project>

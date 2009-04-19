@@ -1,13 +1,13 @@
-test:
-	phing test
-
 all:
 	phing
 
-tar::
+test:
+	phing test
+
+tar:
 	phing tar
 
-docs::
+docs:
 	phing docs
 
 clean:
