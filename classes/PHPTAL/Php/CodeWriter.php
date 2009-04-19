@@ -289,12 +289,12 @@ class PHPTAL_Php_CodeWriter
         return $this->_state->interpolateTalesVarsInCDATA($str);
     }
 
-	public function pushHTML($html)
-	{
+    public function pushHTML($html)
+    {
         if ($html === "") return;
         $this->flushCode();
-		$this->_htmlBuffer[] =  $html;
-	}
+        $this->_htmlBuffer[] =  $html;
+    }
 
     public function pushCode($codeLine) 
     {

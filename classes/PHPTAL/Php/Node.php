@@ -332,7 +332,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
 
             if ($codewriter->isDebugOn())
             {
-                $codewriter->pushCode('$ctx->__line = '.$this->getSourceLine());
+                $codewriter->pushCode('$ctx->_line = '.$this->getSourceLine());
                 $codewriter->doComment('tag "'.$this->qualifiedName.'" from line '.$this->getSourceLine());
             }
 
@@ -348,7 +348,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
 
             $this->generateSurroundHead($codewriter);
             // a surround tag may decide to hide us (tal:define for example)
-            if (!$this->hidden){
+            if (!$this->hidden) {
                 $this->generateHead($codewriter);
                 $this->generateContent($codewriter);
                 $this->generateFoot($codewriter);
@@ -642,12 +642,12 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
  */
 class PHPTAL_DOMComment extends PHPTAL_DOMNode
 {
-	public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
-	{
-		if (!preg_match('/^<!--\s*!/',$this->getValueEscaped()))
-		{
-		    $codewriter->pushHTML($this->getValueEscaped());
-	    }
+    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
+    {
+        if (!preg_match('/^<!--\s*!/',$this->getValueEscaped()))
+        {
+            $codewriter->pushHTML($this->getValueEscaped());
+        }
     }
 }
 

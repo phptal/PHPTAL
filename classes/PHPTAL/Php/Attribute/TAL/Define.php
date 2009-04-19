@@ -84,7 +84,7 @@ implements PHPTAL_Php_TalesChainReader
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         if ($this->tmp_content_var) $codewriter->recycleTempVariable($this->tmp_content_var);
-        if ($this->_pushedContext){
+        if ($this->_pushedContext) {
             $codewriter->popContext();
         }
     }

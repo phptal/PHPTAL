@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
@@ -19,16 +19,16 @@ require PHPTAL_DIR.'PHPTAL/Dom/XmlnsState.php';
 
 /**
  * DOM Builder
- * 
+ *
  * @package PHPTAL.dom
  */
 class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
-{  
+{
     public function __construct()
     {
         $this->_xmlns = new PHPTAL_Dom_XmlnsState(array(), '');
     }
-    
+
     public function getResult()
     {
         return $this->documentElement;
@@ -43,9 +43,9 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     {
         $this->_stripComments = $b;
     }
-    
+
     // ~~~~~ XmlParser implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
+
     public function onDocumentStart()
     {
         $this->documentElement = new PHPTAL_DOMElement('documentElement','http://xml.zope.org/namespaces/tal',array(), $this->getXmlnsState());
@@ -53,11 +53,11 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
         $this->_stack = array();
         $this->_current = $this->documentElement;
     }
-    
+
     public function onDocumentEnd()
     {
         if (count($this->_stack) > 0) {
-            $left='</'.$this->_current->getQualifiedName().'>'; 
+            $left='</'.$this->_current->getQualifiedName().'>';
             for($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->_stack[$i]->getQualifiedName().'>';
             throw new PHPTAL_ParserException("Not all elements were closed before end of the document. Missing: ".$left);
         }
@@ -72,37 +72,37 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     {
         $this->pushNode(new PHPTAL_DOMXmlDeclaration($decl, $this->encoding));
     }
-    
+
     public function onComment($data)
     {
-        if ($this->_stripComments) 
+        if ($this->_stripComments)
             return;
         $this->pushNode(new PHPTAL_DOMComment($data, $this->encoding));
     }
-    
+
     public function onCDATASection($data)
     {
         $this->pushNode(new PHPTAL_DOMCDATASection($data, $this->encoding));
-    }    
+    }
 
     public function onProcessingInstruction($data)
     {
         $this->pushNode(new PHPTAL_DOMProcessingInstruction($data, $this->encoding));
-    }    
+    }
 
     public function onElementStart($element_qname, array $attributes)
-    {                
+    {
         $this->_xmlns = $this->_xmlns->newElement($attributes);
-        
+
         if (preg_match('/^([^:]+):/', $element_qname, $m)) {
-            $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);            
+            $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
             if (false === $namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$element_qname>");
         } else {
             $namespace_uri = $this->_xmlns->getCurrentDefaultNamespaceURI();
         }
-        
+
         $attrnodes = array();
-        foreach ($attributes as $qname=>$value) {            
+        foreach ($attributes as $qname=>$value) {
             $local_name = $qname;
             if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
                 $local_name = $m[2];
@@ -115,16 +115,16 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
             if ($this->_xmlns->isHandledNamespace($attr_namespace_uri) && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
                 throw new PHPTAL_ParserException("Unsupported attribute '$qname'");
             }
-      
+
             $attrnodes[] = new PHPTAL_DOMAttr($qname, $attr_namespace_uri, $value, $this->encoding);
         }
-        
+
         $node = new PHPTAL_DOMElement($element_qname, $namespace_uri, $attrnodes, $this->getXmlnsState());
         $this->pushNode($node);
         $this->_stack[] =  $this->_current;
         $this->_current = $node;
     }
-    
+
     public function onElementData($data)
     {
         $this->pushNode(new PHPTAL_DOMText($data, $this->encoding));
@@ -132,7 +132,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onElementClose($qname)
     {
-	    if ($this->_current === $this->documentElement) throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");			
+        if ($this->_current === $this->documentElement) throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");
         if ($this->_current->getQualifiedName() != $qname) {
             throw new PHPTAL_ParserException("Tag closure mismatch, expected </".$this->_current->getQualifiedName()."> but found </".$qname.">");
         }
@@ -146,19 +146,19 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
         $node->setSource($this->file, $this->line);
         $this->_current->appendChild($node);
     }
-    
+
     public function setSource($file, $line)
     {
-        $this->file = $file; $this->line = $line; 
+        $this->file = $file; $this->line = $line;
     }
-    
+
     public function setEncoding($encoding)
     {
-        $this->encoding = $encoding; 
+        $this->encoding = $encoding;
     }
-    
+
     private $file, $line;
-    
+
     private $encoding;
     private $documentElement;    /* PHPTAL_DOMElement */
     private $_stack;   /* array<PHPTAL_DOMNode> */

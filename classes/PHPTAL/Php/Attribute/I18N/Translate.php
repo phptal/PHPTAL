@@ -59,11 +59,11 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         $result = '';
         foreach ($tag->childNodes as $child) {
             if ($child instanceOf PHPTAL_DOMText) {
-				if ($preserve_tags) {
+                if ($preserve_tags) {
                     $result .= $child->getValueEscaped();
                 } else {
-                	$result .= $child->getValue($encoding);
-	    		}
+                    $result .= $child->getValue($encoding);
+                }
             } elseif ($child instanceOf PHPTAL_DOMElement) {
                 if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n','name')) {
                     $result .= '${' . $attr->getValue() . '}';

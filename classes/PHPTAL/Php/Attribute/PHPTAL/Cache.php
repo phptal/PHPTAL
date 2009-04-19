@@ -67,7 +67,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
              $codewriter->doSetVar($this->cache_tag, '('.$code.')."@".' . $old_cache_tag );
         }
     
-	    $cond = '!file_exists('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.')) || time() - '.$cache_len.' >= filemtime('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'))';
+        $cond = '!file_exists('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.')) || time() - '.$cache_len.' >= filemtime('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'))';
 
         $codewriter->doIf($cond);
         $codewriter->doEval('ob_start()');

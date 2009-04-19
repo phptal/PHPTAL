@@ -49,13 +49,13 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
  */
 function _phptal_tale_wrap($array, $nothrow)
 {
-	if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
-		($array[0]==PHPTAL_TALES_NOTHING_KEYWORD?'null':$array[0]).
-		'):"")';
-	
-	$expr = array_shift($array);
-	
-	return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:"._phptal_tale_wrap($array, $nothrow).')';
+    if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
+        ($array[0]==PHPTAL_TALES_NOTHING_KEYWORD?'null':$array[0]).
+        '):"")';
+    
+    $expr = array_shift($array);
+    
+    return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:"._phptal_tale_wrap($array, $nothrow).')';
 }
 
 /** 
@@ -65,11 +65,11 @@ function _phptal_tale_wrap($array, $nothrow)
 */
 function phptal_tale($expression, $nothrow=false)
 {
-	$r = phptal_tales($expression,$nothrow);
-	if (!is_array($r)) return $r;
-	
-	// this weird ternary operator construct is to execute noThrow inside the expression
-	return '($ctx->noThrow(true)||1?'._phptal_tale_wrap($r, $nothrow).':"")';
+    $r = phptal_tales($expression,$nothrow);
+    if (!is_array($r)) return $r;
+    
+    // this weird ternary operator construct is to execute noThrow inside the expression
+    return '($ctx->noThrow(true)||1?'._phptal_tale_wrap($r, $nothrow).':"")';
 }
 
 /**
@@ -84,7 +84,7 @@ function phptal_tale($expression, $nothrow=false)
  */
 function phptal_tales($expression, $nothrow=false)
 {
-	$expression = trim($expression);
+    $expression = trim($expression);
 
     // Look for tales modifier (string:, exists:, etc...)
     //if (preg_match('/^([-a-z]+):(.*?)$/', $expression, $m)) {
@@ -103,8 +103,8 @@ function phptal_tales($expression, $nothrow=false)
     
     // is a registered TALES expression modifier
     if (PHPTAL_TalesRegistry::getInstance()->isRegistered($typePrefix)) {
-    	$callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);
-		return call_user_func($callback, $expression, $nothrow);
+        $callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);
+        return call_user_func($callback, $expression, $nothrow);
     }
 
     // class method

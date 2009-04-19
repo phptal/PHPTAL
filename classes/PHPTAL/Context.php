@@ -19,12 +19,12 @@
  */
 class PHPTAL_Context
 {
-    public $__line = false;
-    public $__file = false;
+    public $_line = false;
+    public $_file = false;
     public $repeat;
-    public $__xmlDeclaration;
-    public $__docType;
-    private $__nothrow;
+    public $_xmlDeclaration;
+    public $_docType;
+    private $_nothrow;
 
     public function __construct()
     {
@@ -55,6 +55,7 @@ class PHPTAL_Context
 
     /**
      * save current execution context
+     * 
      * @return Context (new)
      */
     public function pushContext()
@@ -66,6 +67,7 @@ class PHPTAL_Context
 
     /**
      * get previously saved execution context
+     * 
      * @return Context (old)
      */
     public function popContext()
@@ -87,8 +89,8 @@ class PHPTAL_Context
         if ($this->_parentContext) {
             return $this->_parentContext->setDocType($doctype);
         }
-        if (!$this->__docType) {
-            $this->__docType = $doctype;
+        if (!$this->_docType) {
+            $this->_docType = $doctype;
         }
     }
 
@@ -107,8 +109,8 @@ class PHPTAL_Context
         if ($this->_parentContext) {
             return $this->_parentContext->setXmlDeclaration($xmldec);
         }
-        if (!$this->__xmlDeclaration) {
-            $this->__xmlDeclaration = $xmldec;
+        if (!$this->_xmlDeclaration) {
+            $this->_xmlDeclaration = $xmldec;
         }
     }
 
@@ -118,33 +120,45 @@ class PHPTAL_Context
      */
     public function noThrow($bool)
     {
-        $this->__nothrow = $bool;
+        $this->_nothrow = $bool;
     }
 
     /**
      * Returns true if specified slot is filled.
+     * 
+     * @return bool
      */
     public function hasSlot($key)
     {
-        if ($this->_parentContext) return $this->_parentContext->hasSlot($key); // setting slots in any context
+        if ($this->_parentContext) {
+            return $this->_parentContext->hasSlot($key); // setting slots in any context
+        }
         return array_key_exists($key, $this->_slots);
     }
 
     /**
      * Returns the content of specified filled slot.
+     * 
+     * @return string
      */
     public function getSlot($key)
     {
-        if ($this->_parentContext) return $this->_parentContext->getSlot($key); // setting slots in any context
+        if ($this->_parentContext) {
+            return $this->_parentContext->getSlot($key); // setting slots in any context
+        }
         return $this->_slots[$key];
     }
 
     /**
      * Fill a macro slot.
+     * 
+     * @return void
      */
     public function fillSlot($key, $content)
     {
-        if ($this->_parentContext) $this->_parentContext->fillSlot($key, $content); // setting slots in any context
+        if ($this->_parentContext) {
+            $this->_parentContext->fillSlot($key, $content); // setting slots in any context
+        }
         else $this->_slots[$key] = $content;
     }
 
@@ -200,10 +214,11 @@ class PHPTAL_Context
             return constant($varname);
         }
         
-        if ($this->__nothrow)
+        if ($this->_nothrow) {            
             return null;
+        }
        
-        throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->__file, $this->__line);
+        throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->_file, $this->_line);
     }
 
     private $_slots = array();
@@ -214,17 +229,19 @@ class PHPTAL_Context
 
 /**
  * Resolve TALES path starting from the first path element.
- *
  * The TALES path : object/method1/10/method2
  * will call : phptal_path($ctx->object, 'method1/10/method2')
  *
- * The nothrow param is used by phptal_exists() and prevent this function to
- * throw an exception when a part of the path cannot be resolved, null is
- * returned instead.
- * 
  * This function is very important for PHPTAL performance.
  * 
+ * @param mixed  $base    first element of the path ($ctx)
+ * @param string $path    rest of the path
+ * @param bool   $nothrow is used by phptal_exists(). Prevents this function from
+ * throwing an exception when a part of the path cannot be resolved, null is
+ * returned instead.
+ * 
  * @access private
+ * @return mixed
  */
 function phptal_path($base, $path, $nothrow=false)
 {
@@ -284,8 +301,9 @@ function phptal_path($base, $path, $nothrow=false)
                 catch(BadMethodCallException $e){}
             }
 
-            if ($nothrow)
+            if ($nothrow) {
                 return null;
+            }
 
             phptal_path_error($base, $path, $current);
         }
@@ -362,6 +380,9 @@ function phptal_path_error($base, $path, $current)
 /**
  * implements true: modifier
  * 
+ * @see phptal_path()
+ * @param mixed  $ctx  base object
+ * @param string $parh rest of the path
  * @access private
  */
 function phptal_true($ctx, $path)
@@ -391,6 +412,8 @@ function phptal_exists($ctx, $path)
 /**
  * helper function for conditional expressions
  * 
+ * @param mixed $var value to check
+ * @return bool
  * @access private
  */
 function phptal_isempty($var)

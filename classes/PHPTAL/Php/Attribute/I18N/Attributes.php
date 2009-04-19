@@ -96,20 +96,20 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
      */
     private function _getTranslationCode(PHPTAL_Php_CodeWriter $codewriter, $key)
     {
-		$code = '';
-    	if (preg_match_all('/\$\{(.*?)\}/', $key, $m)){
-			array_shift($m);
-			$m = array_shift($m);
-			foreach ($m as $name) {
-				$code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.phptal_tale($name).');'; // allow more complex TAL expressions
-			}
-			$code .= "\n";
-		}
+        $code = '';
+        if (preg_match_all('/\$\{(.*?)\}/', $key, $m)) {
+            array_shift($m);
+            $m = array_shift($m);
+            foreach ($m as $name) {
+                $code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.phptal_tale($name).');'; // allow more complex TAL expressions
+            }
+            $code .= "\n";
+        }
 
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
         $code .= 'echo '.$codewriter->escapeCode('$_translator->translate('.$codewriter->str($key).', false)');
-		return $code;
+        return $code;
     }
 }
 

@@ -302,8 +302,8 @@ class PHPTAL_RepeatController implements Iterator
  *
  * @package PHPTAL.php
  */
-class PHPTAL_RepeatController_Groups {
-
+class PHPTAL_RepeatController_Groups 
+{
     protected $dict = array();
     protected $cache = array();
     protected $data = null;

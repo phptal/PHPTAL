@@ -29,18 +29,18 @@ class PHPTAL_Php_Attribute_I18N_Source extends PHPTAL_Php_Attribute
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // ensure that a sources stack exists or create it
-        $codewriter->doIf('!isset($__i18n_sources)');
-        $codewriter->pushCode('$__i18n_sources = array()');
+        $codewriter->doIf('!isset($_i18n_sources)');
+        $codewriter->pushCode('$_i18n_sources = array()');
         $codewriter->end();
 
         // push current source and use new one
-        $codewriter->pushCode('$__i18n_sources[] = $_translator->setSource('.$codewriter->str($this->expression).')');
+        $codewriter->pushCode('$_i18n_sources[] = $_translator->setSource('.$codewriter->str($this->expression).')');
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore source
-        $code = '$_translator->setSource(array_pop($__i18n_sources))';
+        $code = '$_translator->setSource(array_pop($_i18n_sources))';
         $codewriter->pushCode($code);
     }
 }

@@ -130,7 +130,7 @@ class PHPTAL_Php_State
             $php  = PHPTAL_TalesInternal::php($exp);
             $string = str_replace($ori, '\'.'.$php.'.\'', $string); // FIXME: that is not elegant
         }
-	    $string = str_replace('$${', '${', $string);
+        $string = str_replace('$${', '${', $string);
         return '\''.$string.'\'';
     }
 
@@ -175,8 +175,8 @@ class PHPTAL_Php_State
     {
         $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
         $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/is', array($this,'_interpolateTalesVarsHTML'), $result);
-		$result = str_replace('$${', '${', $result);
-		return $result;
+        $result = str_replace('$${', '${', $result);
+        return $result;
     }
 
     /**
@@ -188,8 +188,8 @@ class PHPTAL_Php_State
     {
         $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
         $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/is', array($this,'_interpolateTalesVarsCDATA'), $result);
-		$result = str_replace('$${', '${', $result);
-		return $result;
+        $result = str_replace('$${', '${', $result);
+        return $result;
     }
 
     /**

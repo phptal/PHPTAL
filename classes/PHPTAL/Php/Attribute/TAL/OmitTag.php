@@ -48,7 +48,7 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
     private $varname;
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if (trim($this->expression) == ''){
+        if (trim($this->expression) == '') {
             $this->phpelement->headFootDisabled = true;
         }
         else { 

@@ -403,7 +403,7 @@ class PHPTAL
             $this->prepare();
         }
 
-        $this->_context->__file = $this->__file;
+        $this->_context->_file = $this->_file;
 
         $templateFunction = $this->getFunctionName();
         try {
@@ -413,18 +413,18 @@ class PHPTAL
         }
         catch (Exception $e)
         {
-            if ($e instanceof PHPTAL_TemplateException) $e->hintSrcPosition($this->_context->__file, $this->_context->__line);
+            if ($e instanceof PHPTAL_TemplateException) $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
             ob_end_clean();
             throw $e;
         }
 
         // unshift doctype
-        $docType = $this->_context->__docType;
+        $docType = $this->_context->_docType;
         if ($docType) {
             $res = $docType . "\n" . $res;
         }
         // unshift xml declaration
-        $xmlDec = $this->_context->__xmlDeclaration;
+        $xmlDec = $this->_context->_xmlDeclaration;
         if ($xmlDec) {
             $res = $xmlDec . "\n" . $res;
         }
@@ -495,8 +495,8 @@ class PHPTAL
             }
 
             // save current file
-            $currentFile = $this->_context->__file;
-            $this->_context->__file = $tpl->__file;
+            $currentFile = $this->_context->_file;
+            $this->_context->_file = $tpl->_file;
 
             $fun = $tpl->getFunctionName() . '_' . strtr($macroName,"-","_");
             if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file", $this->_source->getRealPath());
@@ -506,13 +506,13 @@ class PHPTAL
             }
             catch(PHPTAL_TemplateException $e)
             {
-                $e->hintSrcPosition($tpl->_context->__file.'/'.$macroName, $tpl->_context->__line);
-                $this->_context->__file = $currentFile;
+                $e->hintSrcPosition($tpl->_context->_file.'/'.$macroName, $tpl->_context->_line);
+                $this->_context->_file = $currentFile;
                 throw $e;
             }
 
             // restore current file
-            $this->_context->__file = $currentFile;
+            $this->_context->_file = $currentFile;
         } else {
             // call local macro
             $fun = $local_tpl->getFunctionName() . '_' . strtr($path,"-","_");
@@ -540,7 +540,7 @@ class PHPTAL
 
         // find the template source file and update function name
         $this->setCodeFile();
-        $this->__file = $this->_source->getRealPath();
+        $this->_file = $this->_source->getRealPath();
 
         if (!function_exists($this->getFunctionName())) {
             // parse template if php generated code does not exists or template
@@ -874,7 +874,7 @@ class PHPTAL
     /**
      * current template file (changes within macros)
      */
-    public  $__file = false;
+    public  $_file = false;
     /**
      * list of on-error caught exceptions
      */
