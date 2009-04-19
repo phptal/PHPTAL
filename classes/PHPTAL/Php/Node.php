@@ -46,35 +46,61 @@ class PHPTAL_DOMAttr
         $this->encoding = $encoding;
     }
 
+    /**
+     * get character encoding used by this attribute.
+     */
     public function getEncoding()
     {
         return $this->encoding;
     }
 
+    /**
+     * get full namespace URI. "" for default namespace.
+     */
     function getNamespaceURI()
     {
         return $this->namespace_uri;
     }
 
+    /**
+     * get attribute name including namespace prefix, if any
+     */
     function getQualifiedName()
     {
         return $this->qualified_name;
     }
 
+    /**
+     * get "foo" of "ns:foo" attribute name
+     */
     function getLocalName()
     {
         $n = explode(':',$this->qualified_name,2);
         return end($n);
     }
 
+    /**
+     * set plain text as value
+     */
     function setValue($val)
     {
         $this->value_escaped = htmlspecialchars($val);
     }
-    function getValue() {return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);}
+    
+    /**
+     * get value as plain text
+     * 
+     * @return string
+     */
+    function getValue() 
+    {
+        return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);
+    }
 
     /**
-     * depends on replaced state
+     * Depends on replaced state. 
+     * If value is not replaced, it will return it with HTML escapes.
+     * 
      * @see getReplacedState()
      * @see overwriteValueWithVariable()
      */
@@ -83,12 +109,21 @@ class PHPTAL_DOMAttr
         return $this->value_escaped;
     }
 
+    /**
+     * set PHP code as value of this attribute. Code is expected to echo the value.
+     */
     private function setPHPCode($code)
     {
         $this->value_escaped = '<?php '.$code.' ?>';
     }
 
-    function hide() {$this->replacedState = self::HIDDEN;}
+    /**
+     * hide this attribute. It won't be generated.
+     */
+    function hide() 
+    {
+        $this->replacedState = self::HIDDEN;
+    }
 
     /**
      * generate value of this attribute from variable
@@ -170,26 +205,41 @@ abstract class PHPTAL_DOMNode
         $this->source_line = $line;
     }
 
+    /**
+     * file from which this node comes from
+     */
     public function getSourceFile()
     {
         return $this->source_file;
     }
 
+    /**
+     * line on which this node was defined
+     */
     public function getSourceLine()
     {
         return $this->source_line;
     }
 
+    /**
+     * depends on node type. Value will be escaped according to context that node comes from.
+     */
     function getValueEscaped()
     {
         return $this->value_escaped;
     }
 
+    /**
+     * get value as plain text. Depends on node type.
+     */
     function getValue($encoding)
     {
         return html_entity_decode($this->value_escaped,ENT_QUOTES,$this->encoding);
     }
 
+    /**
+     * encoding used by vaule of this node.
+     */
     public function getEncoding()
     {
         return $this->encoding;
@@ -199,7 +249,6 @@ abstract class PHPTAL_DOMNode
      * use CodeWriter to compile this element to PHP code
      */
     public abstract function generateCode(PHPTAL_Php_CodeWriter $gen);    
-    
     
     
     /**
@@ -247,7 +296,6 @@ abstract class PHPTAL_DOMNode
  */
 class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
 {
-
     protected $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
     protected $replaceAttributes = array();
@@ -259,6 +307,10 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
     public $hidden = false;
     public $childNodes = array();
 
+    /**
+     * @param string $qname         qualified name of the element, e.g. "tal:block"
+     * @param string $namespace_uri 
+     */
     public function __construct($qname, $namespace_uri, array $attribute_nodes, PHPTAL_Dom_XmlnsState $xmlns)
     {
         $this->qualifiedName = $qname;

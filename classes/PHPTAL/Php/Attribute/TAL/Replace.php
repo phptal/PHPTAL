@@ -66,6 +66,9 @@ implements PHPTAL_Php_TalesChainReader
     {
     }
 
+    /**
+     * support expressions like "foo | bar"
+     */
     private function replaceByChainedExpression(PHPTAL_Php_CodeWriter $codewriter, $expArray)
     {
         $executor = new PHPTAL_Php_TalesChainExecutor(
@@ -101,6 +104,9 @@ implements PHPTAL_Php_TalesChainReader
         }
     }
 
+    /**
+     * don't replace - re-generate default content
+     */
     private function generateDefault(PHPTAL_Php_CodeWriter $codewriter)
     {
         $this->phpelement->generateSurroundHead($codewriter);

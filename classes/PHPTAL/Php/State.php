@@ -134,6 +134,9 @@ class PHPTAL_Php_State
         return '\''.$string.'\'';
     }
 
+    /**
+     * callback for interpolation of TALES with structure keyword, i.e. without HTML-escapes
+     */
     private function _interpolateTalesVarsStructure($matches)
     {
         if ($this->_talesMode == 'tales') $code = phptal_tale($matches[1]);
@@ -142,6 +145,9 @@ class PHPTAL_Php_State
         return '<?php echo '.$this->stringify($code).' ?>';
     }
 
+    /**
+     * callback for interpolating TALES with HTML-escaping
+     */
     private function _interpolateTalesVarsHTML($matches)
     {
         if ($this->_talesMode == 'tales') {
@@ -151,6 +157,9 @@ class PHPTAL_Php_State
         return '<?php echo '.$this->htmlchars($code).' ?>';
     }
 
+    /**
+     * callback for interpolating TALES with CDATA escaping
+     */
     private function _interpolateTalesVarsCDATA($matches)
     {
         if ($this->_talesMode == 'tales') {
