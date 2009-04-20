@@ -13,7 +13,7 @@
  * @link     http://phptal.motion-twin.com/
  */
 
-define('PHPTAL_VERSION', '1_2_0a6');
+define('PHPTAL_VERSION', '1_2_0a7');
 
 PHPTAL::setIncludePath();
 
@@ -781,7 +781,7 @@ class PHPTAL
         self::restoreIncludePath();
 
         // instantiate the PHPTAL source parser
-        $parser = new PHPTAL_XmlParser($this->_encoding);
+        $parser = new PHPTAL_Dom_XmlParser($this->_encoding);
         $builder = new PHPTAL_DOM_DocumentBuilder();
         $builder->stripComments($this->_stripComments);
 
@@ -829,21 +829,42 @@ class PHPTAL
         }
     }
     
+    /**
+     * restore_include_path() resets path to default in ini, breaking application's custom paths,
+     * so a custom backup is necessary.
+     */
+    private static $include_path_backup;
+    
+    /**
+     * keeps track of multiple calls to setIncludePath()
+     */
     private static $include_path_set_nesting = 0;
     
+    /**
+     * Set include path to contain PHPTAL's directory. 
+     * Every call to setIncludePath() MUST have corresponding call to restoreIncludePath()!
+     * Calls to setIncludePath/restoreIncludePath can be nested.
+     *
+     * @return void
+     */
     public static function setIncludePath()
     {        
         if (!self::$include_path_set_nesting) {
+            self::$include_path_backup = get_include_path();
             set_include_path(dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
         }
         self::$include_path_set_nesting++;
     }
     
+    /**
+     * Restore include path to state before PHPTAL modified it.
+     */
     public static function restoreIncludePath()
     {
         self::$include_path_set_nesting--;
         if (!self::$include_path_set_nesting) {
-            restore_include_path();
+            // restore_include_path() doesn't work properly
+            set_include_path(self::$include_path_backup);
         }
     }
 
