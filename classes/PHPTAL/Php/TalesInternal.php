@@ -19,7 +19,7 @@ require_once 'PHPTAL/Php/Transformer.php';
 /**
  * @package PHPTAL.php
  */
-class PHPTAL_TalesInternal implements PHPTAL_Tales 
+class PHPTAL_Php_TalesInternal implements PHPTAL_Tales 
 {
     /**
      * This function registers all internal expression modifiers
@@ -325,4 +325,4 @@ class PHPTAL_TalesInternal implements PHPTAL_Tales
 }
 
 
-PHPTAL_TalesInternal::registerInternalTales();
+PHPTAL_Php_TalesInternal::registerInternalTales();

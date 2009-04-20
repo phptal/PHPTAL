@@ -782,7 +782,7 @@ class PHPTAL
 
         // instantiate the PHPTAL source parser
         $parser = new PHPTAL_Dom_XmlParser($this->_encoding);
-        $builder = new PHPTAL_DOM_DocumentBuilder();
+        $builder = new PHPTAL_Dom_DocumentBuilder();
         $builder->stripComments($this->_stripComments);
 
         $data = $this->_source->getData();

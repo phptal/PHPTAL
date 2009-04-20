@@ -13,7 +13,7 @@
  * @link     http://phptal.motion-twin.com/
  */
 
-require_once 'PHPTAL/Php/Node.php';
+require_once 'PHPTAL/Dom/Node.php';
 require_once 'PHPTAL/Dom/XmlParser.php';
 require 'PHPTAL/Dom/XmlnsState.php';
 
@@ -22,7 +22,7 @@ require 'PHPTAL/Dom/XmlnsState.php';
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
+class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
 {
     public function __construct()
     {
@@ -48,7 +48,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onDocumentStart()
     {
-        $this->documentElement = new PHPTAL_DOMElement('documentElement', 'http://xml.zope.org/namespaces/tal',array(), $this->getXmlnsState());
+        $this->documentElement = new PHPTAL_Dom_Element('documentElement', 'http://xml.zope.org/namespaces/tal',array(), $this->getXmlnsState());
         $this->documentElement->setSource($this->file, $this->line);
         $this->_stack = array();
         $this->_current = $this->documentElement;
@@ -65,29 +65,29 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onDocType($doctype)
     {
-        $this->pushNode(new PHPTAL_DOMDocumentType($doctype, $this->encoding));
+        $this->pushNode(new PHPTAL_Dom_DocumentType($doctype, $this->encoding));
     }
 
     public function onXmlDecl($decl)
     {
-        $this->pushNode(new PHPTAL_DOMXmlDeclaration($decl, $this->encoding));
+        $this->pushNode(new PHPTAL_Dom_XmlDeclaration($decl, $this->encoding));
     }
 
     public function onComment($data)
     {
         if ($this->_stripComments)
             return;
-        $this->pushNode(new PHPTAL_DOMComment($data, $this->encoding));
+        $this->pushNode(new PHPTAL_Dom_Comment($data, $this->encoding));
     }
 
     public function onCDATASection($data)
     {
-        $this->pushNode(new PHPTAL_DOMCDATASection($data, $this->encoding));
+        $this->pushNode(new PHPTAL_Dom_CDATASection($data, $this->encoding));
     }
 
     public function onProcessingInstruction($data)
     {
-        $this->pushNode(new PHPTAL_DOMProcessingInstruction($data, $this->encoding));
+        $this->pushNode(new PHPTAL_Dom_ProcessingInstruction($data, $this->encoding));
     }
 
     public function onElementStart($element_qname, array $attributes)
@@ -116,10 +116,10 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
                 throw new PHPTAL_ParserException("Unsupported attribute '$qname'");
             }
 
-            $attrnodes[] = new PHPTAL_DOMAttr($qname, $attr_namespace_uri, $value, $this->encoding);
+            $attrnodes[] = new PHPTAL_Dom_Attr($qname, $attr_namespace_uri, $value, $this->encoding);
         }
 
-        $node = new PHPTAL_DOMElement($element_qname, $namespace_uri, $attrnodes, $this->getXmlnsState());
+        $node = new PHPTAL_Dom_Element($element_qname, $namespace_uri, $attrnodes, $this->getXmlnsState());
         $this->pushNode($node);
         $this->_stack[] =  $this->_current;
         $this->_current = $node;
@@ -127,7 +127,7 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onElementData($data)
     {
-        $this->pushNode(new PHPTAL_DOMText($data, $this->encoding));
+        $this->pushNode(new PHPTAL_Dom_Text($data, $this->encoding));
     }
 
     public function onElementClose($qname)
@@ -137,11 +137,11 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
             throw new PHPTAL_ParserException("Tag closure mismatch, expected </".$this->_current->getQualifiedName()."> but found </".$qname.">");
         }
         $this->_current = array_pop($this->_stack);
-        if ($this->_current instanceOf PHPTAL_DOMElement)
+        if ($this->_current instanceOf PHPTAL_Dom_Element)
             $this->_xmlns = $this->_current->getXmlnsState();
     }
 
-    private function pushNode(PHPTAL_DOMNode $node)
+    private function pushNode(PHPTAL_Dom_Node $node)
     {
         $node->setSource($this->file, $this->line);
         $this->_current->appendChild($node);
@@ -160,9 +160,9 @@ class PHPTAL_DOM_DocumentBuilder implements PHPTAL_DocumentBuilder
     private $file, $line;
 
     private $encoding;
-    private $documentElement;    /* PHPTAL_DOMElement */
-    private $_stack;   /* array<PHPTAL_DOMNode> */
-    private $_current; /* PHPTAL_DOMNode */
+    private $documentElement;    /* PHPTAL_Dom_Element */
+    private $_stack;   /* array<PHPTAL_Dom_Node> */
+    private $_current; /* PHPTAL_Dom_Node */
     private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
     private $_stripComments = false;
 }

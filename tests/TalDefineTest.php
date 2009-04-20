@@ -14,13 +14,13 @@
  */
  
 PHPTAL::setIncludePath();
-require_once 'PHPTAL/Php/Node.php';
+require_once 'PHPTAL/Dom/Node.php';
 require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
 PHPTAL::restoreIncludePath();
 
 
 if (!class_exists('DummyPhpNode')) {
-    class DummyPhpNode extends PHPTAL_DOMElement {
+    class DummyPhpNode extends PHPTAL_Dom_Element {
         function __construct() {}
         function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}
     }

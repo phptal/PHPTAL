@@ -16,19 +16,11 @@
 require_once 'PHPTAL/Dom/Defs.php';
 
 /**
- * For backwards compatibility only. Do not use!
- * @deprecated
- */
-interface PHPTAL_Php_Tree
-{
-}
-
-/**
  * node that represents element's attribute
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMAttr
+class PHPTAL_Dom_Attr
 {
     private $value_escaped, $qualified_name, $namespace_uri, $encoding;
 
@@ -184,7 +176,7 @@ class PHPTAL_DOMAttr
  *
  * @package PHPTAL.dom
  */
-abstract class PHPTAL_DOMNode
+abstract class PHPTAL_Dom_Node
 {
     public $parentNode;
 
@@ -290,11 +282,19 @@ abstract class PHPTAL_DOMNode
 }
 
 /**
+ * For backwards compatibility only. Do not use!
+ * @deprecated
+ */
+interface PHPTAL_Php_Tree
+{
+}
+
+/**
  * Document Tag representation.
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
+class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 {
     protected $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
@@ -324,7 +324,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
             // it'll work only when qname == localname, which is good
             if ($this->xmlns->isValidAttributeNS($namespace_uri, $attr->getQualifiedName()))
             {
-                $this->attribute_nodes[$index] = new PHPTAL_DOMAttr($attr->getQualifiedName(), $namespace_uri, $attr->getValueEscaped(), $attr->getEncoding());
+                $this->attribute_nodes[$index] = new PHPTAL_Dom_Attr($attr->getQualifiedName(), $namespace_uri, $attr->getValueEscaped(), $attr->getEncoding());
             }
         }
 
@@ -367,7 +367,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
     }
     }
 
-    public function appendChild(PHPTAL_DOMNode $child)
+    public function appendChild(PHPTAL_Dom_Node $child)
     {
         $child->parentNode = $this;
         $this->childNodes[] = $child;
@@ -450,7 +450,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
     {
         if ($attr = $this->getAttributeNode($qname)) return $attr;
 
-        $attr = new PHPTAL_DOMAttr($qname, "", NULL, 'UTF-8'); // FIXME: should find namespace and encoding
+        $attr = new PHPTAL_Dom_Attr($qname, "", NULL, 'UTF-8'); // FIXME: should find namespace and encoding
         $this->attribute_nodes[] = $attr;
         return $attr;
     }
@@ -475,7 +475,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
 
         foreach($this->childNodes as $node)
         {
-            if (!$child instanceOf PHPTAL_DOMText || $child->getValueEscaped() !== '') return true;
+            if (!$child instanceOf PHPTAL_Dom_Text || $child->getValueEscaped() !== '') return true;
         }
     }
 
@@ -484,7 +484,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
         if ($this->hasAttributeNS('http://xml.zope.org/namespaces/tal', 'attributes')) return true;
         foreach($this->attribute_nodes as $attr)
         {
-            if ($attr->getReplacedState() !== PHPTAL_DOMAttr::HIDDEN) return true;
+            if ($attr->getReplacedState() !== PHPTAL_Dom_Attr::HIDDEN) return true;
         }
         return false;
     }
@@ -576,7 +576,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
         {
             switch($attr->getReplacedState())
             {
-                case PHPTAL_DOMAttr::NOT_REPLACED:
+                case PHPTAL_Dom_Attr::NOT_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName());
                     if ($codewriter->getOutputMode() !== PHPTAL::HTML5 || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName()))
                     {
@@ -584,14 +584,14 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
                     }
                     break;
 
-                case PHPTAL_DOMAttr::HIDDEN:
+                case PHPTAL_Dom_Attr::HIDDEN:
                     break;
 
-                case PHPTAL_DOMAttr::FULLY_REPLACED:
+                case PHPTAL_Dom_Attr::FULLY_REPLACED:
                     $codewriter->pushHTML($attr->getValueEscaped());
                     break;
 
-                case PHPTAL_DOMAttr::VALUE_REPLACED:
+                case PHPTAL_Dom_Attr::VALUE_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName().'="');
                     $codewriter->pushHTML($attr->getValueEscaped());
                     $codewriter->pushHTML('"');
@@ -692,7 +692,7 @@ class PHPTAL_DOMElement extends PHPTAL_DOMNode implements PHPTAL_Php_Tree
 /**
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMComment extends PHPTAL_DOMNode
+class PHPTAL_Dom_Comment extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -708,7 +708,7 @@ class PHPTAL_DOMComment extends PHPTAL_DOMNode
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMText extends PHPTAL_DOMNode
+class PHPTAL_Dom_Text extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -724,7 +724,7 @@ class PHPTAL_DOMText extends PHPTAL_DOMNode
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMProcessingInstruction extends PHPTAL_DOMNode
+class PHPTAL_Dom_ProcessingInstruction extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -737,7 +737,7 @@ class PHPTAL_DOMProcessingInstruction extends PHPTAL_DOMNode
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMCDATASection extends PHPTAL_DOMNode
+class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -772,7 +772,7 @@ class PHPTAL_DOMCDATASection extends PHPTAL_DOMNode
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMDocumentType extends PHPTAL_DOMNode
+class PHPTAL_Dom_DocumentType extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -786,7 +786,7 @@ class PHPTAL_DOMDocumentType extends PHPTAL_DOMNode
  *
  * @package PHPTAL.dom
  */
-class PHPTAL_DOMXmlDeclaration extends PHPTAL_DOMNode
+class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {

@@ -32,7 +32,7 @@ class PHPTAL_Php_CodeGenerator
     }
 
 
-    public function generateCode(PHPTAL_DOMElement $treeGen)
+    public function generateCode(PHPTAL_Dom_Element $treeGen)
     {   
         $codewriter = new PHPTAL_Php_CodeWriter($this->_state);
 

@@ -111,7 +111,7 @@ class PHPTAL_Php_State
     public function evaluateExpression($expression)
     {
         if ($this->_talesMode == 'php')
-            return PHPTAL_TalesInternal::php($expression);
+            return PHPTAL_Php_TalesInternal::php($expression);
         return phptal_tales($expression);
     }
 
@@ -121,13 +121,13 @@ class PHPTAL_Php_State
     public function interpolateTalesVarsInString($string)
     {
         if ($this->_talesMode == 'tales') {
-            return PHPTAL_TalesInternal::string($string);
+            return PHPTAL_Php_TalesInternal::string($string);
         }
 
         // replace ${var} found in expression
         while (preg_match('/(?<!\$)\$\{([^\}]+)\}/s', $string, $m)){
             list($ori, $exp) = $m;
-            $php  = PHPTAL_TalesInternal::php($exp);
+            $php  = PHPTAL_Php_TalesInternal::php($exp);
             $string = str_replace($ori, '\'.'.$php.'.\'', $string); // FIXME: that is not elegant
         }
         $string = str_replace('$${', '${', $string);
@@ -140,7 +140,7 @@ class PHPTAL_Php_State
     private function _interpolateTalesVarsStructure($matches)
     {
         if ($this->_talesMode == 'tales') $code = phptal_tale($matches[1]);
-        else $code = PHPTAL_TalesInternal::php($matches[1]);
+        else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
 
         return '<?php echo '.$this->stringify($code).' ?>';
     }
@@ -152,7 +152,7 @@ class PHPTAL_Php_State
     {
         if ($this->_talesMode == 'tales') {
             $code = phptal_tale(html_entity_decode($matches[1],ENT_QUOTES, $this->getEncoding()));
-        } else $code = PHPTAL_TalesInternal::php($matches[1]);
+        } else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
 
         return '<?php echo '.$this->htmlchars($code).' ?>';
     }
@@ -164,7 +164,7 @@ class PHPTAL_Php_State
     {
         if ($this->_talesMode == 'tales') {
             $code = phptal_tale($matches[1],ENT_QUOTES, $this->getEncoding());
-        } else $code = PHPTAL_TalesInternal::php($matches[1]);
+        } else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
 
         // quite complex for an "unescaped" section, isn't it?
         if ($this->getOutputMode() === PHPTAL::HTML5) {

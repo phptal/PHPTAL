@@ -54,17 +54,17 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
     {
     }
 
-    private function _getTranslationKey(PHPTAL_DOMNode $tag, $preserve_tags, $encoding)
+    private function _getTranslationKey(PHPTAL_Dom_Node $tag, $preserve_tags, $encoding)
     {
         $result = '';
         foreach ($tag->childNodes as $child) {
-            if ($child instanceOf PHPTAL_DOMText) {
+            if ($child instanceOf PHPTAL_Dom_Text) {
                 if ($preserve_tags) {
                     $result .= $child->getValueEscaped();
                 } else {
                     $result .= $child->getValue($encoding);
                 }
-            } elseif ($child instanceOf PHPTAL_DOMElement) {
+            } elseif ($child instanceOf PHPTAL_Dom_Element) {
                 if ($attr = $child->getAttributeNodeNS('http://xml.zope.org/namespaces/i18n', 'name')) {
                     $result .= '${' . $attr->getValue() . '}';
                 } else {
@@ -72,7 +72,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
                     if ($preserve_tags) {
                         $result .= '<'.$child->getQualifiedName();
                         foreach ($child->getAttributeNodes() as $attr) {
-                            if ($attr->getReplacedState() === PHPTAL_DOMAttr::HIDDEN) continue;
+                            if ($attr->getReplacedState() === PHPTAL_Dom_Attr::HIDDEN) continue;
                             
                             $result .= ' '.$attr->getQualifiedName().'="'.$attr->getValueEscaped().'"';
                         }
@@ -86,10 +86,10 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
         return $result;
     }
 
-    private function _prepareNames(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_DOMNode $tag)
+    private function _prepareNames(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Dom_Node $tag)
     {
         foreach ($tag->childNodes as $child) {
-            if ($child instanceOf PHPTAL_DOMElement) {
+            if ($child instanceOf PHPTAL_Dom_Element) {
                 if ($child->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'name')) {
                     $child->generateCode($codewriter);
                 } else {

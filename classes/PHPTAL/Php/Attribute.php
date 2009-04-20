@@ -72,7 +72,7 @@ abstract class PHPTAL_Php_Attribute
      */
     public function doEcho($code) { $this->doEchoAttribute($this->tag->generator, $code); }
 
-    function __construct(PHPTAL_DOMElement $phpelement, $expression)
+    function __construct(PHPTAL_Dom_Element $phpelement, $expression)
     {
         $this->expression = $expression;
         $this->phpelement = $phpelement; 

@@ -19,7 +19,7 @@ PHPTAL::restoreIncludePath();
 
 function phptal_tales_custom($src,$nothrow)
 {
-    return 'sprintf("%01.2f", '.PHPTAL_TalesInternal::path($src, $nothrow).')';
+    return 'sprintf("%01.2f", '.PHPTAL_Php_TalesInternal::path($src, $nothrow).')';
 }
 
 class MyTalesClass implements PHPTAL_Tales
