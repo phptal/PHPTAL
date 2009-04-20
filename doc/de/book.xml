@@ -665,7 +665,7 @@ catch (Exception $e){
           Dieses Attribut ersetzt die gesamte Auszeichnung durch den angegebenen Wert, oder durch nichts, wenn kein Wert agegeben wird.
         </para>
 
-        <programlisting><![CDATA[<span tal:replace="string:this beautyful string">
+        <programlisting><![CDATA[<span tal:replace="string:this beautiful string">
   this ugly string and span
 </span>
 ]]></programlisting>
@@ -674,7 +674,7 @@ catch (Exception $e){
           Ergibt:
         </para>
 
-        <programlisting><![CDATA[this beautyful string
+        <programlisting><![CDATA[this beautiful string
 ]]></programlisting>
 
         <para>

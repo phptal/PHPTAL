@@ -712,7 +712,7 @@ catch (Exception $e){
         nothing if no value is given.
         </para>
 
-        <programlisting language="xml"><![CDATA[<span tal:replace="string:this beautyful string">
+        <programlisting language="xml"><![CDATA[<span tal:replace="string:this beautiful string">
   this ugly string and span
 </span>
 ]]></programlisting>
@@ -721,7 +721,7 @@ catch (Exception $e){
         Will produce:
         </para>
 
-        <programlisting><![CDATA[this beautyful string
+        <programlisting><![CDATA[this beautiful string
 ]]></programlisting>
 
         <para>
