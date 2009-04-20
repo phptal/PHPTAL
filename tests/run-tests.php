@@ -81,4 +81,3 @@ $runner = new PHPUnit_TextUI_TestRunner();
 $runner->doRun($alltests);
 
 
-print_r(get_included_files());
