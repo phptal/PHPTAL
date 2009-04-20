@@ -38,6 +38,8 @@ class PHPTAL_Context
 
     /**
      * will switch to this context when popContext() is called
+     * 
+     * @return void
      */
     public function setParent(PHPTAL_Context $parent)
     {
@@ -47,6 +49,8 @@ class PHPTAL_Context
     /**
      * set StdClass object which has property of every global variable
      * It can use __isset() and __get() [none of them or both]
+     * 
+     * @return void
      */
     public function setGlobal(StdClass $globalContext)
     {
@@ -80,6 +84,8 @@ class PHPTAL_Context
      *
      * This method ensure PHPTAL uses the first DOCTYPE encountered (main
      * template or any macro template source containing a DOCTYPE.
+     * 
+     * @return void
      */
     public function setDocType($doctype)
     {
@@ -99,7 +105,9 @@ class PHPTAL_Context
      *
      * This method ensure PHPTAL uses the first xml declaration encountered
      * (main template or any macro template source containing an xml
-     * declaration).
+     * declaration)
+     * 
+     * @return void
      */
     public function setXmlDeclaration($xmldec)
     {
@@ -117,6 +125,8 @@ class PHPTAL_Context
     /** 
      * Activate or deactivate exception throwing during unknown path
      * resolution.
+     * 
+     * @return void
      */
     public function noThrow($bool)
     {
@@ -164,6 +174,8 @@ class PHPTAL_Context
 
     /**
      * Push current filled slots on stack.
+     * 
+     * @return void
      */
     public function pushSlots()
     {
@@ -173,6 +185,8 @@ class PHPTAL_Context
 
     /**
      * Restore filled slots stack.
+     * 
+     * @return void
      */
     public function popSlots()
     {
@@ -181,6 +195,8 @@ class PHPTAL_Context
 
     /**
      * Context setter.
+     * 
+     * @return void
      */
     public function __set($varname, $value)
     {
@@ -190,6 +206,9 @@ class PHPTAL_Context
         $this->$varname = $value;
     }
 
+    /**
+     * @return bool
+     */
     public function __isset($varname)
     {
         // it doesn't need to check isset($this->$varname), because PHP does that _before_ calling __isset()
@@ -199,6 +218,8 @@ class PHPTAL_Context
     /**
      * Context getter.
      * If variable doesn't exist, it will throw an exception, unless noThrow(true) has been called
+     * 
+     * @return mixed
      */
     public function __get($varname)
     {

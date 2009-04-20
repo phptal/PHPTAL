@@ -178,6 +178,8 @@ class EscapeHTMLTest extends PHPTAL_TestCase {
     
     function testStructureSimpleXML()
     {
+        $this->markTestSkipped("Impossible as of PHP5.3");
+        
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${structure x}</p>');
         $simplexml = new SimpleXMLElement('<foo title="bar&amp;&lt;">foo&amp;&lt;</foo>');

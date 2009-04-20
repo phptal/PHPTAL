@@ -27,7 +27,7 @@ all: $(LANGS)
 # recursive make
 $(LANGS)::
 	@echo "Generating $@"
-	$(MAKE) --no-builtin-rules -$(MAKEFLAGS) SRCLANG="$@" lang
+	$(MAKE) --no-builtin-rules --jobs=2 -$(MAKEFLAGS) SRCLANG="$@" lang
 
 # make a single language given by setting SRCLANG=xx
 lang: plaintext onepageperchapter allononepage
@@ -83,3 +83,5 @@ clean:
 cleanlang:
 	@echo "Deleting generated $(SRCLANG)"
 	-rm -rf -- "$(TEMP)" "$(BUILD)"
+
+Makefile: ;

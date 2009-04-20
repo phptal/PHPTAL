@@ -95,4 +95,3 @@ implements PHPTAL_Php_TalesChainReader
         $executor->breakChain();
     }
 }
-?>
