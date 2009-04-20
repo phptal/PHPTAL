@@ -12,7 +12,10 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
+
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Php/Tales.php';
+PHPTAL::restoreIncludePath();
 
 class TalReplaceTest extends PHPTAL_TestCase 
 {

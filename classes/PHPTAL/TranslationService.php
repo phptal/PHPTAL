@@ -54,5 +54,3 @@ interface PHPTAL_TranslationService
      */
     function translate($key, $htmlescape=true);
 }
-
-?>

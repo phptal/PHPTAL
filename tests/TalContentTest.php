@@ -12,7 +12,6 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Php/Tales.php';
 
 class DummyToStringObject {
     public function __construct($value){ $this->_value = $value; }

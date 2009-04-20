@@ -12,7 +12,12 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/GetTextTranslator.php';
+ 
+PHPTAL::setIncludePath();
+
+require_once 'PHPTAL/GetTextTranslator.php';
+
+PHPTAL::restoreIncludePath();
 
 class GetTextTest extends PHPTAL_TestCase
 {

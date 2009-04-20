@@ -19,10 +19,8 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 
 error_reporting( E_ALL | E_STRICT );
 
-define('PHPTAL_DIR',dirname(__FILE__).DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'classes'.DIRECTORY_SEPARATOR);
-
 require_once dirname(__FILE__)."/config.php";
-require_once PHPTAL_DIR.'PHPTAL.php';
+require_once dirname(__FILE__).'/../classes/PHPTAL.php';
 
 class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
 {
@@ -78,5 +76,9 @@ foreach (new DirectoryIterator( dirname(__FILE__) ) as $f) {
     }
 }
 
+
 $runner = new PHPUnit_TextUI_TestRunner();
 $runner->doRun($alltests);
+
+
+print_r(get_included_files());

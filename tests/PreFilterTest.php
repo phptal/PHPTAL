@@ -12,7 +12,6 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Filter.php';
 
 class MyPreFilter implements PHPTAL_Filter
 {

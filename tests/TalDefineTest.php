@@ -12,8 +12,11 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
-require_once PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Define.php';
+ 
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Php/Node.php';
+require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
+PHPTAL::restoreIncludePath();
 
 
 if (!class_exists('DummyPhpNode')) {

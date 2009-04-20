@@ -15,19 +15,17 @@
 
 define('PHPTAL_VERSION', '1_2_0a6');
 
-if (!defined('PHPTAL_DIR')) {
-    define('PHPTAL_DIR', dirname(__FILE__).DIRECTORY_SEPARATOR);
-} else {
-    assert('substr(PHPTAL_DIR,-1) == DIRECTORY_SEPARATOR');
-}
+PHPTAL::setIncludePath();
 
-require PHPTAL_DIR.'PHPTAL/Source.php';
-require PHPTAL_DIR.'PHPTAL/SourceResolver.php';
-require PHPTAL_DIR.'PHPTAL/FileSource.php';
-require PHPTAL_DIR.'PHPTAL/RepeatController.php';
-require PHPTAL_DIR.'PHPTAL/Context.php';
-require PHPTAL_DIR.'PHPTAL/Exception.php';
-require_once PHPTAL_DIR.'PHPTAL/Filter.php';
+require 'PHPTAL/Source.php';
+require 'PHPTAL/SourceResolver.php';
+require 'PHPTAL/FileSource.php';
+require 'PHPTAL/RepeatController.php';
+require 'PHPTAL/Context.php';
+require 'PHPTAL/Exception.php';
+require_once 'PHPTAL/Filter.php';
+
+PHPTAL::restoreIncludePath();
 
 /**
  * PHPTAL template entry point.
@@ -51,6 +49,10 @@ require_once PHPTAL_DIR.'PHPTAL/Filter.php';
  */
 class PHPTAL
 {
+    /**
+     * constants for output mode
+     * @see setOutputMode()
+     */
     const XHTML = 111;
     const XML   = 222;
     const HTML5 = 555;
@@ -137,7 +139,10 @@ class PHPTAL
             $path = '<string '.md5($src).'>';
         }
 
-        require_once PHPTAL_DIR.'PHPTAL/StringSource.php';
+        PHPTAL::setIncludePath();
+        require_once 'PHPTAL/StringSource.php';
+        PHPTAL::restoreIncludePath();        
+        
         $this->_prepared = false;
         $this->_functionName = null;
         $this->_codeFile = null;
@@ -770,8 +775,10 @@ class PHPTAL
      */
     protected function parse()
     {
-        require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
-        require_once PHPTAL_DIR.'PHPTAL/Php/CodeGenerator.php';
+        self::setIncludePath();
+        require_once 'PHPTAL/Dom/DocumentBuilder.php';
+        require_once 'PHPTAL/Php/CodeGenerator.php';
+        self::restoreIncludePath();
 
         // instantiate the PHPTAL source parser
         $parser = new PHPTAL_XmlParser($this->_encoding);
@@ -819,6 +826,24 @@ class PHPTAL
 
         if (!$this->_source) {
             throw new PHPTAL_IOException('Unable to locate template file '.$this->_path);
+        }
+    }
+    
+    private static $include_path_set_nesting = 0;
+    
+    public static function setIncludePath()
+    {        
+        if (!self::$include_path_set_nesting) {
+            set_include_path(dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
+        }
+        self::$include_path_set_nesting++;
+    }
+    
+    public static function restoreIncludePath()
+    {
+        self::$include_path_set_nesting--;
+        if (!self::$include_path_set_nesting) {
+            restore_include_path();
         }
     }
 

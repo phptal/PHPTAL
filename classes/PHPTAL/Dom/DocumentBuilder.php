@@ -13,9 +13,9 @@
  * @link     http://phptal.motion-twin.com/
  */
 
-require_once PHPTAL_DIR.'PHPTAL/Php/Node.php';
-require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
-require PHPTAL_DIR.'PHPTAL/Dom/XmlnsState.php';
+require_once 'PHPTAL/Php/Node.php';
+require_once 'PHPTAL/Dom/XmlParser.php';
+require 'PHPTAL/Dom/XmlnsState.php';
 
 /**
  * DOM Builder

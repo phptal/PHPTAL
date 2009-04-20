@@ -13,15 +13,15 @@
  * @link     http://phptal.motion-twin.com/ 
  */
  
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Comment.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Replace.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Content.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Condition.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Attributes.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Repeat.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/Define.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/OnError.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/TAL/OmitTag.php';
+require 'PHPTAL/Php/Attribute/TAL/Comment.php';
+require 'PHPTAL/Php/Attribute/TAL/Replace.php';
+require 'PHPTAL/Php/Attribute/TAL/Content.php';
+require 'PHPTAL/Php/Attribute/TAL/Condition.php';
+require 'PHPTAL/Php/Attribute/TAL/Attributes.php';
+require 'PHPTAL/Php/Attribute/TAL/Repeat.php';
+require 'PHPTAL/Php/Attribute/TAL/Define.php';
+require 'PHPTAL/Php/Attribute/TAL/OnError.php';
+require 'PHPTAL/Php/Attribute/TAL/OmitTag.php';
 
 /**
  * @package PHPTAL.namespace

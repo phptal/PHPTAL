@@ -12,7 +12,12 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
+
+PHPTAL::setIncludePath();
+
+require_once 'PHPTAL/TranslationService.php';
+
+PHPTAL::restoreIncludePath();
 
 /**
  * PHPTAL_TranslationService gettext implementation.

@@ -12,9 +12,8 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
- 
 
-require_once PHPTAL_DIR.'PHPTAL/Namespace.php';
+require_once 'PHPTAL/Namespace.php';
 
 /**
  * PHPTAL constants.

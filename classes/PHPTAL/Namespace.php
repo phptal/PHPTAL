@@ -12,11 +12,11 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require PHPTAL_DIR.'PHPTAL/Php/Attribute.php';
-require PHPTAL_DIR.'PHPTAL/Namespace/TAL.php';
-require PHPTAL_DIR.'PHPTAL/Namespace/METAL.php';
-require PHPTAL_DIR.'PHPTAL/Namespace/I18N.php';
-require PHPTAL_DIR.'PHPTAL/Namespace/PHPTAL.php';
+require 'PHPTAL/Php/Attribute.php';
+require 'PHPTAL/Namespace/TAL.php';
+require 'PHPTAL/Namespace/METAL.php';
+require 'PHPTAL/Namespace/I18N.php';
+require 'PHPTAL/Namespace/PHPTAL.php';
 
 
 /** 

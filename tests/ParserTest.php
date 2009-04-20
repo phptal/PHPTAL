@@ -13,6 +13,11 @@
  * @link     http://phptal.motion-twin.com/ 
  */
 
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Dom/DocumentBuilder.php';
+PHPTAL::restoreIncludePath();
+
+
 class ParserTest extends PHPTAL_TestCase
 {
     public function testParseSimpleDocument()

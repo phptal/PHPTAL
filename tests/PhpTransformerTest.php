@@ -12,7 +12,10 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Php/Transformer.php';
+ 
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Php/Transformer.php';
+PHPTAL::restoreIncludePath();
 
 class PhpTransformerTest extends PHPTAL_TestCase
 {

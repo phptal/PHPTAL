@@ -13,10 +13,10 @@
  * @link     http://phptal.motion-twin.com/ 
  */
  
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/METAL/UseMacro.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/METAL/FillSlot.php';
+require 'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
+require 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
+require 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
+require 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
 
 /** 
  * @package PHPTAL.namespace

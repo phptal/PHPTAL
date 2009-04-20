@@ -12,8 +12,10 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Dom/XmlParser.php';
-require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
+
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Dom/DocumentBuilder.php';
+PHPTAL::restoreIncludePath();
 
 class XmlParserTest extends PHPTAL_TestCase
 {

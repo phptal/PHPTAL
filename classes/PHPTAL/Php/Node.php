@@ -13,7 +13,7 @@
  * @link     http://phptal.motion-twin.com/
  */
 
-require_once PHPTAL_DIR.'PHPTAL/Dom/Defs.php';
+require_once 'PHPTAL/Dom/Defs.php';
 
 /**
  * For backwards compatibility only. Do not use!

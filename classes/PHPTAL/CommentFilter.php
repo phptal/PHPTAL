@@ -14,7 +14,7 @@
  */
  
  
-require_once PHPTAL_DIR.'PHPTAL/Filter.php';
+require_once 'PHPTAL/Filter.php';
 
 /**
  * simple filter that removes XML comments

@@ -58,4 +58,4 @@ class ArrayOverloadTest extends PHPTAL_TestCase
     }
 }
 
-?>
+

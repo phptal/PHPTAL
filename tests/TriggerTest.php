@@ -12,7 +12,10 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Trigger.php';
+
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Trigger.php';
+PHPTAL::restoreIncludePath();
 
 class StupidCacheTrigger implements PHPTAL_Trigger
 {

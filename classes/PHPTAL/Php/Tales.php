@@ -138,5 +138,5 @@ function phptal_tales($expression, $nothrow=false)
 
 
 // Register internal Tales expression modifiers
-require PHPTAL_DIR.'PHPTAL/TalesRegistry.php';
-require PHPTAL_DIR.'PHPTAL/Php/TalesInternal.php';
+require 'PHPTAL/TalesRegistry.php';
+require 'PHPTAL/Php/TalesInternal.php';

@@ -12,7 +12,6 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Filter.php';
 
 class MyPostFilter implements PHPTAL_Filter
 {

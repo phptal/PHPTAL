@@ -12,8 +12,12 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
- 
-require_once PHPTAL_DIR.'PHPTAL/CommentFilter.php';
+
+PHPTAL::setIncludePath();
+
+require_once 'PHPTAL/CommentFilter.php';
+
+PHPTAL::restoreIncludePath();
 
 class CommentFilterTest extends PHPTAL_TestCase
 {
@@ -26,6 +30,3 @@ class CommentFilterTest extends PHPTAL_TestCase
 		$this->assertEquals($exp,$res);
 	}
 }
-
-
-?>

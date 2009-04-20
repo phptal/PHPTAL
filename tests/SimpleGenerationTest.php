@@ -12,6 +12,11 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
+ 
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Dom/DocumentBuilder.php';
+PHPTAL::restoreIncludePath();
+ 
 class SimpleGenerationTest extends PHPTAL_TestCase
 {
     function testTreeGeneration()

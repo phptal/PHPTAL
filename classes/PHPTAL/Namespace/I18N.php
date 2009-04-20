@@ -13,10 +13,10 @@
  * @link     http://phptal.motion-twin.com/ 
  */
  
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Translate.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Name.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Domain.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/I18N/Attributes.php';
+require 'PHPTAL/Php/Attribute/I18N/Translate.php';
+require 'PHPTAL/Php/Attribute/I18N/Name.php';
+require 'PHPTAL/Php/Attribute/I18N/Domain.php';
+require 'PHPTAL/Php/Attribute/I18N/Attributes.php';
 
 /**
  * @package PHPTAL.namespace

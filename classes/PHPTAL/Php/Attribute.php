@@ -12,7 +12,7 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require PHPTAL_DIR.'PHPTAL/Php/TalesChainExecutor.php';
+require 'PHPTAL/Php/TalesChainExecutor.php';
 
 /**
  * Base class for all PHPTAL attributes.

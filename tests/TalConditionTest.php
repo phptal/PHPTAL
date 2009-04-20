@@ -12,7 +12,12 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/ 
  */
-require_once PHPTAL_DIR.'PHPTAL/Dom/DocumentBuilder.php';
+
+PHPTAL::setIncludePath();
+
+require_once 'PHPTAL/Dom/DocumentBuilder.php';
+
+PHPTAL::restoreIncludePath();
 
 if (!class_exists('DummyTag')) {
     class DummyTag {}

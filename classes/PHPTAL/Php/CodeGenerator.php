@@ -13,8 +13,8 @@
  * @link     http://phptal.motion-twin.com/ 
  */
  
-require PHPTAL_DIR.'PHPTAL/Php/State.php';
-require PHPTAL_DIR.'PHPTAL/Php/CodeWriter.php';
+require 'PHPTAL/Php/State.php';
+require 'PHPTAL/Php/CodeWriter.php';
 
 /**
  * @package PHPTAL.php

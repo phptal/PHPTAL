@@ -1330,9 +1330,6 @@ php:SomeClass::$staticVar
         <classname>PHPTAL_VERSION</classname>: version of <acronym>PHPTAL</acronym> library installed on your
         system (in format: X.X.X)
         </para></listitem>
-        <listitem><para>
-        <classname>PHPTAL_DIR</classname>: path to directory where <filename>PHPTAL.php</filename> is located.
-        </para></listitem>
       </itemizedlist>
 
       <para>
@@ -1646,7 +1643,7 @@ echo $tpl->execute();
  
       <programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
-require_once PHPTAL_DIR.'PHPTAL/Trigger.php';
+require_once 'PHPTAL/Trigger.php';
 
 class CacheTrigger implements PHPTAL_Trigger
 {
@@ -1784,7 +1781,7 @@ echo $tpl->execute();
         </para>
 
         <programlisting><![CDATA[<?php
-require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
+require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
 …
@@ -1813,7 +1810,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         </para>
 
         <programlisting><![CDATA[<?php
-require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
+require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
     …
@@ -1847,7 +1844,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         </para>
 
         <programlisting><![CDATA[<?php
-require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
+require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
     …
@@ -1871,7 +1868,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         </para>
 
         <programlisting><![CDATA[<?php
-require_once PHPTAL_DIR.'PHPTAL/TranslationService.php';
+require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
     …
@@ -2062,7 +2059,7 @@ msgstr "Une petite phrase en français"
 
         <programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
-require_once PHPTAL_DIR.'PHPTAL/GetTextTranslator.php';
+require_once 'PHPTAL/GetTextTranslator.php';
 
 try {
     $tr = new PHPTAL_GetTextTranslator();

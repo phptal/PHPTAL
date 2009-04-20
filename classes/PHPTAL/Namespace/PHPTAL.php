@@ -13,10 +13,10 @@
  * @link     http://phptal.motion-twin.com/ 
  */
  
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/PHPTAL/Debug.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/PHPTAL/Id.php';
-require PHPTAL_DIR.'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
+require 'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
+require 'PHPTAL/Php/Attribute/PHPTAL/Debug.php';
+require 'PHPTAL/Php/Attribute/PHPTAL/Id.php';
+require 'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
 
 /**
  * @package PHPTAL.namespace
