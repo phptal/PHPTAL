@@ -224,7 +224,7 @@ abstract class PHPTAL_Dom_Node
     /**
      * get value as plain text. Depends on node type.
      */
-    function getValue($encoding)
+    function getValue()
     {
         return html_entity_decode($this->value_escaped,ENT_QUOTES, $this->encoding);
     }
@@ -348,6 +348,32 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     }
 
     /**
+     * Replace <script> foo &gt; bar </script> 
+     * with <script>/*<![CDATA[* / foo > bar /*]]>* /</script>
+     *
+     * This avoids gotcha in text/html
+     */
+    private function replaceTextWithCDATA()
+    {
+        $isCDATAelement = PHPTAL_Dom_Defs::getInstance()->isCDATAElementInHTML($this->getNamespaceURI(), $this->getLocalName());
+                
+        if ($isCDATAelement) {
+            
+            // if there is CDATA, comment, or anything else, leave it alone.
+            if (count($this->childNodes) == 1 && $this->childNodes[0] instanceOf PHPTAL_Dom_Text) {
+                $textnode = $this->childNodes[0]; 
+                if (false !== strpos($textnode->getValueEscaped(),'&')) {
+                    $this->childNodes = array();
+                    // appendChild sets parent
+                    $this->appendChild(new PHPTAL_Dom_Text('/*', $textnode->getEncoding())); 
+                    $this->appendChild(new PHPTAL_Dom_CDATASection('*/'.$textnode->getValue().'/*', $textnode->getEncoding())); 
+                    $this->appendChild(new PHPTAL_Dom_Text('*/', $textnode->getEncoding())); 
+                }
+            }
+        }
+    }
+ 
+    /**
      * support <?php ?> inside attributes
      */
     private function replacePHPAttributes()
@@ -384,7 +410,14 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         
         try
         {
-            $this->replacePHPAttributes();
+            /// self-modifications 
+            
+            $this->replacePHPAttributes();            
+            if ($codewriter->getOutputMode() === PHPTAL::XHTML) {
+                $this->replaceTextWithCDATA();
+            }
+            
+            /// code generation
 
             if ($codewriter->isDebugOn()) {
                 $codewriter->pushCode('$ctx->_line = '.$this->getSourceLine());
