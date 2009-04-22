@@ -42,8 +42,8 @@ class XmlParserTest extends PHPTAL_TestCase
     public function testAllowGtAndLtInTextNodes() {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
         $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.03.xml')->getResult();
-        $expected = trim(join('', file('output/xml.03.xml')));
-        $this->assertEquals($expected, $builder->result);
+        
+        $this->assertEquals(trim_file('output/xml.03.xml'), trim_string($builder->result));
         $this->assertEquals(3, $builder->elementStarts);
         $this->assertEquals(3, $builder->elementCloses);
         // a '<' character withing some text data make the parser call 2 times
@@ -95,6 +95,18 @@ class XmlParserTest extends PHPTAL_TestCase
         </foo>";
         $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
         $this->assertEquals($src, $builder->result);        
+    }
+
+    public function testFixOrRejectCDATAClose()
+    {
+        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $src = '<a> ]]> </a>';
+        try
+        {
+            $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+            $this->assertEquals('<a> ]]&gt; </a>', $builder->result);
+        }
+        catch(PHPTAL_ParserException $e) { /* ok - rejecting is one way to do it */ }
     }
         
     public function testFixOrRejectEntities()

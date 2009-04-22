@@ -347,7 +347,7 @@ class PHPTAL_Dom_XmlParser
         for($i=0; $i < count($split); $i+=2)
         {
             // escape invalid entities and < >
-            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $split[$i]),array('<'=>'&lt;', '>'=>'&gt;'));
+            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $split[$i]),array('<'=>'&lt;', ']]>'=>']]&gt;'));
         }
         return implode('', $split);
     }

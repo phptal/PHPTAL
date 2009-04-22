@@ -23,6 +23,20 @@ class EscapeCDATATest extends PHPTAL_TestCase {
         return $tpl->execute();
     }
 
+    function testTrimString()
+    {
+        $this->assertEquals(
+             trim_string('<foo><bar>]]&gt; foo ]> bar</bar></foo>'),
+             trim_string('<foo> <bar>]]&gt; foo ]&gt; bar </bar> </foo>')
+        );
+        
+        $this->assertNotEquals(
+             trim_string('foo]]>bar'),
+             trim_string('foo]]&gt;bar')
+        );
+        
+    }
+
 	function testDoesEscapeHTMLContent(){
 		$tpl = $this->newPHPTAL('input/escape.html');
 		$exp = trim_file('output/escape.html');
@@ -113,5 +127,37 @@ class EscapeCDATATest extends PHPTAL_TestCase {
         $tpl->cdata = ']]></x>';
         $res = $tpl->execute();
         $this->assertEquals('<y>]]&gt;&lt;/x&gt;; ]]&gt;&lt;/x&gt;;</y>     <y>]]></x></y>',$res);
+    }
+    
+    
+    
+    function testAutoCDATA()
+    {
+        $res = $this->executeString('<script> 1 < 2 </script>');
+        $this->assertEquals('<script>/*<![CDATA[*/ 1 < 2 /*]]>*/</script>',$res);
+    }
+    
+    function testAutoCDATA2()
+    {
+        $res = $this->executeString('<xhtmlz:script xmlns:xhtmlz="http://www.w3.org/1999/xhtml"> 1 < 2 ${php:\'&\' . \'&amp;\'} </xhtmlz:script>');
+        $this->assertEquals('<xhtmlz:script xmlns:xhtmlz="http://www.w3.org/1999/xhtml">/*<![CDATA[*/ 1 < 2 && /*]]>*/</xhtmlz:script>',$res);
+    }
+    
+    function testNoAutoCDATA()
+    {
+        $res = $this->executeString('<script> "1 \' 2" </script><script xmlns="foo"> 1 &lt; 2 </script>');
+        $this->assertEquals('<script> "1 \' 2" </script><script xmlns="foo"> 1 &lt; 2 </script>',$res);
+    }
+
+    function testNoAutoCDATA2()
+    {
+        $res = $this->executeString('<script> a && ${structure foo} </script><script xmlns="foo"> 1 &lt; 2 </script>', array('foo'=>'<foo/>'));
+        $this->assertEquals('<script> a &amp;&amp; <foo/> </script><script xmlns="foo"> 1 &lt; 2 </script>',$res);
+    }
+
+    function testNoAutoCDATA3()
+    {
+        $res = $this->executeString('<style> html > body </style>');
+        $this->assertEquals('<style> html > body </style>',$res);
     }
 }

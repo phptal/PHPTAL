@@ -78,6 +78,7 @@ class PHPTAL_Dom_Defs
     
     /**
      * true if elements content is parsed as CDATA in text/html
+     * and also accepts /* * / as comments.
      */
     public function isCDATAElementInHTML($namespace_uri, $local_name)
     {

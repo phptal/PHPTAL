@@ -350,27 +350,45 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     /**
      * Replace <script> foo &gt; bar </script> 
      * with <script>/*<![CDATA[* / foo > bar /*]]>* /</script>
+     * This avoids gotcha in text/html.
      *
-     * This avoids gotcha in text/html
+     * Note that PHPTAL_Dom_CDATASection::generate() does reverse operation, if needed!
+     *
+     * @return void
      */
     private function replaceTextWithCDATA()
     {
         $isCDATAelement = PHPTAL_Dom_Defs::getInstance()->isCDATAElementInHTML($this->getNamespaceURI(), $this->getLocalName());
                 
-        if ($isCDATAelement) {
-            
-            // if there is CDATA, comment, or anything else, leave it alone.
-            if (count($this->childNodes) == 1 && $this->childNodes[0] instanceOf PHPTAL_Dom_Text) {
-                $textnode = $this->childNodes[0]; 
-                if (false !== strpos($textnode->getValueEscaped(),'&')) {
-                    $this->childNodes = array();
-                    // appendChild sets parent
-                    $this->appendChild(new PHPTAL_Dom_Text('/*', $textnode->getEncoding())); 
-                    $this->appendChild(new PHPTAL_Dom_CDATASection('*/'.$textnode->getValue().'/*', $textnode->getEncoding())); 
-                    $this->appendChild(new PHPTAL_Dom_Text('*/', $textnode->getEncoding())); 
-                }
-            }
+        if (!$isCDATAelement) {
+            return;
         }
+        
+        $valueEscaped = ''; // sometimes parser generates split text nodes. "normalisation" is needed.
+        $value = '';
+        foreach($this->childNodes as $node)
+        {
+            // leave it alone if there is CDATA, comment, or anything else.
+            if (!$node instanceOf PHPTAL_Dom_Text) return;
+            
+            $value .= $node->getValue();
+            $valueEscaped .= $node->getValueEscaped();
+            
+            $encoding = $node->getEncoding(); // encoding of all nodes is the same
+        }
+            
+        // only add cdata if there are entities
+        // and there's no ${structure} (because it may rely on cdata syntax)            
+        if (false === strpos($valueEscaped,'&') || preg_match('/<\?|\${structure/', $value)) {
+            return;
+        }
+
+        $this->childNodes = array();
+        
+        // appendChild sets parent
+        $this->appendChild(new PHPTAL_Dom_Text('/*', $encoding)); 
+        $this->appendChild(new PHPTAL_Dom_CDATASection('*/'.$value.'/*', $encoding)); 
+        $this->appendChild(new PHPTAL_Dom_Text('*/', $encoding)); 
     }
  
     /**

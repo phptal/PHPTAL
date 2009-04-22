@@ -186,11 +186,5 @@ class EscapeHTMLTest extends PHPTAL_TestCase {
         
         $tpl->x = $simplexml['title'];
         $this->assertEquals('<p>bar&<</p>',$tpl->execute());
-    }
-    
-    function testAutoCDATA()
-    {
-        $res = $this->executeString('<script> 1 &lt; 2 </script>');
-        $this->assertEquals('<script>/*<![CDATA[*/ 1 < 2 /*]]>*/</script>',$res);
-    }
+    }    
 }
