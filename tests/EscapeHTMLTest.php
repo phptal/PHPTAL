@@ -187,4 +187,13 @@ class EscapeHTMLTest extends PHPTAL_TestCase {
         $tpl->x = $simplexml['title'];
         $this->assertEquals('<p>bar&<</p>',$tpl->execute());
     }    
+    
+    function testUnicodeUnescaped()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->World = '${World}'; // a quine! ;)
+        $tpl->setSource($src = '<p>Hello “${World}!”</p>');
+        
+        $this->assertEquals($src, $tpl->execute());
+    }
 }

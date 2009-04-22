@@ -4,7 +4,7 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 version="1.0">
 
-  <xsl:param name="html.stylesheet" select="'new.css'"/>
+  <xsl:param name="html.stylesheet" select="'/new.css'"/>
   <xsl:param name="html.extra.head.links" select="1"></xsl:param>
   <xsl:param name="navig.showtitles">1</xsl:param>
     

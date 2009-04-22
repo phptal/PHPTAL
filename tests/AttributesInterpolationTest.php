@@ -140,7 +140,7 @@ EOT;
         $tpl->setSource('<p test=\'te&amp;st<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
         try
         {
-            $this->assertEquals('<p test="te&amp;st&lt;? print("&lt;x&gt;"); ?&gt;test&lt;?= "&amp;" ?&gt;test"></p>', $tpl->execute());
+            $this->assertEquals(trim_string('<p test="te&amp;st&lt;? print("&lt;x&gt;"); ?&gt;test&lt;?= "&amp;" ?&gt;test"></p>'), trim_string($tpl->execute()));
         }
         catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
         ini_restore('short_open_tag');

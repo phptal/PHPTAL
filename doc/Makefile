@@ -2,7 +2,6 @@ LANGS=$(wildcard ??)
 
 SRCLANG=en
 BOOK=./$(SRCLANG)/book.xml
-STYLESHEET=./temp/new.css
 
 MAKE=make
 XMLTO=xmlto
@@ -32,28 +31,17 @@ $(LANGS)::
 # make a single language given by setting SRCLANG=xx
 lang: plaintext onepageperchapter allononepage
 
-onepageperchapter: $(XHTMLFILES) onepageperchapter_css output_dir
+onepageperchapter: $(XHTMLFILES) output_dir
 	cp -- "$(TEMP)/xhtml/"* "$(BUILD)/split/"
 
-allononepage: $(XHTMLNOCHUNKSFILES) allononepage_css output_dir
+allononepage: $(XHTMLNOCHUNKSFILES) output_dir
 	cp -- "$(XHTMLNOCHUNKSFILES)" "$(BUILD)/index.html"
 	
 plaintext: $(TXTFILES) output_dir
 	cp -- "$(TXTFILES)" "$(BUILD)/phptal.txt"
 
-# copy STYLESHEET files
-allononepage_css: $(STYLESHEET) output_dir
-	cp -- "$(STYLESHEET)" "$(BUILD)/"
-	
-onepageperchapter_css: $(STYLESHEET) output_dir
-	cp -- "$(STYLESHEET)" "$(BUILD)/split"
-
 output_dir:
 	@test -d "$(BUILD)/split" || mkdir -p -- "$(BUILD)/split"	
-
-# get STYLESHEET file from font-end
-$(STYLESHEET): $(TEMP)
-	svn cat https://svn.motion-twin.com/phptal/website/www/new.css > "$(STYLESHEET)"
 
 # create temp output directory for current language
 $(TEMP):
