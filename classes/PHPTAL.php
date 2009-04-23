@@ -13,7 +13,7 @@
  * @link     http://phptal.motion-twin.com/
  */
 
-define('PHPTAL_VERSION', '1_2_0a7');
+define('PHPTAL_VERSION', '1_2_0a8');
 
 PHPTAL::setIncludePath();
 
@@ -135,13 +135,13 @@ class PHPTAL
      */
     public function setSource($src, $path=false)
     {
-        if ($path == false) {
-            $path = '<string '.md5($src).'>';
-        }
-
         PHPTAL::setIncludePath();
         require_once 'PHPTAL/StringSource.php';
         PHPTAL::restoreIncludePath();        
+        
+        if (!$path) {
+            $path = PHPTAL_StringSource::NO_PATH_PREFIX.md5($src).'>';
+        }
         
         $this->_prepared = false;
         $this->_functionName = null;
@@ -246,8 +246,15 @@ class PHPTAL
      */
     public function setEncoding($enc)
     {
+        if ($enc != $this->_encoding)
+        {
         $this->_encoding = $enc;
         if ($this->_translator) $this->_translator->setEncoding($enc);
+            
+            $this->_prepared = false;
+            $this->_functionName = null;
+            $this->_codeFile = null;
+        }
         return $this;
     }
 
@@ -262,7 +269,7 @@ class PHPTAL
     }
 
     /**
-     * Set the storage location for intermediate PHP files. The path cannot contain characters that would be interpreted by glob() (e.g. * or ?)
+     * Set the storage location for intermediate PHP files. The path cannot contain characters that would be interpreted by glob() (e.g. *[]?)
      * @param string $path Intermediate file path.
      */
     public function setPhpCodeDestination($path)
@@ -639,19 +646,24 @@ class PHPTAL
     public function cleanUpGarbage()
     {
         $phptalCacheFilesExpire = time() - $this->getCacheLifetime() * 3600 * 24;
-        $upperLimit = $this->getPhpCodeDestination() . 'tpl_' . $phptalCacheFilesExpire . '_';
-        $lowerLimit = $this->getPhpCodeDestination() . 'tpl_0_';
+        
+        // relies on templates sorting order being related to their modification dates
+        $upperLimit = $this->getPhpCodeDestination() . $this->getFunctionNamePrefix($phptalCacheFilesExpire) . '_';
+        $lowerLimit = $this->getPhpCodeDestination() . $this->getFunctionNamePrefix(0);
+        
+        // second * gets phptal:cache
         $phptalCacheFiles = glob($this->getPhpCodeDestination() . 'tpl_*.' . $this->getPhpCodeExtension() . '*');
 
         if ($phptalCacheFiles) {
             foreach ($phptalCacheFiles as $index => $file) {
-                if ($file > $upperLimit && substr($file, 0, strlen($lowerLimit)) !== $lowerLimit) {
-                    unset($phptalCacheFiles[$index]);
+                
+                // comparison here skips filenames that are certainly too new
+                if (strcmp($file,$upperLimit) <= 0 || substr($file, 0, strlen($lowerLimit)) === $lowerLimit) {
+                    $time = filemtime($file);
+                    if ($time && $time < $phptalCacheFilesExpire) {
+                        @unlink($file);
                 }
             }
-            foreach ($phptalCacheFiles as $file) {
-                $time = filemtime($file);
-                if ($time && $time < $phptalCacheFilesExpire) @unlink($file);
             }
         }
     }
@@ -691,14 +703,38 @@ class PHPTAL
      */
     public function getFunctionName()
     {
-        if (!$this->_functionName) {
             // function name is used as base for caching, so it must be unique for every combination of settings
             // that changes code in compiled template
-            $this->_functionName = 'tpl_' . $this->_source->getLastModifiedTime() . '_' . PHPTAL_VERSION .
-                substr(preg_replace('/[^a-zA-Z]/', '_',basename($this->_source->getRealPath())), 0,15) .
-                md5($this->_source->getRealPath() . ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode());
+        
+        if (!$this->_functionName) {
+            
+            // just to make tempalte name recognizable
+            $basename = preg_replace('/\.[a-z]{3,4}$/','',basename($this->_source->getRealPath()));
+            $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,16);
+            
+            $hash = md5($this->_source->getRealPath() . $this->getEncoding() . ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode(), true);
+            
+            // uses base64 rather than hex to make filename shorter. 
+            // there is loss of some bits due to name constraints and filesystem case-insensivity,
+            // but that's still over 110 bits (collision less probable than spontaneous combustion of the server)
+            $hash = strtr(rtrim(base64_encode($hash),"="),"+/=","___");
+            
+            $this->_functionName = $this->getFunctionNamePrefix($this->_source->getLastModifiedTime()) . 
+                                   $basename . '_' . $hash;
         }
         return $this->_functionName;
+    }
+
+    /**
+     * Returns prefix used for function name (and function name is base name for the template)
+     *
+     * @param int $timestamp unix timestamp with template modification date
+     * @return string
+     */
+    private function getFunctionNamePrefix($timestamp)
+    {
+        // tpl_ prefix and last modified time must not be changed, because cache cleanup relies on that
+        return 'tpl_' . PHPTAL_VERSION . '_' . sprintf("%08x",$timestamp) .'_';
     }
 
     /**
@@ -961,6 +997,6 @@ class PHPTAL
     /**
      * 1/x
      */
-    protected $_cachePurgeFrequency = 50;
+    protected $_cachePurgeFrequency = 30;
 }
 
