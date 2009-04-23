@@ -15,6 +15,7 @@
  
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Dom/DocumentBuilder.php';
+require_once 'PHPTAL/Php/CodeGenerator.php';
 PHPTAL::restoreIncludePath();
  
 class SimpleGenerationTest extends PHPTAL_TestCase

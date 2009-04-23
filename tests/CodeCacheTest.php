@@ -110,25 +110,36 @@ class CodeCacheTest extends PHPTAL_TestCase
         $this->assertTrue($this->phptal->testHasParsed, "Reparse");
     }
 
-/*
     function testGarbageRemoval()
-    {
-        $this->markTestIncomplete("cache doesnt use timestamps anymore");
-        
-        $this->phptal->setTemplate('input/code-cache-01.html');
+    {       
+        $src = '<test uniq="'.time().mt_rand().'" phptal:cache="1d" />';
+        $this->phptal->setSource($src);
         $this->phptal->execute();
 
-        foreach (glob($this->codeDestination.'*') as $file) {
+        $this->assertTrue($this->phptal->testHasParsed, "Parse");
+        
+        $this->phptal->testHasParsed = false;
+        $this->phptal->setSource($src);
+        $this->phptal->execute();
+
+        $this->assertFalse($this->phptal->testHasParsed, "Reparse!?");
+
+        $files = glob($this->codeDestination.'*');
+        $this->assertEquals(2,count($files)); // one for template, one for cache
+        foreach($files as $file) {
+            $this->assertFileExists($file);
             touch($file, time() - 3600*24*100);
         }
-
+        clearstatcache();
+        
         $this->phptal->cleanUpGarbage(); // should delete all files
 
-        $this->phptal->testHasParsed = false;
-        $this->phptal->setTemplate('input/code-cache-01.html');
-        $this->phptal->execute();
+        clearstatcache();
 
-        $this->assertTrue($this->phptal->testHasParsed, "Reparse");
+        // can't check for reparse, because PHPTAL uses function_exists() as a shortcut!
+        foreach($files as $file) {
+            $this->assertFileNotExists($file);
+        }
+
     }
-*/    
 }
