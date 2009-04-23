@@ -19,6 +19,8 @@
  */
 class PHPTAL_StringSource implements PHPTAL_Source
 {
+    const NO_PATH_PREFIX = '<string ';
+    
     public function __construct($data, $realpath)
     {
         $this->_data = $data;
@@ -27,8 +29,9 @@ class PHPTAL_StringSource implements PHPTAL_Source
 
     public function getLastModifiedTime()
     {
-        if (file_exists($this->_realpath))
+        if (substr($this->_realpath,0,8) !== self::NO_PATH_PREFIX && file_exists($this->_realpath)) {
             return @filemtime($this->_realpath);
+        }
         return 0;
     }
 
@@ -37,6 +40,9 @@ class PHPTAL_StringSource implements PHPTAL_Source
         return $this->_data;
     }
 
+    /**
+     * well, this is not always a real path. If it starts with self::NO_PATH_PREFIX, then it's fake.
+     */
     public function getRealPath()
     {
         return $this->_realpath;
