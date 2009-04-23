@@ -10,11 +10,11 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 if (!class_exists('OnErrorDummyObject')) {
-    class OnErrorDummyObject 
+    class OnErrorDummyObject
     {
         function throwException()
         {
@@ -23,7 +23,7 @@ if (!class_exists('OnErrorDummyObject')) {
     }
 }
 
-class TalOnErrorTest extends PHPTAL_TestCase 
+class TalOnErrorTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
@@ -58,8 +58,8 @@ class TalOnErrorTest extends PHPTAL_TestCase
         $errors = $tpl->getErrors();
         $this->assertEquals(1, count($errors));
         $this->assertEquals('error thrown', $errors[0]->getMessage());
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 }
-        
+
 ?>

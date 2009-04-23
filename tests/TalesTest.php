@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
@@ -29,7 +29,7 @@ class MyTalesClass implements PHPTAL_Tales
     }
 }
 
-class TalesTest extends PHPTAL_TestCase 
+class TalesTest extends PHPTAL_TestCase
 {
     function testString()
     {
@@ -75,7 +75,7 @@ class TalesTest extends PHPTAL_TestCase
     function testCustom()
     {
         $src = 'custom: some/path';
-        $this->assertEquals('sprintf("%01.2f", phptal_path($ctx->some, \'path\'))', 
+        $this->assertEquals('sprintf("%01.2f", phptal_path($ctx->some, \'path\'))',
                             phptal_tales($src));
     }
 
@@ -84,7 +84,7 @@ class TalesTest extends PHPTAL_TestCase
         $src = 'MyTalesClass.reverse: some';
         $this->assertEquals('strrev($ctx->some)', phptal_tales($src));
     }
-    
+
     function testInterpolate1()
     {
         $this->assertEquals('$ctx->{phptal_path($ctx->some, \'path\')}',phptal_tales('${some/path}'));
@@ -94,36 +94,36 @@ class TalesTest extends PHPTAL_TestCase
     {
         $this->assertEquals('phptal_path($ctx->{phptal_path($ctx->some, \'path\')}, \'meh\')',phptal_tales('${some/path}/meh'));
     }
-    
+
     function testInterpolate3()
     {
         $this->assertEquals('phptal_path($ctx->meh, phptal_path($ctx->some, \'path\'))',phptal_tales('meh/${some/path}'));
     }
-    
+
     function testInterpolate4()
     {
         $this->assertEquals('phptal_path($ctx->{$ctx->meh}, $ctx->blah)',phptal_tales('${meh}/${blah}'));
     }
-    
+
     function testSuperglobals()
     {
         $this->assertEquals('phptal_path($ctx->{\'_GET\'}, \'a\')',phptal_tales('_GET/a'));
     }
-    
+
     function testInterpolatedPHP1()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<div tal:content="string:foo${php:true?&apos;bar&apos;:0}baz"/>');
         $this->assertEquals('<div>foobarbaz</div>',$tpl->execute());
     }
-    
+
     function testInterpolatedTALES()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<div tal:content="string:foo${nonexistant | string:bar}baz"/>');
         $this->assertEquals('<div>foobarbaz</div>',$tpl->execute());
     }
-    
+
     function testInterpolatedPHP2()
     {
         $tpl = $this->newPHPTAL();

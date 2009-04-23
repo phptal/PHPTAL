@@ -10,29 +10,29 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 /**
  * TAL Specifications 1.4
- * 
+ *
  *      argument ::= (['text'] | 'structure') expression
- * 
+ *
  *  Default behaviour : text
- * 
+ *
  *      <span tal:replace="template/title">Title</span>
  *      <span tal:replace="text template/title">Title</span>
  *      <span tal:replace="structure table" />
  *      <span tal:replace="nothing">This element is a comment.</span>
- *  
- * 
- * 
+ *
+ *
+ *
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Replace 
+class PHPTAL_Php_Attribute_TAL_Replace
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
-{   
+{
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // tal:replace="" => do nothing and ignore node
@@ -89,7 +89,7 @@ implements PHPTAL_Php_TalesChainReader
     }
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
-    {        
+    {
         if (!$islast)
         {
             $var = $executor->getCodeWriter()->createTempVariable();
@@ -97,7 +97,7 @@ implements PHPTAL_Php_TalesChainReader
             $this->doEchoAttribute($executor->getCodeWriter(), $var);
             $executor->getCodeWriter()->recycleTempVariable($var);
         }
-        else 
+        else
         {
             $executor->doElse();
             $this->doEchoAttribute($executor->getCodeWriter(), $exp);

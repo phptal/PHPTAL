@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 require_once 'I18NDummyTranslator.php';
 
 class I18NNameTest extends PHPTAL_TestCase
@@ -53,7 +53,7 @@ class I18NNameTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/i18n-name-04.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testI18NBlock()
@@ -63,7 +63,7 @@ class I18NNameTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/i18n-name-05.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testNamespace()
@@ -75,7 +75,7 @@ class I18NNameTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/i18n-name-06.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 }
 

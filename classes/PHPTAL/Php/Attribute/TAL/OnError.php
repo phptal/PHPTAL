@@ -10,23 +10,23 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 /**
  * TAL Specifications 1.4
- * 
+ *
  *      argument ::= (['text'] | 'structure') expression
- * 
+ *
  * Example:
- * 
+ *
  *      <p tal:on-error="string: Error! This paragraph is buggy!">
  *      My name is <span tal:replace="here/SlimShady" />.<br />
- *      (My login name is 
- *      <b tal:on-error="string: Username is not defined!" 
+ *      (My login name is
+ *      <b tal:on-error="string: Username is not defined!"
  *         tal:content="user">Unknown</b>)
  *      </p>
- * 
+ *
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -37,12 +37,12 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
         $codewriter->doTry();
         $codewriter->pushCode('ob_start()');
     }
-    
+
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $var = $codewriter->createTempVariable();
-        
-        $codewriter->pushCode('ob_end_flush()');        
+
+        $codewriter->pushCode('ob_end_flush()');
         $codewriter->doCatch('Exception '.$var);
         $codewriter->pushCode('$tpl->addError('.$var.')');
         $codewriter->pushCode('ob_end_clean()');
@@ -59,13 +59,13 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
                 $codewriter->doEchoRaw($var);
                 $codewriter->pushHTML('</pre>');
                 break;
-                
+
             default:
                 $this->doEchoAttribute($codewriter, $code);
                 break;
         }
         $codewriter->doEnd();
-        
+
         $codewriter->recycleTempVariable($var);
     }
 }

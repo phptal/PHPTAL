@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 $testDir = dirname(__FILE__);
 chdir($testDir);
@@ -35,7 +35,7 @@ function trim_string( $src ){
     return $src;
 }
 
-function exception_error_handler($errno, $errstr, $errfile, $errline ) 
+function exception_error_handler($errno, $errstr, $errfile, $errline )
 {
     throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
 }

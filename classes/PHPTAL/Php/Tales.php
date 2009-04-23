@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 define('PHPTAL_TALES_DEFAULT_KEYWORD', '_DEFAULT_DEFAULT_DEFAULT_DEFAULT_');
 define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
@@ -34,14 +34,14 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
  *
  * Builtin Names in Page Templates (for PHPTAL)
  *
- *      * nothing - special singleton value used by TAL to represent a 
+ *      * nothing - special singleton value used by TAL to represent a
  *        non-value (e.g. void, None, Nil, NULL).
- *        
- *      * default - special singleton value used by TAL to specify that 
+ *
+ *      * default - special singleton value used by TAL to specify that
  *        existing text should not be replaced.
  *
  *      * repeat - the repeat variables (see RepeatVariable).
- * 
+ *
  *
  *
  *  helper function for phptal_tale
@@ -52,14 +52,14 @@ function _phptal_tale_wrap($array, $nothrow)
     if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
         ($array[0]==PHPTAL_TALES_NOTHING_KEYWORD?'null':$array[0]).
         '):"")';
-    
+
     $expr = array_shift($array);
-    
+
     return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:"._phptal_tale_wrap($array, $nothrow).')';
 }
 
-/** 
- * translates array of alternative expressions into single PHP expression. Identical to phptal_tales() for singular expressions. 
+/**
+ * translates array of alternative expressions into single PHP expression. Identical to phptal_tales() for singular expressions.
  * @see phptal_tales()
  * @return string
 */
@@ -67,7 +67,7 @@ function phptal_tale($expression, $nothrow=false)
 {
     $r = phptal_tales($expression, $nothrow);
     if (!is_array($r)) return $r;
-    
+
     // this weird ternary operator construct is to execute noThrow inside the expression
     return '($ctx->noThrow(true)||1?'._phptal_tale_wrap($r, $nothrow).':"")';
 }
@@ -75,7 +75,7 @@ function phptal_tale($expression, $nothrow=false)
 /**
  * returns PHP code that will evaluate given TALES expression.
  * e.g. "string:foo${bar}" may be transformed to "'foo'.phptal_escape($ctx->bar)"
- * 
+ *
  * Expressions with alternatives ("foo | bar") will cause it to return array
  * Use phptal_tale() if you always want string.
  *
@@ -100,7 +100,7 @@ function phptal_tales($expression, $nothrow=false)
     else {
         $typePrefix = 'path';
     }
-    
+
     // is a registered TALES expression modifier
     if (PHPTAL_TalesRegistry::getInstance()->isRegistered($typePrefix)) {
         $callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);
@@ -126,13 +126,13 @@ function phptal_tales($expression, $nothrow=false)
     if (function_exists($func)) {
         return $func($expression, $nothrow);
     }
-    
+
     // check if it is implemented via runtime function
     $runfunc = 'phptal_runtime_tales_'.str_replace('-','_', $typePrefix);
     if (function_exists($runfunc)) {
         return "$runfunc(".phptal_tale($expression, $nothrow).")";
     }
-    
+
     throw new PHPTAL_ParserException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist");
 }
 

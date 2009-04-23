@@ -10,12 +10,12 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 require_once 'I18NDummyTranslator.php';
 
-class I18NTranslateTest extends PHPTAL_TestCase 
+class I18NTranslateTest extends PHPTAL_TestCase
 {
     function testStringTranslate()
     {
@@ -37,7 +37,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
         $exp = trim_file('output/i18n-translate-02.html');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testStructureTranslate()
     {
         $tpl = $this->newPHPTAL();
@@ -45,7 +45,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
         $tpl->setSource('<p i18n:translate="structure \'translate<b>this</b>\'"/>');
         $this->assertEquals('<p>translate<b>this</b></p>',$tpl->execute());
     }
-    
+
     function testStructureTranslate2()
     {
         $tpl = $this->newPHPTAL();
@@ -58,7 +58,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
         </p>');
         $this->assertEquals('<p>translate <b class="foo&amp;bar"> this </b></p>',$tpl->execute());
     }
-    
+
     function testStructureTranslate3()
     {
         $tpl = $this->newPHPTAL();

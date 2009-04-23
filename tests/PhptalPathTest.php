@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class PhptalPathTest_DummyClass
@@ -18,9 +18,9 @@ class PhptalPathTest_DummyClass
     public $foo;
 }
 
-/* protected get/isset doesn't work in PHP 5.3 
+/* protected get/isset doesn't work in PHP 5.3
 class PhptalPathTest_DummyIssetClass
-{    
+{
     protected function __isset($isset)
     {
         return false;
@@ -28,7 +28,7 @@ class PhptalPathTest_DummyIssetClass
 }
 
 class PhptalPathTest_DummyGetClass
-{   
+{
     protected function __get($anything)
     {
         return 'whatever';
@@ -44,27 +44,27 @@ class PhptalPathTest extends PHPTAL_TestCase
         $result = phptal_path($data, '0');
         $this->assertEquals(1, $result);
     }
-    
-    /* protected get/isset doesn't work in PHP 5.3 
+
+    /* protected get/isset doesn't work in PHP 5.3
     function testProtectedIsset()
     {
-        $tpl = $this->newPHPTAL(); 
+        $tpl = $this->newPHPTAL();
         $tpl->protected = new PhptalPathTest_DummyIssetClass;
         $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
         $res = $tpl->execute();
         $this->assertEquals($res,'<p>ok</p>');
     }
-    
+
     function testProtectedGet()
     {
-        $tpl = $this->newPHPTAL(); 
+        $tpl = $this->newPHPTAL();
         $tpl->protected = new PhptalPathTest_DummyGetClass;
         $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
         $res = $tpl->execute();
         $this->assertEquals($res,'<p>ok</p>');
-    }    
+    }
     */
-    
+
     function testDefinedButNullProperty()
     {
         $src = <<<EOS

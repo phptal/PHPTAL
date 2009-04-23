@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class MetalMacroTest extends PHPTAL_TestCase
@@ -52,7 +52,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $call = new StdClass();
         $call->first = 1;
         $call->second = 2;
-        
+
         $tpl = $this->newPHPTAL('input/metal-macro.05.html');
         $tpl->call = $call;
 
@@ -66,7 +66,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $call = new StdClass();
         $call->first = 1;
         $call->second = 2;
-        
+
         $tpl = $this->newPHPTAL('input/metal-macro.06.html');
         $tpl->call = $call;
 
@@ -92,7 +92,7 @@ class MetalMacroTest extends PHPTAL_TestCase
             $res = $tpl->execute();
         $this->fail('Bad macro name exception not thrown');
         }
-    
+
     /**
      * @expectedException PHPTAL_MacroMissingException
      */
@@ -114,7 +114,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->fail('Bad macro name exception not thrown');
     }
-    
+
     function testMixedCallerDefiner()
     {
         $tpl = $this->newPHPTAL();
@@ -122,7 +122,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl->ok_var = '??'; // fallback in case test fails
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.09.html/defined_earlier" />');
         $res = $tpl->execute();
-        $this->assertEquals('Call OK OK',trim(preg_replace('/\s+/',' ',$res)));        
+        $this->assertEquals('Call OK OK',trim(preg_replace('/\s+/',' ',$res)));
     }
 }
 

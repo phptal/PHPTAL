@@ -31,7 +31,7 @@
        tal:attributes="href link/href | default; title link/title | default"
        tal:content="link/name | default">default content</a>
     </span>
-    
+
     <span tal:omit-tag="" tal:on-error="string:error caught for attributes test">
     <a href="http://www.default.com" title="default title"
        tal:attributes="href link2/href | default; title link2/title | default"

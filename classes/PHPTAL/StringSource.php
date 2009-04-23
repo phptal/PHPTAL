@@ -10,17 +10,17 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 /**
  * Fake template source that makes PHPTAL->setString() work
- * 
+ *
  * @package PHPTAL
  */
 class PHPTAL_StringSource implements PHPTAL_Source
 {
     const NO_PATH_PREFIX = '<string ';
-    
+
     public function __construct($data, $realpath)
     {
         $this->_data = $data;

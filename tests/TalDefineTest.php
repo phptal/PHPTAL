@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Dom/Node.php';
 require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
@@ -26,12 +26,12 @@ if (!class_exists('DummyPhpNode')) {
     }
 }
 
-class TalDefineTest extends PHPTAL_TestCase 
+class TalDefineTest extends PHPTAL_TestCase
 {
     function testExpressionParser()
     {
         $att = new PHPTAL_Php_Attribute_Tal_Define(new DummyPhpNode(),'a b');
-        
+
         list($defineScope, $defineVar, $expression) = $att->parseExpression('local a_234z b');
         $this->assertEquals('local', $defineScope);
         $this->assertEquals('a_234z', $defineVar);
@@ -40,28 +40,28 @@ class TalDefineTest extends PHPTAL_TestCase
         list($defineScope, $defineVar, $expression) = $att->parseExpression('global a_234z b');
         $this->assertEquals('global', $defineScope);
         $this->assertEquals('a_234z', $defineVar);
-        $this->assertEquals('b', $expression); 
+        $this->assertEquals('b', $expression);
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('a_234Z b');
         $this->assertEquals(false, $defineScope);
         $this->assertEquals('a_234Z', $defineVar);
-        $this->assertEquals('b', $expression); 
+        $this->assertEquals('b', $expression);
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('a');
         $this->assertEquals(false, $defineScope);
         $this->assertEquals('a', $defineVar);
-        $this->assertEquals(null, $expression); 
+        $this->assertEquals(null, $expression);
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('global a string: foo; bar; baz');
         $this->assertEquals('global', $defineScope);
         $this->assertEquals('a', $defineVar);
-        $this->assertEquals('string: foo; bar; baz', $expression); 
+        $this->assertEquals('string: foo; bar; baz', $expression);
 
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('foo this != other');
         $this->assertEquals(false, $defineScope);
         $this->assertEquals('foo', $defineVar);
-        $this->assertEquals('this != other', $expression); 
+        $this->assertEquals('this != other', $expression);
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('x exists: a | not: b | path: c | 128');
         $this->assertEquals(false, $defineScope);
@@ -84,7 +84,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.02.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testMultiChained()
@@ -93,7 +93,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.03.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testDefineZero()
@@ -157,7 +157,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tal-define.10.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testDefineContent()
@@ -195,14 +195,14 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = trim_string($tpl->execute());
         $this->assertEquals($exp, $res);
     }
-    
+
     function testDefineSemicolon()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:define="one \';;\'; two string:;;;;; three php:\';;;;;;\'">${one}-${two}-${three}</p>');
         $this->assertEquals('<p>;-;;-;;;</p>',$tpl->execute());
     }
-    
+
     function testEmpty()
     {
         $tal = $this->newPHPTAL();
@@ -211,7 +211,7 @@ class TalDefineTest extends PHPTAL_TestCase
 
         $this->assertEquals($tal->execute(), '<div class="blank_bg"></div>');
     }
-        
+
     function testGlobalDefineEmptySpan()
     {
         $tpl = $this->newPHPTAL();
@@ -223,7 +223,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = trim_string($tpl->execute());
         $this->assertEquals(trim_string('<div> ok </div>'), $res);
     }
-    
+
     function testGlobalDefineEmptySpan2()
     {
         $tpl = $this->newPHPTAL();
@@ -235,13 +235,13 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = trim_string($tpl->execute());
         $this->assertEquals(trim_string('<div> ok </div>'), $res);
     }
-    
-        
+
+
     function testGlobalDefineNonEmptySpan()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::XML);
-        
+
         $tpl->setSource('<div>
            <span tal:define="global x \'ok\'" class="foo" />
            ${x}
@@ -250,12 +250,12 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = trim_string($tpl->execute());
         $this->assertEquals(trim_string('<div> <span class="foo"/> ok </div>'), $res);
     }
-    
+
     function testGlobalDefineNonEmptySpan2()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::XML);
-        
+
         $tpl->setSource('<div>
            <span tal:define="global x \'ok\'" tal:attributes="class \'foo\'" />
            ${x}
@@ -264,7 +264,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $res = trim_string($tpl->execute());
         $this->assertEquals(trim_string('<div> <span class="foo"/> ok </div>'), $res);
     }
-    
+
     function testDefineTALESInterpolated()
     {
         $tpl = $this->newPHPTAL();
@@ -282,9 +282,9 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl->setSource('<div tal:define="test php:${varname}">${test}</div>');
         $this->assertEquals('<div>ok</div>',$tpl->execute());
     }
-    
+
     const VARNAME = 'varvar';
-    
+
     function testDefinePHPConstInterpolated()
     {
         $tpl = $this->newPHPTAL();
@@ -293,24 +293,24 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl->setSource('<div tal:define="test php:${TalDefineTest::VARNAME}">${test}</div>');
         $this->assertEquals('<div>ok</div>',$tpl->execute());
     }
-    
+
     function testRedefineSelf()
     {
         $tpl = $this->newPHPTAL();
         $tpl->label = 'label var';
         $tpl->fail = 'not an array';
         $tpl->setSource('<tal:block tal:define="label fail/label|label" tal:replace="structure label"/>');
-        
+
         $this->assertEquals('label var', $tpl->execute());
     }
-    
+
     function testRedefineSelf2()
     {
         $tpl = $this->newPHPTAL();
         $tpl->label = 'label var';
         $tpl->fail = 'not an array';
         $tpl->setSource('<tal:block tal:define="label fail/label|label|somethingelse" tal:replace="structure label"/>');
-        
+
         $this->assertEquals('label var', $tpl->execute());
     }
 }

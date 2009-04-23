@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 /**
@@ -339,7 +339,7 @@ class PHPTAL_Dom_XmlParser
     public function sanitizeEscapedText($str)
     {
         $str = str_replace('&apos;','&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
-        
+
         /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
         $types = ini_get('short_open_tag')?'php|=|':'php';
         $split = preg_split("/(<\?(?:$types).*?\?>)/", $str, null, PREG_SPLIT_DELIM_CAPTURE);

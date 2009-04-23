@@ -10,10 +10,10 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
-class TalesModeTest extends PHPTAL_TestCase 
+class TalesModeTest extends PHPTAL_TestCase
 {
     public function testUnsupportedMode()
     {

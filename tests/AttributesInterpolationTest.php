@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 class AttributesInterpolationTest extends PHPTAL_TestCase
 {
     public function testInterpol()
@@ -29,7 +29,7 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
+
     public function testInterpol2()
     {
         $src = <<<EOT
@@ -45,7 +45,7 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
+
     public function testInterpol3()
     {
         $src = <<<EOT
@@ -63,8 +63,8 @@ EOT;
         $tpl->foo = 'foo value';
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
-    }    
-    
+    }
+
     public function testInterpol3a()
     {
         $src = <<<EOT
@@ -111,8 +111,8 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
-    
+
+
     public function testPHPBlock()
     {
         $tpl = $this->newPHPTAL();
@@ -124,18 +124,18 @@ EOT;
     {
         ini_set('short_open_tag',1);
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
-        
+
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p test=\'te&amp;st<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
         $this->assertEquals('<p test="te&amp;st<x>test&amp;test"></p>', $tpl->execute());
         ini_restore('short_open_tag');
     }
-    
+
     public function testPHPBlockNoShort()
     {
         ini_set('short_open_tag', 0);
         if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
-                
+
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p test=\'te&amp;st<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
         try

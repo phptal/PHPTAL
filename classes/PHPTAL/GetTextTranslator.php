@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
@@ -26,7 +26,7 @@ PHPTAL::restoreIncludePath();
  * implementation is shipped with the PHPTAL library.
  *
  * Please refer to the PHPTAL documentation for usage examples.
- * 
+ *
  * @package PHPTAL
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -46,14 +46,14 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     /**
      * set encoding that is used by template and is expected from gettext
      * the default is UTF-8
-     * 
+     *
      * @param string $enc encoding name
      */
     public function setEncoding($enc)
     {
         $this->_encoding = $enc;
     }
-    
+
     /**
      * if true, all non-ASCII characters in keys will be converted to C<xxx> form. This impacts performance.
      * by default keys will be passed to gettext unmodified.
@@ -66,13 +66,13 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     {
         $this->_canonicalize = $bool;
     }
-    
+
     /**
      * It expects locale names as arguments.
      * Choses first one that works.
-     * 
+     *
      * setLanguage("en_US.utf8","en_US","en_GB","en")
-     * 
+     *
      * @return string - chosen language
      */
     public function setLanguage(/*...*/)
@@ -97,10 +97,10 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 
         throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');
     }
-    
+
     /**
      * Adds translation domain (usually it's the same as name of .po file [without extension])
-     * 
+     *
      * Encoding must be set before calling addDomain!
      */
     public function addDomain($domain, $path='./locale/')
@@ -111,10 +111,10 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         }
         $this->useDomain($domain);
     }
-    
+
     /**
      * Switches to one of the domains previously set via addDomain()
-     * 
+     *
      * @param string $domain name of translation domain to be used.
      * @return string - old domain
      */
@@ -125,7 +125,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         textdomain($domain);
         return $old;
     }
-    
+
     /**
      * used by generated PHP code. Don't use directly.
      */
@@ -133,20 +133,20 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     {
         $this->_vars[$key] = $value;
     }
-    
+
     /**
-     * translate given key. 
-     * 
+     * translate given key.
+     *
      * @param bool $htmlencode if true, output will be HTML-escaped.
      */
     public function translate($key, $htmlencode=true)
     {
         if ($this->_canonicalize) $key = self::_canonicalizeKey($key);
-        
+
         $value = gettext($key);
-        
+
         if ($htmlencode) {
-            $value = htmlspecialchars($value, ENT_QUOTES); 
+            $value = htmlspecialchars($value, ENT_QUOTES);
         }
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src, $var) = $m;
@@ -157,7 +157,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
         }
         return $value;
     }
-    
+
     /**
      * For backwards compatibility only.
      */

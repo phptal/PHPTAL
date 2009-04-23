@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 class PHPTAL_CodeCacheTest extends PHPTAL
 {
     public $testHasParsed = false;
@@ -77,7 +77,7 @@ class CodeCacheTest extends PHPTAL_TestCase
         $this->phptal->execute();
 
         $this->assertTrue($this->phptal->testHasParsed, "Initial parse");
-        
+
         $this->resetPHPTAL();
 
         $this->phptal->setSource('<p>hello2</p>');
@@ -111,13 +111,13 @@ class CodeCacheTest extends PHPTAL_TestCase
     }
 
     function testGarbageRemoval()
-    {       
+    {
         $src = '<test uniq="'.time().mt_rand().'" phptal:cache="1d" />';
         $this->phptal->setSource($src);
         $this->phptal->execute();
 
         $this->assertTrue($this->phptal->testHasParsed, "Parse");
-        
+
         $this->phptal->testHasParsed = false;
         $this->phptal->setSource($src);
         $this->phptal->execute();
@@ -131,7 +131,7 @@ class CodeCacheTest extends PHPTAL_TestCase
             touch($file, time() - 3600*24*100);
         }
         clearstatcache();
-        
+
         $this->phptal->cleanUpGarbage(); // should delete all files
 
         clearstatcache();

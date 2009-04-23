@@ -10,14 +10,14 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 if (!class_exists('DummyTag')) {
     class DummyTag {}
 }
 
-class TalAttributesTest extends PHPTAL_TestCase 
+class TalAttributesTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
@@ -112,13 +112,13 @@ EOT;
     }
 
     function testStructure()
-    { 
+    {
         $exp = trim_file('output/tal-attributes.09.html');
         $tpl = $this->newPHPTAL('input/tal-attributes.09.html');
         $tpl->value = "return confirm('hel<lo');";
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
-    } 
+    }
 
     function testChainedStructure()
     {
@@ -132,7 +132,7 @@ EOT;
 
     function testNothingValue()
     {
-        $tpl = $this->newPHPTAL(); 
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:attributes="title missing | nothing"></p>');
         $res = $tpl->execute();
         $this->assertEquals($res,'<p></p>');
@@ -140,15 +140,15 @@ EOT;
 
     function testNULLValue()
     {
-        $tpl = $this->newPHPTAL(); 
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:attributes="title missing | php:NULL"></p><p tal:attributes="class \'ok\'; title null:blah"></p>');
         $res = $tpl->execute();
         $this->assertEquals('<p></p><p class="ok"></p>',$res);
     }
-    
+
     function testNULLValueNoAlternative()
     {
-       $tpl = $this->newPHPTAL(); 
+       $tpl = $this->newPHPTAL();
        $tpl->setSource('<p tal:attributes="title php:NULL"></p>');
        $res = $tpl->execute();
        $this->assertEquals('<p></p>',$res);
@@ -156,28 +156,28 @@ EOT;
 
     function testNULLValueReversed()
     {
-       $tpl = $this->newPHPTAL(); 
+       $tpl = $this->newPHPTAL();
        $tpl->setSource('<p tal:attributes="title php:true ? NULL : false; class structure php:false ? NULL : \'fo\\\'o\'; style structure php:true ? NULL : false;"></p>');
        $res = $tpl->execute();
        $this->assertEquals('<p class="fo\'o"></p>',$res);
     }
-    
+
     function testEmptyValue()
     {
-        $tpl = $this->newPHPTAL(); 
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:attributes="title missing | \'\'"></p><p tal:attributes="title missing | php:\'\'"></p>');
         $res = $tpl->execute();
         $this->assertEquals('<p title=""></p><p title=""></p>',$res);
     }
-    
+
     function testSemicolon()
     {
-        $tpl = $this->newPHPTAL(); 
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:content="\'\\\'a;b;;c;;;d\'" tal:attributes="style \'color:red;; font-weight:bold;;;;\'; title php:\'\\\'test;;test;;;;test\'"></p></div>');
         $res = $tpl->execute();
         $this->assertEquals($res,'<div><p style="color:red; font-weight:bold;;" title="&#039;test;test;;test">&#039;a;b;;c;;;d</p></div>');
     }
-    
+
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
 

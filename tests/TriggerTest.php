@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
@@ -33,14 +33,14 @@ class StupidCacheTrigger implements PHPTAL_Trigger
             readfile($this->cachePath);
             return self::SKIPTAG;
         }
-        
+
         // no cache, we start and output buffer and tell
         // PHPTAL to proceed (ie: execute the tag content)
         $this->isCaching = true;
         ob_start();
         return self::PROCEED;
     }
-    
+
     public function end($phptalId, $tpl)
     {
         // end of tag, if cached file used, do nothing
@@ -67,13 +67,13 @@ class TriggerTest extends PHPTAL_TestCase
         if (file_exists('trigger.10')) unlink('trigger.10');
         if (file_exists('trigger.11')) unlink('trigger.11');
     }
-    
+
     public function tearDown()
     {
         if (file_exists('trigger.10')) unlink('trigger.10');
         if (file_exists('trigger.11')) unlink('trigger.11');
     }
-    
+
     public function testSimple()
     {
         $trigger = new StupidCacheTrigger();

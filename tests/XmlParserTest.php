@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
@@ -42,7 +42,7 @@ class XmlParserTest extends PHPTAL_TestCase
     public function testAllowGtAndLtInTextNodes() {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
         $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.03.xml')->getResult();
-        
+
         $this->assertEquals(trim_file('output/xml.03.xml'), trim_string($builder->result));
         $this->assertEquals(3, $builder->elementStarts);
         $this->assertEquals(3, $builder->elementCloses);
@@ -50,7 +50,7 @@ class XmlParserTest extends PHPTAL_TestCase
         // the onElementData() method
         $this->assertEquals(7, $builder->datas);
     }
-    
+
 	
 	/**
      * @expectedException PHPTAL_ParserException
@@ -61,7 +61,7 @@ class XmlParserTest extends PHPTAL_TestCase
         $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar="bar"baz="baz"/>')->getResult();
         $this->fail($builder->result);
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -71,21 +71,21 @@ class XmlParserTest extends PHPTAL_TestCase
         $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar;="bar"/>')->getResult();
         $this->fail($builder->result);
     }
-    
+
     public function testSkipsBom()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
         $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<foo/>")->getResult();
         $this->assertEquals("<foo></foo>", $builder->result);
     }
-        
+
     public function testAllowsTrickyQnames()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
         $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>")->getResult();
         $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $builder->result);
     }
-    
+
     public function testAllowsXMLStylesheet()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
@@ -94,7 +94,7 @@ class XmlParserTest extends PHPTAL_TestCase
         <?xml-stylesheet href='foo2' ?>
         </foo>";
         $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
-        $this->assertEquals($src, $builder->result);        
+        $this->assertEquals($src, $builder->result);
     }
 
     public function testFixOrRejectCDATAClose()
@@ -108,7 +108,7 @@ class XmlParserTest extends PHPTAL_TestCase
         }
         catch(PHPTAL_ParserException $e) { /* ok - rejecting is one way to do it */ }
     }
-        
+
     public function testFixOrRejectEntities()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
@@ -120,7 +120,7 @@ class XmlParserTest extends PHPTAL_TestCase
         }
         catch(PHPTAL_ParserException $e) { /* ok - rejecting is one way to do it */ }
     }
-    
+
     public function testLineAccuracy()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
@@ -140,9 +140,9 @@ class XmlParserTest extends PHPTAL_TestCase
         catch(PHPTAL_ParserException $e)
         {
             $this->assertEquals(6,$e->srcLine);
-        }        
+        }
     }
-    
+
     public function testLineAccuracy2()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
@@ -164,9 +164,9 @@ bar4='baz'
         catch(PHPTAL_ParserException $e)
         {
             $this->assertEquals(7,$e->srcLine);
-        }        
-    }    
-    
+        }
+    }
+
     public function testLineAccuracy3()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
@@ -189,9 +189,9 @@ xxxx/>
         catch(PHPTAL_ParserException $e)
         {
             $this->assertEquals(8,$e->srcLine);
-        }        
+        }
     }
-    
+
     public function testClosingRoot()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
@@ -205,9 +205,9 @@ xxxx/>
             $this->assertContains('ishallnotbeclosed',$e->getMessage());
             $this->assertNotContains('imrootelement',$e->getMessage());
             $this->assertNotContains("documentElement",$e->getMessage());
-        }        
+        }
     }
-    
+
     public function testNotClosing()
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
@@ -220,7 +220,7 @@ xxxx/>
         {
             $this->assertNotContains("documentElement",$e->getMessage());
             $this->assertRegExp("/element_e.*element_d.*element_c.*element_b.*element_a/",$e->getMessage());
-        }        
+        }
     }
 }
 
@@ -250,26 +250,26 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         $this->allow_xmldec = false;
         $this->result .= $decl;
     }
-    
-    public function onCDATASection($data) { 
+
+    public function onCDATASection($data) {
         $this->specifics++;
-        $this->allow_xmldec = false;        
-        $this->result .= '<![CDATA['.$data.']]>'; 
+        $this->allow_xmldec = false;
+        $this->result .= '<![CDATA['.$data.']]>';
     }
-        
-    public function onProcessingInstruction($data) 
+
+    public function onProcessingInstruction($data)
     {
         $this->specifics++;
-        $this->allow_xmldec = false;        
+        $this->allow_xmldec = false;
         $this->result .= $data;
     }
 
-    public function onComment($data) {     
+    public function onComment($data) {
         $this->onProcessingInstruction($data); // doesn't matter
     }
-    
+
     public function onElementStart($name, array $attributes) {
-        $this->allow_xmldec = false;        
+        $this->allow_xmldec = false;
         $this->elementStarts++;
         $this->result .= "<$name";
         $pairs = array();
@@ -279,18 +279,18 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         }
         $this->result .= '>';
     }
-    
+
     public function onElementClose($name){
-        $this->allow_xmldec = false;        
+        $this->allow_xmldec = false;
         $this->elementCloses++;
         $this->result .= "</$name>";
     }
-    
+
     public function onElementData($data){
         $this->datas++;
         $this->result .= $data;
     }
-    
+
     public function onDocumentStart(){}
     public function onDocumentEnd(){
     }

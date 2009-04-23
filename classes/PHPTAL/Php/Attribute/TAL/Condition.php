@@ -10,26 +10,26 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 /**
  * TAL Specifications 1.4
- * 
+ *
  *      argument ::= expression
- * 
+ *
  * Example:
- * 
+ *
  *      <p tal:condition="here/copyright"
  *         tal:content="here/copyright">(c) 2000</p>
- * 
- * 
- * 
- * 
+ *
+ *
+ *
+ *
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Condition 
+class PHPTAL_Php_Attribute_TAL_Condition
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
@@ -49,12 +49,12 @@ implements PHPTAL_Php_TalesChainReader
         // Force a falsy condition if the nothing keyword is active
         if ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
             $code = 'false';
-        }        
+        }
 
         $codewriter->doIf($code);
     }
 
-    public function after(PHPTAL_Php_CodeWriter $codewriter) 
+    public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEnd();
     }
@@ -72,7 +72,7 @@ implements PHPTAL_Php_TalesChainReader
             $executor->getCodeWriter()->doIf( implode(' || ', $this->expressions ) );
             // The executor will always end an if so we output a dummy if
             $executor->doIf('false');
-        } 
+        }
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)

@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 /**
  * @package PHPTAL.php
  */
@@ -40,12 +40,12 @@ class PHPTAL_Php_TalesChainExecutor
         $this->_reader = $reader;
         $this->_executeChain();
     }
-    
+
     public function getCodeWriter()
     {
         return $this->codewriter;
     }
-    
+
     public function doIf($condition)
     {
         if ($this->_chainStarted == false) {
@@ -76,9 +76,9 @@ class PHPTAL_Php_TalesChainExecutor
     private function _executeChain()
     {
         $this->codewriter->noThrow(true);
-        
+
         end($this->_chain); $lastkey = key($this->_chain);
-        
+
         foreach ($this->_chain as $key => $exp) {
             $this->_state = 0;
             if ($exp == PHPTAL_TALES_NOTHING_KEYWORD) {
@@ -104,7 +104,7 @@ class PHPTAL_Php_TalesChainExecutor
         $this->codewriter->doEnd();
         $this->codewriter->noThrow(false);
     }
-    
+
     private $_state = 0;
     private $_chain;
     private $_chainStarted = false;

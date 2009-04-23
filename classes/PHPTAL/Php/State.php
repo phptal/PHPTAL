@@ -96,8 +96,8 @@ class PHPTAL_Php_State
 
     /**
      * Syntax rules to follow in generated code
-     * 
-     * @return one of PHPTAL::XHTML, PHPTAL::XML, PHPTAL::HTML5 
+     *
+     * @return one of PHPTAL::XHTML, PHPTAL::XML, PHPTAL::HTML5
      */
     public function getOutputMode()
     {
@@ -188,8 +188,8 @@ class PHPTAL_Php_State
     }
 
     /**
-     * replaces ${} in string, expecting CDATA (basically unescaped) input, 
-     * generates output protected against breaking out of CDATA in XML/HTML 
+     * replaces ${} in string, expecting CDATA (basically unescaped) input,
+     * generates output protected against breaking out of CDATA in XML/HTML
      * (depending on current output mode).
      */
     public function interpolateTalesVarsInCDATA($src)
@@ -203,7 +203,7 @@ class PHPTAL_Php_State
     /**
      * expects PHP code and returns PHP code that will generate escaped string
      * Optimizes case when PHP string is given.
-     * 
+     *
      * @return php code
      */
     public function htmlchars($php)
@@ -215,11 +215,11 @@ class PHPTAL_Php_State
         }
         return 'phptal_escape('.$php.')';
     }
-    
+
     /**
-     * allow proper printing of any object 
+     * allow proper printing of any object
      * (without escaping - for use with structure keyword)
-     * 
+     *
      * @return php code
      */
     public function stringify($php)

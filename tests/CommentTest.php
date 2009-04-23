@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class CommentTest extends PHPTAL_TestCase
@@ -23,7 +23,7 @@ class CommentTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals($source, $res);
     }
-    
+
     function testNoEntities()
     {
         $source = '<html><!-- <foo> --></html>';
@@ -32,7 +32,7 @@ class CommentTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals($source, $res);
     }
-    
+
     function testShortComments()
     {
         $source = '<html><!--><--></html>';
@@ -41,7 +41,7 @@ class CommentTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals($source, $res);
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -66,7 +66,7 @@ class CommentTest extends PHPTAL_TestCase
         $this->fail("Ill-formed comment accepted");
     }
 
-    
+
     function testSkippedComments()
     {
         $source = '<html><!--!

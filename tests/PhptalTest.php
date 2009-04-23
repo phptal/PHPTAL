@@ -10,10 +10,10 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
-class PhptalTest extends PHPTAL_TestCase 
+class PhptalTest extends PHPTAL_TestCase
 {
     function test01()
     {
@@ -99,7 +99,7 @@ class PhptalTest extends PHPTAL_TestCase
         $tpl->setSource($source);
         $res = $tpl->execute();
         $this->assertEquals('<span>foo value</span>', $res);
-                
+
         $this->assertRegExp('/^tpl_/', $tpl->getFunctionName());
         $this->assertContains(PHPTAL_VERSION, $tpl->getFunctionName());
     }
@@ -155,5 +155,5 @@ class PhptalTest extends PHPTAL_TestCase
         $this->assertEquals($exp,$res);
     }
 }
-        
+
 ?>

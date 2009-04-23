@@ -1,6 +1,6 @@
 <span tal:omit-tag="" tal:comment="this tag head and foot are removed from result">
 
-<span tal:comment="set some data" 
+<span tal:comment="set some data"
       tal:define="global a string:a;
                   global b string:b;
                   global c string:c;"/>
@@ -10,14 +10,14 @@
 <span tal:content="b"/>
 <span tal:content="c"/>
 
-   
+
 <!-- test attributes -->
-<a href="http://www.google.fr" 
+<a href="http://www.google.fr"
    tal:attributes="href a; title a;"
    tal:content="c"
 >should be c</a>
 
-<a href="http://www.example.fr" 
+<a href="http://www.example.fr"
    tal:attributes="href string:http://www.pearfr.com">foo</a>
 
 <!-- test if -->

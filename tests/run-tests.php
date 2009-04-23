@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 require_once 'PHPUnit/Framework/Test.php';
 require_once 'PHPUnit/Framework/TestCase.php';
@@ -29,9 +29,9 @@ class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
         //echo $this->getName();
         parent::setUp();
     }
-    
+
     protected $backupGlobals = FALSE;
-    
+
     protected function newPHPTAL($tpl = false)
     {
         $p = new PHPTAL($tpl);
@@ -61,7 +61,7 @@ if (isset($argv) && count($argv) >= 2) {
         {
             echo "Exception during execution of $entry: ".$e->getMessage()."\n\n";
         }
-        
+
     }
     exit(0);
 }
@@ -69,7 +69,7 @@ if (isset($argv) && count($argv) >= 2) {
 $alltests = new PHPUnit_Framework_TestSuite();
 foreach (new DirectoryIterator( dirname(__FILE__) ) as $f) {
     if ($f->isDot() || !$f->isFile()) continue;
-    
+
     if (preg_match('/(.*?Test).php$/', $f->getFileName(), $m)) {
         require_once $f->getPathName();
         $alltests->addTestSuite(new PHPUnit_Framework_TestSuite($m[1]));

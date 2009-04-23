@@ -10,15 +10,15 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 require 'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
 require 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
 require 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
 require 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
 
-/** 
+/**
  * @package PHPTAL.namespace
  */
 class PHPTAL_Namespace_METAL extends PHPTAL_BuiltinNamespace

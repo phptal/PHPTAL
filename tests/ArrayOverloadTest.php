@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class MyArray implements ArrayAccess
@@ -18,7 +18,7 @@ class MyArray implements ArrayAccess
     public function push($value) {
         $this->_values[] =  $value;
     }
-    
+
     public function offsetGet($index){
         return $this->_values[$index];
     }
@@ -30,7 +30,7 @@ class MyArray implements ArrayAccess
     public function offsetExists($of){
         return isset($this->_values[$of]);
     }
-    
+
     public function offsetUnset($of){
         unset($this->_values[$of]);
     }

@@ -29,7 +29,7 @@ interface PHPTAL_Tales
  *
  * @package PHPTAL.php
  */
-class PHPTAL_TalesRegistry 
+class PHPTAL_TalesRegistry
 {
 
     static $instance;
@@ -53,7 +53,7 @@ class PHPTAL_TalesRegistry
         return self::$instance;
     }
 
-    protected function __construct() 
+    protected function __construct()
     {
     }
 
@@ -102,7 +102,7 @@ class PHPTAL_TalesRegistry
     /**
      * true if given prefix is taken
      */
-    public function isRegistered($prefix) 
+    public function isRegistered($prefix)
     {
         return (array_key_exists($prefix, $this->_callbacks));
     }
@@ -110,7 +110,7 @@ class PHPTAL_TalesRegistry
     /**
      * get callback for the prefix
      */
-    public function getCallback($prefix) 
+    public function getCallback($prefix)
     {
         if (!$this->isRegistered($prefix)) {
             throw new PHPTAL_ConfigurationException("Expression modifier '$prefix' is not registered");

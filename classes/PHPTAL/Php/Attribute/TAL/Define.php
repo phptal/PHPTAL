@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 /**
  * TAL spec 1.4 for tal:define content
  *
@@ -24,16 +24,16 @@
  * Note: If you want to include a semi-colon (;) in an expression, it must be escaped by doubling it (;;).*
  *
  * examples:
- * 
+ *
  *   tal:define="mytitle template/title; tlen python:len(mytitle)"
  *   tal:define="global company_name string:Digital Creations, Inc."
  *
- *        
+ *
  *
  * @package PHPTAL.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
-class PHPTAL_Php_Attribute_TAL_Define 
+class PHPTAL_Php_Attribute_TAL_Define
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
@@ -47,7 +47,7 @@ implements PHPTAL_Php_TalesChainReader
             if (!$defineVar) {
                 continue;
             }
-            
+
             $this->_defineScope = $defineScope;
 
             if ($defineScope != 'global') $definesAnyNonGlobalVars = true; // <span tal:define="global foo" /> should be invisible, but <img tal:define="bar baz" /> not
@@ -56,7 +56,7 @@ implements PHPTAL_Php_TalesChainReader
                 $codewriter->pushContext();
                 $this->_pushedContext = true;
             }
-            
+
             $this->_defineVar = $defineVar;
             if ($expression === null) {
                 // no expression give, use content of tag as value for newly defined
@@ -64,7 +64,7 @@ implements PHPTAL_Php_TalesChainReader
                 $this->bufferizeContent($codewriter);
                 continue;
             }
-            
+
             $code = $codewriter->evaluateExpression($expression);
             if (is_array($code)) {
                 $this->chainedDefine($codewriter, $code);
@@ -88,7 +88,7 @@ implements PHPTAL_Php_TalesChainReader
             $codewriter->popContext();
         }
     }
-    
+
     private function chainedDefine(PHPTAL_Php_CodeWriter $codewriter, $parts)
     {
         $executor = new PHPTAL_Php_TalesChainExecutor(
@@ -117,9 +117,9 @@ implements PHPTAL_Php_TalesChainReader
         } else {
             $var = '$ctx->'.$this->_defineVar;
         }
-        
+
         $cw = $executor->getCodeWriter();
-        
+
         if (!$islast) {
             // must use temp variable, because expression could refer to itself
             $tmp = $cw->createTempVariable();
@@ -128,9 +128,9 @@ implements PHPTAL_Php_TalesChainReader
             $cw->recycleTempVariable($tmp);
         } else {
             $executor->doIf('('.$var.' = '.$exp.') !== null');
-        }    
+        }
     }
-    
+
     /**
      * Parse the define expression, already splitted in sub parts by ';'.
      */
@@ -138,7 +138,7 @@ implements PHPTAL_Php_TalesChainReader
     {
         $defineScope = false; // (local | global)
         $defineVar   = false; // var to define
-        
+
         // extract defineScope from expression
         $exp = trim($exp);
         if (preg_match('/^(local|global)\s+(.*?)$/ism', $exp, $m)) {

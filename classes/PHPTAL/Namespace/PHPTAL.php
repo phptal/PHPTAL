@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 require 'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
 require 'PHPTAL/Php/Attribute/PHPTAL/Debug.php';
 require 'PHPTAL/Php/Attribute/PHPTAL/Id.php';

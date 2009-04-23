@@ -10,12 +10,12 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 /**
  * This class handles template execution context.
  * Holds template variables and carries state/scope across macro executions.
- * 
+ *
  */
 class PHPTAL_Context
 {
@@ -38,7 +38,7 @@ class PHPTAL_Context
 
     /**
      * will switch to this context when popContext() is called
-     * 
+     *
      * @return void
      */
     public function setParent(PHPTAL_Context $parent)
@@ -49,7 +49,7 @@ class PHPTAL_Context
     /**
      * set StdClass object which has property of every global variable
      * It can use __isset() and __get() [none of them or both]
-     * 
+     *
      * @return void
      */
     public function setGlobal(StdClass $globalContext)
@@ -59,7 +59,7 @@ class PHPTAL_Context
 
     /**
      * save current execution context
-     * 
+     *
      * @return Context (new)
      */
     public function pushContext()
@@ -71,7 +71,7 @@ class PHPTAL_Context
 
     /**
      * get previously saved execution context
-     * 
+     *
      * @return Context (old)
      */
     public function popContext()
@@ -79,12 +79,12 @@ class PHPTAL_Context
         return $this->_parentContext;
     }
 
-    /** 
+    /**
      * Set output document type if not already set.
      *
      * This method ensure PHPTAL uses the first DOCTYPE encountered (main
      * template or any macro template source containing a DOCTYPE.
-     * 
+     *
      * @return void
      */
     public function setDocType($doctype)
@@ -106,7 +106,7 @@ class PHPTAL_Context
      * This method ensure PHPTAL uses the first xml declaration encountered
      * (main template or any macro template source containing an xml
      * declaration)
-     * 
+     *
      * @return void
      */
     public function setXmlDeclaration($xmldec)
@@ -122,10 +122,10 @@ class PHPTAL_Context
         }
     }
 
-    /** 
+    /**
      * Activate or deactivate exception throwing during unknown path
      * resolution.
-     * 
+     *
      * @return void
      */
     public function noThrow($bool)
@@ -135,7 +135,7 @@ class PHPTAL_Context
 
     /**
      * Returns true if specified slot is filled.
-     * 
+     *
      * @return bool
      */
     public function hasSlot($key)
@@ -148,7 +148,7 @@ class PHPTAL_Context
 
     /**
      * Returns the content of specified filled slot.
-     * 
+     *
      * @return string
      */
     public function getSlot($key)
@@ -161,7 +161,7 @@ class PHPTAL_Context
 
     /**
      * Fill a macro slot.
-     * 
+     *
      * @return void
      */
     public function fillSlot($key, $content)
@@ -174,7 +174,7 @@ class PHPTAL_Context
 
     /**
      * Push current filled slots on stack.
-     * 
+     *
      * @return void
      */
     public function pushSlots()
@@ -185,7 +185,7 @@ class PHPTAL_Context
 
     /**
      * Restore filled slots stack.
-     * 
+     *
      * @return void
      */
     public function popSlots()
@@ -195,7 +195,7 @@ class PHPTAL_Context
 
     /**
      * Context setter.
-     * 
+     *
      * @return void
      */
     public function __set($varname, $value)
@@ -218,7 +218,7 @@ class PHPTAL_Context
     /**
      * Context getter.
      * If variable doesn't exist, it will throw an exception, unless noThrow(true) has been called
-     * 
+     *
      * @return mixed
      */
     public function __get($varname)
@@ -230,15 +230,15 @@ class PHPTAL_Context
         if (isset($this->_globalContext->$varname)) { // must use isset() to allow custom global contexts with __isset()/__get()
             return $this->_globalContext->$varname;
         }
-        
+
         if (defined($varname)) {
             return constant($varname);
         }
-        
-        if ($this->_nothrow) {            
+
+        if ($this->_nothrow) {
             return null;
         }
-       
+
         throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->_file, $this->_line);
     }
 
@@ -254,13 +254,13 @@ class PHPTAL_Context
  * will call : phptal_path($ctx->object, 'method1/10/method2')
  *
  * This function is very important for PHPTAL performance.
- * 
+ *
  * @param mixed  $base    first element of the path ($ctx)
  * @param string $path    rest of the path
  * @param bool   $nothrow is used by phptal_exists(). Prevents this function from
  * throwing an exception when a part of the path cannot be resolved, null is
  * returned instead.
- * 
+ *
  * @access private
  * @return mixed
  */
@@ -279,23 +279,23 @@ function phptal_path($base, $path, $nothrow=false)
                 $base = $base->$current();
                 continue;
             }
-            
+
             // look for variable
             if (property_exists($base, $current)) {
                 $base = $base->$current;
                 continue;
             }
-            
+
             if ($base instanceof ArrayAccess && $base->offsetExists($current)) {
                 $base = $base->offsetGet($current);
                 continue;
             }
-            
+
             if ($base instanceof Countable && ($current === 'length' || $current === 'size')) {
                 $base = count($base);
                 continue;
             }
-                        
+
             // look for isset (priority over __get)
             if (method_exists($base, '__isset') && is_callable(array($base, '__isset'))) {
                 if ($base->__isset($current)) {
@@ -365,10 +365,10 @@ function phptal_path($base, $path, $nothrow=false)
         }
 
         // if this point is reached, then the part cannot be resolved
-        
+
         if ($nothrow)
             return null;
-        
+
         phptal_path_error($base, $path, $current);
     }
 
@@ -377,7 +377,7 @@ function phptal_path($base, $path, $nothrow=false)
 
 /**
  * helper method for phptal_path(). Please don't use it directly.
- * 
+ *
  * @access private
  */
 function phptal_path_error($base, $path, $current)
@@ -390,17 +390,17 @@ function phptal_path_error($base, $path, $current)
         $pathinfo = " (in path '.../$path')";
         if (preg_match('!([^/]+)/'.preg_quote($current, '!').'(?:/|$)!', $path, $m)) {
             $basename = "'".$m[1]."' ";
-        }        
+        }
     } else $pathinfo = '';
-        
+
     if (is_array($base)) throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
     if (is_object($base)) throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
-    throw new PHPTAL_VariableNotFoundException(ucfirst(gettype($base))." {$basename}doesn't have property '$current'$pathinfo");    
+    throw new PHPTAL_VariableNotFoundException(ucfirst(gettype($base))." {$basename}doesn't have property '$current'$pathinfo");
 }
 
 /**
  * implements true: modifier
- * 
+ *
  * @see phptal_path()
  * @param mixed  $ctx  base object
  * @param string $parh rest of the path
@@ -414,9 +414,9 @@ function phptal_true($ctx, $path)
     return !!$res;
 }
 
-/** 
- * Returns true if $path can be fully resolved in $ctx context. 
- * 
+/**
+ * Returns true if $path can be fully resolved in $ctx context.
+ *
  * @access private
  */
 function phptal_exists($ctx, $path)
@@ -432,20 +432,20 @@ function phptal_exists($ctx, $path)
 
 /**
  * helper function for conditional expressions
- * 
+ *
  * @param mixed $var value to check
  * @return bool
  * @access private
  */
 function phptal_isempty($var)
 {
-    return $var === null || $var === false || $var === ''  
+    return $var === null || $var === false || $var === ''
            || ((is_array($var) || $var instanceof Countable) && count($var)===0);
 }
 
 /**
  * convert to string and html-escape given value (of any type)
- * 
+ *
  * @access private
  */
 function phptal_escape($var)
@@ -464,7 +464,7 @@ function phptal_escape($var)
 
 /**
  * convert anything to string
- * 
+ *
  * @access private
  */
 function phptal_tostring($var)
@@ -476,7 +476,7 @@ function phptal_tostring($var)
     } elseif (is_array($var)) {
         return implode(', ', $var);
     } elseif ($var instanceof SimpleXMLElement) {
-        return $var->asXML();        
+        return $var->asXML();
     }
     return (string)$var;
 }

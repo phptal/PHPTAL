@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class MyPreFilter implements PHPTAL_Filter
@@ -67,7 +67,7 @@ class PreFilterTest extends PHPTAL_TestCase
         $exp = trim_string('<root>filtered</root>');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testCache2()
     {
         $tpl = $this->newPHPTAL('input/prefilter.03.html');
@@ -78,5 +78,5 @@ class PreFilterTest extends PHPTAL_TestCase
         $exp = trim_string('<root>filtered</root>');
         $this->assertEquals($exp, $res);
     }
-    
+
 }

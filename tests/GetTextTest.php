@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 PHPTAL::setIncludePath();
 
 require_once 'PHPTAL/GetTextTranslator.php';
@@ -28,19 +28,19 @@ class GetTextTest extends PHPTAL_TestCase
             return new PHPTAL_GetTextTranslator();
         }
         catch(PHPTAL_Exception $e)
-        {            
+        {
             $this->markTestSkipped($e->getMessage());
         }
     }
-    
-    
+
+
     function testSimple()
     {
         $gettext = $this->getTextTranslator();
         $gettext->setLanguage('en_GB', 'en_GB.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
-        
+
         $tpl = $this->newPHPTAL('input/gettext.01.html');
         $tpl->setTranslator($gettext);
         $res = trim_string($tpl->execute());
@@ -54,12 +54,12 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
-        
+
         $tpl = $this->newPHPTAL('input/gettext.02.html');
         $tpl->setTranslator($gettext);
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/gettext.02.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testInterpol()
@@ -69,14 +69,14 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->setEncoding('UTF-8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
-        
+
         $tpl = $this->newPHPTAL('input/gettext.03.html');
         $tpl->setTranslator($gettext);
         $tpl->login = 'john';
         $tpl->lastCxDate = '2004-12-25';
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/gettext.03.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testDomainChange()
@@ -87,7 +87,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->addDomain('test');
         $gettext->addDomain('test2');
         $gettext->useDomain('test');
-        
+
         $tpl = $this->newPHPTAL('input/gettext.04.html');
         $tpl->setEncoding('UTF-8');
         $tpl->setTranslator($gettext);
@@ -95,7 +95,7 @@ class GetTextTest extends PHPTAL_TestCase
         $tpl->lastCxDate = '2004-12-25';
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/gettext.04.html');
-        $this->assertEquals($exp, $res);                
+        $this->assertEquals($exp, $res);
     }
 
     function testSpaces()
@@ -104,7 +104,7 @@ class GetTextTest extends PHPTAL_TestCase
         $gettext->setLanguage('en_GB', 'en_GB.utf8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
-        
+
         $tpl = $this->newPHPTAL('input/gettext.05.html');
         $tpl->login = 'john smith';
         $tpl->setTranslator($gettext);
@@ -128,7 +128,7 @@ class GetTextTest extends PHPTAL_TestCase
         $exp = trim_file('output/gettext.06.html');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testAccentuateKeyNonCanonical()
     {
         $gettext = $this->getTextTranslator();

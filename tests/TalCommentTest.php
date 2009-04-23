@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
@@ -26,7 +26,7 @@ if (!class_exists('DummyPhpNode')) {
     }
 }
 
-class TalCommentTest extends PHPTAL_TestCase 
+class TalCommentTest extends PHPTAL_TestCase
 {
     function setUp()
     {
@@ -36,12 +36,12 @@ class TalCommentTest extends PHPTAL_TestCase
         $this->_tag = new DummyPhpNode();
         $this->_tag->codewriter = $this->_gen;
     }
-    
+
     private function newComment($expr)
     {
         return $this->_att = new PHPTAL_Php_Attribute_TAL_Comment($this->_tag, $expr);
     }
-    
+
     function testComment()
     {
         $this->newComment( 'my dummy comment');
@@ -74,8 +74,8 @@ class TalCommentTest extends PHPTAL_TestCase
 
     function testInTemplate()
     {
-        $tpl = $this->newPHPTAL('input/tal-comment.01.html'); 
-        $res = trim_string($tpl->execute()); 
+        $tpl = $this->newPHPTAL('input/tal-comment.01.html');
+        $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-comment.01.html');
         $this->assertEquals($exp, $res);
     }

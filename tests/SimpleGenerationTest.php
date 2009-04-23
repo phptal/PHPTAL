@@ -10,14 +10,14 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Dom/DocumentBuilder.php';
 require_once 'PHPTAL/Php/CodeGenerator.php';
 PHPTAL::restoreIncludePath();
- 
+
 class SimpleGenerationTest extends PHPTAL_TestCase
 {
     function testTreeGeneration()
@@ -25,14 +25,14 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
         $treeGen = $parser->parseFile(new PHPTAL_Dom_DocumentBuilder(),'input/parser.01.xml')->getResult();
         $state     = new PHPTAL_Php_State();
-        $codewriter = new PHPTAL_Php_CodeWriter($state);        
+        $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doFunction('test', '$tpl');
         $treeGen->generateCode($codewriter);
         $codewriter->doEnd();
         $result = $codewriter->getResult();
 
         $expected = <<<EOS
-<?php 
+<?php
 function test( \$tpl ) {
 \$ctx->setXmlDeclaration('<?xml version="1.0"?>') ;?>
 <html>

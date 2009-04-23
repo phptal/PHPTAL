@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 /**
  * @package PHPTAL.php.attribute.phptal
@@ -22,18 +22,18 @@ class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
     {
         $mode = trim($this->expression);
         $mode = strtolower($mode);
-        
-        if ($mode == '' || $mode == 'default') 
+
+        if ($mode == '' || $mode == 'default')
             $mode = 'tales';
-        
+
         if ($mode != 'php' && $mode != 'tales') {
             throw new PHPTAL_TemplateException(
-                "Unsupported TALES mode '$mode'", 
-                $this->phpelement->getSourceFile(), 
+                "Unsupported TALES mode '$mode'",
+                $this->phpelement->getSourceFile(),
                 $this->phpelement->getSourceLine()
-            ); 
+            );
         }
-        
+
         $this->_oldMode = $codewriter->setTalesMode( $mode );
     }
 

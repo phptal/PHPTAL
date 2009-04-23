@@ -10,14 +10,14 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Php/Tales.php';
 PHPTAL::restoreIncludePath();
 
-class TalesExistTest extends PHPTAL_TestCase 
+class TalesExistTest extends PHPTAL_TestCase
 {
     function testLevel1()
     {

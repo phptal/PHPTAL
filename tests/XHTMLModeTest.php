@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class XHTMLModeTest extends PHPTAL_TestCase
@@ -25,7 +25,7 @@ class XHTMLModeTest extends PHPTAL_TestCase
             <basefont face="Helvetica" />
             <meta name="test" content=""></meta>
             <link rel="test"></link>
-        </head> 
+        </head>
         <body>
             <br/>
             <br />
@@ -35,11 +35,11 @@ class XHTMLModeTest extends PHPTAL_TestCase
             <form>
                 <textarea />
                 <textarea tal:content="\'\'" />
-                <textarea tal:content="nonexistant | nothing" />                
+                <textarea tal:content="nonexistant | nothing" />
             </form>
         </body>
         </html>');
-        $res = $tpl->execute();       
+        $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_string('<html xmlns="http://www.w3.org/1999/xhtml">
                 <head>
@@ -48,7 +48,7 @@ class XHTMLModeTest extends PHPTAL_TestCase
                     <basefont face="Helvetica" />
                     <meta name="test" content="" />
                     <link rel="test" />
-                </head> 
+                </head>
                 <body>
                     <br />
                     <br />
@@ -58,13 +58,13 @@ class XHTMLModeTest extends PHPTAL_TestCase
                     <form>
                         <textarea></textarea>
                         <textarea></textarea>
-                        <textarea></textarea>                
+                        <textarea></textarea>
                     </form>
                 </body>
                 </html>');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testBoolean()
     {
         $tpl = $this->newPHPTAL();
@@ -79,12 +79,12 @@ class XHTMLModeTest extends PHPTAL_TestCase
                 <option selected="unexpected value"/>
                 <option tal:repeat="n php:range(0,5)" tal:attributes="selected repeat/n/odd"/>
             </select>
-            
+
             <script defer="defer"></script>
             <script tal:attributes="defer number:1"></script>
         </body>
         </html>');
-        $res = $tpl->execute();       
+        $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_string('<html xmlns="http://www.w3.org/1999/xhtml">
                 <body>
@@ -99,7 +99,7 @@ class XHTMLModeTest extends PHPTAL_TestCase
                     <script defer="defer"></script>
                     <script defer="defer"></script>
                 </body>
-                </html>');                
+                </html>');
         $this->assertEquals($exp, $res);
    }
 }

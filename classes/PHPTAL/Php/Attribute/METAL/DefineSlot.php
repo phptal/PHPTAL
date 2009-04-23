@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 /**
  * METAL Specification 1.0
  *
@@ -35,7 +35,7 @@
  *        <tr>
  *        <?php if (isset($tpl->slots->links)): ? >
  *          <?php echo $tpl->slots->links ? >
- *        <?php else: ? >  
+ *        <?php else: ? >
  *        <td>
  *          <a href="/">A Link</a>
  *        </td></tr>
@@ -53,7 +53,7 @@ class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute
         $codewriter->pushCode('echo $ctx->getSlot('.$codewriter->str($this->expression).')');
         $codewriter->doElse();
     }
-    
+
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEnd();

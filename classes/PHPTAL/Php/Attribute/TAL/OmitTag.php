@@ -10,8 +10,8 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
- */ 
+ * @link     http://phptal.motion-twin.com/
+ */
 
 /**
  * TAL Specifications 1.4
@@ -27,10 +27,10 @@
  *      <b tal:omit-tag="not:bold">I may not be bold.</b>
  *
  * To leave the contents of a tag in place while omitting the surrounding
- * start and end tag, use the omit-tag statement. 
+ * start and end tag, use the omit-tag statement.
  *
- * If its expression evaluates to a false value, then normal processing 
- * of the element continues. 
+ * If its expression evaluates to a false value, then normal processing
+ * of the element continues.
  *
  * If the expression evaluates to a true value, or there is no
  * expression, the statement tag is replaced with its contents. It is up to
@@ -38,7 +38,7 @@
  * value of true and false. For these purposes, the value nothing is false,
  * and cancellation of the action has the same effect as returning a
  * false value.
- * 
+ *
  *
  * @package phptal.php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
@@ -51,10 +51,10 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
         if (trim($this->expression) == '') {
             $this->phpelement->headFootDisabled = true;
         }
-        else { 
-            
+        else {
+
             $this->varname = $codewriter->createTempVariable();
-            
+
             // print tag header/foot only if condition is false
             $cond = $codewriter->evaluateExpression($this->expression);
             $this->phpelement->headPrintCondition = '('.$this->varname.' = !('.$cond.'))';

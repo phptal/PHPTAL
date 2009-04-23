@@ -11,7 +11,7 @@
  * @author   Iván Montes <drslump@pollinimini.net>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 /**
  * Stores tal:repeat information during template execution.
@@ -24,9 +24,9 @@
  * ...
  * are provided by this instance.
  *
- * 'repeat' is an StdClass instance created to handle RepeatControllers, 
- * 'item' is an instance of this class. 
- * 
+ * 'repeat' is an StdClass instance created to handle RepeatControllers,
+ * 'item' is an instance of this class.
+ *
  * @package PHPTAL.php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
@@ -54,7 +54,7 @@ class PHPTAL_RepeatController implements Iterator
             $this->iterator = new ArrayIterator($source);
         } elseif ( $source instanceof IteratorAggregate ) {
             $this->iterator = $source->getIterator();
-        } elseif ( $source instanceof Iterator ) {        
+        } elseif ( $source instanceof Iterator ) {
             $this->iterator = $source;
         } elseif ( $source instanceof SimpleXMLElement) { // has non-unique keys!
             $array = array();
@@ -63,7 +63,7 @@ class PHPTAL_RepeatController implements Iterator
             }
             $this->iterator = new ArrayIterator($array);
         } elseif ( $source instanceof Traversable || $source instanceof DOMNodeList ) {
-            // PDO Statements implement an internal Traversable interface. 
+            // PDO Statements implement an internal Traversable interface.
             // To make it fully iterable we traverse the set to populate
             // an array which will be actually used for iteration.
             $array = array();
@@ -76,10 +76,10 @@ class PHPTAL_RepeatController implements Iterator
         } else {
             $this->iterator = new ArrayIterator( array() );
         }
-    
+
         $this->groups = new PHPTAL_RepeatController_Groups();
     }
-  
+
     /**
      * Returns the current element value in the iteration
      *
@@ -89,7 +89,7 @@ class PHPTAL_RepeatController implements Iterator
     {
         return $this->current;
     }
-    
+
     /**
      * Returns the current element key in the iteration
      *
@@ -99,17 +99,17 @@ class PHPTAL_RepeatController implements Iterator
     {
         return $this->key;
     }
-    
+
     /**
      * Tells if the iteration is over
      *
      * @return bool     True if the iteration is not finished yet
      */
     public function valid()
-    {   
+    {
         $valid = $this->valid || $this->validOnNext;
         $this->validOnNext = $this->valid;
-        
+
         return $valid;
     }
 
@@ -122,14 +122,14 @@ class PHPTAL_RepeatController implements Iterator
             } elseif ( is_object($this->iterator) ) {
                 // for backwards compatibility with existing PHPTAL templates
                 if ( method_exists( $this->iterator, 'size' ) ) {
-                    return $this->length = $this->iterator->size();                
+                    return $this->length = $this->iterator->size();
                 } elseif ( method_exists( $this->iterator, 'length' ) ) {
                     return $this->length = $this->iterator->length();
                 }
-            }            
+            }
             $this->length = '_PHPTAL_LENGTH_UNKNOWN_';
         }
-        
+
         if ($this->length === '_PHPTAL_LENGTH_UNKNOWN_') // return length if end is discovered
         {
             return $this->end ? $this->index + 1 : null;
@@ -146,7 +146,7 @@ class PHPTAL_RepeatController implements Iterator
         $this->index = 0;
         $this->length = null;
         $this->end = false;
-        
+
         $this->iterator->rewind();
 
         // Prefetch the next element
@@ -156,9 +156,9 @@ class PHPTAL_RepeatController implements Iterator
         } else {
             $this->validOnNext = false;
         }
-        
+
         // Notify the grouping helper of the change
-        $this->groups->reset();        
+        $this->groups->reset();
     }
 
     /**
@@ -167,15 +167,15 @@ class PHPTAL_RepeatController implements Iterator
      */
     public function next()
     {
-        $this->index++;        
-        
+        $this->index++;
+
         // Prefetch the next element
         if ($this->validOnNext) $this->prefetch();
-        
+
         // Notify the grouping helper of the change
-        $this->groups->reset();        
+        $this->groups->reset();
     }
-    
+
     /**
      * Gets an object property
      *
@@ -199,29 +199,29 @@ class PHPTAL_RepeatController implements Iterator
             case 'letter':
                 return strtolower( $this->int2letter($this->index+1) );
             case 'Letter':
-                return strtoupper( $this->int2letter($this->index+1) );            
+                return strtoupper( $this->int2letter($this->index+1) );
             case 'roman':
                 return strtolower( $this->int2roman($this->index+1) );
-            case 'Roman':            
+            case 'Roman':
                 return strtoupper( $this->int2roman($this->index+1) );
-                
+
             case 'first':
                 // Compare the current one with the previous in the dictionary
-                $res = $this->groups->first( $this->current );                    
+                $res = $this->groups->first( $this->current );
                 return is_bool($res) ? $res : $this->groups;
             case 'last':
                 // Compare the next one with the dictionary
                 $res = $this->groups->last( $this->iterator->current() );
                 return is_bool($res) ? $res : $this->groups;
-            
+
             default:
                 throw new PHPTAL_VariableNotFoundException( "Unable to find part '$var' in repeat variable" );
         }
-    }    
-    
+    }
+
     /**
      * Fetches the next element from the source data store and
-     * updates the end flag if needed. 
+     * updates the end flag if needed.
      *
      * @access protected
      */
@@ -236,11 +236,11 @@ class PHPTAL_RepeatController implements Iterator
             $this->valid = false;
             $this->end = true;
         }
-    }    
-    
+    }
+
     /**
      * Converts an integer number (1 based) to a sequence of letters
-     *     
+     *
      * @param int $int  The number to convert
      * @return String   The letters equivalent as a, b, c-z ... aa, ab, ac-zz ...
      * @access protected
@@ -258,10 +258,10 @@ class PHPTAL_RepeatController implements Iterator
         }
         return $letters;
     }
-    
+
     /**
      * Converts an integer number (1 based) to a roman numeral
-     *     
+     *
      * @param int $int  The number to convert
      * @return String   The roman numeral
      * @access protected
@@ -283,7 +283,7 @@ class PHPTAL_RepeatController implements Iterator
             '4'     => 'IV',
             '1'     => 'I',
         );
-        
+
         $roman = '';
         foreach ( $lookup as $max => $letters ) {
             while ( $int >= $max ) {
@@ -291,7 +291,7 @@ class PHPTAL_RepeatController implements Iterator
                 $int -= $max;
             }
         }
-        
+
         return $roman;
     }
 }
@@ -302,79 +302,79 @@ class PHPTAL_RepeatController implements Iterator
  *
  * @package PHPTAL.php
  */
-class PHPTAL_RepeatController_Groups 
+class PHPTAL_RepeatController_Groups
 {
     protected $dict = array();
     protected $cache = array();
     protected $data = null;
     protected $vars = array();
     protected $branch;
-    
-        
+
+
     public function __construct()
     {
-        $this->dict = array();        
+        $this->dict = array();
         $this->reset();
     }
-    
+
     /**
      * Resets the result caches. Use it to signal an iteration in the loop
-     * 
+     *
      */
     public function reset()
     {
         $this->cache = array();
     }
-        
+
     /**
      * Checks if the data passed is the first one in a group
-     * 
+     *
      * @param mixed $data   The data to evaluate
      * @return Mixed    True if the first item in the group, false if not and
      *                  this same object if the path is not finished
-     */ 
+     */
     public function first( $data )
     {
         if ( !is_array($data) && !is_object($data) && !is_null($data) ) {
-            
+
             if ( !isset($this->cache['F']) ) {
-                
+
                 $hash = md5($data);
-                
-                if ( !isset($this->dict['F']) || $this->dict['F'] !== $hash ) {                
+
+                if ( !isset($this->dict['F']) || $this->dict['F'] !== $hash ) {
                     $this->dict['F'] = $hash;
                     $res = true;
                 } else {
                     $res = false;
                 }
-                
+
                 $this->cache['F'] = $res;
             }
-            
+
             return $this->cache['F'];
         }
-        
+
         $this->data = $data;
         $this->branch = 'F';
         $this->vars = array();
         return $this;
     }
-   
+
     /**
      * Checks if the data passed is the last one in a group
-     * 
+     *
      * @param mixed $data   The data to evaluate
      * @return Mixed    True if the last item in the group, false if not and
      *                  this same object if the path is not finished
-     */ 
+     */
     public function last( $data )
     {
         if ( !is_array($data) && !is_object($data) && !is_null($data) ) {
-            
+
             if ( !isset($this->cache['L']) ) {
-                
+
                 $hash = md5($data);
-                
+
                 if (empty($this->dict['L'])) {
                     $this->dict['L'] = $hash;
                     $res = false;
@@ -384,19 +384,19 @@ class PHPTAL_RepeatController_Groups
                 } else {
                     $res = false;
                 }
-                
+
                 $this->cache['L'] = $res;
             }
-            
+
             return $this->cache['L'];
         }
-        
+
         $this->data = $data;
         $this->branch = 'L';
         $this->vars = array();
         return $this;
-    }    
-    
+    }
+
     /**
      * Handles variable accesses for the tal path resolver
      *
@@ -407,16 +407,16 @@ class PHPTAL_RepeatController_Groups
      */
     public function __get( $var )
     {
-        // When the iterator item is empty we just let the tal 
-        // expression consume by continuously returning this 
+        // When the iterator item is empty we just let the tal
+        // expression consume by continuously returning this
         // same object which should evaluate to true for 'last'
         if ( is_null($this->data) ) {
             return $this;
         }
-        
+
         // Find the requested variable
         $value = phptal_path( $this->data, $var, true );
-        
+
         // Check if it's an object or an array
         if ( is_array($value) || is_object($value) ) {
             // Move the context to the requested variable and return
@@ -424,16 +424,16 @@ class PHPTAL_RepeatController_Groups
             $this->addVarName( $var );
             return $this;
         }
-        
+
         // get a hash of the variable contents
         $hash = md5( $value );
-        
+
         // compute a path for the variable to use as dictionary key
         $path = $this->branch . $this->getVarPath() . $var;
 
-        // If we don't know about this var store in the dictionary        
+        // If we don't know about this var store in the dictionary
         if ( !isset($this->cache[$path]) ) {
-        
+
             if ( !isset($this->dict[$path]) ) {
                 $this->dict[$path] = $hash;
                 $res = $this->branch === 'F';
@@ -446,10 +446,10 @@ class PHPTAL_RepeatController_Groups
                     $res = false;
                 }
             }
-            
+
             $this->cache[$path] = $res;
         }
-        
+
         return $this->cache[$path];
 
     }

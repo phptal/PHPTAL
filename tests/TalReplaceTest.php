@@ -10,14 +10,14 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Php/Tales.php';
 PHPTAL::restoreIncludePath();
 
-class TalReplaceTest extends PHPTAL_TestCase 
+class TalReplaceTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
@@ -74,7 +74,7 @@ class TalReplaceTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tal-replace.07.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-replace.07.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testEmpty()

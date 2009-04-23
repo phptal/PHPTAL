@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 /**
  * Helps generate php representation of a template.
@@ -32,7 +32,7 @@ class PHPTAL_Php_CodeWriter
         if (count($this->temp_recycling)) return array_shift($this->temp_recycling);
         return '$_tmp_'.(++$this->temp_var_counter);
     }
-    
+
     public function recycleTempVariable($var)
     {
         assert('substr($var,0,6)===\'$_tmp_\'');
@@ -93,18 +93,18 @@ class PHPTAL_Php_CodeWriter
     {
         return $this->_state->evaluateExpression($src);
     }
-    
-    public function indent() 
+
+    public function indent()
     {
-        $this->_indentation ++; 
+        $this->_indentation ++;
     }
-    
-    public function unindent() 
+
+    public function unindent()
     {
-        $this->_indentation --; 
+        $this->_indentation --;
     }
-    
-    public function flush() 
+
+    public function flush()
     {
         $this->flushCode();
         $this->flushHtml();
@@ -118,10 +118,10 @@ class PHPTAL_Php_CodeWriter
             $this->pushCode('$ctx->noThrow(false)');
         }
     }
-    
+
     public function flushCode()
     {
-        if (count($this->_codeBuffer) == 0) 
+        if (count($this->_codeBuffer) == 0)
             return;
 
         // special treatment for one code line
@@ -135,23 +135,23 @@ class PHPTAL_Php_CodeWriter
             $this->_codeBuffer = array();
             return;
         }
-    
+
         $this->_result .= '<?php '."\n";
         foreach ($this->_codeBuffer as $codeLine) {
             // avoid adding ; after } and {
             if (!preg_match('/\}\s*$|\{\s*$/', $codeLine))
                 $this->_result .= $codeLine . ' ;'."\n";
-            else 
+            else
                 $this->_result .= $codeLine;
         }
         $this->_result .= '?>';
         $this->_codeBuffer = array();
     }
-    
+
     public function flushHtml()
     {
         if (count($this->_htmlBuffer) == 0) return;
-        
+
         $this->_result .= implode( '', $this->_htmlBuffer );
         $this->_htmlBuffer = array();
     }
@@ -178,18 +178,18 @@ class PHPTAL_Php_CodeWriter
     }
 
     private $known_functions = array();
-    
+
     public function doFunction($name, $params)
     {
         $name = $this->_functionPrefix . $name;
         $this->known_functions[$name] = true;
-                
+
         $this->pushCodeWriterContext();
         $this->pushCode("function $name( $params ) {\n");
         $this->indent();
         $this->_segments[] =  'function';
     }
-    
+
     public function doComment($comment)
     {
         $comment = str_replace('*/', '* /', $comment);
@@ -200,7 +200,7 @@ class PHPTAL_Php_CodeWriter
     {
         $this->pushCode($code);
     }
-                       
+
     public function doForeach($out, $source)
     {
         $this->_segments[] =  'foreach';
@@ -221,7 +221,7 @@ class PHPTAL_Php_CodeWriter
             $this->pushCode('}');
         elseif ($segment == 'catch')
             $this->pushCode('}');
-        else 
+        else
             $this->pushCode("end$segment");
     }
 
@@ -236,7 +236,7 @@ class PHPTAL_Php_CodeWriter
     {
         $this->pushCode($varname.' = '.$code);
     }
-        
+
     public function doCatch($catch)
     {
         $this->doEnd();
@@ -296,13 +296,13 @@ class PHPTAL_Php_CodeWriter
         $this->_htmlBuffer[] =  $html;
     }
 
-    public function pushCode($codeLine) 
+    public function pushCode($codeLine)
     {
         $this->flushHtml();
         $codeLine = $this->indentSpaces() . $codeLine;
         $this->_codeBuffer[] =  $codeLine;
     }
-    
+
     /**
      * php string with escaped text
      */
@@ -315,12 +315,12 @@ class PHPTAL_Php_CodeWriter
     {
         return $this->_state->htmlchars($code);
     }
-    
+
     public function stringifyCode($code)
     {
         return $this->_state->stringify($code);
     }
-    
+
     public function getEncoding()
     {
         return $this->_state->getEncoding();
@@ -335,7 +335,7 @@ class PHPTAL_Php_CodeWriter
     {
         return $this->_state->setDebug($bool);
     }
-    
+
     public function isDebugOn()
     {
         return $this->_state->isDebugOn();
@@ -354,8 +354,8 @@ class PHPTAL_Php_CodeWriter
         } else {
             $attr_regex = '/^[^$&\/=\'"><\s`\0177-\377]+$/';
         }
-        
-        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex, $value)) 
+
+        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex, $value))
             return $value;
         else return '"'.$value.'"';
     }
@@ -369,12 +369,12 @@ class PHPTAL_Php_CodeWriter
     {
         $this->doSetVar('$ctx', '$tpl->popContext()');
     }
-    
+
     // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-    private function indentSpaces() 
+
+    private function indentSpaces()
     {
-        return str_repeat("\t", $this->_indent); 
+        return str_repeat("\t", $this->_indent);
     }
 
     private function pushCodeWriterContext()
@@ -386,7 +386,7 @@ class PHPTAL_Php_CodeWriter
         $this->_htmlBuffer = array();
         $this->_segments = array();
     }
-    
+
     private function popCodeWriterContext()
     {
         $oldContext = array_pop($this->_contexts);

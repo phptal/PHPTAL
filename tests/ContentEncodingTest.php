@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class ContentEncodingTest extends PHPTAL_TestCase
@@ -23,7 +23,7 @@ class ContentEncodingTest extends PHPTAL_TestCase
         $res = trim_string($res);
         $this->assertEquals($exp, $res);
     }
-    
+
     function testEchoArray()
     {
         $p = $this->newPHPTAL();

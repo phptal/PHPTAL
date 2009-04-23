@@ -10,13 +10,13 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class ReadableErrorTest extends PHPTAL_TestCase
 {
     function testSimple()
-    { 
+    {
         $tpl = $this->newPHPTAL('input/error-01.html');
         try {
             $tpl->prepare();
@@ -35,7 +35,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
     function testMacro()
     {
         $expected = 'input' . DIRECTORY_SEPARATOR . 'error-02.macro.html';
-        
+
         try {
             $tpl = $this->newPHPTAL('input/error-02.html');
             $res = $tpl->execute();
@@ -49,7 +49,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
             throw $e;
         }
     }
-    
+
     function testAfterMacro()
     {
         try {

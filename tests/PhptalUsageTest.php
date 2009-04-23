@@ -10,10 +10,10 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
-class PhptalUsageTest extends PHPTAL_TestCase 
+
+class PhptalUsageTest extends PHPTAL_TestCase
 {
 	function testMultiUse()
 	{
@@ -30,12 +30,12 @@ class PhptalUsageTest extends PHPTAL_TestCase
 		
     function testSetSourceReset()
     {
-        $t = $this->newPHPTAL();        
+        $t = $this->newPHPTAL();
         $t->setSource('<p>Hello</p>');
         $res1 = $t->execute();
         $t->setSource('<p>World</p>');
         $res2 = $t->execute();
-        
+
         $this->assertNotEquals($res1,$res2);
     }
 }

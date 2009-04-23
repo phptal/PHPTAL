@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class HTML5ModeTest extends PHPTAL_TestCase
@@ -24,7 +24,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
                 alert("</foo>");
             }
         ]]></script>');
-        
+
         $this->assertEquals(trim_string('<!DOCTYPE html><script> if (2 < 5) { alert("<\/foo>"); } </script>'),trim_string($tpl->execute()));
     }
 
@@ -32,10 +32,10 @@ class HTML5ModeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
-        $tpl->setSource('<!DOCTYPE html><p><![CDATA[<hello>]]></p>');        
+        $tpl->setSource('<!DOCTYPE html><p><![CDATA[<hello>]]></p>');
         $this->assertEquals(trim_string('<!DOCTYPE html><p>&lt;hello&gt;</p>'),trim_string($tpl->execute()));
     }
-    
+
     function testEmpty()
     {
         $tpl = $this->newPHPTAL();
@@ -47,7 +47,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
             <basefont face="Helvetica" />
             <meta name="test" content=""></meta>
             <link rel="test"></link>
-        </head> 
+        </head>
         <body>
             <br/>
             <br />
@@ -57,11 +57,11 @@ class HTML5ModeTest extends PHPTAL_TestCase
             <form>
                 <textarea />
                 <textarea tal:content="\'\'" />
-                <textarea tal:content="nonexistant | nothing" />                
+                <textarea tal:content="nonexistant | nothing" />
             </form>
         </body>
         </html>');
-        $res = $tpl->execute();       
+        $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_string('<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml">
                 <head>
@@ -70,7 +70,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
                     <basefont face=Helvetica>
                     <meta name=test content="">
                     <link rel=test>
-                </head> 
+                </head>
                 <body>
                     <br>
                     <br>
@@ -80,13 +80,13 @@ class HTML5ModeTest extends PHPTAL_TestCase
                     <form>
                         <textarea></textarea>
                         <textarea></textarea>
-                        <textarea></textarea>                
+                        <textarea></textarea>
                     </form>
                 </body>
                 </html>');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testBoolean()
     {
         $tpl = $this->newPHPTAL();
@@ -102,12 +102,12 @@ class HTML5ModeTest extends PHPTAL_TestCase
                 <option selected="unexpected value"/>
                 <option tal:repeat="n php:range(0,5)" tal:attributes="selected repeat/n/odd"/>
             </select>
-            
+
             <script defer="defer"></script>
             <script tal:attributes="defer number:1"></script>
         </body>
         </html>');
-        $res = $tpl->execute();       
+        $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_string('<html xmlns="http://www.w3.org/1999/xhtml">
                 <body>
@@ -123,7 +123,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
                     <script defer></script>
                     <script defer></script>
                 </body>
-                </html>');                
+                </html>');
         $this->assertEquals($exp, $res);
    }
 
@@ -133,9 +133,9 @@ class HTML5ModeTest extends PHPTAL_TestCase
        $tpl->setOutputMode(PHPTAL::HTML5);
        $tpl->setSource('<input checked="checked"/>');
        $this->assertEquals('<input checked>',$tpl->execute());
-       
+
        $tpl->setOutputMode(PHPTAL::XHTML);
-       $this->assertEquals('<input checked="checked"/>',$tpl->execute());       
+       $this->assertEquals('<input checked="checked"/>',$tpl->execute());
    }
 }
 

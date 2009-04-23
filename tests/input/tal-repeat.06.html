@@ -2,9 +2,9 @@
   <metal:block define-macro="test">
     <div tal:content="php:repeat.item.index"/>
   </metal:block>
-  
-  <div 
-    tal:repeat="item data" 
+
+  <div
+    tal:repeat="item data"
     metal:use-macro="test"
   />
 </div>

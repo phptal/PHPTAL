@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
@@ -23,7 +23,7 @@ if (!class_exists('DummyTag')) {
     class DummyTag {}
 }
 
-class TalConditionTest extends PHPTAL_TestCase 
+class TalConditionTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
@@ -38,7 +38,7 @@ class TalConditionTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tal-condition.02.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-condition.02.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testExists()
@@ -47,7 +47,7 @@ class TalConditionTest extends PHPTAL_TestCase
         $tpl->somevar = true;
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/tal-condition.03.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function testException()
@@ -61,9 +61,9 @@ class TalConditionTest extends PHPTAL_TestCase
         }
         $this->assertEquals(true, isset($e));
         // $exp = trim_file('output/tal-condition.04.html');
-        // $this->assertEquals($exp, $res);        
+        // $this->assertEquals($exp, $res);
     }
-    
+
     function testChainedFalse()
     {
         $tpl = $this->newPHPTAL();
@@ -71,7 +71,7 @@ class TalConditionTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals($res,'');
     }
-    
+
     function testChainedTrue()
     {
         $tpl = $this->newPHPTAL();
@@ -79,7 +79,7 @@ class TalConditionTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals($res,'ok');
     }
-        
+
     function testChainedShortCircuit()
     {
         $tpl = $this->newPHPTAL();

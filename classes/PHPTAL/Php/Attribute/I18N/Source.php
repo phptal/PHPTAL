@@ -10,17 +10,17 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
- 
+
+
 /**
  * i18n:source
- * 
- *  The i18n:source attribute specifies the language of the text to be 
- *  translated. The default is "nothing", which means we don't provide 
+ *
+ *  The i18n:source attribute specifies the language of the text to be
+ *  translated. The default is "nothing", which means we don't provide
  *  this information to the translation services.
- *  
+ *
  *
  * @package PHPTAL.php.attribute.i18n
  */

@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
-class OldTest extends PHPTAL_TestCase 
+class OldTest extends PHPTAL_TestCase
 {
     function test03()
     {
@@ -31,7 +31,7 @@ class OldTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/old-06.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
     function test08()
@@ -39,7 +39,7 @@ class OldTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/old-08.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-08.html');
-        $this->assertEquals($exp, $res);                
+        $this->assertEquals($exp, $res);
     }
 
     function test11()
@@ -47,7 +47,7 @@ class OldTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/old-11.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-11.html');
-        $this->assertEquals($exp, $res);                
+        $this->assertEquals($exp, $res);
     }
 
     function test12()
@@ -55,7 +55,7 @@ class OldTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/old-12.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-12.html');
-        $this->assertEquals($exp, $res);                
+        $this->assertEquals($exp, $res);
     }
 
     function test13()  // default keyword
@@ -67,13 +67,13 @@ class OldTest extends PHPTAL_TestCase
         $l->name = "my link content";
         $tpl->a2 = "a value";
         $tpl->link2 = $l;
-        
+
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/old-13.html');
-        $this->assertEquals($exp, $res);                
+        $this->assertEquals($exp, $res);
     }
 
-    function test15() // boolean attributes 
+    function test15() // boolean attributes
     {
         $tpl = $this->newPHPTAL('input/old-15.html');
         $tpl->checked = true;
@@ -119,7 +119,7 @@ class OldTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/old-20.html');
-        $this->assertEquals($exp, $res);        
+        $this->assertEquals($exp, $res);
     }
 
 
@@ -164,7 +164,7 @@ class OldTest extends PHPTAL_TestCase
         $a->fooval = new stdclass;
         $a->fooval->b = new stdclass;
         $a->fooval->b->barval = "it's working";
-        
+
         $tpl = $this->newPHPTAL('input/old-31.html');
         $tpl->a = $a;
         $tpl->foo = 'fooval';
@@ -187,7 +187,7 @@ class OldTest extends PHPTAL_TestCase
                 array('title' => 'o.2', 'children'=>array()),
             )
         );
-        
+
         $tpl = $this->newPHPTAL('input/old-32.html');
         $tpl->object = $o;
         $res = trim_string($tpl->execute());

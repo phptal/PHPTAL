@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 /**
  * @package PHPTAL.php.attribute.phptal
@@ -22,16 +22,16 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // retrieve trigger
-        $this->var = $codewriter->createTempVariable();        
-                
+        $this->var = $codewriter->createTempVariable();
+
         $codewriter->doSetVar(
-            $this->var, 
+            $this->var,
             '$tpl->getTrigger('.$codewriter->str($this->expression).')'
         );
 
         // if trigger found and trigger tells to proceed, we execute
         // the node content
-        $codewriter->doIf($this->var.' && 
+        $codewriter->doIf($this->var.' &&
             '.$this->var.'->start('.$codewriter->str($this->expression).', $tpl) === PHPTAL_Trigger::PROCEED');
     }
 
@@ -39,7 +39,7 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
     {
         // end of if PROCEED
         $codewriter->doEnd();
-        
+
         // if trigger found, notify the end of the node
         $codewriter->doIf($this->var);
         $codewriter->pushCode(

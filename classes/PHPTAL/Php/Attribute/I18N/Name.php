@@ -10,12 +10,12 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 /** i18n:name
  *
- * Name the content of the current element for use in interpolation within 
+ * Name the content of the current element for use in interpolation within
  * translated content. This allows a replaceable component in content to be
  * re-ordered by translation. For example:
  *

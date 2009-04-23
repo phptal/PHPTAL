@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Php/Transformer.php';
 PHPTAL::restoreIncludePath();
@@ -25,14 +25,14 @@ class PhpTransformerTest extends PHPTAL_TestCase
         $this->assertEquals('$a || $b', PHPTAL_Php_Transformer::transform('a or b'));
         $this->assertEquals('($a || $b) && ($z && $x) && (10 < 100)', PHPTAL_Php_Transformer::transform('(a or b) and (z and x) and (10 < 100)'));
     }
-    
+
     function testPathes()
     {
         $this->assertEquals('$a', PHPTAL_Php_Transformer::transform('a'));
         $this->assertEquals('$a->b', PHPTAL_Php_Transformer::transform('a.b'));
         $this->assertEquals('$a->b->c', PHPTAL_Php_Transformer::transform('a.b.c'));
     }
-    
+
     function testFunctionAndMethod()
     {
         $this->assertEquals('a()', PHPTAL_Php_Transformer::transform('a()'));
@@ -59,15 +59,15 @@ class PhpTransformerTest extends PHPTAL_TestCase
     {
         $this->assertEquals('"prout"', PHPTAL_Php_Transformer::transform('"prout"'));
         $this->assertEquals("'prout'", PHPTAL_Php_Transformer::transform("'prout'"));
-        $this->assertEquals('"my string\" still in string"', 
+        $this->assertEquals('"my string\" still in string"',
                             PHPTAL_Php_Transformer::transform('"my string\" still in string"'));
-        $this->assertEquals("'my string\' still in string'", 
+        $this->assertEquals("'my string\' still in string'",
                             PHPTAL_Php_Transformer::transform("'my string\' still in string'"));
     }
 
     function testStringParams()
     {
-        $this->assertEquals('strtolower(\'AAA\')', 
+        $this->assertEquals('strtolower(\'AAA\')',
                             PHPTAL_Php_Transformer::transform('strtolower(\'AAA\')')
                            );
     }
@@ -79,13 +79,13 @@ class PhpTransformerTest extends PHPTAL_TestCase
         $this->assertEquals('$prefix->a->{$prefix->x->y}->z', PHPTAL_Php_Transformer::transform('a.{x.y}.z','$prefix->'));
         $this->assertEquals('$a->{$x->y}()', PHPTAL_Php_Transformer::transform('a.{x.y}()'));
     }
-    
+
     function testEvals2()
     {
         $this->assertEquals('$prefix->{$prefix->var} + $prefix->{$prefix->var}', trim(PHPTAL_Php_Transformer::transform('${var} + ${var}','$prefix->'),'()'));
         $this->assertEquals('$prefix->{MyClass::CONSTANT}', trim(PHPTAL_Php_Transformer::transform('${MyClass::CONSTANT}','$prefix->'),'()'));
     }
-    
+
     function testOperators()
     {
         $this->assertEquals('$a + 100 / $b == $d', PHPTAL_Php_Transformer::transform('a + 100 / b == d'));

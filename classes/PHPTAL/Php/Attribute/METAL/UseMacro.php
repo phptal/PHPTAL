@@ -10,16 +10,16 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 /**
  * METAL Specification 1.0
  *
  *      argument ::= expression
  *
  * Example:
- * 
+ *
  *      <hr />
  *      <p metal:use-macro="here/master_page/macros/copyright">
  *      <hr />
@@ -36,15 +36,15 @@
 class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
 {
     static $ALLOWED_ATTRIBUTES = array(
-        'fill-slot'=>'http://xml.zope.org/namespaces/metal', 
-        'define-macro'=>'http://xml.zope.org/namespaces/metal', 
+        'fill-slot'=>'http://xml.zope.org/namespaces/metal',
+        'define-macro'=>'http://xml.zope.org/namespaces/metal',
         'define'=>'http://xml.zope.org/namespaces/tal',
     );
-    
+
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $this->pushSlots($codewriter);
-        
+
         foreach ($this->phpelement->childNodes as $child) {
             $this->generateFillSlots($codewriter, $child);
         }
@@ -65,23 +65,23 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
 
         $this->popSlots($codewriter);
     }
-    
+
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
     /**
      * reset template slots on each macro call ?
-     * 
-     * NOTE: defining a macro and using another macro on the same tag 
-     * means inheriting from the used macro, thus slots are shared, it 
+     *
+     * NOTE: defining a macro and using another macro on the same tag
+     * means inheriting from the used macro, thus slots are shared, it
      * is a little tricky to understand but very natural to use.
      *
-     * For example, we may have a main design.html containing our main 
+     * For example, we may have a main design.html containing our main
      * website presentation with some slots (menu, content, etc...) then
      * we may define a member.html macro which use the design.html macro
      * for the general layout, fill the menu slot and let caller templates
-     * fill the parent content slot without interfering. 
+     * fill the parent content slot without interfering.
      */
     private function pushSlots(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -95,18 +95,18 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
      * (restore slots if not inherited macro)
      */
     private function popSlots(PHPTAL_Php_CodeWriter $codewriter)
-    {        
+    {
         if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal', 'define-macro')) {
             $codewriter->pushCode('$ctx->popSlots()');
         }
     }
-    
+
     /**
      * recursively generates code for slots
      */
     private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Dom_Node $phpelement)
     {
-        if (false == ($phpelement instanceOf PHPTAL_Dom_Element)) 
+        if (false == ($phpelement instanceOf PHPTAL_Dom_Element))
             return;
 
         // if the tag contains one of the allowed attribute, we generate it
@@ -116,7 +116,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
                 return;
             }
         }
-        
+
         foreach ($phpelement->childNodes as $child) {
             $this->generateFillSlots($codewriter, $child);
         }

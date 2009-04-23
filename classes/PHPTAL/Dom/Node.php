@@ -78,21 +78,21 @@ class PHPTAL_Dom_Attr
     {
         $this->value_escaped = htmlspecialchars($val);
     }
-    
+
     /**
      * get value as plain text
-     * 
+     *
      * @return string
      */
-    function getValue() 
+    function getValue()
     {
         return html_entity_decode($this->value_escaped, ENT_QUOTES, $this->encoding);
     }
 
     /**
-     * Depends on replaced state. 
+     * Depends on replaced state.
      * If value is not replaced, it will return it with HTML escapes.
-     * 
+     *
      * @see getReplacedState()
      * @see overwriteValueWithVariable()
      */
@@ -112,7 +112,7 @@ class PHPTAL_Dom_Attr
     /**
      * hide this attribute. It won't be generated.
      */
-    function hide() 
+    function hide()
     {
         $this->replacedState = self::HIDDEN;
     }
@@ -240,9 +240,9 @@ abstract class PHPTAL_Dom_Node
     /**
      * use CodeWriter to compile this element to PHP code
      */
-    public abstract function generateCode(PHPTAL_Php_CodeWriter $gen);    
-    
-    
+    public abstract function generateCode(PHPTAL_Php_CodeWriter $gen);
+
+
     /**
      * For backwards compatibility only! Do not use!
      * @deprecated
@@ -256,7 +256,7 @@ abstract class PHPTAL_Dom_Node
      * @deprecated
      */
     static $_codewriter_bc_hack_;
-    
+
     /**
      * For backwards compatibility only
      * @deprecated
@@ -273,7 +273,7 @@ abstract class PHPTAL_Dom_Node
         }
         throw new PHPTAL_Exception("There is no property $prop on ".get_class($this));
     }
-    
+
     /**
      * For backwards compatibility only
      * @deprecated
@@ -348,7 +348,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     }
 
     /**
-     * Replace <script> foo &gt; bar </script> 
+     * Replace <script> foo &gt; bar </script>
      * with <script>/*<![CDATA[* / foo > bar /*]]>* /</script>
      * This avoids gotcha in text/html.
      *
@@ -359,38 +359,38 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     private function replaceTextWithCDATA()
     {
         $isCDATAelement = PHPTAL_Dom_Defs::getInstance()->isCDATAElementInHTML($this->getNamespaceURI(), $this->getLocalName());
-                
+
         if (!$isCDATAelement) {
             return;
         }
-        
+
         $valueEscaped = ''; // sometimes parser generates split text nodes. "normalisation" is needed.
         $value = '';
         foreach($this->childNodes as $node)
         {
             // leave it alone if there is CDATA, comment, or anything else.
             if (!$node instanceOf PHPTAL_Dom_Text) return;
-            
+
             $value .= $node->getValue();
             $valueEscaped .= $node->getValueEscaped();
-            
+
             $encoding = $node->getEncoding(); // encoding of all nodes is the same
         }
-            
+
         // only add cdata if there are entities
-        // and there's no ${structure} (because it may rely on cdata syntax)            
+        // and there's no ${structure} (because it may rely on cdata syntax)
         if (false === strpos($valueEscaped,'&') || preg_match('/<\?|\${structure/', $value)) {
             return;
         }
 
         $this->childNodes = array();
-        
+
         // appendChild sets parent
-        $this->appendChild(new PHPTAL_Dom_Text('/*', $encoding)); 
-        $this->appendChild(new PHPTAL_Dom_CDATASection('*/'.$value.'/*', $encoding)); 
-        $this->appendChild(new PHPTAL_Dom_Text('*/', $encoding)); 
+        $this->appendChild(new PHPTAL_Dom_Text('/*', $encoding));
+        $this->appendChild(new PHPTAL_Dom_CDATASection('*/'.$value.'/*', $encoding));
+        $this->appendChild(new PHPTAL_Dom_Text('*/', $encoding));
     }
- 
+
     /**
      * support <?php ?> inside attributes
      */
@@ -425,16 +425,16 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     {
         // For backwards compatibility only!
         self::$_codewriter_bc_hack_ = $codewriter; // FIXME
-        
+
         try
         {
-            /// self-modifications 
-            
-            $this->replacePHPAttributes();            
+            /// self-modifications
+
+            $this->replacePHPAttributes();
             if ($codewriter->getOutputMode() === PHPTAL::XHTML) {
                 $this->replaceTextWithCDATA();
             }
-            
+
             /// code generation
 
             if ($codewriter->isDebugOn()) {
@@ -574,7 +574,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     {
         // For backwards compatibility only!
         if ($codewriter===NULL) $codewriter = self::$_codewriter_bc_hack_; // FIXME!
-        
+
         if (!$this->isEmptyNode($codewriter->getOutputMode())) {
             if ($realContent || !count($this->contentAttributes)) {
                 foreach($this->childNodes as $child) {

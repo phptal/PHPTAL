@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 PHPTAL::setIncludePath();
@@ -58,14 +58,14 @@ class ParserTest extends PHPTAL_TestCase
     {
         $parser = new PHPTAL_Dom_XmlParser('UTF-8');
         $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),'<?xml version="1.0" encoding="UTF-8"?>
-        <t1 xmlns:foo..._-ą="http://foo.example.com"><foo..._-ą:test-element_name /><t---- /><t___ /><oóźżćń /><d.... /></t1>')->getResult();        
+        <t1 xmlns:foo..._-ą="http://foo.example.com"><foo..._-ą:test-element_name /><t---- /><t___ /><oóźżćń /><d.... /></t1>')->getResult();
     }
-    
+
     public function testXMLNS()
     {
          $parser = new PHPTAL_Dom_XmlParser('UTF-8');
          $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),'<?xml version="1.0" encoding="UTF-8"?>
-         <t1 xml:lang="foo" xmlns:bla="xx"></t1>')->getResult();        
+         <t1 xml:lang="foo" xmlns:bla="xx"></t1>')->getResult();
     }
 
     public function testIllegalElementNames1()

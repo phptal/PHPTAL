@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class DummyObjectX{
@@ -41,7 +41,7 @@ class TalesIssetNullTest extends PHPTAL_TestCase
 
         $res = phptal_path($dummy, 'method');
         $this->assertEquals('__call', $res);
-        
+
         $res = phptal_path($dummy, 'foo');
         $this->assertEquals(null, $res);
     }

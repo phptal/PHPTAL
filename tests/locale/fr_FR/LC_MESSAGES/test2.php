@@ -1,7 +1,7 @@
 <?php
 return array(
-    '' => 'Project-Id-Version: 
-POT-Creation-Date: 
+    '' => 'Project-Id-Version:
+POT-Creation-Date:
 PO-Revision-Date: 2001-11-14 17:11+0100
 Last-Translator: Melle Koning <hace_x@yahoo.com>
 Language-Team: <>

@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class DummyToStringObject {
@@ -19,7 +19,7 @@ class DummyToStringObject {
     private $_value;
 }
 
-class TalContentTest extends PHPTAL_TestCase 
+class TalContentTest extends PHPTAL_TestCase
 {
     function testSimple()
     {
@@ -54,7 +54,7 @@ class TalContentTest extends PHPTAL_TestCase
         $exp = trim_file('output/tal-content.04.html');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testDefault()
     {
         $tpl = $this->newPHPTAL('input/tal-content.05.html');
@@ -126,7 +126,7 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($res, $exp);
     }
-    
+
       /**
        * @expectedException PHPTAL_VariableNotFoundException
        */
@@ -143,7 +143,7 @@ EOT;
       function testErrorsThrow2()
       {
           $this->markTestSkipped("tal:define and tal:attributes rely on chains not throwing");//FIXME
-          
+
           $tpl = $this->newPHPTAL();
           $tpl->setSource('<p tal:content="erroridontexist2 | erroridontexist2"/>');
           $tpl->execute();
@@ -155,7 +155,7 @@ EOT;
       function testErrorsThrow3()
       {
           $this->markTestSkipped("tal:define and tal:attributes rely on chains not throwing");//FIXME
-          
+
           $tpl = $this->newPHPTAL();
           $tpl->setSource('<p tal:replace="erroridontexist3 | erroridontexist3"/>');
           $tpl->execute();
@@ -167,7 +167,7 @@ EOT;
       function testErrorsThrow4()
       {
           $this->markTestSkipped("tal:define and tal:attributes rely on chains not throwing");//FIXME
-                  
+
           $tpl = $this->newPHPTAL();
           $tpl->setSource('<p tal:condition="erroridontexist4 | erroridontexist4"/>');
           $tpl->execute();

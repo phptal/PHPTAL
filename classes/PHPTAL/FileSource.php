@@ -10,10 +10,10 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
-/** 
+
+/**
  * Reads template from the filesystem
  *
  * @package PHPTAL
@@ -44,7 +44,7 @@ class PHPTAL_FileSource implements PHPTAL_Source
     private $_path;
 }
 
-/** 
+/**
  * Finds template on disk by looking through repositories first
  *
  * @package PHPTAL

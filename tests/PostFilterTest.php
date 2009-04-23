@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class MyPostFilter implements PHPTAL_Filter
@@ -44,7 +44,7 @@ class PostFilterTest extends PHPTAL_TestCase
         $exp = trim_file('output/postfilter.01.html');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testMacro()
     {
         $tpl = $this->newPHPTAL();

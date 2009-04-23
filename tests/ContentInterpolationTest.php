@@ -10,9 +10,9 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
+
 class ContentInterpolationTest extends PHPTAL_TestCase
 {
     public function testInterpol()
@@ -29,7 +29,7 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
+
     public function testInterpol2()
     {
         $src = <<<EOT
@@ -45,7 +45,7 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
+
     public function testInterpol3()
     {
         $src = <<<EOT
@@ -59,7 +59,7 @@ EOT;
         $tpl->foo = 'foo value';
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
-    }    
+    }
 
     public function testNoInterpol()
     {
@@ -90,7 +90,7 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
+
     public function testPHPBlock()
     {
         $tpl = $this->newPHPTAL();
@@ -102,7 +102,7 @@ EOT;
     {
         ini_set('short_open_tag',1);
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
-        
+
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
         $this->assertEquals('<p>test<x>test&amp;test</p>', $tpl->execute());
@@ -112,8 +112,8 @@ EOT;
     public function testPHPBlockNoShort()
     {
         ini_set('short_open_tag', 0);
-        if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");        
-        
+        if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
+
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
         try
@@ -121,10 +121,10 @@ EOT;
             // unlike attributes, this isn't going to be escaped, because it gets parsed as a real processing instruction
             $this->assertEquals('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>', $tpl->execute());
         }
-        catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}        
+        catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
         ini_restore('short_open_tag');
     }
-    
+
     /**
      * @expectedException PHPTAL_VariableNotFoundException
      */
@@ -134,7 +134,7 @@ EOT;
         $tpl->setSource('<p>${error}</p>');
         $tpl->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_VariableNotFoundException
      */
@@ -144,14 +144,14 @@ EOT;
         $tpl->setSource('<p>${error | error}</p>');
         $tpl->execute();
     }
-    
+
     function testErrorsSilenced()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${error | nothing}</p>');
         $this->assertEquals('<p></p>',$tpl->execute());
     }
-    
+
     function testZeroIsNotEmpty()
     {
         $tpl = $this->newPHPTAL();

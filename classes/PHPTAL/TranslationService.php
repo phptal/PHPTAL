@@ -10,10 +10,10 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
- 
-/** 
+
+/**
  * @package PHPTAL
  */
 interface PHPTAL_TranslationService
@@ -26,7 +26,7 @@ interface PHPTAL_TranslationService
      * You can specify a list of possible language for exemple :
      *
      * setLanguage('fr_FR', 'fr_FR@euro')
-     * 
+     *
      * @return string - chosen language
      */
     function setLanguage(/*...*/);
@@ -44,7 +44,7 @@ interface PHPTAL_TranslationService
 
     /**
      * Set an interpolation var.
-     * 
+     *
      * Replace all ${key}s with values in translated strings.
      */
     function setVar($key, $value);

@@ -11,7 +11,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
 */
 
 require_once 'PHPTAL/Php/Transformer.php';
@@ -19,12 +19,12 @@ require_once 'PHPTAL/Php/Transformer.php';
 /**
  * @package PHPTAL.php
  */
-class PHPTAL_Php_TalesInternal implements PHPTAL_Tales 
+class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 {
     /**
      * This function registers all internal expression modifiers
      */
-    static public function registerInternalTales() 
+    static public function registerInternalTales()
     {
         static $registered = false;
 
@@ -48,7 +48,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     static public function true($src, $nothrow)
     {
         if (ctype_alnum($src)) return '!empty($ctx->'.$src.')';
-        
+
         return 'phptal_true($ctx, '.self::string(trim($src), $nothrow).')';
     }
 
@@ -148,18 +148,18 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             return $result;
         }
 
-        
+
         // see if there are subexpressions, but skip interpolated parts, i.e. ${a/b}/c is 2 parts
         if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/', $expression, $m))
         {
             if (!self::checkExpressionPart($m[1]))  throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
-            
+
             $next = self::string($m[1]);
             $expression = self::string($m[2]);
         } else {
             if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name. Complex expressions need php: modifier.");
 
-            $next = self::string($expression); 
+            $next = self::string($expression);
             $expression = null;
         }
 
@@ -168,12 +168,12 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         // if no sub part for this expression, just optimize the generated code
         // and access the $ctx->var
         if ($expression === null) {
-            return '$ctx->'.$next;            
+            return '$ctx->'.$next;
         }
-            
+
         // otherwise we have to call phptal_path() to resolve the path at runtime
         // extract the first part of the expression (it will be the phptal_path()
-        // $base and pass the remaining of the path to phptal_path()            
+        // $base and pass the remaining of the path to phptal_path()
         return 'phptal_path($ctx->'.$next.', '.$expression.($nothrow ? ', true' : '').')';
     }
 
@@ -182,7 +182,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     private static function checkExpressionPart($expression)
     {
-        $expression = preg_replace('/\${[^}]+}/', 'a', $expression); // pretend interpolation is done                
+        $expression = preg_replace('/\${[^}]+}/', 'a', $expression); // pretend interpolation is done
         return preg_match('/^[a-z_][a-z0-9_]*$/i', $expression);
     }
 
@@ -281,12 +281,12 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $subEval = phptal_tale($subPath,false);
             $result .= "'.(" . $subEval . ").'";
         }
-        
+
         // optimize ''.foo.'' to foo
-        $result = preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/", '\1', '\''.$result.'\'');        
-        
+        $result = preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/", '\1', '\''.$result.'\'');
+
         // optimize (foo()) to foo()
-        $result = preg_replace("/^\(((?:[^()]+|\([^()]*\))*)\)$/", '\1', $result);        
+        $result = preg_replace("/^\(((?:[^()]+|\([^()]*\))*)\)$/", '\1', $result);
         return $result;
     }
 
@@ -308,7 +308,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     static public function exists($src, $nothrow)
     {
         if (ctype_alnum($src)) return 'isset($ctx->'.$src.')';
-        
+
         return 'phptal_exists($ctx, '.self::string(trim($src), $nothrow).')';
     }
 

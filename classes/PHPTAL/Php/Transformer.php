@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 /**
@@ -26,7 +26,7 @@
  * The $prefix variable may be changed to change the context lookup.
  *
  * example:
- * 
+ *
  *      $res = PHPTAL_Php_Transformer::transform('a.b.c[x]', '$ctx->');
  *      $res == '$ctx->a->b->c[$ctx->x]';
  *
@@ -37,7 +37,7 @@ class PHPTAL_Php_Transformer
 {
     const ST_WHITE  = -1; // start of string or whitespace
     const ST_NONE   = 0;  // pass through (operators, parens, etc.)
-    const ST_STR    = 1;  // 'foo' 
+    const ST_STR    = 1;  // 'foo'
     const ST_ESTR   = 2;  // "foo ${x} bar"
     const ST_VAR    = 3;  // abcd
     const ST_NUM    = 4;  // 123.02
@@ -50,7 +50,7 @@ class PHPTAL_Php_Transformer
      * transform PHPTAL's php-like syntax into real PHP
      */
     public static function transform( $str, $prefix='$' )
-    {        
+    {
         $len = strlen($str);
         $state = self::ST_WHITE;
         $result = '';
@@ -60,13 +60,13 @@ class PHPTAL_Php_Transformer
         $instanceOf = false;
         $eval = false;
 
-        
+
         for ($i = 0; $i <= $len; $i++) {
             if ($i == $len) $c = "\0";
             else $c = $str[$i];
 
             switch ($state) {
-                
+
                 // after whitespace a variable-variable may start, ${var} → $ctx->{$ctx->var}
                 case self::ST_WHITE:
                     if ($c === '$' && $i < $len-2 && $str[$i+1] === '{')
@@ -75,8 +75,8 @@ class PHPTAL_Php_Transformer
                         $state = self::ST_NONE;
                         continue;
                     }
-                    /* NO BREAK - ST_WHITE is almost the same as ST_NONE */                    
-                
+                    /* NO BREAK - ST_WHITE is almost the same as ST_NONE */
+
                 // no specific state defined, just eat char and see what to do with it.
                 case self::ST_NONE:
                     // begin of eval without {
@@ -84,14 +84,14 @@ class PHPTAL_Php_Transformer
                         $state = self::ST_EVAL;
                         $mark = $i+1;
                         $result .= $prefix.'{';
-                    } 
+                    }
                     // that an alphabetic char, then it should be the begining
                     // of a var
                     elseif (self::isAlpha($c) || $c==='_') {
                         $state = self::ST_VAR;
                         $mark = $i;
                     }
-                    // begining of double quoted string 
+                    // begining of double quoted string
                     elseif ($c === '"') {
                         $state = self::ST_ESTR;
                         $mark = $i;
@@ -116,7 +116,7 @@ class PHPTAL_Php_Transformer
                         }
                     }
                     // @ is an access to some defined variable
-                    elseif ($c === '@') { 
+                    elseif ($c === '@') {
                         $state = self::ST_DEFINE;
                         $mark = $i+1;
                     }
@@ -130,7 +130,7 @@ class PHPTAL_Php_Transformer
                         $result .= $c;
                     }
                     break;
-               
+
                 // $xxx
                 case self::ST_EVAL:
                     if (!self::isVarNameChar($c)) {
@@ -139,9 +139,9 @@ class PHPTAL_Php_Transformer
                         $state = self::ST_NONE;
                     }
                     break;
- 
+
                 // single quoted string
-                case self::ST_STR: 
+                case self::ST_STR:
                     if ($c === '\\') {
                         $backslashed = true;
                     } elseif ($backslashed) {
@@ -156,7 +156,7 @@ class PHPTAL_Php_Transformer
                     break;
 
                 // double quoted string
-                case self::ST_ESTR: 
+                case self::ST_ESTR:
                     if ($c === '\\') {
                         $backslashed = true;
                     } elseif ($backslashed) {
@@ -172,7 +172,7 @@ class PHPTAL_Php_Transformer
                     // interpollation to insert it into the string
                     elseif ($c === '$' && $i < $len && $str[$i+1] === '{') {
                         $result .= substr( $str, $mark, $i-$mark ) . '{';
-                        
+
                         $sub = 0;
                         for ($j = $i; $j<$len; $j++) {
                             if ($str[$j] === '{') {
@@ -257,7 +257,7 @@ class PHPTAL_Php_Transformer
                 case self::ST_MEMBER:
                     if (self::isVarNameChar($c)) {
                     }
-                    // eval mode ${foo} 
+                    // eval mode ${foo}
                     elseif ($c === '$' && ($i >= $len-2 || $str[$i+1] !== '{')) {
                         $result .= '{' . $prefix;
                         $mark++;
@@ -294,7 +294,7 @@ class PHPTAL_Php_Transformer
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_NONE;
                         $i--;
-                    }   
+                    }
                     break;
 
                 // wait for separator
@@ -306,16 +306,16 @@ class PHPTAL_Php_Transformer
                         $i--;
                     }
                     break;
-                    
+
                 // static call, can be const, static var, static method
                 // Klass::$static
                 // Klass::const
                 // Kclass::staticMethod()
-                // 
+                //
                 case self::ST_STATIC:
                     if (self::isVarNameChar($c)) {
                     }
-                    // static var 
+                    // static var
                     elseif ($c === '$') {
                     }
                     // end of static var which is an object and begin of member
@@ -341,7 +341,7 @@ class PHPTAL_Php_Transformer
                         $result .= substr( $str, $mark, $i-$mark );
                         $state = self::ST_NONE;
                         $i--;
-                    }   
+                    }
                     break;
 
                 // numeric value
@@ -351,14 +351,14 @@ class PHPTAL_Php_Transformer
                         $state = self::ST_NONE;
                     }
                     break;
-            }            
+            }
         }
 
-        $result = trim($result); 
-        
+        $result = trim($result);
+
         // CodeWriter doesn't like expressions that look like blocks
-        if ($result[strlen($result)-1] === '}') return '('.$result.')'; 
-        
+        if ($result[strlen($result)-1] === '}') return '('.$result.')';
+
         return $result;
     }
 
@@ -379,8 +379,8 @@ class PHPTAL_Php_Transformer
     }
 
     private static $TranslationTable = array(
-        'not' => '!', 
-        'ne'  => '!=', 
+        'not' => '!',
+        'ne'  => '!=',
         'and' => '&&',
         'or'  => '||',
         'lt'  => '<',

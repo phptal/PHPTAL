@@ -10,18 +10,18 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/ 
+ * @link     http://phptal.motion-twin.com/
  */
 
 class OverloadTestClass
 {
     public $vars = array('foo'=>'bar', 'baz'=>'biz');
-    
+
     public function __set( $name, $value )
     {
         $this->vars[$name] = $value;
     }
-    
+
     public function __get( $name )
     {
         if (array_key_exists($name, $this->vars))
@@ -33,7 +33,7 @@ class OverloadTestClass
     {
         return isset($this->$key) || array_key_exists($key, $this->vars);
     }
-    
+
     public function __call( $func, $args )
     {
         return "$func()=".join(',', $args);
@@ -41,7 +41,7 @@ class OverloadTestClass
 }
 
 
-class OverloadingTest extends PHPTAL_TestCase 
+class OverloadingTest extends PHPTAL_TestCase
 {
     function test()
     {

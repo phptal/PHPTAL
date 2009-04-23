@@ -3,7 +3,7 @@
     Call
     <tal:block tal:define="ok_var 'OK'" tal:comment="define pushes context">
         <tal:block metal:use-macro="defined_later" /> <tal:block metal:use-macro="${defined_later_var}" />
-    </tal:block>    
+    </tal:block>
 </tal:block>
 
 <tal:block metal:define-macro="defined_later"><tal:block tal:define="x 'y'">${ok_var}</tal:block></tal:block>
