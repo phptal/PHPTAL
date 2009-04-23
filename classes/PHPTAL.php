@@ -192,7 +192,7 @@ class PHPTAL
      */
     public function addSourceResolver(PHPTAL_SourceResolver $resolver)
     {
-        $this->_resolvers[] = $rep;
+        $this->_resolvers[] = $resolver;
         return $this;
     }
 
