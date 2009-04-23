@@ -12,6 +12,7 @@
  * @version  SVN: $Id$
  * @link     http://phptal.motion-twin.com/
  */
+require_once 'PHPTAL/Php/Tales.php';
 
 /**
  * @package PHPTAL.php
