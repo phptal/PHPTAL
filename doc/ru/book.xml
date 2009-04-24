@@ -151,17 +151,17 @@
     <title>Установка</title>
 
     <para>
-    <acronym>PHPTAL</acronym>реализован в виде <acronym>PEAR</acronym> библиотеки (см. <ulink url="http://pear.php.net">http://pear.php.net</ulink>). Библиотеку <acronym>PHPTAL</acronym> можно скачать на сайте <acronym>PHPTAL</acronym> (<ulink url="http://phptal.motion-twin.com">http://phptal.motion-twin.com</ulink>).</para>
+    <acronym>PHPTAL</acronym>реализован в виде <acronym>PEAR</acronym> библиотеки (см. <ulink url="http://pear.php.net">http://pear.php.net</ulink>). Библиотеку <acronym>PHPTAL</acronym> можно скачать на сайте <acronym>PHPTAL</acronym> (<ulink url="http://phptal.org">http://phptal.org</ulink>).</para>
 
     <para>Eстановку можно выполнить с помощью утилит pear:</para>
 
-    <programlisting><![CDATA[pear install http://phptal.motion-twin.com/latest.tar.gz
+    <programlisting><![CDATA[pear install http://phptal.org/latest.tar.gz
 ]]></programlisting>
 
 
     <para>После установки, так же просто можно обновлять <acronym>PHPTAL</acronym>, используя <acronym>PEAR</acronym>:</para>
 
-    <programlisting><![CDATA[pear upgrade http://phptal.motion-twin.com/latest.tar.gz
+    <programlisting><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
 ]]></programlisting>
 
     <para>Можно обойтись и без <acronym>PEAR</acronym>, попросту разархивировав архив.</para>

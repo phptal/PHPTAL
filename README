@@ -18,7 +18,7 @@
   PEAR Install
   ============
 
-  Get the latest PHPTAL package on http://phptal.motion-twin.com.  
+  Get the latest PHPTAL package on http://phptal.org.  
   
   Then run
 
@@ -28,7 +28,7 @@
   NON PEAR install
   ================
 
-  Get the latest PHPTAL package on http://phptal.motion-twin.com. 
+  Get the latest PHPTAL package on http://phptal.org. 
 
     tar zxvf PHPTAL-X.X.X.tar.gz
     mv PHPTAL-X.X.X PHPTAL

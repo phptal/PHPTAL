@@ -10,10 +10,10 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/
+ * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_0a8');
+define('PHPTAL_VERSION', '1_2_0a9');
 
 PHPTAL::setIncludePath();
 

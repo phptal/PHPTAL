@@ -192,14 +192,14 @@
     <acronym>PHPTAL</acronym> is released as a <acronym>PEAR</acronym> package (see <ulink
     url="http://pear.php.net">http://pear.php.net</ulink>).  You can
     download the <acronym>PHPTAL</acronym> library on the <acronym>PHPTAL</acronym> website (<ulink
-    url="http://phptal.motion-twin.com">http://phptal.motion-twin.com</ulink>).
+    url="http://phptal.org">http://phptal.org</ulink>).
     </para>
 
     <para>
     You can install it using the pear utility:
     </para>
 
-    <programlisting><![CDATA[pear install http://phptal.motion-twin.com/latest.tar.gz
+    <programlisting><![CDATA[pear install http://phptal.org/latest.tar.gz
 ]]></programlisting>
 
 
@@ -208,7 +208,7 @@
     using <acronym>PEAR</acronym>:
     </para>
 
-    <programlisting><![CDATA[pear upgrade http://phptal.motion-twin.com/latest.tar.gz
+    <programlisting><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
 ]]></programlisting>
 
     <para>

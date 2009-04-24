@@ -10,7 +10,7 @@
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
- * @link     http://phptal.motion-twin.com/
+ * @link     http://phptal.org/
  */
 
 require 'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
@@ -25,7 +25,7 @@ class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
 {
     public function __construct()
     {
-        parent::__construct('phptal', 'http://phptal.motion-twin.com/ns/phptal');
+        parent::__construct('phptal', 'http://phptal.org/ns/phptal');
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('tales', -1));
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('debug', -2));
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('id', 7));
