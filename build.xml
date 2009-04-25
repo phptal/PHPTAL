@@ -20,6 +20,13 @@
     <include name="README"/>
     <include name="COPYING"/>
   </fileset>
+  
+  <fileset dir="." id="tests">
+    <include name="tests/**"/>
+    <exclude name="tests/**/.svn/**"/>
+    <exclude name="tests/**/.rej"/>
+    <exclude name="tests/**/.orig"/>
+  </fileset>
 
   <target name="main" if="version" depends="versioncheck">
     <phingcall target="test"/>
@@ -50,62 +57,86 @@
 
   <target name="build">
     <delete dir="${build.base.dir}"/>
+    <mkdir dir="${build.base.dir}"/>
+    <mkdir dir="${build.src.dir}"/>
     <copy todir="${build.src.dir}">
       <fileset refid="classes"/>
-      <fileset refid="gendocs"/>
+      <fileset refid="gendocs"/>    
+      <fileset refid="tests"/>  
     </copy>
+      
   </target>
 
   <target name="pear-package" depends="build">
-    <pearpkg
+    <pearpkg2      
       name="${phing.project.name}"
-      dir="${build.src.dir}"
-      destfile="${build.base.dir}/package.xml">
-      <fileset refid="classes"/>
-      <fileset refid="gendocs"/>
+      dir="${build.src.dir}">
 
-      <option name="notes">Zope Page Template implementation for PHP5</option>
-      <option name="description">Zope Page Template implementation for PHP5</option>
-      <option name="summary">PHPTAL for PHP5 supports tal, metal and i18n namespaces</option>
-      <option name="version" value="${version}"/>
-      <option name="state" value="alpha"/>
-      <option name="baseinstalldir" value=""/>
-      <option name="license" value="LGPL"/>
+      <option name="outputdirectory" value="${build.base.dir}"/>
+      <option name="packagefile" value="package.xml"/>
+      <option name="baseinstalldir" value="/"/>
 
+      <option name="channel" value="pear.php.net"/>
+      <option name="summary">Zope Page Template implementation for PHP5</option>
+      <option name="description">PHPTAL is a XML-based template engine that generates XML, XHTML and HTML5 using syntax of Zope's Template Attribute Language (TAL, METAL and I18N namespaces). 
+PHPTAL compiles templates to PHP for best performance and supports selective caching of output.</option>
 
-      <mapping name="deps">
-        <element>
-          <element key="type" value="php" />
-          <element key="version" value="5.1.0" />
-          <element key="rel" value="ge" />
-        </element>
-      </mapping>
+      <option name="apiversion" value="1.2"/>
+      <option name="apistability" value="alpha"/>
 
       <mapping name="maintainers">
         <element>
           <element key="handle" value="kornel"/>
           <element key="name" value="Kornel Lesiński"/>
-          <element key="email" value="kornel@aardvarkmedia.co.uk"/>
+          <element key="email" value="kornel&#x40;aardvarkmedia.co.uk"/>
           <element key="role" value="lead"/>
         </element>
         <element>
           <element key="handle" value="lbedubourg"/>
           <element key="name" value="Laurent Bedubourg"/>
-          <element key="email" value="lbedubourg@motion-twin.com"/>
+          <element key="email" value="lbedubourg&#x40;motion-twin.com"/>
           <element key="role" value="developer"/>
         </element>
       </mapping>
 
+      <option name="releaseversion" value="${version}"/>
+      <option name="releasestability" value="alpha"/>
+      <option name="license" value="LGPL"/>    
+      <option name="phpdep" value="5.1.0"/>
+      <option name="pearinstallerdep" value="1.4.6"/>
+      <option name="packagetype" value="php"/>
+     
+      <option name="notes">Test release</option>
+     
+      <mapping name="extdeps">  
+        <element>
+          <element key="type" value="ext" />
+          <element key="rel" value="has" />
+          <element key="name" value="pcre" />
+        </element>
+        
+        <element>
+          <element key="type" value="ext" />
+          <element key="rel" value="has" />
+          <element key="name" value="gettext" />
+          <element key="optional" value="yes" />
+        </element>
+      </mapping>
+                 
+      <fileset refid="classes"/>
+      <fileset refid="gendocs"/>
+      <fileset refid="tests"/>
+      
+      <mapping name="dir_roles">
+        <element key="tests" value="test"/>
+      </mapping>
+      
       <mapping name="exceptions">
         <element key="README" value="doc"/>
         <element key="COPYING" value="doc"/>
       </mapping>
 
-      <mapping name="dir_roles">
-        <element key="text" value="doc"/>
-      </mapping>
-
-    </pearpkg>
+    </pearpkg2>
   </target>
 
   <target name="tar" depends="pear-package,build">
