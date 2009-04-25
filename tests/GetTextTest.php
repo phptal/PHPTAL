@@ -13,10 +13,10 @@
  * @link     http://phptal.org/
  */
 
+require_once dirname(__FILE__)."/config.php";
+
 PHPTAL::setIncludePath();
-
 require_once 'PHPTAL/GetTextTranslator.php';
-
 PHPTAL::restoreIncludePath();
 
 class GetTextTest extends PHPTAL_TestCase

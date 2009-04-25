@@ -12,8 +12,45 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
-$testDir = dirname(__FILE__);
-chdir($testDir);
+
+
+// run-tests.php will include local copy of PHPTAL,
+// rather than PEAR's version. This is backup for
+// tests ran individually in other environments.
+if (!class_exists('PHPTAL'))
+{
+    require_once "PHPTAL.php";
+}
+
+abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
+{
+    private $cwd_backup;
+    function setUp()
+    {        
+        // tests rely on cwd being in tests/
+        $this->cwd_backup = getcwd();
+        chdir(dirname(__FILE__));
+        
+        parent::setUp();
+    }
+    
+    function tearDown()
+    {
+        chdir($this->cwd_backup);
+    }
+
+    /**
+     * backupGlobals is the worst idea ever.
+     */
+    protected $backupGlobals = FALSE;
+
+    protected function newPHPTAL($tpl = false)
+    {
+        $p = new PHPTAL($tpl);
+        $p->setForceReparse(true);
+        return $p;
+    }
+}
 
 if (function_exists('date_default_timezone_set'))
 {
@@ -35,6 +72,7 @@ function trim_string( $src ){
     return $src;
 }
 
+// Old versions of PHPUnit seemed to need it
 function exception_error_handler($errno, $errstr, $errfile, $errline )
 {
     throw new ErrorException($errstr, 0, $errno, $errfile, $errline);

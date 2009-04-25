@@ -12,6 +12,8 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+require_once dirname(__FILE__)."/config.php";
+
 class PhptalCacheTest extends PHPTAL_TestCase
 {
     function setUp()

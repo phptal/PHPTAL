@@ -38,6 +38,8 @@ class MyArray implements ArrayAccess
     private $_values = array();
 }
 
+require_once dirname(__FILE__)."/config.php";
+
 class ArrayOverloadTest extends PHPTAL_TestCase
 {
     function testIt()

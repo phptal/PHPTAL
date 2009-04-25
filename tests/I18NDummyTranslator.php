@@ -57,4 +57,3 @@ class DummyTranslator implements PHPTAL_TranslationService
         return $v;
     }
 }
-?>

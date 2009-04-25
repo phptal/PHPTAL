@@ -13,10 +13,10 @@
  * @link     http://phptal.org/
  */
 
+require_once dirname(__FILE__)."/config.php";
+
 PHPTAL::setIncludePath();
-
 require_once 'PHPTAL/CommentFilter.php';
-
 PHPTAL::restoreIncludePath();
 
 class CommentFilterTest extends PHPTAL_TestCase

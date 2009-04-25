@@ -23,6 +23,8 @@ if (!class_exists('OnErrorDummyObject')) {
     }
 }
 
+require_once dirname(__FILE__)."/config.php";
+
 class TalOnErrorTest extends PHPTAL_TestCase
 {
     function testSimple()

@@ -13,6 +13,8 @@
  * @link     http://phptal.org/
  */
 
+require_once dirname(__FILE__)."/config.php";
+
 class MyPreFilter implements PHPTAL_Filter
 {
     public function filter($str)
@@ -31,6 +33,7 @@ class MyPreFilter2 implements PHPTAL_Filter
         return preg_replace('/dummy/', '', $str);
     }
 }
+
 
 class PreFilterTest extends PHPTAL_TestCase
 {

@@ -19,26 +19,10 @@ require_once 'PHPUnit/TextUI/TestRunner.php';
 
 error_reporting( E_ALL | E_STRICT );
 
-require_once dirname(__FILE__)."/config.php";
-require_once dirname(__FILE__).'/../classes/PHPTAL.php';
+chdir(dirname(__FILE__));
 
-class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
-{
-    function setUp()
-    {
-        //echo $this->getName();
-        parent::setUp();
-    }
-
-    protected $backupGlobals = FALSE;
-
-    protected function newPHPTAL($tpl = false)
-    {
-        $p = new PHPTAL($tpl);
-        $p->setForceReparse(true);
-        return $p;
-    }
-}
+require_once '../classes/PHPTAL.php';
+require_once "./config.php";
 
 if (isset($argv) && count($argv) >= 2) {
     array_shift($argv);

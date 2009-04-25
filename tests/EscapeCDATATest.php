@@ -13,6 +13,8 @@
  * @link     http://phptal.org/
  */
 
+require_once dirname(__FILE__)."/config.php";
+
 class EscapeCDATATest extends PHPTAL_TestCase {
 
     private function executeString($str, $params = array())

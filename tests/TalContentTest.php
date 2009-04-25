@@ -19,6 +19,8 @@ class DummyToStringObject {
     private $_value;
 }
 
+require_once dirname(__FILE__)."/config.php";
+
 class TalContentTest extends PHPTAL_TestCase
 {
     function testSimple()

@@ -32,6 +32,8 @@ class DummyObjectX{
     private $_data;
 }
 
+require_once dirname(__FILE__)."/config.php";
+
 class TalesIssetNullTest extends PHPTAL_TestCase
 {
     function testIt()

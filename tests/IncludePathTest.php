@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname(__FILE__)."/config.php";
+
 class IncludePathTest extends PHPTAL_TestCase
 {
     private $cwd;

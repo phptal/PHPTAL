@@ -13,6 +13,8 @@
  * @link     http://phptal.org/
  */
 
+require_once dirname(__FILE__)."/config.php";
+
 class XHTMLModeTest extends PHPTAL_TestCase
 {
     function testEmpty()

@@ -13,11 +13,12 @@
  * @link     http://phptal.org/
  */
 
+require_once dirname(__FILE__)."/config.php";
+
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Dom/Node.php';
 require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
 PHPTAL::restoreIncludePath();
-
 
 if (!class_exists('DummyPhpNode')) {
     class DummyPhpNode extends PHPTAL_Dom_Element {
