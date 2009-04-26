@@ -49,7 +49,7 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
         $p = new PHPTAL($tpl);
         $p->setForceReparse(true);
         return $p;
-    }
+    }    
 }
 
 if (function_exists('date_default_timezone_set'))

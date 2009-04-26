@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_0a9');
+define('PHPTAL_VERSION', '1_2_0alpha10');
 
 PHPTAL::setIncludePath();
 
@@ -556,44 +556,42 @@ class PHPTAL
 
         if (!function_exists($this->getFunctionName())) {
             // parse template if php generated code does not exists or template
-            // source file modified since last generation of PHPTAL_FORCE_REPARSE
-            // is defined.
+            // source file modified since last generation or force reparse is set
             if ($this->getForceReparse() || !file_exists($this->getCodePath())) {
+                
+                // i'm not sure where that belongs, but not in normal path of execution
+                // because some sites have _a lot_ of files in temp
                 if ($this->getCachePurgeFrequency() && mt_rand()%$this->getCachePurgeFrequency() == 0) {
                     $this->cleanUpGarbage();
                 }
 
                 $result = $this->parse();
 
-                if (!$this->getForceReparse()) {
-                    if (!file_put_contents($this->getCodePath(), $result)) {
-                        throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
-                    }
+                if (!file_put_contents($this->getCodePath(), $result)) {
+                    throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
                 }
-
+                        
                 // the awesome thing about eval() is that parse errors don't stop PHP.
+                // when PHP dies during eval, fatal error is printed and can be captured with output buffering            
                 ob_start();
                 try {
-                    eval('?>'.$result);
+                    eval('require $this->getCodePath();');
+                
+                    if (!function_exists($this->getFunctionName())) {                
+                        $msg = ob_get_contents();
+                        // greedy .* ensures last match
+                        if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line =$m[1]; else $line=0;
+                        throw new PHPTAL_TemplateException($msg, $this->getCodePath(), $line);
+                    }
                 }
                 catch(Exception $e) {
-                    ob_end_clean();
-                    // save file if it wasn't saved already - this is needed for debugging
-                    if ($this->getForceReparse()) @file_put_contents($this->getCodePath(), $result);
+                    ob_end_clean(); // PHP needs finally clause :/
                     throw $e;
                 }
-                if (!function_exists($this->getFunctionName())) {
-                    $msg = str_replace("eval()'d code", $this->getCodePath(), ob_get_clean());
-
-                    // save file if it wasn't saved already
-                    if ($this->getForceReparse()) @file_put_contents($this->getCodePath(), $result);
-
-                    if (preg_match('/on line (\d+)$/m', $msg, $m)) $line =$m[1]; else $line=0;
-                    throw new PHPTAL_TemplateException($msg, $this->getCodePath(), $line);
-                }
                 ob_end_clean();
-
             } else {
+                // eval trick is used only on first run,
+                // just in case it causes any problems with opcode accelerators
                 require $this->getCodePath();
             }
         }
@@ -645,22 +643,22 @@ class PHPTAL
      */
     public function cleanUpGarbage()
     {
-        $phptalCacheFilesExpire = time() - $this->getCacheLifetime() * 3600 * 24;
+        $cacheFilesExpire = time() - $this->getCacheLifetime() * 3600 * 24;
 
         // relies on templates sorting order being related to their modification dates
-        $upperLimit = $this->getPhpCodeDestination() . $this->getFunctionNamePrefix($phptalCacheFilesExpire) . '_';
+        $upperLimit = $this->getPhpCodeDestination() . $this->getFunctionNamePrefix($cacheFilesExpire) . '_';
         $lowerLimit = $this->getPhpCodeDestination() . $this->getFunctionNamePrefix(0);
 
         // second * gets phptal:cache
-        $phptalCacheFiles = glob($this->getPhpCodeDestination() . 'tpl_*.' . $this->getPhpCodeExtension() . '*');
+        $cacheFiles = glob($this->getPhpCodeDestination() . 'tpl_????????_*.' . $this->getPhpCodeExtension() . '*');
 
-        if ($phptalCacheFiles) {
-            foreach ($phptalCacheFiles as $index => $file) {
+        if ($cacheFiles) {
+            foreach ($cacheFiles as $index => $file) {
 
                 // comparison here skips filenames that are certainly too new
                 if (strcmp($file,$upperLimit) <= 0 || substr($file, 0, strlen($lowerLimit)) === $lowerLimit) {
                     $time = filemtime($file);
-                    if ($time && $time < $phptalCacheFilesExpire) {
+                    if ($time && $time < $cacheFilesExpire) {
                         @unlink($file);
                 }
             }
@@ -675,8 +673,8 @@ class PHPTAL
     public function cleanUpCache()
     {
         $filename = $this->getCodePath();
-        $phptalCacheFiles = glob($filename . '?*');
-        if ($phptalCacheFiles) foreach ($phptalCacheFiles as $file) {
+        $cacheFiles = glob($filename . '?*');
+        if ($cacheFiles) foreach ($cacheFiles as $file) {
             if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
             @unlink($file);
         }
@@ -710,17 +708,19 @@ class PHPTAL
 
             // just to make tempalte name recognizable
             $basename = preg_replace('/\.[a-z]{3,4}$/','',basename($this->_source->getRealPath()));
-            $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,16);
+            $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,20);
 
-            $hash = md5($this->_source->getRealPath() . $this->getEncoding() . ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode(), true);
+            $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath() . $this->getEncoding() . 
+                        ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode(),
+                        true);
 
             // uses base64 rather than hex to make filename shorter.
-            // there is loss of some bits due to name constraints and filesystem case-insensivity,
-            // but that's still over 110 bits (collision less probable than spontaneous combustion of the server)
+            // there is loss of some bits due to name constraints and case-insensivity,
+            // but that's still over 110 bits in addition to basename and timestamp.
             $hash = strtr(rtrim(base64_encode($hash),"="),"+/=","___");
 
             $this->_functionName = $this->getFunctionNamePrefix($this->_source->getLastModifiedTime()) .
-                                   $basename . '_' . $hash;
+                                   $basename . '__' . $hash;
         }
         return $this->_functionName;
     }
@@ -734,7 +734,7 @@ class PHPTAL
     private function getFunctionNamePrefix($timestamp)
     {
         // tpl_ prefix and last modified time must not be changed, because cache cleanup relies on that
-        return 'tpl_' . PHPTAL_VERSION . '_' . sprintf("%08x",$timestamp) .'_';
+        return 'tpl_' . sprintf("%08x",$timestamp) .'_';
     }
 
     /**

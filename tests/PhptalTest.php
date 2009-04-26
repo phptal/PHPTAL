@@ -102,8 +102,17 @@ class PhptalTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals('<span>foo value</span>', $res);
 
-        $this->assertRegExp('/^tpl_/', $tpl->getFunctionName());
-        $this->assertContains(PHPTAL_VERSION, $tpl->getFunctionName());
+        $this->assertRegExp('/^tpl_\d{8}_/', $tpl->getFunctionName());
+        $this->assertContains('string', $tpl->getFunctionName());
+        $this->assertNotContains(PHPTAL_VERSION, $tpl->getFunctionName());
+    }
+
+    /**
+     * @todo: write it :)
+     */
+    function testFunctionNameChangesWhenSettingsChange()
+    {
+        $this->markTestIncomplete();
     }
 
     function testSourceWithPath()
@@ -111,11 +120,12 @@ class PhptalTest extends PHPTAL_TestCase
         $source = '<span tal:content="foo"/>';
         $tpl = $this->newPHPTAL();
         $tpl->foo = 'foo value';
-        $tpl->setSource($source, '123');
+        $tpl->setSource($source, $fakename = 'abc12345');
         $res = $tpl->execute();
         $this->assertEquals('<span>foo value</span>', $res);
-        $this->assertRegExp('/^tpl_/', $tpl->getFunctionName());
-        $this->assertContains(PHPTAL_VERSION, $tpl->getFunctionName());
+        $this->assertRegExp('/^tpl_\d{8}_/', $tpl->getFunctionName());
+        $this->assertContains($fakename, $tpl->getFunctionName());
+        $this->assertNotContains(PHPTAL_VERSION, $tpl->getFunctionName());
     }
 
     function testStripComments()
