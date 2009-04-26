@@ -585,10 +585,11 @@ class PHPTAL
                     }
                 }
                 catch(Exception $e) {
-                    ob_end_clean(); // PHP needs finally clause :/
+                    ob_end_flush();
                     throw $e;
                 }
                 ob_end_clean();
+                                
             } else {
                 // eval trick is used only on first run,
                 // just in case it causes any problems with opcode accelerators

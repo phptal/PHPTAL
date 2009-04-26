@@ -115,15 +115,15 @@ class TalesTest extends PHPTAL_TestCase
     function testInterpolatedPHP1()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setForceReparse(false);
-        $tpl->setSource('<div tal:content="string:foo${php:true?&apos;bar&apos;:0}${php:false?0:\'baz\'}"/>');
-        $this->assertEquals('<div>foobarbaz</div>',$tpl->execute());
+        $tpl->setSource('<div tal:content="string:foo${php:true?&apos;bar&apos;:0}${php:false?0:\'b$$a$z\'}"/>');
+        $this->assertEquals('<div>foobarb$$a$z</div>',$tpl->execute());
     }
 
     function testInterpolatedTALES()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setSource('<div tal:content="string:foo${nonexistant | string:bar}baz"/>');
+        $tpl->var = 'ba';
+        $tpl->setSource('<div tal:content="string:foo${nonexistant | string:bar$var}z"/>');
         $this->assertEquals('<div>foobarbaz</div>',$tpl->execute());
     }
 

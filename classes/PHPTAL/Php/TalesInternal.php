@@ -219,6 +219,9 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                 case '$':
                     if ($lastWasDollar) {
                         $lastWasDollar = false;
+                    } elseif ($inAccoladePath) {
+                        $subPath .= $c;
+                        $c = '';
                     } else {
                         $lastWasDollar = true;
                         $c = '';
@@ -226,15 +229,31 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                     break;
 
                 case '\\':
-                    $c = '\\\\';
+                    if ($inAccoladePath) {
+                        $subPath .= $c;
+                        $c = '';
+                    }
+                    else {
+                        $c = '\\\\';
+                    }
                     break;
 
                 case '\'':
-                    $c = '\\\'';
+                    if ($inAccoladePath) {
+                        $subPath .= $c;
+                        $c = '';
+                    }
+                    else {
+                        $c = '\\\'';
+                    }
                     break;
 
                 case '{':
-                    if ($lastWasDollar) {
+                    if ($inAccoladePath) {
+                        $subPath .= $c;
+                        $c = '';
+                    }
+                    elseif ($lastWasDollar) {
                         $lastWasDollar = false;
                         $inAccoladePath = true;
                         $subPath = '';

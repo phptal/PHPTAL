@@ -19,7 +19,11 @@
 // tests ran individually in other environments.
 if (!class_exists('PHPTAL'))
 {
-    require_once "PHPTAL.php";
+    if (file_exists(dirname(__FILE__).'/../classes/PHPTAL.php')) {
+        require_once dirname(__FILE__).'/../classes/PHPTAL.php';        
+    } else {    
+        require_once "PHPTAL.php";
+    }
 }
 
 abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
