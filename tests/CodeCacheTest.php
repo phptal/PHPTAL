@@ -100,6 +100,8 @@ class CodeCacheTest extends PHPTAL_TestCase
 
     function testReparseAfterTouch()
     {
+        if (!is_writable('input/code-cache-01.html')) $this->markTestSkipped();
+        
         $time1 = filemtime('input/code-cache-01.html');
         touch('input/code-cache-01.html', time());
         clearstatcache();
