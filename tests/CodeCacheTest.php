@@ -36,13 +36,23 @@ class CodeCacheTest extends PHPTAL_TestCase
         $this->phptal->setForceReparse(false);
         $this->assertFalse($this->phptal->getForceReparse());
 
-        $this->phptal->setPhpCodeDestination(dirname(__FILE__).DIRECTORY_SEPARATOR.'temp_output');
+        if (function_exists('sys_get_temp_dir'))
+        {
+            $tmpdirpath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'temp_output';
+            if (!is_dir($tmpdirpath)) mkdir($tmpdirpath);
+        }
+        else $this->markTestSkipped("Newer PHP needed");
+        
+        $this->assertTrue(is_dir($tmpdirpath));
+        $this->assertTrue(is_writable($tmpdirpath));
+
+        $this->phptal->setPhpCodeDestination($tmpdirpath);
         $this->codeDestination = $this->phptal->getPhpCodeDestination();
     }
 
     private function clearCache()
     {
-        $this->assertContains(dirname(__FILE__),$this->codeDestination);
+        $this->assertContains(DIRECTORY_SEPARATOR.'temp_output'.DIRECTORY_SEPARATOR,$this->codeDestination);
         foreach (glob($this->codeDestination.'tpl_*') as $tpl) {
             $this->assertTrue(unlink($tpl), "Delete $tpl");
         }
