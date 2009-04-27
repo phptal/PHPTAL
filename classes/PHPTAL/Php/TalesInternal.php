@@ -21,6 +21,9 @@ require_once 'PHPTAL/Php/Transformer.php';
  */
 class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 {
+    const DEFAULT_KEYWORD = '_DEFAULT_DEFAULT_DEFAULT_DEFAULT_';
+    const NOTHING_KEYWORD = '_NOTHING_NOTHING_NOTHING_NOTHING_';
+    
     /**
      * This function registers all internal expression modifiers
      */
@@ -118,9 +121,9 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     static public function path($expression, $nothrow=false)
     {
         $expression = trim($expression);
-        if ($expression == 'default') return PHPTAL_TALES_DEFAULT_KEYWORD;
-        if ($expression == 'nothing') return PHPTAL_TALES_NOTHING_KEYWORD;
-        if ($expression == '')        return PHPTAL_TALES_NOTHING_KEYWORD;
+        if ($expression == 'default') return PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD;
+        if ($expression == 'nothing') return PHPTAL_Php_TalesInternal::NOTHING_KEYWORD;
+        if ($expression == '')        return PHPTAL_Php_TalesInternal::NOTHING_KEYWORD;
 
         // split OR expressions terminated by a string
         if (preg_match('/^(.*?)\s*\|\s*?(string:.*)$/sm', $expression, $m)) {

@@ -68,7 +68,7 @@ implements PHPTAL_Php_TalesChainReader
             $code = $codewriter->evaluateExpression($expression);
             if (is_array($code)) {
                 $this->chainedDefine($codewriter, $code);
-            } elseif ( $code == PHPTAL_TALES_NOTHING_KEYWORD) {
+            } elseif ( $code == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
                 $this->doDefineVarWith($codewriter, 'null');
             } else {
                 $this->doDefineVarWith($codewriter, $code);

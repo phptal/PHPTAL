@@ -12,9 +12,6 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
-define('PHPTAL_TALES_DEFAULT_KEYWORD', '_DEFAULT_DEFAULT_DEFAULT_DEFAULT_');
-define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
-
 
 /**
  * TALES Specification 1.3
@@ -50,7 +47,7 @@ define('PHPTAL_TALES_NOTHING_KEYWORD', '_NOTHING_NOTHING_NOTHING_NOTHING_');
 function _phptal_tale_wrap($array, $nothrow)
 {
     if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
-        ($array[0]==PHPTAL_TALES_NOTHING_KEYWORD?'null':$array[0]).
+        ($array[0]==PHPTAL_Php_TalesInternal::NOTHING_KEYWORD?'null':$array[0]).
         '):"")';
 
     $expr = array_shift($array);

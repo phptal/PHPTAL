@@ -42,11 +42,11 @@ implements PHPTAL_Php_TalesChainReader
             return $this->generateChainedContent($codewriter, $code);
         }
 
-        if ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
+        if ($code == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
             return;
         }
 
-        if ($code == PHPTAL_TALES_DEFAULT_KEYWORD) {
+        if ($code == PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD) {
             return $this->generateDefault($codewriter);
         }
 

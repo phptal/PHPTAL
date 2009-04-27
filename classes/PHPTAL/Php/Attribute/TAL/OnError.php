@@ -51,10 +51,10 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
 
         $code = $codewriter->evaluateExpression($expression);
         switch ($code) {
-            case PHPTAL_TALES_NOTHING_KEYWORD:
+            case PHPTAL_Php_TalesInternal::NOTHING_KEYWORD:
                 break;
 
-            case PHPTAL_TALES_DEFAULT_KEYWORD:
+            case PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD:
                 $codewriter->pushHTML('<pre class="phptalError"');
                 $codewriter->doEchoRaw($var);
                 $codewriter->pushHTML('</pre>');

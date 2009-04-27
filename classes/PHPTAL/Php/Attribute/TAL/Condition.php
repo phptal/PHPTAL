@@ -47,7 +47,7 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         // Force a falsy condition if the nothing keyword is active
-        if ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
+        if ($code == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
             $code = 'false';
         }
 

@@ -49,12 +49,12 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         // nothing do nothing
-        if ($code == PHPTAL_TALES_NOTHING_KEYWORD) {
+        if ($code == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
             return;
         }
 
         // default generate default tag content
-        if ($code == PHPTAL_TALES_DEFAULT_KEYWORD) {
+        if ($code == PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD) {
             return $this->generateDefault($codewriter);
         }
 
