@@ -17,12 +17,12 @@ define('PHPTAL_VERSION', '1_2_0alpha10');
 
 PHPTAL::setIncludePath();
 
-require 'PHPTAL/Source.php';
-require 'PHPTAL/SourceResolver.php';
-require 'PHPTAL/FileSource.php';
-require 'PHPTAL/RepeatController.php';
-require 'PHPTAL/Context.php';
-require 'PHPTAL/Exception.php';
+require_once 'PHPTAL/Source.php';
+require_once 'PHPTAL/SourceResolver.php';
+require_once 'PHPTAL/FileSource.php';
+require_once 'PHPTAL/RepeatController.php';
+require_once 'PHPTAL/Context.php';
+require_once 'PHPTAL/Exception.php';
 require_once 'PHPTAL/Filter.php';
 
 PHPTAL::restoreIncludePath();

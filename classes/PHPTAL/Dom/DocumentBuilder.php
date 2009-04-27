@@ -15,7 +15,7 @@
 
 require_once 'PHPTAL/Dom/Node.php';
 require_once 'PHPTAL/Dom/XmlParser.php';
-require 'PHPTAL/Dom/XmlnsState.php';
+require_once 'PHPTAL/Dom/XmlnsState.php';
 
 /**
  * DOM Builder

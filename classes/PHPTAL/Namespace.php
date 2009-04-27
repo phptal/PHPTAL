@@ -13,11 +13,11 @@
  * @link     http://phptal.org/
  */
 
-require 'PHPTAL/Php/Attribute.php';
-require 'PHPTAL/Namespace/TAL.php';
-require 'PHPTAL/Namespace/METAL.php';
-require 'PHPTAL/Namespace/I18N.php';
-require 'PHPTAL/Namespace/PHPTAL.php';
+require_once 'PHPTAL/Php/Attribute.php';
+require_once 'PHPTAL/Namespace/TAL.php';
+require_once 'PHPTAL/Namespace/METAL.php';
+require_once 'PHPTAL/Namespace/I18N.php';
+require_once 'PHPTAL/Namespace/PHPTAL.php';
 
 /**
  * Information about TAL attributes (in which order they are executed and how they generate the code)

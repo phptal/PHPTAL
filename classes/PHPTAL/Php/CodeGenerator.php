@@ -13,8 +13,8 @@
  * @link     http://phptal.org/
  */
 
-require 'PHPTAL/Php/State.php';
-require 'PHPTAL/Php/CodeWriter.php';
+require_once 'PHPTAL/Php/State.php';
+require_once 'PHPTAL/Php/CodeWriter.php';
 
 /**
  * @package PHPTAL

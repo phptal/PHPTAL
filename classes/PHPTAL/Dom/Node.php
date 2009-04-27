@@ -14,7 +14,7 @@
  */
 
 require_once 'PHPTAL/Dom/Defs.php';
-require 'PHPTAL/Dom/Attr.php';
+require_once 'PHPTAL/Dom/Attr.php';
 
 /**
  * Document node abstract class.
@@ -127,7 +127,7 @@ abstract class PHPTAL_Dom_Node
     function getName(){ return $this->getQualifiedName(); }
 }
 
-require 'PHPTAL/Dom/Element.php';
+require_once 'PHPTAL/Dom/Element.php';
 
 /**
  * @package PHPTAL

@@ -14,8 +14,8 @@
  */
 
 // Register internal Tales expression modifiers
-require 'PHPTAL/TalesRegistry.php';
-require 'PHPTAL/Php/TalesInternal.php';
+require_once 'PHPTAL/TalesRegistry.php';
+require_once 'PHPTAL/Php/TalesInternal.php';
  
 /**
  * TALES Specification 1.3
