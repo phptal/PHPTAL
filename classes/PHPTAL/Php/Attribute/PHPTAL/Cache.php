@@ -30,7 +30,8 @@
  *  <div phptal:cache="3h">...</div> <!-- <div> to be evaluated at most once per 3 hours. -->
  *  <ul phptal:cache="1d per object/id">...</ul> <!-- <ul> be cached for one day, separately for each object. -->
  *
- * @package PHPTAL.php.attribute.phptal
+ * @package PHPTAL
+ * @subpackage php.attribute.phptal
 */
 class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 {

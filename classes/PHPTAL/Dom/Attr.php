@@ -16,7 +16,8 @@
 /**
  * node that represents element's attribute
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_Attr
 {

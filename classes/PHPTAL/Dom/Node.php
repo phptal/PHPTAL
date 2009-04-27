@@ -19,7 +19,8 @@ require 'PHPTAL/Dom/Attr.php';
 /**
  * Document node abstract class.
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 abstract class PHPTAL_Dom_Node
 {
@@ -129,7 +130,8 @@ abstract class PHPTAL_Dom_Node
 require 'PHPTAL/Dom/Element.php';
 
 /**
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_Comment extends PHPTAL_Dom_Node
 {
@@ -144,7 +146,8 @@ class PHPTAL_Dom_Comment extends PHPTAL_Dom_Node
 /**
  * Document text data representation.
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_Text extends PHPTAL_Dom_Node
 {
@@ -159,7 +162,8 @@ class PHPTAL_Dom_Text extends PHPTAL_Dom_Node
 /**
  * processing instructions, including <?php blocks
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_ProcessingInstruction extends PHPTAL_Dom_Node
 {
@@ -172,7 +176,8 @@ class PHPTAL_Dom_ProcessingInstruction extends PHPTAL_Dom_Node
 /**
  * processing instructions, including <?php blocks
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
 {
@@ -205,7 +210,8 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
 /**
  * Document doctype representation.
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_DocumentType extends PHPTAL_Dom_Node
 {
@@ -219,7 +225,8 @@ class PHPTAL_Dom_DocumentType extends PHPTAL_Dom_Node
 /**
  * XML declaration node.
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_Node
 {

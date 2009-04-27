@@ -8,7 +8,7 @@ tar:
 	phing tar
 
 docs:
-	phing docs
+	phing doc
 
 clean:
 	@if test -d ./build/; then rm -rf ./build/; fi

@@ -17,7 +17,8 @@ require 'PHPTAL/Php/State.php';
 require 'PHPTAL/Php/CodeWriter.php';
 
 /**
- * @package PHPTAL.php
+ * @package PHPTAL
+ * @subpackage php
  */
 class PHPTAL_Php_CodeGenerator
 {

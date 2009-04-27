@@ -24,7 +24,8 @@ require_once 'PHPTAL/Namespace.php';
  * This behaviour is mainly useful to remove builtin namespaces
  * and provide custom ones.
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Defs

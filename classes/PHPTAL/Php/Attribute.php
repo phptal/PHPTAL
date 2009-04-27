@@ -22,7 +22,8 @@ require 'PHPTAL/Php/TalesChainExecutor.php';
  *
  * An attribute must implements start() and end().
  *
- * @package PHPTAL.php
+ * @package PHPTAL
+ * @subpackage php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 abstract class PHPTAL_Php_Attribute

@@ -20,7 +20,8 @@ require 'PHPTAL/Dom/XmlnsState.php';
 /**
  * DOM Builder
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
 {

@@ -32,7 +32,8 @@
  * i18n:translate span.
  *
  *
- * @package PHPTAL.php.attribute.i18n
+ * @package PHPTAL
+ * @subpackage php.attribute.i18n
  */
 class PHPTAL_Php_Attribute_I18N_Target extends PHPTAL_Php_Attribute
 {

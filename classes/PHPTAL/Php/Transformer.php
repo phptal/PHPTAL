@@ -30,7 +30,8 @@
  *      $res = PHPTAL_Php_Transformer::transform('a.b.c[x]', '$ctx->');
  *      $res == '$ctx->a->b->c[$ctx->x]';
  *
- * @package PHPTAL.php
+ * @package PHPTAL
+ * @subpackage php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Transformer

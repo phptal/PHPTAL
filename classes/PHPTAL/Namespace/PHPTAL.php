@@ -19,7 +19,8 @@ require 'PHPTAL/Php/Attribute/PHPTAL/Id.php';
 require 'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
 
 /**
- * @package PHPTAL.namespace
+ * @package PHPTAL
+ * @subpackage namespace
  */
 class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
 {

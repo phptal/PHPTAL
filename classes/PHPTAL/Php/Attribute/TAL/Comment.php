@@ -13,7 +13,8 @@
  * @link     http://phptal.org/
  */
 /**
- * @package PHPTAL.php.attribute.tal
+ * @package PHPTAL
+ * @subpackage php.attribute.tal
  */
 class PHPTAL_Php_Attribute_TAL_Comment extends PHPTAL_Php_Attribute
 {

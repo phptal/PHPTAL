@@ -30,7 +30,8 @@
  *
  *
  *
- * @package PHPTAL.php.attribute.metal
+ * @package PHPTAL
+ * @subpackage php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute

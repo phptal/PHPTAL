@@ -56,7 +56,8 @@
  *
  *
  *
- * @package PHPTAL.php.attribute.i18n
+ * @package PHPTAL
+ * @subpackage php.attribute.i18n
  */
 class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 {

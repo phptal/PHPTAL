@@ -21,7 +21,8 @@
  * default domain. The value of the attribute is used directly; it is not
  * a TALES expression.
  *
- * @package PHPTAL.php.attribute.i18n
+ * @package PHPTAL
+ * @subpackage php.attribute.i18n
  */
 class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
 {

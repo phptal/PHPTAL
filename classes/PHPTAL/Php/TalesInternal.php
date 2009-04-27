@@ -17,7 +17,8 @@
 require_once 'PHPTAL/Php/Transformer.php';
 
 /**
- * @package PHPTAL.php
+ * @package PHPTAL
+ * @subpackage php
  */
 class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 {

@@ -24,7 +24,8 @@ interface PHPTAL_Php_Tree
 /**
  * Document Tag representation.
  *
- * @package PHPTAL.dom
+ * @package PHPTAL
+ * @subpackage dom
  */
 class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 {

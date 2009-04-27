@@ -27,7 +27,8 @@
  *         tal:content="user">Unknown</b>)
  *      </p>
  *
- * @package PHPTAL.php.attribute.tal
+ * @package PHPTAL
+ * @subpackage php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute

@@ -46,7 +46,8 @@
  * <?php echo phptal_macro($tpl, 'master_page.html/macros/sidebar'); ? >
  *
  *
- * @package PHPTAL.php.attribute.metal
+ * @package PHPTAL
+ * @subpackage php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute

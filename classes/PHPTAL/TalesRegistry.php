@@ -18,7 +18,8 @@
  *
  * Methods suitable for modifiers must be static.
  *
- * @package PHPTAL.php
+ * @package PHPTAL
+ * @subpackage php
  */
 interface PHPTAL_Tales
 {
@@ -27,7 +28,8 @@ interface PHPTAL_Tales
 /**
  * Global registry of TALES expression modifiers
  *
- * @package PHPTAL.php
+ * @package PHPTAL
+ * @subpackage php
  */
 class PHPTAL_TalesRegistry
 {
