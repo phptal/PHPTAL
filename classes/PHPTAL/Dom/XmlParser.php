@@ -25,7 +25,7 @@
  * @package PHPTAL.dom
  * @see PHPTAL_DOM_DocumentBuilder
  */
-class PHPTAL_Dom_XmlParser
+class PHPTAL_XmlParser
 {
     // available parser states
     const ST_ROOT = 0;

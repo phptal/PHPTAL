@@ -818,7 +818,7 @@ class PHPTAL
         self::restoreIncludePath();
 
         // instantiate the PHPTAL source parser
-        $parser = new PHPTAL_Dom_XmlParser($this->_encoding);
+        $parser = new PHPTAL_XmlParser($this->_encoding);
         $builder = new PHPTAL_Dom_DocumentBuilder();
         $builder->stripComments($this->_stripComments);
 

@@ -22,7 +22,7 @@ PHPTAL::restoreIncludePath();
 class XmlParserTest extends PHPTAL_TestCase
 {
     public function testSimpleParse(){
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.01.xml')->getResult();
         $expected = trim(join('', file('input/xml.01.xml')));
         $this->assertEquals($expected, $builder->result);
@@ -31,7 +31,7 @@ class XmlParserTest extends PHPTAL_TestCase
     }
 
     public function testCharactersBeforeBegining() {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         try {
             $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.02.xml')->getResult();
             $this->assertTrue( false );
@@ -42,7 +42,7 @@ class XmlParserTest extends PHPTAL_TestCase
     }
 
     public function testAllowGtAndLtInTextNodes() {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.03.xml')->getResult();
 
         $this->assertEquals(trim_file('output/xml.03.xml'), trim_string($builder->result));
@@ -59,7 +59,7 @@ class XmlParserTest extends PHPTAL_TestCase
      */
     public function testRejectsInvalidAttributes1()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar="bar"baz="baz"/>')->getResult();
         $this->fail($builder->result);
     }
@@ -69,28 +69,28 @@ class XmlParserTest extends PHPTAL_TestCase
      */
     public function testRejectsInvalidAttributes2()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar;="bar"/>')->getResult();
         $this->fail($builder->result);
     }
 
     public function testSkipsBom()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<foo/>")->getResult();
         $this->assertEquals("<foo></foo>", $builder->result);
     }
 
     public function testAllowsTrickyQnames()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>")->getResult();
         $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $builder->result);
     }
 
     public function testAllowsXMLStylesheet()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $src = "<foo>
         <?xml-stylesheet href='foo1' ?>
         <?xml-stylesheet href='foo2' ?>
@@ -101,7 +101,7 @@ class XmlParserTest extends PHPTAL_TestCase
 
     public function testFixOrRejectCDATAClose()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $src = '<a> ]]> </a>';
         try
         {
@@ -113,7 +113,7 @@ class XmlParserTest extends PHPTAL_TestCase
 
     public function testFixOrRejectEntities()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         $src = '<a href="?foo=1&bar=baz&copy=true&reg=x"> & ; &#x100; &nbsp; &#10; &--;</a>';
         try
         {
@@ -125,7 +125,7 @@ class XmlParserTest extends PHPTAL_TestCase
 
     public function testLineAccuracy()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         try
         {
             $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),
@@ -147,7 +147,7 @@ class XmlParserTest extends PHPTAL_TestCase
 
     public function testLineAccuracy2()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         try
         {
             $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),
@@ -171,7 +171,7 @@ bar4='baz'
 
     public function testLineAccuracy3()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         try
         {
             $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),
@@ -196,7 +196,7 @@ xxxx/>
 
     public function testClosingRoot()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         try
         {
             $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),"<imrootelement/></ishallnotbeclosed>");
@@ -212,7 +212,7 @@ xxxx/>
 
     public function testNotClosing()
     {
-        $parser = new PHPTAL_Dom_XmlParser('UTF-8');
+        $parser = new PHPTAL_XmlParser('UTF-8');
         try
         {
             $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),"<element_a><element_b><element_x/><element_c><element_d><element_e>");
