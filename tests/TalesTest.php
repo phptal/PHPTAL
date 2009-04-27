@@ -36,7 +36,7 @@ class TalesTest extends PHPTAL_TestCase
     function testString()
     {
         $src = 'string:foo bar baz';
-        $res = phptal_tales($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
         $this->assertEquals("'foo bar baz'", $res);
 
         $src = "'foo bar baz'";
@@ -47,7 +47,7 @@ class TalesTest extends PHPTAL_TestCase
     function testPhp()
     {
         $src = 'php: foo.x[10].doBar()';
-        $res = phptal_tales($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
         $this->assertEquals('$ctx->foo->x[10]->doBar()', $res);
     }
 
@@ -61,7 +61,7 @@ class TalesTest extends PHPTAL_TestCase
     function testNot()
     {
         $src = "not: php: foo()";
-        $res = phptal_tales($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
         $this->assertEquals("!(foo())", $res);
     }
 
@@ -89,7 +89,7 @@ class TalesTest extends PHPTAL_TestCase
 
     function testInterpolate1()
     {
-        $this->assertEquals('$ctx->{phptal_path($ctx->some, \'path\')}',phptal_tales('${some/path}'));
+        $this->assertEquals('$ctx->{phptal_path($ctx->some, \'path\')}',PHPTAL_Php_TalesInternal::compileToPHPStatements('${some/path}'));
     }
 
     function testInterpolate2()
@@ -99,7 +99,7 @@ class TalesTest extends PHPTAL_TestCase
 
     function testInterpolate3()
     {
-        $this->assertEquals('phptal_path($ctx->meh, phptal_path($ctx->some, \'path\'))',phptal_tales('meh/${some/path}'));
+        $this->assertEquals('phptal_path($ctx->meh, phptal_path($ctx->some, \'path\'))',PHPTAL_Php_TalesInternal::compileToPHPStatements('meh/${some/path}'));
     }
 
     function testInterpolate4()
@@ -109,7 +109,7 @@ class TalesTest extends PHPTAL_TestCase
 
     function testSuperglobals()
     {
-        $this->assertEquals('phptal_path($ctx->{\'_GET\'}, \'a\')',phptal_tales('_GET/a'));
+        $this->assertEquals('phptal_path($ctx->{\'_GET\'}, \'a\')',PHPTAL_Php_TalesInternal::compileToPHPStatements('_GET/a'));
     }
 
     function testInterpolatedPHP1()

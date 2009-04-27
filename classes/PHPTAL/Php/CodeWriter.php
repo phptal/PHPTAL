@@ -350,6 +350,7 @@ class PHPTAL_Php_CodeWriter
     {
         if ($this->getEncoding() == 'UTF-8') // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
         {
+            // regex excludes unicode control characters, all kinds of whitespace and unsafe characters
             $attr_regex = '/^[^$&\/=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]+$/u'; // FIXME: interpolation is done _after_ that function, so $ must be forbidden for now
         } else {
             $attr_regex = '/^[^$&\/=\'"><\s`\0177-\377]+$/';

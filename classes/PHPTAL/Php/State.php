@@ -112,7 +112,7 @@ class PHPTAL_Php_State
     {
         if ($this->_talesMode == 'php')
             return PHPTAL_Php_TalesInternal::php($expression);
-        return phptal_tales($expression);
+        return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression,false);
     }
 
     /**
@@ -139,7 +139,7 @@ class PHPTAL_Php_State
      */
     private function _interpolateTalesVarsStructure($matches)
     {
-        if ($this->_talesMode == 'tales') $code = phptal_tale($matches[1]);
+        if ($this->_talesMode == 'tales') $code = PHPTAL_Php_TalesInternal::compileToPHPExpression($matches[1]);
         else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
 
         return '<?php echo '.$this->stringify($code).' ?>';
@@ -151,7 +151,7 @@ class PHPTAL_Php_State
     private function _interpolateTalesVarsHTML($matches)
     {
         if ($this->_talesMode == 'tales') {
-            $code = phptal_tale(html_entity_decode($matches[1],ENT_QUOTES, $this->getEncoding()));
+            $code = PHPTAL_Php_TalesInternal::compileToPHPExpression(html_entity_decode($matches[1],ENT_QUOTES, $this->getEncoding()),false);
         } else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
 
         return '<?php echo '.$this->htmlchars($code).' ?>';
@@ -163,7 +163,7 @@ class PHPTAL_Php_State
     private function _interpolateTalesVarsCDATA($matches)
     {
         if ($this->_talesMode == 'tales') {
-            $code = phptal_tale($matches[1],ENT_QUOTES, $this->getEncoding());
+            $code = PHPTAL_Php_TalesInternal::compileToPHPExpression($matches[1],ENT_QUOTES, $this->getEncoding());
         } else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
 
         // quite complex for an "unescaped" section, isn't it?
@@ -182,6 +182,7 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInHtml($src)
     {
+        // uses lookback assertion to exclude $${}
         $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
         $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/is', array($this,'_interpolateTalesVarsHTML'), $result);
         $result = str_replace('$${', '${', $result);

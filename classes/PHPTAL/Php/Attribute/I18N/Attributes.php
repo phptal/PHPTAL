@@ -101,7 +101,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
             array_shift($m);
             $m = array_shift($m);
             foreach ($m as $name) {
-                $code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.phptal_tale($name).');'; // allow more complex TAL expressions
+                $code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.PHPTAL_Php_TalesInternal::compileToPHPExpression($name).');'; // allow more complex TAL expressions
             }
             $code .= "\n";
         }
