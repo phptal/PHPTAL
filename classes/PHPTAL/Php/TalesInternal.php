@@ -24,30 +24,6 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 {
     const DEFAULT_KEYWORD = '_DEFAULT_DEFAULT_DEFAULT_DEFAULT_';
     const NOTHING_KEYWORD = '_NOTHING_NOTHING_NOTHING_NOTHING_';
-    
-    /**
-     * This function registers all internal expression modifiers
-     */
-    static public function registerInternalTales()
-    {
-        static $registered = false;
-
-        if ($registered) {
-            return;
-        }
-
-        $registry = PHPTAL_TalesRegistry::getInstance();
-
-        $registry->registerPrefix('not', array(__CLASS__, 'not'));
-        $registry->registerPrefix('path', array(__CLASS__, 'path'));
-        $registry->registerPrefix('string', array(__CLASS__, 'string'));
-        $registry->registerPrefix('php', array(__CLASS__, 'php'));
-        $registry->registerPrefix('exists', array(__CLASS__, 'exists'));
-        $registry->registerPrefix('number', array(__CLASS__, 'number'));
-        $registry->registerPrefix('true', array(__CLASS__, 'true'));
-
-        $registered = true;
-    }
 
     static public function true($src, $nothrow)
     {
@@ -442,6 +418,3 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         throw new PHPTAL_ParserException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist");
     }
 }
-
-
-PHPTAL_Php_TalesInternal::registerInternalTales();

@@ -33,6 +33,3 @@ class PHPTAL_Namespace_METAL extends PHPTAL_BuiltinNamespace
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('fill-slot', 9));
     }
 }
-
-PHPTAL_Dom_Defs::getInstance()->registerNamespace(new PHPTAL_Namespace_METAL());
-

@@ -33,7 +33,3 @@ class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
         $this->addAttribute(new PHPTAL_NamespaceAttributeSurround('cache', -3));
     }
 }
-
-PHPTAL_Dom_Defs::getInstance()->registerNamespace(new PHPTAL_Namespace_PHPTAL());
-
-?>

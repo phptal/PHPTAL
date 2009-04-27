@@ -13,6 +13,10 @@
  * @link     http://phptal.org/
  */
 
+// Register internal Tales expression modifiers
+require 'PHPTAL/TalesRegistry.php';
+require 'PHPTAL/Php/TalesInternal.php';
+ 
 /**
  * TALES Specification 1.3
  *
@@ -69,7 +73,3 @@ function phptal_tales($expression, $nothrow=false)
     return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression,$nothrow);
 }
 
-
-// Register internal Tales expression modifiers
-require 'PHPTAL/TalesRegistry.php';
-require 'PHPTAL/Php/TalesInternal.php';

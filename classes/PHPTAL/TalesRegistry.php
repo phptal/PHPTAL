@@ -33,13 +33,7 @@ interface PHPTAL_Tales
  */
 class PHPTAL_TalesRegistry
 {
-
-    static $instance;
-
-    static public function initialize()
-    {
-        self::$instance = new PHPTAL_TalesRegistry();
-    }
+    private static $instance;
 
     /**
      * This is a singleton
@@ -48,15 +42,22 @@ class PHPTAL_TalesRegistry
      */
     static public function getInstance()
     {
-        if (!(self::$instance instanceof PHPTAL_TalesRegistry)) {
-            self::initialize();
+        if (!self::$instance) {
+            self::$instance = new PHPTAL_TalesRegistry();
         }
 
         return self::$instance;
     }
 
     protected function __construct()
-    {
+    {       
+        $this->registerPrefix('not', array('PHPTAL_Php_TalesInternal', 'not'));
+        $this->registerPrefix('path', array('PHPTAL_Php_TalesInternal', 'path'));
+        $this->registerPrefix('string', array('PHPTAL_Php_TalesInternal', 'string'));
+        $this->registerPrefix('php', array('PHPTAL_Php_TalesInternal', 'php'));
+        $this->registerPrefix('exists', array('PHPTAL_Php_TalesInternal', 'exists'));
+        $this->registerPrefix('number', array('PHPTAL_Php_TalesInternal', 'number'));
+        $this->registerPrefix('true', array('PHPTAL_Php_TalesInternal', 'true'));
     }
 
     /**

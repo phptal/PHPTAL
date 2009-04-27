@@ -40,6 +40,14 @@ class PHPTAL_Dom_Defs
         }
         return self::$_instance;
     }
+    
+    protected function __construct()
+    {
+        $this->registerNamespace(new PHPTAL_Namespace_TAL());
+        $this->registerNamespace(new PHPTAL_Namespace_METAL());
+        $this->registerNamespace(new PHPTAL_Namespace_I18N());
+        $this->registerNamespace(new PHPTAL_Namespace_PHPTAL());
+    }
 
     /**
      * @param string $tagName local name of the tag
@@ -70,6 +78,7 @@ class PHPTAL_Dom_Defs
     /**
      * Returns true if the attribute is an xhtml boolean attribute.
      *
+     * @param string $att local name
      * @return bool
      */
     public function isBooleanAttribute($att)
