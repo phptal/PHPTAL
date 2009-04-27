@@ -718,7 +718,7 @@ class PHPTAL
             // uses base64 rather than hex to make filename shorter.
             // there is loss of some bits due to name constraints and case-insensivity,
             // but that's still over 110 bits in addition to basename and timestamp.
-            $hash = strtr(rtrim(base64_encode($hash),"="),"+/=","___");
+            $hash = strtr(rtrim(base64_encode($hash),"="),"+/=","_A_");
 
             $this->_functionName = $this->getFunctionNamePrefix($this->_source->getLastModifiedTime()) .
                                    $basename . '__' . $hash;

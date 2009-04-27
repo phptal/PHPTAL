@@ -314,7 +314,12 @@ class PHPTAL_Dom_XmlParser
                 if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element");
             }
         } else {
-            throw new PHPTAL_ParserException("Finished document in unexpected state: ".self::$state_names[$state]." is not finished");
+            if ($state === self::ST_ROOT) {
+                $msg = "Document does not have any tags";
+            } else {
+                $msg = "Finished document in unexpected state: ".self::$state_names[$state]." is not finished";
+            }
+            throw new PHPTAL_ParserException($msg);
         }
 
             $builder->onDocumentEnd();

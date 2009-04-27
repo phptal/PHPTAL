@@ -38,7 +38,13 @@ class PHPTAL_FileSource implements PHPTAL_Source
 
     public function getData()
     {
-        return file_get_contents($this->_path);
+        $content = file_get_contents($this->_path);
+        
+        // file_get_contents returns "" when loading directory!?
+        if (false === $content || ("" === $content && is_dir($this->_path))) {
+            throw new PHPTAL_IOException("Unable to load file ".$this->_path);
+        }
+        return $content;
     }
 
     private $_path;
