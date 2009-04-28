@@ -134,5 +134,15 @@ class TalesTest extends PHPTAL_TestCase
         $tpl->setSource('<div tal:repeat="x php:somearray"><x tal:replace=\'repeat/${php:"x"}/key\'/></div>');
         $this->assertEquals('<div>1</div><div>2</div><div>3</div>',$tpl->execute());
     }
+    
+    function testStringWithLongVarName()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->aaaaaaaaaaaaaaaaaaaaa = 'ok';
+        $tpl->bbb = 'ok';
+        
+        $tpl->setSource('<x tal:attributes="y string:$bbb/y/y; x string:$aaaaaaaaaaaaaaaaaaaaa/x/x" />');        
+        $tpl->execute();
+    }
 }
 

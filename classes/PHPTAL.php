@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_0alpha10');
+define('PHPTAL_VERSION', '1_2_0alpha12');
 
 PHPTAL::setIncludePath();
 

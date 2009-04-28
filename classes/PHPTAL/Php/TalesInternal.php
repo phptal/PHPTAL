@@ -284,8 +284,17 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         // optimize ''.foo.'' to foo
         $result = preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/", '\1', '\''.$result.'\'');
 
+        /*
+            The following expression (with + in first alternative):
+            "/^\(((?:[^\(\)]+|\([^\(\)]*\))*)\)$/"
+
+            did work properly for (aaaaaaa)aa, but not for (aaaaaaaaaaaaaaaaaaaaa)aa
+            WTF!?
+        */
+
         // optimize (foo()) to foo()
-        $result = preg_replace("/^\(((?:[^()]+|\([^()]*\))*)\)$/", '\1', $result);
+        $result = preg_replace("/^\(((?:[^\(\)]|\([^\(\)]*\))*)\)$/", '\1', $result);
+
         return $result;
     }
 
@@ -321,10 +330,10 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         if (!is_numeric(trim($src))) throw new PHPTAL_ParserException("'$src' is not a number");
         return trim($src);
     }
-    
-    
+
+
     /**
-     * translates TALES expression with alternatives into single PHP expression. 
+     * translates TALES expression with alternatives into single PHP expression.
      * Identical to compileExpressionToStatements() for singular expressions.
      *
      * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
@@ -336,9 +345,9 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         if (!is_array($r)) return $r;
 
         // this weird ternary operator construct is to execute noThrow inside the expression
-        return '($ctx->noThrow(true)||1?'.self::convertStatementsToExpression($r, $nothrow).':"")';        
+        return '($ctx->noThrow(true)||1?'.self::convertStatementsToExpression($r, $nothrow).':"")';
     }
-    
+
     /*
      * helper function for compileExpressionToExpression
      * @access private
@@ -353,7 +362,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
         return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:".self::convertStatementsToExpression($array, $nothrow).')';
     }
-    
+
     /**
      * returns PHP code that will evaluate given TALES expression.
      * e.g. "string:foo${bar}" may be transformed to "'foo'.phptal_escape($ctx->bar)"
