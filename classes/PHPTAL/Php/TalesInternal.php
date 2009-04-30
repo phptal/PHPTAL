@@ -130,7 +130,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
 
         // see if there are subexpressions, but skip interpolated parts, i.e. ${a/b}/c is 2 parts
-        if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/', $expression, $m))
+        if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/s', $expression, $m))
         {
             if (!self::checkExpressionPart($m[1]))  throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
 
@@ -379,11 +379,11 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
         // Look for tales modifier (string:, exists:, etc...)
         //if (preg_match('/^([-a-z]+):(.*?)$/', $expression, $m)) {
-        if (preg_match('/^([a-z][.a-z_-]*[a-z]):(.*?)$/i', $expression, $m)) {
-            list(,$typePrefix, $expression) = $m;
+        if (preg_match('/^([a-z][.a-z_-]*[a-z]):(.*)$/si', $expression, $m)) {
+            list(,$typePrefix,$expression) = $m;
         }
         // may be a 'string'
-        elseif (preg_match('/^\'((?:[^\']|\\\\.)*)\'$/', $expression, $m)) {
+        elseif (preg_match('/^\'((?:[^\']|\\\\.)*)\'$/s', $expression, $m)) {
             $expression = stripslashes($m[1]);
             $typePrefix = 'string';
         }

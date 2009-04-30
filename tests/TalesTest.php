@@ -131,7 +131,8 @@ class TalesTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL();
         $tpl->somearray = array(1=>9,9,9);
-        $tpl->setSource('<div tal:repeat="x php:somearray"><x tal:replace=\'repeat/${php:"x"}/key\'/></div>');
+        $tpl->setSource('<div tal:repeat="x php:somearray"><x tal:replace=\'repeat/${php:
+            "x"}/key\'/></div>');
         $this->assertEquals('<div>1</div><div>2</div><div>3</div>',$tpl->execute());
     }
     

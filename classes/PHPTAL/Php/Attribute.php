@@ -113,7 +113,7 @@ abstract class PHPTAL_Php_Attribute
     {
         $exp = trim($exp);
         // (dest) (value)
-        if (preg_match('/^([a-z0-9:\-_]+)\s+(.*?)$/i', $exp, $m)) {
+        if (preg_match('/^([a-z0-9:\-_]+)\s+(.*?)$/si', $exp, $m)) {
             return array($m[1], trim($m[2]));
         }
         // (dest)
