@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Dom/Node.php';
+require_once 'PHPTAL/Dom/AllNodes.php';
 require_once 'PHPTAL/Dom/XmlParser.php';
 require_once 'PHPTAL/Dom/XmlnsState.php';
 
