@@ -36,7 +36,7 @@ class PHPTAL_Php_CodeWriter
 
     public function recycleTempVariable($var)
     {
-        assert('substr($var,0,6)===\'$_tmp_\'');
+        if (substr($var,0,6)!=='$_tmp_') throw new PHPTAL_Exception("Invalid variable recycled");
         $this->temp_recycling[] = $var;
     }
 
@@ -52,30 +52,53 @@ class PHPTAL_Php_CodeWriter
         return $this->_result;
     }
 
+    /**
+     * set full '<!DOCTYPE...>' string to output later
+     * 
+     * @param string $dt
+     * @return void
+     */
     public function setDocType($dt)
     {
-        assert('is_string($dt)');
         $this->_doctype = $dt;
     }
 
+    /**
+     * set full '<?xml ?>' string to output later
+     * 
+     * @param string $dt
+     * @return void
+     */
     public function setXmlDeclaration($dt)
     {
-        assert('is_string($dt)');
         $this->_xmldeclaration = $dt;
     }
 
+    /**
+     * functions later generated and checked for existence will have this prefix added
+     * (poor man's namespace)
+     * 
+     * @param string $prefix
+     * @return void
+     */
     public function setFunctionPrefix($prefix)
     {
         $this->_functionPrefix = $prefix;
     }
 
+    /**
+     * @return string
+     */
     public function getFunctionPrefix()
     {
         return $this->_functionPrefix;
     }
 
     /**
-     * Returns old tales mode.
+     * @see PHPTAL_Php_State::setTalesMode()
+     * 
+     * @param string $mode
+     * @return string
      */
     public function setTalesMode($mode)
     {

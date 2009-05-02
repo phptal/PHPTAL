@@ -33,9 +33,8 @@ class PHPTAL_Php_TalesChainExecutor
     const CHAIN_BREAK = 1;
     const CHAIN_CONT  = 2;
 
-    public function __construct(PHPTAL_Php_CodeWriter $codewriter, $chain, $reader)
+    public function __construct(PHPTAL_Php_CodeWriter $codewriter, array $chain, PHPTAL_Php_TalesChainReader $reader)
     {
-        assert(is_array($chain));
         $this->_chain = $chain;
         $this->_chainStarted = false;
         $this->codewriter = $codewriter;

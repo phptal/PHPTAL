@@ -39,8 +39,11 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/', $this->expression, $matches))
+        // number or variable name followed by time unit
+        // optional per expression
+        if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/', $this->expression, $matches)) {
             throw new PHPTAL_ParserException("Cache attribute syntax error: ".$this->expression);
+        }
 
         $cache_len = $matches[1];
         if (!is_numeric($cache_len)) $cache_len = '$ctx->'.$cache_len;

@@ -60,6 +60,13 @@ class PHPTAL_Php_State
         return $this->_debug;
     }
 
+    /**
+     * Sets new and returns old TALES mode.
+     * Valid modes are 'tales' and 'php'
+     * 
+     * @param string $mode
+     * @return string
+     */
     public function setTalesMode($mode)
     {
         $old = $this->_talesMode;
