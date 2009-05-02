@@ -71,7 +71,7 @@ abstract class PHPTAL_Php_Attribute
      * for backwards compatibility ONLY. Do not use!
      * @deprecated
      */
-    public function doEcho($code) { $this->doEchoAttribute($this->tag->generator, $code); }
+    final public function doEcho($code) { $this->doEchoAttribute($this->tag->generator, $code); }
 
     function __construct(PHPTAL_Dom_Element $phpelement, $expression)
     {

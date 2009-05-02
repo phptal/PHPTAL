@@ -488,7 +488,7 @@ class PHPTAL
      * @param $local_tpl is PHPTAL instance of the file in which macro is defined (it will be different from $this if it's external macro call)
      * @access private
      */
-    public function _executeMacroOfTempalte($path, PHPTAL $local_tpl)
+    final public function _executeMacroOfTempalte($path, PHPTAL $local_tpl)
     {
         // extract macro source file from macro name, if macro path does not contain filename,
         // then the macro is assumed to be local
@@ -790,7 +790,7 @@ class PHPTAL
      * only for use in generated template code
      * @access private
      */
-    public function pushContext()
+    final public function pushContext()
     {
         $this->_context = $this->_context->pushContext();
         return $this->_context;
@@ -800,7 +800,7 @@ class PHPTAL
      * only for use in generated template code
      * @access private
      */
-    public function popContext()
+    final public function popContext()
     {
         $this->_context = $this->_context->popContext();
         return $this->_context;
@@ -884,7 +884,7 @@ class PHPTAL
      *
      * @return void
      */
-    public static function setIncludePath()
+    final public static function setIncludePath()
     {
         if (!self::$include_path_set_nesting) {
             self::$include_path_backup = get_include_path();
@@ -896,7 +896,7 @@ class PHPTAL
     /**
      * Restore include path to state before PHPTAL modified it.
      */
-    public static function restoreIncludePath()
+    final public static function restoreIncludePath()
     {
         self::$include_path_set_nesting--;
         if (!self::$include_path_set_nesting) {
