@@ -69,4 +69,4 @@ class ReadableErrorTest extends PHPTAL_TestCase
     }
 }
 
-?>
+

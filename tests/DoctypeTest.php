@@ -54,4 +54,4 @@ class DoctypeTest extends PHPTAL_TestCase
 	}
 }
 
-?>
+

@@ -51,4 +51,4 @@ class MetalSlotTest extends PHPTAL_TestCase
     }
 }
 
-?>
+

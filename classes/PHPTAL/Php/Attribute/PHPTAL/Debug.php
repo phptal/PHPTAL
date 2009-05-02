@@ -32,4 +32,4 @@ class PHPTAL_Php_Attribute_PHPTAL_DEBUG extends PHPTAL_Php_Attribute
     private $_oldMode;
 }
 
-?>
+

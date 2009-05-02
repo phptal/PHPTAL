@@ -392,4 +392,4 @@ class PHPTAL_Php_Transformer
     );
 }
 
-?>
+

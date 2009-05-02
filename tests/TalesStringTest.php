@@ -86,4 +86,4 @@ class TalesStringTest extends PHPTAL_TestCase {
     }
 }
 
-?>
+

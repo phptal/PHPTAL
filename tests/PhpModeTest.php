@@ -36,4 +36,4 @@ class PhpModeTest extends PHPTAL_TestCase
     }
 }
 
-?>
+

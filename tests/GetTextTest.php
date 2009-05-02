@@ -165,4 +165,4 @@ class GetTextTest extends PHPTAL_TestCase
     }
 }
 
-?>
+

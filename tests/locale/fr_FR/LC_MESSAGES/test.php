@@ -14,4 +14,5 @@ Content-Transfer-Encoding: iso-8859-1
     'my second translate key' => 'Deuxième message avec login=${login} et lastCxDate=${lastCxDate} traduit',
     'Welcome ${login}, your last connection date was : ${lastCxDate}' => 'Bienvenue ${login}, votre dernière connection date de ${lastCxDate}',
 );
-?>
+
+

@@ -298,4 +298,4 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     }
 }
 
-?>
+

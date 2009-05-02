@@ -204,4 +204,4 @@ function phptal_tales_my_modifier( $arg, $nothrow )
     return "strtoupper('$arg')";
 }
 
-?>
+
