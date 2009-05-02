@@ -97,7 +97,9 @@ class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
 
         if (preg_match('/^([^:]+):/', $element_qname, $m)) {
             $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
-            if (false === $namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$element_qname>");
+            if (false === $namespace_uri) {
+                throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$element_qname>");
+            }
         } else {
             $namespace_uri = $this->_xmlns->getCurrentDefaultNamespaceURI();
         }
@@ -108,12 +110,15 @@ class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
             if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
-                if (false === $attr_namespace_uri) throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element <$element_qname>");
+                if (false === $attr_namespace_uri) {
+                    throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element <$element_qname>");
+                }
             } else {
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
             }
 
-            if ($this->_xmlns->isHandledNamespace($attr_namespace_uri) && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
+            if ($this->_xmlns->isHandledNamespace($attr_namespace_uri) 
+                && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
                 throw new PHPTAL_ParserException("Unsupported attribute '$qname'");
             }
 
@@ -133,7 +138,9 @@ class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
 
     public function onElementClose($qname)
     {
-        if ($this->_current === $this->documentElement) throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");
+        if ($this->_current === $this->documentElement) {
+            throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");
+        }
         if ($this->_current->getQualifiedName() != $qname) {
             throw new PHPTAL_ParserException("Tag closure mismatch, expected </".$this->_current->getQualifiedName()."> but found </".$qname.">");
         }

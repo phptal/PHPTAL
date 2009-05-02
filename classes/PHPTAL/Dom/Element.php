@@ -354,7 +354,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             switch($attr->getReplacedState()) {
                 case PHPTAL_Dom_Attr::NOT_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName());
-                    if ($codewriter->getOutputMode() !== PHPTAL::HTML5 || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
+                    if ($codewriter->getOutputMode() !== PHPTAL::HTML5 
+                        || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
                         $codewriter->pushHTML('='.$codewriter->quoteAttributeValue($codewriter->interpolateHTML($attr->getValueEscaped())));
                     }
                     break;
@@ -391,8 +392,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         $talAttributes = array();
         foreach($this->attribute_nodes as $index => $attr) {
             // remove handled xml namespaces
-            if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($attr->getQualifiedName(), $attr->getValueEscaped()))
-            {
+            if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($attr->getQualifiedName(), $attr->getValueEscaped())) {
                 unset($this->attribute_nodes[$index]);
             }
             else if ($this->xmlns->isHandledNamespace($attr->getNamespaceURI())) {

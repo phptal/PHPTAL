@@ -271,8 +271,12 @@ class PHPTAL_XmlParser
                 case self::ST_ATTR_KEY:
                     if ($c === '=' || self::isWhiteChar($c)) {
                         $attribute = substr($src, $mark, $i-$mark);
-                        if (!$this->isValidQName($attribute)) $this->raiseError("Invalid attribute name '$attribute'");
-                        if (isset($attributes[$attribute])) $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
+                        if (!$this->isValidQName($attribute)) {
+                            $this->raiseError("Invalid attribute name '$attribute'");
+                        }
+                        if (isset($attributes[$attribute])) {
+                            $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
+                        }
 
                         if ($c === '=') $state = self::ST_ATTR_VALUE;
                         else /* white char */ $state = self::ST_ATTR_EQ;
@@ -285,7 +289,9 @@ class PHPTAL_XmlParser
                 case self::ST_ATTR_EQ:
                     if ($c === '=') {
                         $state = self::ST_ATTR_VALUE;
-                    } elseif (!self::isWhiteChar($c)) $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
+                    } elseif (!self::isWhiteChar($c)) {
+                        $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
+                    }
                     break;
 
                 case self::ST_ATTR_VALUE:

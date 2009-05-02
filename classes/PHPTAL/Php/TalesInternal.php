@@ -132,12 +132,16 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         // see if there are subexpressions, but skip interpolated parts, i.e. ${a/b}/c is 2 parts
         if (preg_match('/^((?:[^$\/]+|\$\$|\${[^}]+}|\$))\/(.+)$/s', $expression, $m))
         {
-            if (!self::checkExpressionPart($m[1]))  throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
+            if (!self::checkExpressionPart($m[1])) {
+                throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected '{$m[1]}' to be variable name");
+            }
 
             $next = self::string($m[1]);
             $expression = self::string($m[2]);
         } else {
-            if (!self::checkExpressionPart($expression)) throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name. Complex expressions need php: modifier.");
+            if (!self::checkExpressionPart($expression)) {
+                throw new PHPTAL_ParserException("Invalid TALES path: '$expression', expected variable name. Complex expressions need php: modifier.");
+            }
 
             $next = self::string($expression);
             $expression = null;

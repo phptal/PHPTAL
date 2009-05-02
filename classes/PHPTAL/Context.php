@@ -227,7 +227,8 @@ class PHPTAL_Context
             return $this->$varname;            // edge case with NULL will be weird
         }
 
-        if (isset($this->_globalContext->$varname)) { // must use isset() to allow custom global contexts with __isset()/__get()
+        // must use isset() to allow custom global contexts with __isset()/__get()
+        if (isset($this->_globalContext->$varname)) {
             return $this->_globalContext->$varname;
         }
 
@@ -393,8 +394,12 @@ function phptal_path_error($base, $path, $current)
         }
     } else $pathinfo = '';
 
-    if (is_array($base)) throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
-    if (is_object($base)) throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
+    if (is_array($base)) {
+        throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
+    }
+    if (is_object($base)) {
+        throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
+    }
     throw new PHPTAL_VariableNotFoundException(ucfirst(gettype($base))." {$basename}doesn't have property '$current'$pathinfo");
 }
 

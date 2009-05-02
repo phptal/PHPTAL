@@ -38,7 +38,11 @@ class PHPTAL_Dom_XmlnsState
         if ($prefix === 'xml') return 'http://www.w3.org/XML/1998/namespace';
 
         // domdefs provides fallback for all known phptal ns
-        return isset($this->prefix_to_uri[$prefix]) ? $this->prefix_to_uri[$prefix] : PHPTAL_Dom_Defs::getInstance()->prefixToNamespaceURI($prefix);
+        if (isset($this->prefix_to_uri[$prefix])) {
+            return $this->prefix_to_uri[$prefix];
+        } else {
+            return PHPTAL_Dom_Defs::getInstance()->prefixToNamespaceURI($prefix);
+        }
     }
 
     /** Returns true if $attName is a valid attribute name, false otherwise. */

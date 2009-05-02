@@ -425,7 +425,9 @@ class PHPTAL
         }
         catch (Exception $e)
         {
-            if ($e instanceof PHPTAL_TemplateException) $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
+            if ($e instanceof PHPTAL_TemplateException) {
+                $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
+            }
             ob_end_clean();
             throw $e;
         }
@@ -502,7 +504,10 @@ class PHPTAL
                 $tpl->setConfigurationFrom($this);
                 $tpl->prepare();
 
-                if (count($this->externalMacroTempaltesCache) > 10) $this->externalMacroTempaltesCache = array(); // keep it small (typically only 1 or 2 external files are used)
+                // keep it small (typically only 1 or 2 external files are used)
+                if (count($this->externalMacroTempaltesCache) > 10) {
+                    $this->externalMacroTempaltesCache = array(); 
+                }
                 $this->externalMacroTempaltesCache[$file] = $tpl;
             }
 
@@ -511,7 +516,9 @@ class PHPTAL
             $this->_context->_file = $tpl->_file;
 
             $fun = $tpl->getFunctionName() . '_' . strtr($macroName,"-","_");
-            if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file", $this->_source->getRealPath());
+            if (!function_exists($fun)) {
+                throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file", $this->_source->getRealPath());
+            }
             try
             {
                 $fun($tpl, $this);
@@ -528,7 +535,9 @@ class PHPTAL
         } else {
             // call local macro
             $fun = $local_tpl->getFunctionName() . '_' . strtr($path,"-","_");
-            if (!function_exists($fun)) throw new PHPTAL_MacroMissingException("Macro '$path' is not defined", $local_tpl->_source->getRealPath());
+            if (!function_exists($fun)) {
+                throw new PHPTAL_MacroMissingException("Macro '$path' is not defined", $local_tpl->_source->getRealPath());
+            }
             $fun( $local_tpl, $this);
         }
     }
@@ -829,7 +838,12 @@ class PHPTAL
             $data = $this->_prefilter->filter($data);
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
-        $generator = new PHPTAL_Php_CodeGenerator($this->getFunctionName(), $this->_source->getRealPath(), $this->_encoding, $this->_outputMode, $this->getCodePath());
+        $generator = new PHPTAL_Php_CodeGenerator(
+            $this->getFunctionName(), 
+            $this->_source->getRealPath(), 
+            $this->_encoding, 
+            $this->_outputMode, 
+            $this->getCodePath());
         $result = $generator->generateCode($tree);
 
         return $result;
