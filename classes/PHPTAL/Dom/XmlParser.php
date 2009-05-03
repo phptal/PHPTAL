@@ -16,11 +16,15 @@
 /**
  * Simple sax like xml parser for PHPTAL.
  *
- * Because PHP Xml parser libraries tends to fail giving a real xml document
- * representation (at the time this file was created, it was impossible to
- * retrieve doctypes, xml declaration, problem with comments and CDATA) this
- * parser was created and can be manipulated to accept some user errors
- * like < and < in attribute values or inside text nodes.
+ * At the time this parser was created, standard PHP libraries were not suitable
+ * (could not retrieve doctypes, xml declaration, problem with comments and CDATA).
+ * 
+ * There are still some problems: XML parsers don't care about exact format of enties
+ * or CDATA sections (PHPTAL tries to preserve them), 
+ * <?php ?> blocks are not allowed in attributes.
+ * 
+ * This parser failed to enforce some XML well-formedness constraints,
+ * and there are ill-formed templates "in the wild" because of this.
  *
  * @package PHPTAL
  * @subpackage Dom
