@@ -44,6 +44,11 @@ class PHPTAL_RepeatController implements Iterator
     protected $iterator;
     public $index;
     public $end;
+    
+    /**
+     * computed lazily
+     */
+    private $length = null;
 
     /**
      * Construct a new RepeatController.
@@ -115,7 +120,6 @@ class PHPTAL_RepeatController implements Iterator
         return $valid;
     }
 
-    private $length = null;
     public function length()
     {
         if ($this->length === null) {

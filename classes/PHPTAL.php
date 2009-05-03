@@ -49,6 +49,7 @@ PHPTAL::restoreIncludePath();
  */
 class PHPTAL
 {
+    //{{{
     /**
      * constants for output mode
      * @see setOutputMode()
@@ -57,6 +58,107 @@ class PHPTAL
     const XML   = 222;
     const HTML5 = 555;
 
+    protected $_prefilter = null;
+    protected $_postfilter = null;
+
+    /**
+     *  list of template source repositories
+     */
+    protected $_repositories = array();
+    /**
+     *  template path
+     */
+    protected $_path = null;
+    /**
+     *  template source resolvers
+     */
+    protected $_resolvers = array();
+    /**
+     *  template source (only set when not working with file)
+     */
+    protected $_source = null;
+    /**
+     * destination of PHP intermediate file
+     */
+    protected $_codeFile = null;
+    /**
+     * php function generated for the template
+     */
+    protected $_functionName = null;
+    /**
+     * set to true when template is ready for execution
+     */
+    protected $_prepared = false;
+
+    /**
+     * associative array of phptal:id => PHPTAL_Trigger
+     */
+    protected $_triggers = array();
+    /**
+     * i18n translator
+     */
+    protected $_translator = null;
+
+    /**
+     * global execution context
+     */
+    protected $_globalContext = null;
+    /**
+     * current execution context
+     */
+    protected $_context = null;
+    /**
+     * current template file (changes within macros)
+     */
+    public  $_file = false;
+    /**
+     * list of on-error caught exceptions
+     */
+    protected $_errors = array();
+
+    /**
+     * encoding used throughout
+     */
+    protected $_encoding = 'UTF-8';
+
+    /**
+     * type of syntax used in generated templates
+     */
+    protected $_outputMode = PHPTAL::XHTML;
+    /**
+     * should all comments be stripped
+     */
+    protected $_stripComments = false;
+
+    // configuration properties
+
+    /**
+     * don't use code cache
+     */
+    protected $_forceReparse = null;
+
+    /**
+     * directory where code cache is
+     */
+    protected $_phpCodeDestination;
+    protected $_phpCodeExtension = 'php';
+
+    /**
+     * number of days
+     */
+    protected $_cacheLifetime = 30;
+
+    /**
+     * 1/x
+     */
+    protected $_cachePurgeFrequency = 30;
+    
+    /**
+     * speeds up calls to external templates
+     */
+    private $externalMacroTempaltesCache = array();
+    //}}}
+    
     /**
      * PHPTAL Constructor.
      *
@@ -469,8 +571,6 @@ class PHPTAL
         $this->_prefilter = &$from->_prefilter;
         $this->_postfilter = &$from->_postfilter;
     }
-
-    private $externalMacroTempaltesCache = array();
 
     /**
      * Execute a template macro.
@@ -918,100 +1018,5 @@ class PHPTAL
             set_include_path(self::$include_path_backup);
         }
     }
-
-    protected $_prefilter = null;
-    protected $_postfilter = null;
-
-    /**
-     *  list of template source repositories
-     */
-    protected $_repositories = array();
-    /**
-     *  template path
-     */
-    protected $_path = null;
-    /**
-     *  template source resolvers
-     */
-    protected $_resolvers = array();
-    /**
-     *  template source (only set when not working with file)
-     */
-    protected $_source = null;
-    /**
-     * destination of PHP intermediate file
-     */
-    protected $_codeFile = null;
-    /**
-     * php function generated for the template
-     */
-    protected $_functionName = null;
-    /**
-     * set to true when template is ready for execution
-     */
-    protected $_prepared = false;
-
-    /**
-     * associative array of phptal:id => PHPTAL_Trigger
-     */
-    protected $_triggers = array();
-    /**
-     * i18n translator
-     */
-    protected $_translator = null;
-
-    /**
-     * global execution context
-     */
-    protected $_globalContext = null;
-    /**
-     * current execution context
-     */
-    protected $_context = null;
-    /**
-     * current template file (changes within macros)
-     */
-    public  $_file = false;
-    /**
-     * list of on-error caught exceptions
-     */
-    protected $_errors = array();
-
-    /**
-     * encoding used throughout
-     */
-    protected $_encoding = 'UTF-8';
-
-    /**
-     * type of syntax used in generated templates
-     */
-    protected $_outputMode = PHPTAL::XHTML;
-    /**
-     * should all comments be stripped
-     */
-    protected $_stripComments = false;
-
-    // configuration properties
-
-    /**
-     * don't use code cache
-     */
-    protected $_forceReparse = null;
-
-    /**
-     * directory where code cache is
-     */
-    protected $_phpCodeDestination;
-    protected $_phpCodeExtension = 'php';
-
-    /**
-     * number of days
-     */
-    protected $_cacheLifetime = 30;
-
-    /**
-     * 1/x
-     */
-    protected $_cachePurgeFrequency = 30;
 }
 

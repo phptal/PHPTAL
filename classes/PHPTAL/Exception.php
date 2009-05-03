@@ -72,7 +72,9 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
  * @package PHPTAL
  * @subpackage exception
  */
-class PHPTAL_IOException extends PHPTAL_Exception {}
+class PHPTAL_IOException extends PHPTAL_Exception 
+{
+}
 
 /**
  * Parse error in TALES expression.
@@ -80,7 +82,9 @@ class PHPTAL_IOException extends PHPTAL_Exception {}
  * @package PHPTAL
  * @subpackage exception
  */
-class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception {}
+class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception 
+{
+}
 
 /**
  * You're probably not using PHPTAL class properly
@@ -88,7 +92,9 @@ class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception {}
  * @package PHPTAL
  * @subpackage exception
  */
-class PHPTAL_ConfigurationException extends PHPTAL_Exception {}
+class PHPTAL_ConfigurationException extends PHPTAL_Exception 
+{
+}
 
 /**
  * Runtime error in TALES expression
@@ -96,7 +102,9 @@ class PHPTAL_ConfigurationException extends PHPTAL_Exception {}
  * @package PHPTAL
  * @subpackage exception
  */
-class PHPTAL_VariableNotFoundException extends PHPTAL_TemplateException {}
+class PHPTAL_VariableNotFoundException extends PHPTAL_TemplateException
+{
+}
 
 /**
  * XML well-formedness errors and alike.
@@ -104,7 +112,9 @@ class PHPTAL_VariableNotFoundException extends PHPTAL_TemplateException {}
  * @package PHPTAL
  * @subpackage exception
  */
-class PHPTAL_ParserException extends PHPTAL_TemplateException {}
+class PHPTAL_ParserException extends PHPTAL_TemplateException
+{
+}
 
 /**
  * Wrong macro name in metal:use-macro
@@ -112,5 +122,7 @@ class PHPTAL_ParserException extends PHPTAL_TemplateException {}
  * @package PHPTAL
  * @subpackage exception
  */
-class PHPTAL_MacroMissingException extends PHPTAL_TemplateException {}
+class PHPTAL_MacroMissingException extends PHPTAL_TemplateException
+{
+}
 

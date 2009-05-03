@@ -20,14 +20,27 @@
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_CodeWriter
-{
+{    
+    /**
+     * max id of variable to give as temp
+     */
+    private $temp_var_counter=0;
+    /**
+     * stack with free'd variables
+     */
+    private $temp_recycling=array();
+    
+    /**
+     * keeps track of seen functions for function_exists
+     */
+    private $known_functions = array();
+
+    
     public function __construct(PHPTAL_Php_State $state)
     {
         $this->_state = $state;
     }
 
-    private $temp_var_counter=0;
-    private $temp_recycling=array();
     public function createTempVariable()
     {
         if (count($this->temp_recycling)) return array_shift($this->temp_recycling);
@@ -200,8 +213,6 @@ class PHPTAL_Php_CodeWriter
     {
         return isset($this->known_functions[$this->_functionPrefix . $name]);
     }
-
-    private $known_functions = array();
 
     public function doFunction($name, $params)
     {

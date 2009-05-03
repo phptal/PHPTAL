@@ -25,7 +25,11 @@ class PHPTAL_Context
     public $_xmlDeclaration;
     public $_docType;
     private $_nothrow;
-
+    private $_slots = array();
+    private $_slotsStack = array();
+    private $_parentContext = null;
+    private $_globalContext = null;
+    
     public function __construct()
     {
         $this->repeat = new StdClass();
@@ -242,11 +246,6 @@ class PHPTAL_Context
 
         throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->_file, $this->_line);
     }
-
-    private $_slots = array();
-    private $_slotsStack = array();
-    private $_parentContext = null;
-    private $_globalContext = null;
 }
 
 /**

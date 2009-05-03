@@ -20,6 +20,8 @@
  */
 class PHPTAL_FileSource implements PHPTAL_Source
 {
+    private $_path;
+    
     public function __construct($path)
     {
         $this->_path = realpath($path);
@@ -46,8 +48,6 @@ class PHPTAL_FileSource implements PHPTAL_Source
         }
         return $content;
     }
-
-    private $_path;
 }
 
 /**

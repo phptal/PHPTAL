@@ -32,16 +32,16 @@ PHPTAL::restoreIncludePath();
  */
 class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
 {
+    private $_vars = array();
+    private $_currentDomain;
+    private $_encoding = 'UTF-8';
+    private $_canonicalize = false;
+    
     public function __construct()
     {
         if (!function_exists('gettext')) throw new PHPTAL_ConfigurationException("Gettext not installed");
         $this->useDomain("messages"); // PHP bug #21965
     }
-
-    private $_vars = array();
-    private $_currentDomain;
-    private $_encoding = 'UTF-8';
-    private $_canonicalize = false;
 
     /**
      * set encoding that is used by template and is expected from gettext

@@ -38,6 +38,12 @@ class PHPTAL_Php_Attribute_TAL_Define
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
+    private $tmp_content_var;
+    private $_buffered = false;
+    private $_defineScope = null;
+    private $_defineVar = null;
+    private $_pushedContext = false;
+    
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $expressions = $codewriter->splitExpression($this->expression);
@@ -153,8 +159,6 @@ implements PHPTAL_Php_TalesChainReader
         return array($defineScope, $defineVar, $exp);
     }
 
-
-    private $tmp_content_var;
     private function bufferizeContent(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (!$this->_buffered) {
@@ -175,10 +179,5 @@ implements PHPTAL_Php_TalesChainReader
             $codewriter->doSetVar('$ctx->'.$this->_defineVar, $code);
         }
     }
-
-    private $_buffered = false;
-    private $_defineScope = null;
-    private $_defineVar = null;
-    private $_pushedContext = false;
 }
 

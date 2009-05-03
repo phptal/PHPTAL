@@ -67,6 +67,15 @@ require_once 'PHPTAL/Namespace/PHPTAL.php';
  */
 abstract class PHPTAL_NamespaceAttribute
 {
+    /** Attribute name without the namespace: prefix */
+    private $local_name;
+
+    /** [0 - 1000] */
+    private $_priority;
+
+    /** PHPTAL_Namespace */
+    private $_namespace;
+    
     /**
      * @param string $name The attribute name
      * @param int $priority Attribute execution priority
@@ -93,15 +102,6 @@ abstract class PHPTAL_NamespaceAttribute
     {
         return $this->_namespace->createAttributeHandler($this, $tag, $expression);
     }
-
-    /** Attribute name without the namespace: prefix */
-    private $local_name;
-
-    /** [0 - 1000] */
-    private $_priority;
-
-    /** PHPTAL_Namespace */
-    private $_namespace;
 }
 
 /**
@@ -138,7 +138,8 @@ class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute
 abstract class PHPTAL_Namespace
 {
     private $prefix, $namespace_uri;
-
+    protected $_attributes;
+    
     public function __construct($prefix, $namespace_uri)
     {
         $this->_attributes = array();
@@ -178,8 +179,6 @@ abstract class PHPTAL_Namespace
     }
 
     abstract public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_Dom_Element $tag, $expression);
-
-    protected $_attributes;
 }
 
 /**

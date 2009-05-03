@@ -28,6 +28,10 @@
  */
 class PHPTAL_XmlParser
 {
+    private $_file;
+    private $_line;
+    private $_source;
+    
     // available parser states
     const ST_ROOT = 0;
     const ST_TEXT = 1;
@@ -388,10 +392,6 @@ class PHPTAL_XmlParser
     {
         throw new PHPTAL_ParserException($errStr, $this->_file, $this->_line);
     }
-
-    private $_file;
-    private $_line;
-    private $_source;
 }
 
 /**

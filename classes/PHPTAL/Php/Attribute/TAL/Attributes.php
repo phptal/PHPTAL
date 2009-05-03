@@ -39,6 +39,14 @@ class PHPTAL_Php_Attribute_TAL_Attributes
 extends PHPTAL_Php_Attribute
 implements PHPTAL_Php_TalesChainReader
 {
+    /** before creates several variables that need to be freed in after */
+    private $vars_to_recycle = array();
+    
+    /**
+     * value for default keyword
+     */
+    private $_default_escaped;
+    
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes using ; delimiter
@@ -112,7 +120,6 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
 
-    private $_default_escaped;
     private function prepareChainedAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $chain)
     {
         $this->_default_escaped = false;
@@ -145,8 +152,6 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter->doEnd();
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
-
-    private $vars_to_recycle = array();
 
     private function getVarName($qname, PHPTAL_Php_CodeWriter $codewriter)
     {

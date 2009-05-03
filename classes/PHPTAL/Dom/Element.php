@@ -351,12 +351,13 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     private function generateAttributes(PHPTAL_Php_CodeWriter $codewriter)
     {
         foreach($this->getAttributeNodes() as $attr) {
-            switch($attr->getReplacedState()) {
+            switch ($attr->getReplacedState()) {
                 case PHPTAL_Dom_Attr::NOT_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName());
                     if ($codewriter->getOutputMode() !== PHPTAL::HTML5 
                         || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
-                        $codewriter->pushHTML('='.$codewriter->quoteAttributeValue($codewriter->interpolateHTML($attr->getValueEscaped())));
+                        $html = $codewriter->interpolateHTML($attr->getValueEscaped());
+                        $codewriter->pushHTML('='.$codewriter->quoteAttributeValue($html));
                     }
                     break;
 

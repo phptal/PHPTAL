@@ -22,6 +22,15 @@
 class PHPTAL_Dom_Attr
 {
     private $value_escaped, $qualified_name, $namespace_uri, $encoding;
+    /**
+     * attribute's value can be overriden with a variable
+     */
+    private $phpVariable;
+    const HIDDEN = -1;
+    const NOT_REPLACED = 0;
+    const VALUE_REPLACED = 1;
+    const FULLY_REPLACED = 2;
+    private $replacedState = 0;
 
     /**
      * @param string $qualified_name attribute name with prefix
@@ -145,8 +154,7 @@ class PHPTAL_Dom_Attr
         $this->phpVariable = NULL;
         $this->setPHPCode($code);
     }
-
-    private $phpVariable;
+    
     /**
      * if value was overwritten with variable, get its name
      */
@@ -154,12 +162,6 @@ class PHPTAL_Dom_Attr
     {
         return $this->phpVariable;
     }
-
-    const HIDDEN = -1;
-    const NOT_REPLACED = 0;
-    const VALUE_REPLACED = 1;
-    const FULLY_REPLACED = 2;
-    private $replacedState = 0;
 
     /**
      * whether getValueEscaped() returns real value or PHP code

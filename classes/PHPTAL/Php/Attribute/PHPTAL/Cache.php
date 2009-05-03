@@ -47,7 +47,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
         $cache_len = $matches[1];
         if (!is_numeric($cache_len)) $cache_len = '$ctx->'.$cache_len;
-        switch($matches[2])
+        switch ($matches[2])
         {
             case 'd': $cache_len .= '*24'; /* no break */
             case 'h': $cache_len .= '*60'; /* no break */
