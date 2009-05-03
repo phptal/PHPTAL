@@ -33,6 +33,7 @@
     <phingcall target="build"/>
     <phingcall target="pear-package"/>
     <phingcall target="tar"/>
+    <phingcall target="tar-pear"/>
   </target>
 
   <target name="doc">
@@ -41,6 +42,14 @@
 
   <target name="test">
     <php expression="include 'tests/run-tests.php'"/>
+    
+    <!-- built-in task displays progres poorly -->
+    <!--phpunit haltonfailure="true" haltonerror="true">
+      <formatter type="plain" usefile="false"/>
+      <batchtest>
+        <fileset dir="tests"><include name="*Test.php"/></fileset>
+      </batchtest>  
+    </phpunit-->
   </target>
 
   <target name="versioncheck" unless="version">
@@ -63,10 +72,9 @@
       <fileset refid="classes"/>
       <fileset refid="gendocs"/>    
       <fileset refid="tests"/>  
-    </copy>
-      
+    </copy>    
   </target>
-
+  
   <target name="pear-package" depends="build">
     <pearpkg2      
       name="${phing.project.name}"
@@ -142,7 +150,30 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
   <target name="tar" depends="pear-package,build">
     <property name="tarfile" value="${build.base.dir}/${pkgname}.tar.gz"/>
     <delete file="${tarfile}"/>
-    <tar destfile="${tarfile}" basedir="${build.base.dir}"/>
+    <tar destfile="${tarfile}">
+      <fileset dir="${build.base.dir}">
+     	 <include name="${pkgname}/**" />
+     	 <include name="package.xml" />
+      </fileset>      
+    </tar>
+  </target>
+
+  <target name="pearify">
+    <!-- Finds all PHP files that don't seem to have "?>" and adds it. 
+         This is needed to satisfy PEAR coding standard without polluting PHPTAL codebase with closing tags. -->
+    <exec command="find '${build.src.dir}' -name \*.php \! -exec egrep -q '^\?>$' {} \; -exec sh -c 'printf >>'{}' &quot;\n?>\n&quot;' \;"/>  
+  </target>  
+
+  <target name="tar-pear" depends="tar">
+    <phingcall target="pearify"/>
+    <property name="tarfilepear" value="${build.base.dir}/${pkgname}-pear.tar.gz"/>
+    <delete file="${tarfilepear}"/>
+    <tar destfile="${tarfilepear}">
+      <fileset dir="${build.base.dir}">
+     	 <include name="${pkgname}/**" />
+     	 <include name="package.xml" />
+      </fileset>
+    </tar>
   </target>
 
 </project>

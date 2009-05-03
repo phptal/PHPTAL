@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_0alpha12');
+define('PHPTAL_VERSION', '1_2_0alpha13');
 
 PHPTAL::setIncludePath();
 
@@ -157,6 +157,17 @@ class PHPTAL
      * speeds up calls to external templates
      */
     private $externalMacroTempaltesCache = array();
+    
+    /**
+     * restore_include_path() resets path to default in ini, breaking application's custom paths,
+     * so a custom backup is necessary.
+     */
+    private static $include_path_backup;
+
+    /**
+     * keeps track of multiple calls to setIncludePath()
+     */
+    private static $include_path_set_nesting = 0;
     //}}}
     
     /**
@@ -979,17 +990,6 @@ class PHPTAL
             throw new PHPTAL_IOException('Unable to locate template file '.$this->_path);
         }
     }
-
-    /**
-     * restore_include_path() resets path to default in ini, breaking application's custom paths,
-     * so a custom backup is necessary.
-     */
-    private static $include_path_backup;
-
-    /**
-     * keeps track of multiple calls to setIncludePath()
-     */
-    private static $include_path_set_nesting = 0;
 
     /**
      * Set include path to contain PHPTAL's directory.

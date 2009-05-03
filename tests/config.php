@@ -23,7 +23,9 @@ if (!class_exists('PHPTAL'))
     // PEAR version (or another in include path) causing serious WTF!?s.
     if (file_exists(dirname(__FILE__).'/../classes/PHPTAL.php')) {
         require_once dirname(__FILE__).'/../classes/PHPTAL.php';        
-    } else {    
+    } elseif (file_exists(dirname(__FILE__).'/../PHPTAL.php')) {
+        require_once dirname(__FILE__).'/../PHPTAL.php';        
+    } else {
         require_once "PHPTAL.php";
     }
     if (strlen(ob_get_clean()))
