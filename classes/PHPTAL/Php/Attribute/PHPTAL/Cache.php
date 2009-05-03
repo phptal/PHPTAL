@@ -31,7 +31,7 @@
  *  <ul phptal:cache="1d per object/id">...</ul> <!-- <ul> be cached for one day, separately for each object. -->
  *
  * @package PHPTAL
- * @subpackage php.attribute.phptal
+ * @subpackage Php.attribute.phptal
 */
 class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 {
@@ -46,9 +46,10 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         }
 
         $cache_len = $matches[1];
-        if (!is_numeric($cache_len)) $cache_len = '$ctx->'.$cache_len;
-        switch ($matches[2])
-        {
+        if (!is_numeric($cache_len)) {
+            $cache_len = '$ctx->'.$cache_len;
+        }
+        switch ($matches[2]) {
             case 'd': $cache_len .= '*24'; /* no break */
             case 'h': $cache_len .= '*60'; /* no break */
             case 'm': $cache_len .= '*60'; /* no break */

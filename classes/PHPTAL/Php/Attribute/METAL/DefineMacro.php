@@ -26,14 +26,14 @@
  *
  * PHPTAL:
  *
- *      <?php function XXX_macro_copyright( $tpl ) { ? >
+ *      <?php function XXX_macro_copyright($tpl) { ? >
  *        <p>
  *        Copyright 2001, <em>Foobar</em> Inc.
  *        </p>
  *      <?php } ? >
  *
  * @package PHPTAL
- * @subpackage php.attribute.metal
+ * @subpackage Php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute

@@ -29,7 +29,7 @@
  *
  * PHPTAL: (access to slots may be renamed)
  *
- *  <?php function XXXX_macro_sidebar( $tpl ) { ? >
+ *  <?php function XXXX_macro_sidebar($tpl) { ? >
  *      <table>
  *        <tr><th>Links</th></tr>
  *        <tr>
@@ -43,7 +43,7 @@
  *  <?php } ? >
  *
  * @package PHPTAL
- * @subpackage php.attribute.metal
+ * @subpackage Php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute

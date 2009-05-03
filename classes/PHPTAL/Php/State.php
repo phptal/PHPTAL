@@ -16,7 +16,7 @@ require_once 'PHPTAL/Php/Tales.php';
 
 /**
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  */
 class PHPTAL_Php_State
 {

@@ -20,7 +20,7 @@ require_once 'PHPTAL/Php/Attribute/I18N/Attributes.php';
 
 /**
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_Namespace_I18N extends PHPTAL_BuiltinNamespace
 {

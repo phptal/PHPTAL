@@ -14,7 +14,7 @@
  */
 /**
  * @package PHPTAL
- * @subpackage php.attribute.phptal
+ * @subpackage Php.attribute.phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute

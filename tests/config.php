@@ -28,8 +28,7 @@ if (!class_exists('PHPTAL'))
     } else {
         require_once "PHPTAL.php";
     }
-    if (strlen(ob_get_clean()))
-    {
+    if (strlen(ob_get_clean())) {
         throw new Exception("Inclusion of PHPTAL causes output");
     }
 }
@@ -64,8 +63,7 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
     }    
 }
 
-if (function_exists('date_default_timezone_set'))
-{
+if (function_exists('date_default_timezone_set')) {
     date_default_timezone_set(@date_default_timezone_get());
 }
 

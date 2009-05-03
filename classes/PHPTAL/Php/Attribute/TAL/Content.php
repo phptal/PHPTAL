@@ -26,7 +26,7 @@
  *
  *
  * @package PHPTAL
- * @subpackage php.attribute.tal
+ * @subpackage Php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_TAL_Content
@@ -70,15 +70,12 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
-        if (!$islast)
-        {
+        if (!$islast) {
             $var = $executor->getCodeWriter()->createTempVariable();
             $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
             $this->doEchoAttribute($executor->getCodeWriter(), $var);
             $executor->getCodeWriter()->recycleTempVariable($var);
-        }
-        else
-        {
+        } else {
             $executor->doElse();
             $this->doEchoAttribute($executor->getCodeWriter(), $exp);
         }

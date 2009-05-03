@@ -35,7 +35,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
 
         $expected = <<<EOS
 <?php
-function test( \$tpl ) {
+function test(\$tpl) {
 \$ctx->setXmlDeclaration('<?xml version="1.0"?>') ;?>
 <html>
   <head>
@@ -68,8 +68,8 @@ EOS;
         $codewriter->doEnd();
         $res = $codewriter->getResult();
         $exp = <<<EOS
-<?php function test2( \$tpl ) {?>test2<?php}?>
-<?php function test1( \$tpl ) {?>test1test1<?php}?>
+<?php function test2(\$tpl) {?>test2<?php}?>
+<?php function test1(\$tpl) {?>test1test1<?php}?>
 EOS;
         $res = $this->trimCode($res);
         $exp = $this->trimCode($exp);

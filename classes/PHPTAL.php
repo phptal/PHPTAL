@@ -359,10 +359,9 @@ class PHPTAL
      */
     public function setEncoding($enc)
     {
-        if ($enc != $this->_encoding)
-        {
-        $this->_encoding = $enc;
-        if ($this->_translator) $this->_translator->setEncoding($enc);
+        if ($enc != $this->_encoding) {
+            $this->_encoding = $enc;
+            if ($this->_translator) $this->_translator->setEncoding($enc);
 
             $this->_prepared = false;
             $this->_functionName = null;
@@ -795,9 +794,11 @@ class PHPTAL
     {
         $filename = $this->getCodePath();
         $cacheFiles = glob($filename . '?*');
-        if ($cacheFiles) foreach ($cacheFiles as $file) {
-            if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
-            @unlink($file);
+        if ($cacheFiles) {
+            foreach ($cacheFiles as $file) {
+                if (substr($file, 0, strlen($filename)) !== $filename) continue; // safety net
+                @unlink($file);
+            }
         }
         $this->_prepared = false;
     }
@@ -945,8 +946,9 @@ class PHPTAL
         $data = $this->_source->getData();
         $realpath = $this->_source->getRealPath();
 
-        if ($this->_prefilter)
+        if ($this->_prefilter) {
             $data = $this->_prefilter->filter($data);
+        }
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
         $generator = new PHPTAL_Php_CodeGenerator(

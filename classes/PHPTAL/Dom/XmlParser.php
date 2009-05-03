@@ -23,7 +23,7 @@
  * like < and < in attribute values or inside text nodes.
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  * @see PHPTAL_DOM_DocumentBuilder
  */
 class PHPTAL_XmlParser
@@ -396,7 +396,7 @@ class PHPTAL_XmlParser
 
 /**
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 interface PHPTAL_DocumentBuilder
 {

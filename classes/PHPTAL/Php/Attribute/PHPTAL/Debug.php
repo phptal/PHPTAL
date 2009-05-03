@@ -14,7 +14,7 @@
  */
 /**
  * @package PHPTAL
- * @subpackage php.attribute.phptal
+ * @subpackage Php.attribute.phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_PHPTAL_DEBUG extends PHPTAL_Php_Attribute
@@ -26,7 +26,7 @@ class PHPTAL_Php_Attribute_PHPTAL_DEBUG extends PHPTAL_Php_Attribute
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->setDebug( $this->_oldMode );
+        $codewriter->setDebug($this->_oldMode);
     }
 
     private $_oldMode;

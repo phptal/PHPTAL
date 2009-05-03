@@ -32,7 +32,7 @@
  * IN PHPTAL: attributes will not work on structured replace.
  *
  * @package PHPTAL
- * @subpackage php.attribute.tal
+ * @subpackage Php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_TAL_Attributes
@@ -124,8 +124,7 @@ implements PHPTAL_Php_TalesChainReader
     {
         $this->_default_escaped = false;
         $this->_attribute = $qname;
-        if ($default_attr = $this->phpelement->getAttributeNode($qname))
-        {
+        if ($default_attr = $this->phpelement->getAttributeNode($qname)) {
             $this->_default_escaped = $default_attr->getValueEscaped();
         }
         $this->_attkey = $this->getVarName($qname, $codewriter);
@@ -137,12 +136,9 @@ implements PHPTAL_Php_TalesChainReader
     {
         $attkey = $this->getVarName($qname, $codewriter);
 
-        if ($codewriter->getOutputMode() === PHPTAL::HTML5)
-        {
+        if ($codewriter->getOutputMode() === PHPTAL::HTML5) {
             $value  = "' $qname'";
-        }
-        else
-        {
+        } else {
             $value  = "' $qname=\"$qname\"'";
         }
         $codewriter->doIf($code);

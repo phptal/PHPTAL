@@ -25,7 +25,7 @@
  *
  *
  * @package PHPTAL
- * @subpackage php.attribute.i18n
+ * @subpackage Php.attribute.i18n
  */
 class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
 {

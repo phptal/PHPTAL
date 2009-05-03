@@ -20,7 +20,7 @@ require_once 'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
 
 /**
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
 {

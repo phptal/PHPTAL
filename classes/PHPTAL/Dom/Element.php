@@ -25,7 +25,7 @@ interface PHPTAL_Php_Tree
  * Document Tag representation.
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 {
@@ -57,14 +57,12 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         foreach($attribute_nodes as $index => $attr)
         {
             // it'll work only when qname == localname, which is good
-            if ($this->xmlns->isValidAttributeNS($namespace_uri, $attr->getQualifiedName()))
-            {
+            if ($this->xmlns->isValidAttributeNS($namespace_uri, $attr->getQualifiedName())) {
                 $this->attribute_nodes[$index] = new PHPTAL_Dom_Attr($attr->getQualifiedName(), $namespace_uri, $attr->getValueEscaped(), $attr->getEncoding());
             }
         }
 
-        if ($this->xmlns->isHandledNamespace($this->namespace_uri))
-        {
+        if ($this->xmlns->isHandledNamespace($this->namespace_uri)) {
             $this->headFootDisabled = true;
         }
 
@@ -332,7 +330,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             $codewriter->doIf($this->footPrintCondition);
         }
 
-        $codewriter->pushHTML( '</'.$this->qualifiedName.'>' );
+        $codewriter->pushHTML('</'.$this->qualifiedName.'>');
 
         if ($this->footPrintCondition) {
             $codewriter->doEnd();

@@ -19,7 +19,7 @@
  * @todo this might be moved to CDATA processing in Element
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
 {
@@ -32,8 +32,7 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
         // in HTML5 must limit it to <script> and <style>
         if ($mode === PHPTAL::HTML5 && $inCDATAelement) {
             $codewriter->pushHTML($codewriter->interpolateCDATA(str_replace('</', '<\/', $value)));
-        }
-        elseif (($mode === PHPTAL::XHTML && $inCDATAelement)  // safe for text/html
+        } elseif (($mode === PHPTAL::XHTML && $inCDATAelement)  // safe for text/html
              || ($mode === PHPTAL::XML && preg_match('/[<>&]/', $value))  // non-useless in XML
              || ($mode !== PHPTAL::HTML5 && preg_match('/<\?|\${structure/', $value)))  // hacks with structure (in X[HT]ML) may need it
         {
@@ -41,8 +40,7 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
             if ($mode === PHPTAL::XHTML) $value = str_replace('</', '<\/', $value);
 
             $codewriter->pushHTML($codewriter->interpolateCDATA('<![CDATA['.$value.']]>'));
-        }
-        else {
+        } else {
             $codewriter->pushHTML($codewriter->interpolateHTML(htmlspecialchars($value)));
         }
     }

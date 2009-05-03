@@ -25,7 +25,7 @@ require_once 'PHPTAL/Php/Attribute/TAL/OmitTag.php';
 
 /**
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_Namespace_TAL extends PHPTAL_BuiltinNamespace
 {

@@ -19,7 +19,7 @@ require_once 'PHPTAL/Dom/CDATASection.php';
 
 /**
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_Comment extends PHPTAL_Dom_Node
 {
@@ -35,7 +35,7 @@ class PHPTAL_Dom_Comment extends PHPTAL_Dom_Node
  * Document text data representation.
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_Text extends PHPTAL_Dom_Node
 {
@@ -51,7 +51,7 @@ class PHPTAL_Dom_Text extends PHPTAL_Dom_Node
  * processing instructions, including <?php blocks
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_ProcessingInstruction extends PHPTAL_Dom_Node
 {
@@ -65,7 +65,7 @@ class PHPTAL_Dom_ProcessingInstruction extends PHPTAL_Dom_Node
  * Document doctype representation.
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_DocumentType extends PHPTAL_Dom_Node
 {
@@ -80,7 +80,7 @@ class PHPTAL_Dom_DocumentType extends PHPTAL_Dom_Node
  * XML declaration node.
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_Node
 {

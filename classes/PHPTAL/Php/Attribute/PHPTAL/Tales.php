@@ -14,7 +14,7 @@
  */
 /**
  * @package PHPTAL
- * @subpackage php.attribute.phptal
+ * @subpackage Php.attribute.phptal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
@@ -35,12 +35,12 @@ class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
             );
         }
 
-        $this->_oldMode = $codewriter->setTalesMode( $mode );
+        $this->_oldMode = $codewriter->setTalesMode($mode);
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->setTalesMode( $this->_oldMode );
+        $codewriter->setTalesMode($this->_oldMode);
     }
 
     private $_oldMode;

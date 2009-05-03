@@ -15,7 +15,7 @@
 
 /**
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  */
 interface PHPTAL_Php_TalesChainReader
 {
@@ -26,7 +26,7 @@ interface PHPTAL_Php_TalesChainReader
 
 /**
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  */
 class PHPTAL_Php_TalesChainExecutor
 {

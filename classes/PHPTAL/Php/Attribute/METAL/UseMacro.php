@@ -31,7 +31,7 @@
  *
  *
  * @package PHPTAL
- * @subpackage php.attribute.metal
+ * @subpackage Php.attribute.metal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
@@ -107,8 +107,9 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
      */
     private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Dom_Node $phpelement)
     {
-        if (false == ($phpelement instanceOf PHPTAL_Dom_Element))
+        if (false == ($phpelement instanceOf PHPTAL_Dom_Element)) {
             return;
+        }
 
         // if the tag contains one of the allowed attribute, we generate it
         foreach (self::$ALLOWED_ATTRIBUTES as $qname => $uri) {

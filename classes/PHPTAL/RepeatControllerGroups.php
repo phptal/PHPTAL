@@ -18,7 +18,7 @@
  * Keeps track of variable contents when using grouping in a path (first/ and last/)
  *
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  */
 class PHPTAL_RepeatControllerGroups
 {
@@ -51,7 +51,7 @@ class PHPTAL_RepeatControllerGroups
      * @return Mixed    True if the first item in the group, false if not and
      *                  this same object if the path is not finished
      */
-    public function first( $data )
+    public function first($data)
     {
         if ( !is_array($data) && !is_object($data) && !is_null($data) ) {
 
@@ -85,7 +85,7 @@ class PHPTAL_RepeatControllerGroups
      * @return Mixed    True if the last item in the group, false if not and
      *                  this same object if the path is not finished
      */
-    public function last( $data )
+    public function last($data)
     {
         if ( !is_array($data) && !is_object($data) && !is_null($data) ) {
 
@@ -96,7 +96,7 @@ class PHPTAL_RepeatControllerGroups
                 if (empty($this->dict['L'])) {
                     $this->dict['L'] = $hash;
                     $res = false;
-                } elseif ( $this->dict['L'] !== $hash ) {
+                } elseif ($this->dict['L'] !== $hash) {
                     $this->dict['L'] = $hash;
                     $res = true;
                 } else {
@@ -123,7 +123,7 @@ class PHPTAL_RepeatControllerGroups
      *
      * @todo    replace the phptal_path() with custom code
      */
-    public function __get( $var )
+    public function __get($var)
     {
         // When the iterator item is empty we just let the tal
         // expression consume by continuously returning this
@@ -133,18 +133,18 @@ class PHPTAL_RepeatControllerGroups
         }
 
         // Find the requested variable
-        $value = phptal_path( $this->data, $var, true );
+        $value = phptal_path($this->data, $var, true);
 
         // Check if it's an object or an array
         if ( is_array($value) || is_object($value) ) {
             // Move the context to the requested variable and return
             $this->data = $value;
-            $this->addVarName( $var );
+            $this->addVarName($var);
             return $this;
         }
 
         // get a hash of the variable contents
-        $hash = md5( $value );
+        $hash = md5($value);
 
         // compute a path for the variable to use as dictionary key
         $path = $this->branch . $this->getVarPath() . $var;
@@ -157,7 +157,7 @@ class PHPTAL_RepeatControllerGroups
                 $res = $this->branch === 'F';
             } else {
                 // Check if the value has changed
-                if ( $this->dict[$path] !== $hash ) {
+                if ($this->dict[$path] !== $hash) {
                     $this->dict[$path] = $hash;
                     $res = true;
                 } else {
@@ -178,7 +178,7 @@ class PHPTAL_RepeatControllerGroups
      * @param string $varname  The variable name to store as a path part
      * @access protected
      */
-    protected function addVarName( $varname )
+    protected function addVarName($varname)
     {
         $this->vars[] = $varname;
     }

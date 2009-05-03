@@ -57,7 +57,7 @@
  *
  *
  * @package PHPTAL
- * @subpackage php.attribute.i18n
+ * @subpackage Php.attribute.i18n
  */
 class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 {
@@ -67,8 +67,8 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
         foreach ($codewriter->splitExpression($this->expression) as $exp) {
             list($qname, $key) = $this->parseSetExpression($exp);
 
-            if (strlen($key)) // if the translation key is specified and not empty (but may be '0')
-            {
+            // if the translation key is specified and not empty (but may be '0')
+            if (strlen($key)) {
                 // we use it and replace the tag attribute with the result of the translation
                 $code = $this->_getTranslationCode($codewriter, $key);
             } else {

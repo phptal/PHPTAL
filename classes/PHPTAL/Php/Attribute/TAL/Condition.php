@@ -27,7 +27,7 @@
  *
  *
  * @package PHPTAL
- * @subpackage php.attribute.tal
+ * @subpackage Php.attribute.tal
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_Attribute_TAL_Condition
@@ -43,7 +43,7 @@ implements PHPTAL_Php_TalesChainReader
         // If it's a chained expression build a new code path
         if (is_array($code)) {
             $this->expressions = array();
-            $executor = new PHPTAL_Php_TalesChainExecutor( $codewriter, $code, $this );
+            $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $code, $this);
             return;
         }
 
@@ -64,11 +64,11 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         // check if the expression is empty
-        if ( $exp !== 'false' ) {
+        if ($exp !== 'false') {
             $this->expressions[] = '!phptal_isempty(' . $exp . ')';
         }
 
-        if ( $islast ) {
+        if ($islast) {
             // for the last one in the chain build a ORed condition
             $executor->getCodeWriter()->doIf( implode(' || ', $this->expressions ) );
             // The executor will always end an if so we output a dummy if
@@ -79,7 +79,7 @@ implements PHPTAL_Php_TalesChainReader
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         // end the chain
-        $this->talesChainPart( $executor, 'false', true );
+        $this->talesChainPart($executor, 'false', true);
         $executor->breakChain();
     }
 

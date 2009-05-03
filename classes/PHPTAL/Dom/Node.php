@@ -20,7 +20,7 @@ require_once 'PHPTAL/Dom/Attr.php';
  * Document node abstract class.
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 abstract class PHPTAL_Dom_Node
 {
@@ -112,9 +112,11 @@ abstract class PHPTAL_Dom_Node
         if ($prop === 'children') return $this->childNodes;
         if ($prop === 'node') return $this;
         if ($prop === 'generator') return self::$_codewriter_bc_hack_;
-        if ($prop === 'attributes')
-        {
-            $tmp = array(); foreach($this->getAttributeNodes() as $att) $tmp[$att->getQualifiedName()] = $att->getValueEscaped();
+        if ($prop === 'attributes') {
+            $tmp = array(); 
+            foreach($this->getAttributeNodes() as $att) {
+                $tmp[$att->getQualifiedName()] = $att->getValueEscaped();
+            }
             return $tmp;
         }
         throw new PHPTAL_Exception("There is no property $prop on ".get_class($this));

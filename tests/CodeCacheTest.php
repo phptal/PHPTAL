@@ -36,8 +36,7 @@ class CodeCacheTest extends PHPTAL_TestCase
         $this->phptal->setForceReparse(false);
         $this->assertFalse($this->phptal->getForceReparse());
 
-        if (function_exists('sys_get_temp_dir'))
-        {
+        if (function_exists('sys_get_temp_dir')) {
             $tmpdirpath = sys_get_temp_dir().DIRECTORY_SEPARATOR.'temp_output';
             if (!is_dir($tmpdirpath)) mkdir($tmpdirpath);
         }

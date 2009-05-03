@@ -21,7 +21,7 @@ require_once 'PHPTAL/Dom/XmlnsState.php';
  * DOM Builder
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  */
 class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
 {

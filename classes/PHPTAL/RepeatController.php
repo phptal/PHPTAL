@@ -29,7 +29,7 @@
  * 'item' is an instance of this class.
  *
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_RepeatController implements Iterator
@@ -61,26 +61,26 @@ class PHPTAL_RepeatController implements Iterator
             $this->iterator = new ArrayIterator( str_split($source) );  // FIXME: invalid for UTF-8 encoding, use preg_match_all('/./u') trick
         } elseif ( is_array($source) ) {
             $this->iterator = new ArrayIterator($source);
-        } elseif ( $source instanceof IteratorAggregate ) {
+        } elseif ($source instanceof IteratorAggregate) {
             $this->iterator = $source->getIterator();
-        } elseif ( $source instanceof Iterator ) {
+        } elseif ($source instanceof Iterator) {
             $this->iterator = $source;
         } elseif ( $source instanceof SimpleXMLElement) { // has non-unique keys!
             $array = array();
-            foreach ( $source as $v ) {
+            foreach ($source as $v) {
                 $array[] = $v;
             }
             $this->iterator = new ArrayIterator($array);
-        } elseif ( $source instanceof Traversable || $source instanceof DOMNodeList ) {
+        } elseif ($source instanceof Traversable || $source instanceof DOMNodeList) {
             // PDO Statements implement an internal Traversable interface.
             // To make it fully iterable we traverse the set to populate
             // an array which will be actually used for iteration.
             $array = array();
-            foreach ( $source as $k=>$v ) {
+            foreach ($source as $k=>$v) {
                 $array[$k] = $v;
             }
             $this->iterator = new ArrayIterator($array);
-        } elseif ( $source instanceof stdClass ) {
+        } elseif ($source instanceof stdClass) {
             $this->iterator = new ArrayIterator( (array) $source );
         } else {
             $this->iterator = new ArrayIterator( array() );
@@ -123,13 +123,13 @@ class PHPTAL_RepeatController implements Iterator
     public function length()
     {
         if ($this->length === null) {
-            if ( $this->iterator instanceof Countable ) {
+            if ($this->iterator instanceof Countable) {
                 return $this->length = count($this->iterator);
             } elseif ( is_object($this->iterator) ) {
                 // for backwards compatibility with existing PHPTAL templates
-                if ( method_exists( $this->iterator, 'size' ) ) {
+                if ( method_exists($this->iterator, 'size') ) {
                     return $this->length = $this->iterator->size();
-                } elseif ( method_exists( $this->iterator, 'length' ) ) {
+                } elseif ( method_exists($this->iterator, 'length') ) {
                     return $this->length = $this->iterator->length();
                 }
             }
@@ -156,15 +156,14 @@ class PHPTAL_RepeatController implements Iterator
         $this->iterator->rewind();
 
         // Prefetch the next element
-        if ( $this->iterator->valid() ) {
+        if ($this->iterator->valid()) {
             $this->validOnNext = true;
             $this->prefetch();
         } else {
             $this->validOnNext = false;
         }
 
-        if ($this->uses_groups)
-        {
+        if ($this->uses_groups) {
             // Notify the grouping helper of the change
             $this->groups->reset();
         }
@@ -181,8 +180,7 @@ class PHPTAL_RepeatController implements Iterator
         // Prefetch the next element
         if ($this->validOnNext) $this->prefetch();
 
-        if ($this->uses_groups)
-        {
+        if ($this->uses_groups) {
             // Notify the grouping helper of the change
             $this->groups->reset();
         }
@@ -195,10 +193,8 @@ class PHPTAL_RepeatController implements Iterator
      */
     private function initializeGroups()
     {
-        if (!$this->uses_groups)
-        {
-            if (!class_exists('PHPTAL_RepeatControllerGroups',false))
-            {
+        if (!$this->uses_groups) {
+            if (!class_exists('PHPTAL_RepeatControllerGroups',false)) {
                 PHPTAL::setIncludePath();
                 require_once "PHPTAL/RepeatControllerGroups.php";
                 PHPTAL::restoreIncludePath();
@@ -213,9 +209,9 @@ class PHPTAL_RepeatController implements Iterator
      *
      * @return $var  Mixed  The variable value
      */
-    public function __get( $var )
+    public function __get($var)
     {
-        switch ( $var ) {
+        switch ($var) {
             case 'number':
                 return $this->index + 1;
             case 'start':
@@ -242,7 +238,7 @@ class PHPTAL_RepeatController implements Iterator
             case 'first':
                 $this->initializeGroups();
                 // Compare the current one with the previous in the dictionary
-                $res = $this->groups->first( $this->current );
+                $res = $this->groups->first($this->current);
                 return is_bool($res) ? $res : $this->groups;
                 
             case 'last':
@@ -252,7 +248,7 @@ class PHPTAL_RepeatController implements Iterator
                 return is_bool($res) ? $res : $this->groups;
 
             default:
-                throw new PHPTAL_VariableNotFoundException( "Unable to find part '$var' in repeat variable" );
+                throw new PHPTAL_VariableNotFoundException("Unable to find part '$var' in repeat variable");
         }
     }
 
@@ -282,13 +278,13 @@ class PHPTAL_RepeatController implements Iterator
      * @return String   The letters equivalent as a, b, c-z ... aa, ab, ac-zz ...
      * @access protected
      */
-    protected function int2letter( $int )
+    protected function int2letter($int)
     {
         $lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $size = strlen($lookup);
 
         $letters = '';
-        while ( $int > 0 ) {
+        while ($int > 0) {
             $int--;
             $letters = $lookup[$int % $size] . $letters;
             $int = floor($int / $size);
@@ -303,7 +299,7 @@ class PHPTAL_RepeatController implements Iterator
      * @return String   The roman numeral
      * @access protected
      */
-    protected function int2roman( $int )
+    protected function int2roman($int)
     {
         $lookup = array(
             '1000'  => 'M',
@@ -322,8 +318,8 @@ class PHPTAL_RepeatController implements Iterator
         );
 
         $roman = '';
-        foreach ( $lookup as $max => $letters ) {
-            while ( $int >= $max ) {
+        foreach ($lookup as $max => $letters) {
+            while ($int >= $max) {
                 $roman .= $letters;
                 $int -= $max;
             }

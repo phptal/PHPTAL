@@ -20,7 +20,7 @@ require_once 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
 
 /**
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_Namespace_METAL extends PHPTAL_BuiltinNamespace
 {

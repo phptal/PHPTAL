@@ -25,7 +25,7 @@ require_once 'PHPTAL/Namespace.php';
  * and provide custom ones.
  *
  * @package PHPTAL
- * @subpackage dom
+ * @subpackage Dom
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Dom_Defs

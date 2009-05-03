@@ -18,7 +18,7 @@ require_once 'PHPTAL/Php/CodeWriter.php';
 
 /**
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  */
 class PHPTAL_Php_CodeGenerator
 {

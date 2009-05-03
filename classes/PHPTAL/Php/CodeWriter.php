@@ -16,7 +16,7 @@
  * Helps generate php representation of a template.
  *
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_CodeWriter
@@ -158,8 +158,7 @@ class PHPTAL_Php_CodeWriter
 
     public function flushCode()
     {
-        if (count($this->_codeBuffer) == 0)
-            return;
+        if (count($this->_codeBuffer) == 0) return;
 
         // special treatment for one code line
         if (count($this->_codeBuffer) == 1) {
@@ -189,7 +188,7 @@ class PHPTAL_Php_CodeWriter
     {
         if (count($this->_htmlBuffer) == 0) return;
 
-        $this->_result .= implode( '', $this->_htmlBuffer );
+        $this->_result .= implode('', $this->_htmlBuffer);
         $this->_htmlBuffer = array();
     }
 
@@ -220,7 +219,7 @@ class PHPTAL_Php_CodeWriter
         $this->known_functions[$name] = true;
 
         $this->pushCodeWriterContext();
-        $this->pushCode("function $name( $params ) {\n");
+        $this->pushCode("function $name($params) {\n");
         $this->indent();
         $this->_segments[] =  'function';
     }

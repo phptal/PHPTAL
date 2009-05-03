@@ -18,7 +18,7 @@ require_once 'PHPTAL/Php/Transformer.php';
 
 /**
  * @package PHPTAL
- * @subpackage php
+ * @subpackage Php
  */
 class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 {
@@ -236,8 +236,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                     if ($inAccoladePath) {
                         $subPath .= $c;
                         $c = '';
-                    }
-                    elseif ($lastWasDollar) {
+                    } elseif ($lastWasDollar) {
                         $lastWasDollar = false;
                         $inAccoladePath = true;
                         $subPath = '';

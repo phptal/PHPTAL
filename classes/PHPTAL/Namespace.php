@@ -63,7 +63,7 @@ require_once 'PHPTAL/Namespace/PHPTAL.php';
  *
  *
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 abstract class PHPTAL_NamespaceAttribute
 {
@@ -107,7 +107,7 @@ abstract class PHPTAL_NamespaceAttribute
 /**
  * This type of attribute wraps element
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
 {
@@ -116,7 +116,7 @@ class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
 /**
  * This type of attribute replaces element entirely
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
 {
@@ -125,7 +125,7 @@ class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
 /**
  * This type of attribute replaces element's content entirely
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute
 {
@@ -133,7 +133,7 @@ class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute
 
 /**
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 abstract class PHPTAL_Namespace
 {
@@ -183,7 +183,7 @@ abstract class PHPTAL_Namespace
 
 /**
  * @package PHPTAL
- * @subpackage namespace
+ * @subpackage Namespace
  */
 class PHPTAL_BuiltinNamespace extends PHPTAL_Namespace
 {
