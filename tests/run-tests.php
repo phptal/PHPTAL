@@ -21,7 +21,6 @@ error_reporting( E_ALL | E_STRICT );
 
 chdir(dirname(__FILE__));
 
-require_once '../classes/PHPTAL.php';
 require_once "./config.php";
 
 if (isset($argv) && count($argv) >= 2) {

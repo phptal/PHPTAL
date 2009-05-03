@@ -14,15 +14,21 @@
  */
 
 
-// run-tests.php will include local copy of PHPTAL,
-// rather than PEAR's version. This is backup for
-// tests ran individually in other environments.
+// This is needed to run tests ran individually without run-tests.php script
 if (!class_exists('PHPTAL'))
 {
+    ob_start();
+    
+    // try local copy of PHPTAL first, otherwise it might be testing
+    // PEAR version (or another in include path) causing serious WTF!?s.
     if (file_exists(dirname(__FILE__).'/../classes/PHPTAL.php')) {
         require_once dirname(__FILE__).'/../classes/PHPTAL.php';        
     } else {    
         require_once "PHPTAL.php";
+    }
+    if (strlen(ob_get_clean()))
+    {
+        throw new Exception("Inclusion of PHPTAL causes output");
     }
 }
 
