@@ -114,13 +114,27 @@ class PHPTAL_Php_State
     }
 
     /**
+     * compile TALES expression according to current talesMode
      * @return string with PHP code or array with expressions for TalesChainExecutor
      */
     public function evaluateExpression($expression)
     {
-        if ($this->_talesMode == 'php')
+        if ($this->_talesMode === 'php') {
             return PHPTAL_Php_TalesInternal::php($expression);
+        }
         return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression,false);
+    }
+
+    /**
+     * compile TALES expression according to current talesMode
+     * @return string with PHP code 
+     */
+    private function compileTalesToPHPExpression($expression)
+    {
+        if ($this->_talesMode === 'php') {
+            return PHPTAL_Php_TalesInternal::php($expression);
+        }
+        return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression,false);
     }
 
     /**
@@ -138,19 +152,36 @@ class PHPTAL_Php_State
             $php  = PHPTAL_Php_TalesInternal::php($exp);
             $string = str_replace($ori, '\'.'.$php.'.\'', $string); // FIXME: that is not elegant
         }
-        $string = str_replace('$${', '${', $string);
+        $string = str_replace('$${', '${', $string); // FIXME: that is not elegant
         return '\''.$string.'\'';
+    }
+    
+    /**
+     * helper function that changes HTML-escaped TALES expression to PHP code.
+     * Generated PHP code does not apply HTML-escaping.
+     */
+    private function _interpolateTalesVars($src)
+    {
+        $src = html_entity_decode($src,ENT_QUOTES, $this->getEncoding());        
+        return $this->compileTalesToPHPExpression($src);
     }
 
     /**
-     * callback for interpolation of TALES with structure keyword, i.e. without HTML-escapes
+     * callback for interpolation of TALES with structure keyword, i.e. output without HTML-escapes, 
+     * but input with HTML-escapes.
      */
-    private function _interpolateTalesVarsStructure($matches)
+    private function _interpolateTalesVarsHTMLStructure($matches)
     {
-        if ($this->_talesMode == 'tales') $code = PHPTAL_Php_TalesInternal::compileToPHPExpression($matches[1]);
-        else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
+        return '<?php echo '.$this->stringify($this->_interpolateTalesVars($matches[1])).' ?>';
+    }
 
-        return '<?php echo '.$this->stringify($code).' ?>';
+
+    /**
+     * callback for interpolation of TALES with structure keyword, i.e. input and output without HTML-escapes.
+     */
+    private function _interpolateTalesVarsCDATAStructure($matches)
+    {        
+        return '<?php echo '.$this->stringify($this->compileTalesToPHPExpression($matches[1])).' ?>';
     }
 
     /**
@@ -158,11 +189,7 @@ class PHPTAL_Php_State
      */
     private function _interpolateTalesVarsHTML($matches)
     {
-        if ($this->_talesMode == 'tales') {
-            $code = PHPTAL_Php_TalesInternal::compileToPHPExpression(html_entity_decode($matches[1],ENT_QUOTES, $this->getEncoding()),false);
-        } else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
-
-        return '<?php echo '.$this->htmlchars($code).' ?>';
+        return '<?php echo '.$this->htmlchars($this->_interpolateTalesVars($matches[1])).' ?>';
     }
 
     /**
@@ -170,18 +197,16 @@ class PHPTAL_Php_State
      */
     private function _interpolateTalesVarsCDATA($matches)
     {
-        if ($this->_talesMode == 'tales') {
-            $code = PHPTAL_Php_TalesInternal::compileToPHPExpression($matches[1],ENT_QUOTES, $this->getEncoding());
-        } else $code = PHPTAL_Php_TalesInternal::php($matches[1]);
-
+        $code = $this->compileTalesToPHPExpression($matches[1]);
+        
         // quite complex for an "unescaped" section, isn't it?
         if ($this->getOutputMode() === PHPTAL::HTML5) {
-            return "<?php echo str_replace('</','<\\\\/', phptal_tostring($code)) ?>";
+            return "<?php echo str_replace('</','<\\\\/', ".$this->stringify($code).") ?>";
         } elseif ($this->getOutputMode() === PHPTAL::XHTML) {
             // both XML and HMTL, because people will inevitably send it as text/html :(
-            return "<?php echo strtr(phptal_tostring($code) ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>";
+            return "<?php echo strtr(".$this->stringify($code)." ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>";
         } else {
-            return "<?php echo str_replace(']]>',']]]]><![CDATA[>', phptal_tostring($code)) ?>";
+            return "<?php echo str_replace(']]>',']]]]><![CDATA[>', ".$this->stringify($code).") ?>";
         }
     }
 
@@ -191,9 +216,9 @@ class PHPTAL_Php_State
     public function interpolateTalesVarsInHtml($src)
     {
         // uses lookback assertion to exclude $${}
-        $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
+        $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsHTMLStructure'), $src);
         $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/is', array($this,'_interpolateTalesVarsHTML'), $result);
-        $result = str_replace('$${', '${', $result);
+        $result = str_replace('$${', '${', $result); // FIXME: could change it inside compiled code, which breaks things
         return $result;
     }
 
@@ -204,9 +229,9 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInCDATA($src)
     {
-        $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsStructure'), $src);
+        $result = preg_replace_callback('/(?<!\$)\$\{structure (.*?)\}/is', array($this,'_interpolateTalesVarsCDATAStructure'), $src);
         $result = preg_replace_callback('/(?<!\$)\$\{(?:text )?(.*?)\}/is', array($this,'_interpolateTalesVarsCDATA'), $result);
-        $result = str_replace('$${', '${', $result);
+        $result = str_replace('$${', '${', $result); // FIXME: could change it inside compiled code, which breaks things
         return $result;
     }
 
@@ -234,6 +259,11 @@ class PHPTAL_Php_State
      */
     public function stringify($php)
     {
+        // PHP strings don't need to be changed
+        if (preg_match('/^\'(?:[^\'{]+|\\\\.)*\'$/', $php))
+        {
+            return $php;
+        }
         return 'phptal_tostring('.$php.')';
     }
 }

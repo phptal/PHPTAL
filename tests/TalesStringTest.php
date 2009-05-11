@@ -84,6 +84,19 @@ class TalesStringTest extends PHPTAL_TestCase {
         $exp = trim_file('output/tales-string-03.html');
         $this->assertEquals($exp,$res);
     }
+    
+    function testStructure()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p>
+            ${string:&lt;foo/&gt;}
+            ${structure string:&lt;foo/&gt;}
+            <x y="${string:&lt;foo/&gt;}" tal:content="string:&lt;foo/&gt;" />
+            <x y="${structure string:&lt;foo/&gt;}" tal:content="structure string:&lt;foo/&gt;" />
+        </p>');
+        $this->assertEquals(trim_string('<p>&lt;foo/&gt;<foo/><x y="&lt;foo/&gt;">&lt;foo/&gt;</x><x y="<foo/>"><foo/></x></p>'),
+                            trim_string($tpl->execute()));
+    }
 }
 
 
