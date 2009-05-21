@@ -90,10 +90,10 @@ class MetalMacroTest extends PHPTAL_TestCase
      */
     function testBadMacroNameException()
     {
-            $tpl = $this->newPHPTAL('input/metal-macro.08.html');
-            $res = $tpl->execute();
+        $tpl = $this->newPHPTAL('input/metal-macro.08.html');
+        $res = $tpl->execute();
         $this->fail('Bad macro name exception not thrown');
-        }
+    }
 
     /**
      * @expectedException PHPTAL_MacroMissingException
@@ -125,6 +125,33 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.09.html/defined_earlier" />');
         $res = $tpl->execute();
         $this->assertEquals('Call OK OK',trim(preg_replace('/\s+/',' ',$res)));
+    }
+    
+    /**
+     * @expectedException PHPTAL_Exception
+     */
+    function testMacroRedefinitionIsGraceful()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource(
+        '<p>
+          <metal:block define-macro=" foo " /> 
+              <a metal:define-macro="foo">bar</a>
+         </p>');
+        $tpl->execute();
+        
+        $this->fail("Allowed duplicate macro");
+    }
+    
+    function testSameMacroCanBeDefinedInDifferentTemplates()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<tal:block metal:define-macro=" foo ">1</tal:block>');
+        $tpl->execute();
+
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<tal:block metal:define-macro=" foo ">2</tal:block>');
+        $tpl->execute();
     }
 }
 
