@@ -171,23 +171,23 @@ class EscapeHTMLTest extends PHPTAL_TestCase {
     function testSimpleXML()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p>${x}</p>');
-        $simplexml = new SimpleXMLElement('<foo title="bar&amp;&lt;">foo&amp;&lt;</foo>');
+        $tpl->setSource('<p>${x} ${y}</p>');
+        $simplexml = new SimpleXMLElement('<foo title="bar&amp;&lt;" empty="">foo&amp;&lt;</foo>');
 
         $tpl->x = $simplexml['title'];
-        $this->assertEquals('<p>bar&amp;&lt;</p>',$tpl->execute());
+        $tpl->y = $simplexml['empty'];
+        $this->assertEquals('<p>bar&amp;&lt; </p>',$tpl->execute());
     }
 
     function testStructureSimpleXML()
     {
-        $this->markTestSkipped("Impossible as of PHP5.3");
-
         $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p>${structure x}</p>');
-        $simplexml = new SimpleXMLElement('<foo title="bar&amp;&lt;">foo&amp;&lt;</foo>');
+        $tpl->setSource('<p>${structure x} ${structure y}</p>');
+        $simplexml = new SimpleXMLElement('<foo title="bar&amp;&lt;" empty="">foo&amp;&lt;</foo>');
 
         $tpl->x = $simplexml['title'];
-        $this->assertEquals('<p>bar&<</p>',$tpl->execute());
+        $tpl->y = $simplexml['empty'];
+        $this->assertEquals('<p>bar&< </p>',$tpl->execute());
     }
 
     function testUnicodeUnescaped()

@@ -29,7 +29,7 @@ class PHPTAL_Context
     private $_slotsStack = array();
     private $_parentContext = null;
     private $_globalContext = null;
-    
+
     public function __construct()
     {
         $this->repeat = new StdClass();
@@ -480,7 +480,15 @@ function phptal_tostring($var)
     } elseif (is_array($var)) {
         return implode(', ', $var);
     } elseif ($var instanceof SimpleXMLElement) {
-        return $var->asXML();
+
+        /* There is no sane way to tell apart element and attribute nodes
+           in SimpleXML, so here's a guess that if something has no attributes
+           or children, and doesn't output <, then it's an attribute */
+
+        $xml = $var->asXML();
+        if ($xml[0] === '<' || $var->attributes() || $var->children()) {
+            return $xml;
+        }
     }
     return (string)$var;
 }
