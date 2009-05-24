@@ -19,7 +19,7 @@ PHPTAL::setIncludePath();
 require_once 'PHPTAL/Dom/DocumentBuilder.php';
 PHPTAL::restoreIncludePath();
 
-if (!class_exists('DummyTag')) {
+if (!class_exists('DummyTag',false)) {
     class DummyTag {}
 }
 

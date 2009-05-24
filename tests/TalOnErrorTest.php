@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-if (!class_exists('OnErrorDummyObject')) {
+if (!class_exists('OnErrorDummyObject',false)) {
     class OnErrorDummyObject
     {
         function throwException()

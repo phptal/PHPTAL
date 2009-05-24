@@ -15,7 +15,7 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-if (!class_exists('DummyTag')) {
+if (!class_exists('DummyTag',false)) {
     class DummyTag {}
 }
 
