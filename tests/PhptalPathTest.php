@@ -13,6 +13,12 @@
  * @link     http://phptal.org/
  */
 
+require_once dirname(__FILE__)."/config.php";
+
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Context.php';
+PHPTAL::restoreIncludePath();
+ 
 class PhptalPathTest_DummyClass
 {
     public $foo;
@@ -35,8 +41,6 @@ class PhptalPathTest_DummyGetClass
     }
 }
 */
-
-require_once dirname(__FILE__)."/config.php";
 
 class PhptalPathTest extends PHPTAL_TestCase
 {

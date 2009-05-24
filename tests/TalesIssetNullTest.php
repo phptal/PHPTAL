@@ -34,6 +34,10 @@ class DummyObjectX{
 
 require_once dirname(__FILE__)."/config.php";
 
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Context.php';
+PHPTAL::restoreIncludePath();
+
 class TalesIssetNullTest extends PHPTAL_TestCase
 {
     function testIt()
