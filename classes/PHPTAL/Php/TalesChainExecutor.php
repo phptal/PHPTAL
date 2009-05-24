@@ -13,16 +13,7 @@
  * @link     http://phptal.org/
  */
 
-/**
- * @package PHPTAL
- * @subpackage Php
- */
-interface PHPTAL_Php_TalesChainReader
-{
-    public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor);
-    public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor);
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $expression, $islast);
-}
+require_once 'PHPTAL/Php/TalesChainReader.php';
 
 /**
  * @package PHPTAL
