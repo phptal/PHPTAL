@@ -106,7 +106,7 @@ class PHPTAL_Dom_DocumentBuilder
         if (preg_match('/^([^:]+):/', $element_qname, $m)) {
             $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
             if (false === $namespace_uri) {
-                throw new PHPTAL_ParserException("There is no namespace declared for prefix of element <$element_qname>");
+                throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >");
             }
         } else {
             $namespace_uri = $this->_xmlns->getCurrentDefaultNamespaceURI();
@@ -119,7 +119,7 @@ class PHPTAL_Dom_DocumentBuilder
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
                 if (false === $attr_namespace_uri) {
-                    throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element <$element_qname>");
+                    throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >");
                 }
             } else {
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
@@ -147,10 +147,10 @@ class PHPTAL_Dom_DocumentBuilder
     public function onElementClose($qname)
     {
         if ($this->_current === $this->documentElement) {
-            throw new PHPTAL_ParserException("Found closing tag for <$qname> where there are no open tags");
+            throw new PHPTAL_ParserException("Found closing tag for < $qname > where there are no open tags");
         }
         if ($this->_current->getQualifiedName() != $qname) {
-            throw new PHPTAL_ParserException("Tag closure mismatch, expected </".$this->_current->getQualifiedName()."> but found </".$qname.">");
+            throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$this->_current->getQualifiedName()." > but found < /".$qname." >");
         }
         $this->_current = array_pop($this->_stack);
         if ($this->_current instanceOf PHPTAL_Dom_Element)
