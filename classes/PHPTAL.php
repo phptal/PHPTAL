@@ -164,8 +164,8 @@ class PHPTAL
     private $externalMacroTempaltesCache = array();
     
     /**
-     * restore_include_path() resets path to default in ini, breaking application's custom paths,
-     * so a custom backup is necessary.
+     * restore_include_path() resets path to default in ini, 
+     * breaking application's custom paths, so a custom backup is necessary.
      */
     private static $include_path_backup;
 
@@ -245,7 +245,8 @@ class PHPTAL
     /**
      * Set template from source.
      *
-     * Should be used only with temporary template sources. Use setTemplate() whenever possible.
+     * Should be used only with temporary template sources. 
+     * Use setTemplate() or addSourceResolver() whenever possible.
      *
      * @param string $src The phptal template source.
      * @param string $path Fake and 'unique' template path.
@@ -329,10 +330,12 @@ class PHPTAL
 
     /**
      * Set output mode
-     * XHTML output mode will force elements like <link/>, <meta/> and <img/>, etc. to be empty
-     * and threats attributes like selected, checked to be boolean attributes.
+     * XHTML output mode will force elements like <link/>, <meta/> and <img/>, etc. 
+     * to be empty and threats attributes like selected, checked to be 
+     * boolean attributes.
      *
-     * XML output mode outputs XML without such modifications and is neccessary to generate RSS feeds properly.
+     * XML output mode outputs XML without such modifications 
+     * and is neccessary to generate RSS feeds properly.
      *
      * @param int $mode (PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5).
      * @return $this
@@ -386,12 +389,14 @@ class PHPTAL
     }
 
     /**
-     * Set the storage location for intermediate PHP files. The path cannot contain characters that would be interpreted by glob() (e.g. *[]?)
+     * Set the storage location for intermediate PHP files. 
+     * The path cannot contain characters that would be interpreted by glob() (e.g. *[]?)
+     * 
      * @param string $path Intermediate file path.
      */
     public function setPhpCodeDestination($path)
     {
-        $this->_phpCodeDestination = rtrim($path, DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+        $this->_phpCodeDestination = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
         $this->_functionName = null;
         $this->_codeFile = null;
         $this->_prepared = false;
@@ -443,17 +448,19 @@ class PHPTAL
      */
     public function getForceReparse()
     {
-        return $this->_forceReparse !== null ? $this->_forceReparse : (defined('PHPTAL_FORCE_REPARSE') && PHPTAL_FORCE_REPARSE);
+        return $this->_forceReparse;
     }
 
     /**
      * Set I18N translator.
-     * This sets encoding used by the translator, so be sure to use encoding-dependent features of the translator (e.g. addDomain) _after_ calling setTranslator.
+     * 
+     * This sets encoding used by the translator, so be sure to use encoding-dependent
+     * features of the translator (e.g. addDomain) _after_ calling setTranslator.
      */
     public function setTranslator(PHPTAL_TranslationService $t)
     {
         $this->_translator = $t;
-        $this->_translator->setEncoding($this->getEncoding());
+        $t->setEncoding($this->getEncoding());
         return $this;
     }
 
@@ -469,7 +476,8 @@ class PHPTAL
     }
 
     /**
-     * Set template post filter. It will be called every time after template generates output.
+     * Set template post filter. 
+     * It will be called every time after template generates output.
      */
     public function setPostFilter(PHPTAL_Filter $filter)
     {
@@ -599,7 +607,8 @@ class PHPTAL
     }
 
     /**
-     * This is PHPTAL's internal function that handles execution of macros from templates.
+     * This is PHPTAL's internal function that handles 
+     * execution of macros from templates.
      *
      * $this is caller's context (the file where execution had originally started)
      * @param $local_tpl is PHPTAL instance of the file in which macro is defined (it will be different from $this if it's external macro call)
@@ -607,8 +616,9 @@ class PHPTAL
      */
     final public function _executeMacroOfTempalte($path, PHPTAL $local_tpl)
     {
-        // extract macro source file from macro name, if macro path does not contain filename,
-        // then the macro is assumed to be local
+        // extract macro source file from macro name, if macro path does not 
+        // contain filename, then the macro is assumed to be local
+        
         if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m)) {
             list(,$file, $macroName) = $m;
 
@@ -696,7 +706,8 @@ class PHPTAL
                 }
                         
                 // the awesome thing about eval() is that parse errors don't stop PHP.
-                // when PHP dies during eval, fatal error is printed and can be captured with output buffering            
+                // when PHP dies during eval, fatal error is printed and 
+                // can be captured with output buffering            
                 ob_start();
                 try {
                     eval('require $this->getCodePath();');
@@ -764,7 +775,8 @@ class PHPTAL
 
 
     /**
-     * Removes all compiled templates from cache that are older than getCacheLifetime() days
+     * Removes all compiled templates from cache that 
+     * are older than getCacheLifetime() days
      */
     public function cleanUpGarbage()
     {
@@ -828,10 +840,10 @@ class PHPTAL
      */
     public function getFunctionName()
     {
-            // function name is used as base for caching, so it must be unique for every combination of settings
-            // that changes code in compiled template
+       // function name is used as base for caching, so it must be unique for 
+       // every combination of settings that changes code in compiled template
 
-        if (!$this->_functionName) {
+       if (!$this->_functionName) {
 
             // just to make tempalte name recognizable
             $basename = preg_replace('/\.[a-z]{3,4}$/','',basename($this->_source->getRealPath()));
@@ -853,14 +865,16 @@ class PHPTAL
     }
 
     /**
-     * Returns prefix used for function name (and function name is base name for the template)
+     * Returns prefix used for function name.
+     * Function name is also base name for the template.
      *
      * @param int $timestamp unix timestamp with template modification date
      * @return string
      */
     private function getFunctionNamePrefix($timestamp)
     {
-        // tpl_ prefix and last modified time must not be changed, because cache cleanup relies on that
+        // tpl_ prefix and last modified time must not be changed, 
+        // because cache cleanup relies on that
         return 'tpl_' . sprintf("%08x",$timestamp) .'_';
     }
 
@@ -1000,7 +1014,9 @@ class PHPTAL
 
     /**
      * Set include path to contain PHPTAL's directory.
-     * Every call to setIncludePath() MUST have corresponding call to restoreIncludePath()!
+     * Every call to setIncludePath() MUST have corresponding call 
+     * to restoreIncludePath()!
+     * 
      * Calls to setIncludePath/restoreIncludePath can be nested.
      *
      * @return void
