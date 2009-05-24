@@ -434,7 +434,9 @@ class PHPTAL
     /**
      * Flags whether to ignore intermediate php files and to
      * reparse templates every time (if set to true).
-     * Don't use in production - this makes PHPTAL significantly slower.
+     * 
+     * DON'T USE IN PRODUCTION - this makes PHPTAL many times slower.
+     * 
      * @param bool bool Forced reparse state.
      */
     public function setForceReparse($bool)
@@ -1067,7 +1069,7 @@ class PHPTAL
 
         $path = dirname(__FILE__) . strtr("_".$class,"_",DIRECTORY_SEPARATOR) . '.php';
 
-        require_once $path;
+        require $path;
     }
 }
 
