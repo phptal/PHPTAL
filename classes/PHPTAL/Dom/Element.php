@@ -13,6 +13,9 @@
  * @link     http://phptal.org/
  */
 
+require_once 'PHPTAL/Dom/Defs.php';
+require_once 'PHPTAL/Dom/Attr.php';
+
 /**
  * For backwards compatibility only. Do not use!
  * @deprecated

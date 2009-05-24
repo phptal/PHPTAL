@@ -14,18 +14,6 @@
  */
 
 /**
- * You can implement this interface to create custom tales modifiers
- *
- * Methods suitable for modifiers must be static.
- *
- * @package PHPTAL
- * @subpackage Php
- */
-interface PHPTAL_Tales
-{
-}
-
-/**
  * Global registry of TALES expression modifiers
  *
  * @package PHPTAL

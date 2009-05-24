@@ -13,9 +13,17 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Dom/AllNodes.php';
-require_once 'PHPTAL/Dom/XmlParser.php';
+require_once 'PHPTAL/Dom/SaxXmlParser.php';
 require_once 'PHPTAL/Dom/XmlnsState.php';
+
+require_once 'PHPTAL/Dom/Node.php';
+require_once 'PHPTAL/Dom/XmlDeclaration.php';
+require_once 'PHPTAL/Dom/DocumentType.php';
+require_once 'PHPTAL/Dom/Text.php';
+require_once 'PHPTAL/Dom/Element.php';
+require_once 'PHPTAL/Dom/Comment.php';
+require_once 'PHPTAL/Dom/CDATASection.php';
+require_once 'PHPTAL/Dom/ProcessingInstruction.php';
 
 /**
  * DOM Builder
@@ -23,7 +31,7 @@ require_once 'PHPTAL/Dom/XmlnsState.php';
  * @package PHPTAL
  * @subpackage Dom
  */
-class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
+class PHPTAL_Dom_DocumentBuilder
 {
     public function __construct()
     {
@@ -174,5 +182,4 @@ class PHPTAL_Dom_DocumentBuilder implements PHPTAL_DocumentBuilder
     private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
     private $_stripComments = false;
 }
-
 

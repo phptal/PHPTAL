@@ -22,7 +22,7 @@ require_once 'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
  * @package PHPTAL
  * @subpackage Namespace
  */
-class PHPTAL_Namespace_PHPTAL extends PHPTAL_BuiltinNamespace
+class PHPTAL_Namespace_PHPTAL extends PHPTAL_Namespace_Builtin
 {
     public function __construct()
     {

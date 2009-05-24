@@ -13,42 +13,26 @@
  * @link     http://phptal.org/
  */
 
-// Register internal Tales expression modifiers
-require_once 'PHPTAL/TalesRegistry.php';
 require_once 'PHPTAL/Php/TalesInternal.php';
- 
+
 /**
- * TALES Specification 1.3
+ * You can implement this interface to create custom tales modifiers
  *
- *      Expression  ::= [type_prefix ':'] String
- *      type_prefix ::= Name
+ * Methods suitable for modifiers must be static.
  *
- * Examples:
- *
- *      a/b/c
- *      path:a/b/c
- *      nothing
- *      path:nothing
- *      python: 1 + 2
- *      string:Hello, ${username}
- *
- *
- * Builtin Names in Page Templates (for PHPTAL)
- *
- *      * nothing - special singleton value used by TAL to represent a
- *        non-value (e.g. void, None, Nil, NULL).
- *
- *      * default - special singleton value used by TAL to specify that
- *        existing text should not be replaced.
- *
- *      * repeat - the repeat variables (see RepeatVariable).
- *
- *
+ * @package PHPTAL
+ * @subpackage Php
  */
+interface PHPTAL_Tales
+{
+}
+
  
  /**
   * translates TALES expression with alternatives into single PHP expression. 
-  * Identical to compileExpressionToStatements() for singular expressions.
+  * Identical to phptal_tales() for singular expressions.
+  * 
+  * Please use this function rather than PHPTAL_Php_TalesInternal methods.
   *
   * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
   * @return string
@@ -63,7 +47,7 @@ function phptal_tale($expression, $nothrow=false)
  * e.g. "string:foo${bar}" may be transformed to "'foo'.phptal_escape($ctx->bar)"
  *
  * Expressions with alternatives ("foo | bar") will cause it to return array
- * Use PHPTAL_Php_TalesInternal::compileToPHPExpression() if you always want string.
+ * Use phptal_tale() if you always want string.
  *
  * @param bool $nothrow if true, invalid expression will return NULL (at run time) rather than throwing exception
  * @return string or array

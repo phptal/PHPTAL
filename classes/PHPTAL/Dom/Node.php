@@ -13,9 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Dom/Defs.php';
-require_once 'PHPTAL/Dom/Attr.php';
-
 /**
  * Document node abstract class.
  *

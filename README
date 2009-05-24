@@ -87,7 +87,7 @@ Runtime classes
 Parsetime classes
 =================
 
-- PHPTAL_XmlParser
+- PHPTAL_Dom_SaxXmlParser
 - PHPTAL_Php_Attribute
 - PHPTAL_Dom_Node
 

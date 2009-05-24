@@ -14,10 +14,6 @@
  */
 
 require_once 'PHPTAL/Php/Attribute.php';
-require_once 'PHPTAL/Namespace/TAL.php';
-require_once 'PHPTAL/Namespace/METAL.php';
-require_once 'PHPTAL/Namespace/I18N.php';
-require_once 'PHPTAL/Namespace/PHPTAL.php';
 require_once 'PHPTAL/NamespaceAttribute.php';
 
 /**
@@ -69,21 +65,4 @@ abstract class PHPTAL_Namespace
     }
 
     abstract public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_Dom_Element $tag, $expression);
-}
-
-/**
- * @package PHPTAL
- * @subpackage Namespace
- */
-class PHPTAL_BuiltinNamespace extends PHPTAL_Namespace
-{
-    public function createAttributeHandler(PHPTAL_NamespaceAttribute $att, PHPTAL_Dom_Element $tag, $expression)
-    {
-        $name = $att->getLocalName();
-        $name = str_replace('-', '', $name);
-
-        $class = 'PHPTAL_Php_Attribute_'.$this->getPrefix().'_'.$name;
-        $result = new $class($tag, $expression);
-        return $result;
-    }
 }

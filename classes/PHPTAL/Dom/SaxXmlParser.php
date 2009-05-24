@@ -14,10 +14,11 @@
  */
 
 /**
- * Simple sax like xml parser for PHPTAL.
+ * Simple sax like xml parser for PHPTAL 
+ * ("Dom" in the class name comes from name of the directory, not mode of operation)
  *
  * At the time this parser was created, standard PHP libraries were not suitable
- * (could not retrieve doctypes, xml declaration, problem with comments and CDATA).
+ * (could not retrieve doctypes, xml declaration, problems with comments and CDATA).
  * 
  * There are still some problems: XML parsers don't care about exact format of enties
  * or CDATA sections (PHPTAL tries to preserve them), 
@@ -30,7 +31,7 @@
  * @subpackage Dom
  * @see PHPTAL_DOM_DocumentBuilder
  */
-class PHPTAL_XmlParser
+class PHPTAL_Dom_SaxXmlParser
 {
     private $_file;
     private $_line;
@@ -85,7 +86,7 @@ class PHPTAL_XmlParser
         $this->_file = "<string>";
     }
 
-    public function parseFile(PHPTAL_DocumentBuilder $builder, $src)
+    public function parseFile(PHPTAL_Dom_DocumentBuilder $builder, $src)
     {
         if (!file_exists($src)) {
             throw new PHPTAL_IOException("file $src not found");
@@ -93,7 +94,7 @@ class PHPTAL_XmlParser
         return $this->parseString($builder, file_get_contents($src), $src);
     }
 
-    public function parseString(PHPTAL_DocumentBuilder $builder, $src, $filename = '<string>')
+    public function parseString(PHPTAL_Dom_DocumentBuilder $builder, $src, $filename = '<string>')
     {
         try
         {
@@ -397,25 +398,3 @@ class PHPTAL_XmlParser
         throw new PHPTAL_ParserException($errStr, $this->_file, $this->_line);
     }
 }
-
-/**
- * @package PHPTAL
- * @subpackage Dom
- */
-interface PHPTAL_DocumentBuilder
-{
-    function setEncoding($encoding);
-    function setSource($file, $line);
-
-    function onDocType($doctype);
-    function onXmlDecl($decl);
-    function onCDATASection($data);
-    function onProcessingInstruction($data);
-    function onComment($data);
-    function onElementStart($name, array $attributes);
-    function onElementClose($name);
-    function onElementData($data);
-    function onDocumentStart();
-    function onDocumentEnd();
-}
-

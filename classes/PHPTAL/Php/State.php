@@ -12,7 +12,8 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
-require_once 'PHPTAL/Php/Tales.php';
+
+require_once 'PHPTAL/Tales.php';
 
 /**
  * @package PHPTAL

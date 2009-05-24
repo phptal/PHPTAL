@@ -15,6 +15,36 @@
 */
 
 require_once 'PHPTAL/Php/Transformer.php';
+require_once 'PHPTAL/TalesRegistry.php';
+
+/**
+ * TALES Specification 1.3
+ *
+ *      Expression  ::= [type_prefix ':'] String
+ *      type_prefix ::= Name
+ *
+ * Examples:
+ *
+ *      a/b/c
+ *      path:a/b/c
+ *      nothing
+ *      path:nothing
+ *      python: 1 + 2
+ *      string:Hello, ${username}
+ *
+ *
+ * Builtin Names in Page Templates (for PHPTAL)
+ *
+ *      * nothing - special singleton value used by TAL to represent a
+ *        non-value (e.g. void, None, Nil, NULL).
+ *
+ *      * default - special singleton value used by TAL to specify that
+ *        existing text should not be replaced.
+ *
+ *      * repeat - the repeat variables (see RepeatVariable).
+ *
+ *
+ */
 
 /**
  * @package PHPTAL
