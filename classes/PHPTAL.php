@@ -13,10 +13,16 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_0alpha13');
+define('PHPTAL_VERSION', '1_2_0beta2');
+
+
+/* If you want to use autoload, comment out all lines starting with require_once 'PHPTAL
+   and uncomment the line below: */
+
+// spl_autoload_register(array('PHPTAL','autoload'));
+
 
 PHPTAL::setIncludePath();
-
 require_once 'PHPTAL/Source.php';
 require_once 'PHPTAL/SourceResolver.php';
 require_once 'PHPTAL/FileSource.php';
@@ -24,7 +30,6 @@ require_once 'PHPTAL/RepeatController.php';
 require_once 'PHPTAL/Context.php';
 require_once 'PHPTAL/Exception.php';
 require_once 'PHPTAL/Filter.php';
-
 PHPTAL::restoreIncludePath();
 
 /**
@@ -1019,6 +1024,34 @@ class PHPTAL
             // restore_include_path() doesn't work properly
             set_include_path(self::$include_path_backup);
         }
+    }
+      
+    final public static function autoload($class)
+    {
+       static $except = array(        
+            'PHPTAL_FileSourceResolver'=>'PHPTAL_FileSource',
+            'PHPTAL_NamespaceAttributeReplace'=>'PHPTAL_NamespaceAttribute',
+            'PHPTAL_NamespaceAttributeSurround'=>'PHPTAL_NamespaceAttribute',
+            'PHPTAL_NamespaceAttributeContent'=>'PHPTAL_NamespaceAttribute',
+            'PHPTAL_TemplateException'=>'PHPTAL_Exception',
+            'PHPTAL_IOException'=>'PHPTAL_Exception',
+            'PHPTAL_ParserException'=>'PHPTAL_Exception',
+            'PHPTAL_InvalidVariableNameException'=>'PHPTAL_Exception',
+            'PHPTAL_VariableNotFoundException'=>'PHPTAL_Exception',
+            'PHPTAL_ConfigurationException'=>'PHPTAL_Exception',
+            'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',            
+        );
+
+        if (!isset($except[$class])) {
+            if (substr($class, 0, 7) !== 'PHPTAL_') return;
+        }
+        else {
+            $class = $except[$class];
+        }
+
+        $path = dirname(__FILE__) . strtr("_".$class,"_",DIRECTORY_SEPARATOR) . '.php';
+
+        require_once $path;
     }
 }
 
