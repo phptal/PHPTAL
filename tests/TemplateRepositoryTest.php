@@ -46,18 +46,5 @@ class TemplateRepositoryTest extends PHPTAL_TestCase
         $tpl->setTemplateRepository(dirname(__FILE__).'/bogus');
         $tpl->setTemplate('phptal.01.html');
         $tpl->execute();
-    }
-    
-    /**
-     * @expectedException PHPTAL_IOException
-     */
-    function testFailsIfNoneMatch()
-    {
-        $tpl = $this->newPHPTAL();
-        $tpl->setTemplateRepository(dirname(__FILE__).'/invalid');
-        $tpl->setTemplateRepository(dirname(__FILE__).'/error');
-        $tpl->setTemplateRepository(dirname(__FILE__).'/bogus');
-        $tpl->setTemplate('phptal.01.html');
-        $tpl->execute();
-    }
+    }    
 }

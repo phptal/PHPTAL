@@ -28,8 +28,9 @@ if (!class_exists('PHPTAL'))
     } else {
         require_once "PHPTAL.php";
     }
-    if (strlen(ob_get_clean())) {
-        throw new Exception("Inclusion of PHPTAL causes output");
+    $out = ob_get_clean();
+    if (strlen($out)) {
+        throw new Exception("Inclusion of PHPTAL causes output: '$out'");
     }
 }
 

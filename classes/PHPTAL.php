@@ -850,9 +850,11 @@ class PHPTAL
             $basename = preg_replace('/\.[a-z]{3,4}$/','',basename($this->_source->getRealPath()));
             $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,20);
 
-            $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath() . $this->getEncoding() .
-                        ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode(),
-                        true);
+            $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath()
+                    . $this->getEncoding()
+                    . ($this->_prefilter ? get_class($this->_prefilter) : '-')
+                    . $this->getOutputMode(),
+                    true);
 
             // uses base64 rather than hex to make filename shorter.
             // there is loss of some bits due to name constraints and case-insensivity,
