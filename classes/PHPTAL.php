@@ -157,14 +157,14 @@ class PHPTAL
      * 1/x
      */
     protected $_cachePurgeFrequency = 30;
-    
+
     /**
      * speeds up calls to external templates
      */
     private $externalMacroTempaltesCache = array();
-    
+
     /**
-     * restore_include_path() resets path to default in ini, 
+     * restore_include_path() resets path to default in ini,
      * breaking application's custom paths, so a custom backup is necessary.
      */
     private static $include_path_backup;
@@ -174,7 +174,7 @@ class PHPTAL
      */
     private static $include_path_set_nesting = 0;
     //}}}
-    
+
     /**
      * PHPTAL Constructor.
      *
@@ -245,7 +245,7 @@ class PHPTAL
     /**
      * Set template from source.
      *
-     * Should be used only with temporary template sources. 
+     * Should be used only with temporary template sources.
      * Use setTemplate() or addSourceResolver() whenever possible.
      *
      * @param string $src The phptal template source.
@@ -330,11 +330,11 @@ class PHPTAL
 
     /**
      * Set output mode
-     * XHTML output mode will force elements like <link/>, <meta/> and <img/>, etc. 
-     * to be empty and threats attributes like selected, checked to be 
+     * XHTML output mode will force elements like <link/>, <meta/> and <img/>, etc.
+     * to be empty and threats attributes like selected, checked to be
      * boolean attributes.
      *
-     * XML output mode outputs XML without such modifications 
+     * XML output mode outputs XML without such modifications
      * and is neccessary to generate RSS feeds properly.
      *
      * @param int $mode (PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5).
@@ -389,9 +389,9 @@ class PHPTAL
     }
 
     /**
-     * Set the storage location for intermediate PHP files. 
+     * Set the storage location for intermediate PHP files.
      * The path cannot contain characters that would be interpreted by glob() (e.g. *[]?)
-     * 
+     *
      * @param string $path Intermediate file path.
      */
     public function setPhpCodeDestination($path)
@@ -434,9 +434,9 @@ class PHPTAL
     /**
      * Flags whether to ignore intermediate php files and to
      * reparse templates every time (if set to true).
-     * 
+     *
      * DON'T USE IN PRODUCTION - this makes PHPTAL many times slower.
-     * 
+     *
      * @param bool bool Forced reparse state.
      */
     public function setForceReparse($bool)
@@ -455,7 +455,7 @@ class PHPTAL
 
     /**
      * Set I18N translator.
-     * 
+     *
      * This sets encoding used by the translator, so be sure to use encoding-dependent
      * features of the translator (e.g. addDomain) _after_ calling setTranslator.
      */
@@ -478,7 +478,7 @@ class PHPTAL
     }
 
     /**
-     * Set template post filter. 
+     * Set template post filter.
      * It will be called every time after template generates output.
      */
     public function setPostFilter(PHPTAL_Filter $filter)
@@ -560,14 +560,13 @@ class PHPTAL
         }
 
         // unshift doctype
-        $docType = $this->_context->_docType;
-        if ($docType) {
-            $res = $docType . "\n" . $res;
+        if ($this->_context->_docType) {
+            $res = $this->_context->_docType . "\n" . $res;
         }
+
         // unshift xml declaration
-        $xmlDec = $this->_context->_xmlDeclaration;
-        if ($xmlDec) {
-            $res = $xmlDec . "\n" . $res;
+        if ($this->_context->_xmlDeclaration) {
+            $res = $this->_context->_xmlDeclaration . "\n" . $res;
         }
 
         if ($this->_postfilter) {
@@ -609,7 +608,7 @@ class PHPTAL
     }
 
     /**
-     * This is PHPTAL's internal function that handles 
+     * This is PHPTAL's internal function that handles
      * execution of macros from templates.
      *
      * $this is caller's context (the file where execution had originally started)
@@ -618,9 +617,9 @@ class PHPTAL
      */
     final public function _executeMacroOfTempalte($path, PHPTAL $local_tpl)
     {
-        // extract macro source file from macro name, if macro path does not 
+        // extract macro source file from macro name, if macro path does not
         // contain filename, then the macro is assumed to be local
-        
+
         if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m)) {
             list(,$file, $macroName) = $m;
 
@@ -633,7 +632,7 @@ class PHPTAL
 
                 // keep it small (typically only 1 or 2 external files are used)
                 if (count($this->externalMacroTempaltesCache) > 10) {
-                    $this->externalMacroTempaltesCache = array(); 
+                    $this->externalMacroTempaltesCache = array();
                 }
                 $this->externalMacroTempaltesCache[$file] = $tpl;
             }
@@ -694,7 +693,7 @@ class PHPTAL
             // parse template if php generated code does not exists or template
             // source file modified since last generation or force reparse is set
             if ($this->getForceReparse() || !file_exists($this->getCodePath())) {
-                
+
                 // i'm not sure where that belongs, but not in normal path of execution
                 // because some sites have _a lot_ of files in temp
                 if ($this->getCachePurgeFrequency() && mt_rand()%$this->getCachePurgeFrequency() == 0) {
@@ -706,15 +705,15 @@ class PHPTAL
                 if (!file_put_contents($this->getCodePath(), $result)) {
                     throw new PHPTAL_IOException('Unable to open '.$this->getCodePath().' for writing');
                 }
-                        
+
                 // the awesome thing about eval() is that parse errors don't stop PHP.
-                // when PHP dies during eval, fatal error is printed and 
-                // can be captured with output buffering            
+                // when PHP dies during eval, fatal error is printed and
+                // can be captured with output buffering
                 ob_start();
                 try {
                     eval('require $this->getCodePath();');
-                
-                    if (!function_exists($this->getFunctionName())) {                
+
+                    if (!function_exists($this->getFunctionName())) {
                         $msg = ob_get_contents();
                         // greedy .* ensures last match
                         if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line =$m[1]; else $line=0;
@@ -726,7 +725,7 @@ class PHPTAL
                     throw $e;
                 }
                 ob_end_clean();
-                                
+
             } else {
                 // eval trick is used only on first run,
                 // just in case it causes any problems with opcode accelerators
@@ -777,7 +776,7 @@ class PHPTAL
 
 
     /**
-     * Removes all compiled templates from cache that 
+     * Removes all compiled templates from cache that
      * are older than getCacheLifetime() days
      */
     public function cleanUpGarbage()
@@ -842,7 +841,7 @@ class PHPTAL
      */
     public function getFunctionName()
     {
-       // function name is used as base for caching, so it must be unique for 
+       // function name is used as base for caching, so it must be unique for
        // every combination of settings that changes code in compiled template
 
        if (!$this->_functionName) {
@@ -851,7 +850,7 @@ class PHPTAL
             $basename = preg_replace('/\.[a-z]{3,4}$/','',basename($this->_source->getRealPath()));
             $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,20);
 
-            $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath() . $this->getEncoding() . 
+            $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath() . $this->getEncoding() .
                         ($this->_prefilter ? get_class($this->_prefilter) : '-') . $this->getOutputMode(),
                         true);
 
@@ -875,7 +874,7 @@ class PHPTAL
      */
     private function getFunctionNamePrefix($timestamp)
     {
-        // tpl_ prefix and last modified time must not be changed, 
+        // tpl_ prefix and last modified time must not be changed,
         // because cache cleanup relies on that
         return 'tpl_' . sprintf("%08x",$timestamp) .'_';
     }
@@ -973,10 +972,10 @@ class PHPTAL
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
         $generator = new PHPTAL_Php_CodeGenerator(
-            $this->getFunctionName(), 
-            $this->_source->getRealPath(), 
-            $this->_encoding, 
-            $this->_outputMode, 
+            $this->getFunctionName(),
+            $this->_source->getRealPath(),
+            $this->_encoding,
+            $this->_outputMode,
             $this->getCodePath());
         $result = $generator->generateCode($tree);
 
@@ -998,6 +997,11 @@ class PHPTAL
             return;
         }
 
+        if (!$this->_resolvers && !$this->_repositories)
+        {
+            $this->_source = new PHPTAL_FileSource($this->_path);
+        }
+
         foreach ($this->_resolvers as $resolver) {
             $source = $resolver->resolve($this->_path);
             if ($source) {
@@ -1016,9 +1020,9 @@ class PHPTAL
 
     /**
      * Set include path to contain PHPTAL's directory.
-     * Every call to setIncludePath() MUST have corresponding call 
+     * Every call to setIncludePath() MUST have corresponding call
      * to restoreIncludePath()!
-     * 
+     *
      * Calls to setIncludePath/restoreIncludePath can be nested.
      *
      * @return void
@@ -1043,10 +1047,10 @@ class PHPTAL
             set_include_path(self::$include_path_backup);
         }
     }
-      
+
     final public static function autoload($class)
     {
-       static $except = array(        
+       static $except = array(
             'PHPTAL_FileSourceResolver'=>'PHPTAL_FileSource',
             'PHPTAL_NamespaceAttributeReplace'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeSurround'=>'PHPTAL_NamespaceAttribute',
@@ -1057,7 +1061,7 @@ class PHPTAL
             'PHPTAL_InvalidVariableNameException'=>'PHPTAL_Exception',
             'PHPTAL_VariableNotFoundException'=>'PHPTAL_Exception',
             'PHPTAL_ConfigurationException'=>'PHPTAL_Exception',
-            'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',            
+            'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',
         );
 
         if (!isset($except[$class])) {
