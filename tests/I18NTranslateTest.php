@@ -71,9 +71,9 @@ class I18NTranslateTest extends PHPTAL_TestCase
         <p i18n:translate="var"/>
         <p i18n:translate="structure var"/>
         </div>');
-        $this->assertEquals('<div>
+        $this->assertEquals(trim_string('<div>
         <p>&lt;b class=&quot;foo&amp;amp;bar&quot;&gt;translated&amp;nbsp;key&lt;/b&gt;</p>
         <p><b class="foo&amp;bar">translated&nbsp;key</b></p>
-        </div>',$tpl->execute());
+        </div>'),trim_string($tpl->execute()));
     }
 }

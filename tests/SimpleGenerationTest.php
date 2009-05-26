@@ -84,7 +84,9 @@ EOS;
         foreach ($lines as $line) {
             $code .= trim($line);
         }
-        return $code;
+        
+        // ignore some no-ops
+        return str_replace(array('<?php ?>','<?php ; ?>','{;'),array('','','{'),$code);
     }
 }
 
