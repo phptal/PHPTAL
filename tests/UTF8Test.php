@@ -17,8 +17,16 @@ require_once dirname(__FILE__)."/config.php";
 
 class UTF8Test extends PHPTAL_TestCase
 {
-     function testLipsum()
-     {
+    function testFile()
+    {
+        $this->assertContains(
+            rawurldecode("%D0%97%D0%B0%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B8%D1%80%D1%83%D0%B9%D1%82%D0%B5%D1%81%D1%8C"), 
+            $this->newPHPTAL('input/utf8.xml')->execute()
+        );
+    }
+    
+    function testLipsum()
+    {
             $tpl = $this->newPHPTAL()->setSource(rawurldecode('<?xml version="1.0" encoding="UTF-8"?>
                 <test>Lørem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Iñtërnâtiônàlizætiøn, これは日本語のテキストです。読めますか. देखें हिन्दी कैसी नजर आती है। अरे वाह ये तो नजर आती है।. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</test>'))->execute();
     }

@@ -370,8 +370,8 @@ class PHPTAL_Dom_SaxXmlParser
                . '|[\xF1-\xF3][\x80-\xBF]{3}'         // planes 4-15
                . '|\xF4[\x80-\x8F][\x80-\xBF]{2}';    // plane 16
 
-            if (!preg_match('/^(?:'.$match.')*$/s',$str)) {
-                $res = preg_split('/('.$match.')/s',$str,NULL,PREG_SPLIT_DELIM_CAPTURE);
+            if (!preg_match('/^(?>'.$match.')*$/s',$str)) {
+                $res = preg_split('/(?>'.$match.')/s',$str,NULL,PREG_SPLIT_DELIM_CAPTURE);
                 for($i=0; $i < count($res); $i+=2)
                 {
                     $res[$i] = self::convertInvalidBytes(array(1=>$res[$i]));
