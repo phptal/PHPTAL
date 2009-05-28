@@ -111,6 +111,17 @@ class XmlParserTest extends PHPTAL_TestCase
         catch(PHPTAL_ParserException $e) { /* ok - rejecting is one way to do it */ }
     }
 
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    public function testSelfClosingSyntaxError()
+    {
+        $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
+        $src = '<a / >';
+
+        $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+    }
+
     public function testFixOrRejectEntities()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
