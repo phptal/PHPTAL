@@ -2498,7 +2498,7 @@ function phptal_tales_money( $src, $nothrow )
       Natürlich kann man alte bzw. unbenutzte Dateien auch via cron Job und shell löschen (hier: UNIXartige Shell):
     </para>
 
-    <programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -exec rm -v {} \;</programlisting>
+    <programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -delete</programlisting>
   </article>
   <article id="usefullinks">
     <title>Nützliche Verweise</title>

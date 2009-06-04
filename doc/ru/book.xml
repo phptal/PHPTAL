@@ -2290,7 +2290,7 @@ function phptal_tales_money( $src, $nothrow )
           </para><para>
           Alternatively you can also schedule the deletion of old/unused files
           by running this from an Unix-like shell (e.g. in a cron job):
-</para><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -exec rm -v {} \;</programlisting>
+</para><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -delete</programlisting>
 </article>
   <article id="usefullinks">
     <title>Useful links</title>
