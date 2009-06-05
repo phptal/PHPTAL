@@ -32,7 +32,7 @@ class DoctypeTest extends PHPTAL_TestCase
 		$res = $tpl->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/doctype.02.html');
-		$this->assertEquals($exp, $res);		
+		$this->assertEquals($exp, $res);
 	}
 
 	function testDeepMacro()
