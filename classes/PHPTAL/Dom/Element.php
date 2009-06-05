@@ -172,27 +172,24 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             /// code generation
 
             if ($codewriter->isDebugOn()) {
-                $codewriter->pushCode('$ctx->_line = '.$this->getSourceLine());
+                $codewriter->doSetVar('$ctx->_line',$this->getSourceLine());
                 $codewriter->doComment('tag "'.$this->qualifiedName.'" from line '.$this->getSourceLine());
             }
 
-            if (count($this->replaceAttributes) > 0) {
-                $this->generateSurroundHead($codewriter);
+            $this->generateSurroundHead($codewriter);
+
+            if (count($this->replaceAttributes)) {
                 foreach($this->replaceAttributes as $att) {
                     $att->before($codewriter);
                     $att->after($codewriter);
                 }
-                $this->generateSurroundFoot($codewriter);
-                return;
-            }
-
-            $this->generateSurroundHead($codewriter);
-            // a surround tag may decide to hide us (tal:define for example)
-            if (!$this->hidden) {
+            } elseif (!$this->hidden) {
+                // a surround tag may decide to hide us (tal:define for example)
                 $this->generateHead($codewriter);
                 $this->generateContent($codewriter);
                 $this->generateFoot($codewriter);
             }
+            
             $this->generateSurroundFoot($codewriter);
         }
         catch(PHPTAL_TemplateException $e)
@@ -289,10 +286,17 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             $codewriter->doIf($this->headPrintCondition);
         }
 
-        $codewriter->pushHTML('<'.$this->qualifiedName);
+        $html5mode = ($codewriter->getOutputMode() === PHPTAL::HTML5);
+
+        if ($html5mode) {
+            $codewriter->pushHTML('<'.$this->getLocalName());
+        } else {
+            $codewriter->pushHTML('<'.$this->qualifiedName);
+        }
+        
         $this->generateAttributes($codewriter);
 
-        if ($codewriter->getOutputMode() !== PHPTAL::HTML5 && $this->isEmptyNode($codewriter->getOutputMode())) {
+        if (!$html5mode && $this->isEmptyNode($codewriter->getOutputMode())) {
             $codewriter->pushHTML('/>');
         }
         else {
@@ -333,8 +337,12 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             $codewriter->doIf($this->footPrintCondition);
         }
 
-        $codewriter->pushHTML('</'.$this->qualifiedName.'>');
-
+        if ($codewriter->getOutputMode() === PHPTAL::HTML5) {
+            $codewriter->pushHTML('</'.$this->getLocalName().'>');
+        } else {
+            $codewriter->pushHTML('</'.$this->qualifiedName.'>');
+        }
+        
         if ($this->footPrintCondition) {
             $codewriter->doEnd();
         }
@@ -351,11 +359,19 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     private function generateAttributes(PHPTAL_Php_CodeWriter $codewriter)
     {
+        $html5mode = ($codewriter->getOutputMode() === PHPTAL::HTML5);
+        
         foreach($this->getAttributeNodes() as $attr) {
+            
+            // xmlns:foo is not allowed in text/html
+            if ($html5mode && $attr->isNamespaceDeclaration()) {
+                continue;
+            }
+            
             switch ($attr->getReplacedState()) {
                 case PHPTAL_Dom_Attr::NOT_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName());
-                    if ($codewriter->getOutputMode() !== PHPTAL::HTML5 
+                    if ($codewriter->getOutputMode() !== PHPTAL::HTML5
                         || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
                         $html = $codewriter->interpolateHTML($attr->getValueEscaped());
                         $codewriter->pushHTML('='.$codewriter->quoteAttributeValue($html));

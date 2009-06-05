@@ -78,6 +78,16 @@ class PHPTAL_Dom_Attr
         $n = explode(':', $this->qualified_name,2);
         return end($n);
     }
+    
+    /**
+     * Returns true if this attribute is ns declaration (xmlns="...")
+     *  
+     * @return bool
+     */
+    function isNamespaceDeclaration()
+    {
+        return preg_match('/^xmlns(?:$|:)/',$this->qualified_name);
+    }
 
     /**
      * set plain text as value

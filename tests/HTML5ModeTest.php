@@ -37,6 +37,17 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $tpl->setSource('<!DOCTYPE html><p><![CDATA[<hello>]]></p>');
         $this->assertEquals(trim_string('<!DOCTYPE html><p>&lt;hello&gt;</p>'),trim_string($tpl->execute()));
     }
+    
+    function testRemovesXHTMLNS()
+    {
+        $tpl = $this->newPHPTAL()->setOutputMode(PHPTAL::HTML5)->setSource('
+        <html     xmlns="http://www.w3.org/1999/xhtml">
+            <x:head  xmlns:x="http://www.w3.org/1999/xhtml"/></html>
+            ');
+            
+        $this->assertEquals(trim_string('<html><head></head></html>'),trim_string($tpl->execute()));
+
+    }
 
     function testDoctype()
     {
@@ -73,7 +84,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         </html>');
         $res = $tpl->execute();
         $res = trim_string($res);
-        $exp = trim_string('<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml">
+        $exp = trim_string('<!DOCTYPE html><html>
                 <head>
                     <title></title>
                     <base href="http://example.com/">
@@ -119,7 +130,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         </html>');
         $res = $tpl->execute();
         $res = trim_string($res);
-        $exp = trim_string('<html xmlns="http://www.w3.org/1999/xhtml">
+        $exp = trim_string('<html>
                 <body>
                     <input type=checkbox checked>
                     <input type=text readonly>
