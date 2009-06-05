@@ -78,24 +78,29 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
     public function setLanguage(/*...*/)
     {
         $langs = func_get_args();
+        
+        $langCode = $this->trySettingLanguages(LC_ALL,$langs);        
+        if ($langCode) return $langCode;
+        
+        if (defined("LC_MESSAGES")) {
+            $langCode = $this->trySettingLanguages(LC_MESSAGES,$langs);
+            if ($langCode) return $langCode;
+        }
+        
+        throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');        
+    }
+    
+    private function trySettingLanguages($category, array $langs)
+    {
         foreach ($langs as $langCode) {
             putenv("LANG=$langCode");
             putenv("LC_ALL=$langCode");
             putenv("LANGUAGE=$langCode");
-            if (setlocale(LC_ALL, $langCode)) {
+            if (setlocale($category, $langCode)) {
                 return $langCode;
             }
         }
-        foreach ($langs as $langCode) {
-            putenv("LANG=$langCode");
-            putenv("LC_ALL=$langCode");
-            putenv("LANGUAGE=$langCode");
-            if (setlocale(LC_MESSAGES, $langCode)) {
-                return $langCode;
-            }
-        }
-
-        throw new PHPTAL_ConfigurationException('Language(s) code(s) "'.implode(', ', $langs).'" not supported by your system');
+        return NULL;
     }
 
     /**
