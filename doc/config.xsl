@@ -4,6 +4,36 @@
                 xmlns="http://www.w3.org/1999/xhtml"
                 version="1.0">
 
+<xsl:template match="example" mode="object.title.markup">
+	<xsl:param name="allow-anchors" select="0"/>
+  <xsl:call-template name="substitute-markup">
+    <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
+    <xsl:with-param name="template" select="'%t'"/>
+  </xsl:call-template>
+</xsl:template>
+
+<xsl:template match="*" mode="object.title.markup.textonly">
+  <xsl:variable name="title">
+    <xsl:apply-templates select="." mode="object.title.markup"/>
+  </xsl:variable>
+  <xsl:value-of select="normalize-space($title)"/>
+</xsl:template>
+
+  <xsl:param name="formal.object.break.after" select="0"/>
+  <xsl:param name="admon.style" select="''"/>
+
+	<xsl:template name="nongraphical.admonition">
+	  <div class="{name(.)}">
+	    <h4 class="title">
+	      <xsl:call-template name="anchor"/>
+	      <xsl:if test="$admon.textlabel != 0 or title">
+	        <xsl:apply-templates select="." mode="object.title.markup"/>
+	      </xsl:if>
+	    </h4>
+	    <xsl:apply-templates/>
+	  </div>
+	</xsl:template>
+
   <xsl:param name="html.stylesheet" select="'/new.css'"/>
   <xsl:param name="html.extra.head.links" select="1"></xsl:param>
   <xsl:param name="navig.showtitles">1</xsl:param>
