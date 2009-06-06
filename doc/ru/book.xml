@@ -1047,7 +1047,7 @@ title="google search engine">the google search engine</a>
       <para>
       <acronym>PHPTALES</acronym> is the expression syntax used inside tal, metal, <acronym>PHPTAL</acronym>
       attributes. From above examples, you should have seen some
-      <acronym>PHPTALES</acronym> examples (string:, php:, not:, …). This chapter
+      <acronym>PHPTALES</acronym> examples (string:, <code>php:</code>, not:, …). This chapter
       describes the usage of <acronym>PHPTALES</acronym> in templates.
       </para>
 
@@ -1087,31 +1087,40 @@ this page has been readed ${page/countRead} times"/>
       </section>
 
       <section id="conditional">
-        <title>Conditional statements</title>
+        <title>Alternative PHP operator syntax</title>
 
         <para>
-        As '&lt;' and '&gt;' should be removed from attribute
-        expression. <acronym>PHPTAL</acronym> provides some equivalent good old
-        text-comparison operators.
+        Because '<code>&lt;</code>', '<code>&gt;</code>' and '<code>&amp;</code>' characters are cumbersome to use in XML, <acronym>PHPTAL</acronym> provides alternative syntax for PHP operators using these characters, and a few more for consistency.
         </para>
 
-        <para>
-        These statements will mostly appear in <sgmltag>tal:condition</sgmltag> attributes,
-        and in php: expressions.
-        </para>
+        <remark>
+        These operators can be used only in <code>php:</code> expressions.
+        </remark>
 
         <itemizedlist>
           <listitem><para>
-          &lt; : LT (less than)
+          <code>&lt;</code> : <code>LT</code> (less than)
           </para></listitem>
           <listitem><para>
-          &gt; : GT (greater than)
+          <code>&gt;</code> : <code>GT</code> (greater than)
           </para></listitem>
           <listitem><para>
-          &lt;= : LE (less or equal)
+          <code>&lt;=</code> : <code>LE</code> (less or equal)
           </para></listitem>
           <listitem><para>
-          &gt;= : GE (greater or equal)
+          <code>&gt;=</code> : <code>GE</code> (greater or equal)
+          </para></listitem>
+          <listitem><para>
+          <code>==</code> : <code>EQ</code> (equal)
+          </para></listitem>
+          <listitem><para>
+          <code>!=</code> : <code>NE</code> (not equal)
+          </para></listitem>
+          <listitem><para>
+          <code>&amp;&amp;</code> : <code>AND</code> 
+          </para></listitem>
+          <listitem><para>
+          <code>||</code> : <code>OR</code> 
           </para></listitem>
         </itemizedlist>
       </section>
@@ -1142,7 +1151,7 @@ string:foo ;; php:doFoo() <!-- only string -->
       </section>
 
       <section id="tales-php">
-        <title>php:</title>
+        <title><code>php:</code></title>
 
         <para>
         This expression evaluates what follows as a regular <acronym>PHP</acronym>
@@ -1169,7 +1178,7 @@ php:SomeClass::$staticVar
 ]]></programlisting>
 
         <para>
-        php: should be used with care and won't be needed in 80% of
+        <code>php:</code> should be used with care and won't be needed in 80% of
         your templates but sometimes you will need to invoke some
         special <acronym>PHP</acronym> method to be certain whether a user is logged in, or
         to retrieve specific complex data depending on some conditions,
@@ -1178,7 +1187,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-not">
-        <title>not:</title>
+        <title><code>not:</code></title>
 
         <para>
         This expression is a boolean one, useful in <sgmltag>tal:condition</sgmltag>
@@ -1190,7 +1199,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-exists">
-        <title>exists:</title>
+        <title><code>exists:</code></title>
 
         <para>
         This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <code>isset()</code>.</para>
@@ -1207,7 +1216,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-default">
-        <title>default</title>
+        <title><code>default</code></title>
 
         <para>
         This is not an expression but a keyword, allowing template
@@ -1235,7 +1244,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-structure">
-        <title>structure</title>
+        <title><code>structure</code></title>
 
         <para>
         This is not an expression modifier but a keyword.
@@ -1277,7 +1286,7 @@ php:SomeClass::$staticVar
         </para>
 
         <para>
-        As a string: expression is always true, string: always terminates
+        As a <code>string:</code> expression is always true, <code>string:</code> always terminates
         an expression chain whatever expression may follow.
         </para>
 
@@ -2217,7 +2226,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-      Modifiers can use other modifiers to generate simpler php
+      Modifiers can use other modifiers to generate simpler <acronym>PHP</acronym>
       code. The example below shows this.
       </para>
 

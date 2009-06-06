@@ -1392,7 +1392,7 @@ string:foo ;; php:doFoo() <!-- eine einzige Zeichenkette -->
       </section>
 
       <section id="tales-php">
-        <title>php:</title>
+        <title><code>php:</code></title>
 
         <para>
           Dieser Operator erwartet als Argument, bis auf zwei Ausnahmen, einen regulären <acronym>PHP</acronym> Ausdruck. '-&gt;' müssen durch Punkte '.' ersetzt werden, und Variablennamen müssen nicht mit einem vorangestellen Dollarzeichen '$' versehen werden.
@@ -1421,7 +1421,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-not">
-        <title>not:</title>
+        <title><code>not:</code></title>
 
         <para>
           Dieser Operator bewirkt eine boolsche Negation. Er wird in <sgmltag>tal:condition</sgmltag> Ausdrücken verwendet.
@@ -1432,7 +1432,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-exists">
-        <title>exists:</title>
+        <title><code>exists:</code></title>
 
         <para>
           Dieser boolsche Operator gibt <varname>wahr</varname> (<varname>true</varname>) zurück, wenn der getestete Pfad existiert und <varname>falsch</varname> (<varname>false</varname>) sonst. Er funktioniert analog zur php isset() Funktion.
@@ -1450,7 +1450,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-default">
-        <title>default</title>
+        <title><code>default</code></title>
 
         <para>
           Dies ist kein Operator, sondern ein Schlüsselwort, daß es Vorlagenentwicklern erlaubt, im Falle eines Fehlers, oder wenn etwas nicht definiert ist, den Inhalt einer Auszeichnung als Ersatzwert zu verwenden.
@@ -1475,7 +1475,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-structure">
-        <title>structure</title>
+        <title><code>structure</code></title>
 
         <para>
           Dies ist kein Operator, sondern ein Schlüsselwort.

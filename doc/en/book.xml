@@ -4,7 +4,7 @@
 
   <bookinfo>
     <title>PHPTAL Manual</title>
-    <subtitle>PHP Template Attribute Language</subtitle>
+    <subtitle><acronym>PHP</acronym> Template Attribute Language</subtitle>
     <date>2008-10-03</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
@@ -276,7 +276,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 ]]></programlisting>
 
     <para>
-    In php, you just have to include the <acronym>PHPTAL</acronym> library, and maybe
+    In <acronym>PHP</acronym>, you just have to include the <acronym>PHPTAL</acronym> library, and maybe
     configure a few variables to customize the template system.
     </para>
 
@@ -808,7 +808,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
         <para>
-        The php: modifier will be explained later, basically if the line
+        The <code>php:</code> modifier will be explained later, basically if the line
         is odd then <sgmltag>tr</sgmltag> will have a <sgmltag>class</sgmltag> attribute with "odd" as value,
         otherwise, no class will be set.
         </para>
@@ -836,7 +836,7 @@ title="google search engine">the google search engine</a>
         false otherwise.
         </para>
 <section id="optional-attrs"><title>Optional attributes</title>
-        <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in php) as last alternative,
+        <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in <acronym>PHP</acronym>) as last alternative,
             attribute won't be added at all if there's no value for it (this avoids adding empty attributes):</para>
         <programlisting language="xml"><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
 
@@ -1160,7 +1160,7 @@ title="google search engine">the google search engine</a>
 
       <section id="xhtml-in-translations"><title><acronym>XHTML</acronym> in translations</title>
           <para>By defaults translations are assumed to contain only text, so <acronym>PHPTAL</acronym> escapes all "&lt;" characters.</para>
-          <para>As of 1.1.14 you can use structure keyword in <sgmltag>i18n:translate</sgmltag> to disable escaping and use translated text as-is:</para>
+          <para>As of 1.1.14 you can use <code>structure</code> keyword in <sgmltag>i18n:translate</sgmltag> to disable escaping and use translated text as-is:</para>
 
            <programlisting language="xml"><![CDATA[      <div i18n:translate="structure '<b>bold text</b>'" />
       ]]></programlisting>
@@ -1276,7 +1276,7 @@ title="google search engine">the google search engine</a>
         This attribute allows us to change the behaviour of <acronym>PHPTALES</acronym>.  The
         default behaviours is to interpret attribute expressions in a
         very <acronym>ZPT</acronym> way. But sometimes you just would like to have <acronym>PHP</acronym>
-        there, and you end up using php: modifier everywhere.
+        there, and you end up using <code>php:</code> modifier everywhere.
         </para>
 
         <para>
@@ -1334,7 +1334,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting>
 
         <para>
-        'php:' modifier is explained in its own chapter.
+        '<code>php:</code>' modifier is explained in its own chapter.
         </para>
       </section>
 
@@ -1386,7 +1386,7 @@ title="google search engine">the google search engine</a>
       <para>
       <acronym>PHPTALES</acronym> is the expression syntax used inside tal, metal, <acronym>PHPTAL</acronym>
       attributes. From above examples, you should have seen some
-      <acronym>PHPTALES</acronym> examples (string:, php:, not:, …). This chapter
+      <acronym>PHPTALES</acronym> examples (<code>string:</code>, <code>php:</code>, <code>not:</code>, …). This chapter
       describes the usage of <acronym>PHPTALES</acronym> in templates.
       </para>
 
@@ -1426,49 +1426,58 @@ this page has been readed ${page/countRead} times"/>
       </section>
 
       <section id="conditional">
-        <title>Conditional statements</title>
+        <title>Alternative <acronym>PHP</acronym> operator syntax</title>
 
         <para>
-        As '&lt;' and '&gt;' should be removed from attribute
-        expression. <acronym>PHPTAL</acronym> provides some equivalent good old
-        text-comparison operators.
+        Because '<code>&lt;</code>', '<code>&gt;</code>' and '<code>&amp;</code>' characters are cumbersome to use in XML, <acronym>PHPTAL</acronym> provides alternative syntax for <acronym>PHP</acronym> operators using these characters, and a few more for consistency.
         </para>
 
-        <para>
-        These statements will mostly appear in <sgmltag>tal:condition</sgmltag> attributes,
-        and in php: expressions.
-        </para>
+        <remark>
+        These operators can be used only in <code>php:</code> expressions.
+        </remark>
 
         <itemizedlist>
           <listitem><para>
-          &lt; : LT (less than)
+          <code>&lt;</code> : <code>LT</code> (less than)
           </para></listitem>
           <listitem><para>
-          &gt; : GT (greater than)
+          <code>&gt;</code> : <code>GT</code> (greater than)
           </para></listitem>
           <listitem><para>
-          &lt;= : LE (less or equal)
+          <code>&lt;=</code> : <code>LE</code> (less or equal)
           </para></listitem>
           <listitem><para>
-          &gt;= : GE (greater or equal)
+          <code>&gt;=</code> : <code>GE</code> (greater or equal)
+          </para></listitem>
+          <listitem><para>
+          <code>==</code> : <code>EQ</code> (equal)
+          </para></listitem>
+          <listitem><para>
+          <code>!=</code> : <code>NE</code> (not equal)
+          </para></listitem>
+          <listitem><para>
+          <code>&amp;&amp;</code> : <code>AND</code> 
+          </para></listitem>
+          <listitem><para>
+          <code>||</code> : <code>OR</code> 
           </para></listitem>
         </itemizedlist>
       </section>
 
       <section id="tales-string">
-        <title>string:</title>
+        <title><code>string:</code></title>
 
         <para>
-        Because expressions are separated by a ';' character, and
-        because '$' marks the start of a path, you must use:
+        Because expressions are separated by a '<code>;</code>' character, and
+        because '<code>$</code>' marks the start of a path, you must use:
         </para>
 
         <itemizedlist>
           <listitem><para>
-          '<literal>;;</literal>' when you want to insert a real ';' character in a string,
+          '<literal>;;</literal>' when you want to insert a real '<code>;</code>' character in a string,
           </para></listitem>
           <listitem><para>
-          '<literal>$$</literal>' when you want to insert a real '$' character in a string.
+          '<literal>$$</literal>' when you want to insert a real '<code>$</code>' character in a string.
           </para></listitem>
         </itemizedlist>
 
@@ -1481,17 +1490,17 @@ string:foo ;; php:doFoo() <!-- only string -->
       </section>
 
       <section id="tales-php">
-        <title>php:</title>
+        <title><code>php:</code></title>
 
         <para>
         This expression evaluates what follows as a regular <acronym>PHP</acronym>
-        expression except that '-&gt;' are replaced by dots '.' and
-        variable names does not need to be prefixed with a dollar '$'
+        expression except that '<code>-&gt;</code>' is replaced by dots '<code>.</code>' and
+        variable names does are prefixed with a dollar '<code>$</code>'
         sign.
         </para>
 
         <para>
-        A dot '.' separated from the rest of expression by spaces is
+        A dot '<code>.</code>' separated from the rest of expression by spaces is
         assumed to be a concatenation sign.
         </para>
 
@@ -1508,7 +1517,7 @@ php:SomeClass::$staticVar
 ]]></programlisting>
 
         <para>
-        php: should be used with care and won't be needed in 80% of
+        <code>php:</code> should be used with care and won't be needed in 80% of
         your templates but sometimes you will need to invoke some
         special <acronym>PHP</acronym> method to be certain whether a user is logged in, or
         to retrieve specific complex data depending on some conditions,
@@ -1517,7 +1526,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-not">
-        <title>not:</title>
+        <title><code>not:</code></title>
 
         <para>
         This expression is a boolean one, useful in <sgmltag>tal:condition</sgmltag>
@@ -1529,7 +1538,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-exists">
-        <title>exists:</title>
+        <title><code>exists:</code></title>
 
         <para>
         This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <code>isset()</code>.</para>
@@ -1546,7 +1555,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-default">
-        <title>default</title>
+        <title><code>default</code></title>
 
         <para>
         This is not an expression but a keyword, allowing template
@@ -1574,7 +1583,7 @@ php:SomeClass::$staticVar
       </section>
 
       <section id="tales-structure">
-        <title>structure</title>
+        <title><code>structure</code></title>
 
         <para>
         This is not an expression modifier but a keyword.
@@ -1616,7 +1625,7 @@ php:SomeClass::$staticVar
         </para>
 
         <para>
-        As a string: expression is always true, string: always terminates
+        As a <code>string:</code> expression is always true, <code>string:</code> always terminates
         an expression chain whatever expression may follow.
         </para>
 
@@ -2556,7 +2565,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-      Modifiers can use other modifiers to generate simpler php
+      Modifiers can use other modifiers to generate simpler <acronym>PHP</acronym>
       code. The example below shows this.
       </para>
 
