@@ -155,18 +155,18 @@
 
     <para>Eстановку можно выполнить с помощью утилит pear:</para>
 
-    <informalexample><programlisting><![CDATA[pear install http://phptal.org/latest.tar.gz
+    <informalexample><programlisting language="sh"><![CDATA[pear install http://phptal.org/latest.tar.gz
 ]]></programlisting></informalexample>
 
 
     <para>После установки, так же просто можно обновлять <acronym>PHPTAL</acronym>, используя <acronym>PEAR</acronym>:</para>
 
-    <informalexample><programlisting><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
+    <informalexample><programlisting language="sh"><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
 ]]></programlisting></informalexample>
 
     <para>Можно обойтись и без <acronym>PEAR</acronym>, попросту разархивировав архив.</para>
 
-    <informalexample><programlisting><![CDATA[tar zxvf PHPTAL-X.X.X.tar.gz
+    <informalexample><programlisting language="sh"><![CDATA[tar zxvf PHPTAL-X.X.X.tar.gz
 cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 ]]></programlisting></informalexample>
 
@@ -608,7 +608,7 @@ catch (Exception $e){
 
         <para>Для примера, пусть значение '<varname>somelink</varname>' будет таковым:</para>
 
-        <informalexample><programlisting><![CDATA[$somelink->href = "http://www.google.com";
+        <informalexample><programlisting language="php"><![CDATA[$somelink->href = "http://www.google.com";
 $somelink->title = "google search engine";
 $somelink->text = "the google search engine";
 ]]></programlisting></informalexample>
@@ -1755,7 +1755,7 @@ echo $tpl->execute();
       <classname>PHPTAL_GetTextTranslator</classname>.
       </para>
 
-      <informalexample><programlisting><![CDATA[$tpl->setTranslator($yourOwnTranslatorInstance);
+      <informalexample><programlisting language="php"><![CDATA[$tpl->setTranslator($yourOwnTranslatorInstance);
 ]]></programlisting></informalexample>
 
       <para>
@@ -1983,7 +1983,7 @@ else
         po minimalistic example (<filename>en_US/LC_MESSAGES/mydomain.po</filename>):
         </para>
 
-        <informalexample><programlisting><![CDATA[msgid ""
+        <informalexample><programlisting language="po"><![CDATA[msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2017,7 +2017,7 @@ msgstr "A small sentence in english"
         po minimalistic example (<filename>fr_FR/LC_MESSAGES/mydomain.po</filename>):
         </para>
 
-        <informalexample><programlisting><![CDATA[msgid ""
+        <informalexample><programlisting language="po"><![CDATA[msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2030,7 +2030,7 @@ msgstr "Une petite phrase en français"
         The translation file must also be indexed:
         </para>
 
-        <informalexample><programlisting><![CDATA[msgfmt mydomain.po -o mydomain.mo
+        <informalexample><programlisting language="sh"><![CDATA[msgfmt mydomain.po -o mydomain.mo
 ]]></programlisting></informalexample>
 
       </section>
@@ -2085,7 +2085,7 @@ catch (Exception $e){
 
 <para>If you need to translate some other text, that is not in the template (e.g. plaintext e-mail message), you can reuse PHPTAL's translator:</para>
 
-<informalexample><programlisting><![CDATA[$tr = $tpl->getTranslator();
+<informalexample><programlisting language="php"><![CDATA[$tr = $tpl->getTranslator();
 
 $subject = $tr->translate("Registration information");
 
@@ -2235,7 +2235,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       code. The example below shows this.
       </para>
 
-      <informalexample><programlisting><![CDATA[//
+      <informalexample><programlisting language="php"><![CDATA[//
 // This modifier will return a money formated string (XXX.XX)
 //
 // usage:
