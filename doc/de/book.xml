@@ -1736,9 +1736,8 @@ EOS;
 require_once 'PHPTAL.php';
 $tpl = new PHPTAL();
 
-// because the source is contained in this file and won't be modified unless
-// this file is modified, it is 'faster' to specify __FILE__ as the unique
-// source identifier, thus no md5 of $src will be done on each call.
+// If you specify where the source comes from (second argument to setSource),
+// PHPTAL will be able to generate more helpful error messages.
 $tpl->setSource($src, __FILE__);
 $tpl->title = 'this is my title';
 try {
@@ -1857,8 +1856,8 @@ echo $tpl->execute();
       <para>
       The <constant>PHPTAL_Trigger::end()</constant> will be called after the element
       (whether it has been executed or not). This allows you to build
-      cache systems using ob_start() in start() and ob_get_contents(),
-      ob_end_clean() in end().
+      cache systems using <constant>ob_start()</constant> in <methodname>start()</methodname> and <constant>ob_get_contents()</constant>,
+      <constant>ob_end_clean()</constant> in <methodname>end()</methodname>.
       </para>
 
       <programlisting><![CDATA[<html>
@@ -1945,7 +1944,7 @@ class CacheTrigger implements PHPTAL_Trigger
 ]]></programlisting>
 
       <para>
-      The key here is to return from start() with either <constant>SKIPTAG</constant> or
+      The key here is to return from <methodname>start()</methodname> with either <constant>SKIPTAG</constant> or
       <constant>PROCEED</constant>.
       </para>
 
@@ -2018,7 +2017,7 @@ echo $tpl->execute();
       </para>
 
       <section id="i18n-setlanguage">
-        <title>method setLanguage(…)</title>
+        <title>method <methodname>setLanguage(<replaceable>…</replaceable>)</methodname></title>
 
         <para>
         Diese Methode kann durch die Vorlage aufgerufen werden um die aktuelle Ausgabesprache zu ändern.
@@ -2049,7 +2048,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-usedomain">
-        <title>method useDomain($domain)</title>
+        <title>method <methodname>useDomain(<replaceable>$domain</replaceable>)</methodname></title>
 
         <para>
           If you decided to store your translations into separate files,
@@ -2087,7 +2086,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-setvar">
-        <title>method setVar($key,$value)</title>
+        <title>method <methodname>setVar(<replaceable>$key</replaceable>,<replaceable>$value</replaceable>)</methodname></title>
 
         <para>
         This method matches <sgmltag>i18n:name</sgmltag> calls. It builds an interpolation
@@ -2110,7 +2109,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-translatekey">
-        <title>method translate($key)</title>
+        <title>method <methodname>translate(<replaceable>$key</replaceable>)</methodname></title>
 
         <para>
         The last and most important method to implement, it asks your
@@ -2285,7 +2284,7 @@ msgstr "Une petite phrase en français"
       </section>
 
       <section id="php-in-phptal">
-        <title><acronym>PHP</acronym> usage in <acronym>PHPTAL</acronym></title>
+        <title>Using Translator in <acronym>PHP</acronym></title>
 
         <programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
@@ -2308,11 +2307,29 @@ try {
 
     // tell PHPTAL to use our translator
     $tpl->setTranslator($tr);
+    
+    // output translated template
+    echo $tpl->execute();
 }
 catch (Exception $e){
     echo $e;
 }
 ]]></programlisting>
+
+<para>If you need to translate some other text, that is not in the template (e.g. plaintext e-mail message), you can reuse PHPTAL's translator:</para>
+
+<programlisting><![CDATA[$tr = $tpl->getTranslator();
+
+$subject = $tr->translate("Registration information");
+
+$tr->setVar("user",$username);
+$message = $tr->translate("Dear ${user}, thanks for registering!");
+
+mail($email, $subject, $message); 
+]]></programlisting>
+
+<para>If you're using PHPTAL's standard <code>gettext</code> translator, you can use <methodname>gettext()</methodname> too.</para>
+
       </section>
 
       <section id="var-interpolation">

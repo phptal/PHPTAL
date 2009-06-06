@@ -1328,21 +1328,9 @@ php:SomeClass::$staticVar
     <section id="constants">
       <title>Constants</title>
 
+      <para> The only constant defined in <filename>PHPTAL.php</filename> is <constant>PHPTAL_VERSION</constant>. It contains version of <acronym>PHPTAL</acronym> library installed on your system (in format: <code>X.X.X</code>).</para>
       <para>
-      After the inclusion of <acronym>PHPTAL</acronym> library, some defines will be
-      created in <acronym>PHP</acronym> context, all these defines come from <filename>PHPTAL.php</filename>
-      file:
-      </para>
-
-      <itemizedlist>
-        <listitem><para>
-        <classname>PHPTAL_VERSION</classname>: version of <acronym>PHPTAL</acronym> library installed on your
-        system (in format: X.X.X)
-        </para></listitem>
-      </itemizedlist>
-
-      <para>
-      In older versions of there were constants for configuration. They have been replaced with methods.
+      In older versions of there were constants for configuration. They have been removed in favour of methods.
       </para>
   </section>
   <section id="configuration">
@@ -1474,7 +1462,7 @@ catch (Exception $e){
 
       <para>
       In the above example, because <acronym>PHPTAL</acronym> requires a template source
-      idenfifier (usually the template file realpath), <acronym>PHPTAL</acronym> will use the md5
+      identifier (usually the template file realpath), <acronym>PHPTAL</acronym> will use the md5
       of the <varname>$src</varname> parameter as a unique identifier. You may decide to force the
       identifier using a second <methodname>setSource()</methodname> argument:
       </para>
@@ -1494,9 +1482,8 @@ EOS;
 require_once 'PHPTAL.php';
 $tpl = new PHPTAL();
 
-// because the source is contained in this file and won't be modified unless
-// this file is modified, it is 'faster' to specify __FILE__ as the unique
-// source identifier, thus no md5 of $src will be done on each call.
+// If you specify where the source comes from (second argument to setSource),
+// PHPTAL will be able to generate more helpful error messages.
 $tpl->setSource($src, __FILE__);
 $tpl->title = 'this is my title';
 try {
@@ -1615,8 +1602,8 @@ echo $tpl->execute();
       <para>
       The <constant>PHPTAL_Trigger::end()</constant> will be called after the element
       (whether it has been executed or not). This allows you to build
-      cache systems using ob_start() in start() and ob_get_contents(),
-      ob_end_clean() in end().
+      cache systems using <constant>ob_start()</constant> in <methodname>start()</methodname> and <constant>ob_get_contents()</constant>,
+      <constant>ob_end_clean()</constant> in <methodname>end()</methodname>.
       </para>
 
       <programlisting><![CDATA[<html>
@@ -1703,7 +1690,7 @@ class CacheTrigger implements PHPTAL_Trigger
 ]]></programlisting>
 
       <para>
-      The key here is to return from start() with either <constant>SKIPTAG</constant> or
+      The key here is to return from <methodname>start()</methodname> with either <constant>SKIPTAG</constant> or
       <constant>PROCEED</constant>.
       </para>
 
@@ -1776,7 +1763,7 @@ echo $tpl->execute();
       </para>
 
       <section id="i18n-setlanguage">
-        <title>method setLanguage(…)</title>
+        <title>method <methodname>setLanguage(<replaceable>…</replaceable>)</methodname></title>
 
         <para>
         This method may be called by the template to change the current
@@ -1785,7 +1772,7 @@ echo $tpl->execute();
 
         <para>
         Its arguments are a list of possible languages (use
-        func_get_args() to get the argument array). The first known
+        <constant>func_get_args()</constant> to get the argument array). The first known
         language should be used by your service.
         </para>
 
@@ -1810,7 +1797,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-usedomain">
-        <title>method useDomain($domain)</title>
+        <title>method <methodname>useDomain(<replaceable>$domain</replaceable>)</methodname></title>
 
         <para>
         If you decided to store your translations into separate files,
@@ -1845,7 +1832,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-setvar">
-        <title>method setVar($key,$value)</title>
+        <title>method <methodname>setVar(<replaceable>$key</replaceable>,<replaceable>$value</replaceable>)</methodname></title>
 
         <para>
         This method matches <sgmltag>i18n:name</sgmltag> calls. It builds an interpolation
@@ -1868,7 +1855,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-translatekey">
-        <title>method translate($key)</title>
+        <title>method <methodname>translate(<replaceable>$key</replaceable>)</methodname></title>
 
         <para>
         The last and most important method to implement, it asks your
@@ -1905,7 +1892,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 
 
         <section id="i18n-setencoding">
-          <title>method setEncoding($encoding)</title>
+          <title>method <methodname>setEncoding(<replaceable>$encoding</replaceable>)</methodname></title>
 
           <para>
               <acronym>PHPTAL</acronym> class calls this method to inform your translation service what encoding is used by the template. <code>translate()</code> method should return strings in that encoding. If you always use the same encoding for templates and translation files (i.e. UTF-8), you can leave this method empty.
@@ -2064,7 +2051,7 @@ msgstr "Une petite phrase en français"
       </section>
 
       <section id="php-in-phptal">
-        <title><acronym>PHP</acronym> usage in <acronym>PHPTAL</acronym></title>
+        <title>Using Translator in <acronym>PHP</acronym></title>
 
         <programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
@@ -2087,11 +2074,29 @@ try {
 
     // tell PHPTAL to use our translator
     $tpl->setTranslator($tr);
+    
+    // output translated template
+    echo $tpl->execute();
 }
 catch (Exception $e){
     echo $e;
 }
 ]]></programlisting>
+
+<para>If you need to translate some other text, that is not in the template (e.g. plaintext e-mail message), you can reuse PHPTAL's translator:</para>
+
+<programlisting><![CDATA[$tr = $tpl->getTranslator();
+
+$subject = $tr->translate("Registration information");
+
+$tr->setVar("user",$username);
+$message = $tr->translate("Dear ${user}, thanks for registering!");
+
+mail($email, $subject, $message); 
+]]></programlisting>
+
+<para>If you're using PHPTAL's standard <code>gettext</code> translator, you can use <methodname>gettext()</methodname> too.</para>
+
       </section>
 
       <section id="var-interpolation">
