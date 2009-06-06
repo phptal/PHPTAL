@@ -1832,7 +1832,7 @@ echo $tpl->execute();
       <title>interface <classname>PHPTAL_Trigger</classname></title>
 
       <para>
-      The <sgmltag>phptal:id</sgmltag> attribute was added into the <acronym>PHPTAL</acronym> for the PHP5
+      The <sgmltag>phptal:id</sgmltag> attribute was added into the <acronym>PHPTAL</acronym> for the <acronym>PHP5</acronym>
       version to replace the old <classname>PHPTAL_Cache</classname> interface and to abstract
       it a little more.
       </para>
@@ -1873,7 +1873,7 @@ echo $tpl->execute();
 ]]></programlisting>
 
       <para>
-      For some reason we decide the div block requires to be cached. We
+      For some reason we decide the <sgmltag>&lt;div&gt;</sgmltag> block requires to be cached. We
       introduce a <sgmltag>phptal:id</sgmltag> into the template:
       </para>
 
@@ -1889,7 +1889,7 @@ echo $tpl->execute();
 ]]></programlisting>
 
       <para>
-      Then we write our trigger which will cache the div content:
+      Then we write our trigger which will cache the <sgmltag>&lt;div&gt;</sgmltag> content:
       </para>
 
       <programlisting><![CDATA[<?php
