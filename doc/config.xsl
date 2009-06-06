@@ -12,13 +12,6 @@
   </xsl:call-template>
 </xsl:template>
 
-<xsl:template match="*" mode="object.title.markup.textonly">
-  <xsl:variable name="title">
-    <xsl:apply-templates select="." mode="object.title.markup"/>
-  </xsl:variable>
-  <xsl:value-of select="normalize-space($title)"/>
-</xsl:template>
-
   <xsl:param name="formal.object.break.after" select="0"/>
   <xsl:param name="admon.style" select="''"/>
 
@@ -34,7 +27,7 @@
 	  </div>
 	</xsl:template>
 
-  <xsl:param name="html.stylesheet" select="'/new.css'"/>
+  <xsl:param name="html.stylesheet" select="'/new.css /prettify.css'"/>
   <xsl:param name="html.extra.head.links" select="1"></xsl:param>
   <xsl:param name="navig.showtitles">1</xsl:param>
     
@@ -146,17 +139,23 @@
       </div>
 
      
-      <xsl:text disable-output-escaping="yes">&lt;div id="page"></xsl:text>
      
  </xsl:template>
- 
+
+ <xsl:template name="user.footer.navigation">
+	<script type="text/javascript" src="/prettify.js"></script>
+	<script type="text/javascript">if (window.prettyPrint) prettyPrint()</script>
+ </xsl:template>
 <xsl:template name="apply-highlighting">
   <!-- 
     xslthl = saxon = java = pain, and if that wasn't enough, docbook-xsl drops language attribute.
   -->
   <code>
     <xsl:if test="@language">
-      <xsl:attribute name="class"><xsl:value-of select="@language"/></xsl:attribute>
+      <xsl:attribute name="class">
+				<xsl:if test="@language">lang-<xsl:value-of select="@language"/></xsl:if>
+				prettyprint
+			</xsl:attribute>
     </xsl:if>    
     <xsl:apply-templates/>    
   </code>  

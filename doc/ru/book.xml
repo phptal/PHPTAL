@@ -218,7 +218,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 
     <para>Все, что Вам понадобиться сделать в php - это включить (include) библиотеку <acronym>PHPTAL</acronym> и, возможно, установить несколько переменных, чтобы настроить шаблонную систему.</para>
 
-    <informalexample><programlisting><![CDATA[<?php
+    <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
 
 // создать обработчик шаблонов
@@ -1339,11 +1339,11 @@ php:SomeClass::$staticVar
       <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
 
       <para>All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:</para>
-        <informalexample><programlisting><![CDATA[<?php
+        <informalexample><programlisting language="php"><![CDATA[<?php
   echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
 ?>]]></programlisting></informalexample>
 <para>то же самое, что и:</para>
-        <informalexample><programlisting><![CDATA[<?php
+        <informalexample><programlisting language="php"><![CDATA[<?php
   $phptal->setPhpCodeDestination('/tmp/phptal');
   $phptal->setOutputMode(PHPTAL::XML);
   $phptal->setTemplate('tpl.zpt');
@@ -1384,7 +1384,7 @@ php:SomeClass::$staticVar
       The most common method of use:
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 
 // include the library
 require_once 'PHPTAL.php';
@@ -1413,7 +1413,7 @@ catch (Exception $e){
       after setting context variables.
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 …
 $tpl = new PHPTAL();
 
@@ -1433,7 +1433,7 @@ $tpl->setTemplate('mytemplate.xhtml');
       source instead of using an existing template file:
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 
 $src = <<<EOS
 <html>
@@ -1467,7 +1467,7 @@ catch (Exception $e){
       identifier using a second <methodname>setSource()</methodname> argument:
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 $src = <<<EOS
 <html>
   <head>
@@ -1515,7 +1515,7 @@ catch (Exception $e){
       Post filters are invoked after each template execution.
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
 
 class MyPreFilter implements PHPTAL_Filter {
@@ -1544,7 +1544,7 @@ echo $tpl->execute();
       interface, which would invoke the filter's chain.
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
 
 class FilterChain implements PHPTAL_Filter {
@@ -1637,7 +1637,7 @@ echo $tpl->execute();
       Then we write our trigger which will cache the <sgmltag>&lt;div&gt;</sgmltag> content:
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/Trigger.php';
 
@@ -1711,7 +1711,7 @@ class CacheTrigger implements PHPTAL_Trigger
       To install our trigger we use:
       </para>
 
-      <informalexample><programlisting><![CDATA[<?php
+      <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
 require_once 'CacheTrigger.php'; // our custom trigger
 
@@ -1776,7 +1776,7 @@ echo $tpl->execute();
         language should be used by your service.
         </para>
 
-        <informalexample><programlisting><![CDATA[<?php
+        <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -1805,7 +1805,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         select the translation domain from your templates (<sgmltag>i18n:domain</sgmltag>).
         </para>
 
-        <informalexample><programlisting><![CDATA[<?php
+        <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -1839,7 +1839,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         context for later translate calls.
         </para>
 
-        <informalexample><programlisting><![CDATA[<?php
+        <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -1863,7 +1863,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         language.
         </para>
 
-        <informalexample><programlisting><![CDATA[<?php
+        <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -2053,7 +2053,7 @@ msgstr "Une petite phrase en français"
       <section id="php-in-phptal">
         <title>Using Translator in <acronym>PHP</acronym></title>
 
-        <informalexample><programlisting><![CDATA[<?php
+        <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/GetTextTranslator.php';
 
