@@ -115,18 +115,18 @@
 
     <para>Если Вы уже использовали какие-либо системы шаблонов, то наверняка сталкивались с чем-то вроде этого:</para>
 
-    <programlisting><![CDATA[<table>
+    <informalexample><programlisting><![CDATA[<table>
   <%loop myarray as myitem %>
   <tr>
     <td><% myitem %></td>
   </tr>
   <%/loop%>
 </table>
-]]></programlisting>
+]]></programlisting></informalexample>
 
     <para>В <acronym>PHPTAL</acronym> можно описать тоже самое проще и красивее:</para>
 
-    <programlisting><![CDATA[<table>
+    <informalexample><programlisting><![CDATA[<table>
   <tr tal:repeat="myitem myarray">
     <td tal:content="myitem">
       Текст, который будет заменен значением myitem
@@ -136,7 +136,7 @@
     <td tal:replace="">Пример 3</td>
   </tr>
 </table>
-]]></programlisting>
+]]></programlisting></informalexample>
 
     <para>Такой шаблон будет корректно отображен в браузере с примерами &quot;Пример 1&quot;, &quot;Пример 2&quot; и &quot;Пример 3&quot;, поэтому можно продемонстрировать его клиенту даже на той стадии, когда код, необходимый для получения значений 'myarray', еще не существует.</para>
 
@@ -155,20 +155,20 @@
 
     <para>Eстановку можно выполнить с помощью утилит pear:</para>
 
-    <programlisting><![CDATA[pear install http://phptal.org/latest.tar.gz
-]]></programlisting>
+    <informalexample><programlisting><![CDATA[pear install http://phptal.org/latest.tar.gz
+]]></programlisting></informalexample>
 
 
     <para>После установки, так же просто можно обновлять <acronym>PHPTAL</acronym>, используя <acronym>PEAR</acronym>:</para>
 
-    <programlisting><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
-]]></programlisting>
+    <informalexample><programlisting><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
+]]></programlisting></informalexample>
 
     <para>Можно обойтись и без <acronym>PEAR</acronym>, попросту разархивировав архив.</para>
 
-    <programlisting><![CDATA[tar zxvf PHPTAL-X.X.X.tar.gz
+    <informalexample><programlisting><![CDATA[tar zxvf PHPTAL-X.X.X.tar.gz
 cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
-]]></programlisting>
+]]></programlisting></informalexample>
 
     <para>Эти инструкции установят файл <filename>PHPTAL.php</filename> и соответствующую папку <acronym>PHPTAL</acronym> в директорию /path/to/your/lib/folder.</para>
 
@@ -181,7 +181,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 
     <para>Ваш шаблон всегда будет синтаксически правильным xml/html документом (с присутствующим корневым элементом)! Вот пример файла под названием 'my_template_file.xhtml'.</para>
 
-    <programlisting><![CDATA[<?xml version="1.0"?>
+    <informalexample><programlisting><![CDATA[<?xml version="1.0"?>
 <html>
   <head>
     <title tal:content="title">
@@ -214,11 +214,11 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
     </table>
   </body>
 </html>
-]]></programlisting>
+]]></programlisting></informalexample>
 
     <para>Все, что Вам понадобиться сделать в php - это включить (include) библиотеку <acronym>PHPTAL</acronym> и, возможно, установить несколько переменных, чтобы настроить шаблонную систему.</para>
 
-    <programlisting><![CDATA[<?php
+    <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
 
 // создать обработчик шаблонов
@@ -254,11 +254,11 @@ catch (Exception $e){
     echo $e;
 }
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
     <para>Выполнив такой <acronym>PHP</acronym> скрипт, Вы получите что-то вроде этого:</para>
 
-    <programlisting><![CDATA[<?xml version="1.0"?>
+    <informalexample><programlisting><![CDATA[<?xml version="1.0"?>
 <html>
   <head>
     <title>Я Заголовок</title>
@@ -287,7 +287,7 @@ catch (Exception $e){
     </table>
   </body>
 </html>
-]]></programlisting>
+]]></programlisting></informalexample>
 
     <para>
 
@@ -307,19 +307,19 @@ catch (Exception $e){
 
       <para>Рассмотрим пример:</para>
 
-      <programlisting><![CDATA[<span tal:define="usersList application/listUsers"
+      <informalexample><programlisting><![CDATA[<span tal:define="usersList application/listUsers"
       tal:condition="somecondition"
       tal:repeat="user usersList"
 >…</span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para><emphasis>абсолютно</emphasis> идентична такой:</para>
 
-      <programlisting><![CDATA[<span tal:repeat="user usersList"
+      <informalexample><programlisting><![CDATA[<span tal:repeat="user usersList"
       tal:condition="somecondition"
       tal:define="usersList application/listUsers"
 >…</span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>Приоритет обработки атрибутов, например, tal:define и tal:condition, не будет зависеть от того, в каком порядке они записаны внутри тега SPAN. Порядок обработки определяется спецификацией <acronym>TAL</acronym>:</para>
 
@@ -374,28 +374,28 @@ catch (Exception $e){
 
         <para>Объявление переменной, содержащей длинный путь:</para>
 
-        <programlisting><![CDATA[<span tal:define="global destname path/to/existing/variable" />
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:define="global destname path/to/existing/variable" />
+]]></programlisting></informalexample>
 
         <para>Объявление строки внутри шаблона:</para>
 
-        <programlisting><![CDATA[<span tal:define="global destname string:some string" />
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:define="global destname string:some string" />
+]]></programlisting></informalexample>
 
         <para>Объявление нескольких переменных одновременно:</para>
 
-        <programlisting><![CDATA[<span tal:define="global fname string:paul; lname string:dupond" />
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:define="global fname string:paul; lname string:dupond" />
+]]></programlisting></informalexample>
 
         <para>Объявление переменной с использованием другой переменной:</para>
 
-        <programlisting><![CDATA[<span tal:define="global hello string:hello $fname welcome on this page" />
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:define="global hello string:hello $fname welcome on this page" />
+]]></programlisting></informalexample>
 
         <para>И маленький трюк с использованием буфера вывода:</para>
 
-        <programlisting><![CDATA[<span tal:define="global hello">hello ${fname} welcome on this page</span>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:define="global hello">hello ${fname} welcome on this page</span>
+]]></programlisting></informalexample>
 
         <para><sgmltag>tal:define</sgmltag> можно и удобно использовать вместе с другими атрибутами, но он всегда будет обработан первым.</para>
 
@@ -403,34 +403,34 @@ catch (Exception $e){
 
         <para>Но вот другой пример:</para>
 
-        <programlisting><![CDATA[<span tal:define="hello string:hello ${fname} welcome on this page"
+        <informalexample><programlisting><![CDATA[<span tal:define="hello string:hello ${fname} welcome on this page"
       tal:content="hello"
 />
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Здесь переменная 'hello' будет установлена, а ее содержимое попадет в тег span</para>
 
         <para>
 	<emphasis>однако</emphasis>, следующий пример неверный (точнее, не отобразит никакого содержания внутри span), т.к. <sgmltag>tal:define</sgmltag> определит содержание переменной 'hello' перед тем, как <sgmltag>tal:content</sgmltag> использует ее для определения того, что должно быть внутри элемента span. Чтобы не было указано внутри span в шаблоне, это будет проигнорированно (заменено значением переменной 'hello'). Но в нашем случае hello не будет определено, и поэтому возникнет исключение (exception).</para>
 
-        <programlisting><![CDATA[<span tal:define="hello" tal:content="hello">
+        <informalexample><programlisting><![CDATA[<span tal:define="hello" tal:content="hello">
   hello ${fname} welcome on this page
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
 	<para>Кстати, в этом примере мы не использовали слово 'global' перед определением переменной. В <acronym>PHPTAL</acronym> переменные бывают глобальными и локальными.</para>
 	
 	<para>Глобальная переменная будет доступна во всем шаблоне и в вызываемых из него макросов.</para>
 
-	<programlisting><![CDATA[<span tal:define="global hello string:hello world"/>
+	<informalexample><programlisting><![CDATA[<span tal:define="global hello string:hello world"/>
 <p tal:content="hello"/>
-]]></programlisting>
+]]></programlisting></informalexample>
 
 	<para>Локальная же переменная видна только внутри тега, в котором она определена:</para>
 
-	<programlisting><![CDATA[<span tal:define="hello string:hello world"/>
+	<informalexample><programlisting><![CDATA[<span tal:define="hello string:hello world"/>
 <p tal:content="hello"/> <!-- вызовет ошибку "неопределенной переменной" -->
-]]></programlisting>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -440,27 +440,27 @@ catch (Exception $e){
 
         <para>Тег и его содержимое будет отображено только тогда, когда условие выполняется.</para>
 
-        <programlisting><![CDATA[<span tal:condition="identified"> Приветствуем, наш любимый посетитель! </span>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:condition="identified"> Приветствуем, наш любимый посетитель! </span>
+]]></programlisting></informalexample>
 
-        <programlisting><![CDATA[<span tal:condition="not: identified">
+        <informalexample><programlisting><![CDATA[<span tal:condition="not: identified">
   Пожалуйста, авторизуйтесь, чтобы получить доступ к этой странице
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Если программисты <acronym>PHP</acronym> скрипта не предоставили Вам (разработчику шаблонов) нужные методы и переменные в передаваемых шаблону данных, Вы можете сами выполнить необходимый <acronym>PHP</acronym> код:</para>
 
-        <programlisting><![CDATA[<span tal:comment="отобразить, только если в корзине больше 5-и позиций"
+        <informalexample><programlisting><![CDATA[<span tal:comment="отобразить, только если в корзине больше 5-и позиций"
       tal:condition="php: cart.countItems() GT 5">…</span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Частое использование инструкций &lt;a0&gt;PHP&lt;/a0&gt; в шаблонах привело бы к тому, что логика скрипта была бы разбросана между PHP файлами и шаблонами, что уводит нас от изначальной идеи разделения кода и вида. Поэтому желательно обеспечить разработчиков шаблонов всеми нужными булевыми значениями и методами, например:</para>
 
-        <programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
+]]></programlisting></informalexample>
 
-        <programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">…</span>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:condition="fullfillNumerousItems">…</span>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -471,10 +471,10 @@ catch (Exception $e){
 
         <para>Атрибут repeat поочередно пробегает по всем значениеям указанного ресурса (например, массива).</para>
 
-        <programlisting><![CDATA[<tr tal:repeat="item some/result">
+        <informalexample><programlisting><![CDATA[<tr tal:repeat="item some/result">
   <td tal:content="item">текст, который заменится значением из item</td>
 </tr>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Внутри цикла можно использовать специальные ключевые слова <varname>repeat/<replaceable>*</replaceable></varname>, чтобы получить доступ к информации об состоянии цикле (и всех внешних циклов).</para>
 
@@ -503,7 +503,7 @@ catch (Exception $e){
 
         <para>Одно из самых распространненных применений атрибута <sgmltag>tal:repeat</sgmltag> - отображение разультатов запроса к базе данных. Следующий пример сработает только в том случае, если <varname>playersRanking</varname> является объектом, реализующим интерфейс <acronym>PHP</acronym> <constant>Iterator</constant>:</para>
 
-        <programlisting><![CDATA[<table>
+        <informalexample><programlisting><![CDATA[<table>
   <thead>
     <tr>
       <th>Позиция</th>
@@ -519,7 +519,7 @@ catch (Exception $e){
     </tr>
   </tbody>
 </table>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -528,21 +528,21 @@ catch (Exception $e){
 
         <para>Этот атрибут заставит парсер <acronym>PHPTAL</acronym> проигнорировать открывающий и закрывающий теги элемента и вывести только его содержимое.</para>
 
-        <programlisting><![CDATA[<span tal:omit-tag="condition">
+        <informalexample><programlisting><![CDATA[<span tal:omit-tag="condition">
   если условие condition верно, то только ЭТОТ текст будет показан (открывающий и закрывающий теги span будут упущены)
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>В результате получим:</para>
 
-        <programlisting><![CDATA[если условие condition верно, то только ЭТОТ текст будет показан (открывающий и закрывающий теги span будут упущены)
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[если условие condition верно, то только ЭТОТ текст будет показан (открывающий и закрывающий теги span будут упущены)
+]]></programlisting></informalexample>
 
         <para>Этот атрибут полезен, чтобы создать &quot;опциональный&quot; элемент. Например, спрятать ссылку, если какое-то условие не выполняется.</para>
 
         <para>Если Вам нужен элемент, теги которого никогда не будут выведены, используйте <sgmltag>tal:block</sgmltag></para>
-        <programlisting><![CDATA[<tal:block tal:repeat="x php:range(1,10)">только этот текст будет выведен; 10 раз</tal:block>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<tal:block tal:repeat="x php:range(1,10)">только этот текст будет выведен; 10 раз</tal:block>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -551,20 +551,20 @@ catch (Exception $e){
 
         <para>Используя этот атрибут, можно заменить весь элемент целиком (включая открывающий и закрывающий тег) на заданную строку, или на пустую, если значение не задано.</para>
 
-        <programlisting><![CDATA[<span tal:replace="string:я - прекрасная строка">
+        <informalexample><programlisting><![CDATA[<span tal:replace="string:я - прекрасная строка">
   а я строка плохая!
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>В результате получим:</para>
 
-        <programlisting><![CDATA[я - прекрасная строка
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[я - прекрасная строка
+]]></programlisting></informalexample>
 
         <para>
         <sgmltag>tal:replace</sgmltag> удобно использовать для создания примеров в шаблоне, которые должны быть игнорированы при его обработке перед отображением.</para>
 
-        <programlisting><![CDATA[<table>
+        <informalexample><programlisting><![CDATA[<table>
   <tr tal:repeat="item myresult">
     <td tal:content="item">значение item</td>
   </tr>
@@ -575,7 +575,7 @@ catch (Exception $e){
     <td>Пример 2</td>
   </tr>
 </table>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -584,14 +584,14 @@ catch (Exception $e){
 
         <para>Значение этого атрибута станет текстом внутри тега.</para>
 
-        <programlisting><![CDATA[<span tal:define="myvar string:моя строка"/>
+        <informalexample><programlisting><![CDATA[<span tal:define="myvar string:моя строка"/>
 <span tal:content="myvar">этот текст будет заменен</span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>В результате получим:</para>
 
-        <programlisting><![CDATA[<span>моя строка</span>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span>моя строка</span>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -600,34 +600,34 @@ catch (Exception $e){
 
         <para>С помощью tal:attributes можно устанавливать на лету значения атрибутов тега.</para>
 
-        <programlisting><![CDATA[<a href="http://www.foo.com" title="some foo link"
+        <informalexample><programlisting><![CDATA[<a href="http://www.foo.com" title="some foo link"
    tal:attributes="href somelink/href; title somelink/title"
   tal:content="somelink/text"
 >какая-нибудь ссылка</a>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Для примера, пусть значение '<varname>somelink</varname>' будет таковым:</para>
 
-        <programlisting><![CDATA[$somelink->href = "http://www.google.com";
+        <informalexample><programlisting><![CDATA[$somelink->href = "http://www.google.com";
 $somelink->title = "google search engine";
 $somelink->text = "the google search engine";
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>В результате получим:</para>
 
-        <programlisting><![CDATA[<a href="http://www.google.com"
+        <informalexample><programlisting><![CDATA[<a href="http://www.google.com"
 title="google search engine">the google search engine</a>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Точка с запятой (<literal>;</literal>) разделяет несколько атрибутов. Чтобы записать точку с запятой как часть значения, необходимо ее продублировать (<literal>;;</literal>).</para>
 
         <para>Вот пример, где <sgmltag>tal:attributes</sgmltag> используется совместно с <sgmltag>tal:repeat</sgmltag>:</para>
 
-        <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
+        <informalexample><programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
     …
 </tr>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Модификатор php: будет описан ниже. Итак, рассмотрим наш пример. Если рядок нечетный, тогда для <sgmltag>tr</sgmltag> будет использован атрибут <sgmltag>class</sgmltag>=&quot;odd&quot;. Для четных же рядков атрибут <sgmltag>class</sgmltag> вообще не будет установлен.</para>
 
@@ -635,20 +635,20 @@ title="google search engine">the google search engine</a>
 
         <para>Правильнее было бы попросить <acronym>PHP</acronym> программиста обеспечить дизайнера шаблонов специальными модификаторами (см. <acronym>PHP</acronym> интеграция / пользовательские модификаторы), которые могли бы использоваться примерно так:</para>
 
-        <programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
+        <informalexample><programlisting><![CDATA[<tr tal:repeat="ranking playerRankings"
     tal:attributes="class css-odd:repeat/ranking/odd">
   …
 </tr>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Модификатор возвратит &quot;odd&quot;, если <varname>repeat/ranking/odd</varname> равен true, а иначе false.</para>
 <section id="optional-attrs"><title>Опциональные атрибуты</title>
         <para>Задавая значение, можно использовать так называемые альтернативные значения, разделяя их знаком |. Если первое значение не определено, парсер попытается подставить следующее в цепочке, если оно тоже не определено - следующе, и т.д. При использовании альтернативных значений, в <sgmltag>tal:attributes</sgmltag> можно использовать значение <varname>nothing</varname> (или <varname>NULL</varname> в выражении php) как последнее альтернативное значение. Тогда атрибут не будет добавлен тегу, если значение для атрибута не определено. Это позволит избежать &quot;пустых&quot; атрибутов:</para>
-        <programlisting><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting>
+        <informalexample><programlisting><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting></informalexample>
 
         <para><acronym>XHTML</acronym> атрибуты <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag> и другие подобные  будут также обработаны правильно.</para>
 
-        <programlisting><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting>
+        <informalexample><programlisting><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting></informalexample>
 
         <para>Не забывайте, что <acronym>XHTML</acronym> регистро-зависим, поэтому запись <sgmltag>SELECTED</sgmltag> ошибочна в <acronym>XHTML</acronym>. Правильная запись - <sgmltag>selected</sgmltag>.</para>
       </section>
@@ -658,20 +658,20 @@ title="google search engine">the google search engine</a>
 
         <para>Значение этого атрибута подставится в тег, если тег содержит внутри себя ошибку (например, неверно заданный путь, или исключение, вызванное <acronym>PHP</acronym> во время генерации тега).</para>
 
-        <programlisting><![CDATA[<span tal:on-error="string:Имя пользователя не определено"
+        <informalexample><programlisting><![CDATA[<span tal:on-error="string:Имя пользователя не определено"
       tal:content="user/name">этот текст заменится на имя пользователя</span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Если доступ к 'name' или 'user' вызовет ошибку, то на месте тега будет показано сообщение об ошибке.</para>
 
         <para>Этот механим работает для любой вложенности тегов:</para>
 
-        <programlisting><![CDATA[<span tal:on-error="string:где-то возникла ошибка">
+        <informalexample><programlisting><![CDATA[<span tal:on-error="string:где-то возникла ошибка">
   <span tal:content="user/firstname"/>
   <span tal:content="user/lastname"/>
   <span metal:use-macro="userMenu" />
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -688,7 +688,7 @@ title="google search engine">the google search engine</a>
 
         <para>Этот атрибут объявляет макрос. По своей сути макросы это обычные шаблоны, которые могут быть многократно вставлены в другие шаблоны.</para>
 
-        <programlisting><![CDATA[<div metal:define-macro="main_menu">
+        <informalexample><programlisting><![CDATA[<div metal:define-macro="main_menu">
   <ul>
     <li><a href="/">Главная</a></li>
     <li><a href="/products">Продукция</a></li>
@@ -700,7 +700,7 @@ title="google search engine">the google search engine</a>
     <span tal:content="mdate">дата последнего обновления</span>
   </div>
 </div>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Макрос наследует доступные переменные из вызывающего шаблона. В нашем примере значение переменной 'mdate' нужно объявить в шаблоне, в котором используют этот макрос.</para>
       </section>
@@ -710,32 +710,32 @@ title="google search engine">the google search engine</a>
 
         <para>Этот атрибут вызывает макрос и включает результат его выполнения в текущий шаблон в то место, откуда он вызван</para>
 
-        <programlisting><![CDATA[<span
+        <informalexample><programlisting><![CDATA[<span
   tal:comment="шаблон main_menu требует переменную 'mdate'"
   tal:define="mdate page/last_modified"
   metal:use-macro="main_menu"
 />
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Можно даже вызвать макрос из другого файла, просто дописав путь к нему:</para>
 
-        <programlisting><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
+]]></programlisting></informalexample>
 
         <para>При этом можно использовать всю гибкость подстановок переменных:</para>
 
-        <programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
+]]></programlisting></informalexample>
 
 
         <para>Макрос может вызывать самого себя. Таким образом, можно использовать рекурсию для вывода массивов:</para>
-        <programlisting><![CDATA[        <ul metal:define-macro="show-list">
+        <informalexample><programlisting><![CDATA[        <ul metal:define-macro="show-list">
             <li tal:repeat="item list">
                 <tal:block tal:condition="php:is_array(item)" tal:define="list item" metal:use-macro="show-list" />
                 <tal:block tal:condition="php:!is_array(item)" tal:content="item" />
             </li>
         </ul>
-        ]]></programlisting>
+        ]]></programlisting></informalexample>
 
       </section>
 
@@ -749,14 +749,14 @@ title="google search engine">the google search engine</a>
 
         <para>Cлоты помогают разнообразить страницы. Если макрос представить как целую страницу, то слоты можно предствить как секции, варьирующиеся в зависимости от, например, <acronym>URL</acronym>. К примеру, на той же главной странице сайта слот выводит свежие новости или перечень действий, доступных пользователю после его авторизации.</para>
 
-        <programlisting><![CDATA[<span metal:define-slot="news_place">
+        <informalexample><programlisting><![CDATA[<span metal:define-slot="news_place">
   <table>
     <tr tal:repeat="item php:latestNews()">
       <td tal:content="item/value">news description</td>
     </tr>
   </table>
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>В этом примере мы определяем секцию под названием '<emphasis>news_place</emphasis>', содержимое которой может быть подменено вызывающим шаблоном. Ниже мы рассмотрим, как использовать слоты, ссылаясь на этот пример.</para>
 
@@ -770,7 +770,7 @@ title="google search engine">the google search engine</a>
 
         <para>Он заставит <acronym>PHPTAL</acronym> подменить содержимое объявленного раньше слота.</para>
 
-        <programlisting><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
+        <informalexample><programlisting><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
   ]]><![CDATA[<h2>Меню пользователя]]><![CDATA[</h2>
   <ul>
     <li><a href="/user/action/inbox">входящие</a></li>
@@ -778,7 +778,7 @@ title="google search engine">the google search engine</a>
     <li><a href="/user/action/disconnect">выйти</a></li>
   </ul>
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Таким образом, слоты позволяют с легкостью разнообразить и усложнить шаблоны с помощью простой технологии push.</para>
       </section>
@@ -796,13 +796,13 @@ title="google search engine">the google search engine</a>
 
         <para>Этот атрибут определяет текст, который должен быть переведен с помощью системы перевода, встроенной в <acronym>PHPTAL</acronym>.</para>
 
-        <programlisting><![CDATA[<div i18n:translate="string:welcome_message">Добро пожаловать!</div>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<div i18n:translate="string:welcome_message">Добро пожаловать!</div>
+]]></programlisting></informalexample>
 
         <para>В вышеприведенном примере <acronym>PHPTAL</acronym> будет искать перевод с ключем 'welcome_message' и заменит содержимое тега эквивалентным переводом.</para>
 
-        <programlisting><![CDATA[<div i18n:translate="">Добро пожаловать!</div>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<div i18n:translate="">Добро пожаловать!</div>
+]]></programlisting></informalexample>
 
         <para>А это другой случай: ключ для перевода не указан, поэтому <acronym>PHPTAL</acronym> воспользуется содержимым 'Добро пожаловать!' как ключем для перевода. Таким образом, будет подставлен эквивалентный перевод для ключа 'Добро пожаловать!'.</para>
 
@@ -810,9 +810,9 @@ title="google search engine">the google search engine</a>
 
         <para>Мало того, ключ может задаваться переменной:</para>
 
-        <programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
+        <informalexample><programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
   <div i18n:translate="welcome">…</div>
-</div>]]></programlisting>
+</div>]]></programlisting></informalexample>
 
       </section>
 
@@ -820,8 +820,8 @@ title="google search engine">the google search engine</a>
           <title><sgmltag>i18n:attributes</sgmltag></title>
 
           <para>Задает, какие атрибуты должны быть переведены. Пары значений Атрибут-Ключ должны быть перечислены через точку с запятой:</para>
-          <programlisting><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
-]]></programlisting>
+          <informalexample><programlisting><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
+]]></programlisting></informalexample>
 
       </section>
 
@@ -834,7 +834,7 @@ title="google search engine">the google search engine</a>
 
         <para>Соответствующее значение будет подставлено в тег и его содержимое. Если же Вы не хотите, чтобы значение было помещено в теги, используйте <sgmltag>tal:replace</sgmltag> вместо <sgmltag>tal:content</sgmltag>. Атрибут <sgmltag>tal:omit-tag</sgmltag> пригодится, если значение представляет собой конкатенацию строк.</para>
 
-        <programlisting><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
+        <informalexample><programlisting><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
 <!-- <span>${some/path}</span> -->
 
 <span i18n:name="myVar" tal:replace="some/path"/>
@@ -845,21 +845,21 @@ title="google search engine">the google search engine</a>
 
 <span i18n:name="myVar" tal:omit-tag="">foo</span>
 <!-- foo -->
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Пример использования i18n:</para>
 
-        <programlisting><![CDATA[<div i18n:translate="">
+        <informalexample><programlisting><![CDATA[<div i18n:translate="">
   Добро пожаловать, <span i18n:name="user" tal:replace="user/name"/>,
   у Вас <span i18n:name="mails" tal:replace="user/nbrMails"/>
   непрочитанных писем.
 </div>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>Ключ перевода в этом примере будет следующий:</para>
 
-        <programlisting><![CDATA["Добро пожаловать, ${user}, у Вас ${mails} непрочитанных писем."
-]]></programlisting>
+        <informalexample><programlisting><![CDATA["Добро пожаловать, ${user}, у Вас ${mails} непрочитанных писем."
+]]></programlisting></informalexample>
 
         <para>
         В подставляемом переводе, <acronym>PHPTAL</acronym> заменит <varname>${user}</varname> на <varname>${user/name}</varname>, а <varname>${mails}</varname> на <varname>${user/nbrMails}</varname>.</para>
@@ -871,12 +871,12 @@ title="google search engine">the google search engine</a>
           <para>По умолчанию предполагается, что переводы содержат только текст и не содержат теги, поэтому <acronym>PHPTAL</acronym> экранирует все символы &quot;&lt;&quot;.</para>
           <para>Начиная с версии 1.1.14, в <sgmltag>i18n:translate</sgmltag> допускается использования ключевого слова structure, чтобы отменить экранирование и выводить переведенный текст &quot;как есть&quot;:</para>
 
-           <programlisting><![CDATA[      <div i18n:translate="structure '<b>bold text</b>'" />
-      ]]></programlisting>
+           <informalexample><programlisting><![CDATA[      <div i18n:translate="structure '<b>bold text</b>'" />
+      ]]></programlisting></informalexample>
       <para>Даст:</para>
 
-             <programlisting><![CDATA[        <div><b>bold text</b></div>
-        ]]></programlisting>
+             <informalexample><programlisting><![CDATA[        <div><b>bold text</b></div>
+        ]]></programlisting></informalexample>
 
       <para>Однако, <acronym>TAL</acronym> атрибуты внутри переведенных строк будут игнорированы. Конечно, следует помнить, что плохо форматированный <acronym>XHTML</acronym> в переводах испортит хорошо форматированный шаблон.</para>
     </section>
@@ -903,7 +903,7 @@ title="google search engine">the google search engine</a>
         thrown.
         </para>
 
-        <programlisting><![CDATA[<html>
+        <informalexample><programlisting><![CDATA[<html>
   <head>
     …
   </head>
@@ -918,7 +918,7 @@ title="google search engine">the google search engine</a>
     </div>
   </body>
 </html>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -931,21 +931,21 @@ title="google search engine">the google search engine</a>
               <note><para>Использование кеша рекомендуется только для элементов со сложными выражениями, вычислениями, макросами из внешних файлов или <acronym>PHP</acronym> доступа к БД. Во всех других случаях, некешированные шаблоны будут настолько же быстро обрабатываться, как и кешированные.</para></note>
 
                 <para>В атрибуте необходимо указать, как долго должен сохраниться кеш. Для этого нужно записать число с суффиксом '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' или '<constant>s</constant>'.</para>
-            <programlisting><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting>
+            <informalexample><programlisting><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting></informalexample>
             <para>                  <sgmltag>&lt;div&gt;</sgmltag> будет заново обработан как минимум раз в 3 часа.</para>
 
             <para>Можно ограничить &quot;видимость&quot; кеша, дописав &quot;<varname>per</varname>&quot;. По умолчанию, кеш видим всем страницам, использующим этот шаблон. Используйте &quot;<varname>per url</varname>&quot;, чтобы заданный элемент кешировался отдельно для разных <acronym>URL</acronym>.</para>
 
-            <programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting>
+            <informalexample><programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting></informalexample>
           <para><sgmltag>&lt;ol&gt;</sgmltag> будет кеширован на один день, отдельно для каждой страницы.</para>
 <para>Можно указать &quot;<varname>per expression</varname>&quot;, где expression - некое выражение. Тогда отдельные значения в кеше будут генерироваться для каждого разного значения этого выражения (выражение ДОЛЖНО в результате давать строку). Выражение не может использовать переменные, определенные в том же элементе с помощью <sgmltag>tal:define</sgmltag>.</para>
-<programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting>
+<informalexample><programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting></informalexample>
              <para><sgmltag>&lt;ul&gt;</sgmltag> будет кешироваться каждые 25 минут, отдельно для каждого ID объекта.</para>
 
              <section id="cache-refresh"><title>Принудительное обновление</title>
 
                  <para>Вместо того, чтобы очищать кеш, разумно использовать версию или время последних изменений вместе с <varname>per</varname>. Это повлечет за собой регенерацию кеша каждый раз, когда версия или время правки будут изменены. В этом случае, можно обойтись без очистки кеша.</para>
-<programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting>
+<informalexample><programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting></informalexample>
 
                  </section>
 
@@ -976,7 +976,7 @@ title="google search engine">the google search engine</a>
 
         <para>Конечно, мы перегибаем палку в этом примере, и, на самом деле, чаще всего нас такие проблемы не будут волновать, та как этот процесс очень быстр. Но что, если этот очень длинный путь вызывается в большом цикле <sgmltag>tal:repeat</sgmltag>? Аминь!.. Именно тут <sgmltag>phptal:tales</sgmltag> приходит на помощь:</para>
 
-        <programlisting><![CDATA[<html>
+        <informalexample><programlisting><![CDATA[<html>
   <body>
     <table phptal:tales="php">
       <tr tal:repeat="myobject document.getChildren()">
@@ -986,13 +986,13 @@ title="google search engine">the google search engine</a>
     </table>
   </body>
 </html>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         Please note that the above example does the same as:
         </para>
 
-        <programlisting><![CDATA[<html>
+        <informalexample><programlisting><![CDATA[<html>
   <body>
     <table>
       <tr tal:repeat="myobject php:document.getChildren()">
@@ -1002,7 +1002,7 @@ title="google search engine">the google search engine</a>
     </table>
   </body>
 </html>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>О модификаторе 'php:' читайте подробнее в соответствующей главе .</para>
       </section>
@@ -1015,29 +1015,29 @@ title="google search engine">the google search engine</a>
       <para>
       <sgmltag>tal:block</sgmltag> будет очень полезен, когда нужно спрятать много элементов с обильным количеством <acronym>TAL</acronym> атрибутов. Другими словами, тег &lt;s1&gt;tal:block&lt;/s1&gt; - более короткий способ создать обычный HTML тег с атрибутом &lt;s1&gt;tal:omit-tag&lt;/s1&gt; </para>
 
-      <programlisting><![CDATA[<tal:block define="myvar string:Some value"/>
-]]></programlisting>
+      <informalexample><programlisting><![CDATA[<tal:block define="myvar string:Some value"/>
+]]></programlisting></informalexample>
 
       <para>то же самое, что и:</para>
 
-      <programlisting><![CDATA[<span tal:define="myvar string:Some value" tal:omit-tag=""/>
-]]></programlisting>
+      <informalexample><programlisting><![CDATA[<span tal:define="myvar string:Some value" tal:omit-tag=""/>
+]]></programlisting></informalexample>
 
       <para>Другой пример:</para>
 
-      <programlisting><![CDATA[<tal:block condition="someCondition" repeat="item someRepeat">
+      <informalexample><programlisting><![CDATA[<tal:block condition="someCondition" repeat="item someRepeat">
   <div metal:use-macro="x"/>
 </tal:block>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>то же самое, что и:</para>
 
-      <programlisting><![CDATA[<div tal:omit-tag=""
+      <informalexample><programlisting><![CDATA[<div tal:omit-tag=""
      tal:condition="someCondition"
      tal:repeat="item someRepeat">
   <div metal:use-macro="x"/>
 </div>
-]]></programlisting>
+]]></programlisting></informalexample>
 
     </section><!-- end of *:block -->
 
@@ -1069,10 +1069,10 @@ title="google search engine">the google search engine</a>
         The following lines will give the same result:
         </para>
 
-        <programlisting><![CDATA[<span tal:content="data/user/name"/>
+        <informalexample><programlisting><![CDATA[<span tal:content="data/user/name"/>
 <span tal:content="path:data/user/name"/>
 <span>${data/user/name}</span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         Inside the template or inside expression strings, you can refer
@@ -1080,10 +1080,10 @@ title="google search engine">the google search engine</a>
         <code>${path/to/my/variable}</code>
         </para>
 
-        <programlisting><![CDATA[<h1>${document/title}</h1>
+        <informalexample><programlisting><![CDATA[<h1>${document/title}</h1>
 <span tal:replace="string:welcome ${user/name},
 this page has been readed ${page/countRead} times"/>
-]]></programlisting>
+]]></programlisting></informalexample>
       </section>
 
       <section id="conditional">
@@ -1142,12 +1142,12 @@ this page has been readed ${page/countRead} times"/>
           </para></listitem>
         </itemizedlist>
 
-        <programlisting><![CDATA[<span tal:replace="string:this is a $$100 page"/>
+        <informalexample><programlisting><![CDATA[<span tal:replace="string:this is a $$100 page"/>
 string:foo $bar baz       <!-- will replace $bar -->
 string:foo $$bar baz      <!-- no interpolation -->
 string:foo ; php:doFoo()  <!-- two different expressions -->
 string:foo ;; php:doFoo() <!-- only string -->
-]]></programlisting>
+]]></programlisting></informalexample>
       </section>
 
       <section id="tales-php">
@@ -1165,7 +1165,7 @@ string:foo ;; php:doFoo() <!-- only string -->
         assumed to be a concatenation sign.
         </para>
 
-        <programlisting><![CDATA[php:htmlentities(foo)
+        <informalexample><programlisting><![CDATA[php:htmlentities(foo)
 php:'string ${varReplaced}'
 php:'string ${some.path().to[0].var}'
 php:NOT foo OR (bar GT baz)
@@ -1175,7 +1175,7 @@ php:range(0, 90)
 php:foo . a.b.c(e) . htmlentities(SomeClass::staticMethod())
 php:SomeClass::ConstOfClass
 php:SomeClass::$staticVar
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         <code>php:</code> should be used with care and won't be needed in 80% of
@@ -1194,8 +1194,8 @@ php:SomeClass::$staticVar
         statements.
         </para>
 
-        <programlisting><![CDATA[<span tal:condition="not: logged">not logged</span>
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<span tal:condition="not: logged">not logged</span>
+]]></programlisting></informalexample>
       </section>
 
       <section id="tales-exists">
@@ -1208,10 +1208,10 @@ php:SomeClass::$staticVar
         Normally using a path which doesn't exist throws an error like &quot;Cannot find variable '<varname>foo</varname>' in current scope&quot;. Thus, uncertain paths must be checked first:
         </para>
 
-        <programlisting><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
+        <informalexample><programlisting><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
   Use user/preferences here if defined
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       </section>
 
@@ -1224,7 +1224,7 @@ php:SomeClass::$staticVar
         if an error occurs, or if something is not defined.
         </para>
 
-        <programlisting><![CDATA[<span tal:define="myVar path/to/possible/var | default">
+        <informalexample><programlisting><![CDATA[<span tal:define="myVar path/to/possible/var | default">
   default my var value
 </span>
 
@@ -1235,7 +1235,7 @@ php:SomeClass::$staticVar
 <a href="unknown.xhtml" title="Unknown page"
    tal:attributes="href item/href | default; title item/title | default"
    tal:content="item/title | default">Unknown page</a>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         Above examples introduce the '<literal>|</literal>' character that allows the
@@ -1260,9 +1260,9 @@ php:SomeClass::$staticVar
         Sometimes, you may use <acronym>HTML</acronym>/<acronym>XML</acronym> variables which must be echoed as is.
         </para>
 
-        <programlisting><![CDATA[<h1 tal:content="structure document/title"/>
+        <informalexample><programlisting><![CDATA[<h1 tal:content="structure document/title"/>
 <span tal:replace="structure document/content"/>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         In above examples, we assume that <code>$document-&gt;title</code> and
@@ -1295,7 +1295,7 @@ php:SomeClass::$staticVar
         other expression.
         </para>
 
-        <programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting>
+        <informalexample><programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting></informalexample>
       </section>
 
     </section><!-- end of PHPTALES -->
@@ -1339,16 +1339,16 @@ php:SomeClass::$staticVar
       <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
 
       <para>All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:</para>
-        <programlisting><![CDATA[<?php
+        <informalexample><programlisting><![CDATA[<?php
   echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
-?>]]></programlisting>
+?>]]></programlisting></informalexample>
 <para>то же самое, что и:</para>
-        <programlisting><![CDATA[<?php
+        <informalexample><programlisting><![CDATA[<?php
   $phptal->setPhpCodeDestination('/tmp/phptal');
   $phptal->setOutputMode(PHPTAL::XML);
   $phptal->setTemplate('tpl.zpt');
   echo $phptal->execute();
-?>]]></programlisting>
+?>]]></programlisting></informalexample>
 
       <itemizedlist>
           <listitem><para><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname>: Specify what encoding your templates use. The default is <acronym>UTF-8</acronym>.</para></listitem>
@@ -1384,7 +1384,7 @@ php:SomeClass::$staticVar
       The most common method of use:
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 
 // include the library
 require_once 'PHPTAL.php';
@@ -1406,14 +1406,14 @@ catch (Exception $e){
     echo $e;
 }
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       You can perfectly well choose to specify the template source
       after setting context variables.
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 …
 $tpl = new PHPTAL();
 
@@ -1426,14 +1426,14 @@ $tpl->set('user', new User('Joe'));
 $tpl->setTemplate('mytemplate.xhtml');
 …
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       You can also decide to use a generated string as the template
       source instead of using an existing template file:
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 
 $src = <<<EOS
 <html>
@@ -1458,7 +1458,7 @@ catch (Exception $e){
 }
 
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       In the above example, because <acronym>PHPTAL</acronym> requires a template source
@@ -1467,7 +1467,7 @@ catch (Exception $e){
       identifier using a second <methodname>setSource()</methodname> argument:
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 $src = <<<EOS
 <html>
   <head>
@@ -1494,7 +1494,7 @@ catch (Exception $e){
 }
 
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
     </section>
 
@@ -1515,7 +1515,7 @@ catch (Exception $e){
       Post filters are invoked after each template execution.
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
 
 class MyPreFilter implements PHPTAL_Filter {
@@ -1535,7 +1535,7 @@ $tpl->setPreFilter(new MyPreFilter());
 $tpl->setPostFilter(new MyPostFilter());
 echo $tpl->execute();
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       You can set only one pre-Filter and one post-Filter using
@@ -1544,7 +1544,7 @@ echo $tpl->execute();
       interface, which would invoke the filter's chain.
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
 
 class FilterChain implements PHPTAL_Filter {
@@ -1570,7 +1570,7 @@ $tpl = new PHPTAL('mytemplate.xhtml');
 $tpl->setPostFilter($myFilter);
 echo $tpl->execute();
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
     </section>
 
     <section id="trigger-interface">
@@ -1606,7 +1606,7 @@ echo $tpl->execute();
       <constant>ob_end_clean()</constant> in <methodname>end()</methodname>.
       </para>
 
-      <programlisting><![CDATA[<html>
+      <informalexample><programlisting><![CDATA[<html>
   …
   <div>
     …
@@ -1615,14 +1615,14 @@ echo $tpl->execute();
   </div>
   …
 </html>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       For some reason we decide the <sgmltag>&lt;div&gt;</sgmltag> block requires to be cached. We
       introduce a <sgmltag>phptal:id</sgmltag> into the template:
       </para>
 
-      <programlisting><![CDATA[<html>
+      <informalexample><programlisting><![CDATA[<html>
   …
   <div phptal:id="somePossiblyUniqueKeyword">
     …
@@ -1631,13 +1631,13 @@ echo $tpl->execute();
   </div>
   …
 </html>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       Then we write our trigger which will cache the <sgmltag>&lt;div&gt;</sgmltag> content:
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/Trigger.php';
 
@@ -1687,7 +1687,7 @@ class CacheTrigger implements PHPTAL_Trigger
     private $_usedCache;
 }
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       The key here is to return from <methodname>start()</methodname> with either <constant>SKIPTAG</constant> or
@@ -1711,7 +1711,7 @@ class CacheTrigger implements PHPTAL_Trigger
       To install our trigger we use:
       </para>
 
-      <programlisting><![CDATA[<?php
+      <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
 require_once 'CacheTrigger.php'; // our custom trigger
 
@@ -1727,7 +1727,7 @@ $tpl->id = 1;
 echo $tpl->execute();
 
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <para>
       You can add as many triggers as you like to your templates.  A
@@ -1755,8 +1755,8 @@ echo $tpl->execute();
       <classname>PHPTAL_GetTextTranslator</classname>.
       </para>
 
-      <programlisting><![CDATA[$tpl->setTranslator($yourOwnTranslatorInstance);
-]]></programlisting>
+      <informalexample><programlisting><![CDATA[$tpl->setTranslator($yourOwnTranslatorInstance);
+]]></programlisting></informalexample>
 
       <para>
       Your implementation must define the following methods:
@@ -1776,7 +1776,7 @@ echo $tpl->execute();
         language should be used by your service.
         </para>
 
-        <programlisting><![CDATA[<?php
+        <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -1793,7 +1793,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     private $_currentLang;
 }
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
       </section>
 
       <section id="i18n-usedomain">
@@ -1805,7 +1805,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         select the translation domain from your templates (<sgmltag>i18n:domain</sgmltag>).
         </para>
 
-        <programlisting><![CDATA[<?php
+        <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -1822,7 +1822,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     private $_domains = array();
 }
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         The above example is a possible translation solution where keys
@@ -1839,7 +1839,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         context for later translate calls.
         </para>
 
-        <programlisting><![CDATA[<?php
+        <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -1851,7 +1851,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     private $_context = array();
 }
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
       </section>
 
       <section id="i18n-translatekey">
@@ -1863,7 +1863,7 @@ class MyTranslator implements PHPTAL_TranslationService {
         language.
         </para>
 
-        <programlisting><![CDATA[<?php
+        <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL/TranslationService.php';
 
 class MyTranslator implements PHPTAL_TranslationService {
@@ -1887,7 +1887,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     …
 }
 ?>
-]]></programlisting>
+]]></programlisting></informalexample>
       </section>
 
 
@@ -1926,7 +1926,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       You can test your installation using following peace of code:
       </para>
 
-      <programlisting role="php"><![CDATA[
+      <informalexample><programlisting role="php"><![CDATA[
 //
 // test if gettext extension is installed with php
 //
@@ -1939,7 +1939,7 @@ else
 {
     echo "gettext is supported\n";
 }
-]]></programlisting>
+]]></programlisting></informalexample>
 
       <section id="i18n-directory">
         <title>Creating the translation directory structure</title>
@@ -1949,12 +1949,12 @@ else
         will contain your translation files.
         </para>
 
-        <programlisting><![CDATA[/path/to/your/translation_root/en_US/LC_MESSAGES/
+        <informalexample><programlisting><![CDATA[/path/to/your/translation_root/en_US/LC_MESSAGES/
 /path/to/your/translation_root/en_GB/LC_MESSAGES/
 /path/to/your/translation_root/fr_FR/LC_MESSAGES/
 /path/to/your/translation_root/es_ES/LC_MESSAGES/
 … and so on …
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         The language code is composed of two characters defining the
@@ -1966,8 +1966,8 @@ else
         The directory pattern is:
         </para>
 
-        <programlisting><![CDATA[<path_to_where_you_want>/<ll_CC>/LC_MESSAGES/
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[<path_to_where_you_want>/<ll_CC>/LC_MESSAGES/
+]]></programlisting></informalexample>
 
       </section>
 
@@ -1983,21 +1983,21 @@ else
         po minimalistic example (<filename>en_US/LC_MESSAGES/mydomain.po</filename>):
         </para>
 
-        <programlisting><![CDATA[msgid ""
+        <informalexample><programlisting><![CDATA[msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Simple test"
 msgstr "A small sentence in english"
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         Once edited, each PO file must be indexed using:
         </para>
 
-        <programlisting><![CDATA[msgfmt mydomain.po -o mydomain.mo
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[msgfmt mydomain.po -o mydomain.mo
+]]></programlisting></informalexample>
 
         <para>
         This command won't work if you don't have gettext tools
@@ -2017,21 +2017,21 @@ msgstr "A small sentence in english"
         po minimalistic example (<filename>fr_FR/LC_MESSAGES/mydomain.po</filename>):
         </para>
 
-        <programlisting><![CDATA[msgid ""
+        <informalexample><programlisting><![CDATA[msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 msgid "Simple test"
 msgstr "Une petite phrase en français"
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         The translation file must also be indexed:
         </para>
 
-        <programlisting><![CDATA[msgfmt mydomain.po -o mydomain.mo
-]]></programlisting>
+        <informalexample><programlisting><![CDATA[msgfmt mydomain.po -o mydomain.mo
+]]></programlisting></informalexample>
 
       </section>
 
@@ -2053,7 +2053,7 @@ msgstr "Une petite phrase en français"
       <section id="php-in-phptal">
         <title>Using Translator in <acronym>PHP</acronym></title>
 
-        <programlisting><![CDATA[<?php
+        <informalexample><programlisting><![CDATA[<?php
 require_once 'PHPTAL.php';
 require_once 'PHPTAL/GetTextTranslator.php';
 
@@ -2081,11 +2081,11 @@ try {
 catch (Exception $e){
     echo $e;
 }
-]]></programlisting>
+]]></programlisting></informalexample>
 
 <para>If you need to translate some other text, that is not in the template (e.g. plaintext e-mail message), you can reuse PHPTAL's translator:</para>
 
-<programlisting><![CDATA[$tr = $tpl->getTranslator();
+<informalexample><programlisting><![CDATA[$tr = $tpl->getTranslator();
 
 $subject = $tr->translate("Registration information");
 
@@ -2093,7 +2093,7 @@ $tr->setVar("user",$username);
 $message = $tr->translate("Dear ${user}, thanks for registering!");
 
 mail($email, $subject, $message); 
-]]></programlisting>
+]]></programlisting></informalexample>
 
 <para>If you're using PHPTAL's standard <code>gettext</code> translator, you can use <methodname>gettext()</methodname> too.</para>
 
@@ -2107,27 +2107,27 @@ mail($email, $subject, $message);
         translations.
         </para>
 
-        <programlisting><![CDATA[# english
+        <informalexample><programlisting><![CDATA[# english
 msgid "welcome"
 msgstr "Welcome ${name} you have ${n} mails!"
 
 # french
 msgid "welcome"
 msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         A template can use this interpolation as follows:
         </para>
 
-        <programlisting><![CDATA[<span i18n:translate="welcome">
+        <informalexample><programlisting><![CDATA[<span i18n:translate="welcome">
   Welcome
   <span i18n:name="name" tal:replace="user/name"/>
   you currently have
   <span i18n:name="n" tal:replace="user/unreadeMails"/>
   unread messages!
 </span>
-]]></programlisting>
+]]></programlisting></informalexample>
 
         <para>
         Because <sgmltag>i18n:translate</sgmltag> contains a value 'welcome', the template
@@ -2193,8 +2193,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       For example, in the following <acronym>TAL</acronym> template,
       </para>
 
-      <programlisting><![CDATA[<span tal:replace="some-modifier: my/path/value"/>
-]]></programlisting>
+      <informalexample><programlisting><![CDATA[<span tal:replace="some-modifier: my/path/value"/>
+]]></programlisting></informalexample>
 
       <para>
       The src argument will be &quot;<varname>my/path/value</varname>&quot;, and the <varname>$nothrow</varname> boolean
@@ -2206,8 +2206,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       An expression like:
       </para>
 
-      <programlisting><![CDATA[<span tal:replace="some-modifier: my/path/value | other/path"/>
-]]></programlisting>
+      <informalexample><programlisting><![CDATA[<span tal:replace="some-modifier: my/path/value | other/path"/>
+]]></programlisting></informalexample>
 
       <para>
       Will use 2 modifiers:
@@ -2235,7 +2235,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       code. The example below shows this.
       </para>
 
-      <programlisting><![CDATA[//
+      <informalexample><programlisting><![CDATA[//
 // This modifier will return a money formated string (XXX.XX)
 //
 // usage:
@@ -2269,7 +2269,7 @@ function phptal_tales_money( $src, $nothrow )
     $src = trim($src);
     return 'sprintf("%01.2f", '.phptal_tales($src, $nothrow).')';
 }
-]]></programlisting>
+]]></programlisting></informalexample>
 
     </section>
 
@@ -2304,7 +2304,7 @@ function phptal_tales_money( $src, $nothrow )
           </para><para>
           Alternatively you can also schedule the deletion of old/unused files
           by running this from an Unix-like shell (e.g. in a cron job):
-</para><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -delete</programlisting>
+</para><informalexample><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -delete</programlisting></informalexample>
 </article>
   <article id="usefullinks">
     <title>Useful links</title>
