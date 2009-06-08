@@ -356,36 +356,51 @@ class PHPTAL_Dom_SaxXmlParser
 
     private function checkEncoding($str)
     {
+        if ($str === '') return '';
+        
         if ($this->input_encoding === 'UTF-8') {
+            
+            // $match expression below somehow triggers quite deep recurrency and stack overflow in preg
+            // to avoid this, check string bit by bit, omitting ASCII fragments.
+            if (strlen($str) > 200)
+            {                  
+                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,NULL,PREG_SPLIT_NO_EMPTY);  
+                foreach($chunks as $chunk) {
+                    if (strlen($chunk) < 200) {
+                        $this->checkEncoding($chunk);
+                    }
+                }
+                return $str;
+            }
 
             // http://www.w3.org/International/questions/qa-forms-utf-8
-            $match = '[\x09\x0A\x0D\x20-\x7F]'      // ASCII
+            $match = '[\x09\x0A\x0D\x20-\x7F]'        // ASCII
                . '|[\xC2-\xDF][\x80-\xBF]'            // non-overlong 2-byte
                . '|\xE0[\xA0-\xBF][\x80-\xBF]'        // excluding overlongs
                . '|[\xE1-\xEC\xEE\xEE][\x80-\xBF]{2}' // straight 3-byte (exclude FFFE and FFFF)
-               . '|\xEF[\x80-\xBE][\x80-\xBF]'                // straight 3-byte
-               . '|\xEF\xBF[\x80-\xBD]'                // straight 3-byte
+               . '|\xEF[\x80-\xBE][\x80-\xBF]'        // straight 3-byte
+               . '|\xEF\xBF[\x80-\xBD]'               // straight 3-byte
                . '|\xED[\x80-\x9F][\x80-\xBF]'        // excluding surrogates
                . '|\xF0[\x90-\xBF][\x80-\xBF]{2}'     // planes 1-3
                . '|[\xF1-\xF3][\x80-\xBF]{3}'         // planes 4-15
                . '|\xF4[\x80-\x8F][\x80-\xBF]{2}';    // plane 16
 
-            if (!preg_match('/^(?>'.$match.')*$/s',$str)) {
-                $res = preg_split('/(?>'.$match.')/s',$str,NULL,PREG_SPLIT_DELIM_CAPTURE);
+            if (!preg_match('/^(?:(?>'.$match.'))+$/s',$str)) {
+                $res = preg_split('/((?>'.$match.')+)/s',$str,NULL,PREG_SPLIT_DELIM_CAPTURE);
                 for($i=0; $i < count($res); $i+=2)
                 {
-                    $res[$i] = self::convertInvalidBytes(array(1=>$res[$i]));
-                }
+                    $res[$i] = self::convertBytesToEntities(array(1=>$res[$i]));
+                }                
                 $this->raiseError("Invalid UTF-8 bytes: ".implode('',$res));
             }
         }
         if ($this->input_encoding === 'ISO-8859-1') {
-            
+
             // http://www.w3.org/TR/2006/REC-xml11-20060816/#NT-RestrictedChar
-            $forbid = '/([\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]+)/s';
+            $forbid = '/((?>[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]+))/s';
 
             if (preg_match($forbid,$str)) {
-                $str = preg_replace_callback($forbid,array('self','convertInvalidBytes'),$str);
+                $str = preg_replace_callback($forbid,array('self','convertBytesToEntities'),$str);
                 $this->raiseError("Invalid ISO-8859-1 characters: ".$str);
             }
         }
@@ -393,12 +408,19 @@ class PHPTAL_Dom_SaxXmlParser
         return $str;
     }
 
-    private static function convertInvalidBytes($m)
+    /**
+     * preg callback
+     * Changes all bytes to hexadecimal XML entities
+     * 
+     * @param array $m first array element is used for input
+     * @return string
+     */
+    private static function convertBytesToEntities(array $m)
     {
         $m = $m[1]; $out = '';
         for($i=0; $i < strlen($m); $i++)
         {
-            $out .= '[&#'.ord($m).';]';
+            $out .= '&#X'.strtoupper(dechex(ord($m[$i]))).';';
         }
         return $out;
     }
