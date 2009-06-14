@@ -103,6 +103,37 @@ class XHTMLModeTest extends PHPTAL_TestCase
                 </body>
                 </html>');
         $this->assertEquals($exp, $res);
-   }
+    }
+
+    function testBooleanOrNothing()
+    {
+        $tpl = $this->newPHPTAL()->setSource('
+        <select>
+          <option tal:repeat="option options" tal:attributes="value option/value; 
+        selected option/isSelected | nothing" tal:content="option/label"/>
+        </select>');
+        
+        $tpl->options = array(
+          array(
+             'label' => 'Option1',
+             'value' => 1
+          ),
+          array(
+             'label'      => 'Option2',
+             'value'      => 2,
+             'isSelected' => true
+          ),
+          array(
+             'label' => 'Option3',
+             'value' => 3
+          )
+        );
+        
+        $this->assertEquals(trim_string('<select>
+          <option value="1">Option1</option>
+          <option value="2" selected="selected">Option2</option>
+          <option value="3">Option3</option>
+        </select>'), trim_string($tpl->execute()));
+    }
 }
 

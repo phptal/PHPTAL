@@ -61,8 +61,19 @@ implements PHPTAL_Php_TalesChainReader
 
     private function prepareAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $expression)
     {
-        $code = $this->extractEchoType($expression);
-        $code = $codewriter->evaluateExpression($code);
+        $tales_code = $this->extractEchoType($expression);
+        $code = $codewriter->evaluateExpression($tales_code);
+
+        // XHTML boolean attribute does not appear when empty or false
+        if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($qname)) {
+            
+            // I don't want to mix code for boolean with chained executor
+            // so compile it again to simple expression
+            if (is_array($code)) {
+                $code = PHPTAL_Php_TalesInternal::compileToPHPExpression($tales_code);
+            }
+            return $this->prepareBooleanAttribute($codewriter, $qname, $code);
+        }
 
         // if $code is an array then the attribute value is decided by a
         // tales chained expression
@@ -70,17 +81,13 @@ implements PHPTAL_Php_TalesChainReader
             return $this->prepareChainedAttribute($codewriter, $qname, $code);
         }
 
-        // XHTML boolean attribute does not appear when empty or false
-        if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($qname)) {
-            return $this->prepareBooleanAttribute($codewriter, $qname, $code);
-        }
-
         // i18n needs to read replaced value of the attribute, which is not possible if attribute is completely replaced with conditional code
-        if ($this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'attributes'))
+        if ($this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'attributes')) {
             $this->prepareAttributeUnconditional($codewriter, $qname, $code);
-        else
+        }
+        else {
             $this->prepareAttributeConditional($codewriter, $qname, $code);
-
+        }
     }
 
     /**
