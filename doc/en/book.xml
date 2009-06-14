@@ -1215,10 +1215,12 @@ title="google search engine">the google search engine</a>
           <para><sgmltag>&lt;ol></sgmltag> will be cached for one day, separately for each page.</para>
 <para>
                   You can add "<varname>per expression</varname>" to have different cache copy for every different value of an expression (which MUST evaluate to a string).
-                  Expression cannot refer to variables defined using <sgmltag>tal:define</sgmltag> on the same element.
+                  <note><para>Expression cannot refer to variables defined using <sgmltag>tal:define</sgmltag> on the same element.</para></note>
 </para>
 <informalexample><programlisting language="xml"><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting></informalexample>
              <para><sgmltag>&lt;ul></sgmltag> will be cached for 25 minutes, separately for each object ID.</para>
+             
+             <warning><para>Be careful when caching users' private data. Cache will be shared with everyone unless you make it user-specific with <code>per user/id</code> or similar expression.</para></warning>
 
              <section id="cache-refresh"><title>Instant refreshing</title>
 
