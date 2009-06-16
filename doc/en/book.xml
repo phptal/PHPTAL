@@ -1526,6 +1526,8 @@ php:SomeClass::$staticVar
 </span>
 ]]></programlisting></informalexample>
 
+        <tip><para>In <acronym>PHPTALES</acronym> use <code>isset()</code> instead.</para></tip>
+
       </section>
 
       <section id="tales-default">
