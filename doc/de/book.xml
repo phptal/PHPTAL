@@ -1338,6 +1338,9 @@ title="google search engine">the google search engine</a>
 <span tal:replace="string:welcome ${user/name},
 this page has been readed ${page/countRead} times"/>
 ]]></programlisting></informalexample>
+
+			<warning><para>If you try to read variable that does not exist, PHPTAL will throw an exception. Use <link linkend="tales-exists">exists:</link> to check if variable can be read</para></warning>
+
       </section>
 
       <section id="conditional">

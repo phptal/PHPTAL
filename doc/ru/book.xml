@@ -1054,7 +1054,7 @@ title="google search engine">the google search engine</a>
       <para>
       The value of a <acronym>TAL</acronym> attribute may contain more than one expression
       (ex: <sgmltag>tal:define</sgmltag>), in which case each expression must be separated
-      from the next one with a '<sgmltag>;</sgmltag>' character.
+      from the next one with a '<literal>;</literal>' character.
       </para>
 
       <section id="tales-path">
@@ -1084,6 +1084,9 @@ title="google search engine">the google search engine</a>
 <span tal:replace="string:welcome ${user/name},
 this page has been readed ${page/countRead} times"/>
 ]]></programlisting></informalexample>
+
+			<warning><para>If you try to read variable that does not exist, PHPTAL will throw an exception. Use <link linkend="tales-exists">exists:</link> to check if variable can be read</para></warning>
+
       </section>
 
       <section id="conditional">
@@ -1300,7 +1303,7 @@ php:SomeClass::$staticVar
         <informalexample><programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting></informalexample>
       </section>
 
-    </section><!-- end of PHPTALES -->
+    </section><!-- end of TALES -->
   </article>
 
   <article id="phpintegration">

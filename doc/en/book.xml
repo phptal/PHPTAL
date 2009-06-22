@@ -88,11 +88,11 @@
 
     <para>
     <acronym>PHPTAL</acronym> is an implementation of the excellent Zope Page Template
-    (<acronym>ZPT</acronym>) system for <acronym>PHP</acronym>. <acronym>PHPTAL</acronym> supports <acronym>TAL</acronym>, <acronym>METAL</acronym>, <acronym>I18N</acronym> namespaces.
+    (<acronym>ZPT</acronym>) system for <acronym>PHP</acronym>. <acronym>PHPTAL</acronym> supports <acronym><link linkend="tal-namespace">TAL</link></acronym>, <acronym><link linkend="metal">METAL</link></acronym>, <acronym><link linkend="tal-namespace">I18N</link></acronym> namespaces.
     </para>
 
     <para>
-    <acronym>PHPTALES</acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
+    <acronym><link linkend="phptales">PHPTALES</link></acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
     Expression Syntax. It defines how <acronym>XML</acronym> attribute values are handled.
     </para>
 
@@ -1308,7 +1308,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <note><para>
-        <code>php:</code> modifier is explained in its own chapter.
+        <code>php:</code> modifier is explained in its <link linkend="tales-php">own chapter</link>.
         </para></note>
       </section>
 
@@ -1358,8 +1358,9 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTALES</acronym></title>
 
       <para>
-      <acronym>PHPTALES</acronym> is the expression syntax used inside tal, metal, <acronym>PHPTAL</acronym>
-      attributes. From above examples, you should have seen some
+      <acronym>PHPTALES</acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
+		    Expression Syntax. Is the syntax used inside <acronym>TAL</acronym>, <acronym>METAL</acronym>, <acronym>PHPTAL</acronym> attributes and <code>${…}</code> inline expressions. </para>
+		<para>In previous examples, you should have seen some
       <acronym>PHPTALES</acronym> examples (<code>string:</code>, <code>php:</code>, <code>not:</code>, …). This chapter
       describes the usage of <acronym>PHPTALES</acronym> in templates.
       </para>
@@ -1367,7 +1368,7 @@ title="google search engine">the google search engine</a>
       <para>
       The value of a <acronym>TAL</acronym> attribute may contain more than one expression
       (ex: <sgmltag>tal:define</sgmltag>), in which case each expression must be separated
-      from the next one with a '<sgmltag>;</sgmltag>' character.
+      from the next one with a '<literal>;</literal>' character.
       </para>
 
       <section id="tales-path">
@@ -1397,6 +1398,9 @@ title="google search engine">the google search engine</a>
 <span tal:replace="string:welcome ${user/name},
 this page has been readed ${page/countRead} times"/>
 ]]></programlisting></informalexample>
+
+			<warning><para>If you try to read variable that does not exist, PHPTAL will throw an exception. Use <link linkend="tales-exists">exists:</link> to check if variable can be read</para></warning>
+
       </section>
 
       <section id="conditional">
@@ -1613,7 +1617,7 @@ php:SomeClass::$staticVar
         <informalexample><programlisting language="xml"><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting></informalexample>
       </section>
 
-    </section><!-- end of PHPTALES -->
+    </section><!-- end of TALES -->
   </article>
 
   <article id="phpintegration">
@@ -1719,7 +1723,7 @@ php:SomeClass::$staticVar
             </section>
         <section id="config-methods"><title>Other methods</title>
             
-            <simplesect>
+            <simplesect id="set-template-repository">
                 <title><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname></title>
                     <para>Specifies where to look for templates. If given a string, it adds it to the list of paths searched. If given array, it replaces the list.</para>
                     <para>
@@ -1731,20 +1735,20 @@ php:SomeClass::$staticVar
                       </para>
                       <tip><para>It's like <code>include_path</code>, but for PHPTAL templates only.</para></tip>
             </simplesect>
-            <simplesect>
+            <simplesect id="set-code-destination">
                 <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
                 
                     <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <methodname>sys_get_tmp_dir()</methodname>, which usually is '<filename>/tmp/</filename>' directory.</para>
                 </simplesect>
-                <simplesect>
+                <simplesect id="set-code-extension">
                     <title><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname></title>
                     <para>What filename extension should be used for intermediate <acronym>PHP</acronym> files. The default is <filename>php</filename> and frankly, there's no reason to change it.</para>
                 </simplesect>
-                <simplesect>
+                <simplesect id="set-cache-lifetime">
                     <title><methodname>setCacheLifetime(<replaceable>num_days</replaceable>)</methodname></title>
                     <para>Maximum number of days intermediate files and fragments cached with <sgmltag>phptal:cache</sgmltag> should be kept.</para>
                 </simplesect>
-                <simplesect>
+                <simplesect id="set-force-reparse">
                     <title><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname></title>
                 <para>Forces reparsing of all templates all the time. It should be used only for testing and debugging. It's useful if you're testing prefilters or changing code of PHPTAL itself.</para>
                 <warning><para>This slows down <acronym>PHPTAL</acronym> very much. Never enable this on production servers!</para></warning>
