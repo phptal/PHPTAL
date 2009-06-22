@@ -32,13 +32,13 @@ $(LANGS)::
 lang: plaintext onepageperchapter allononepage
 
 onepageperchapter: $(XHTMLFILES) output_dir
-	cp -- "$(TEMP)/xhtml/"* "$(BUILD)/split/"
+	cp -p -- "$(TEMP)/xhtml/"* "$(BUILD)/split/"
 
 allononepage: $(XHTMLNOCHUNKSFILES) output_dir
-	cp -- "$(XHTMLNOCHUNKSFILES)" "$(BUILD)/index.html"
+	cp -p -- "$(XHTMLNOCHUNKSFILES)" "$(BUILD)/index.html"
 	
 plaintext: $(TXTFILES) output_dir
-	cp -- "$(TXTFILES)" "$(BUILD)/phptal.txt"
+	cp -p -- "$(TXTFILES)" "$(BUILD)/phptal.txt"
 
 output_dir:
 	@test -d "$(BUILD)/split" || mkdir -p -- "$(BUILD)/split"	
@@ -59,9 +59,6 @@ $(XHTMLNOCHUNKSFILES): $(TEMP) $(BOOK) $(CONFIG)
 # plaintext
 $(TXTFILES): $(TEMP) $(BOOK) $(CONFIG)
 	$(XMLTO) $(PARMS) -o "$(TEMP)/txt" txt -- "$(BOOK)"
-
-sync:
-	rsync -P --recursive "$(BUILDBASEDIR)/"?? root@phptal.motion-twin.com:/www/phptal/www/manual/
 
 # clean all languages
 clean:
