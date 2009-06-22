@@ -142,10 +142,6 @@
      
  </xsl:template>
 
- <xsl:template name="user.footer.navigation">
-	<script type="text/javascript" src="/prettify.js"></script>
-	<script type="text/javascript">if (window.prettyPrint) prettyPrint()</script>
- </xsl:template>
 <xsl:template name="apply-highlighting">
   <!-- 
     xslthl = saxon = java = pain, and if that wasn't enough, docbook-xsl drops language attribute.
@@ -153,8 +149,7 @@
   <code>
     <xsl:if test="@language">
       <xsl:attribute name="class">
-				<xsl:if test="@language">lang-<xsl:value-of select="@language"/></xsl:if>
-				prettyprint
+				<xsl:value-of select="@language"/>
 			</xsl:attribute>
     </xsl:if>    
     <xsl:apply-templates/>    
