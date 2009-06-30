@@ -57,9 +57,9 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
     static public function true($src, $nothrow)
     {
+        $src = trim($src);
         if (ctype_alnum($src)) return '!empty($ctx->'.$src.')';
-
-        return 'phptal_true($ctx, '.self::string(trim($src), $nothrow).')';
+        return '!!$ctx->path($ctx, '.self::string($src).',true)';
     }
 
     /**
@@ -185,10 +185,10 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             return '$ctx->'.$next;
         }
 
-        // otherwise we have to call phptal_path() to resolve the path at runtime
-        // extract the first part of the expression (it will be the phptal_path()
-        // $base and pass the remaining of the path to phptal_path()
-        return 'phptal_path($ctx->'.$next.', '.$expression.($nothrow ? ', true' : '').')';
+        // otherwise we have to call PHPTAL_Context::path() to resolve the path at runtime
+        // extract the first part of the expression (it will be the PHPTAL_Context::path()
+        // $base and pass the remaining of the path to PHPTAL_Context::path()
+        return '$ctx->path($ctx->'.$next.', '.$expression.($nothrow ? ', true' : '').')';
     }
 
     /**
@@ -344,13 +344,13 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     /**
      * exists: modifier.
      *
-     * Returns the code required to invoke phptal_exists() on specified path.
+     * Returns the code required to invoke Context::exists() on specified path.
      */
     static public function exists($src, $nothrow)
     {
+        $src = trim($src);
         if (ctype_alnum($src)) return 'isset($ctx->'.$src.')';
-
-        return 'phptal_exists($ctx, '.self::string(trim($src), $nothrow).')';
+        return '(null !== $ctx->path($ctx,'.self::string($src).', true))';
     }
 
     /**

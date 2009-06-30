@@ -55,7 +55,7 @@ class TalesTest extends PHPTAL_TestCase
     {
         $src = 'foo/x/y';
         $res = phptal_tales($src);
-        $this->assertEquals("phptal_path(\$ctx->foo, 'x/y')", $res);
+        $this->assertEquals("\$ctx->path(\$ctx->foo, 'x/y')", $res);
     }
 
     function testNot()
@@ -77,7 +77,7 @@ class TalesTest extends PHPTAL_TestCase
     function testCustom()
     {
         $src = 'custom: some/path';
-        $this->assertEquals('sprintf("%01.2f", phptal_path($ctx->some, \'path\'))',
+        $this->assertEquals('sprintf("%01.2f", $ctx->path($ctx->some, \'path\'))',
                             phptal_tales($src));
     }
 
@@ -89,27 +89,27 @@ class TalesTest extends PHPTAL_TestCase
 
     function testInterpolate1()
     {
-        $this->assertEquals('$ctx->{phptal_path($ctx->some, \'path\')}',PHPTAL_Php_TalesInternal::compileToPHPStatements('${some/path}'));
+        $this->assertEquals('$ctx->{$ctx->path($ctx->some, \'path\')}',PHPTAL_Php_TalesInternal::compileToPHPStatements('${some/path}'));
     }
 
     function testInterpolate2()
     {
-        $this->assertEquals('phptal_path($ctx->{phptal_path($ctx->some, \'path\')}, \'meh\')',phptal_tales('${some/path}/meh'));
+        $this->assertEquals('$ctx->path($ctx->{$ctx->path($ctx->some, \'path\')}, \'meh\')',phptal_tales('${some/path}/meh'));
     }
 
     function testInterpolate3()
     {
-        $this->assertEquals('phptal_path($ctx->meh, phptal_path($ctx->some, \'path\'))',PHPTAL_Php_TalesInternal::compileToPHPStatements('meh/${some/path}'));
+        $this->assertEquals('$ctx->path($ctx->meh, $ctx->path($ctx->some, \'path\'))',PHPTAL_Php_TalesInternal::compileToPHPStatements('meh/${some/path}'));
     }
 
     function testInterpolate4()
     {
-        $this->assertEquals('phptal_path($ctx->{$ctx->meh}, $ctx->blah)',phptal_tales('${meh}/${blah}'));
+        $this->assertEquals('$ctx->path($ctx->{$ctx->meh}, $ctx->blah)',phptal_tales('${meh}/${blah}'));
     }
 
     function testSuperglobals()
     {
-        $this->assertEquals('phptal_path($ctx->{\'_GET\'}, \'a\')',PHPTAL_Php_TalesInternal::compileToPHPStatements('_GET/a'));
+        $this->assertEquals('$ctx->path($ctx->{\'_GET\'}, \'a\')',PHPTAL_Php_TalesInternal::compileToPHPStatements('_GET/a'));
     }
 
     function testInterpolatedPHP1()

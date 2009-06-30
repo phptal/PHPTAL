@@ -248,14 +248,14 @@ class PHPTAL_Context
     }
     
     /**
-     * helper method for phptal_path(). Please don't use it directly.
+     * helper method for PHPTAL_Context::path()
      *
      * @access private
      */
-    static function pathError($base, $path, $current)
+    private static function pathError($base, $path, $current)
     {
         $basename = '';
-        // phptal_path gets data in format ($object, "rest/of/the/path"),
+        // PHPTAL_Context::path gets data in format ($object, "rest/of/the/path"),
         // so name of the object is not really known and something in its place
         // needs to be figured out
         if ($current !== $path) {
@@ -273,102 +273,126 @@ class PHPTAL_Context
         }
         throw new PHPTAL_VariableNotFoundException(trim("Attempt to read property '$current'$pathinfo from ".gettype($base)." value {$basename}"));
     }    
-}
+    
+    /**
+     * Resolve TALES path starting from the first path element.
+     * The TALES path : object/method1/10/method2
+     * will call : $ctx->path($ctx->object, 'method1/10/method2')
+     *
+     * This function is very important for PHPTAL performance.
+     *
+     * This function will become non-static in the future
+     *
+     * @param mixed  $base    first element of the path ($ctx)
+     * @param string $path    rest of the path
+     * @param bool   $nothrow is used by phptal_exists(). Prevents this function from
+     * throwing an exception when a part of the path cannot be resolved, null is
+     * returned instead.
+     *
+     * @access private
+     * @return mixed
+     */
+    public static function path($base, $path, $nothrow=false)
+    {
+        if ($base === null) {
+            if ($nothrow) return null;
+            PHPTAL_Context::pathError($base, $path, $path);
+        }
 
-/**
- * Resolve TALES path starting from the first path element.
- * The TALES path : object/method1/10/method2
- * will call : phptal_path($ctx->object, 'method1/10/method2')
- *
- * This function is very important for PHPTAL performance.
- *
- * @param mixed  $base    first element of the path ($ctx)
- * @param string $path    rest of the path
- * @param bool   $nothrow is used by phptal_exists(). Prevents this function from
- * throwing an exception when a part of the path cannot be resolved, null is
- * returned instead.
- *
- * @access private
- * @return mixed
- */
-function phptal_path($base, $path, $nothrow=false)
-{
-    if ($base === null) {
-        if ($nothrow) return null;
-        PHPTAL_Context::pathError($base, $path, $path);
-    }
+        foreach (explode('/', $path) as $current) {
+            // object handling
+            if (is_object($base)) {
+                // look for method
+                if (method_exists($base, $current)) {
+                    $base = $base->$current();
+                    continue;
+                }
 
-    foreach (explode('/', $path) as $current) {
-        // object handling
-        if (is_object($base)) {
-            // look for method
-            if (method_exists($base, $current)) {
-                $base = $base->$current();
-                continue;
-            }
-
-            // look for variable
-            if (property_exists($base, $current)) {
-                $base = $base->$current;
-                continue;
-            }
-
-            if ($base instanceof ArrayAccess && $base->offsetExists($current)) {
-                $base = $base->offsetGet($current);
-                continue;
-            }
-
-            if ($base instanceof Countable && ($current === 'length' || $current === 'size')) {
-                $base = count($base);
-                continue;
-            }
-
-            // look for isset (priority over __get)
-            if (method_exists($base, '__isset') && is_callable(array($base, '__isset'))) {
-                if ($base->__isset($current)) {
+                // look for variable
+                if (property_exists($base, $current)) {
                     $base = $base->$current;
                     continue;
                 }
+
+                if ($base instanceof ArrayAccess && $base->offsetExists($current)) {
+                    $base = $base->offsetGet($current);
+                    continue;
+                }
+
+                if ($base instanceof Countable && ($current === 'length' || $current === 'size')) {
+                    $base = count($base);
+                    continue;
+                }
+
+                // look for isset (priority over __get)
+                if (method_exists($base, '__isset') && is_callable(array($base, '__isset'))) {
+                    if ($base->__isset($current)) {
+                        $base = $base->$current;
+                        continue;
+                    }
+                }
+                // ask __get and discard if it returns null
+                elseif (method_exists($base, '__get') && is_callable(array($base, '__get'))) {
+                    $tmp = $base->$current;
+                    if (null !== $tmp) {
+                        $base = $tmp;
+                        continue;
+                    }
+                }
+
+                // magic method call
+                if (method_exists($base, '__call')) {
+                    try
+                    {
+                        $base = $base->__call($current, array());
+                        continue;
+                    }
+                    catch(BadMethodCallException $e){}
+                }
+
+                if ($nothrow) {
+                    return null;
+                }
+
+                PHPTAL_Context::pathError($base, $path, $current);
             }
-            // ask __get and discard if it returns null
-            elseif (method_exists($base, '__get') && is_callable(array($base, '__get'))) {
-                $tmp = $base->$current;
-                if (null !== $tmp) {
-                    $base = $tmp;
+
+            // array handling
+            if (is_array($base)) {
+                // key or index
+                if (array_key_exists((string)$current, $base)) {
+                    $base = $base[$current];
+                    continue;
+                }
+
+                // virtual methods provided by phptal
+                if ($current == 'length' || $current == 'size') {
+                    $base = count($base);
+                    continue;
+                }
+
+                if ($nothrow)
+                    return null;
+
+                PHPTAL_Context::pathError($base, $path, $current);
+            }
+
+            // string handling
+            if (is_string($base)) {
+                // virtual methods provided by phptal
+                if ($current == 'length' || $current == 'size') {
+                    $base = strlen($base);
+                    continue;
+                }
+
+                // access char at index
+                if (is_numeric($current)) {
+                    $base = $base[$current];
                     continue;
                 }
             }
 
-            // magic method call
-            if (method_exists($base, '__call')) {
-                try
-                {
-                    $base = $base->__call($current, array());
-                    continue;
-                }
-                catch(BadMethodCallException $e){}
-            }
-
-            if ($nothrow) {
-                return null;
-            }
-
-            PHPTAL_Context::pathError($base, $path, $current);
-        }
-
-        // array handling
-        if (is_array($base)) {
-            // key or index
-            if (array_key_exists((string)$current, $base)) {
-                $base = $base[$current];
-                continue;
-            }
-
-            // virtual methods provided by phptal
-            if ($current == 'length' || $current == 'size') {
-                $base = count($base);
-                continue;
-            }
+            // if this point is reached, then the part cannot be resolved
 
             if ($nothrow)
                 return null;
@@ -376,62 +400,17 @@ function phptal_path($base, $path, $nothrow=false)
             PHPTAL_Context::pathError($base, $path, $current);
         }
 
-        // string handling
-        if (is_string($base)) {
-            // virtual methods provided by phptal
-            if ($current == 'length' || $current == 'size') {
-                $base = strlen($base);
-                continue;
-            }
-
-            // access char at index
-            if (is_numeric($current)) {
-                $base = $base[$current];
-                continue;
-            }
-        }
-
-        // if this point is reached, then the part cannot be resolved
-
-        if ($nothrow)
-            return null;
-
-        PHPTAL_Context::pathError($base, $path, $current);
-    }
-
-    return $base;
+        return $base;
+    } 
 }
 
 /**
- * implements true: modifier
- *
- * @see phptal_path()
- * @param mixed  $ctx  base object
- * @param string $parh rest of the path
- * @access private
+ * @see PHPTAL_Context::path()
+ * @deprecated
  */
-function phptal_true(PHPTAL_Context $ctx, $path)
+function phptal_path($base, $path, $nothrow=false)
 {
-    $ctx->noThrow(true);
-    $res = phptal_path($ctx, $path, true);
-    $ctx->noThrow(false);
-    return !!$res;
-}
-
-/**
- * Returns true if $path can be fully resolved in $ctx context.
- *
- * @access private
- */
-function phptal_exists(PHPTAL_Context $ctx, $path)
-{
-    // special note: this method may requires to be extended to a full
-    // phptal_path() sibling to avoid calling latest path part if it is a
-    // method or a function...
-    $ctx->noThrow(true);
-    $res = phptal_path($ctx, $path, true);
-    $ctx->noThrow(false);
-    return $res !== null;
+    return PHPTAL_Context::path($base, $path, $nothrow);
 }
 
 /**

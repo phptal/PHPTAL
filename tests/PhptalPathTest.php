@@ -47,7 +47,7 @@ class PhptalPathTest extends PHPTAL_TestCase
     function testZeroIndex()
     {
         $data   = array(1, 0, 3);
-        $result = phptal_path($data, '0');
+        $result = PHPTAL_Context::path($data, '0');
         $this->assertEquals(1, $result);
     }
 

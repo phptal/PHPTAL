@@ -121,7 +121,7 @@ class PHPTAL_RepeatControllerGroups
      * @param string $var   The variable name to check
      * @return Mixed    An object/array if the path is not over or a boolean
      *
-     * @todo    replace the phptal_path() with custom code
+     * @todo    replace the PHPTAL_Context::path() with custom code
      */
     public function __get($var)
     {
@@ -133,7 +133,7 @@ class PHPTAL_RepeatControllerGroups
         }
 
         // Find the requested variable
-        $value = phptal_path($this->data, $var, true);
+        $value = PHPTAL_Context::path($this->data, $var, true);
 
         // Check if it's an object or an array
         if ( is_array($value) || is_object($value) ) {

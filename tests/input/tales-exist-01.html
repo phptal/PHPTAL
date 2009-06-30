@@ -1,4 +1,6 @@
 <span>
-  <span tal:condition="exists: foo">foo exists</span>
-  <span tal:condition="exists: bar">bar exists</span>
+  <span tal:condition="exists:foo">foo exists</span>
+  <span tal:condition="exists: foo/bar">foo/bar exists</span>
+  <span tal:condition="exists: bar ">bar exists</span>
+  <span tal:condition="exists:bar">bar exists</span>
 </span>

@@ -28,7 +28,7 @@ class TalesExistTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/tales-exist-01.html');
-        $this->assertEquals($exp, $res);
+        $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
     function testLevel2()
