@@ -246,6 +246,33 @@ class PHPTAL_Context
 
         throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->_file, $this->_line);
     }
+    
+    /**
+     * helper method for phptal_path(). Please don't use it directly.
+     *
+     * @access private
+     */
+    static function pathError($base, $path, $current)
+    {
+        $basename = '';
+        // phptal_path gets data in format ($object, "rest/of/the/path"),
+        // so name of the object is not really known and something in its place
+        // needs to be figured out
+        if ($current !== $path) {
+            $pathinfo = " (in path '.../$path')";
+            if (preg_match('!([^/]+)/'.preg_quote($current, '!').'(?:/|$)!', $path, $m)) {
+                $basename = "'".$m[1]."' ";
+            }
+        } else $pathinfo = '';
+
+        if (is_array($base)) {
+            throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
+        }
+        if (is_object($base)) {
+            throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
+        }
+        throw new PHPTAL_VariableNotFoundException(trim("Attempt to read property '$current'$pathinfo from ".gettype($base)." value {$basename}"));
+    }    
 }
 
 /**
@@ -268,7 +295,7 @@ function phptal_path($base, $path, $nothrow=false)
 {
     if ($base === null) {
         if ($nothrow) return null;
-        throw new PHPTAL_VariableNotFoundException("Trying to read property '$path' from NULL");
+        PHPTAL_Context::pathError($base, $path, $path);
     }
 
     foreach (explode('/', $path) as $current) {
@@ -326,7 +353,7 @@ function phptal_path($base, $path, $nothrow=false)
                 return null;
             }
 
-            phptal_path_error($base, $path, $current);
+            PHPTAL_Context::pathError($base, $path, $current);
         }
 
         // array handling
@@ -346,7 +373,7 @@ function phptal_path($base, $path, $nothrow=false)
             if ($nothrow)
                 return null;
 
-            phptal_path_error($base, $path, $current);
+            PHPTAL_Context::pathError($base, $path, $current);
         }
 
         // string handling
@@ -369,37 +396,10 @@ function phptal_path($base, $path, $nothrow=false)
         if ($nothrow)
             return null;
 
-        phptal_path_error($base, $path, $current);
+        PHPTAL_Context::pathError($base, $path, $current);
     }
 
     return $base;
-}
-
-/**
- * helper method for phptal_path(). Please don't use it directly.
- *
- * @access private
- */
-function phptal_path_error($base, $path, $current)
-{
-    $basename = '';
-    // phptal_path gets data in format ($object, "rest/of/the/path"),
-    // so name of the object is not really known and something in its place
-    // needs to be figured out
-    if ($current !== $path) {
-        $pathinfo = " (in path '.../$path')";
-        if (preg_match('!([^/]+)/'.preg_quote($current, '!').'(?:/|$)!', $path, $m)) {
-            $basename = "'".$m[1]."' ";
-        }
-    } else $pathinfo = '';
-
-    if (is_array($base)) {
-        throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
-    }
-    if (is_object($base)) {
-        throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
-    }
-    throw new PHPTAL_VariableNotFoundException(ucfirst(gettype($base))." {$basename}doesn't have property '$current'$pathinfo");
 }
 
 /**
@@ -410,7 +410,7 @@ function phptal_path_error($base, $path, $current)
  * @param string $parh rest of the path
  * @access private
  */
-function phptal_true($ctx, $path)
+function phptal_true(PHPTAL_Context $ctx, $path)
 {
     $ctx->noThrow(true);
     $res = phptal_path($ctx, $path, true);
@@ -423,7 +423,7 @@ function phptal_true($ctx, $path)
  *
  * @access private
  */
-function phptal_exists($ctx, $path)
+function phptal_exists(PHPTAL_Context $ctx, $path)
 {
     // special note: this method may requires to be extended to a full
     // phptal_path() sibling to avoid calling latest path part if it is a
