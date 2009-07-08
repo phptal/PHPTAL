@@ -28,6 +28,10 @@
     <exclude name="tests/**/.orig"/>
   </fileset>
 
+  <fileset dir="tools/" id="tools">
+      <include name="*.php"/>
+  </fileset>
+  
   <target name="main" if="version" depends="versioncheck">
     <phingcall target="test"/>
     <phingcall target="build"/>
@@ -72,6 +76,7 @@
       <fileset refid="classes"/>
       <fileset refid="gendocs"/>    
       <fileset refid="tests"/>  
+      <fileset refid="tools"/>  
     </copy>    
   </target>
   
@@ -134,9 +139,11 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
       <fileset refid="classes"/>
       <fileset refid="gendocs"/>
       <fileset refid="tests"/>
+      <fileset refid="tools"/>
       
       <mapping name="dir_roles">
         <element key="tests" value="test"/>
+        <element key="tools" value="script"/>
       </mapping>
       
       <mapping name="exceptions">

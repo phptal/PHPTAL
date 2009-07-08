@@ -117,6 +117,16 @@ class PHPTAL_ParserException extends PHPTAL_TemplateException
 }
 
 /**
+ * ${unknown:foo} found in template
+ *
+ * @package PHPTAL
+ * @subpackage Exception
+ */
+class PHPTAL_UnknownModifierException extends PHPTAL_TemplateException
+{
+}
+
+/**
  * Wrong macro name in metal:use-macro
  *
  * @package PHPTAL

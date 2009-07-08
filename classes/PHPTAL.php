@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_0beta5');
+define('PHPTAL_VERSION', '1_2_0');
 
 
 /* If you want to use autoload, comment out all lines starting with require_once 'PHPTAL
@@ -1063,6 +1063,7 @@ class PHPTAL
             'PHPTAL_InvalidVariableNameException'=>'PHPTAL_Exception',
             'PHPTAL_VariableNotFoundException'=>'PHPTAL_Exception',
             'PHPTAL_ConfigurationException'=>'PHPTAL_Exception',
+            'PHPTAL_UnknownModifierException'=>'PHPTAL_Exception',
             'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',
         );
 
