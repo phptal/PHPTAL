@@ -65,16 +65,9 @@ class PHPTAL_RepeatController implements Iterator
             $this->iterator = $source->getIterator();
         } elseif ($source instanceof Iterator) {
             $this->iterator = $source;
-        } elseif ( $source instanceof SimpleXMLElement) { // has non-unique keys!
-            $array = array();
-            foreach ($source as $v) {
-                $array[] = $v;
-            }
-            $this->iterator = new ArrayIterator($array);
-        } elseif ($source instanceof Traversable || $source instanceof DOMNodeList) {
-            // PDO Statements implement an internal Traversable interface.
-            // To make it fully iterable we traverse the set to populate
-            // an array which will be actually used for iteration.
+        } elseif ($source instanceof Traversable) {
+            $this->iterator = new IteratorIterator($source);
+        } elseif ($source instanceof DOMNodeList) {            
             $array = array();
             foreach ($source as $k=>$v) {
                 $array[$k] = $v;
