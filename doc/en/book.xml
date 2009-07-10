@@ -1545,7 +1545,7 @@ php:SomeClass::$staticVar
         <title><code>exists:</code></title>
 
         <para>
-        This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <code>isset()</code>.</para>
+        This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <function>isset()</function>.</para>
 
         <para>
         Normally using a path which doesn't exist throws an error like "Cannot find variable '<varname>foo</varname>' in current scope". Thus, uncertain paths must be checked first:
@@ -1556,7 +1556,7 @@ php:SomeClass::$staticVar
 </span>
 ]]></programlisting></informalexample>
 
-        <tip><para>In <acronym>PHPTALES</acronym> use <code>isset()</code> instead.</para></tip>
+        <tip><para>In <acronym>PHPTALES</acronym> use <function>isset()</function> instead.</para></tip>
 
       </section>
 
@@ -1764,7 +1764,7 @@ php:SomeClass::$staticVar
             <simplesect id="set-code-destination">
                 <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
                 
-                    <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <methodname>sys_get_tmp_dir()</methodname>, which usually is '<filename>/tmp/</filename>' directory.</para>
+                    <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <function>sys_get_tmp_dir()</function>, which usually is '<filename>/tmp/</filename>' directory.</para>
                 </simplesect>
                 <simplesect id="set-code-extension">
                     <title><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname></title>
@@ -1999,7 +1999,7 @@ echo $tpl->execute();
       </para>
 
       <para>
-      If the <constant>PHPTAL_Trigger::start()</constant> methods returns
+      If the <methodname>PHPTAL_Trigger::start()</methodname> method returns
       <constant>PHPTAL_Trigger::SKIPTAG</constant>, <acronym>PHPTAL</acronym> will ignore the element and its
       content (<methodname>start()</methodname> may echo something to replace it).
       </para>
@@ -2010,10 +2010,10 @@ echo $tpl->execute();
       </para>
 
       <para>
-      The <constant>PHPTAL_Trigger::end()</constant> will be called after the element
+      The <methodname>PHPTAL_Trigger::end()</methodname> will be called after the element
       (whether it has been executed or not). This allows you to build
-      cache systems using <constant>ob_start()</constant> in <methodname>start()</methodname> and <constant>ob_get_contents()</constant>,
-      <constant>ob_end_clean()</constant> in <methodname>end()</methodname>.
+      cache systems using <function>ob_start()</function> in <methodname>start()</methodname> and <function>ob_get_contents()</function>,
+      <function>ob_end_clean()</function> in <methodname>end()</methodname>.
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<html>
@@ -2112,7 +2112,7 @@ class CacheTrigger implements PHPTAL_Trigger
 
       <para>
       When <constant>PROCEED</constant> is returned, <acronym>PHPTAL</acronym> will execute the tag and its
-      content as usual, then call end(). This allows our cache class to
+      content as usual, then call <methodname>end()</methodname>. This allows our cache class to
       play with output buffers to execute the tag once and to store the
       result in a file which will be used in later calls.
       </para>
@@ -2182,7 +2182,7 @@ echo $tpl->execute();
         
         <para>
         Its arguments are a list of possible languages. Use
-        <constant>func_get_args()</constant> to get the argument array. The first known
+        <function>func_get_args()</function> to get the argument array. The first known
         language should be used by your service.
         </para>
                 
@@ -2310,7 +2310,7 @@ class MyTranslator implements PHPTAL_TranslationService {
           <title>method <methodname>setEncoding(<replaceable>$encoding</replaceable>)</methodname></title>
 
           <para>
-              <acronym>PHPTAL</acronym> class calls this method to inform your translation service what encoding is used by the template. <code>translate()</code> method should return strings in that encoding. If you always use the same encoding for templates and translation files (i.e. UTF-8), you can leave this method empty.
+              <acronym>PHPTAL</acronym> class calls this method to inform your translation service what encoding is used by the template. <methodname>translate()</methodname> method should return strings in that encoding. If you always use the same encoding for templates and translation files (i.e. UTF-8), you can leave this method empty.
           </para>
         </section>
     </section> <!-- end of PHPTAL_TranslationService -->
@@ -2326,7 +2326,7 @@ class MyTranslator implements PHPTAL_TranslationService {
       </para>
 
       <para>
-      The usage of <literal>gettext</literal> is simple but you will
+      The usage of <productname>gettext</productname> is simple but you will
       have to perform some tests to be sure everything works fine on your
       system.
       </para>
@@ -2359,7 +2359,7 @@ else
         <title>Creating the translation directory structure</title>
 
         <para>
-        The <acronym>PHP</acronym> gettext extension requires a specific structure which
+        The <acronym>PHP</acronym> <productname>gettext</productname> extension requires a specific structure which
         will contain your translation files.
         </para>
 
@@ -2414,7 +2414,7 @@ msgstr "A small sentence in english"
 ]]></programlisting></informalexample>
 
         <para>
-        This command won't work if you don't have gettext tools
+        This command won't work if you don't have <productname>gettext</productname> tools
         installed on your system.
         </para>
 
@@ -2459,7 +2459,7 @@ msgstr "Une petite phrase en français"
 
         <para>
         You can have more than one domain for the same application, it
-        can enhance gettext's performance to split your application
+        can enhance <productname>gettext</productname>'s performance to split your application
         translations in more than one file.
         </para>
       </section>
@@ -2509,7 +2509,7 @@ $message = $tr->translate("Dear ${user}, thanks for registering!");
 mail($email, $subject, $message); 
 ]]></programlisting></informalexample>
 
-<para>If you're using PHPTAL's standard <code>gettext</code> translator, you can use <methodname>gettext()</methodname> too.</para>
+<para>If you're using PHPTAL's standard <productname>gettext</productname> translator, you can use <function>gettext()</function> too.</para>
 
       </section>
 
@@ -2544,8 +2544,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
 ]]></programlisting></informalexample>
 
         <para>
-        Because <sgmltag>i18n:translate</sgmltag> contains a value 'welcome', the template
-        data will be ignored and the message given by gettext will be
+        Because <sgmltag>i18n:translate</sgmltag> contains a value <computeroutput>'welcome'</computeroutput>, the template
+        data will be ignored and the message given by <productname>gettext</productname> will be
         used instead.
         </para>
 
@@ -2593,12 +2593,12 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
 
       <itemizedlist>
         <listitem><para>
-        $src: the source string after the "modifier:" keyword
+        <varname>$src</varname>: the source string after the "modifier:" keyword
         </para></listitem>
         <listitem><para>
-	  $nothrow: a boolean which determines whether exceptions may
-	  be thrown or not by <constant>phptal_path()</constant> resolution. This boolean
-	  must be propagated whenever you call another phptal_tales_<replaceable>*</replaceable>
+	  <varname>$nothrow</varname>: a boolean which determines whether exceptions may
+	  be thrown or not by <function>phptal_path()</function> resolution. This boolean
+	  must be propagated whenever you call another <function>phptal_tales_<replaceable>*</replaceable></function>
 	  modifier from within your own modifier.
 	</para></listitem>
       </itemizedlist>
@@ -2697,7 +2697,7 @@ function phptal_tales_money( $src, $nothrow )
           they can be parsed by the <acronym>PHP</acronym> interpreter.
 </para><para>
           By default <acronym>PHPTAL</acronym> will use the system's temp directory (via <acronym>PHP</acronym>'s
-          <constant>sys_get_temp_dir()</constant> function if available) or will try to guess where
+          <function>sys_get_temp_dir()</function> function if available) or will try to guess where
           it should be, <filename>/tmp</filename> on Unix like systems and <filename>c:\windows\temp</filename> on
           Microsoft ones, to store the compiled templates. The default
           destination can be changed to your liking by calling <methodname>setPhpCodeDestination()</methodname>
