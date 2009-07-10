@@ -56,6 +56,14 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><p><![CDATA[<hello>]]></p>');
         $this->assertEquals(trim_string('<!DOCTYPE html><p>&lt;hello&gt;</p>'),trim_string($tpl->execute()));
     }
+    
+    function testProlog()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setOutputMode(PHPTAL::HTML5);
+        $tpl->setSource('<?xml version="1.0"?><!DOCTYPE html><p><![CDATA[<hello>]]></p>');
+        $this->assertEquals(trim_string('<!DOCTYPE html><p>&lt;hello&gt;</p>'),trim_string($tpl->execute()));
+    }
 
     function testEmpty()
     {

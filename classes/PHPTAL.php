@@ -59,9 +59,9 @@ class PHPTAL
      * constants for output mode
      * @see setOutputMode()
      */
-    const XHTML = 111;
-    const XML   = 222;
-    const HTML5 = 555;
+    const XHTML = 11;
+    const XML   = 22;
+    const HTML5 = 55;
 
     protected $_prefilter = null;
     protected $_postfilter = null;
@@ -511,8 +511,11 @@ class PHPTAL
 
     /**
      * Set a context variable.
+     * Use it by setting properties on PHPTAL object.
+     * 
      * @param string $varname
      * @param mixed $value
+     * @return void
      */
     public function __set($varname, $value)
     {
@@ -521,8 +524,11 @@ class PHPTAL
 
     /**
      * Set a context variable.
-     * @param string $varname
-     * @param mixed $value
+     * 
+     * @see PHPTAL::__set()
+     * @param string $varname name of the variable
+     * @param mixed $value value of the variable
+     * @return $this
      */
     public function set($varname, $value)
     {
@@ -565,7 +571,7 @@ class PHPTAL
         }
 
         // unshift xml declaration
-        if ($this->_context->_xmlDeclaration) {
+        if ($this->_context->_xmlDeclaration && $this->getOutputMode() !== PHPTAL::HTML5) {
             $res = $this->_context->_xmlDeclaration . "\n" . $res;
         }
 
