@@ -55,12 +55,16 @@ class PHPTAL_Dom_Defs
     }
 
     /**
+     * true if it's empty in XHTML (e.g. <img/>)
+     * it will assume elements with no namespace may be XHTML too.
+     * 
      * @param string $tagName local name of the tag
-     * @return true if it's empty in XHTML (e.g. <img/>)
+     * @return bool
      */
-    public function isEmptyTag($tagName)
+    public function isEmptyTagNS($namespace_uri, $local_name)
     {
-        return in_array(strtolower($tagName), self::$XHTML_EMPTY_TAGS);
+        return ($namespace_uri === 'http://www.w3.org/1999/xhtml' || $namespace_uri === '')
+            && in_array(strtolower($local_name), self::$XHTML_EMPTY_TAGS);
     }
 
     /**
