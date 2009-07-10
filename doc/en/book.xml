@@ -449,7 +449,11 @@ catch (Exception $e){
     <section id="tal-namespace">
       <title><acronym>TAL</acronym> namespace</title>
 
-      <para></para>
+      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/tal</code>. To use <code>tal:</code> attribute prefix in XML you're required to declare it:</para>
+      
+      <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
+      
+      <note><para>PHPTAL does not enforce this requirement.</para></note>
 
       <section id="tal-define">
         <title><sgmltag>tal:define</sgmltag></title>
@@ -860,10 +864,15 @@ title="google search engine">the google search engine</a>
     <section id="metal">
       <title><acronym>METAL</acronym> namespace</title>
 
+      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/metal</code>. To use <code>metal:</code> attribute prefix in XML you're required to declare it:</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:metal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
+
+        <note><para>PHPTAL does not enforce this requirement.</para></note>
+
+
       <para>
-      <acronym>METAL</acronym> stands for 'Macro Extension for <acronym>TAL</acronym>'. This namespace,
-      supported by <acronym>PHPTAL</acronym>, allows template designers to define and call
-      <acronym>XML</acronym>/<acronym>XHTML</acronym> macros.
+      <acronym>METAL</acronym> stands for 'Macro Extension for <acronym>TAL</acronym>'. This namespace allows template designers to define and call macros. Macros can be used to output data recursively or to include code from other template files.
       </para>
 
       <section id="metal-define-macro">
@@ -889,7 +898,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-        Macros inherit from the caller's dictionary. In the above example,
+        Macros inherit all variables from their caller. In the above example,
         the variable '<varname>mdate</varname>' depends on the template that calls the
         macro.
         </para>
@@ -1010,6 +1019,15 @@ title="google search engine">the google search engine</a>
 
     <section id="i18n">
       <title><acronym>I18N</acronym> namespace</title>
+
+
+      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/i18n</code>. To use <code>i18n:</code> attribute prefix in XML you're required to declare it:</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:i18n="http://xml.zope.org/namespaces/i18n" …>]]></programlisting></informalexample>
+
+        <note><para>PHPTAL does not enforce this requirement.</para></note>
+
+
 
       <note><para>
       <acronym>i18n</acronym> is a short name for 'internationalization'. This
@@ -1150,6 +1168,14 @@ title="google search engine">the google search engine</a>
 
     <section id="phptal-namespace">
       <title><acronym>PHPTAL</acronym> namespace</title>
+
+
+      <para><acronym>URI</acronym> for this namespace is <code>http://phptal.org/ns/phptal</code>. To use <code>phptal:</code> attribute prefix in XML you're required to declare it:</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
+
+        <note><para>PHPTAL does not enforce this requirement.</para></note>
+
 
       <para>
       These attributes are not defined in <acronym>TAL</acronym> specifications, but are
