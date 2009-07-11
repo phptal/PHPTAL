@@ -30,7 +30,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doFunction('test', '$tpl');
         $treeGen->generateCode($codewriter);
-        $codewriter->doEnd();
+        $codewriter->doEnd('function');
         $result = $codewriter->getResult();
 
         $expected = <<<EOS

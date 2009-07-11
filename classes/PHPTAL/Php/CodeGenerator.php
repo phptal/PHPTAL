@@ -43,7 +43,8 @@ class PHPTAL_Php_CodeGenerator
         $codewriter->doSetVar('$_thistpl', '$tpl');
         $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
         $treeGen->generateCode($codewriter);
-        $codewriter->doEnd();
+        $codewriter->doComment("end");
+        $codewriter->doEnd('function');
 
         return $codewriter->getResult();
     }

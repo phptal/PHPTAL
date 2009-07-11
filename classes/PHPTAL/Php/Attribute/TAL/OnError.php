@@ -65,7 +65,7 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
                 $this->doEchoAttribute($codewriter, $code);
                 break;
         }
-        $codewriter->doEnd();
+        $codewriter->doEnd('catch');
 
         $codewriter->recycleTempVariable($var);
     }

@@ -57,7 +57,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
     }
 
 

@@ -242,9 +242,18 @@ class PHPTAL_Php_CodeWriter
         $this->indent();
     }
 
-    public function doEnd()
+    public function doEnd($expects = NULL)
     {
+        if (!count($this->_segments)) {
+            if (!$expects) $expects = 'anything';
+            throw new PHPTAL_Exception("Bug: CodeWriter generated end of block without $expects open");
+        }
+                
         $segment = array_pop($this->_segments);
+        if ($expects !== NULL && $segment !== $expects) {
+            throw new PHPTAL_Exception("Bug: CodeWriter generated end of $expects, but needs to close $segment");
+        }
+        
         $this->unindent();
         if ($segment == 'function') {
             $this->pushCode("\n}\n\n");
@@ -273,7 +282,7 @@ class PHPTAL_Php_CodeWriter
 
     public function doCatch($catch)
     {
-        $this->doEnd();
+        $this->doEnd('try');
         $this->_segments[] =  'catch';
         $this->pushCode('catch('.$catch.') {');
         $this->indent();
@@ -288,6 +297,9 @@ class PHPTAL_Php_CodeWriter
 
     public function doElseIf($condition)
     {
+        if (end($this->_segments) !== 'if') {
+            throw new PHPTAL_Exception("Bug: CodeWriter generated elseif without if");
+        }
         $this->unindent();
         $this->pushCode('elseif ('.$condition.'): ');
         $this->indent();
@@ -295,6 +307,9 @@ class PHPTAL_Php_CodeWriter
 
     public function doElse()
     {
+        if (end($this->_segments) !== 'if') {
+            throw new PHPTAL_Exception("Bug: CodeWriter generated else without if");
+        }        
         $this->unindent();
         $this->pushCode('else: ');
         $this->indent();

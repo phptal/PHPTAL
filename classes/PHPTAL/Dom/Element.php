@@ -251,14 +251,17 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     /**
      * Returns true if this element or one of its PHPTAL attributes has some
      * content to print (an empty text node child does not count).
+     * 
+     * @return bool
      */
     public function hasRealContent()
     {
         if (count($this->contentAttributes) > 0) return true;
-
+        
         foreach($this->childNodes as $node) {
-            if (!$child instanceOf PHPTAL_Dom_Text || $child->getValueEscaped() !== '') return true;
+            if (!$node instanceOf PHPTAL_Dom_Text || $node->getValueEscaped() !== '') return true;
         }
+        return false;
     }
 
     public function hasRealAttributes()
@@ -304,7 +307,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         }
 
         if ($this->headPrintCondition) {
-            $codewriter->doEnd();
+            $codewriter->doEnd('if');
         }
     }
 
@@ -344,7 +347,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         }
         
         if ($this->footPrintCondition) {
-            $codewriter->doEnd();
+            $codewriter->doEnd('if');
         }
     }
 

@@ -122,7 +122,7 @@ implements PHPTAL_Php_TalesChainReader
 
         $codewriter->doElse();
         $codewriter->doSetVar($attkey, "''");
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
 
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
@@ -152,7 +152,7 @@ implements PHPTAL_Php_TalesChainReader
         $codewriter->doSetVar($attkey, $value);
         $codewriter->doElse();
         $codewriter->doSetVar($attkey, '\'\'');
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
 

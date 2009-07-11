@@ -315,4 +315,37 @@ class TalDefineTest extends PHPTAL_TestCase
 
         $this->assertEquals('label var', $tpl->execute());
     }
+    
+    /**
+     * @expectedException PHPTAL_Exception
+     */
+    function testRejectsInvalidExpression() 
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<x tal:define="global foo | default"/>');
+        $tpl->execute();
+    }
+    
+    function testHasRealContent()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<y 
+        phptal:debug="">
+        
+        <x 
+        tal:define="global foo bar | default"
+        >
+        test
+        </x>
+        </y>
+        ');
+        $tpl->execute();
+    }
+    
+    function testHasRealCDATAContent()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<script tal:define="global foo bar | default"><![CDATA[ x ]]></script>');
+        $tpl->execute();
+    }
 }

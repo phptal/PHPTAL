@@ -60,7 +60,7 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEnd();
+        $codewriter->doEnd('function');
     }
 }
 

@@ -93,7 +93,8 @@ class PHPTAL_Php_TalesChainExecutor
                     continue;
             }
         }
-        $this->codewriter->doEnd();
+
+        $this->codewriter->doEnd('if');
         $this->codewriter->noThrow(false);
     }
 

@@ -31,7 +31,7 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
         // ensure a domain stack exists or create it
         $codewriter->doIf('!isset($_i18n_domains)');
         $codewriter->pushCode('$_i18n_domains = array()');
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
 
         $expression = $codewriter->interpolateTalesVarsInString($this->expression);
 

@@ -90,7 +90,7 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEnd();
+        $codewriter->doEnd('foreach');
         $codewriter->popContext();
 
         $codewriter->recycleTempVariable($this->var);

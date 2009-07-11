@@ -83,7 +83,7 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         $codewriter->doEval('file_put_contents('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'), ob_get_flush())');
         $codewriter->doElse();
         $codewriter->doEval('readfile('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'))');
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
     }
 }
 

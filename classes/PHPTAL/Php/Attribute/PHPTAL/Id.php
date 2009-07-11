@@ -39,14 +39,14 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         // end of if PROCEED
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
 
         // if trigger found, notify the end of the node
         $codewriter->doIf($this->var);
         $codewriter->pushCode(
             $this->var.'->end('.$codewriter->str($this->expression).', $tpl)'
         );
-        $codewriter->doEnd();
+        $codewriter->doEnd('if');
         $codewriter->recycleTempVariable($this->var);
     }
 }

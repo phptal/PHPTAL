@@ -57,7 +57,8 @@ implements PHPTAL_Php_TalesChainReader
 
             $this->_defineScope = $defineScope;
 
-            if ($defineScope != 'global') $definesAnyNonGlobalVars = true; // <span tal:define="global foo" /> should be invisible, but <img tal:define="bar baz" /> not
+            // <span tal:define="global foo" /> should be invisible, but <img tal:define="bar baz" /> not
+            if ($defineScope != 'global') $definesAnyNonGlobalVars = true; 
 
             if ($this->_defineScope != 'global' && !$this->_pushedContext) {
                 $codewriter->pushContext();
@@ -66,8 +67,7 @@ implements PHPTAL_Php_TalesChainReader
 
             $this->_defineVar = $defineVar;
             if ($expression === null) {
-                // no expression give, use content of tag as value for newly defined
-                // var.
+                // no expression give, use content of tag as value for newly defined var.
                 $this->bufferizeContent($codewriter);
                 continue;
             }
