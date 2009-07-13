@@ -150,11 +150,12 @@ class PHPTAL_Dom_DocumentBuilder
             throw new PHPTAL_ParserException("Found closing tag for < $qname > where there are no open tags");
         }
         if ($this->_current->getQualifiedName() != $qname) {
-            throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$this->_current->getQualifiedName()." > but found < /".$qname." >");
+            throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$this->_current->getQualifiedName()." > (opened in line ".$this->_current->getSourceLine().") but found < /".$qname." >");
         }
         $this->_current = array_pop($this->_stack);
-        if ($this->_current instanceOf PHPTAL_Dom_Element)
-            $this->_xmlns = $this->_current->getXmlnsState();
+        if ($this->_current instanceOf PHPTAL_Dom_Element) {
+            $this->_xmlns = $this->_current->getXmlnsState(); // restore namespace prefixes info to previous state
+        }
     }
 
     private function pushNode(PHPTAL_Dom_Node $node)
