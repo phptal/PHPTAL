@@ -113,7 +113,7 @@ catch(Exception $e)
 
 class PHPTAL_Lint {
     private $ignore_pattern = '/^\.|\.(?i:php|inc|jpe?g|gif|png|mo|po|txt|orig|rej|xsl|xsd|sh|in|ini|conf|css|js|py|pdf|swf|csv|ico|jar|htc)$|^Makefile|^[A-Z]+$/';
-    private $accept_pattern = '/\.(?:xml|x?html|zpt|phptal|tal|tpl)$/i';
+    private $accept_pattern = '/\.(?:xml|[px]?html|zpt|phptal|tal|tpl)$/i';
     
     public $errors = array();
     public $ignored = array();
