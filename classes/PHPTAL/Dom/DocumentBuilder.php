@@ -127,7 +127,7 @@ class PHPTAL_Dom_DocumentBuilder
 
             if ($this->_xmlns->isHandledNamespace($attr_namespace_uri) 
                 && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
-                throw new PHPTAL_ParserException("Unsupported attribute '$qname'");
+                throw new PHPTAL_ParserException("Attribute '$local_name' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
             }
 
             $attrnodes[] = new PHPTAL_Dom_Attr($qname, $attr_namespace_uri, $value, $this->encoding);

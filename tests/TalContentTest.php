@@ -189,5 +189,14 @@ EOT;
           $tpl->setSource('<p tal:content="zero | erroridontexist"/>');
           $this->assertEquals('<p>0</p>',$tpl->execute());
       }
+
+      function testFalseLast()
+      {
+          $tpl = $this->newPHPTAL();
+          $tpl->one_row = array('RESPONSIBLE_OFFICE'=>'responsible_office1');
+          $tpl->setSource('<span tal:define="resp_office offices/${one_row/RESPONSIBLE_OFFICE} | false">${resp_office}</span>');
+          
+          $this->assertEquals('<span>0</span>',$tpl->execute());
+      }
 }
 
