@@ -17,16 +17,16 @@ try
         throw new Exception("Your PHPTAL installation is broken or too new for this tool");
     }
     
-    echo "PHPTAL Lint 1.0 (PHPTAL ",PHPTAL_VERSION,")\n";
+    echo "PHPTAL Lint 1.1 (PHPTAL ",PHPTAL_VERSION,")\n";
     
-    if (! empty($_SERVER['REQUEST_URI']))
+    if (!empty($_SERVER['REQUEST_URI']))
     {
         throw new Exception("Please use this tool from command line");
     }
     
     $custom_extensions = array();
     
-    $options = extended_getopt('i,e');
+    $options = extended_getopt(array('-i','-e'));
     
     if (isset($options['i']))
     {
@@ -117,25 +117,23 @@ function usage() {
     echo "  Use 'phptal_lint.php .' to scan current directory\n\n";
 }
 
-function extended_getopt($string) {
-    function prefix_a_switch(&$value, $key) {
-        $value = "-$value";
-    }
-    $options = explode(',', $string);
-    array_walk($options, 'prefix_a_switch');
-    
-    $results = array();
+function extended_getopt(array $options) {
+    $results = array('--filenames--'=>array());
     for ($i = 1; $i < count($_SERVER['argv']); $i++)
     {
         if (in_array($_SERVER['argv'][$i], $options))
         {
             $results[substr($_SERVER['argv'][$i], 1)][] = $_SERVER['argv'][++$i];
         }
+        else if ($_SERVER['argv'][$i] == '--')
+        {
+            $results['--filenames--'] = array_merge($results['--filenames--'], array_slice($_SERVER['argv'],$i+1));
+            break;
+        }
         else if (substr($_SERVER['argv'][$i], 0, 1) == '-')
         {
-            echo "{$_SERVER['argv'][$i]}  is not a valid options\n\n";
             usage();
-            exit;
+            throw new Exception("{$_SERVER['argv'][$i]} is not a valid option\n\n");
         }
         else
         {
