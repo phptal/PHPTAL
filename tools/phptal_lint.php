@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
-
-try {   
+try
+{
     $myphptal = dirname(__FILE__).'/../classes/PHPTAL.php';
     if (file_exists($myphptal))
     {
@@ -11,45 +11,45 @@ try {
     {
         require_once "PHPTAL.php";
     }
-
-    if (!defined('PHPTAL_VERSION')) {
+    
+    if (!defined('PHPTAL_VERSION'))
+    {
         throw new Exception("Your PHPTAL installation is broken or too new for this tool");
     }
     
     echo "PHPTAL Lint 1.0 (PHPTAL ",PHPTAL_VERSION,")\n";
     
-    if (!empty($_SERVER['REQUEST_URI'])) {
+    if (! empty($_SERVER['REQUEST_URI']))
+    {
         throw new Exception("Please use this tool from command line");
     }
     
-    $paths = array();
-    
     $custom_extensions = array();
     
-    if (isset($_SERVER['argv']) && count($_SERVER['argv']) > 1)
+    $options = getopt('i:e:p:');
+    
+    if (isset($options['i']))
     {
-        $arguments = $_SERVER['argv'];
-        for($i=1; $i < count($arguments); $i++)
-        {
-            if ($arguments[$i] === '-e')
-            {
-                if ($i < count($arguments)-1)
-                {
-                    $custom_extensions = array_merge($custom_extensions,preg_split('/[\s,.]+/',$arguments[$i+1]));
-                    $i++;
-                }
-            }
-            else
-            {
-                $paths[] = $arguments[$i];
-            }            
-        }        
+        include_path((is_array($options['i'])) ? $options['i'] : array($options['i']));
     }
     
+    if (isset($options['e']))
+    {
+        $custom_extensions = array_merge($custom_extensions, preg_split('/[\s,.]+/', $options['e']));
+    }
+    
+    if (isset($options['p']))
+    {
+        $paths = (is_array($options['p'])) ? $options['p'] : array($options['p']);
+    }
+
+    
     if (!count($paths))
-    {    
-        echo "Usage: phptal_lint.php [-e extensions] file_or_directory_to_check ...\n";
+    {
+        echo "Usage: phptal_lint.php [-e extensions] [-i php_file_or_directory] -p file_or_directory_to_check ...\n";
         echo "  -e comma-separated list of extensions\n";
+        echo "  -i phptales file/include file, or directory\n";
+        echo "  -p path to file or directory to check\n";
         echo "  Use 'phptal_lint.php .' to scan current directory\n\n";
         exit(1);
     }
@@ -59,10 +59,10 @@ try {
     if ($custom_extensions)
     {
         $lint->acceptExtensions($custom_extensions);
-        echo "Using *.",implode(', *.',$custom_extensions),"\n";
+        echo "Using *.",implode(', *.', $custom_extensions),"\n";
     }
-
-    foreach($paths as $arg)
+    
+    foreach ($paths as $arg)
     {
         if (is_dir($arg))
         {
@@ -76,19 +76,22 @@ try {
     
     echo "\n\n";
     echo "Checked {$lint->checked} file(s).";
-    if ($lint->skipped) echo " Skipped {$lint->skipped} non-template file(s).";
+    if ($lint->skipped)
+        echo " Skipped {$lint->skipped} non-template file(s).";
     echo "\n";
-    if (!$custom_extensions && count($lint->skipped_filenames)) {
-        echo "Skipped file(s): ",implode(', ',array_keys($lint->skipped_filenames)),".\n";
+    if (!$custom_extensions && count($lint->skipped_filenames))
+    {
+        echo "Skipped file(s): ",implode(', ', array_keys($lint->skipped_filenames)),".\n";
     }
     
     if (count($lint->errors))
     {
         echo "Found ",count($lint->errors)," error(s):\n";
         $last_dir = NULL;
-        foreach($lint->errors as $errinfo)
+        foreach ($lint->errors as $errinfo)
         {
-            if ($errinfo[0] !== $last_dir) {
+            if ($errinfo[0] !== $last_dir)
+            {
                 echo "In ",$errinfo[0],":\n";
                 $last_dir = $errinfo[0];
             }
@@ -106,9 +109,29 @@ try {
 }
 catch(Exception $e)
 {
-    fwrite(STDOUT,$e->getMessage()."\n");
+    fwrite(STDOUT, $e->getMessage()."\n");
     $errcode = $e->getCode();
     exit($errcode ? $errcode : 1);
+}
+
+function include_path($tales) {
+    foreach ($tales as $path)
+    {
+        if (is_dir($path))
+        {
+            foreach ( new DirectoryIterator($path) as $file)
+            {
+                if (preg_match('/\.php$/', "$path/$file") && is_file("$path/$file"))
+                {
+                    include_once ("$path/$file");
+                }
+            }
+        }
+        else if (preg_match('/\.php$/', $path) && is_file($path))
+        {
+            include_once ("$path");
+        }
+    }
 }
 
 class PHPTAL_Lint {
@@ -120,50 +143,51 @@ class PHPTAL_Lint {
     public $skipped = 0;
     public $checked = 0;
     
-    function acceptExtensions(array $ext)
-    {
-        $this->accept_pattern = '/\.(?:'.implode('|',$ext).')$/i';
+    function acceptExtensions(array $ext) {
+        $this->accept_pattern = '/\.(?:'.implode('|', $ext).')$/i';
     }
     
-    function scan($path)
-    {
-        foreach(new DirectoryIterator($path) as $entry)
+    function scan($path) {
+        foreach ( new DirectoryIterator($path) as $entry)
         {
             $filename = $entry->getFilename();
             
-            if ($filename === '.' || $filename === '..') {
+            if ($filename === '.' || $filename === '..')
+            {
                 continue;
             }
             
-            if (preg_match($this->ignore_pattern,$filename)) {
+            if (preg_match($this->ignore_pattern, $filename))
+            {
                 $this->skipped++;
                 continue;
             }
-        
-            if ($entry->isDir()) {
+            
+            if ($entry->isDir())
+            {
                 echo '.';
-                $this->scan($path . DIRECTORY_SEPARATOR . $filename);
+                $this->scan($path.DIRECTORY_SEPARATOR.$filename);
                 continue;
             }
-
-            if (!preg_match($this->accept_pattern,$filename))
+            
+            if (!preg_match($this->accept_pattern, $filename))
             {
                 $this->skipped++;
                 $this->skipped_filenames[$filename] = true;
                 continue;
-            }            
+            }
             
-            $this->testFile($path . DIRECTORY_SEPARATOR . $filename);
+            $this->testFile($path.DIRECTORY_SEPARATOR.$filename);
         }
     }
     
-    function testFile($fullpath)
-    {
+    function testFile($fullpath) {
         try
-        {            
+        {
             $this->checked++;
             $phptal = new PHPTAL($fullpath);
-            $phptal->prepare();                
+            $phptal->setForceReparse(true);
+            $phptal->prepare();
             echo '.';
         }
         catch(PHPTAL_UnknownModifierException $e)
@@ -173,7 +197,7 @@ class PHPTAL_Lint {
         catch(Exception $e)
         {
             echo 'E';
-            $this->errors[] = array(dirname($fullpath),basename($fullpath), $e->getMessage(), $e->getLine());
+            $this->errors[] = array(dirname($fullpath), basename($fullpath), $e->getMessage(), $e->getLine());
         }
     }
 }
