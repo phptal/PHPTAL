@@ -61,7 +61,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
         else {
             $code = $codewriter->interpolateTalesVarsInString($this->expression);
-            $codewriter->pushCode('$tpl->_executeMacroOfTempalte('.$code.', $_thistpl)');
+            $codewriter->pushCode('$tpl->_executeMacroOfTemplate('.$code.', $_thistpl)');
         }
 
         $this->popSlots($codewriter);

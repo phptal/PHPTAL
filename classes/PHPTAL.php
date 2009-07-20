@@ -161,7 +161,7 @@ class PHPTAL
     /**
      * speeds up calls to external templates
      */
-    private $externalMacroTempaltesCache = array();
+    private $externalMacroTemplatesCache = array();
 
     /**
      * restore_include_path() resets path to default in ini,
@@ -610,7 +610,7 @@ class PHPTAL
      */
     public function executeMacro($path)
     {
-        $this->_executeMacroOfTempalte($path, $this);
+        $this->_executeMacroOfTemplate($path, $this);
     }
 
     /**
@@ -621,7 +621,7 @@ class PHPTAL
      * @param $local_tpl is PHPTAL instance of the file in which macro is defined (it will be different from $this if it's external macro call)
      * @access private
      */
-    final public function _executeMacroOfTempalte($path, PHPTAL $local_tpl)
+    final public function _executeMacroOfTemplate($path, PHPTAL $local_tpl)
     {
         // extract macro source file from macro name, if macro path does not
         // contain filename, then the macro is assumed to be local
@@ -629,18 +629,18 @@ class PHPTAL
         if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m)) {
             list(,$file, $macroName) = $m;
 
-            if (isset($this->externalMacroTempaltesCache[$file])) {
-                $tpl = $this->externalMacroTempaltesCache[$file];
+            if (isset($this->externalMacroTemplatesCache[$file])) {
+                $tpl = $this->externalMacroTemplatesCache[$file];
             } else {
                 $tpl = new PHPTAL($file);
                 $tpl->setConfigurationFrom($this);
                 $tpl->prepare();
 
                 // keep it small (typically only 1 or 2 external files are used)
-                if (count($this->externalMacroTempaltesCache) > 10) {
-                    $this->externalMacroTempaltesCache = array();
+                if (count($this->externalMacroTemplatesCache) > 10) {
+                    $this->externalMacroTemplatesCache = array();
                 }
-                $this->externalMacroTempaltesCache[$file] = $tpl;
+                $this->externalMacroTemplatesCache[$file] = $tpl;
             }
 
             // save current file
@@ -689,7 +689,7 @@ class PHPTAL
     public function prepare()
     {
         // clear just in case settings changed and cache is out of date
-        $this->externalMacroTempaltesCache = array();
+        $this->externalMacroTemplatesCache = array();
 
         // find the template source file and update function name
         $this->setCodeFile();
