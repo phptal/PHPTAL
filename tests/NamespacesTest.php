@@ -15,6 +15,18 @@
 
 require_once dirname(__FILE__)."/config.php";
 
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/Namespace.php';
+require_once 'PHPTAL/Namespace/Builtin.php';
+PHPTAL::restoreIncludePath();
+
+if (!class_exists('Test_PHPTAL_Namespace',false))
+{
+    class Test_PHPTAL_Namespace extends PHPTAL_Namespace_Builtin
+    {
+    }
+}
+
 class NamespacesTest extends PHPTAL_TestCase
 {
     function testTalAlias()
@@ -70,5 +82,23 @@ class NamespacesTest extends PHPTAL_TestCase
                          </metal:block>');
         $this->assertEquals(trim_string('<metal:block xmlns:metal="non-zope"> works properly </metal:block>'),
                             trim_string($tpl->execute()));
+    }
+    
+    // different kind of namespace
+    
+    /**
+     * @expectedException PHPTAL_ConfigurationException
+     */
+    function testPHPTALNamespaceClassRejectsEmptyNS() 
+    {
+        new Test_PHPTAL_Namespace('test','');
+    }
+    
+    /**
+     * @expectedException PHPTAL_ConfigurationException
+     */
+    function testPHPTALNamespaceClassRejectsEmptyPrefix() 
+    {
+        new Test_PHPTAL_Namespace('','urn:test');
     }
 }
