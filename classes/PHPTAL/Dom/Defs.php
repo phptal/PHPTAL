@@ -157,8 +157,10 @@ class PHPTAL_Dom_Defs
     public function registerNamespace(PHPTAL_Namespace $ns)
     {
         $prefix = strtolower($ns->getPrefix());
-        $this->namespaces_by_uri[$ns->getNamespaceURI()] = $ns;
-        $this->prefix_to_uri[$ns->getPrefix()] = $ns->getNamespaceURI();
+        $uri = $ns->getNamespaceURI();
+        assert('is_string($uri) && strlen($uri)');
+        $this->namespaces_by_uri[$uri] = $ns;
+        $this->prefix_to_uri[$ns->getPrefix()] = $uri;
         foreach ($ns->getAttributes() as $name => $attribute) {
             $key = $prefix.':'.strtolower($name);
             $this->_dictionary[$key] = $attribute;
