@@ -26,31 +26,27 @@ try
     
     $custom_extensions = array();
     
-    $options = getopt('i:e:p:');
+    $options = extended_getopt('i,e');
     
     if (isset($options['i']))
     {
-        include_path((is_array($options['i'])) ? $options['i'] : array($options['i']));
+        include_path($options['i']);
     }
     
     if (isset($options['e']))
     {
-        $custom_extensions = array_merge($custom_extensions, preg_split('/[\s,.]+/', $options['e']));
+        $custom_extensions = array_merge($custom_extensions, preg_split('/[\s,.]+/', $options['e'][0]));
     }
     
-    if (isset($options['p']))
+    if (isset($options['--filenames--']))
     {
-        $paths = (is_array($options['p'])) ? $options['p'] : array($options['p']);
+        $paths = ($options['--filenames--']);
     }
 
     
     if (!count($paths))
     {
-        echo "Usage: phptal_lint.php [-e extensions] [-i php_file_or_directory] -p file_or_directory_to_check ...\n";
-        echo "  -e comma-separated list of extensions\n";
-        echo "  -i phptales file/include file, or directory\n";
-        echo "  -p path to file or directory to check\n";
-        echo "  Use 'phptal_lint.php .' to scan current directory\n\n";
+        usage();
         exit(1);
     }
     
@@ -112,6 +108,41 @@ catch(Exception $e)
     fwrite(STDOUT, $e->getMessage()."\n");
     $errcode = $e->getCode();
     exit($errcode ? $errcode : 1);
+}
+
+function usage() {
+    echo "Usage: phptal_lint.php [-e extensions] [-i php_file_or_directory] file_or_directory_to_check ...\n";
+    echo "  -e comma-separated list of extensions\n";
+    echo "  -i phptales file/include file, or directory\n";
+    echo "  Use 'phptal_lint.php .' to scan current directory\n\n";
+}
+
+function extended_getopt($string) {
+    function prefix_a_switch(&$value, $key) {
+        $value = "-$value";
+    }
+    $options = explode(',', $string);
+    array_walk($options, 'prefix_a_switch');
+    
+    $results = array();
+    for ($i = 1; $i < count($_SERVER['argv']); $i++)
+    {
+        if (in_array($_SERVER['argv'][$i], $options))
+        {
+            $results[substr($_SERVER['argv'][$i], 1)][] = $_SERVER['argv'][++$i];
+        }
+        else if (substr($_SERVER['argv'][$i], 0, 1) == '-')
+        {
+            echo "{$_SERVER['argv'][$i]}  is not a valid options\n\n";
+            usage();
+            exit;
+        }
+        else
+        {
+            $results['--filenames--'][] = $_SERVER['argv'][$i];
+        }
+    }
+    return $results;
 }
 
 function include_path($tales) {
