@@ -52,7 +52,8 @@ class ParserTest extends PHPTAL_TestCase
             $parser->parseFile(new PHPTAL_Dom_DocumentBuilder(),'input/parser.03.xml')->getResult();
         }
         catch (Exception $e){
-            $this->assertTrue( preg_match('/attribute single or double quote/', $e->getMessage()) == 1 );
+            $this->assertContains( 'href', $e->getMessage() );
+            $this->assertContains( 'quote', $e->getMessage() );
         }
     }
 

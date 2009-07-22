@@ -132,7 +132,7 @@ class PHPTAL_Dom_SaxXmlParser
                             $mark = $i; // mark tag start
                             $state = self::ST_LT;
                         } elseif (!self::isWhiteChar($c)) {
-                            $this->raiseError("Characters found before the beginning of the document!");
+                            $this->raiseError("Characters found before beginning of the document! (wrap document in < tal:block > to avoid this error)");
                         }
                         break;
 
@@ -174,7 +174,7 @@ class PHPTAL_Dom_SaxXmlParser
                     case self::ST_TAG_NAME:
                         if (self::isWhiteChar($c) || $c === '/' || $c === '>') {
                             $tagname = substr($src, $mark, $i-$mark);
-                            if (!$this->isValidQName($tagname)) $this->raiseError("Invalid element name '$tagname'");
+                            if (!$this->isValidQName($tagname)) $this->raiseError("Invalid tag name '$tagname'");
 
                             if ($c === '/') {
                                 $state = self::ST_TAG_SINGLE;
@@ -185,7 +185,7 @@ class PHPTAL_Dom_SaxXmlParser
                             } else /* isWhiteChar */ {
                                 $state = self::ST_TAG_ATTRIBUTES;
                             }
-                        }
+                        }                        
                         break;
 
                     case self::ST_TAG_CLOSE:
@@ -199,7 +199,7 @@ class PHPTAL_Dom_SaxXmlParser
 
                     case self::ST_TAG_SINGLE:
                         if ($c !== '>') {
-                            $this->raiseError("Expected '/>', but found '/$c' inside tag '$tagname'");
+                            $this->raiseError("Expected '/>', but found '/$c' inside tag < $tagname >");
                         }
                         $mark = $i+1;   // mark text start
                         $state = self::ST_TEXT;
@@ -217,10 +217,10 @@ class PHPTAL_Dom_SaxXmlParser
                             $state = self::ST_TAG_SINGLE;
                         } elseif (self::isWhiteChar($c)) {
                             $state = self::ST_TAG_ATTRIBUTES;
-                        } elseif ($state === self::ST_TAG_ATTRIBUTES) {
+                        } elseif ($state === self::ST_TAG_ATTRIBUTES && $this->isValidQName($c)) {
                             $mark = $i; // mark attribute key start
                             $state = self::ST_ATTR_KEY;
-                        } else $this->raiseError("Unexpected character '$c' between attributes of <$tagname>");
+                        } else $this->raiseError("Unexpected character '$c' between attributes of < $tagname >");
                         break;
 
                     case self::ST_COMMENT:
@@ -281,17 +281,20 @@ class PHPTAL_Dom_SaxXmlParser
                         if ($c === '=' || self::isWhiteChar($c)) {
                             $attribute = substr($src, $mark, $i-$mark);
                             if (!$this->isValidQName($attribute)) {
-                                $this->raiseError("Invalid attribute name '$attribute'");
+                                $this->raiseError("Invalid attribute name '$attribute' in < $tagname >");
                             }
                             if (isset($attributes[$attribute])) {
-                                $this->raiseError("Attribute '$attribute' on '$tagname' is defined more than once");
+                                $this->raiseError("Attribute $attribute in < $tagname > is defined more than once");
                             }
 
                             if ($c === '=') $state = self::ST_ATTR_VALUE;
                             else /* white char */ $state = self::ST_ATTR_EQ;
                         } elseif ($c === '/' || $c==='>') {
                             $attribute = substr($src, $mark, $i-$mark);
-                            $this->raiseError("Could not find value for attribute $attribute before end of tag <$tagname>");
+                            if (!$this->isValidQName($attribute)) {
+                                $this->raiseError("Invalid attribute name '$attribute'");
+                            }
+                            $this->raiseError("Attribute $attribute does not have value (found end of tag instead of '=')");
                         }
                         break;
 
@@ -299,7 +302,7 @@ class PHPTAL_Dom_SaxXmlParser
                         if ($c === '=') {
                             $state = self::ST_ATTR_VALUE;
                         } elseif (!self::isWhiteChar($c)) {
-                            $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
+                            $this->raiseError("Attribute $attribute in < $tagname > does not have value (found character '$c' instead of '=')");
                         }
                         break;
 
@@ -310,7 +313,7 @@ class PHPTAL_Dom_SaxXmlParser
                             $state = self::ST_ATTR_QUOTE;
                             $mark = $i+1; // mark attribute real value start
                         } else {
-                            $this->raiseError("Unexpected '$c' character, expecting attribute single or double quote");
+                            $this->raiseError("Value of attribute $attribute in < $tagname > is not in quotes (found character '$c' instead of quote)");
                         }
                         break;
 
@@ -327,7 +330,7 @@ class PHPTAL_Dom_SaxXmlParser
             {
                 if ($i > $mark) {
                     $text = substr($src, $mark, $i-$mark);
-                    if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element");
+                    if (!ctype_space($text)) $this->raiseError("Characters found after end of the root element (wrap document in < tal:block > to avoid this error)");
                 }
             } else {
                 if ($state === self::ST_ROOT) {
