@@ -411,8 +411,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         $expression = trim($expression);
 
         // Look for tales modifier (string:, exists:, etc...)
-        //if (preg_match('/^([-a-z]+):(.*?)$/', $expression, $m)) {
-        if (preg_match('/^([a-z][.a-z_-]*[a-z]):(.*)$/si', $expression, $m)) {
+        if (preg_match('/^([a-z][a-z0-9._-]*[a-z0-9]):(.*)$/si', $expression, $m)) {
             list(,$typePrefix,$expression) = $m;
         }
         // may be a 'string'
@@ -436,11 +435,11 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $classCallback = explode('.', $typePrefix, 2);
             $callbackName  = null;
             if (!is_callable($classCallback, FALSE, $callbackName)) {
-                throw new PHPTAL_UnknownModifierException("Unknown phptal modifier $typePrefix. Function $callbackName does not exists or is not statically callable");
+                throw new PHPTAL_UnknownModifierException("Unknown phptal modifier $typePrefix. Function $callbackName does not exists or is not statically callable", $typePrefix);
             }
             $ref = new ReflectionClass($classCallback[0]);
             if (!$ref->implementsInterface('PHPTAL_Tales')) {
-                throw new PHPTAL_UnknownModifierException("Unable to use phptal modifier $typePrefix as the class $callbackName does not implement the PHPTAL_Tales interface");
+                throw new PHPTAL_UnknownModifierException("Unable to use phptal modifier $typePrefix as the class $callbackName does not implement the PHPTAL_Tales interface", $typePrefix);
             }
             return call_user_func($classCallback, $expression, $nothrow);
         }
@@ -457,6 +456,6 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             return "$runfunc(".self::compileToPHPExpression($expression, $nothrow).")";
         }
 
-        throw new PHPTAL_UnknownModifierException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist");
+        throw new PHPTAL_UnknownModifierException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist", $typePrefix);
     }
 }

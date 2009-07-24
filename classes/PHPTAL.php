@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_0');
+define('PHPTAL_VERSION', '1_2_1b');
 
 
 /* If you want to use autoload, comment out all lines starting with require_once 'PHPTAL
