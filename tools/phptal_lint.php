@@ -17,7 +17,7 @@ try
         throw new Exception("Your PHPTAL installation is broken or too new for this tool");
     }
     
-    echo "PHPTAL Lint 1.1 (PHPTAL ",PHPTAL_VERSION,")\n";
+    echo "PHPTAL Lint 1.1.1 (PHPTAL ",PHPTAL_VERSION,")\n";
     
     if (!empty($_SERVER['REQUEST_URI']))
     {
@@ -52,6 +52,11 @@ try
     
     $lint = new PHPTAL_Lint();
     
+    if (empty($options['i']))
+    {
+        $lint->skipUnknownModifiers();
+    }
+    
     if ($custom_extensions)
     {
         $lint->acceptExtensions($custom_extensions);
@@ -71,9 +76,10 @@ try
     }
     
     echo "\n\n";
-    echo "Checked {$lint->checked} file(s).";
+    echo "Checked ".plural($lint->checked,'file').".";
+   
     if ($lint->skipped)
-        echo " Skipped {$lint->skipped} non-template file(s).";
+        echo " Skipped ".plural($lint->skipped,"non-template file").".";
     echo "\n";
     if (!$custom_extensions && count($lint->skipped_filenames))
     {
@@ -82,20 +88,17 @@ try
     
     if (count($lint->errors))
     {
-        echo "Found ",count($lint->errors)," error(s):\n";
-        $last_dir = NULL;
-        foreach ($lint->errors as $errinfo)
-        {
-            if ($errinfo[0] !== $last_dir)
-            {
-                echo "In ",$errinfo[0],":\n";
-                $last_dir = $errinfo[0];
-            }
-            echo $errinfo[1],": ",$errinfo[2],' (line ',$errinfo[3],')';
-            echo "\n";
-        }
+        echo "Found ".plural(count($lint->errors),"error").":\n";
+        display_erorr_array($lint->errors);
         echo "\n";
         exit(2);
+    }
+    else if (count($lint->warnings))
+    {
+        echo "Found ".plural(count($lint->warnings),"warning").":\n";
+        display_erorr_array($lint->warnings);
+        echo "\n";
+        exit(0);        
     }
     else
     {
@@ -110,11 +113,33 @@ catch(Exception $e)
     exit($errcode ? $errcode : 1);
 }
 
+
+function display_erorr_array(array $errors)
+{
+    $last_dir = '.';
+    foreach ($errors as $errinfo)
+    {
+        if ($errinfo[0] !== $last_dir)
+        {
+            echo "In ",$errinfo[0],":\n";
+            $last_dir = $errinfo[0];
+        }
+        echo $errinfo[1],": ",$errinfo[2],' (line ',$errinfo[3],')';
+        echo "\n";
+    }
+}
+
 function usage() {
     echo "Usage: phptal_lint.php [-e extensions] [-i php_file_or_directory] file_or_directory_to_check ...\n";
     echo "  -e comma-separated list of extensions\n";
     echo "  -i phptales file/include file, or directory\n";
     echo "  Use 'phptal_lint.php .' to scan current directory\n\n";
+}
+
+function plural($num,$word)
+{
+    if ($num == 1) return "$num $word";
+    return "$num {$word}s";
 }
 
 function extended_getopt(array $options) {
@@ -166,11 +191,18 @@ function include_path($tales) {
 class PHPTAL_Lint {
     private $ignore_pattern = '/^\.|\.(?i:php|inc|jpe?g|gif|png|mo|po|txt|orig|rej|xsl|xsd|sh|in|ini|conf|css|js|py|pdf|swf|csv|ico|jar|htc)$|^Makefile|^[A-Z]+$/';
     private $accept_pattern = '/\.(?:xml|[px]?html|zpt|phptal|tal|tpl)$/i';
+    private $skipUnknownModifiers = false;
     
     public $errors = array();
+    public $warnings = array();
     public $ignored = array();
     public $skipped = 0;
     public $checked = 0;
+    
+    function skipUnknownModifiers()
+    {
+        $this->skipUnknownModifiers = true;
+    }
     
     function acceptExtensions(array $ext) {
         $this->accept_pattern = '/\.(?:'.implode('|', $ext).')$/i';
@@ -212,7 +244,7 @@ class PHPTAL_Lint {
     
     function testFile($fullpath) {
         try
-        {
+        {            
             $this->checked++;
             $phptal = new PHPTAL($fullpath);
             $phptal->setForceReparse(true);
@@ -221,13 +253,19 @@ class PHPTAL_Lint {
         }
         catch(PHPTAL_UnknownModifierException $e)
         {
-            echo 'S';
+            if ($this->skipUnknownModifiers && is_callable(array($e,'getModifierName')))
+            {
+                echo 'S';
+                $this->warnings[] = array(dirname($fullpath), basename($fullpath), "Unknown expression modifier: ".$e->getModifierName()." (use -i to include your custom modifier functions)", $e->getLine());                    
+                return;
+            }
         }
         catch(Exception $e)
         {
             echo 'E';
-            $this->errors[] = array(dirname($fullpath), basename($fullpath), $e->getMessage(), $e->getLine());
         }
+
+        $this->errors[] = array(dirname($fullpath), basename($fullpath), $e->getMessage(), $e->getLine());                    
     }
 }
 
