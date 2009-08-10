@@ -165,9 +165,9 @@ class PHPTAL_Php_CodeWriter
             $codeLine = $this->_codeBuffer[0];
             // avoid adding ; after } and {
             if (!preg_match('/\}\s*$|\{\s*$/', $codeLine))
-                $this->_result .= '<?php '.$codeLine.'; ?>';
+                $this->_result .= '<?php '.$codeLine."; ?>\n"; // PHP consumes newline
             else
-                $this->_result .= '<?php '.$codeLine.' ?>';
+                $this->_result .= '<?php '.$codeLine." ?>\n"; // PHP consumes newline
             $this->_codeBuffer = array();
             return;
         }
@@ -180,7 +180,7 @@ class PHPTAL_Php_CodeWriter
             else
                 $this->_result .= $codeLine;
         }
-        $this->_result .= '?>';
+        $this->_result .= "?>\n";// PHP consumes newline
         $this->_codeBuffer = array();
     }
 
