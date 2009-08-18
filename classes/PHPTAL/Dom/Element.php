@@ -430,15 +430,14 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     private function orderTalAttributes(array $talAttributes)
     {
         $temp = array();
-        foreach($talAttributes as $domattr) {
+        foreach($talAttributes as $key => $domattr) {
             $nsattr = PHPTAL_Dom_Defs::getInstance()->getNamespaceAttribute($domattr->getNamespaceURI(), $domattr->getLocalName());
             if (array_key_exists($nsattr->getPriority(), $temp)) {
-                throw new PHPTAL_TemplateException(sprintf("Attribute conflict in '%s' at line '%d', '%s' cannot appear with '%s'",
+                throw new PHPTAL_TemplateException(sprintf("Attribute conflict in < %s > '%s' cannot appear with '%s'",
                                $this->qualifiedName,
-                               $this->getSourceLine(),
                                $key,
-                               $temp[$nsattr->getPriority()][0]
-                               ));
+                               $temp[$nsattr->getPriority()][0]->getNamespace()->getPrefix() . ':' . $temp[$nsattr->getPriority()][0]->getLocalName()
+                               ), $this->getSourceFile(), $this->getSourceLine());
             }
             $temp[$nsattr->getPriority()] = array($nsattr, $domattr);
         }
