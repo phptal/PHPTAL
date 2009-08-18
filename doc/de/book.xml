@@ -31,30 +31,30 @@
         <authorinitials>kl</authorinitials>
         <revremark>Fixed errors spotted by Anton.</revremark>
       </revision>
-        <revision>
-			  <revnumber>v1.5</revnumber>
-				<date>2008-08-21</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Removed old defines, documented configuration methods.</revremark>
-		  </revision>
-        <revision>
-			  <revnumber>v1.4</revnumber>
-				<date>2008-08-18</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Corrections and updates for PHPTAL 1.1.13</revremark>
-		  </revision>
-		  <revision>
-			  <revnumber>v1.3</revnumber>
-				<date>2008-01-27</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Updated for PHPTAL 1.1.10</revremark>
-		  </revision>
-		  <revision>
-			  <revnumber>v1.2</revnumber>
-				<date>2005-12-10</date>
-				<authorinitials>ds</authorinitials>
-				<revremark>English Corrections by Dan Sheppard</revremark>
-		  </revision>
+      <revision>
+        <revnumber>v1.5</revnumber>
+        <date>2008-08-21</date>
+        <authorinitials>kl</authorinitials>
+        <revremark>Removed old defines, documented configuration methods.</revremark>
+      </revision>
+      <revision>
+        <revnumber>v1.4</revnumber>
+        <date>2008-08-18</date>
+        <authorinitials>kl</authorinitials>
+        <revremark>Corrections and updates for PHPTAL 1.1.13</revremark>
+      </revision>
+      <revision>
+        <revnumber>v1.3</revnumber>
+        <date>2008-01-27</date>
+        <authorinitials>kl</authorinitials>
+        <revremark>Updated for PHPTAL 1.1.10</revremark>
+      </revision>
+      <revision>
+        <revnumber>v1.2</revnumber>
+        <date>2005-12-10</date>
+        <authorinitials>ds</authorinitials>
+        <revremark>English Corrections by Dan Sheppard</revremark>
+      </revision>
       <revision>
         <revnumber>v1.1</revnumber>
         <date>2005-03-29</date>
@@ -123,11 +123,11 @@
 
     <para>
     Die meisten Vorlagensysteme (»Template-Systeme«) nutzen <sgmltag>&lt;? ?&gt;</sgmltag>-, <sgmltag>&lt;% %&gt;</sgmltag>- oder
-    <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag>-Auszeichnugen, um die Stellen zu finden, die verarbeitet werden müssen. Dadurch wird die Entwicklung des Vorlagensystems einfacher, dem (Vorlagen-)designer wird die Arbeit aber unnötig erschwert.
+    <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag>-Auszeichnugen, um die Stellen zu finden, die verarbeitet werden müssen. Dadurch wird die Entwicklung des Vorlagensystems einfacher, dem (Vorlagen-) Designer wird die Arbeit aber unnötig erschwert.
     </para>
 
     <para>
-      <acronym>TAL</acronym> versteckt seine Logik größtenteils in <acronym>XML</acronym>-Attributen und erhält dabei die Syntax und Struktur von <acronym>XHTML</acronym>. Dadurch ist ein direkte Betrachtung von <acronym>TAL</acronym>-Vorlagen in Brausern möglich (<acronym>WYSIWYG</acronym>-Editoren, unmittelbare Vorschau). Die <acronym>HTML</acronym>-Syntax-Hervorhebung (»Syntax Highlighting«) im Editor wird nicht gestört.
+      <acronym>TAL</acronym> versteckt seine Logik größtenteils in <acronym>XML</acronym>-Attributen und erhält dabei die Syntax und Struktur von <acronym>XHTML</acronym>. Dadurch ist eine direkte Betrachtung von <acronym>TAL</acronym>-Vorlagen in Brausern möglich (<acronym>WYSIWYG</acronym>-Editoren, unmittelbare Vorschau). Die <acronym>HTML</acronym>-Syntax-Hervorhebung (»Syntax Highlighting«) im Editor wird nicht gestört.
     </para>
 
     <para>
@@ -164,7 +164,7 @@
     </para>
 
     <para>
-    Ein weitere großer Vorteil von <acronym>PHPTAL</acronym> ist, daß Sie von der mehr als 3-jährigen Erfahrung, der Dokumentation und der Hilfe der Zope-Gemeinschaft profitieren.
+    Ein weiterer großer Vorteil von <acronym>PHPTAL</acronym> ist, daß Sie von der mehr als 3-jährigen Erfahrung, der Dokumentation und der Hilfe der Zope-Gemeinschaft profitieren.
     <acronym>PHPTAL</acronym> verlässt sich auf diese Gemeinschaft, um seinen Nutzern eine große Menge nützlicher Informationen zu bieten.
     </para>
 
@@ -182,7 +182,7 @@
     </para>
 
     <para>
-      So installieren Sie <acronym>PHPTAL</acronym> via pear:
+      So installieren Sie <acronym>PHPTAL</acronym> via <acronym>PEAR</acronym>:
     </para>
 
     <informalexample><programlisting language="sh"><![CDATA[pear install http://phptal.org/latest.tar.gz
@@ -218,7 +218,7 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
     </para>
 
     <para>
-      Ihre Vorlage ist ein gültiges XML-/HTML-Dokument (samt Wurzelelement). Die Datei nennen wir 'my_template_file.xhtml':
+      Ihre Vorlage ist ein gültiges XML-/HTML-Dokument (samt Wurzelelement). Die Datei nennen wir <filename>my_template_file.xhtml</filename>:
     </para>
 
     <informalexample><programlisting><![CDATA[<?xml version="1.0"?>
@@ -479,7 +479,7 @@ catch (Exception $e){
         </para>
 
         <para>
-          Der folgende Code aber ist <emphasis>nicht</emphasis> erlaubt, da <sgmltag>tal:define</sgmltag> der Variable »hello« den Inhalt des Knotens zuweist. Der Inhalt des Knotens ist allerdings zu diesem Zeitpunkt noch unklar, da <sgmltag>tal:content</sgmltag> ihn erst später festlegt. Der tatsächliche Inhalt wird dabei wie Beispielinhalt ignoriert. <varname>hello</varname> wird nicht definiert und Sie erhalten eine Fehlermeldung.
+          Der folgende Code aber ist <emphasis>nicht</emphasis> erlaubt, da <sgmltag>tal:define</sgmltag> der Variablen »hello« den Inhalt des Knotens zuweist. Der Inhalt des Knotens ist allerdings zu diesem Zeitpunkt noch unklar, da <sgmltag>tal:content</sgmltag> ihn erst später festlegt. Der tatsächliche Inhalt wird dabei wie Beispielinhalt ignoriert. <varname>hello</varname> wird nicht definiert, und Sie erhalten eine Fehlermeldung.
         </para>
 
         <informalexample><programlisting><![CDATA[<span tal:define="hello" tal:content="hello">
@@ -500,14 +500,14 @@ catch (Exception $e){
       ]]></programlisting></informalexample>
 
         <para>
-          Im Gegensatz dazu ist eine lokale Variable nur innerhalb der Auszeichnung, in der Sie definiert ist, sichtbar.
+          Im Gegensatz dazu ist eine lokale Variable nur innerhalb der Auszeichnung sichtbar, in der Sie definiert ist.
         </para>
 
         <informalexample><programlisting><![CDATA[<span tal:define="hello string:Hallo Welt"/>
       <p tal:content="hello"/>
       ]]></programlisting></informalexample>
         <para>
-           Dieser Code liefert einen 'undefined variable' Fehler.
+           Dieser Code liefert einen 'undefined variable'-Fehler.
          </para>
 
       </section>
@@ -537,7 +537,7 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
         <para>
-          Dadurch kann unerwünscht viel Logik in der Vorlage landen. Manchmal ist es daher besser der Vorlage boolsche Ausdrücke oder Methoden anzubieten.
+          Dadurch kann unerwünscht viel Logik in der Vorlage landen. Manchmal ist es daher besser, der Vorlage boolsche Ausdrücke oder Methoden anzubieten.
         </para>
 
         <informalexample><programlisting><![CDATA[<span tal:condition="cart/hasMoreThanFiveItems">…</span>
@@ -720,7 +720,7 @@ catch (Exception $e){
         <title><sgmltag>tal:attributes</sgmltag></title>
 
         <para>
-          Mit <sgmltag>tal:attributes</sgmltag> können <acronym>HTML</acronym> Attribute gesetzt, oder verändert werden.
+          Mit <sgmltag>tal:attributes</sgmltag> können <acronym>HTML</acronym> Attribute gesetzt oder verändert werden.
         </para>
 
         <informalexample><programlisting><![CDATA[<a href="http://www.foo.com" title="some foo link"
@@ -803,7 +803,7 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>tal:on-error</sgmltag></title>
 
         <para>
-          Wenn ein Pfadfehler oder irgendeine <acronym>PHP</acronym> Ausnahme in der Auszeichnug auftritt, ersetzt dieses Attribut die Auszeichnung durch das Ergebnis des <sgmltag>tal:on-error</sgmltag> Ausdrucks.
+          Wenn ein Pfadfehler oder irgendeine <acronym>PHP</acronym>-Ausnahme in der Auszeichnung auftritt, ersetzt dieses Attribut die Auszeichnung durch das Ergebnis des <sgmltag>tal:on-error</sgmltag>-Ausdrucks.
         </para>
 
         <informalexample><programlisting><![CDATA[<span tal:on-error="string:No username defined here"
@@ -877,14 +877,14 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Makros lassen sich über deren Dateiname auch aus externen Vorlagen ansprechen.
+          Makros lassen sich über die Angabe des Dateinamens auch aus anderen Vorlagen ansprechen.
         </para>
 
         <informalexample><programlisting><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
 ]]></programlisting></informalexample>
 
         <para>
-          Der <acronym>PHPTAL</acronym> Ersetzungsmechanismus läßt sich auch innerhalb von <sgmltag>metal:use-macro</sgmltag> Werten nutzen:
+          Der <acronym>PHPTAL</acronym>-Ersetzungsmechanismus läßt sich auch innerhalb von <sgmltag>metal:use-macro</sgmltag> Werten nutzen:
         </para>
 
         <informalexample><programlisting><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
@@ -928,7 +928,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Obiges Beispiel definiert eine Stelle '<emphasis>news_place</emphasis>' die durch die aufrufende Vorlage überschrieben werden kann. Im nächsten Abschnitt wird dieses Beispiel fortgeführt.
+          Obiges Beispiel definiert eine Stelle '<emphasis>news_place</emphasis>', die durch die aufrufende Vorlage überschrieben werden kann. Im nächsten Abschnitt wird dieses Beispiel fortgeführt.
         </para>
 
       </section>
@@ -938,11 +938,11 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>metal:fill-slot</sgmltag></title>
 
         <para>
-          Dieses Attribut darf nur innerhalb eines <sgmltag>metal:use-macro</sgmltag> Blocks verwendet werden.
+          Dieses Attribut darf nur innerhalb eines <sgmltag>metal:use-macro</sgmltag>-Blocks verwendet werden.
         </para>
 
         <para>
-          Hiermit wird  <acronym>PHPTAL</acronym> mitgeteilt einen bestimmten slot mit dem Inhalt innerhalb der <sgmltag>metal:fill-slot</sgmltag> Auszeichnung zu ersetzen.
+          Hiermit wird <acronym>PHPTAL</acronym> angewiesen, einen bestimmten Slot mit dem Inhalt innerhalb der <sgmltag>metal:fill-slot</sgmltag>-Auszeichnung zu ersetzen.
         </para>
 
         <informalexample><programlisting><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
@@ -968,14 +968,15 @@ title="google search engine">the google search engine</a>
       <title><acronym>I18N</acronym> Namensraum</title>
 
       <para>
-        „i18n“ ist eine Kurzform für das englische 'internationalization' (i, 18 Buchstaben, n). This Namensraum allow template designers to specify some text zones that must be translated during template evaluation.
+        „i18n“ ist eine Kurzform für das englische 'internationalization' (<emphasis>i</emphasis>, 18 Buchstaben, <emphasis>n</emphasis>).
+        Dieser XML-Namensraum erlaubt es Template-Designern, Textbereiche anzugeben, die in die jeweilige Ausgabesprache übersetzt werden sollen.
       </para>
 
       <section id="i18n-translate">
         <title><sgmltag>i18n:translate</sgmltag></title>
 
         <para>
-          Dieses Attribute definiert Text, der durch das <acronym>PHPTAL</acronym> Übersetzungssystem übersetzt werden soll.
+          Dieses Attribut definiert Text, der durch das <acronym>PHPTAL</acronym>-Übersetzungssystem übersetzt werden soll.
         </para>
 
         <informalexample><programlisting><![CDATA[<div i18n:translate="string:welcome_message">Welcome here</div>
@@ -993,11 +994,11 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-          Wird keine Übersetzung gefunden, wird der Schlüssel als Ergebnis benutzt. Darum ist es sinnvoll lesbare Meldung statt Kürzel als Schlüssel zu verwenden.
+          Wird keine Übersetzung gefunden, wird der Schlüssel als Ergebnis benutzt. Darum ist es sinnvoll, lesbare Texte statt Kürzel als Schlüssel zu verwenden.
         </para>
 
         <para>
-          Beachten Sie bitte, das der Schlüssel, um eine dynamische Schlüsselwahl zu ermöglichen, auch in einer Variable enthalten sein kann.
+          Beachten Sie bitte, daß der Schlüssel, um eine dynamische Schlüsselwahl zu ermöglichen, auch in einer Variablen enthalten sein kann.
         </para>
 
         <informalexample><programlisting><![CDATA[<div tal:define="welcome random_welcome_message">
@@ -1010,7 +1011,7 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>i18n:attributes</sgmltag></title>
 
         <para>
-          Dieses Attribut legt fest welche <acronym>HTML</acronym> Attribute übersetzt werden sollen. Ähnlich zu <sgmltag>i18n:translate</sgmltag> verlangt <sgmltag>i18n:attributes</sgmltag> eine durch Semikola getrennte Liste aus Attribute/Schlüssel Paaren.
+          Dieses Attribut legt fest, welche <acronym>HTML</acronym>-Attribute übersetzt werden sollen. Ähnlich zu <sgmltag>i18n:translate</sgmltag> verlangt <sgmltag>i18n:attributes</sgmltag> eine durch Semikola getrennte Liste aus Attribut-/Schlüssel-Paaren.
         </para>
         <informalexample><programlisting><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
 ]]></programlisting></informalexample>
@@ -1064,11 +1065,11 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          <acronym>PHPTAL</acronym> wird <varname>${user}</varname> durch <varname>${user/name}</varname> und <varname>${mails}</varname> durch <varname>${user/nbrMails}</varname> in ihrer Übersetzung ersetzen.
+          <acronym>PHPTAL</acronym> wird in ihrer Übersetzung <varname>${user}</varname> durch <varname>${user/name}</varname> und <varname>${mails}</varname> durch <varname>${user/nbrMails}</varname> ersetzen.
         </para>
 
         <para>
-          Weiter Information zu <acronym>I18N</acronym> und <acronym>PHPTAL</acronym> finden sich im <acronym>PHP</acronym> Kapitel dieses Buches.
+          Weitere Informationen zu <acronym>I18N</acronym> und <acronym>PHPTAL</acronym> finden sich im <acronym>PHP</acronym>-Kapitel dieses Buches.
         </para>
 
       </section>
@@ -1076,11 +1077,11 @@ title="google search engine">the google search engine</a>
       <section id="xhtml-in-translations"><title><acronym>XHTML</acronym> in Übersetzungen</title>
 
         <para>
-          In der Grundeinstellung wird angenommen, das Übersetzungen nur Text enthalten, daher maskiert <acronym>PHPTAL</acronym> sämtliche "&lt;" Zeichen.
+          In der Grundeinstellung wird angenommen, daß Übersetzungen nur Text enthalten; daher maskiert <acronym>PHPTAL</acronym> sämtliche "&lt;" Zeichen.
         </para>
 
         <para>
-          Seit Version 1.1.14 können Sie das structure Schlüsselwort auch in <sgmltag>i18n:translate</sgmltag> verwenden, um die Maskierung zu unterbinden und den übersetzten Text unverändert zu übernehmen.
+          Seit Version 1.1.14 können Sie das structure-Schlüsselwort auch in <sgmltag>i18n:translate</sgmltag> verwenden, um die Maskierung zu unterbinden und den übersetzten Text unverändert zu übernehmen.
         </para>
 
         <informalexample><programlisting><![CDATA[<div i18n:translate="structure '<b>bold text</b>'" />
@@ -1092,7 +1093,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Vorbehalt: Dies funktioniert nur in den einfachsten Fällen – <acronym>TAL</acronym> Attribute innerhalb der Übersetzungen werden ignoriert. Nicht wohlgeformtes <acronym>XHTML</acronym> in Übersetzungen zerstört die Wohlgeformtheit der ganzen Ergebnisseite.
+          Vorbehalt: Dies funktioniert nur in den einfachsten Fällen – <acronym>TAL</acronym>-Attribute innerhalb der Übersetzungen werden ignoriert. Nicht wohlgeformtes <acronym>XHTML</acronym> in Übersetzungen zerstört die Wohlgeformtheit der ganzen Ergebnisseite.
         </para>
 
       </section>
@@ -1141,47 +1142,47 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>phptal:cache</sgmltag></title>
 
         <para>
-          Durch dieses Attribut wird ein komplettes Element, also Auszeichnung samt Attributen und Inhalt auf der Festplatte gepuffert und erst dann wieder neu interpretiert, wenn die Pufferzeit abgelaufen ist.
+          Durch dieses Attribut wird ein komplettes Element, also Auszeichnung samt Attributen und Inhalt, auf der Festplatte gepuffert und erst dann wieder neu interpretiert, wenn die Pufferzeit abgelaufen ist.
         </para>
 
         <note><para>
-          Eine solche Pufferung lohnt sich nur für Elemente, die sehr komplexe Ausdrücke, Makros aus externen Dateien, oder <acronym>PHP</acronym> Ausdrücke/Objekte mit Datenbankzugriffen enthalten. Ansonsten sind nichtgepufferte Vorlagen genau so schnell.
+          Eine solche Pufferung lohnt sich nur für Elemente, die sehr komplexe Ausdrücke, Makros aus externen Dateien, oder <acronym>PHP</acronym>-Ausdrücke/Objekte mit Datenbankzugriffen enthalten. Ansonsten sind nichtgepufferte Vorlagen genauso schnell.
         </para></note>
 
         <para>
-          Der Inhalt dieses Attributes ist eine Zeitspanne (wie lange soll das Element gepuffert werden), die als Zahl mit'<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' oder '<constant>s</constant>' als Einheit geschrieben wird.
+          Der Inhalt dieses Attributs ist eine Zeitspanne (wie lange soll das Element gepuffert werden), die als Zahl mit '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' oder '<constant>s</constant>' als Einheit geschrieben wird.
         </para>
 
         <informalexample><programlisting><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting></informalexample>
 
         <para>
-          <sgmltag>&lt;div></sgmltag> wird maximale alle 3 Stunden einmal ausgeführt.
+          <sgmltag>&lt;div></sgmltag> wird maximal alle 3 Stunden einmal ausgeführt.
         </para>
 
         <para>
-          Der Zeitspanne kann wahlweise ein "<varname>per</varname>" Parameter folgen, der festlegt, ob der Puffer geteilt wird. In der Grundeinstellung wird ein Elementpuffer von allen Seiten genutzt, die die entsprechende Vorlage nutzen. Sie können ein "<varname>per url</varname>" hinzufügen, so daß jeder <acronym>URL</acronym> einen eigenen Puffer für das betreffende Element erhält.
+          Der Zeitspanne kann wahlweise ein "<varname>per</varname>"-Parameter folgen, der festlegt, ob der Puffer geteilt wird. In der Grundeinstellung wird ein Elementpuffer von allen Seiten genutzt, die die entsprechende Vorlage nutzen. Sie können ein "<varname>per url</varname>" hinzufügen, so daß jede <acronym>URL</acronym> einen eigenen Puffer für das betreffende Element erhält.
         </para>
 
         <informalexample><programlisting><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting></informalexample>
 
         <para>
-          <sgmltag>&lt;ol></sgmltag> wird für jede Seite seperat einen Tag lang gepuffert.
+          <sgmltag>&lt;ol></sgmltag> wird für jede Seite separat einen Tag lang gepuffert.
         </para>
 
         <para>
-          Um für jeden einzelnen Wert eines Ausdrucks (der im Ergebnis eine Zeichenkette liefern muß) einen eigenen Puffer zu erhalten, können Sie "<varname>per expression</varname>" verwenden. Dabei dürfen sich die Ausdrücke nicht auf Variablen beziehen, die via <sgmltag>tal:define</sgmltag> im der selben Auszeichnug definiert werden.
+          Um für jeden einzelnen Wert eines Ausdrucks (der im Ergebnis eine Zeichenkette liefern muß) einen eigenen Puffer zu erhalten, können Sie "<varname>per expression</varname>" verwenden. Dabei dürfen sich die Ausdrücke nicht auf Variablen beziehen, die via <sgmltag>tal:define</sgmltag> in der selben Auszeichnug definiert werden.
         </para>
 
         <informalexample><programlisting><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting></informalexample>
 
         <para>
-          <sgmltag>&lt;ul></sgmltag> wird für jede object ID einzelnd 25 Minuten lang gepuffert.
+          <sgmltag>&lt;ul></sgmltag> wird für jede Object-ID einzeln 25 Minuten lang gepuffert.
         </para>
 
         <section id="cache-refresh"><title>Gesteuerte Auffrischung</title>
 
           <para>
-            Es ist eine gute Idee, anstatt einen Puffer zu löschen, in den <varname>per</varname> Parameter eine Versionsnummer oder einen Zeitstempel einzufügen. Dadurch wird die gepufferte Vorlage erneuert, sobald sich die Version oder der Zeitstempel ändert. Ein separates Pufferlöschen ist dann nicht nötig.
+            Es ist eine gute Idee, einen Puffer nicht händisch zu löschen, sondern in den <varname>per</varname>-Parameter eine Versionsnummer oder einen Zeitstempel einzufügen. Dadurch wird die gepufferte Vorlage erneuert, sobald sich die Version oder der Zeitstempel ändert. Ein separates Pufferlöschen ist dann nicht nötig.
           </para>
 
           <informalexample><programlisting><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting></informalexample>
@@ -1242,7 +1243,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Beachten Sie, daß obiges Beispiel dasselbe tut, wie:
+          Beachten Sie, daß obiges Beispiel dasselbe tut wie:
         </para>
 
         <informalexample><programlisting><![CDATA[<html>
@@ -1258,7 +1259,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Der 'php:' Operator wird in einem eigenen Kapitel erläutert.
+          Der 'php:'-Operator wird in einem eigenen Kapitel erläutert.
         </para>
       </section>
 
@@ -1307,18 +1308,18 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTALES</acronym></title>
 
       <para>
-        Zum Formulieren von Ausdrücken innerhalb von tal, metal, <acronym>PHPTAL</acronym> Attributen wird <acronym>PHPTALES</acronym> verwendet. In den vorhergehenden Beispielen sind ihnen schon einige <acronym>PHPTALES</acronym> Beispielverwendungen (string:, php:, not:, …) begegnet. Dieses Kapitel beschreibt nun die Anwendung <acronym>PHPTALES</acronym> in Vorlagen.
+        Zum Formulieren von Ausdrücken innerhalb von TAL-, METAL-, <acronym>PHPTAL</acronym>-Attributen wird <acronym>PHPTALES</acronym> verwendet. In den vorhergehenden Beispielen sind ihnen schon einige <acronym>PHPTALES</acronym> Beispielverwendungen (string:, php:, not:, …) begegnet. Dieses Kapitel beschreibt nun die Verwendung von <acronym>PHPTALES</acronym> in Vorlagen.
       </para>
 
       <para>
-        Der Wert eines <acronym>TAL</acronym> Attributes darf mehr als einen Ausdruck enthalten (zB: <sgmltag>tal:define</sgmltag>). Dabei müssen die einzelnen Ausdrücke durch '<sgmltag>;</sgmltag>' getrennt werden.
+        Der Wert eines <acronym>TAL</acronym>-Attributs darf mehr als einen Ausdruck enthalten (z. B: <sgmltag>tal:define</sgmltag>). Dabei müssen die einzelnen Ausdrücke durch '<sgmltag>;</sgmltag>' getrennt werden.
       </para>
 
       <section id="tales-path">
         <title>path:</title>
 
         <para>
-          Das ist der Standardoperator der innerhalb eines <acronym>TAL</acronym> Ausdrucks verwendet wird, wenn kein anderer Operator angegeben wird.
+          Das ist der Standardoperator, der innerhalb eines <acronym>TAL</acronym>-Ausdrucks verwendet wird, wenn kein anderer Operator angegeben wird.
         </para>
 
         <para>
@@ -1339,7 +1340,7 @@ title="google search engine">the google search engine</a>
 this page has been readed ${page/countRead} times"/>
 ]]></programlisting></informalexample>
 
-			<warning><para>If you try to read variable that does not exist, PHPTAL will throw an exception. Use <link linkend="tales-exists">exists:</link> to check if variable can be read</para></warning>
+      <warning><para>Falls Sie versuchen eine Variable zu lesen, die nicht existiert, wirft <acronym>PHPTAL</acronym> eine Ausnahme aus. Verwenden Sie <link linkend="tales-exists">exists:</link> um zu überprüfen, ob eine Variable lesbar ist.</para></warning>
 
       </section>
 
@@ -1398,7 +1399,7 @@ string:foo ;; php:doFoo() <!-- eine einzige Zeichenkette -->
         <title><code>php:</code></title>
 
         <para>
-          Dieser Operator erwartet als Argument, bis auf zwei Ausnahmen, einen regulären <acronym>PHP</acronym> Ausdruck. '-&gt;' müssen durch Punkte '.' ersetzt werden, und Variablennamen müssen nicht mit einem vorangestellen Dollarzeichen '$' versehen werden.
+          Dieser Operator erwartet als Argument, bis auf zwei Ausnahmen, einen regulären <acronym>PHP</acronym>-Ausdruck: '-&gt;' müssen durch Punkte '.' ersetzt werden, und Variablennamen müssen nicht mit einem vorangestellen Dollarzeichen '$' versehen werden.
         </para>
 
         <para>
@@ -1418,7 +1419,7 @@ php:SomeClass::$staticVar
 ]]></programlisting></informalexample>
 
         <para>
-          Verwenden Sie php: sparsam. In 80% ihrer Vorlagen werden Sie diesen Operator nicht benötigen, aber manchmal werden Sie eine spezielle <acronym>PHP</acronym> Methode aufrufen müssen, z.B. um sich zu vergewissern, daß ein Benutzer angemeldet ist, oder um spezielle, komplexe Daten, in Abhängigkeit von einigen Bedingungen, innerhalb der Vorlage dynamisch zu laden.
+          Verwenden Sie php: sparsam. In 80% ihrer Vorlagen werden Sie diesen Operator nicht benötigen, aber manchmal werden Sie eine spezielle <acronym>PHP</acronym>-Methode aufrufen müssen, z.B. um sich zu vergewissern, daß ein Benutzer angemeldet ist, oder um spezielle, komplexe Daten, in Abhängigkeit von einigen Bedingungen, innerhalb der Vorlage dynamisch zu laden.
         </para>
 
       </section>
@@ -1438,7 +1439,7 @@ php:SomeClass::$staticVar
         <title><code>exists:</code></title>
 
         <para>
-          Dieser boolsche Operator gibt <varname>wahr</varname> (<varname>true</varname>) zurück, wenn der getestete Pfad existiert und <varname>falsch</varname> (<varname>false</varname>) sonst. Er funktioniert analog zur php isset() Funktion.
+          Dieser boolsche Operator gibt <varname>wahr</varname> (<varname>true</varname>) zurück, wenn der getestete Pfad existiert und <varname>falsch</varname> (<varname>false</varname>) sonst. Er funktioniert analog zur PHP-Funktion isset().
         </para>
 
         <para>
@@ -1456,7 +1457,7 @@ php:SomeClass::$staticVar
         <title><code>default</code></title>
 
         <para>
-          Dies ist kein Operator, sondern ein Schlüsselwort, daß es Vorlagenentwicklern erlaubt, im Falle eines Fehlers, oder wenn etwas nicht definiert ist, den Inhalt einer Auszeichnung als Ersatzwert zu verwenden.
+          Dies ist kein Operator, sondern ein Schlüsselwort, das es Vorlagenentwicklern erlaubt, im Falle eines Fehlers, oder wenn etwas nicht definiert ist, den Inhalt einer Auszeichnung als Ersatzwert zu verwenden.
         </para>
 
         <informalexample><programlisting><![CDATA[<span tal:define="myVar path/to/possible/var | default">
@@ -1473,7 +1474,7 @@ php:SomeClass::$staticVar
 ]]></programlisting></informalexample>
 
         <para>
-          Das obigen Beispiele führt das '|' Zeichen ein, daß für Definitonen oder Ausgaben die Festlegung von Alternativen ermöglicht.
+          Das obige Beispiel führt das '|'-Zeichen ein, das für Definitonen oder Ausgaben die Festlegung von Alternativen ermöglicht.
         </para>
       </section>
 
@@ -1485,11 +1486,11 @@ php:SomeClass::$staticVar
         </para>
 
         <para>
-          Bei der Ausgabe von Variablen innerhalb von <acronym>PHPTAL</acronym> Vorlagen kodiert <acronym>PHPTAL</acronym> alle <acronym>HTML</acronym>/<acronym>XML</acronym> eigenen Zeichen um sicherzustellen, daß das Ausgabedokument gültig ist.
+          Bei der Ausgabe von Variablen innerhalb von <acronym>PHPTAL</acronym>-Vorlagen kodiert <acronym>PHPTAL</acronym> alle <acronym>HTML</acronym>/<acronym>XML</acronym>-eigenen Zeichen, um sicherzustellen, daß das Ausgabedokument gültig ist.
         </para>
 
         <para>
-          Es kommt vor, daß Sie <acronym>HTML</acronym>/<acronym>XML</acronym> Variablen verwenden, die unverändert ausgegeben werden sollen:
+          Es kommt vor, daß Sie <acronym>HTML</acronym>/<acronym>XML</acronym>-Variablen verwenden, die unverändert ausgegeben werden sollen:
         </para>
 
         <informalexample><programlisting><![CDATA[<h1 tal:content="structure document/title"/>
@@ -1497,7 +1498,7 @@ php:SomeClass::$staticVar
 ]]></programlisting></informalexample>
 
         <para>
-          Im obigen Beispiel wird angenommen, daß <varname>$document->title</varname> und <varname>$document->content</varname> Variblen sind, die vorformatiertes <acronym>HTML</acronym> enthalten, das, so wie es ist, ausgegeben werden soll.
+          Im obigen Beispiel wird angenommen, daß <varname>$document->title</varname> und <varname>$document->content</varname> Variablen sind, die vorformatiertes <acronym>HTML</acronym> enthalten, das unverändert ausgegeben werden soll.
         </para>
       </section>
 
@@ -1505,19 +1506,19 @@ php:SomeClass::$staticVar
         <title>Ausdrucksketten</title>
 
         <para>
-          Ein Ausdruckskette ist eine durch das '|' Zeichen getrennte Liste von Ausdrücken.
+          Ein Ausdruckskette ist eine durch das '|'-Zeichen getrennte Liste von Ausdrücken.
         </para>
 
         <para>
-          <acronym>PHPTAL</acronym> wertet die Ausdrücke in einer solchen Kette von vorne nach hinten aus, bis der erste Ausdruck ein nicht Null Ergebnis, das keine Fehlermeldung ist, zurückliefert. Dannach bricht die Auswertung ab.
+          <acronym>PHPTAL</acronym> wertet die Ausdrücke in einer solchen Kette von vorne nach hinten aus, bis der erste Ausdruck ein Nicht-Null-Ergebnis zurückliefert, das keine Fehlermeldung ist. Danach bricht die Auswertung ab.
         </para>
 
         <para>
-          Da ein string: Ausdruck immer wahr ist, wird die Auswertung durch einen string: Ausdruck immer beendet.
+          Da ein string:-Ausdruck immer wahr ist, wird die Auswertung durch einen string:-Ausdruck immer beendet.
         </para>
 
         <para>
-          Innerhalb von Ausdrucksketten können Sie, wie jeden anderen Ausdruck, auch Ausdrücke mit dem php: Operator verwenden:
+          Innerhalb von Ausdrucksketten können Sie, wie jeden anderen Ausdruck, auch Ausdrücke mit dem php:-Operator verwenden:
         </para>
 
         <informalexample><programlisting><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | default>
@@ -1532,12 +1533,12 @@ php:SomeClass::$staticVar
     <title><acronym>PHP</acronym> Integration</title>
 
     <para>
-      Dieser Abschnitt richtet sich an <acronym>PHP</acronym> Entwickler und erläutert die Verwendung und Anpassung von <acronym>PHPTAL</acronym> bei einfacher und fortgeschrittener Nutzung.
+      Dieser Abschnitt richtet sich an <acronym>PHP</acronym>-Entwickler und erläutert die Verwendung und Anpassung von <acronym>PHPTAL</acronym> bei einfacher und fortgeschrittener Nutzung.
     </para>
 
     <itemizedlist>
       <listitem><para>
-        <classname>PHPTAL</classname>: die <acronym>PHPTAL</acronym> Hauptklasse, zum Laden und Ausführen von Vorlagen.
+        <classname>PHPTAL</classname>: die <acronym>PHPTAL</acronym>-Hauptklasse, zum Laden und Ausführen von Vorlagen.
       </para></listitem>
       <listitem><para>
         <classname>PHPTAL_Filter</classname>: filtert Vorlagenquellen und <acronym>PHPTAL</acronym> Ausgabe.
@@ -1546,7 +1547,7 @@ php:SomeClass::$staticVar
         <classname>PHPTAL_Trigger</classname>: behandelt die Ausgabe von Elementen mit <sgmltag>phptal:id</sgmltag>.
       </para></listitem>
       <listitem><para>
-        <classname>PHPTAL_TranslationService</classname>: erlaubt das Ersetzen der eingebauten <constant>gettext</constant> Unterstützung durch ein eigenes Internationalisierungssystem.
+        <classname>PHPTAL_TranslationService</classname>: erlaubt das Ersetzen der eingebauten <constant>gettext</constant>-Unterstützung durch ein eigenes Internationalisierungssystem.
       </para></listitem>
     </itemizedlist>
 
@@ -1571,7 +1572,7 @@ php:SomeClass::$staticVar
       <title>Konfigurationsmethoden</title>
 
       <para>
-        <acronym>PHPTAL</acronym> versucht die bestmöglichen Grundeinstellungen zu verwenden. Eine Ämderung solllte nicht <emphasis>nötig</emphasis> sein.
+        <acronym>PHPTAL</acronym> versucht die bestmöglichen Grundeinstellungen zu verwenden. Eine Änderung sollte nicht <emphasis>nötig</emphasis> sein.
       </para>
 
       <para>
@@ -1639,7 +1640,7 @@ php:SomeClass::$staticVar
       <title>class <classname>PHPTAL</classname></title>
 
       <para>
-        Dies ist der Bibliothek Hauptklasse.
+        Dies ist die Hauptklasse der Bibliothek.
       </para>
 
       <para>
@@ -2023,11 +2024,11 @@ echo $tpl->execute();
         <title>method <methodname>setLanguage(<replaceable>…</replaceable>)</methodname></title>
 
         <para>
-        Diese Methode kann durch die Vorlage aufgerufen werden um die aktuelle Ausgabesprache zu ändern.
+        Diese Methode kann durch die Vorlage aufgerufen werden, um die aktuelle Ausgabesprache zu ändern.
         </para>
 
         <para>
-        Die Argumente sind eine Liste von möglichen Sprachen (verwenden Sie func_get_args() um die Argumentenliste zu erhalten). Ihr Dienst sollte dann die erste bekannte Sprache wählen.
+        Die Argumente sind eine Liste möglicher Sprachen (verwenden Sie func_get_args(), um die Argumentliste zu erhalten). Ihr Dienst sollte dann die erste bekannte Sprache wählen.
         </para>
 
         <informalexample><programlisting language="php"><![CDATA[<?php
@@ -2084,7 +2085,7 @@ class MyTranslator implements PHPTAL_TranslationService {
 ]]></programlisting></informalexample>
 
         <para>
-          Das obige Beispiel ist eine möglich Übersetzungslösung, bei der die Schlüssel in <acronym>PHP</acronym> Dateien gespeichert werden, die ein assoziatives key =&gt; translation Feld zurückgeben.
+          Das obige Beispiel ist eine möglich Übersetzungslösung, bei der die Schlüssel in <acronym>PHP</acronym>-Dateien gespeichert werden, die ein assoziatives key=&gt;translation-Feld zurückgeben.
         </para>
       </section>
 
@@ -2153,19 +2154,19 @@ class MyTranslator implements PHPTAL_TranslationService {
       <title>Die Arbeit mit gettext</title>
 
       <para>
-        <literal>gettext</literal> ist der <acronym>GNU</acronym> Standard für das Internationalisierungs und Übersetzungssystem. Es kann im Zusammenspiel mit <acronym>PHP</acronym> benutzt werden und wird von <acronym>PHPTAL</acronym> unterstüzt.
+        <literal>gettext</literal> ist der <acronym>GNU</acronym>-Standard für das Internationalisierungs- und Übersetzungssystem. Es kann im Zusammenspiel mit <acronym>PHP</acronym> benutzt werden und wird von <acronym>PHPTAL</acronym> unterstüzt.
       </para>
 
       <para>
-        Die Benuzung von <literal>gettext</literal> ist einfach, aber Sie sollten einige tests durchführen, um sicherzustellen, daß auf ihrem rechner alles richtig zusammenspielt.
+        Die Benutzung von <literal>gettext</literal> ist einfach, aber Sie sollten einige Tests durchführen, um sicherzustellen, daß auf ihrem Rechner alles richtig zusammenspielt.
       </para>
 
       <para>
-        <acronym>PHP</acronym> muß mit dem <parameter>--with-gettext</parameter> Schalter kompiliert werden. Näheres dazu findet sich in der <acronym>PHP</acronym> Dokumentation.
+        <acronym>PHP</acronym> muß mit dem <parameter>--with-gettext</parameter> Schalter kompiliert werden. Näheres dazu findet sich in der <acronym>PHP</acronym>-Dokumentation.
       </para>
 
       <para>
-        Mit dem folgenden Stückchen Code können Sie ihre <acronym>PHP</acronym> Installation daraufhin prüfen:
+        Mit dem folgenden Stückchen Code können Sie ihre <acronym>PHP</acronym>-Installation daraufhin prüfen:
       </para>
 
       <informalexample><programlisting role="php"><![CDATA[
@@ -2187,7 +2188,7 @@ else
         <title>Erzeugung der Übersetzungsverzeichnisstruktur (Hmpf)</title>
 
         <para>
-          Die <acronym>PHP</acronym> gettext Erweiterung verlangt nach einer bestimmten Verzeichnissstruktur, die die Übersetungsdateien enthält.
+          Die <acronym>PHP</acronym>-gettext-Erweiterung verlangt nach einer bestimmten Verzeichnisstruktur, die die Übersetzungsdateien enthält.
         </para>
 
         <informalexample><programlisting><![CDATA[/path/to/your/translation_root/en_US/LC_MESSAGES/
@@ -2214,11 +2215,11 @@ else
         <title>Portable Object files</title>
 
         <para>
-          PO Dateien sind Klartextdateien die die Übersetzungen enthalten. Sie können sie problemlos händisch editieren.
+          PO-Dateien sind Klartextdateien, die die Übersetzungen enthalten. Sie können sie problemlos händisch editieren.
         </para>
 
         <para>
-          minimalistisches po Beispiel (<filename>en_US/LC_MESSAGES/mydomain.po</filename>):
+          minimalistisches po-Beispiel (<filename>en_US/LC_MESSAGES/mydomain.po</filename>):
         </para>
 
         <informalexample><programlisting><![CDATA[msgid ""
@@ -2231,26 +2232,26 @@ msgstr "A small sentence in english"
 ]]></programlisting></informalexample>
 
         <para>
-          Einmal bearbeitet, muß jede PO Datei indiziert werden:
+          Einmal bearbeitet, muß jede PO-Datei indiziert werden:
         </para>
 
         <informalexample><programlisting><![CDATA[msgfmt mydomain.po -o mydomain.mo
 ]]></programlisting></informalexample>
 
         <para>
-          Dieser Aufruf funktioniert nicht, wenn Sie die gettext Werzeuge auf ihrem System nicht installiert haben.
+          Dieser Aufruf funktioniert nur, wenn Sie die gettext-Werkzeuge auf ihrem System installiert haben.
         </para>
 
         <para>
-          Hierdurch wird eine MO Datei (machine object) erzeugt, in der ihre Übersetzung für einen schnellen Zugriff indiziert vorliegen.
+          Hierdurch wird eine MO-Datei (machine object) erzeugt, in der Ihre Übersetzungen für einen schnellen Zugriff indiziert vorliegen.
         </para>
 
         <para>
-          Nun müssen Sie diese Datei in andere Sprachen übersetzen.
+          Nun müssen Sie diese Datei in die anderen gewünschten Sprachen übersetzen.
         </para>
 
         <para>
-          minimalistisches po Beispiel (fr_FR/LC_MESSAGES/mydomain.po):
+          Minimalistisches PO-Beispiel (fr_FR/LC_MESSAGES/mydomain.po):
         </para>
 
         <informalexample><programlisting language="po"><![CDATA[msgid ""
@@ -2263,7 +2264,7 @@ msgstr "Une petite phrase en français"
 ]]></programlisting></informalexample>
 
         <para>
-          Auch die Übersetzungsdatei muß indiziert werden:
+          Auch diese Übersetzungsdatei muß indiziert werden:
         </para>
 
         <informalexample><programlisting language="sh"><![CDATA[msgfmt mydomain.po -o mydomain.mo
@@ -2384,15 +2385,15 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-        Diese Operatoren sind in den <acronym>ZPT</acronym> Spezifikationen definiert. <acronym>PHPTALES</acronym> kann mit eigenen Operatoren zur Bearbeitung von Zeichenketten, Kalenderdaten, Währungen, oder was auch immer erweitert werden.
+        Diese Operatoren sind in den <acronym>ZPT</acronym>-Spezifikationen definiert. <acronym>PHPTALES</acronym> kann mit eigenen Operatoren zur Bearbeitung von Zeichenketten, Kalenderdaten, Währungen, oder was auch immer erweitert werden.
       </para>
 
       <para>
-        Ziel der Anwendung jedweden Operators ist es, ein Stückchen <acronym>PHP</acronym> Code zurückzugeben, der in den aus der Vorlage generierte <acronym>PHP</acronym> Code integriert wird.
+        Ziel der Anwendung jedweden Operators ist es, ein Stückchen <acronym>PHP</acronym>-Code zurückzugeben, der in den aus der Vorlage generierte <acronym>PHP</acronym>-Code integriert wird.
       </para>
 
       <para>
-        Operatoren werden während der Vorlagenzerlegung angewendet. Wenn sie das Verhalten eines Operators verändern, müssen sie alle vorher erzeugten <acronym>PHP</acronym> Dateien löschen und die Vorlagen neu zerlegen lassen.
+        Operatoren werden während der Vorlagenzerlegung angewendet. Wenn Sie das Verhalten eines Operators verändern, müssen Sie alle vorher erzeugten <acronym>PHP</acronym>-Dateien löschen und die Vorlagen neu zerlegen lassen.
       </para>
 
       <para>
@@ -2400,7 +2401,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-        Jede <acronym>PHP</acronym> Funktion die mit "<constant>phptal_tales_</constant>" beginnt, ist als Operator verwendbar.
+        Jede <acronym>PHP</acronym>-Funktion, die mit "<constant>phptal_tales_</constant>" beginnt, definiert einen Operator.
       </para>
 
       <para>
@@ -2457,7 +2458,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-        Operatoren können andere Operatoren verwenden um einfacheren php Code zu erhalten, siehe das folgende Beispiel.
+        Operatoren können andere Operatoren verwenden, um einfacheren PHP-Code zu erhalten; siehe das folgende Beispiel:
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[//
@@ -2503,19 +2504,19 @@ function phptal_tales_money( $src, $nothrow )
   <article id="sysadmin">
     <title>Hinweis für Systembetreuer</title>
     <para>
-      <acronym>PHPTAL</acronym> arbeitet, indem es <acronym>PHP</acronym> Dateien aus der Vorlagenlogik generiert; das bedeutet, daß es ein Verzeichniss benötigt, in dem die erzeugten Dateien gespeichert und durch den <acronym>PHP</acronym> Interpreter zerlegt werden können.
+      <acronym>PHPTAL</acronym> arbeitet, indem es <acronym>PHP</acronym>-Dateien aus der Vorlagenlogik generiert; das bedeutet, daß es ein Verzeichnis benötigt, in dem die erzeugten Dateien gespeichert und durch den <acronym>PHP</acronym> Interpreter zerlegt werden können.
     </para>
 
     <para>
-      In der Grundeinstellung verwendet <acronym>PHPTAL</acronym>, falls vorhanden, die <acronym>PHP</acronym> <constant>sys_get_temp_dir()</constant> Funktion um das temporäre Verzeichniss zu bestimmen in dem die generierten <acronym>PHP</acronym> Dateien gespeichert werden. Sonst wird auf unixartigen Systemen <filename>/tmp</filename> und auf Microsoft Systemen <filename>c:\windows\temp</filename> verwendet. Sie können die Grundeinstellung durch den Aufruf von <methodname>setPhpCodeDestination()</methodname> mit einem passenden Pfad nach ihren Wünschen ändern. Sei es das übliche temporäre Verzeichniss, sei es ein eigenes: seine Zugriffsrechte müssen so gesetzt sein, daß der <acronym>PHP</acronym> ausführenden Prozess (d.h. der Apache Betreiber wenn das mod_php Modul verwendet wird, sonst der cgi/fastcgi Betreiber) Dateien anlegen und verändern kann.
+      In der Grundeinstellung verwendet <acronym>PHPTAL</acronym>, falls vorhanden, die <acronym>PHP</acronym>-Funktion <constant>sys_get_temp_dir()</constant>, um das temporäre Verzeichnis zu bestimmen, in dem die generierten <acronym>PHP</acronym>-Dateien gespeichert werden. Sonst wird auf unixartigen Systemen <filename>/tmp</filename> und auf Microsoft Systemen <filename>c:\windows\temp</filename> verwendet. Sie können die Grundeinstellung durch den Aufruf von <methodname>setPhpCodeDestination()</methodname> mit einem passenden Pfad nach ihren Wünschen ändern. Sei es das übliche temporäre Verzeichnis, sei es ein eigenes: seine Zugriffsrechte müssen so gesetzt sein, daß der <acronym>PHP</acronym> ausführenden Prozess (d.h. der Apache Betreiber wenn das mod_php Modul verwendet wird, sonst der cgi/fastcgi Betreiber) Dateien anlegen und verändern kann.
     </para>
 
     <para>
-      <acronym>PHPTAL</acronym> erzeugt zu jeder Vorlagendatei und, falls <sgmltag>phptal:cache</sgmltag> verwendet wird, auch für jedes Element  eine (php) Datei. Für Makros werden keine separaten Dateien angelegt. (Sie werden einfach als <acronym>PHP</acronym> Funktionen in die erzeugte Datei eingefügt.) Diese Dateien werden ab und an automatisch gelöscht, genauer: jedes mal, wenn eine Vorlage bearbeitet wird, wird die alte Datei mit einer gewissen, durch <methodname>setCachePurgeFrequency()</methodname> bestimmten Wahrscheinlichkeit, gelöscht, falls ihre durch <methodname>setCacheLifetime()</methodname> festgelegte Lebensdauer abgelaufen ist.
+      <acronym>PHPTAL</acronym> erzeugt zu jeder Vorlagendatei und, falls <sgmltag>phptal:cache</sgmltag> verwendet wird, auch für jedes Element  eine (php) Datei. Für Makros werden keine separaten Dateien angelegt. (Sie werden einfach als <acronym>PHP</acronym>-Funktionen in die erzeugte Datei eingefügt.) Diese Dateien werden ab und an automatisch gelöscht, genauer: jedes mal, wenn eine Vorlage bearbeitet wird, wird die alte Datei mit einer gewissen durch <methodname>setCachePurgeFrequency()</methodname> bestimmten Wahrscheinlichkeit gelöscht, falls ihre durch <methodname>setCacheLifetime()</methodname> festgelegte Lebensdauer abgelaufen ist.
     </para>
 
     <para>
-      Natürlich kann man alte bzw. unbenutzte Dateien auch via cron Job und shell löschen (hier: UNIXartige Shell):
+      Natürlich kann man alte bzw. unbenutzte Dateien auch via cron-Job und Shell löschen (hier: UNIXartige Shell):
     </para>
 
     <informalexample><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -delete</programlisting></informalexample>
@@ -2525,16 +2526,16 @@ function phptal_tales_money( $src, $nothrow )
 
     <itemizedlist>
       <listitem><para>
-        <ulink url="http://www.zope.org/Wikis/Projects/ZPT/"><acronym>ZPT</acronym></ulink> die Zope Page Template Startseite,
+        <ulink url="http://www.zope.org/Wikis/Projects/ZPT/"><acronym>ZPT</acronym></ulink> Zope Page Templates,
       </para></listitem>
       <listitem><para>
-        <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TAL/"><acronym>TAL</acronym></ulink> die Template Attribute Language Seite,
+        <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TAL/"><acronym>TAL</acronym></ulink> Template Attribute Language,
       </para></listitem>
       <listitem><para>
-        <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/METAL"><acronym>METAL</acronym></ulink> die Makroerweiterung zu <acronym>TAL</acronym>,
+        <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/METAL"><acronym>METAL</acronym></ulink>, die Makroerweiterung zu <acronym>TAL</acronym>,
       </para></listitem>
       <listitem><para>
-        <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TALES"><acronym>TALES</acronym></ulink> die Definition der <acronym>TAL</acronym> Ausdrücke.
+        <ulink url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TALES"><acronym>TALES</acronym></ulink>, die Definition der <acronym>TAL</acronym>-Ausdrücke.
       </para></listitem>
     </itemizedlist>
   </article>
