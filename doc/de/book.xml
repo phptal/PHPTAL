@@ -780,7 +780,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Der Operator wird "odd" zurückgeben, wenn <varname>repeat/ranking/odd</varname> wahr ist sonst 'false'.
+          Der Operator wird "odd" zurückgeben, wenn <varname>repeat/ranking/odd</varname> wahr ist, sonst 'NULL'.
         </para>
 
         <section id="optional-attrs"><title>Optionale Attribute</title>
@@ -791,7 +791,7 @@ title="google search engine">the google search engine</a>
           <informalexample><programlisting language="xml"><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting></informalexample>
 
           <para>
-            <acronym>XHTML</acronym> Attribute wie <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag>, usw. werden automatisch richtig verwendet.
+            <acronym>XHTML</acronym> Attribute wie <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag> usw. werden automatisch richtig verwendet.
           </para>
 
           <informalexample><programlisting language="xml"><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting></informalexample>
