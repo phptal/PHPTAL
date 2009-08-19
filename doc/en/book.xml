@@ -1499,7 +1499,7 @@ string:foo ;; php:doFoo() <!-- only string -->
         <para>
         This expression evaluates what follows as a regular <acronym>PHP</acronym>
         expression except that '<code>-&gt;</code>' is replaced by dots '<code>.</code>' and
-        variable names does are prefixed with a dollar '<literal>$</literal>'
+        variable names are prefixed with a dollar '<literal>$</literal>'
         sign.
         </para>
 
