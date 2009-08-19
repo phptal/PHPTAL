@@ -4,7 +4,7 @@
 
   <bookinfo>
     <title>PHPTAL Handbuch</title>
-    <subtitle>PHP Template Attribute Language</subtitle>
+    <subtitle><acronym>PHP</acronym> Template Attribute Language</subtitle>
     <date>2008-10-03</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
@@ -733,7 +733,7 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
         <para>
-        With a '<varname>somelink</varname>' having:
+        Wobei '<varname>somelink</varname>' aus folgendem besteht:
         </para>
 
         <informalexample><programlisting language="php"><![CDATA[$somelink->href = "http://www.google.com";
@@ -762,7 +762,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Der php: Operator wird später genauer erklärt werden. Hier wird, wenn die Zeilennummer ungerade ist, <sgmltag>tr</sgmltag> ein <sgmltag>class</sgmltag> Attribut mit 'odd' als Wert zugewiesen sonst wird kein <sgmltag>class</sgmltag> Attribut gesetzt.
+          Der <code>php:</code> Operator wird später genauer erklärt werden. Hier wird, wenn die Zeilennummer ungerade ist, <sgmltag>tr</sgmltag> ein <sgmltag>class</sgmltag> Attribut mit 'odd' als Wert zugewiesen sonst wird kein <sgmltag>class</sgmltag> Attribut gesetzt.
         </para>
 
         <para>
@@ -1084,7 +1084,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-          Seit Version 1.1.14 können Sie das structure-Schlüsselwort auch in <sgmltag>i18n:translate</sgmltag> verwenden, um die Maskierung zu unterbinden und den übersetzten Text unverändert zu übernehmen.
+          Seit Version 1.1.14 können Sie das <code>structure</code>-Schlüsselwort auch in <sgmltag>i18n:translate</sgmltag> verwenden, um die Maskierung zu unterbinden und den übersetzten Text unverändert zu übernehmen.
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="structure '<b>bold text</b>'" />
@@ -1218,7 +1218,7 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>phptal:tales</sgmltag></title>
 
         <para>
-          Mit diesem Attribut läßt sich das Verhalten von <acronym>PHPTALES</acronym> verändern. In der Grundeinstellung werden <acronym>PHPTAL</acronym> Attribute eng an <acronym>ZPT</acronym> angelehnt interpretiert. In manchen Fällen bräuchte man aber nur <acronym>PHP</acronym> und findet sich bei der ständigen Verwendung des php: Operators wieder.
+          Mit diesem Attribut läßt sich das Verhalten von <acronym>PHPTALES</acronym> verändern. In der Grundeinstellung werden <acronym>PHPTAL</acronym> Attribute eng an <acronym>ZPT</acronym> angelehnt interpretiert. In manchen Fällen bräuchte man aber nur <acronym>PHP</acronym> und findet sich bei der ständigen Verwendung des <code>php:</code> Operators wieder.
         </para>
 
         <para>
@@ -1262,7 +1262,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Der 'php:'-Operator wird in einem eigenen Kapitel erläutert.
+          Der <code>php:</code>-Operator wird in einem eigenen Kapitel erläutert.
         </para>
       </section>
 
@@ -1311,7 +1311,7 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTALES</acronym></title>
 
       <para>
-        Zum Formulieren von Ausdrücken innerhalb von TAL-, METAL-, <acronym>PHPTAL</acronym>-Attributen wird <acronym>PHPTALES</acronym> verwendet. In den vorhergehenden Beispielen sind ihnen schon einige <acronym>PHPTALES</acronym> Beispielverwendungen (string:, php:, not:, …) begegnet. Dieses Kapitel beschreibt nun die Verwendung von <acronym>PHPTALES</acronym> in Vorlagen.
+        Zum Formulieren von Ausdrücken innerhalb von TAL-, METAL-, <acronym>PHPTAL</acronym>-Attributen wird <acronym>PHPTALES</acronym> verwendet. In den vorhergehenden Beispielen sind ihnen schon einige <acronym>PHPTALES</acronym> Beispielverwendungen (<code>string:</code>, <code>php:</code>, <code>not:</code>, …) begegnet. Dieses Kapitel beschreibt nun die Verwendung von <acronym>PHPTALES</acronym> in Vorlagen.
       </para>
 
       <para>
@@ -1348,28 +1348,40 @@ this page has been readed ${page/countRead} times"/>
       </section>
 
       <section id="conditional">
-        <title>Bedingte Anweisungen</title>
+        <title>Alternative <acronym>PHP</acronym>-Operator Syntax</title>
 
         <para>
-          Da '&lt;' und '&gt;' aus Attributausdrücken entfernt werden sollten, hat <acronym>PHPTAL</acronym> einige äquivalente gute, alte, textuelle Vergleichsoperatoren.
+          Da '<literal>&lt;</literal>', '<literal>&gt;</literal>' und '<literal>&amp;</literal>' in XML nur umständlich zu verwenden sind, bietet <acronym>PHPTAL</acronym> eine alternative <acronym>PHP</acronym>-Operator Syntax für diese und, aus Konsistenzgründen, ein paar weiter Zeichen.
         </para>
 
-        <para>
-          Diese Anweisungen treten hauptsächlich in <sgmltag>tal:condition</sgmltag> Attributen und in php: Ausdrücken auf.
-        </para>
+        <remark>
+          Diese Syntax kann nur in <code>php:</code>-Ausdrücken verwendet werden.
+        </remark>
 
         <itemizedlist>
           <listitem><para>
-          &lt; : LT (kleiner als)
+            <code>&lt;</code> : <code>LT</code> (kleiner als)
           </para></listitem>
           <listitem><para>
-          &gt; : GT (größer als)
+            <code>&gt;</code> : <code>GT</code> (größer als)
           </para></listitem>
           <listitem><para>
-          &lt;= : LE (kleiner oder gleich)
+            <code>&lt;=</code> : <code>LE</code> (kleiner oder gleich)
           </para></listitem>
           <listitem><para>
-          &gt;= : GE (größer oder gleich)
+            <code>&gt;=</code> : <code>GE</code> (größer oder gleich)
+          </para></listitem>
+          <listitem><para>
+            <code>==</code> : <code>EQ</code> (gleich)
+          </para></listitem>
+          <listitem><para>
+            <code>!=</code> : <code>NE</code> (ungleich)
+          </para></listitem>
+          <listitem><para>
+            <code>&amp;&amp;</code> : <code>AND</code> 
+          </para></listitem>
+          <listitem><para>
+            <code>||</code> : <code>OR</code> 
           </para></listitem>
         </itemizedlist>
       </section>
@@ -1378,15 +1390,15 @@ this page has been readed ${page/countRead} times"/>
         <title>string:</title>
 
         <para>
-          Da Ausdrücke mit Semikolon getrennt werden, und weil '$' Zeichen den Anfang eines Pfades markieren, müssen Sie
+          Da Ausdrücke mit '<literal>;</literal>' getrennt werden, und weil '<literal>$</literal>' Zeichen den Anfang eines Pfades markieren, müssen Sie
         </para>
 
         <itemizedlist>
           <listitem><para>
-          '<literal>;;</literal>' verwenden, wenn Sie ein Semikolon in eine Zeichenkette einfügen wollen,
+              '<literal>;;</literal>' verwenden, wenn Sie ein '<code>;</code>' in eine Zeichenkette einfügen wollen,
           </para></listitem>
           <listitem><para>
-              '<literal>$$</literal>' verwenden, wenn Sie ein '$' Zeichen in eine Zeichenkette einfügen wollen.
+              '<literal>$$</literal>' verwenden, wenn Sie ein '<code>$</code>' Zeichen in eine Zeichenkette einfügen wollen.
           </para></listitem>
         </itemizedlist>
 
@@ -1402,11 +1414,11 @@ string:foo ;; php:doFoo() <!-- eine einzige Zeichenkette -->
         <title><code>php:</code></title>
 
         <para>
-          Dieser Operator erwartet als Argument, bis auf zwei Ausnahmen, einen regulären <acronym>PHP</acronym>-Ausdruck: '-&gt;' müssen durch Punkte '.' ersetzt werden, und Variablennamen müssen nicht mit einem vorangestellen Dollarzeichen '$' versehen werden.
+          Dieser Operator erwartet als Argument einen regulären <acronym>PHP</acronym>-Ausdruck, wobei '<code>-&gt;</code>' durch Punkte '<code>.</code>' ersetzt werden, und Variablennamen  mit einem vorangestellen Dollarzeichen '<code>$</code>' versehen werden müssen.
         </para>
 
         <para>
-          Ein vom Rest des Ausdrucks durch Leerzeichen getrennter Punkt '.' wird als Verkettungszeichen behandelt.
+          Ein vom Rest des Ausdrucks durch Leerzeichen getrennter Punkt '<code>.</code>' wird als Verkettungszeichen behandelt.
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[php:htmlentities(foo)
@@ -1422,7 +1434,7 @@ php:SomeClass::$staticVar
 ]]></programlisting></informalexample>
 
         <para>
-          Verwenden Sie php: sparsam. In 80% ihrer Vorlagen werden Sie diesen Operator nicht benötigen, aber manchmal werden Sie eine spezielle <acronym>PHP</acronym>-Methode aufrufen müssen, z.B. um sich zu vergewissern, daß ein Benutzer angemeldet ist, oder um spezielle, komplexe Daten, in Abhängigkeit von einigen Bedingungen, innerhalb der Vorlage dynamisch zu laden.
+          Verwenden Sie <code>php:</code> sparsam. In 80% ihrer Vorlagen werden Sie diesen Operator nicht benötigen, aber manchmal werden Sie eine spezielle <acronym>PHP</acronym>-Methode aufrufen müssen, z.B. um sich zu vergewissern, daß ein Benutzer angemeldet ist, oder um spezielle, komplexe Daten, in Abhängigkeit von einigen Bedingungen, innerhalb der Vorlage dynamisch zu laden.
         </para>
 
       </section>
@@ -1517,11 +1529,11 @@ php:SomeClass::$staticVar
         </para>
 
         <para>
-          Da ein string:-Ausdruck immer wahr ist, wird die Auswertung durch einen string:-Ausdruck immer beendet.
+          Da ein <code>string:</code>-Ausdruck immer wahr ist, wird die Auswertung durch einen <code>string:</code>-Ausdruck immer beendet.
         </para>
 
         <para>
-          Innerhalb von Ausdrucksketten können Sie, wie jeden anderen Ausdruck, auch Ausdrücke mit dem php:-Operator verwenden:
+          Innerhalb von Ausdrucksketten können Sie, wie jeden anderen Ausdruck, auch Ausdrücke mit dem <code>php:</code>-Operator verwenden:
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | default>
