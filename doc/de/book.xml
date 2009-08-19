@@ -92,12 +92,11 @@
 
     <para>
     <acronym>PHPTAL</acronym> ist eine Implementierung des hervorragenden »Zope Page Template«-
-    (<acronym>ZPT</acronym>-)Systems in <acronym>PHP</acronym>. <acronym>PHPTAL</acronym> unterstützt die <acronym>TAL</acronym>-, <acronym>METAL</acronym>- und <acronym>I18N</acronym>-Namensräume.
+    (<acronym>ZPT</acronym>-)Systems in <acronym>PHP</acronym>. <acronym>PHPTAL</acronym> unterstützt die <acronym><link linkend="tal-namespace">TAL</link></acronym>-, <acronym><link linkend="metal">METAL</link></acronym>- und <acronym><link linkend="tal-namespace">I18N</link></acronym>-Namensräume.
     </para>
 
     <para>
-    <acronym>PHPTALES</acronym> ist das Äquivalent zu <acronym>TALES</acronym>, der »Template Attribute Language
-    Expression Syntax«. Es legt fest, wie <acronym>XML</acronym>-Attributwerte behandelt werden.
+      <acronym><link linkend="phptales">PHPTALES</link></acronym> ist das Äquivalent zu <acronym>TALES</acronym>, der »Template Attribute Language Expression Syntax«. Es legt fest, wie <acronym>XML</acronym>-Attributwerte behandelt werden.
     </para>
 
     <para>
@@ -427,8 +426,18 @@ catch (Exception $e){
 
     <section id="tal-namespace">
       <title><acronym>TAL</acronym>-Namensraum</title>
-
-      <para></para>
+      
+      <para>
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/tal</code>. Um das <code>tal:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+      </para>
+      
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
+        
+        <note>
+          <para>
+            PHPTAL erzwingt diese Angabe nicht.
+          </para>
+        </note>
 
       <section id="tal-define">
         <title><sgmltag>tal:define</sgmltag></title>
@@ -854,7 +863,19 @@ title="google search engine">the google search engine</a>
       <title><acronym>METAL</acronym> Namensraum</title>
 
       <para>
-        <acronym>METAL</acronym> ist die Kurzform für „Macro Extension for <acronym>TAL</acronym>“. Dieser durch <acronym>PHPTAL</acronym> unterstützte Namensraum, erlaubt es Vorlagendesignern, <acronym>XML</acronym>/<acronym>XHTML</acronym> Makros zu definieren und aufzurufen.
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/metal</code>. Um das <code>metal:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+      </para>
+      
+      <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
+        
+        <note>
+          <para>
+            PHPTAL erzwingt diese Angabe nicht.
+          </para>
+        </note>
+        
+      <para>
+        <acronym>METAL</acronym> ist die Kurzform für „Macro Extension for <acronym>TAL</acronym>“. Dieser Namensraum erlaubt es Vorlagendesignern, Makros zu definieren und aufzurufen. Makros können für die rekursive Ausgabe von Daten oder zum einbinden von Code aus anderen Vorlagen verwendet werden.
       </para>
 
       <section id="metal-define-macro">
@@ -989,14 +1010,14 @@ title="google search engine">the google search engine</a>
       <title><acronym>I18N</acronym> Namensraum</title>
       
       <para>
-        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/i18n</code>. Um das <code>i18n:</code> Attribute Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/i18n</code>. Um das <code>i18n:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:i18n="http://xml.zope.org/namespaces/i18n" …>]]></programlisting></informalexample>
 
       <note>
         <para>
-          PHPTAL erzwingt das Erfüllen dieser Bedingung nicht.
+          PHPTAL erzwingt diese Angabe nicht.
         </para>
       </note>
 
@@ -1142,6 +1163,18 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTAL</acronym> Namensraum</title>
 
       <para>
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://phptal.org/ns/phptal</code>. Um das <code>phptal:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+      </para>
+      
+      <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://phptal.org/ns/phptal" …>]]></programlisting></informalexample>
+      
+      <note>
+        <para>
+          PHPTAL erzwingt diese Angabe nicht.
+        </para>
+      </note>
+      
+      <para>
         Diese Attribute sind nicht in den <acronym>TAL</acronym> Spezifikationen enthalten, aber sehr nützlich für die Arbeit mit <acronym>PHPTAL</acronym>.
       </para>
 
@@ -1207,14 +1240,24 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-          Um für jeden einzelnen Wert eines Ausdrucks (der im Ergebnis eine Zeichenkette liefern muß) einen eigenen Puffer zu erhalten, können Sie "<varname>per expression</varname>" verwenden. Dabei dürfen sich die Ausdrücke nicht auf Variablen beziehen, die via <sgmltag>tal:define</sgmltag> in der selben Auszeichnug definiert werden.
+          Um für jeden einzelnen Wert eines Ausdrucks (der im Ergebnis eine Zeichenkette liefern muß) einen eigenen Puffer zu erhalten, können Sie "<varname>per expression</varname>" verwenden.
         </para>
+        <note>
+          <para>Dabei dürfen sich die Ausdrücke nicht auf Variablen beziehen, die via <sgmltag>tal:define</sgmltag> in der selben Auszeichnug definiert werden.
+          </para>
+        </note>
 
         <informalexample><programlisting language="xml"><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting></informalexample>
 
         <para>
           <sgmltag>&lt;ul></sgmltag> wird für jede Object-ID einzeln 25 Minuten lang gepuffert.
         </para>
+        
+        <warning>
+          <para>
+            Seien Sie vorsichtig damit private Daten Ihrer Nutzer zu puffern. Der Zwischenspeicher wird von allen Nutzern geteilt, wenn Sie ihn nicht durch <code>per user/id</code> oder ähnliche Ausdrücke benutzerspezifisch machen.
+          </para>
+        </warning>
 
         <section id="cache-refresh"><title>Gesteuerte Auffrischung</title>
 
@@ -1293,7 +1336,7 @@ title="google search engine">the google search engine</a>
 
         <note>
           <para>
-            Der <code>php:</code>-Operator wird in einem eigenen Kapitel erläutert.
+            Der <code>php:</code>-Operator wird in einem <link linkend="tales-php">eigenen Kapitel</link> erläutert.
           </para>
         </note>
 
@@ -1348,7 +1391,7 @@ title="google search engine">the google search engine</a>
       </para>
 
       <para>
-        Der Wert eines <acronym>TAL</acronym>-Attributs darf mehr als einen Ausdruck enthalten (z. B: <sgmltag>tal:define</sgmltag>). Dabei müssen die einzelnen Ausdrücke durch '<sgmltag>;</sgmltag>' getrennt werden.
+        Der Wert eines <acronym>TAL</acronym>-Attributs darf mehr als einen Ausdruck enthalten (z. B: <sgmltag>tal:define</sgmltag>). Dabei müssen die einzelnen Ausdrücke durch '<literal>;</literal>' getrennt werden.
       </para>
 
       <section id="tales-path">
@@ -1499,6 +1542,13 @@ php:SomeClass::$staticVar
   user preferences here if defined
 </span>
 ]]></programlisting></informalexample>
+
+        <tip>
+          <para>
+            Benutzen Sie in <acronym>PHPTALES</acronym> stattdessen die Funktion <function>isset()</function>.
+          </para>
+        </tip>
+
       </section>
 
       <section id="tales-default">
@@ -1574,7 +1624,7 @@ php:SomeClass::$staticVar
 </h1>
 ]]></programlisting></informalexample>
       </section>
-    </section><!-- end of PHPTALES -->
+    </section><!-- end of TALES -->
   </article>
 
   <article id="phpintegration">
@@ -1595,7 +1645,7 @@ php:SomeClass::$staticVar
         <classname>PHPTAL_Trigger</classname>: behandelt die Ausgabe von Elementen mit <sgmltag>phptal:id</sgmltag>.
       </para></listitem>
       <listitem><para>
-        <classname>PHPTAL_TranslationService</classname>: erlaubt das Ersetzen der eingebauten <constant>gettext</constant>-Unterstützung durch ein eigenes Internationalisierungssystem.
+          <classname>PHPTAL_TranslationService</classname>: erlaubt das Ersetzen der eingebauten <productname>gettext</productname>-Unterstützung durch ein eigenes Internationalisierungssystem.
       </para></listitem>
     </itemizedlist>
 
@@ -1995,7 +2045,7 @@ echo $tpl->execute();
       </para>
 
       <para>
-      If the <constant>PHPTAL_Trigger::start()</constant> methods returns
+        If the <methodname>PHPTAL_Trigger::start()</methodname> methods returns
       <constant>PHPTAL_Trigger::SKIPTAG</constant>, <acronym>PHPTAL</acronym> will ignore the element and its
       content (<methodname>start()</methodname> may echo something to replace it).
       </para>
@@ -2006,7 +2056,7 @@ echo $tpl->execute();
       </para>
 
       <para>
-      The <constant>PHPTAL_Trigger::end()</constant> will be called after the element
+        The <methodname>PHPTAL_Trigger::end()</methodname> will be called after the element
       (whether it has been executed or not). This allows you to build
       cache systems using <function>ob_start()</function> in <methodname>start()</methodname> and <function>ob_get_contents()</function>,
       <function>ob_end_clean()</function> in <methodname>end()</methodname>.
@@ -2101,9 +2151,7 @@ class CacheTrigger implements PHPTAL_Trigger
       </para>
 
       <para>
-      When <constant>SKIPTAG</constant> is returned, <acronym>PHPTAL</acronym> will just ignore the tag and call
-      end().  This usually means that the trigger takes the hand in
-      deciding what to show there.
+      When <constant>SKIPTAG</constant> is returned, <acronym>PHPTAL</acronym> will just ignore the tag and call <methodname>end()</methodname>. This usually means that the trigger takes the hand in deciding what to show there.
       </para>
 
       <para>
@@ -2146,7 +2194,7 @@ echo $tpl->execute();
       <title>interface <classname>PHPTAL_TranslationService</classname></title>
 
       <para>
-      <acronym>PHPTAL</acronym> comes with a default gettext translation service, as shown
+        <acronym>PHPTAL</acronym> comes with a default <productname>gettext</productname> translation service, as shown
       in another section. For some reason you may prefer to implement
       your own service of translation.
       </para>
@@ -2176,7 +2224,7 @@ echo $tpl->execute();
         </para>
 
         <para>
-          Die Argumente sind eine Liste möglicher Sprachen (verwenden Sie <constant>func_get_args()</constant>, um die Argumentliste zu erhalten). Ihr Dienst sollte dann die erste bekannte Sprache wählen.
+          Die Argumente sind eine Liste möglicher Sprachen (verwenden Sie <function>func_get_args()</function>, um die Argumentliste zu erhalten). Ihr Dienst sollte dann die erste bekannte Sprache wählen.
         </para>
 
         <informalexample><programlisting language="php"><![CDATA[<?php
@@ -2295,14 +2343,14 @@ class MyTranslator implements PHPTAL_TranslationService {
     </section> <!-- end of PHPTAL_TranslationService -->
 
     <section id="gettext"><?dbhtml stop-chunking?>
-      <title>Die Arbeit mit gettext</title>
+      <title>Die Arbeit mit <productname>gettext</productname></title>
 
       <para>
-        <literal>gettext</literal> ist der <acronym>GNU</acronym>-Standard für das Internationalisierungs- und Übersetzungssystem. Es kann im Zusammenspiel mit <acronym>PHP</acronym> benutzt werden und wird von <acronym>PHPTAL</acronym> unterstüzt.
+        <productname>gettext</productname> ist der <acronym>GNU</acronym>-Standard für das Internationalisierungs- und Übersetzungssystem. Es kann im Zusammenspiel mit <acronym>PHP</acronym> benutzt werden und wird von <acronym>PHPTAL</acronym> unterstüzt.
       </para>
 
       <para>
-        Die Benutzung von <literal>gettext</literal> ist einfach, aber Sie sollten einige Tests durchführen, um sicherzustellen, daß auf ihrem Rechner alles richtig zusammenspielt.
+        Die Benutzung von <productname>gettext</productname> ist einfach, aber Sie sollten einige Tests durchführen, um sicherzustellen, daß auf ihrem Rechner alles richtig zusammenspielt.
       </para>
 
       <para>
@@ -2332,7 +2380,7 @@ else
         <title>Erzeugung der Übersetzungsverzeichnisstruktur (Hmpf)</title>
 
         <para>
-          Die <acronym>PHP</acronym>-gettext-Erweiterung verlangt nach einer bestimmten Verzeichnisstruktur, die die Übersetzungsdateien enthält.
+          Die <acronym>PHP</acronym>-<productname>gettext</productname>-Erweiterung verlangt nach einer bestimmten Verzeichnisstruktur, die die Übersetzungsdateien enthält.
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[/path/to/your/translation_root/en_US/LC_MESSAGES/
@@ -2383,7 +2431,7 @@ msgstr "A small sentence in english"
 ]]></programlisting></informalexample>
 
         <para>
-          Dieser Aufruf funktioniert nur, wenn Sie die gettext-Werkzeuge auf ihrem System installiert haben.
+          Dieser Aufruf funktioniert nur, wenn Sie die <productname>gettext</productname>-Werkzeuge auf ihrem System installiert haben.
         </para>
 
         <para>
@@ -2426,7 +2474,7 @@ msgstr "Une petite phrase en français"
 
         <para>
         You can have more than one domain for the same application, it
-        can enhance gettext's performance to split your application
+        can enhance <productname>gettext</productname>'s performance to split your application
         translations in more than one file.
         </para>
       </section>
@@ -2476,7 +2524,7 @@ $message = $tr->translate("Dear ${user}, thanks for registering!");
 mail($email, $subject, $message); 
 ]]></programlisting></informalexample>
 
-<para>If you're using PHPTAL's standard <code>gettext</code> translator, you can use <methodname>gettext()</methodname> too.</para>
+<para>If you're using PHPTAL's standard <productname>gettext</productname> translator, you can use <methodname>gettext()</methodname> too.</para>
 
       </section>
 
@@ -2511,8 +2559,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
 ]]></programlisting></informalexample>
 
         <para>
-        Because <sgmltag>i18n:translate</sgmltag> contains a value 'welcome', the template
-        data will be ignored and the message given by gettext will be
+          Because <sgmltag>i18n:translate</sgmltag> contains a value <computeroutput>'welcome'</computeroutput>, the template
+        data will be ignored and the message given by <productname>gettext</productname> will be
         used instead.
         </para>
 
@@ -2553,12 +2601,14 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <itemizedlist>
-        <listitem><para>
-          $src: the source string after the "modifier:" keyword
+        <listitem>
+          <para>
+            <varname>$src</varname>: the source string after the "modifier:" keyword
         </para></listitem>
 
-        <listitem><para>
-          $nothrow: a boolean which determines whether exceptions may be thrown or not by <constant>phptal_path()</constant> resolution. This boolean must be propagated whenever you call another phptal_tales_<replaceable>*</replaceable> modifier from within your own modifier.
+        <listitem>
+          <para>
+            <varname>$nothrow</varname>: a boolean which determines whether exceptions may be thrown or not by <function>phptal_path()</function> resolution. This boolean must be propagated whenever you call another <function>phptal_tales_<replaceable>*</replaceable></function> modifier from within your own modifier.
         </para></listitem>
       </itemizedlist>
 
@@ -2652,7 +2702,7 @@ function phptal_tales_money( $src, $nothrow )
     </para>
 
     <para>
-      In der Grundeinstellung verwendet <acronym>PHPTAL</acronym>, falls vorhanden, die <acronym>PHP</acronym>-Funktion <constant>sys_get_temp_dir()</constant>, um das temporäre Verzeichnis zu bestimmen, in dem die generierten <acronym>PHP</acronym>-Dateien gespeichert werden. Sonst wird auf unixartigen Systemen <filename>/tmp</filename> und auf Microsoft Systemen <filename>c:\windows\temp</filename> verwendet. Sie können die Grundeinstellung durch den Aufruf von <methodname>setPhpCodeDestination()</methodname> mit einem passenden Pfad nach ihren Wünschen ändern. Sei es das übliche temporäre Verzeichnis, sei es ein eigenes: seine Zugriffsrechte müssen so gesetzt sein, daß der <acronym>PHP</acronym> ausführenden Prozess (d.h. der Apache Betreiber wenn das mod_php Modul verwendet wird, sonst der cgi/fastcgi Betreiber) Dateien anlegen und verändern kann.
+      In der Grundeinstellung verwendet <acronym>PHPTAL</acronym>, falls vorhanden, die <acronym>PHP</acronym>-Funktion <function>sys_get_temp_dir()</function>, um das temporäre Verzeichnis zu bestimmen, in dem die generierten <acronym>PHP</acronym>-Dateien gespeichert werden. Sonst wird auf unixartigen Systemen <filename>/tmp</filename> und auf Microsoft Systemen <filename>c:\windows\temp</filename> verwendet. Sie können die Grundeinstellung durch den Aufruf von <methodname>setPhpCodeDestination()</methodname> mit einem passenden Pfad nach ihren Wünschen ändern. Sei es das übliche temporäre Verzeichnis, sei es ein eigenes: seine Zugriffsrechte müssen so gesetzt sein, daß der <acronym>PHP</acronym> ausführenden Prozess (d.h. der Apache Betreiber wenn das mod_php Modul verwendet wird, sonst der cgi/fastcgi Betreiber) Dateien anlegen und verändern kann.
     </para>
 
     <para>
