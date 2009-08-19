@@ -1385,7 +1385,7 @@ title="google search engine">the google search engine</a>
 
       <para>
       <acronym>PHPTALES</acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
-		    Expression Syntax. Is the syntax used inside <acronym>TAL</acronym>, <acronym>METAL</acronym>, <acronym>PHPTAL</acronym> attributes and <code>${…}</code> inline expressions. </para>
+		    Expression Syntax which is the syntax used inside <acronym>TAL</acronym>, <acronym>METAL</acronym>, <acronym>PHPTAL</acronym> attributes and <code>${…}</code> inline expressions. </para>
 		<para>In previous examples, you should have seen some
       <acronym>PHPTALES</acronym> examples (<code>string:</code>, <code>php:</code>, <code>not:</code>, …). This chapter
       describes the usage of <acronym>PHPTALES</acronym> in templates.
