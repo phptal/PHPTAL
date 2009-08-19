@@ -770,7 +770,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-          Ein besserer Weg um dasselbe Ergebnis zu erhalten ist es, denn <acronym>PHP</acronym> Programmierer um einen maßgeschneiderten Operator zu bitten (siehe <acronym>PHP</acronym> Integration / maßgeschneiderte Operatoren), der dann wie folgt genutzt wird:
+          Ein besserer Weg um dasselbe Ergebnis zu erhalten ist es, den <acronym>PHP</acronym> Programmierer um einen maßgeschneiderten Operator zu bitten (siehe <acronym>PHP</acronym> Integration / maßgeschneiderte Operatoren), der dann wie folgt genutzt wird:
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="ranking playerRankings"
@@ -780,7 +780,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-          Der Operator wird "odd" zurückgeben, wenn <varname>repeat/ranking/odd</varname> wahr ist, sonst 'NULL'.
+          Der Operator sollte "odd" zurückgeben, wenn <varname>repeat/ranking/odd</varname> wahr ist, sonst <constant>NULL</constant>.
         </para>
 
         <section id="optional-attrs"><title>Optionale Attribute</title>
@@ -1558,14 +1558,8 @@ php:SomeClass::$staticVar
       <title>Konstanten</title>
 
       <para>
-        Nach dem Einbinden der <acronym>PHPTAL</acronym> Bibliothek, gibt es im <acronym>PHP</acronym> Kontext zwei neue Konstanten. Sie werden durch die <filename>PHPTAL.php</filename> Datei bestimmt.
+        Die einzige Konstante, die in der Datei <filename>PHPTAL.php</filename> definiert ist, ist <constant>PHPTAL_VERSION</constant>. Sie enthält  die Version der <acronym>PHPTAL</acronym> Bibliothek (Format: <code>X.X.X</code>) die auf dem Rechner installiert ist.
       </para>
-
-      <itemizedlist>
-        <listitem><para>
-          <classname>PHPTAL_VERSION</classname>: die Version der <acronym>PHPTAL</acronym> Bibliothek die auf dem Rechner installiert ist im Format: X.X.X.
-        </para></listitem>
-      </itemizedlist>
 
       <para>
         Die Konfigurationskonstanten aus älteren Versionen sind durch Methoden ersetzt worden.
