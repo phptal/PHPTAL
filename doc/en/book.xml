@@ -812,7 +812,7 @@ title="google search engine">the google search engine</a>
 
         <para>
         The modifier would return "odd" if <varname>repeat/ranking/odd</varname> is true,
-        false otherwise.
+        <constant>NULL</constant> otherwise.
         </para>
 <section id="optional-attrs"><title>Optional attributes</title>
         <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in <acronym>PHP</acronym>) as last alternative,
