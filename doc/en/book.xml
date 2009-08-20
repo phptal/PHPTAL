@@ -1172,7 +1172,7 @@ title="google search engine">the google search engine</a>
 
       <para><acronym>URI</acronym> for this namespace is <code>http://phptal.org/ns/phptal</code>. To use <code>phptal:</code> attribute prefix in XML you're required to declare it:</para>
 
-        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://phptal.org/ns/phptal" …>]]></programlisting></informalexample>
 
         <note><para>PHPTAL does not enforce this requirement.</para></note>
 
