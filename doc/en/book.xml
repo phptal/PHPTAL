@@ -1104,7 +1104,7 @@ title="google search engine">the google search engine</a>
 
         <para>
         The value of this variable will be set to the tag and its
-        content. If you don't need tag around the value, use
+        content. If you don't need the tag around the value, use
         <sgmltag>tal:replace</sgmltag> instead of <sgmltag>tal:content</sgmltag>. <sgmltag>tal:omit-tag</sgmltag> may help if the
         value is a concatenation of strings.
         </para>
@@ -1743,9 +1743,9 @@ php:SomeClass::$staticVar
 
                     <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
                         <para>Specify charcter encoding used by your templates. The default is <acronym>UTF-8</acronym>.
-                            </para><para>PHPTAL assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.</para>
-                        <note><para>PHPTAL does not read encoding from XML files and never converts character encodings.</para></note>
-                        <tip><para>Save yourself trouble and always use UTF-8 for everything.</para></tip>
+                        </para><para><acronym>PHPTAL</acronym> assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.</para>
+                        <note><para><acronym>PHPTAL</acronym> does not read encoding from XML files and never converts character encodings.</para></note>
+                        <tip><para>Save yourself trouble and always use <acronym>UTF-8</acronym> for everything.</para></tip>
             </section>
         <section id="config-methods"><title>Other methods</title>
             
