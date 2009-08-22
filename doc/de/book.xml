@@ -131,7 +131,7 @@
 
     <para>
     Die meisten Vorlagensysteme (»Template-Systeme«) nutzen <sgmltag>&lt;? ?&gt;</sgmltag>-, <sgmltag>&lt;% %&gt;</sgmltag>- oder
-    <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag>-Auszeichnugen, um die Stellen zu finden, die verarbeitet werden müssen. Dadurch wird die Entwicklung des Vorlagensystems einfacher, dem (Vorlagen-) Designer wird die Arbeit aber unnötig erschwert.
+    <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag>-Auszeichnungen, um die Stellen zu finden, die verarbeitet werden müssen. Dadurch wird die Entwicklung des Vorlagensystems einfacher, dem (Vorlagen-) Designer wird die Arbeit aber unnötig erschwert.
     </para>
 
     <para>
@@ -428,7 +428,7 @@ catch (Exception $e){
       <title><acronym>TAL</acronym>-Namensraum</title>
       
       <para>
-        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/tal</code>. Um das <code>tal:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/tal</code>. Um das <code>tal:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
       
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
@@ -811,12 +811,12 @@ title="google search engine">the google search engine</a>
         <section id="optional-attrs"><title>Optionale Attribute</title>
 
           <para>
-            Verwenden Sie in <sgmltag>tal:attributes</sgmltag> <acronym>TALES</acronym> Alternativen (die a|b|c Notation) und ist <varname>nothing</varname> (oder <varname>NULL</varname> in <acronym>PHP</acronym>) die letzte der Alternativen, wird das Attribut garnicht ausgegeben wenn kein Wert dafür vorhanden ist. (Hierdurch werden leere Attribute vermieden.):
+            Verwenden Sie in <sgmltag>tal:attributes</sgmltag> <acronym>TALES</acronym>-Alternativen (die a|b|c Notation) und ist <varname>nothing</varname> (oder <varname>NULL</varname> in <acronym>PHP</acronym>) die letzte der Alternativen, wird das Attribut gar nicht ausgegeben wenn kein Wert dafür vorhanden ist. (Hierdurch werden leere Attribute vermieden.):
           </para>
           <informalexample><programlisting language="xml"><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting></informalexample>
 
           <para>
-            <acronym>XHTML</acronym> Attribute wie <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag> usw. werden automatisch richtig verwendet.
+            <acronym>XHTML</acronym>-Attribute wie <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag> usw. werden automatisch richtig verwendet.
           </para>
 
           <informalexample><programlisting language="xml"><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting></informalexample>
@@ -863,7 +863,7 @@ title="google search engine">the google search engine</a>
       <title><acronym>METAL</acronym> Namensraum</title>
 
       <para>
-        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/metal</code>. Um das <code>metal:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/metal</code>. Um das <code>metal:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
       
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
@@ -875,17 +875,18 @@ title="google search engine">the google search engine</a>
         </note>
         
       <para>
-        <acronym>METAL</acronym> ist die Kurzform für „Macro Extension for <acronym>TAL</acronym>“. Dieser Namensraum erlaubt es Vorlagendesignern, Makros zu definieren und aufzurufen. Makros können für die rekursive Ausgabe von Daten oder zum einbinden von Code aus anderen Vorlagen verwendet werden.
+        <acronym>METAL</acronym> ist die Kurzform für „Macro Extension for <acronym>TAL</acronym>“. Dieser Namensraum erlaubt es Vorlagendesignern, Makros zu definieren und aufzurufen. Makros können für die rekursive Ausgabe von Daten oder zum Einbinden von Code aus anderen Vorlagen verwendet werden.
       </para>
 
       <section id="metal-define-macro">
         <title><sgmltag>metal:define-macro</sgmltag></title>
 
         <para>
-          Dieses Attribut deklariert ein Makro. Makros lassen sich als eine Art Bibliothek aus kleinen Vorlagen verstehen, die in anderen Vorlagen wiederverwendet werden können.
+          Dieses Attribut deklariert ein Makro. Mit Makros lassen sich Bibliotheken aus kleinen Vorlagen erstellen, die in anderen Vorlagen wiederverwendet werden können.
         </para>
 
-        <informalexample><programlisting language="xml"><![CDATA[<div metal:define-macro="main_menu">
+        <informalexample><programlisting language="xml"><![CDATA[
+<div metal:define-macro="main_menu">
   <ul>
     <li><a href="/">home</a></li>
     <li><a href="/products">products</a></li>
@@ -897,7 +898,7 @@ title="google search engine">the google search engine</a>
     <span tal:content="mdate">page modification date</span>
   </div>
 </div>
-]]></programlisting></informalexample>
+        ]]></programlisting></informalexample>
 
         <para>
           Makros erben den Variablenkontext des Aufrufers. In obigem Beispiel hängt die Variable „<varname>mdate</varname>“ von der aufrufenden Vorlage ab.
@@ -911,12 +912,13 @@ title="google search engine">the google search engine</a>
           Dieses Attribut ruft ein Makro auf und setzt das Ergebnis an seiner statt in die aktuelle Vorlage ein.
         </para>
 
-        <informalexample><programlisting language="xml"><![CDATA[<span
+        <informalexample><programlisting language="xml"><![CDATA[
+<span
   tal:comment="main_menu template requires 'mdate' variable"
   tal:define="mdate page/last_modified"
   metal:use-macro="main_menu"
 />
-]]></programlisting></informalexample>
+        ]]></programlisting></informalexample>
 
         <para>
           Makros lassen sich über die Angabe des Dateinamens auch aus anderen Vorlagen ansprechen.
@@ -1010,7 +1012,7 @@ title="google search engine">the google search engine</a>
       <title><acronym>I18N</acronym> Namensraum</title>
       
       <para>
-        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/i18n</code>. Um das <code>i18n:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/i18n</code>. Um das <code>i18n:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:i18n="http://xml.zope.org/namespaces/i18n" …>]]></programlisting></informalexample>
@@ -1086,7 +1088,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-          Diese Variable enthält die Auszeichnung und ihren Inhalt. Wird die Auszeichnug um den Inhalt herum nicht benötigt, benutzen Sie <sgmltag>tal:replace</sgmltag> anstatt <sgmltag>tal:content</sgmltag>. Falls der Wert eine Verknüpfung von Zeichenketten ist kann <sgmltag>tal:omit-tag</sgmltag> hilfreich sein.
+          Diese Variable enthält die Auszeichnung und ihren Inhalt. Wird die Auszeichnung um den Inhalt herum nicht benötigt, benutzen Sie <sgmltag>tal:replace</sgmltag> anstatt <sgmltag>tal:content</sgmltag>. Falls der Wert eine Verknüpfung von Zeichenketten ist kann <sgmltag>tal:omit-tag</sgmltag> hilfreich sein.
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
@@ -1163,7 +1165,7 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTAL</acronym> Namensraum</title>
 
       <para>
-        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://phptal.org/ns/phptal</code>. Um das <code>phptal:</code> Attribut Prefix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
+        Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://phptal.org/ns/phptal</code>. Um das <code>phptal:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
       
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://phptal.org/ns/phptal" …>]]></programlisting></informalexample>
@@ -1175,7 +1177,7 @@ title="google search engine">the google search engine</a>
       </note>
       
       <para>
-        Diese Attribute sind nicht in den <acronym>TAL</acronym> Spezifikationen enthalten, aber sehr nützlich für die Arbeit mit <acronym>PHPTAL</acronym>.
+        Diese Attribute sind in den <acronym>TAL</acronym>-Spezifikationen nicht enthalten, aber sehr nützlich für die Arbeit mit <acronym>PHPTAL</acronym>.
       </para>
 
       <section id="phptal-debug">
@@ -1243,7 +1245,7 @@ title="google search engine">the google search engine</a>
           Um für jeden einzelnen Wert eines Ausdrucks (der im Ergebnis eine Zeichenkette liefern muß) einen eigenen Puffer zu erhalten, können Sie "<varname>per expression</varname>" verwenden.
         </para>
         <note>
-          <para>Dabei dürfen sich die Ausdrücke nicht auf Variablen beziehen, die via <sgmltag>tal:define</sgmltag> in der selben Auszeichnug definiert werden.
+          <para>Dabei dürfen sich die Ausdrücke nicht auf Variablen beziehen, die via <sgmltag>tal:define</sgmltag> in der selben Auszeichnung definiert werden.
           </para>
         </note>
 
@@ -1273,7 +1275,7 @@ title="google search engine">the google search engine</a>
           <itemizedlist>
             <listitem>
               <para>
-                <sgmltag>phptal:cache</sgmltag> Blöcke können geschachtelt werden, aber der äußere Block puffert die inneren unabhängig von ihrem Alter.
+                <sgmltag>phptal:cache</sgmltag>-Blöcke können geschachtelt werden, aber der äußere Block puffert die inneren unabhängig von ihrem Alter.
               </para>
             </listitem>
             <listitem>
@@ -1291,7 +1293,7 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>phptal:tales</sgmltag></title>
 
         <para>
-          Mit diesem Attribut läßt sich das Verhalten von <acronym>PHPTALES</acronym> verändern. In der Grundeinstellung werden <acronym>PHPTAL</acronym> Attribute eng an <acronym>ZPT</acronym> angelehnt interpretiert. In manchen Fällen bräuchte man aber nur <acronym>PHP</acronym> und findet sich bei der ständigen Verwendung des <code>php:</code>- Operators wieder.
+          Mit diesem Attribut läßt sich das Verhalten von <acronym>PHPTALES</acronym> verändern. In der Grundeinstellung werden <acronym>PHPTAL</acronym>-Attribute eng an <acronym>ZPT</acronym> angelehnt interpretiert. In manchen Fällen bräuchte man aber nur <acronym>PHP</acronym> und findet sich bei der ständigen Verwendung des <code>php:</code>- Operators wieder.
         </para>
 
         <para>
@@ -1299,7 +1301,7 @@ title="google search engine">the google search engine</a>
         </para>
 
         <para>
-          Zur Laufzeit nimm sich <acronym>PHPTAL</acronym> <varname>myobject</varname> und findet heraus, daß es ein Objekt ist; stellt dann fest, daß <varname>mymethod</varname> eine Methode dieses Objektes (und keine Variable) ist und ruft sie auf; untersucht das Ergebnis, um festzustellen, daß dies ein Objekt mit einer Eigenschaft ist; sieht, daß sein Wert ein Feld ist; greift sich das <varname>10</varname>-Element dieses Feldes und bestimmt, daß das ein Objekt ist; entscheidet, daß <varname>othermethod</varname> eine Methode dieses Objektes (und keine Variable) ist und erhält das Ergebnis ihrer Ausführung; um dieses wiederum als Objekt zu erkennen und sich den Wert für den Schlüssel <varname>hashkey</varname> zu holen.
+          Zur Laufzeit nimmt sich <acronym>PHPTAL</acronym> <varname>myobject</varname> und findet heraus, daß es ein Objekt ist; stellt dann fest, daß <varname>mymethod</varname> eine Methode dieses Objektes (und keine Variable) ist und ruft sie auf; untersucht das Ergebnis, um festzustellen, daß dies ein Objekt mit einer Eigenschaft ist; sieht, daß sein Wert ein Feld ist; greift sich das <varname>10</varname>-Element dieses Feldes und bestimmt, daß das ein Objekt ist; entscheidet, daß <varname>othermethod</varname> eine Methode dieses Objektes (und keine Variable) ist und erhält das Ergebnis ihrer Ausführung; um dieses wiederum als Objekt zu erkennen und sich den Wert für den Schlüssel <varname>hashkey</varname> zu holen.
         </para>
 
         <para>
@@ -1490,7 +1492,7 @@ string:foo ;; php:doFoo() <!-- eine einzige Zeichenkette -->
         <title><code>php:</code></title>
 
         <para>
-          Dieser Operator erwartet als Argument einen regulären <acronym>PHP</acronym>-Ausdruck, wobei '<code>-&gt;</code>' durch Punkte '<code>.</code>' ersetzt werden, und Variablennamen  mit einem vorangestellen Dollarzeichen '<literal>$</literal>' versehen werden müssen.
+          Dieser Operator erwartet als Argument einen regulären <acronym>PHP</acronym>-Ausdruck, wobei er '<code>-&gt;</code>' durch einen Punkt '<code>.</code>' ersetzt, und Variablennamen  mit einem vorangestellen Dollarzeichen '<literal>$</literal>' versieht.
         </para>
 
         <para>
@@ -1653,7 +1655,7 @@ php:SomeClass::$staticVar
       <title>Konstanten</title>
 
       <para>
-        Die einzige Konstante, die in der Datei <filename>PHPTAL.php</filename> definiert ist, ist <constant>PHPTAL_VERSION</constant>. Sie enthält  die Version der <acronym>PHPTAL</acronym> Bibliothek (Format: <code>X.X.X</code>) die auf dem Rechner installiert ist.
+        Die einzige Konstante, die in der Datei <filename>PHPTAL.php</filename> definiert ist, ist <constant>PHPTAL_VERSION</constant>. Sie enthält  die Version der <acronym>PHPTAL</acronym>-Bibliothek (Format: <code>X.X.X</code>) die auf dem Rechner installiert ist.
       </para>
 
       <para>
@@ -1769,19 +1771,19 @@ php:SomeClass::$staticVar
       <section id="set-encoding">
         <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
         <para>
-          Specify charcter encoding used by your templates. The default is <acronym>UTF-8</acronym>.
+          Gibt die in Ihren Vorlagen verwendete Kodierung an. Die Grundeinstellung ist <acronym>UTF-8</acronym>.
         </para>
         <para>
-          PHPTAL assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.
+          <acronym>PHPTAL</acronym> geht davon aus, das die Kodierung aller Vorlagen und erzeugten Dokumente die gleiche ist. Der BOM (Byte Order Marker) wird aus UTF-8 Dokumenten entfernt.
         </para>
         <note>
           <para>
-            PHPTAL does not read encoding from XML files and never converts character encodings.
+            <acronym>PHPTAL</acronym> liest keine Zeichenkodierungen aus <acronym>XML</acronym>-Dateien und verändert niemals eine Kodierung.
           </para>
         </note>
         <tip>
           <para>
-            Save yourself trouble and always use UTF-8 for everything.
+            Ersparen Sie sich den Ärger und verwenden Sie immer und für alles <acronym>UTF-8</acronym>.
           </para>
         </tip>
       </section>
@@ -2750,7 +2752,7 @@ function phptal_tales_money( $src, $nothrow )
         Jean-Michel Hiver, der mich zum Draufschauen 'zwang',
       </para></listitem>
       <listitem><para>
-        Olivier Parisy, den ersten enthusiastischen <acronym>PHPTAL</acronym>-Benutzer und bug Finder,
+        Olivier Parisy, den ersten enthusiastischen <acronym>PHPTAL</acronym>-Benutzer und Bug Finder,
       </para></listitem>
     </itemizedlist>
   </appendix>
