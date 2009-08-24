@@ -2538,27 +2538,29 @@ mail($email, $subject, $message);
         translations.
         </para>
 
-        <informalexample><programlisting language="xml"><![CDATA[# english
+        <informalexample><programlisting language="xml"><![CDATA[
+# english
 msgid "welcome"
 msgstr "Welcome ${name} you have ${n} mails!"
 
 # french
 msgid "welcome"
 msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
-]]></programlisting></informalexample>
+        ]]></programlisting></informalexample>
 
         <para>
         A template can use this interpolation as follows:
         </para>
 
-        <informalexample><programlisting language="xml"><![CDATA[<span i18n:translate="welcome">
+        <informalexample><programlisting language="xml"><![CDATA[
+<span i18n:translate="welcome">
   Welcome
   <span i18n:name="name" tal:replace="user/name"/>
   you currently have
   <span i18n:name="n" tal:replace="user/unreadeMails"/>
   unread messages!
 </span>
-]]></programlisting></informalexample>
+        ]]></programlisting></informalexample>
 
         <para>
           Because <sgmltag>i18n:translate</sgmltag> contains a value <computeroutput>'welcome'</computeroutput>, the template
@@ -2605,13 +2607,15 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       <itemizedlist>
         <listitem>
           <para>
-            <varname>$src</varname>: the source string after the "modifier:" keyword
-        </para></listitem>
+            <varname>$src</varname>: die Quellzeichenkette nach dem "modifier:" Schlüsselwort
+          </para>
+        </listitem>
 
         <listitem>
           <para>
-            <varname>$nothrow</varname>: a boolean which determines whether exceptions may be thrown or not by <function>phptal_path()</function> resolution. This boolean must be propagated whenever you call another <function>phptal_tales_<replaceable>*</replaceable></function> modifier from within your own modifier.
-        </para></listitem>
+            <varname>$nothrow</varname>: eine boolsche Variable, die entscheidet ob durch die <function>phptal_path()</function> Auflösung eine Ausnahme ausgeworfen werden soll. Diese Variable muß immer an innerhalb Ihres eigenen Operators aufgerufene weitere <function>phptal_tales_<replaceable>*</replaceable></function>-Operatoren durchgereicht werden.
+          </para>
+        </listitem>
       </itemizedlist>
 
       <para>
@@ -2657,7 +2661,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
         Operatoren können andere Operatoren verwenden, um einfacheren PHP-Code zu erhalten; siehe das folgende Beispiel:
       </para>
 
-      <informalexample><programlisting language="php"><![CDATA[//
+      <informalexample><programlisting language="php"><![CDATA[
+//
 // This modifier will return a money formated string (XXX.XX)
 //
 // usage:
