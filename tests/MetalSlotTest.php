@@ -24,13 +24,77 @@ class MetalSlotTest extends PHPTAL_TestCase
         $exp = trim_file('output/metal-slot.01.html');
         $this->assertEquals($exp, $res);
     }
+    
+    function testPreservesTopmostContext()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->var = "valid";
+        $tpl->setSource('
+            <div metal:define-macro="m">
+                <div tal:define="var string:invalid">
+                    <span metal:define-slot="s">empty slot</span>
+                </div>    
+            </div>
+            
+            <div metal:use-macro="m">
+                <div metal:fill-slot="s">var = ${var}</div>
+            </div>    
+        ');
+        $this->assertEquals(trim_string('<div><div><div>var = valid</div></div></div>'),trim_string($tpl->execute()));
+    }
+
+    function testPreservesLocalContext()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->var = "topmost invalid";
+        $tpl->setSource('
+            <div metal:define-macro="m">
+                <div tal:define="var string:invalid">
+                    <span metal:define-slot="s">empty slot</span>
+                </div>    
+            </div>
+            
+            <div metal:use-macro="m" tal:define="var string:valid">
+                <div metal:fill-slot="s">var = ${var}</div>
+            </div>    
+        ');
+        $this->assertEquals(trim_string('<div><div><div>var = valid</div></div></div>'),trim_string($tpl->execute()));
+    }
+    
+    function testRecursiveFillSimple()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('
+            <div>
+              <div metal:define-macro="test1">
+                test1 macro value:<span metal:define-slot="value">a value should go here</span>
+              </div>
+
+              <div metal:define-macro="test2">
+                test2 macro value:<span metal:define-slot="value">a value should go here</span>                
+              </div>
+
+              <div metal:use-macro="test1" class="calls test1 macro">
+                <div metal:fill-slot="value" class="filling value for test1">
+                  <div metal:use-macro="test2" class="calls test2 macro">
+                    <span metal:fill-slot="value" class="filling value for test2">foo bar baz</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            ');
+            
+        $this->assertEquals(trim_string('<div><div>test1 macro value:<div class="filling value for test1">
+        <div>test2 macro value:<span class="filling value for test2">foo bar baz</span></div></div></div></div>'),
+                            trim_string($tpl->execute()), $tpl->getCodePath());
+    }
 
     function testRecusiveFill()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.02.html');
         $res = trim_string($tpl->execute());
         $exp = trim_file('output/metal-slot.02.html');
-        $this->assertEquals($exp, $res);
+        $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
     function testBlock()
