@@ -25,10 +25,35 @@ class MetalSlotTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
     
+    function testPreservesContext()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->var = "top";
+        $tpl->setSource('
+            <tal:block>
+                top=${var}
+                <div metal:define-macro="m" tal:define="var string:inmacro">
+                        inmacro=${var}
+                        <span metal:define-slot="s">FAIL</span>
+                        /inmacro=${var}
+                </div>
+                            
+                <div metal:use-macro="m" tal:define="var string:inusemacro">                
+                    inusemacro=${var}
+                    <div metal:fill-slot="s" tal:define="var string:infillslot">infillslot=${var}</div>
+                    /inusemacro=${var}
+                </div>    
+                /top=${var}
+            </tal:block>
+        ');
+        $this->assertEquals(trim_string('top=top<div>inmacro=inmacro<div>infillslot=infillslot</div>/inmacro=inmacro</div>/top=top'),
+                            trim_string($tpl->execute()), $tpl->getCodePath());
+    }
+
     function testPreservesTopmostContext()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->var = "valid";
+        $tpl->var = "topmost";
         $tpl->setSource('
             <div metal:define-macro="m">
                 <div tal:define="var string:invalid">
@@ -40,25 +65,7 @@ class MetalSlotTest extends PHPTAL_TestCase
                 <div metal:fill-slot="s">var = ${var}</div>
             </div>    
         ');
-        $this->assertEquals(trim_string('<div><div><div>var = valid</div></div></div>'),trim_string($tpl->execute()));
-    }
-
-    function testPreservesLocalContext()
-    {
-        $tpl = $this->newPHPTAL();
-        $tpl->var = "topmost invalid";
-        $tpl->setSource('
-            <div metal:define-macro="m">
-                <div tal:define="var string:invalid">
-                    <span metal:define-slot="s">empty slot</span>
-                </div>    
-            </div>
-            
-            <div metal:use-macro="m" tal:define="var string:valid">
-                <div metal:fill-slot="s">var = ${var}</div>
-            </div>    
-        ');
-        $this->assertEquals(trim_string('<div><div><div>var = valid</div></div></div>'),trim_string($tpl->execute()));
+        $this->assertEquals(trim_string('<div><div><div>var = topmost</div></div></div>'),trim_string($tpl->execute()), $tpl->getCodePath());
     }
     
     function testRecursiveFillSimple()
