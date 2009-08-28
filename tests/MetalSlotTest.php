@@ -49,6 +49,24 @@ class MetalSlotTest extends PHPTAL_TestCase
         $exp = trim_file('output/metal-slot.04.html');
         $this->assertEquals($exp, $res);
     }
+
+    function testFillWithi18n()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('
+        <div metal:use-macro="m1"><p metal:fill-slot="test-slot"><span i18n:translate="">translatemetoo</span></p></div>
+        <div metal:define-macro="m1">
+            <p metal:define-slot="test-slot" i18n:attributes="title" title="translateme">test</p>
+        </div>
+        ');
+
+        $tr = new DummyTranslator();
+        $tr->setTranslation("translateme","translatedyou");
+        $tr->setTranslation("translatemetoo","translatedyouaswell");
+        $tpl->setTranslator($tr);
+
+        $this->assertEquals(trim_string('<div><p><span>translatedyouaswell</span></p></div>'),trim_string($tpl->execute()), $tpl->getCodePath());
+    }
 }
 
 
