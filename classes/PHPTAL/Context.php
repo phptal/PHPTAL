@@ -144,24 +144,47 @@ class PHPTAL_Context
      */
     public function hasSlot($key)
     {
-        if (isset($this->_slots[$key])) return true;        
-        if ($this->_parentContext) {
-            return $this->_parentContext->hasSlot($key); // setting slots in any context, @see fillSlot
-        }
-        return false;
+        return isset($this->_slots[$key]);
     }
 
     /**
      * Returns the content of specified filled slot.
+     *
+     * Use echoSlot() whenever you just want to output the slot
      *
      * @return string
      */
     public function getSlot($key)
     {
         if (isset($this->_slots[$key])) {
-            return $this->_slots[$key];              
+            if (is_string($this->_slots[$key])) {
+                return $this->_slots[$key];
+            }
+            ob_start();
+            call_user_func($this->_slots[$key][0],$this->_slots[$key][1],$this->_slots[$key][2]);
+            return ob_get_clean();
         } else if ($this->_parentContext) {
             return $this->_parentContext->getSlot($key);
+        }
+    }
+
+    /**
+     * Immediately echoes content of specified filled slot.
+     *
+     * Equivalent of echo $this->getSlot();
+     *
+     * @return string
+     */
+    public function echoSlot($key)
+    {
+        if (isset($this->_slots[$key])) {
+            if (is_string($this->_slots[$key])) {
+                echo $this->_slots[$key];
+            } else {
+                call_user_func($this->_slots[$key][0],$this->_slots[$key][1],$this->_slots[$key][2]);
+            }
+        } else if ($this->_parentContext) {
+            return $this->_parentContext->echoSlot($key);
         }
     }
 
@@ -175,7 +198,16 @@ class PHPTAL_Context
         $this->_slots[$key] = $content;
         if ($this->_parentContext) {
             // setting slots in any context (probably violates TAL, but works around bug with tal:define popping context after fillslot)
-            $this->_parentContext->fillSlot($key, $content); 
+            $this->_parentContext->fillSlot($key, $content);
+        }
+    }
+
+    public function fillSlotCallback($key, $callback, $_thistpl, $tpl)
+    {
+        assert('is_callable($callback)');
+        $this->_slots[$key] = array($callback, $_thistpl, $tpl);
+        if ($this->_parentContext) {
+            $this->_parentContext->fillSlotCallback($key,  $callback, $_thistpl, $tpl);
         }
     }
 
@@ -249,7 +281,7 @@ class PHPTAL_Context
 
         throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->_file, $this->_line);
     }
-    
+
     /**
      * helper method for PHPTAL_Context::path()
      *
@@ -275,8 +307,8 @@ class PHPTAL_Context
             throw new PHPTAL_VariableNotFoundException(ucfirst(get_class($base))." object {$basename}doesn't have method/property named '$current'$pathinfo");
         }
         throw new PHPTAL_VariableNotFoundException(trim("Attempt to read property '$current'$pathinfo from ".gettype($base)." value {$basename}"));
-    }    
-    
+    }
+
     /**
      * Resolve TALES path starting from the first path element.
      * The TALES path : object/method1/10/method2
@@ -404,7 +436,7 @@ class PHPTAL_Context
         }
 
         return $base;
-    } 
+    }
 }
 
 /**

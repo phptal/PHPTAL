@@ -52,16 +52,36 @@
  */
 class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
 {
+    private static $uid = 0;    
+    private $function_name;
+    
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushCode('ob_start()');
+        if ($this->shouldUseCallback()) {
+            $function_base_name = 'slot_'.preg_replace('/[^a-z0-9]/','_',$this->expression).'_'.(self::$uid++);
+            $codewriter->doFunction($function_base_name,'PHPTAL $_thistpl, PHPTAL $tpl');
+            $this->function_name = $codewriter->getFunctionPrefix().$function_base_name;
+            
+            $codewriter->doSetVar('$ctx','$tpl->getContext()');            
+            $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
+        } else {
+            $codewriter->pushCode('ob_start()');
+            $this->function_name = NULL;
+        }     
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $code = '$ctx->fillSlot("'.$this->expression.'", ob_get_clean())';
-        $codewriter->pushCode($code);
+        if ($this->function_name !== NULL) {
+            $codewriter->doEnd();            
+            $codewriter->pushCode('$ctx->fillSlotCallback('.$codewriter->str($this->expression).', '.$codewriter->str($this->function_name).', $_thistpl, clone $tpl)'); 
+        } else {
+            $codewriter->pushCode('$ctx->fillSlot('.$codewriter->str($this->expression).', ob_get_clean())');
+        }
+    }
+    
+    private function shouldUseCallback()
+    {
+        return true; // FIXME: add heuristics to decide which is better
     }
 }
-
-
