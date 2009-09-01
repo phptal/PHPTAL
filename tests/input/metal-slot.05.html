@@ -1,0 +1,19 @@
+<tal:block>
+    top=${var}
+    <div metal:define-macro="m">
+            inusemacro=${var}
+            <div tal:define="var string:inmacro">
+                inmacro=${var}
+                <span metal:define-slot="s">FAIL</span>
+                /inmacro=${var}
+            </div>
+            /inusemacro=${var}
+    </div>
+                
+    <div metal:use-macro="m" tal:define="var string:inusemacro">                
+        invalid=${var}
+        <div metal:fill-slot="s" tal:define="var string:infillslot">infillslot=${var}</div>
+        /invalid=${var}
+    </div>    
+    /top=${var}
+</tal:block>

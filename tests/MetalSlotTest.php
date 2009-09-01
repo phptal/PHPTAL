@@ -27,26 +27,9 @@ class MetalSlotTest extends PHPTAL_TestCase
     
     function testPreservesContext()
     {
-        $tpl = $this->newPHPTAL();
+        $tpl = $this->newPHPTAL('input/metal-slot.05.html');
         $tpl->var = "top";
-        $tpl->setSource('
-            <tal:block>
-                top=${var}
-                <div metal:define-macro="m" tal:define="var string:inmacro">
-                        inmacro=${var}
-                        <span metal:define-slot="s">FAIL</span>
-                        /inmacro=${var}
-                </div>
-                            
-                <div metal:use-macro="m" tal:define="var string:inusemacro">                
-                    inusemacro=${var}
-                    <div metal:fill-slot="s" tal:define="var string:infillslot">infillslot=${var}</div>
-                    /inusemacro=${var}
-                </div>    
-                /top=${var}
-            </tal:block>
-        ');
-        $this->assertEquals(trim_string('top=top<div>inmacro=inmacro<div>infillslot=infillslot</div>/inmacro=inmacro</div>/top=top'),
+        $this->assertEquals(trim_string('top=top<div>inusemacro=inusemacro<div>inmacro=inmacro<div>infillslot=infillslot</div>/inmacro=inmacro</div>/inusemacro=inusemacro</div>/top=top'),
                             trim_string($tpl->execute()), $tpl->getCodePath());
     }
 
