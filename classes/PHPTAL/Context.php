@@ -37,7 +37,7 @@ class PHPTAL_Context
 
     public function __clone()
     {
-        $this->repeat = clone($this->repeat);
+        $this->repeat = clone $this->repeat;
     }
 
     /**
@@ -144,10 +144,11 @@ class PHPTAL_Context
      */
     public function hasSlot($key)
     {
+        if (isset($this->_slots[$key])) return true;        
         if ($this->_parentContext) {
-            return $this->_parentContext->hasSlot($key); // setting slots in any context
+            return $this->_parentContext->hasSlot($key); // setting slots in any context, @see fillSlot
         }
-        return array_key_exists($key, $this->_slots);
+        return false;
     }
 
     /**
@@ -157,10 +158,11 @@ class PHPTAL_Context
      */
     public function getSlot($key)
     {
-        if ($this->_parentContext) {
-            return $this->_parentContext->getSlot($key); // setting slots in any context
+        if (isset($this->_slots[$key])) {
+            return $this->_slots[$key];              
+        } else if ($this->_parentContext) {
+            return $this->_parentContext->getSlot($key);
         }
-        return $this->_slots[$key];
     }
 
     /**
@@ -170,10 +172,11 @@ class PHPTAL_Context
      */
     public function fillSlot($key, $content)
     {
+        $this->_slots[$key] = $content;
         if ($this->_parentContext) {
-            $this->_parentContext->fillSlot($key, $content); // setting slots in any context
+            // setting slots in any context (probably violates TAL, but works around bug with tal:define popping context after fillslot)
+            $this->_parentContext->fillSlot($key, $content); 
         }
-        else $this->_slots[$key] = $content;
     }
 
     /**
