@@ -348,4 +348,19 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl->setSource('<script tal:define="global foo bar | default"><![CDATA[ x ]]></script>');
         $tpl->execute();
     }
+    
+    
+    function testDefineAndAttributesOnSameElement()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->team = 'zzz';
+        $tpl->row = 'zzz';
+        $tpl->event_name = 'zzz';
+        $tpl->setSource('<tal:block tal:condition="php: isset(row.$team.$event_name)">
+                        <td tal:define="event php: row.$team.$event_name" tal:attributes="style \'THIS DOESNT WORK\'">
+                           ${event/player/surname}
+                       </td>
+                   </tal:block>');        
+        $tpl->execute();  
+    }
 }

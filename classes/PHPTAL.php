@@ -239,6 +239,8 @@ class PHPTAL
         $this->_codeFile = null;
         $this->_path = $path;
         $this->_source = null;
+        $this->_context->_docType = null;
+        $this->_context->_xmlDeclaration = null;
         return $this;
     }
 
@@ -267,6 +269,8 @@ class PHPTAL
         $this->_codeFile = null;
         $this->_source = new PHPTAL_StringSource($src, $path);
         $this->_path = $path;
+        $this->_context->_docType = null;
+        $this->_context->_xmlDeclaration = null;
         return $this;
     }
 
@@ -344,6 +348,7 @@ class PHPTAL
     {
         $this->_prepared = false;
         $this->_functionName = null;
+        $this->_codeFile = null;
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
         }
@@ -473,6 +478,7 @@ class PHPTAL
     {
         $this->_prepared = false;
         $this->_functionName = null;
+        $this->_codeFile = null;
         $this->_prefilter = $filter;
         return $this;
     }
@@ -512,7 +518,7 @@ class PHPTAL
     /**
      * Set a context variable.
      * Use it by setting properties on PHPTAL object.
-     * 
+     *
      * @param string $varname
      * @param mixed $value
      * @return void
@@ -524,7 +530,7 @@ class PHPTAL
 
     /**
      * Set a context variable.
-     * 
+     *
      * @see PHPTAL::__set()
      * @param string $varname name of the variable
      * @param mixed $value value of the variable
@@ -547,7 +553,6 @@ class PHPTAL
             // includes generated template PHP code
             $this->prepare();
         }
-
         $this->_context->_file = $this->_file;
 
         $templateFunction = $this->getFunctionName();
@@ -558,10 +563,10 @@ class PHPTAL
         }
         catch (Exception $e)
         {
+            ob_end_clean();
             if ($e instanceof PHPTAL_TemplateException) {
                 $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
             }
-            ob_end_clean();
             throw $e;
         }
 
@@ -1085,4 +1090,3 @@ class PHPTAL
         require $path;
     }
 }
-

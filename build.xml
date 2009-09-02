@@ -94,7 +94,7 @@
       <option name="description">PHPTAL is a XML-based template engine that generates XML, XHTML and HTML5 using syntax of Zope's Template Attribute Language (TAL, METAL and I18N namespaces). 
 PHPTAL compiles templates to PHP for best performance and supports selective caching of output.</option>
 
-      <option name="apiversion" value="1.2"/>
+      <option name="apiversion" value="1.2.0"/>
       <option name="apistability" value="alpha"/>
 
       <mapping name="maintainers">
@@ -113,7 +113,7 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
       </mapping>
 
       <option name="releaseversion" value="${version}"/>
-      <option name="releasestability" value="alpha"/>
+      <option name="releasestability" value="beta"/>
       <option name="license" value="LGPL"/>    
       <option name="phpdep" value="5.1.0"/>
       <option name="pearinstallerdep" value="1.4.6"/>
