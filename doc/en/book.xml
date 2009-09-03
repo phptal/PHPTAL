@@ -1906,6 +1906,42 @@ catch (Exception $e){
 ?>
 ]]></programlisting></informalexample>
 
+
+        <section id="echo-execute">
+            <title><methodname>echoExecute()</methodname> method</title>
+        
+            <para>Since most common use of <methodname>execute()</methodname> method is to echo its output, <acronym>PHPTAL</acronym> offers convenience method that echoes output immedately without buffering. This enables streaming of arbitrarily large output without hitting memory limit.</para>
+
+            <note><para>Fragments of template that use <sgmltag>tal:on-error</sgmltag> or <sgmltag>phptal:cache</sgmltag> are buffered regardless.</para></note>
+        
+        <para>The code:</para>
+            <informalexample><programlisting language="php"><![CDATA[<?php
+    $tpl = new PHPTAL('template.xhtml');
+    $tpl->echoExecute();
+?>]]></programlisting></informalexample>
+
+<para>is same as:</para>
+
+            <informalexample><programlisting language="php"><![CDATA[<?php
+    $tpl = new PHPTAL('template.xhtml');
+    echo $tpl->execute();
+?>]]></programlisting></informalexample>
+
+<para>but little faster.</para>
+
+            <warning><para>Currently <methodname>echoExecute()</methodname> method has some unexpected limitations.</para></warning>
+
+            <simplesect>
+                <title>Limitations</title>
+                <para>When <methodname>echoExecute()</methodname> is used, <acronym>PHPTAL</acronym> will throw exception if you call any macro defined in a file that has XML declaration or DOCTYPE.</para>
+                <para>Typically <acronym>PHPTAL</acronym> allows templates to "inherit" DOCTYPE from another file (useful when subpage is calling main layout template), however that is not possible without buffering.</para>
+                <para>To work around this you can:</para>            
+                <itemizedlist>
+                    <listitem><para>Keep using <code>echo $tpl->execute()</code> until this limitation is removed.</para></listitem>
+                    <listitem><para>Remove all DOCTYPEs and XML declarations from templates and echo them from PHP before calling <methodname>echoExecute()</methodname>.</para></listitem>
+                </itemizedlist>    
+            </simplesect>    
+        </section>
     </section>
 
     <section id="filter-interface">
