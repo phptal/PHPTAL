@@ -169,19 +169,16 @@ class PhptalTest extends PHPTAL_TestCase
     
     function testDirAsTemplate()
     {
-        try
-        {
+        try {
             $tpl = $this->newPHPTAL(dirname(__FILE__));
             $tpl->execute();
             $this->fail("Executed directory as if it was a template file");
         }
-        catch(PHPTAL_IOException $e)
-        {
+        catch(PHPTAL_IOException $e) {
             // ok
         }
-        catch(PHPTAL_Exception $e)
-        {
+        catch(PHPTAL_Exception $e) {
             $this->fail("Thrown exception ".get_class($e)." (".$e->getMessage().") rather than PHPTAL_IOException");
         }
-    }
+    }    
 }

@@ -36,7 +36,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $expected = <<<EOS
 <?php
 function test(\$tpl) {
-\$ctx->setXmlDeclaration('<?xml version="1.0"?>') ;?>
+\$ctx->setXmlDeclaration('<?xml version="1.0"?>',false) ;?>
 <html>
   <head>
     <title>test document</title>

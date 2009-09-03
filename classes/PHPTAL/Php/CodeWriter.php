@@ -192,18 +192,28 @@ class PHPTAL_Php_CodeWriter
         $this->_htmlBuffer = array();
     }
 
-    public function doDoctype()
+    /**
+     * Generate code for setting DOCTYPE
+     *
+     * @param bool $called_from_macro for error checking: unbuffered output doesn't support that
+     */
+    public function doDoctype($called_from_macro = false)
     {
         if ($this->_doctype) {
-            $code = '$ctx->setDocType('.$this->str($this->_doctype).')';
+            $code = '$ctx->setDocType('.$this->str($this->_doctype).','.($called_from_macro?'true':'false').')';
             $this->pushCode($code);
         }
     }
-
-    public function doXmlDeclaration()
+    
+    /**
+     * Generate XML declaration 
+     *
+     * @param bool $called_from_macro for error checking: unbuffered output doesn't support that
+     */
+    public function doXmlDeclaration($called_from_macro = false)
     {
-        if ($this->_xmldeclaration) {
-            $code = '$ctx->setXmlDeclaration('.$this->str($this->_xmldeclaration).')';
+        if ($this->_xmldeclaration && $this->getOutputMode() !== PHPTAL::HTML5) {
+            $code = '$ctx->setXmlDeclaration('.$this->str($this->_xmldeclaration).','.($called_from_macro?'true':'false').')';
             $this->pushCode($code);
         }
     }

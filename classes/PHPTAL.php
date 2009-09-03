@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_1b1');
+define('PHPTAL_VERSION', '1_2_1b2');
 
 
 /* If you want to use autoload, comment out all lines starting with require_once 'PHPTAL
@@ -543,7 +543,7 @@ class PHPTAL
     }
 
     /**
-     * Execute the template code.
+     * Execute the template code and return generated markup.
      *
      * @return string
      */
@@ -554,6 +554,7 @@ class PHPTAL
             $this->prepare();
         }
         $this->_context->_file = $this->_file;
+        $this->_context->echoDeclarations(false);
 
         $templateFunction = $this->getFunctionName();
         try {
@@ -576,7 +577,7 @@ class PHPTAL
         }
 
         // unshift xml declaration
-        if ($this->_context->_xmlDeclaration && $this->getOutputMode() !== PHPTAL::HTML5) {
+        if ($this->_context->_xmlDeclaration) {
             $res = $this->_context->_xmlDeclaration . "\n" . $res;
         }
 
@@ -584,6 +585,37 @@ class PHPTAL
             return $this->_postfilter->filter($res);
         }
         return $res;
+    }
+    
+    /**
+     * Execute and echo template without buffering of the output.
+     * This function does not allow postfilters nor DOCTYPE/XML declaration.
+     *
+     * @return NULL
+     */
+    public function echoExecute()
+    {
+        if (!$this->_prepared) {
+            // includes generated template PHP code
+            $this->prepare();
+        }
+        
+        if ($this->_postfilter) {
+            throw new PHPTAL_ConfigurationException("echoExecute() does not support postfilters");
+        }
+
+        $this->_context->_file = $this->_file;
+        $this->_context->echoDeclarations(true);
+
+        $templateFunction = $this->getFunctionName();
+        try {
+            $templateFunction($this, $this->_context);
+        }
+        catch (PHPTAL_TemplateException $e)
+        {
+            $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
+            throw $e;
+        }
     }
 
     /**

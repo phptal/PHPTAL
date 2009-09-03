@@ -54,8 +54,8 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
         $codewriter->doSetVar('$tpl', 'clone $tpl');
         $codewriter->doSetVar('$ctx', '$tpl->getContext()');
         $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
-        $codewriter->doXmlDeclaration();
-        $codewriter->doDoctype();
+        $codewriter->doXmlDeclaration(true);
+        $codewriter->doDoctype(true);
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
