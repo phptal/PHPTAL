@@ -127,7 +127,7 @@ class MetalSlotTest extends PHPTAL_TestCase
      */
     function testFillPreservedAcrossCalls()
     {
-        $tpl =$this->newPHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block metal:fill-slot="foo">foocontent</tal:block>');
         $tpl->execute();
         $tpl->setSource('<tal:block metal:define-slot="foo">FAIL</tal:block>');
@@ -140,13 +140,59 @@ class MetalSlotTest extends PHPTAL_TestCase
      */
     function testFillPreservedAcrossCalls2()
     {
-        $tpl =$this->newPHPTAL();
+        $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:define="x string:x"><tal:block metal:fill-slot="foo">foocontent</tal:block></p>');
         $tpl->execute();
         $tpl->setSource('<p tal:define="y string:y"><tal:block metal:define-slot="foo">FAIL</tal:block></p>');
         
         $this->assertEquals('<p>foocontent</p>', $tpl->execute());
     }
+    
+    function testUsesCallbackForLargeSlots()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('
+        <x metal:define-macro="foo"><y metal:define-slot="s"/></x>
+        
+        <f metal:use-macro="foo"><s metal:fill-slot="s">
+            <loop tal:repeat="n php:range(1,5)">
+                <inner tal:repeat="y php:range(1,5)">
+                    <a title="stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff lots of stuff stuff lots of stuff">stuff</a>
+                    <a title="stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff lots of stuff stuff lots of stuff">stuff</a>
+                    <a title="stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff lots of stuff stuff lots of stuff">stuff</a>
+                </inner>    
+            </loop>    
+        </s></f>
+        ');
+        
+        $res = $tpl->execute();        
+        $this->assertGreaterThan(PHPTAL_Php_Attribute_METAL_FillSlot::CALLBACK_THRESHOLD,strlen($res));
+        
+        $tpl_php_source = file_get_contents($tpl->getCodePath());
+        
+        $this->assertNotContains("fillSlot(",$tpl_php_source);        
+        $this->assertContains("fillSlotCallback(",$tpl_php_source);
+    }
+
+    function testUsesBufferForSmallSlots()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('
+        <x metal:define-macro="foo"><y metal:define-slot="s"/></x>
+        
+        <f metal:use-macro="foo"><s metal:fill-slot="s">
+            stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff
+        </s></f>
+        ');
+        
+        $tpl->execute();
+        
+        $tpl_php_source = file_get_contents($tpl->getCodePath());
+        
+        $this->assertNotContains("fillSlotCallback(",$tpl_php_source);
+        $this->assertContains("fillSlot(",$tpl_php_source);        
+    }
+
 }
 
 

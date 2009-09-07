@@ -80,8 +80,66 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
         }
     }
     
+    // rough guess
+    const CALLBACK_THRESHOLD = 10000;
+    
+    /**
+     * inspects contents of the element to decide whether callback makes sense
+     */
     private function shouldUseCallback()
     {
-        return true; // FIXME: add heuristics to decide which is better
+        // since callback is slightly slower than buffering, 
+        // use callback only for content that is large to offset speed loss by memory savings
+        return $this->estimateNumberOfBytesOutput($this->phpelement, false) > self::CALLBACK_THRESHOLD;
+    }
+    
+    /**
+     * @param bool $is_nested_in_repeat true if any parent element has tal:repeat
+     * @return rough guess
+     */
+    private function estimateNumberOfBytesOutput(PHPTAL_Dom_Element $element, $is_nested_in_repeat)
+    {
+        // macros don't output anything on their own
+        if ($element->hasAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')) {
+            return 0;
+        }
+        
+        $estimated_bytes = 2*(3+strlen($element->getQualifiedName()));
+        
+        foreach($element->getAttributeNodes() as $attr) {
+            $estimated_bytes += 4+strlen($attr->getQualifiedName());
+            $estimated_bytes += strlen($attr->getValueEscaped()); // this is shoddy for replaced attributes
+        }
+
+        $has_repeat_attr = $element->hasAttributeNS('http://xml.zope.org/namespaces/tal','repeat');        
+        
+        if ($element->hasAttributeNS('http://xml.zope.org/namespaces/tal','content') || 
+            $element->hasAttributeNS('http://xml.zope.org/namespaces/tal','replace')) {
+            // assume that output in loops is shorter (e.g. table rows) than outside (main content)
+            $estimated_bytes += ($has_repeat_attr || $is_nested_in_repeat) ? 500 : 2000;
+        } else {
+            foreach($element->childNodes as $node) {
+                if ($node instanceof PHPTAL_Dom_Element) {
+                    $estimated_bytes += $this->estimateNumberOfBytesOutput($node, $has_repeat_attr || $is_nested_in_repeat);
+                } else {
+                    $estimated_bytes += strlen($node->getValueEscaped());
+                }
+            }
+        }
+        
+        if ($element->hasAttributeNS('http://xml.zope.org/namespaces/metal','use-macro')) {
+            $estimated_bytes += ($has_repeat_attr || $is_nested_in_repeat) ? 500 : 2000;
+        }
+
+        if ($element->hasAttributeNS('http://xml.zope.org/namespaces/tal','condition')) {
+            $estimated_bytes /= 2; // naively assuming 50% chance, that works well with if/else pattern
+        }
+        
+        if ($element->hasAttributeNS('http://xml.zope.org/namespaces/tal','repeat')) {
+            // assume people don't write big nested loops
+            $estimated_bytes *= $is_nested_in_repeat ? 5 : 10; 
+        }
+        
+        return $estimated_bytes;
     }
 }
