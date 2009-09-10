@@ -619,27 +619,6 @@ class PHPTAL
     }
 
     /**
-     * copies state of PHPTAL class. for internal use only.
-     */
-    protected function setConfigurationFrom(PHPTAL $from)
-    {
-        // use references - this way config of both objects will be more-or-less in sync
-        $this->_encoding = &$from->_encoding;
-        $this->_outputMode = &$from->_outputMode;
-        $this->_stripComments = &$from->_stripComments;
-        $this->_forceReparse = &$from->_forceReparse;
-        $this->_phpCodeDestination = &$from->_phpCodeDestination;
-        $this->_phpCodeExtension = &$from->_phpCodeExtension;
-        $this->_cacheLifetime = &$from->_cacheLifetime;
-        $this->_cachePurgeFrequency = &$from->_cachePurgeFrequency;
-        $this->setTemplateRepository($from->_repositories);
-        array_unshift($this->_repositories, dirname($from->_source->getRealPath()));
-        $this->_resolvers = &$from->_resolvers;
-        $this->_prefilter = &$from->_prefilter;
-        $this->_postfilter = &$from->_postfilter;
-    }
-
-    /**
      * Execute a template macro.
      * Should be used only from within generated template code!
      *
@@ -669,8 +648,9 @@ class PHPTAL
             if (isset($this->externalMacroTemplatesCache[$file])) {
                 $tpl = $this->externalMacroTemplatesCache[$file];
             } else {
-                $tpl = new PHPTAL($file);
-                $tpl->setConfigurationFrom($this);
+                $tpl = clone $this;
+                array_unshift($tpl->_repositories, dirname($this->_source->getRealPath())); 
+                $tpl->setTemplate($file);               
                 $tpl->prepare();
 
                 // keep it small (typically only 1 or 2 external files are used)
