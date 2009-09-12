@@ -85,6 +85,12 @@
       name="${phing.project.name}"
       dir="${build.src.dir}">
 
+      <option name="notes">Zope Page Template implementation for PHP5</option>
+      <option name="description">Zope Page Template implementation for PHP5</option>
+      <option name="summary">PHPTAL for PHP5 supports tal, metal and i18n namespaces</option>
+      <option name="version" value="${version}"/>
+      <option name="state" value="stable"/>
+      <option name="license" value="LGPL"/>
       <option name="outputdirectory" value="${build.base.dir}"/>
       <option name="packagefile" value="package.xml"/>
       <option name="baseinstalldir" value="/"/>

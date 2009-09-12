@@ -84,10 +84,12 @@ function trim_string( $src ){
 }
 
 // Old versions of PHPUnit seemed to need it
-function exception_error_handler($errno, $errstr, $errfile, $errline )
-{
-    throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-}
-set_error_handler("exception_error_handler");
+// OTOH PHP5-incompatible PEAR throws lots of errors, causing Phing to fail.
+
+// function exception_error_handler($errno, $errstr, $errfile, $errline )
+// {
+//     throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+// }
+// set_error_handler("exception_error_handler", E_ALL | E_STRICT);
 
 
