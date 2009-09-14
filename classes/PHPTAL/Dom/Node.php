@@ -63,6 +63,18 @@ abstract class PHPTAL_Dom_Node
     {
         return $this->value_escaped;
     }
+    
+    /**
+     * Set value of the node (type-dependent) to this exact string. 
+     * String must be HTML-escaped and use node's encoding.
+     * 
+     * @param string $value_escaped new content
+     */
+    function setValueEscaped($value_escaped)
+    {
+        $this->value_escaped = $value_escaped;
+    }
+
 
     /**
      * get value as plain text. Depends on node type.

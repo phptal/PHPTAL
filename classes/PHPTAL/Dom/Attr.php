@@ -89,13 +89,6 @@ class PHPTAL_Dom_Attr
         return preg_match('/^xmlns(?:$|:)/',$this->qualified_name);
     }
 
-    /**
-     * set plain text as value
-     */
-    function setValue($val)
-    {
-        $this->value_escaped = htmlspecialchars($val);
-    }
 
     /**
      * get value as plain text
@@ -108,6 +101,14 @@ class PHPTAL_Dom_Attr
     }
 
     /**
+     * set plain text as value
+     */
+    function setValue($val)
+    {
+        $this->value_escaped = htmlspecialchars($val);
+    }
+    
+    /**
      * Depends on replaced state.
      * If value is not replaced, it will return it with HTML escapes.
      *
@@ -117,6 +118,18 @@ class PHPTAL_Dom_Attr
     function getValueEscaped()
     {
         return $this->value_escaped;
+    }
+    
+    /**
+     * Set value of the attribute to this exact string. 
+     * String must be HTML-escaped and use attribute's encoding.
+     * 
+     * @param string $value_escaped new content
+     */
+    function setValueEscaped($value_escaped)
+    {
+        $this->replacedState = self::NOT_REPLACED;
+        $this->value_escaped = $value_escaped;
     }
 
     /**

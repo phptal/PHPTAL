@@ -199,9 +199,24 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         }
     }
 
+    /**
+     * Array with PHPTAL_Dom_Attr objects
+     * 
+     * @return array
+     */
     public function getAttributeNodes()
     {
         return $this->attribute_nodes;
+    }
+    
+    /**
+     * Replace all attributes
+     * 
+     * @param array $nodes array of PHPTAL_Dom_Attr objects
+     */
+    public function setAttributeNodes(array $nodes)
+    {
+        $this->attribute_nodes = $nodes;
     }
 
     /** Returns true if the element contains specified PHPTAL attribute. */
