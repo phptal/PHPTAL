@@ -63,7 +63,12 @@ class PHPTAL
     const XML   = 22;
     const HTML5 = 55;
 
-    protected $_prefilter = null;
+    protected $_prefilters = array();
+    
+    /**
+     * @deprecated
+     */
+    private $_prefilter = 'REMOVED: DO NOT USE';
     protected $_postfilter = null;
 
     /**
@@ -474,13 +479,55 @@ class PHPTAL
     /**
      * Set template pre filter. It will be called once before template is compiled.
      */
-    public function setPreFilter(PHPTAL_Filter $filter)
+    public function setPreFilter($filter, $key = NULL)
     {
+        if (!$filter instanceof PHPTAL_Filter && !$filter instanceof PHPTAL_DomPreFilter &&
+            ($key === NULL || $filter !== NULL)) { 
+            throw new PHPTAL_ConfigurationException("Prefilter must implement PHPTAL_Filter or PHPTAL_DomPreFilter");
+        }
+
         $this->_prepared = false;
         $this->_functionName = null;
         $this->_codeFile = null;
-        $this->_prefilter = $filter;
+        
+        if ($key !== NULL) {
+            if ($filter !== NULL) {
+                if ($filter instanceof PHPTAL_DomPreFilter) {
+                    $filter->setPHPTAL($this);
+                }
+                $this->_prefilters[$key] = $filter;
+            } else {
+                unset($this->_prefilters[$key]);
+            }
+        } else {
+            $this->_prefilters[] = $filter;
+        }
         return $this;
+    }
+
+    /**
+     * Array with all prefilter objects.
+     * 
+     * @return array
+     */
+    protected function getPreFilters()
+    {
+        return $this->_prefilters;
+    }
+
+    /**
+     * Return string that is unique for every different configuration of prefilters.
+     * Result of prefilters may be cached unless this string changes.
+     * 
+     * @return string
+     */
+    protected function getPreFiltersCacheId()
+    {
+        $c = '';
+        foreach($this->getPreFilters() as $prefilter) {
+            $c .= get_class($prefilter);
+        }
+        return $c;
     }
 
     /**
@@ -875,7 +922,7 @@ class PHPTAL
 
             $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath()
                     . $this->getEncoding()
-                    . ($this->_prefilter ? get_class($this->_prefilter) : '-')
+                    . $this->getPrefiltersCacheId()
                     . $this->getOutputMode(),
                     true);
 
@@ -991,10 +1038,18 @@ class PHPTAL
         $data = $this->_source->getData();
         $realpath = $this->_source->getRealPath();
 
-        if ($this->_prefilter) {
-            $data = $this->_prefilter->filter($data);
+        foreach($this->getPreFilters() as $prefilter) {
+            $data = $prefilter->filter($data);
         }
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
+        
+        foreach($this->getPreFilters() as $prefilter) {
+            if ($prefilter instanceof PHPTAL_DomPreFilter) {
+                if ($prefilter->filterDOM($tree)) {
+                    throw new PHPTAL_ConfigurationException("Don't return value from filterDOM()");
+                }
+            }
+        }
 
         $generator = new PHPTAL_Php_CodeGenerator(
             $this->getFunctionName(),
