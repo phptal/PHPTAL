@@ -64,7 +64,7 @@ class PHPTAL
     const HTML5 = 55;
 
     protected $_prefilters = array();
-    
+
     /**
      * @deprecated
      */
@@ -476,29 +476,45 @@ class PHPTAL
         return $this;
     }
 
+
     /**
      * Set template pre filter. It will be called once before template is compiled.
+     *
+     * Please use addPreFilter instead
+     *
+     * @see addPreFilter
+     * @deprecated
      */
-    public function setPreFilter($filter, $key = NULL)
+    final public function setPreFilter(PHPTAL_Filter $filter)
     {
-        if (!$filter instanceof PHPTAL_Filter && !$filter instanceof PHPTAL_DomPreFilter &&
-            ($key === NULL || $filter !== NULL)) { 
-            throw new PHPTAL_ConfigurationException("Prefilter must implement PHPTAL_Filter or PHPTAL_DomPreFilter");
-        }
-
         $this->_prepared = false;
         $this->_functionName = null;
         $this->_codeFile = null;
-        
+
+        $this->_prefilters['_phptal_old_filter_'] = $filter;
+    }
+
+    /**
+     * Add new prefilter to filter chain. Filter must extend PHPTAL_PreFilter class.
+     * 
+     * If you specify $key, prefilter will be added under specific key. 
+     * Adding new prefilter with same name will replace it instead.
+     * 
+     * @param PHPTAL_PreFilter $filter filter to add
+     * @param string $key name for filter or NULL. Must not be numeric.
+     * @return PHPTAL
+     */
+    final public function addPreFilter(PHPTAL_PreFilter $filter, $key = NULL)
+    {
+        $this->_prepared = false;
+        $this->_functionName = null;
+        $this->_codeFile = null;
+
         if ($key !== NULL) {
-            if ($filter !== NULL) {
-                if ($filter instanceof PHPTAL_DomPreFilter) {
-                    $filter->setPHPTAL($this);
-                }
-                $this->_prefilters[$key] = $filter;
-            } else {
-                unset($this->_prefilters[$key]);
+            if (is_numeric($key)) {
+                throw new PHPTAL_ConfigurationException("Key for prefilter must not be non-numeric string");
             }
+            $this->_prefilters[$key] = $filter;
         } else {
             $this->_prefilters[] = $filter;
         }
@@ -506,8 +522,8 @@ class PHPTAL
     }
 
     /**
-     * Array with all prefilter objects.
-     * 
+     * Array with all prefilter objects
+     *
      * @return array
      */
     protected function getPreFilters()
@@ -518,16 +534,20 @@ class PHPTAL
     /**
      * Return string that is unique for every different configuration of prefilters.
      * Result of prefilters may be cached unless this string changes.
-     * 
+     *
      * @return string
      */
     protected function getPreFiltersCacheId()
     {
-        $c = '';
-        foreach($this->getPreFilters() as $prefilter) {
-            $c .= get_class($prefilter);
+        $cacheid = '';
+        foreach($this->getPreFilters() as $key => $prefilter) {
+            if ($prefilter instanceof PHPTAL_PreFilter) {
+                $cacheid .= $key.$prefilter->getCacheId();
+            } else {
+                $cacheid .= $key.get_class($prefilter);
+            }
         }
-        return $c;
+        return $cacheid;
     }
 
     /**
@@ -633,7 +653,7 @@ class PHPTAL
         }
         return $res;
     }
-    
+
     /**
      * Execute and echo template without buffering of the output.
      * This function does not allow postfilters nor DOCTYPE/XML declaration.
@@ -646,7 +666,7 @@ class PHPTAL
             // includes generated template PHP code
             $this->prepare();
         }
-        
+
         if ($this->_postfilter) {
             throw new PHPTAL_ConfigurationException("echoExecute() does not support postfilters");
         }
@@ -696,8 +716,8 @@ class PHPTAL
                 $tpl = $this->externalMacroTemplatesCache[$file];
             } else {
                 $tpl = clone $this;
-                array_unshift($tpl->_repositories, dirname($this->_source->getRealPath())); 
-                $tpl->setTemplate($file);               
+                array_unshift($tpl->_repositories, dirname($this->_source->getRealPath()));
+                $tpl->setTemplate($file);
                 $tpl->prepare();
 
                 // keep it small (typically only 1 or 2 external files are used)
@@ -1039,12 +1059,15 @@ class PHPTAL
         $realpath = $this->_source->getRealPath();
 
         foreach($this->getPreFilters() as $prefilter) {
+            if ($prefilter instanceof PHPTAL_PreFilter) {
+                $prefilter->setPHPTAL($this);
+            }
             $data = $prefilter->filter($data);
         }
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
-        
+
         foreach($this->getPreFilters() as $prefilter) {
-            if ($prefilter instanceof PHPTAL_DomPreFilter) {
+            if ($prefilter instanceof PHPTAL_PreFilter) {
                 if ($prefilter->filterDOM($tree)) {
                     throw new PHPTAL_ConfigurationException("Don't return value from filterDOM()");
                 }

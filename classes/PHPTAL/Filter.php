@@ -30,4 +30,3 @@ interface PHPTAL_Filter
     public function filter($str);
 }
 
-
