@@ -226,8 +226,7 @@ class PHPTAL_Lint
             echo 'E';
         }
 
-            $this->errors[] = array(dirname($fullpath) , basename($fullpath) , $e->getMessage() , $e->getLine());
-        }
+        $this->errors[] = array(dirname($fullpath) , basename($fullpath) , $e->getMessage() , $e->getLine());
     }
 }
 
