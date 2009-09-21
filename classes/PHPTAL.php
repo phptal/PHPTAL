@@ -1104,17 +1104,19 @@ class PHPTAL
         {
             $this->_source = new PHPTAL_FileSource($this->_path);
         }
-
-        foreach ($this->_resolvers as $resolver) {
-            $source = $resolver->resolve($this->_path);
-            if ($source) {
-                $this->_source = $source;
-                return;
+        else
+        {
+            foreach ($this->_resolvers as $resolver) {
+                $source = $resolver->resolve($this->_path);
+                if ($source) {
+                    $this->_source = $source;
+                    return;
+                }
             }
-        }
 
-        $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
-        $this->_source = $resolver->resolve($this->_path);
+            $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
+            $this->_source = $resolver->resolve($this->_path);
+        }
 
         if (!$this->_source) {
             throw new PHPTAL_IOException('Unable to locate template file '.$this->_path);
