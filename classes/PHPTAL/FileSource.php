@@ -49,34 +49,3 @@ class PHPTAL_FileSource implements PHPTAL_Source
         return $content;
     }
 }
-
-/**
- * Finds template on disk by looking through repositories first
- *
- * @package PHPTAL
- */
-class PHPTAL_FileSourceResolver implements PHPTAL_SourceResolver
-{
-    public function __construct($repositories)
-    {
-        $this->_repositories = $repositories;
-    }
-
-    public function resolve($path)
-    {
-        foreach ($this->_repositories as $repository) {
-            $file = $repository . DIRECTORY_SEPARATOR . $path;
-            if (file_exists($file)) {
-                return new PHPTAL_FileSource($file);
-            }
-        }
-
-        if (file_exists($path)) {
-            return new PHPTAL_FileSource($path);
-        }
-
-        return null;
-    }
-
-    private $_repositories;
-}

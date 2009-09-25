@@ -24,7 +24,6 @@ define('PHPTAL_VERSION', '1_2_1b2');
 
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Source.php';
-require_once 'PHPTAL/SourceResolver.php';
 require_once 'PHPTAL/FileSource.php';
 require_once 'PHPTAL/RepeatController.php';
 require_once 'PHPTAL/Context.php';
@@ -354,6 +353,7 @@ class PHPTAL
         $this->_prepared = false;
         $this->_functionName = null;
         $this->_codeFile = null;
+        
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
         }
@@ -937,7 +937,7 @@ class PHPTAL
        if (!$this->_functionName) {
 
             // just to make tempalte name recognizable
-            $basename = preg_replace('/\.[a-z]{3,4}$/','',basename($this->_source->getRealPath()));
+            $basename = preg_replace('/\.[a-z]{3,5}$/','',basename($this->_source->getRealPath()));
             $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,20);
 
             $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath()
@@ -1114,6 +1114,8 @@ class PHPTAL
                 }
             }
 
+            if (!class_exists('PHPTAL_FileSourceResolver')) self::autoload('PHPTAL_FileSourceResolver');
+
             $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
             $this->_source = $resolver->resolve($this->_path);
         }
@@ -1156,7 +1158,6 @@ class PHPTAL
     final public static function autoload($class)
     {
        static $except = array(
-            'PHPTAL_FileSourceResolver'=>'PHPTAL_FileSource',
             'PHPTAL_NamespaceAttributeReplace'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeSurround'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeContent'=>'PHPTAL_NamespaceAttribute',
@@ -1170,10 +1171,9 @@ class PHPTAL
             'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',
         );
 
-        if (!isset($except[$class])) {
             if (substr($class, 0, 7) !== 'PHPTAL_') return;
-        }
-        else {
+
+        if (isset($except[$class])) {
             $class = $except[$class];
         }
 
