@@ -30,6 +30,27 @@ class XmlParserTest extends PHPTAL_TestCase
         $this->assertEquals(7, $builder->elementCloses);
     }
 
+    public function testXMLStylesheet() {
+        $tpl = $this->newPHPTAL();
+        $tpl->baz = 'quz';
+        $tpl->setSource('<?xml version="1.0" encoding="utf-8"?>
+        <?xml-stylesheet type="text/css" href="/css" ?>
+        <?xml-stylesheet type="text/css" href="/${baz}" ?>
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"/>');
+        
+        $this->assertEquals(trim_string('<?xml version="1.0" encoding="utf-8"?>
+        <?xml-stylesheet type="text/css" href="/css" ?>
+        <?xml-stylesheet type="text/css" href="/quz" ?>
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"></html>'),trim_string($tpl->execute()));
+    }
+
+    public function testPHPBlocksNotInterpolated() {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<?php echo \'${baz}\' ?><html></html>');
+        
+        $this->assertEquals('${baz}<html></html>',$tpl->execute());
+    }
+
     public function testCharactersBeforeBegining() {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try {
@@ -303,8 +324,7 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     }
 
     public function onDocumentStart(){}
-    public function onDocumentEnd(){
-    }
+    public function onDocumentEnd(){}
 }
 
 
