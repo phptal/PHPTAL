@@ -48,11 +48,6 @@ class PHPTAL_Dom_DocumentBuilder
         return $this->_xmlns;
     }
 
-    public function stripComments($b)
-    {
-        $this->_stripComments = $b;
-    }
-
     // ~~~~~ XmlParser implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     public function onDocumentStart()
@@ -84,8 +79,6 @@ class PHPTAL_Dom_DocumentBuilder
 
     public function onComment($data)
     {
-        if ($this->_stripComments)
-            return;
         $this->pushNode(new PHPTAL_Dom_Comment($data, $this->encoding));
     }
 
@@ -181,6 +174,5 @@ class PHPTAL_Dom_DocumentBuilder
     private $_stack;   /* array<PHPTAL_Dom_Node> */
     private $_current; /* PHPTAL_Dom_Node */
     private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
-    private $_stripComments = false;
 }
 
