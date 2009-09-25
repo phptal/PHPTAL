@@ -1278,7 +1278,7 @@ class PHPTAL
             'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',
         );
 
-            if (substr($class, 0, 7) !== 'PHPTAL_') return;
+        if (substr($class, 0, 7) !== 'PHPTAL_') return;
 
         if (isset($except[$class])) {
             $class = $except[$class];

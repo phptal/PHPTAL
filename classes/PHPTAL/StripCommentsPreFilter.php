@@ -6,7 +6,14 @@ class PHPTAL_StripCommentsPreFilter extends PHPTAL_PreFilter
     {
         foreach($element->childNodes as $node) {
             if ($node instanceof PHPTAL_Dom_Comment) {
-                $node->parentNode->removeChild($node);
+                $ns = $element->getNamespaceURI();
+                $ln = $element->getLocalName();
+                if (($ns === '' || $ns === 'http://www.w3.org/1999/xhtml') && ($ln === 'script' || $ln === 'style')) {                    
+                    $textNode = new PHPTAL_Dom_CDATASection($node->getValueEscaped(), $node->getEncoding());                    
+                    $node->parentNode->replaceChild($textNode,$node);                    
+                } else {
+                    $node->parentNode->removeChild($node);
+                }
             }
             else if ($node instanceof PHPTAL_Dom_Element) {
                 $this->filterDOM($node);

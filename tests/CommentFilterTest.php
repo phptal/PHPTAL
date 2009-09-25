@@ -15,18 +15,36 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/CommentFilter.php';
-PHPTAL::restoreIncludePath();
-
 class CommentFilterTest extends PHPTAL_TestCase
 {
-	function testIt(){
+	function testStripComments() {
 		$t = $this->newPHPTAL('input/comment-filter-01.html');
-		$t->setPreFilter(new PHPTAL_CommentFilter());
+		$t->addPreFilter("strip_comments");
 		$res = $t->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/comment-filter-01.html');
 		$this->assertEquals($exp,$res);
+	}
+
+	function testPreservesScript() {
+		$t = $this->newPHPTAL();
+		$t->addPreFilter("strip_comments");
+		$t->setSource('<script>//<!--
+		alert("1990s called"); /* && */
+		//--></script>');
+		
+		$this->assertEquals(trim_string('<script>//<![CDATA[
+		alert("1990s called"); /* && */
+		//]]></script>'),trim_string($t->execute()));
+	}
+
+	function testNamespaceAware() {
+		$t = $this->newPHPTAL();
+		$t->addPreFilter("strip_comments");
+		$t->setSource('<script xmlns="http://example.com/foo">//<!--
+		alert("1990s called"); /* && */
+		//--></script>');
+		
+		$this->assertEquals(trim_string('<script xmlns="http://example.com/foo">//</script>'),trim_string($t->execute()));
 	}
 }
