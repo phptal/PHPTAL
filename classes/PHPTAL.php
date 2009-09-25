@@ -539,6 +539,8 @@ class PHPTAL
      * Returns string that is unique for every different configuration of prefilters.
      * Result of prefilters may be cached until this string changes.
      *
+     * You can override this function.
+     * 
      * @return string
      */
     protected function getPreFiltersCacheId()
@@ -594,7 +596,7 @@ class PHPTAL
             if (!$loaded_classname) {
                 $all_paths = array_unique(call_user_func_array('array_merge',$pluginloader->getPaths()));
                 
-                throw new PHPTAL_ConfigurationException("Could not load class $classname for prefilter '$name' in: ".implode(', ',$all_paths).". Load class before execution of the template");
+                throw new PHPTAL_ConfigurationException("Could not load class $classname for prefilter '$name' in: ".implode(', ',$all_paths).". Load class before execution of the template or add path to plugin loader");
             }
             $classname = $loaded_classname;
         }
@@ -602,12 +604,12 @@ class PHPTAL
         return new $classname();
     }
 
-    public function setPluginLoader($pl)
+    final public function setPluginLoader($pl)
     {
         $this->pluginloader = $pl;
     }
 
-    protected function getPluginLoader()
+    final public function getPluginLoader()
     {
         if (!$this->pluginloader) {
             
@@ -1153,7 +1155,8 @@ class PHPTAL
     {
         self::setIncludePath();
         require_once 'PHPTAL/Dom/DocumentBuilder.php';
-        require_once 'PHPTAL/Php/CodeGenerator.php';
+        require_once 'PHPTAL/Php/State.php';
+        require_once 'PHPTAL/Php/CodeWriter.php';
         self::restoreIncludePath();
 
         // instantiate the PHPTAL source parser
@@ -1177,16 +1180,16 @@ class PHPTAL
                 }
             }
         }
+        
+        $state = new PHPTAL_Php_State();
+        $state->setEncoding($this->getEncoding());
+        $state->setCacheFilesBaseName($this->getCodePath());
+        $state->setOutputMode($this->getOutputMode());
 
-        $generator = new PHPTAL_Php_CodeGenerator(
-            $this->getFunctionName(),
-            $this->_source->getRealPath(),
-            $this->_encoding,
-            $this->_outputMode,
-            $this->getCodePath());
-        $result = $generator->generateCode($tree);
+        $codewriter = new PHPTAL_Php_CodeWriter($state);
+        $codewriter->doTemplateFile($this->getFunctionName(), $tree);
 
-        return $result;
+        return $codewriter->getResult();
     }
 
     /**
