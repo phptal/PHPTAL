@@ -265,9 +265,7 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     }
 
     public function onCDATASection($data) {
-        $this->specifics++;
-        $this->allow_xmldec = false;
-        $this->result .= '<![CDATA['.$data.']]>';
+        $this->onProcessingInstruction('<![CDATA['.$data.']]>');
     }
 
     public function onProcessingInstruction($data)
@@ -278,7 +276,7 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     }
 
     public function onComment($data) {
-        $this->onProcessingInstruction($data); // doesn't matter
+        $this->onProcessingInstruction('<!--'.$data.'-->');
     }
 
     public function onElementStart($name, array $attributes) {

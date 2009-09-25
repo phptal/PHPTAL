@@ -230,7 +230,7 @@ class PHPTAL_Dom_SaxXmlParser
                                 $this->raiseError("Ill-formed comment. XML comments are not allowed to contain '--' or start/end with '-': ".substr($src, $mark+4, $i-$mark+1-7));
                             }
 
-                            $builder->onComment($this->checkEncoding(substr($src, $mark, $i-$mark+1)));
+                            $builder->onComment($this->checkEncoding(substr($src, $mark+4, $i-$mark+1-7)));
                             $mark = $i+1; // mark text start
                             $state = self::ST_TEXT;
                         }
