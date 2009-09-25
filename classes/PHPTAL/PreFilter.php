@@ -56,7 +56,7 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
     }
 
     /**
-     * Receives DOM node that had phptal:prefilter attribute calling this filter.
+     * Receives DOM node that had phptal:filter attribute calling this filter.
      * Should modify node in place.
      * Prefilters are called only once before template is compiled, so they can be slow.
      *

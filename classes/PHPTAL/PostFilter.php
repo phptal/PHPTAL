@@ -41,7 +41,7 @@ abstract class PHPTAL_PostFilter implements PHPTAL_Filter
     }
 
     /**
-     * Receives generated markup fragment that had phptal:postfilter attribute calling this filter.
+     * Receives generated markup fragment that had phptal:filter attribute calling this filter.
      * Postfilters are called every time template is executed, and should be as fast as possible.
      *
      * Default implementation calls filter(). Override it.

@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_1b2');
+define('PHPTAL_VERSION', '1_2_1b4');
 
 
 /* If you want to use autoload, comment out all lines starting with require_once 'PHPTAL
@@ -137,7 +137,6 @@ class PHPTAL
     /**
      * should all comments be stripped
      */
-    protected $_stripComments = false;
 
     // configuration properties
 
@@ -178,6 +177,11 @@ class PHPTAL
      */
     private static $include_path_set_nesting = 0;
     //}}}
+    
+    /**
+     * @see PHPTAL::setPluginLoader()
+     */
+    private $pluginloader;
 
     /**
      * PHPTAL Constructor.
@@ -332,7 +336,13 @@ class PHPTAL
      */
     public function stripComments($bool)
     {
-        $this->_stripComments = $bool;
+        $this->resetPrepared();
+        
+        if ($bool) {
+            $this->_prefilters['_phptal_strip_comments_'] = "strip_comments";
+        } else {
+            unset($this->_prefilters['_phptal_strip_comments_']);
+        }
         return $this;
     }
 
@@ -472,52 +482,52 @@ class PHPTAL
 
 
     /**
-     * Set template pre filter. It will be called once before template is compiled.
+     * Please use addPreFilter instead.
+     * 
+     * This method and use of PHPTAL_Filter for prefilters are deprecated.
      *
-     * Please use addPreFilter instead
-     *
-     * @see addPreFilter
+     * @see PHPTAL::addPreFilter()
      * @deprecated
      */
     final public function setPreFilter(PHPTAL_Filter $filter)
     {
-        $this->_prepared = false;
-        $this->_functionName = null;
-        $this->_codeFile = null;
-
+        $this->resetPrepared();
         $this->_prefilters['_phptal_old_filter_'] = $filter;
     }
 
     /**
-     * Add new prefilter to filter chain. Filter must extend PHPTAL_PreFilter class.
+     * Add new prefilter to filter chain. 
+     * Prefilters are called only once template is compiled.
      * 
-     * If you specify $key, prefilter will be added under specific key. 
-     * Adding new prefilter with same name will replace it instead.
+     * You can pass either PHPTAL_PreFilter object or (faster)
+     * a string with name the prefilter to apply.
      * 
-     * @param PHPTAL_PreFilter $filter filter to add
-     * @param string $key name for filter or NULL. Must not be numeric.
+     * Name of the prefilter will be used as prefix for prefilter class name.
+     * See getPreFilterByName() for details.
+     * 
+     * @see PHPTAL::getPreFilterByName()
+     * @param mixed $filter PHPTAL_PreFilter object or name of prefilter to add
      * @return PHPTAL
      */
-    final public function addPreFilter(PHPTAL_PreFilter $filter, $key = NULL)
+    final public function addPreFilter($filter)
     {
-        $this->_prepared = false;
-        $this->_functionName = null;
-        $this->_codeFile = null;
-
-        if ($key !== NULL) {
-            if (is_numeric($key)) {
-                throw new PHPTAL_ConfigurationException("Key for prefilter must not be non-numeric string");
-            }
-            $this->_prefilters[$key] = $filter;
-        } else {
-            $this->_prefilters[] = $filter;
+        $this->resetPrepared();
+        
+        if (!is_string($filter) && !$filter instanceof PHPTAL_PreFilter) {
+            throw new PHPTAL_ConfigurationException("addPreFilter expects PHPTAL_PreFilter object or string, which is class name of the prefilter");
         }
+        
+        $this->_prefilters[] = $filter;
         return $this;
     }
 
     /**
-     * Array with all prefilter objects
-     *
+     * Array with all prefilter objects *or strings* for named prefilters.
+     * Array keys may be non-numeric!
+     * 
+     * To get actual prefilter object from strings, use getPreFilterByName().
+     * 
+     * @see PHPTAL::getPreFilterByName()
      * @return array
      */
     protected function getPreFilters()
@@ -526,8 +536,8 @@ class PHPTAL
     }
 
     /**
-     * Return string that is unique for every different configuration of prefilters.
-     * Result of prefilters may be cached unless this string changes.
+     * Returns string that is unique for every different configuration of prefilters.
+     * Result of prefilters may be cached until this string changes.
      *
      * @return string
      */
@@ -537,16 +547,108 @@ class PHPTAL
         foreach($this->getPreFilters() as $key => $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 $cacheid .= $key.$prefilter->getCacheId();
-            } else {
+            } elseif ($prefilter instanceof PHPTAL_Filter) {
                 $cacheid .= $key.get_class($prefilter);
+            } else {
+                $cacheid .= $key.$prefilter;
             }
         }
         return $cacheid;
     }
 
     /**
+     * Load and instantiate filter with given name.
+     * If you pass PHPTAL_PreFilter object instead of a string,
+     * it will be returned.
+     *
+     * By default this method will try to autoload class with name
+     * made by replacing underscores with CamelCase and
+     * appending "PreFilter" to filter name.
+     * 
+     * foo_bar → FooBarPreFilter
+     * 
+     * If autoload fails, it will try to load file with
+     * name of the class and '.php' appended.
+     * 
+     * @param mixed $name base name of prefilter
+     */
+    final public function getPreFilterByName($name)
+    {
+        if (!is_string($name)) {
+            if ($name instanceof PHPTAL_Filter) {
+                return $name;
+            }
+            throw new PHPTAL_ConfigurationException("Illegal argument. Name of a filter expected");
+        }
+
+        if (!preg_match('/^[a-z][a-z_0-9]*$/i',$name)) {
+            throw new PHPTAL_ConfigurationException("Name of the prefilter '$name' is not alphanumeric or does not start with a letter");
+        }
+
+        $classname = ucfirst($name).'PreFilter';
+        $classname = preg_replace('/_([a-zA-Z])/e','strtoupper("\1")',$classname);
+
+        if (!class_exists($classname,false)) {
+            $pluginloader = $this->getPluginLoader();
+            $loaded_classname = $pluginloader->load($classname);
+            if (!$loaded_classname) {
+                $all_paths = array_unique(call_user_func_array('array_merge',$pluginloader->getPaths()));
+                
+                throw new PHPTAL_ConfigurationException("Could not load class $classname for prefilter '$name' in: ".implode(', ',$all_paths).". Load class before execution of the template");
+            }
+            $classname = $loaded_classname;
+        }
+        
+        return new $classname();
+    }
+
+    public function setPluginLoader($pl)
+    {
+        $this->pluginloader = $pl;
+    }
+
+    protected function getPluginLoader()
+    {
+        if (!$this->pluginloader) {
+            
+            PHPTAL::setIncludePath();
+            require_once 'PHPTAL/PluginLoader.php';
+            require_once 'PHPTAL/PreFilter.php';
+            PHPTAL::restoreIncludePath();
+            
+            $this->pluginloader = new PHPTAL_PluginLoader();
+            $this->pluginloader->addPrefixPath('PHPTAL',dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPTAL');
+        }
+        return $this->pluginloader;
+    }
+
+    /**
+     * Instantiate prefilters
+     * 
+     * @return array of PHPTAL_[Pre]Filter objects
+     */
+    private function getInitializedPreFilters()
+    {
+        $prefilters = $this->getPreFilters();
+        
+        foreach($prefilters as &$prefilter) {
+            if (is_string($prefilter)) {
+                $prefilter = $this->getPreFilterByName($prefilter);
+            }
+            if ($prefilter instanceof PHPTAL_PreFilter) {
+                $prefilter->setPHPTAL($this);
+            }
+        }
+        return $prefilters;
+    }
+    
+    /**
      * Set template post filter.
      * It will be called every time after template generates output.
+     * 
+     * See PHPTAL_PostFilter class.
+     * 
+     * @param PHPTAL_Filter $filter filter instance
      */
     public function setPostFilter(PHPTAL_Filter $filter)
     {
@@ -695,7 +797,9 @@ class PHPTAL
      * execution of macros from templates.
      *
      * $this is caller's context (the file where execution had originally started)
-     * @param $local_tpl is PHPTAL instance of the file in which macro is defined (it will be different from $this if it's external macro call)
+     * 
+     * @param PHPTAL $local_tpl is PHPTAL instance of the file in which macro is defined 
+     *                          (it will be different from $this if it's external macro call)
      * @access private
      */
     final public function _executeMacroOfTemplate($path, PHPTAL $local_tpl)
@@ -838,6 +942,7 @@ class PHPTAL
 
     /**
      * set how long compiled templates and phptal:cache files are kept
+     * 
      * @param $days number of days
      */
     public function setCacheLifetime($days)
@@ -1054,20 +1159,18 @@ class PHPTAL
         // instantiate the PHPTAL source parser
         $parser = new PHPTAL_Dom_SaxXmlParser($this->_encoding);
         $builder = new PHPTAL_Dom_DocumentBuilder();
-        $builder->stripComments($this->_stripComments);
 
         $data = $this->_source->getData();
         $realpath = $this->_source->getRealPath();
 
-        foreach($this->getPreFilters() as $prefilter) {
-            if ($prefilter instanceof PHPTAL_PreFilter) {
-                $prefilter->setPHPTAL($this);
-            }
+        $prefilters = $this->getInitializedPreFilters();
+
+        foreach($prefilters as $prefilter) {
             $data = $prefilter->filter($data);
         }
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
-        foreach($this->getPreFilters() as $prefilter) {
+        foreach($prefilters as $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 if ($prefilter->filterDOM($tree)) {
                     throw new PHPTAL_ConfigurationException("Don't return value from filterDOM()");
