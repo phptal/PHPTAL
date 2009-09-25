@@ -41,7 +41,10 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     public $headPrintCondition = false;
     public $footPrintCondition = false;
     public $hidden = false;
+
+    // W3C DOM interface
     public $childNodes = array();
+    public $parentNode;
 
     /**
      * @param string $qname           qualified name of the element, e.g. "tal:block"
@@ -153,6 +156,18 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     {
         $child->parentNode = $this;
         $this->childNodes[] = $child;
+    }
+    
+    public function removeChild(PHPTAL_Dom_Node $child)
+    {
+        foreach($this->childNodes as $k => $node) {
+            if ($child === $node) {
+                $child->parentNode = null;
+                array_splice($this->childNodes,$k,1);
+                return;
+            }
+        }
+        throw new PHPTAL_Exception("Given node is not child of ".$this->getQualifiedName());
     }
 
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
