@@ -76,4 +76,31 @@ class DOMTest extends PHPTAL_TestCase
         $this->assertFalse(isset($el1->childNodes[1]));
         
     }
+    
+    function testReplaceChild()
+    {
+        $el1 = $this->newElement();
+        $el2 = $this->newElement();
+        $el3 = $this->newElement();
+        $el4 = $this->newElement();
+        
+        $r = $this->newElement();
+
+        $el1->appendChild($el2);
+        $el1->appendChild($el3);
+        $el1->appendChild($el4);
+
+        $this->assertEquals(3,count($el1->childNodes));
+        $this->assertSame($el3,$el1->childNodes[1]);
+
+        $el1->replaceChild($r, $el3);   
+
+        $this->assertEquals(3,count($el1->childNodes));
+        $this->assertSame($el2,$el1->childNodes[0]);
+        $this->assertSame($r,$el1->childNodes[1]);
+        $this->assertSame($el4,$el1->childNodes[2]);
+        
+        $this->assertNull($el3->parentNode);       
+        $this->assertSame($el1,$r->parentNode);       
+    }
 }

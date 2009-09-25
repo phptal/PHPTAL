@@ -169,6 +169,19 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         }
         throw new PHPTAL_Exception("Given node is not child of ".$this->getQualifiedName());
     }
+    
+    public function replaceChild(PHPTAL_Dom_Node $newElement, PHPTAL_Dom_Node $oldElement)
+    {
+        foreach($this->childNodes as $k => $node) {
+            if ($node === $oldElement) {
+                $oldElement->parentNode = NULL;
+                $newElement->parentNode = $this;
+                $this->childNodes[$k] = $newElement;
+                return;
+            }
+        }
+        throw new PHPTAL_Exception("Given node is not child of ".$this->getQualifiedName());
+    }
 
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
