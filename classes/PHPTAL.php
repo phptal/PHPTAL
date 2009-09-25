@@ -350,9 +350,8 @@ class PHPTAL
      */
     public function setOutputMode($mode)
     {
-        $this->_prepared = false;
-        $this->_functionName = null;
-        $this->_codeFile = null;
+        $this->resetPrepared();
+        
         
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
@@ -381,9 +380,7 @@ class PHPTAL
             $this->_encoding = $enc;
             if ($this->_translator) $this->_translator->setEncoding($enc);
 
-            $this->_prepared = false;
-            $this->_functionName = null;
-            $this->_codeFile = null;
+            $this->resetPrepared();
         }
         return $this;
     }
@@ -407,9 +404,7 @@ class PHPTAL
     public function setPhpCodeDestination($path)
     {
         $this->_phpCodeDestination = rtrim($path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-        $this->_functionName = null;
-        $this->_codeFile = null;
-        $this->_prepared = false;
+        $this->resetPrepared();
         return $this;
     }
 
@@ -428,8 +423,7 @@ class PHPTAL
     public function setPhpCodeExtension($extension)
     {
         $this->_phpCodeExtension = $extension;
-        $this->_codeFile = null;
-        $this->_prepared = false;
+        $this->resetPrepared();
         return $this;
     }
 
@@ -767,6 +761,13 @@ class PHPTAL
         $this->_codeFile = $this->getPhpCodeDestination() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
     }
 
+    protected function resetPrepared()
+    {
+        $this->_prepared = false;
+        $this->_functionName = null;
+        $this->_codeFile = null;
+    }
+
     /**
      * Prepare template without executing it.
      */
@@ -806,7 +807,7 @@ class PHPTAL
                     if (!function_exists($this->getFunctionName())) {
                         $msg = ob_get_contents();
                         // greedy .* ensures last match
-                        if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line =$m[1]; else $line=0;
+                        if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line=$m[1]; else $line=0;
                         throw new PHPTAL_TemplateException($msg, $this->getCodePath(), $line);
                     }
                 }
