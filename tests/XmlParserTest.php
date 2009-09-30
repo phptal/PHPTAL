@@ -256,6 +256,35 @@ xxxx/>
             $this->assertRegExp("/element_e.*element_d.*element_c.*element_b.*element_a/",$e->getMessage());
         }
     }
+    
+    public function testSPRY()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<html>
+        <body>
+        <div metal:define-macro="SomeMacro" xmlns:spry="http://ns.adobe.com/spry" >
+        <div spry:region="someSpryRegion">
+          <p spry:if="\'{someRegion::element}\' != \'hello\'">{someSpryRegion::element}</p>
+        </div>
+        </div>
+        </body>
+        </html>');
+        $tpl->prepare();
+    }
+    
+    public function testSPRY2()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->phptal_var = 'ok';
+        $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
+        <input type="text" value="${phptal_var}" spry:if="i == 1" /></form></body></html>');
+        
+        $this->assertEquals(trim_string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
+        <input type="text" value="ok" spry:if="i == 1"/></form></body></html>'),trim_string($tpl->execute()));
+    }
+    
 }
 
 class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
