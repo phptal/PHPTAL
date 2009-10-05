@@ -22,25 +22,21 @@ PHPTAL::restoreIncludePath();
 class PhptalPathTest_DummyClass
 {
     public $foo;
-}
-
-/* protected get/isset doesn't work in PHP 5.3
-class PhptalPathTest_DummyIssetClass
-{
-    protected function __isset($isset)
+    
+    protected function protTest()
     {
-        return false;
+        return 'prot-method';
     }
-}
+    
+    public $protTest = 'prot-property';
 
-class PhptalPathTest_DummyGetClass
-{
-    protected function __get($anything)
+    public function pubTest()
     {
-        return 'whatever';
+        return 'pub-method';
     }
+    
+    public $pubTest = 'pub-property';
 }
-*/
 
 class PhptalPathTest extends PHPTAL_TestCase
 {
@@ -51,25 +47,23 @@ class PhptalPathTest extends PHPTAL_TestCase
         $this->assertEquals(1, $result);
     }
 
-    /* protected get/isset doesn't work in PHP 5.3
-    function testProtectedIsset()
+    function testProtectedMethodIgnored()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->protected = new PhptalPathTest_DummyIssetClass;
-        $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
-        $res = $tpl->execute();
-        $this->assertEquals($res,'<p>ok</p>');
+        $tpl->obj = new PhptalPathTest_DummyClass();
+        $tpl->setSource('<test tal:content="obj/protTest"></test>');
+        
+        $this->assertEquals('<test>prot-property</test>',$tpl->execute());
     }
 
-    function testProtectedGet()
+    function testPublicMethodFirst()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->protected = new PhptalPathTest_DummyGetClass;
-        $tpl->setSource('<p tal:content="protected/fail | \'ok\'"></p>');
-        $res = $tpl->execute();
-        $this->assertEquals($res,'<p>ok</p>');
+        $tpl->obj = new PhptalPathTest_DummyClass();
+        $tpl->setSource('<test tal:content="obj/pubTest"></test>');
+        
+        $this->assertEquals('<test>pub-method</test>',$tpl->execute());
     }
-    */
 
     function testDefinedButNullProperty()
     {

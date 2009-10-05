@@ -356,13 +356,13 @@ class PHPTAL_Context
         foreach (explode('/', $path) as $current) {
             // object handling
             if (is_object($base)) {
-                // look for method
-                if (method_exists($base, $current)) {
+                // look for method. Both method_exists and is_callable are required because of __call() and protected methods
+                if (method_exists($base, $current) && is_callable(array($base, $current))) {
                     $base = $base->$current();
                     continue;
                 }
 
-                // look for variable
+                // look for property
                 if (property_exists($base, $current)) {
                     $base = $base->$current;
                     continue;
@@ -379,14 +379,14 @@ class PHPTAL_Context
                 }
 
                 // look for isset (priority over __get)
-                if (method_exists($base, '__isset') && is_callable(array($base, '__isset'))) {
+                if (method_exists($base, '__isset')) {
                     if ($base->__isset($current)) {
                         $base = $base->$current;
                         continue;
                     }
                 }
                 // ask __get and discard if it returns null
-                elseif (method_exists($base, '__get') && is_callable(array($base, '__get'))) {
+                elseif (method_exists($base, '__get')) {
                     $tmp = $base->$current;
                     if (null !== $tmp) {
                         $base = $tmp;
