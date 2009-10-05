@@ -1759,7 +1759,7 @@ php:SomeClass::$staticVar
                               reference templates without specifying the real path, but
                               instead their relative path within the repository.
                       </para>
-                      <tip><para>It's like <code>include_path</code>, but for PHPTAL templates only.</para></tip>
+                      <tip><para>It's like <code>include_path</code>, but for <acronym>PHPTAL</acronym> templates only.</para></tip>
             </simplesect>
             <simplesect id="set-code-destination">
                 <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
