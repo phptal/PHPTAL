@@ -40,7 +40,7 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
 
         if ($srcFile) {
             $this->file = $srcFile;
-            $this->line = $srcLine;
+            $this->line = (int)$srcLine;
         }
     }
 
