@@ -62,24 +62,29 @@ class PHPTAL
     const XML   = 22;
     const HTML5 = 55;
 
+    /**
+     * @see getPreFilters()
+     */
     protected $_prefilters = array();
 
     /**
+     * Prefilters have been redesigned. Old property is no longer used.
+     * 
      * @deprecated
      */
     private $_prefilter = 'REMOVED: DO NOT USE';
     protected $_postfilter = null;
 
     /**
-     *  list of template source repositories
+     *  list of template source repositories given to file source resolver
      */
     protected $_repositories = array();
     /**
-     *  template path
+     *  template path (path that has been set, not necessarily loaded)
      */
     protected $_path = null;
     /**
-     *  template source resolvers
+     *  template source resolvers (classes that search for templates by name)
      */
     protected $_resolvers = array();
     /**
@@ -116,10 +121,12 @@ class PHPTAL
      * current execution context
      */
     protected $_context = null;
+    
     /**
      * current template file (changes within macros)
      */
     public  $_file = false;
+    
     /**
      * list of on-error caught exceptions
      */
@@ -176,12 +183,12 @@ class PHPTAL
      * keeps track of multiple calls to setIncludePath()
      */
     private static $include_path_set_nesting = 0;
-    //}}}
     
     /**
      * @see PHPTAL::setPluginLoader()
      */
     private $pluginloader;
+    //}}}
 
     /**
      * PHPTAL Constructor.
@@ -199,7 +206,7 @@ class PHPTAL
             $this->setPhpCodeDestination(sys_get_temp_dir());
         } elseif (substr(PHP_OS, 0, 3) == 'WIN') {
             if (file_exists('c:\\WINNT\\Temp\\')) {
-                $this->setPhpCodeDestination('c:\\WINNT\\Temp');
+                $this->setPhpCodeDestination('c:\\WINNT\\Temp\\');
             } else {
                 $this->setPhpCodeDestination('c:\\WINDOWS\\Temp\\');
             }
@@ -264,11 +271,10 @@ class PHPTAL
      */
     public function setSource($src, $path=false)
     {
-        PHPTAL::setIncludePath();
-        require_once 'PHPTAL/StringSource.php';
-        PHPTAL::restoreIncludePath();
+        if (!class_exists('PHPTAL_StringSource')) self::autoload('PHPTAL_StringSource');
 
         if (!$path) {
+            // this prefix tells string source that path has been faked
             $path = PHPTAL_StringSource::NO_PATH_PREFIX.md5($src).'>';
         }
 
@@ -361,7 +367,6 @@ class PHPTAL
     public function setOutputMode($mode)
     {
         $this->resetPrepared();
-        
         
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
@@ -669,7 +674,9 @@ class PHPTAL
 
     /**
      * Returns trigger for specified phptal:id.
+     * 
      * @param string $id phptal:id
+     * @return PHPTAL_Trigger or NULL
      */
     public function getTrigger($id)
     {
@@ -1165,18 +1172,18 @@ class PHPTAL
         self::restoreIncludePath();
 
         // instantiate the PHPTAL source parser
-        $parser = new PHPTAL_Dom_SaxXmlParser($this->_encoding);
-        $builder = new PHPTAL_Dom_DocumentBuilder();
-
         $data = $this->_source->getData();
-        $realpath = $this->_source->getRealPath();
 
         $prefilters = $this->getInitializedPreFilters();
 
         foreach($prefilters as $prefilter) {
             $data = $prefilter->filter($data);
         }
-        
+
+        $parser = new PHPTAL_Dom_SaxXmlParser($this->_encoding);
+        $builder = new PHPTAL_Dom_DocumentBuilder();
+        $realpath = $this->_source->getRealPath();
+
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
         foreach($prefilters as $prefilter) {
