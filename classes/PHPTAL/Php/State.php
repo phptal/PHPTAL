@@ -21,18 +21,17 @@ require_once 'PHPTAL/Tales.php';
  */
 class PHPTAL_Php_State
 {
-    private $_debug      = false;
-    private $_talesMode  = 'tales';
-    private $_encoding   = 'UTF-8';
-    private $_outputMode = PHPTAL::XHTML;
-    private $cache_basename = '/tmp/phptal';
+    private $debug      = false;
+    private $tales_mode = 'tales';
+    private $encoding;
+    private $output_mode;
+    private $phptal;
 
-    /**
-     * used by codegenerator to pass information from PHPTAL class. Don't use otherwise.
-     */
-    public function setCacheFilesBaseName($name)
+    function __construct(PHPTAL $phptal)
     {
-        $this->cache_basename = $name;
+        $this->phptal = $phptal; 
+        $this->encoding = $phptal->getEncoding();
+        $this->output_mode = $phptal->getOutputMode();
     }
 
     /**
@@ -40,7 +39,7 @@ class PHPTAL_Php_State
      */
     public function getCacheFilesBaseName()
     {
-        return $this->cache_basename;
+        return $this->phptal->getCodePath();
     }
 
     /**
@@ -48,8 +47,8 @@ class PHPTAL_Php_State
      */
     public function setDebug($bool)
     {
-        $old = $this->_debug;
-        $this->_debug = $bool;
+        $old = $this->debug;
+        $this->debug = $bool;
         return $old;
     }
 
@@ -58,7 +57,7 @@ class PHPTAL_Php_State
      */
     public function isDebugOn()
     {
-        return $this->_debug;
+        return $this->debug;
     }
 
     /**
@@ -70,22 +69,14 @@ class PHPTAL_Php_State
      */
     public function setTalesMode($mode)
     {
-        $old = $this->_talesMode;
-        $this->_talesMode = $mode;
+        $old = $this->tales_mode;
+        $this->tales_mode = $mode;
         return $old;
     }
 
     public function getTalesMode()
     {
-        return $this->_talesMode;
-    }
-
-    /**
-     * must be same as input's encoding and can't change.
-     */
-    public function setEncoding($enc)
-    {
-        $this->_encoding = $enc;
+        return $this->tales_mode;
     }
 
     /**
@@ -93,15 +84,7 @@ class PHPTAL_Php_State
      */
     public function getEncoding()
     {
-        return $this->_encoding;
-    }
-
-    /**
-     * @param $mode one of PHPTAL::XHTML, PHPTAL::XML, PHPTAL::HTML5
-     */
-    public function setOutputMode($mode)
-    {
-        $this->_outputMode = $mode;
+        return $this->encoding;
     }
 
     /**
@@ -111,7 +94,15 @@ class PHPTAL_Php_State
      */
     public function getOutputMode()
     {
-        return $this->_outputMode;
+        return $this->output_mode;
+    }
+
+    /**
+     * Load prefilter
+     */
+    public function getPreFilterByName($name)
+    {
+        return $this->phptal->getPreFilterByName($name);
     }
 
     /**
@@ -120,7 +111,7 @@ class PHPTAL_Php_State
      */
     public function evaluateExpression($expression)
     {
-        if ($this->_talesMode === 'php') {
+        if ($this->tales_mode === 'php') {
             return PHPTAL_Php_TalesInternal::php($expression);
         }
         return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression,false);
@@ -132,7 +123,7 @@ class PHPTAL_Php_State
      */
     private function compileTalesToPHPExpression($expression)
     {
-        if ($this->_talesMode === 'php') {
+        if ($this->tales_mode === 'php') {
             return PHPTAL_Php_TalesInternal::php($expression);
         }
         return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression,false);
@@ -143,7 +134,7 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInString($string)
     {
-        if ($this->_talesMode == 'tales') {
+        if ($this->tales_mode == 'tales') {
             return PHPTAL_Php_TalesInternal::string($string);
         }
 

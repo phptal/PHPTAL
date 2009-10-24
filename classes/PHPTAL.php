@@ -1153,7 +1153,7 @@ class PHPTAL
     }
 
     /**
-     * parse currently set template
+     * Parse currently set template, prefilter and generate PHP code.
      * 
      * @return string (compiled PHP code)
      */
@@ -1177,6 +1177,7 @@ class PHPTAL
         foreach($prefilters as $prefilter) {
             $data = $prefilter->filter($data);
         }
+        
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
         foreach($prefilters as $prefilter) {
@@ -1187,10 +1188,7 @@ class PHPTAL
             }
         }
         
-        $state = new PHPTAL_Php_State();
-        $state->setEncoding($this->getEncoding());
-        $state->setCacheFilesBaseName($this->getCodePath());
-        $state->setOutputMode($this->getOutputMode());
+        $state = new PHPTAL_Php_State($this);
 
         $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doTemplateFile($this->getFunctionName(), $tree);
