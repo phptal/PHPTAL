@@ -386,7 +386,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         if ($codewriter->getOutputMode() === PHPTAL::HTML5) {
             $codewriter->pushHTML('</'.$this->getLocalName().'>');
         } else {
-            $codewriter->pushHTML('</'.$this->qualifiedName.'>');
+            $codewriter->pushHTML('</'.$this->getQualifiedName().'>');
         }
         
         if ($this->footPrintCondition) {
@@ -518,6 +518,11 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     {
         $n = explode(':', $this->qualifiedName,2);
         return end($n);
+    }
+    
+    function __toString()
+    {
+        return '<{'.$this->getNamespaceURI().'}:'.$this->getLocalName().'>';
     }
 }
 

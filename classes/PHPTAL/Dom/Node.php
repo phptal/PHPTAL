@@ -81,7 +81,7 @@ abstract class PHPTAL_Dom_Node
      */
     function getValue()
     {
-        return html_entity_decode($this->value_escaped,ENT_QUOTES, $this->encoding);
+        return html_entity_decode($this->getValueEscaped(),ENT_QUOTES, $this->encoding);
     }
 
     /**
@@ -136,5 +136,10 @@ abstract class PHPTAL_Dom_Node
      * @deprecated
      */
     function getName(){ return $this->getQualifiedName(); }
+    
+    function __toString()
+    {
+        return " “".$this->getValue()."” ";
+    }
 }
 
