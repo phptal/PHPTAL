@@ -117,7 +117,7 @@ class PHPTAL_Dom_SaxXmlParser
             $builder->onDocumentStart();
 
             $i=0;
-            // remove BOM (utf8 byte order mark)...
+            // remove BOM (UTF-8 byte order mark)...
             if (substr($src, 0, 3) === self::BOM_STR) {
                 $i=3;
             }

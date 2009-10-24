@@ -103,44 +103,4 @@ class DOMTest extends PHPTAL_TestCase
         $this->assertNull($el3->parentNode);       
         $this->assertSame($el1,$r->parentNode);       
     }
-    
-    function testNormalizeSpaceRemovesEmpty() 
-    {
-        $el = $this->newElement();
-        $el->appendChild(new PHPTAL_Dom_Text('','UTF-8'));
-        $el->appendChild(new PHPTAL_Dom_Text('','UTF-8'));
-        
-        $this->assertEquals(2, count($el->childNodes));
-        
-        $el->normalizeSpace();
-        
-        $this->assertEquals(0, count($el->childNodes));        
-    }
-    
-    function testNormalizeSpaceMerges() 
-    {
-        $el = $this->newElement();
-        $el->appendChild(new PHPTAL_Dom_Text('a','UTF-8'));
-        $el->appendChild(new PHPTAL_Dom_Text('b','UTF-8'));
-        
-        $this->assertEquals(2, count($el->childNodes));
-        
-        $el->normalizeSpace();
-        
-        $this->assertEquals(1, count($el->childNodes));        
-    }
-    
-    function testNormalizeSpaceSkipsElement() 
-    {
-        $el = $this->newElement();
-        $el->appendChild(new PHPTAL_Dom_Text('a','UTF-8'));
-        $el->appendChild($this->newElement());
-        $el->appendChild(new PHPTAL_Dom_Text('b','UTF-8'));
-        
-        $this->assertEquals(3, count($el->childNodes));
-        
-        $el->normalizeSpace();
-        
-        $this->assertEquals(3, count($el->childNodes));        
-    }
 }
