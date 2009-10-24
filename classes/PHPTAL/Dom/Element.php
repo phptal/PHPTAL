@@ -440,6 +440,29 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         }
     }
 
+    public function normalizeSpace()
+    {
+        $lastTextNode = NULL;
+        foreach($this->childNodes as $node)
+        {
+            if ($node instanceOf PHPTAL_Dom_Text) {
+                if ('' === $node->getValueEscaped()) {
+                    $this->removeChild($node);
+                } else if ($lastTextNode) {
+                    $lastTextNode->setValueEscaped($lastTextNode->getValueEscaped().$node->getValueEscaped());
+                    $this->removeChild($node);
+                } else {
+                    $lastTextNode = $node;
+                }
+            } else {
+                $lastTextNode = NULL;
+                if ($node instanceOf PHPTAL_Dom_Element) {
+                    $node->normalizeSpace();
+                }
+            }
+        }
+    }
+
     private function isEmptyNode($mode)
     {
         return (($mode === PHPTAL::XHTML || $mode === PHPTAL::HTML5) && PHPTAL_Dom_Defs::getInstance()->isEmptyTagNS($this->getNamespaceURI(), $this->getLocalName())) ||
