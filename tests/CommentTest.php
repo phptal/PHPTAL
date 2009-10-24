@@ -78,5 +78,17 @@ class CommentTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals('<html><!-- left --></html>', $res);
     }
+    
+    function testCStyleComments()
+    {
+        $tpl = $this->newPHPTAL();
+        $src = '<script><!--
+            // comment
+            /* comment <tag> */
+            // comment
+            --></script>';
+        $tpl->setSource($src);            
+        $this->assertEquals($src,$tpl->execute());
+    }
 }
 

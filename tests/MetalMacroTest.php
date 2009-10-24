@@ -153,5 +153,37 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl->setSource('<tal:block metal:define-macro=" foo ">2</tal:block>');
         $tpl->execute();
     }
+    
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testExternalTemplateThrowsError()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<phptal:block metal:use-macro="input/metal-macro.10.html/throwerr"/>');
+        
+        $tpl->execute();
+    }
+
+    function testOnErrorCapturesErorrInExternalMacro()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<phptal:block tal:on-error="string:ok"
+        metal:use-macro="input/metal-macro.10.html/throwerr"/>');
+        
+        $this->assertEquals('ok',$tpl->execute());
+    }
+    
+    function testGlobalDefineInExternalMacro()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<metal:block>
+            <phptal:block tal:define="global test string:bad"
+            metal:use-macro="input/metal-macro.11.html/redefine"/>
+            ${test}
+            </metal:block>');
+        
+        $this->assertEquals('ok',trim($tpl->execute()));
+    }
 }
 

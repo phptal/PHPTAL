@@ -776,7 +776,7 @@ class PHPTAL
         try {
             $templateFunction($this, $this->_context);
         }
-        catch (PHPTAL_TemplateException $e)
+        catch(PHPTAL_TemplateException $e)
         {
             $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
             throw $e;
@@ -996,8 +996,8 @@ class PHPTAL
                     $time = filemtime($file);
                     if ($time && $time < $cacheFilesExpire) {
                         @unlink($file);
+                    }
                 }
-            }
             }
         }
     }
@@ -1090,6 +1090,7 @@ class PHPTAL
 
     /**
      * Returns array of exceptions caught by tal:on-error attribute.
+     * 
      * @return array<Exception>
      */
     public function getErrors()
@@ -1099,12 +1100,13 @@ class PHPTAL
 
     /**
      * Public for phptal templates, private for user.
+     * 
+     * @return void
      * @access private
      */
     public function addError(Exception $error)
     {
         $this->_errors[] =  $error;
-        return $this;
     }
 
     /**
@@ -1120,6 +1122,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
+     * 
      * @access private
      */
     public function getGlobalContext()
@@ -1129,6 +1132,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
+     * 
      * @access private
      */
     final public function pushContext()
@@ -1139,6 +1143,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
+     * 
      * @access private
      */
     final public function popContext()
@@ -1149,6 +1154,7 @@ class PHPTAL
 
     /**
      * parse currently set template
+     * 
      * @return string (compiled PHP code)
      */
     protected function parse()
