@@ -385,12 +385,14 @@ class PHPTAL
     }
 
     /**
-     * Set input and ouput encoding.
+     * Set input and ouput encoding. Encoding is case-insensitive.
+     * 
      * @param string $enc example: 'UTF-8'
      * @return $this
      */
     public function setEncoding($enc)
     {
+        $enc = strtoupper($enc);        
         if ($enc != $this->_encoding) {
             $this->_encoding = $enc;
             if ($this->_translator) $this->_translator->setEncoding($enc);

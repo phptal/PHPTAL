@@ -181,4 +181,11 @@ class PhptalTest extends PHPTAL_TestCase
             $this->fail("Thrown exception ".get_class($e)." (".$e->getMessage().") rather than PHPTAL_IOException");
         }
     }    
+    
+    function testEncodingUppercase()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setEncoding('utf-8');
+        $this->assertEquals('UTF-8', $tpl->getEncoding());
+    }
 }
