@@ -1,6 +1,6 @@
 <?php
 
-class PHPTAL_StripCommentsPreFilter extends PHPTAL_PreFilter 
+class PHPTAL_PreFilter_StripComments extends PHPTAL_PreFilter 
 {
     function filterDOM(PHPTAL_Dom_Element $element)
     {

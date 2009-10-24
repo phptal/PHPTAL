@@ -565,9 +565,9 @@ class PHPTAL
      *
      * By default this method will try to autoload class with name
      * made by replacing underscores with CamelCase and
-     * appending "PreFilter" to filter name.
+     * prepending "PreFilter_" to filter name.
      * 
-     * foo_bar → FooBarPreFilter
+     * foo_bar → PreFilter_FooBar
      * 
      * If autoload fails, it will try to load file with
      * name of the class and '.php' appended.
@@ -587,8 +587,7 @@ class PHPTAL
             throw new PHPTAL_ConfigurationException("Name of the prefilter '$name' is not alphanumeric or does not start with a letter");
         }
 
-        $classname = ucfirst($name).'PreFilter';
-        $classname = preg_replace('/_([a-zA-Z])/e','strtoupper("\1")',$classname);
+        $classname = 'PreFilter_'.preg_replace('/_([a-zA-Z])/e','strtoupper("\1")',ucfirst($name));
 
         if (!class_exists($classname,false)) {
             $pluginloader = $this->getPluginLoader();
