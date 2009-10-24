@@ -19,34 +19,18 @@
  */
 abstract class PHPTAL_PreFilter implements PHPTAL_Filter
 {
+    /**
+     * @see getPHPTAL()
+     */
     private $phptal;
-    
-    /**
-     * Set which instance of PHPTAL is using this filter.
-     * 
-     * @param PHPTAL $phptal instance
-     */
-    final function setPHPTAL(PHPTAL $phptal)
-    {
-        $this->phptal = $phptal;
-    }
-
-    /**
-     * Returns PHPTAL class instance that is currently using this prefilter.
-     * May return NULL if PHPTAL didn't start filtering yet.
-     * 
-     * @return PHPTAL or NULL
-     */
-    final protected function getPHPTAL()
-    {
-        return $this->phptal;
-    }
 
     /**
      * Receives root PHPTAL DOM node of parsed file and should edit it in place.
      * Prefilters are called only once before template is compiled, so they can be slow.
      *
      * Default implementation does nothing. Override it.
+     * 
+     * @see PHPTAL_Dom_Element class for methods and fields available.
      *
      * @param PHPTAL_Dom_Element $root PHPTAL's DOM node to modify in place
      * @return void
@@ -76,7 +60,8 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
      *
      * Default implementation does nothing. Override it.
      *
-     * @param $src
+     * @param string $src markup to filter
+     * @return string
      */
     public function filter($src)
     {
@@ -84,7 +69,7 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
     }
     
     /**
-     * Returns string that uniquely identifies this filter, 
+     * Returns (any) string that uniquely identifies this filter and its settings, 
      * which is used to (in)validate template cache.
      * 
      * Unlike other filter methods, this one is called on every execution.
@@ -96,6 +81,28 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
     public function getCacheId()
     {
         return get_class($this);
+    }
+    
+    /**
+     * Returns PHPTAL class instance that is currently using this prefilter.
+     * May return NULL if PHPTAL didn't start filtering yet.
+     * 
+     * @return PHPTAL or NULL
+     */
+    final protected function getPHPTAL()
+    {
+        return $this->phptal;
+    }
+    
+    /**
+     * Set which instance of PHPTAL is using this filter.
+     * Must be done before calling any filter* methods.
+     * 
+     * @param PHPTAL $phptal instance
+     */
+    final function setPHPTAL(PHPTAL $phptal)
+    {
+        $this->phptal = $phptal;
     }
 }
 
