@@ -9,13 +9,19 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     
     function filterDOM(PHPTAL_Dom_Element $root)
     {
-        if ($root->getAttributeNS("http://www.w3.org/XML/1998/namespace",'space') == 'preserve'
-            || $this->isSpaceSensitiveInXHTML($root)) {
+        // let xml:space=preserve preserve attributes as well
+        if ($root->getAttributeNS("http://www.w3.org/XML/1998/namespace",'space') == 'preserve') {
             $this->findElementToFilter($root);
             return;
         }
         
         $this->normalizeAttributes($root);   
+
+        // <pre> may have attributes normalized
+        if ($this->isSpaceSensitiveInXHTML($root)) {
+            $this->findElementToFilter($root);
+            return;
+        }            
         
         $lastTextNode = NULL;
         foreach($root->childNodes as $node) {
