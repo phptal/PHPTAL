@@ -54,6 +54,14 @@ class PreFilterNormalizeTest extends PHPTAL_TestCase
         $this->assertEquals('<p title="foo bar baz"> </p>',$tpl->execute());
     }
     
+    function testNormalizesPreAttrs()
+    {
+        $tpl = $this->newPHPTAL()->setSource("<pre title='   foo \r\n bar \t\tbaz '>  </pre>");
+        $tpl->addPreFilter(new PHPTAL_PreFilter_Normalize());
+        
+        $this->assertEquals('<pre title="foo bar baz">  </pre>',$tpl->execute());
+    }
+    
     function testSkipsXMLSpacePreserve()
     {
         $tpl = $this->newPHPTAL()->setSource("<p title='   foo \r\n bar \t\tbaz '> 
