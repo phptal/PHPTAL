@@ -13,8 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_1b4');
-
+define('PHPTAL_VERSION', '1_2_1rc1');
 
 /* If you want to use autoload, comment out all lines starting with require_once 'PHPTAL
    and uncomment the line below: */
@@ -184,10 +183,6 @@ class PHPTAL
      */
     private static $include_path_set_nesting = 0;
     
-    /**
-     * @see PHPTAL::setPluginLoader()
-     */
-    private $pluginloader;
     //}}}
 
     /**
@@ -345,7 +340,9 @@ class PHPTAL
         $this->resetPrepared();
         
         if ($bool) {
-            $this->_prefilters['_phptal_strip_comments_'] = "strip_comments";
+            if (!class_exists('PHPTAL_PreFilter_StripComments')) self::autoload('PHPTAL_PreFilter_StripComments');
+            
+            $this->_prefilters['_phptal_strip_comments_'] = new PHPTAL_PreFilter_StripComments();
         } else {
             unset($this->_prefilters['_phptal_strip_comments_']);
         }
@@ -506,13 +503,9 @@ class PHPTAL
      * Add new prefilter to filter chain. 
      * Prefilters are called only once template is compiled.
      * 
-     * You can pass either PHPTAL_PreFilter object or (faster)
-     * a string with name the prefilter to apply.
+     * PreFilters must inherit PHPTAL_PreFilter class.
+     * (in future this method will allow string with filter name instead of object)
      * 
-     * Name of the prefilter will be used as prefix for prefilter class name.
-     * See getPreFilterByName() for details.
-     * 
-     * @see PHPTAL::getPreFilterByName()
      * @param mixed $filter PHPTAL_PreFilter object or name of prefilter to add
      * @return PHPTAL
      */
@@ -520,8 +513,8 @@ class PHPTAL
     {
         $this->resetPrepared();
         
-        if (!is_string($filter) && !$filter instanceof PHPTAL_PreFilter) {
-            throw new PHPTAL_ConfigurationException("addPreFilter expects PHPTAL_PreFilter object or string, which is class name of the prefilter");
+        if (!$filter instanceof PHPTAL_PreFilter) {
+            throw new PHPTAL_ConfigurationException("addPreFilter expects PHPTAL_PreFilter object");
         }
         
         $this->_prefilters[] = $filter;
@@ -529,12 +522,11 @@ class PHPTAL
     }
 
     /**
-     * Array with all prefilter objects *or strings* for named prefilters.
+     * Array with all prefilter objects *or strings* that are names of prefilter classes.
+     * (the latter is not implemented in 1.2.1)
+     * 
      * Array keys may be non-numeric!
      * 
-     * To get actual prefilter object from strings, use getPreFilterByName().
-     * 
-     * @see PHPTAL::getPreFilterByName()
      * @return array
      */
     protected function getPreFilters()
@@ -566,83 +558,15 @@ class PHPTAL
     }
 
     /**
-     * Load and instantiate filter with given name.
-     * If you pass PHPTAL_PreFilter object instead of a string,
-     * it will be returned.
-     *
-     * By default this method will try to autoload class with name
-     * made by replacing underscores with CamelCase and
-     * prepending "PreFilter_" to filter name.
-     * 
-     * foo_bar → PreFilter_FooBar
-     * 
-     * If autoload fails, it will try to load file with
-     * name of the class and '.php' appended.
-     * 
-     * @param mixed $name base name of prefilter
-     */
-    final public function getPreFilterByName($name)
-    {
-        if (!is_string($name)) {
-            if ($name instanceof PHPTAL_Filter) {
-                return $name;
-            }
-            throw new PHPTAL_ConfigurationException("Illegal argument. Name of a filter expected");
-        }
-
-        if (!preg_match('/^[a-z][a-z_0-9]*$/i',$name)) {
-            throw new PHPTAL_ConfigurationException("Name of the prefilter '$name' is not alphanumeric or does not start with a letter");
-        }
-
-        $classname = 'PreFilter_'.preg_replace('/_([a-zA-Z])/e','strtoupper("\1")',ucfirst($name));
-
-        if (!class_exists($classname,false)) {
-            $pluginloader = $this->getPluginLoader();
-            $loaded_classname = $pluginloader->load($classname);
-            if (!$loaded_classname) {
-                $all_paths = array_unique(call_user_func_array('array_merge',$pluginloader->getPaths()));
-                
-                throw new PHPTAL_ConfigurationException("Could not load class $classname for prefilter '$name' in: ".implode(', ',$all_paths).". Load class before execution of the template or add path to plugin loader");
-            }
-            $classname = $loaded_classname;
-        }
-        
-        return new $classname();
-    }
-
-    final public function setPluginLoader($pl)
-    {
-        $this->pluginloader = $pl;
-    }
-
-    final public function getPluginLoader()
-    {
-        if (!$this->pluginloader) {
-            
-            PHPTAL::setIncludePath();
-            require_once 'PHPTAL/PluginLoader.php';
-            require_once 'PHPTAL/PreFilter.php';
-            PHPTAL::restoreIncludePath();
-            
-            $this->pluginloader = new PHPTAL_PluginLoader();
-            $this->pluginloader->addPrefixPath('PHPTAL',dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPTAL');
-        }
-        return $this->pluginloader;
-    }
-
-    /**
-     * Instantiate prefilters
+     * Instantiate all prefilters
      * 
      * @return array of PHPTAL_[Pre]Filter objects
      */
-    private function getInitializedPreFilters()
+    private function getPreFilterInstances()
     {
         $prefilters = $this->getPreFilters();
         
-        foreach($prefilters as &$prefilter) {
-            if (is_string($prefilter)) {
-                $prefilter = $this->getPreFilterByName($prefilter);
-            }
+        foreach($prefilters as $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 $prefilter->setPHPTAL($this);
             }
@@ -1176,7 +1100,7 @@ class PHPTAL
         // instantiate the PHPTAL source parser
         $data = $this->_source->getData();
 
-        $prefilters = $this->getInitializedPreFilters();
+        $prefilters = $this->getPreFilterInstances();
 
         foreach($prefilters as $prefilter) {
             $data = $prefilter->filter($data);

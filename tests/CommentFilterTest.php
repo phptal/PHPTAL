@@ -15,11 +15,16 @@
 
 require_once dirname(__FILE__)."/config.php";
 
+PHPTAL::setIncludePath();
+require_once 'PHPTAL/PreFilter.php';
+require_once 'PHPTAL/PreFilter/StripComments.php';
+PHPTAL::restoreIncludePath();
+
 class CommentFilterTest extends PHPTAL_TestCase
 {
 	function testStripComments() {
 		$t = $this->newPHPTAL('input/comment-filter-01.html');
-		$t->addPreFilter("strip_comments");
+		$t->addPreFilter(new PHPTAL_PreFilter_StripComments());
 		$res = $t->execute();
 		$res = trim_string($res);
 		$exp = trim_file('output/comment-filter-01.html');
@@ -28,7 +33,7 @@ class CommentFilterTest extends PHPTAL_TestCase
 
 	function testPreservesScript() {
 		$t = $this->newPHPTAL();
-		$t->addPreFilter("strip_comments");
+		$t->addPreFilter(new PHPTAL_PreFilter_StripComments());
 		$t->setSource('<script>//<!--
 		alert("1990s called"); /* && */
 		//--></script>');
@@ -40,7 +45,7 @@ class CommentFilterTest extends PHPTAL_TestCase
 
 	function testNamespaceAware() {
 		$t = $this->newPHPTAL();
-		$t->addPreFilter("strip_comments");
+		$t->addPreFilter(new PHPTAL_PreFilter_StripComments());
 		$t->setSource('<script xmlns="http://example.com/foo">//<!--
 		alert("1990s called"); /* && */
 		//--></script>');
