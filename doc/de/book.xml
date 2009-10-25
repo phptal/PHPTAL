@@ -5,7 +5,7 @@
   <bookinfo>
     <title>PHPTAL Handbuch</title>
     <subtitle><acronym>PHP</acronym> Template Attribute Language</subtitle>
-    <date>2008-10-03</date>
+    <date>2009-10-25</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
       <address><email>lbedubourg@motion-twin.com</email></address>
@@ -1989,15 +1989,15 @@ class MyPostFilter implements PHPTAL_Filter {
 }
 
 $tpl = new PHPTAL('mytemplate.xhtml');
-$tpl->setPreFilter(new MyPreFilter());
 $tpl->setPostFilter(new MyPostFilter());
 echo $tpl->execute();
 ?>
 ]]></programlisting></informalexample>
 
+<simplesect><title>Multiple post filters</title>
       <para>
-      You can set only one pre-Filter and one post-Filter using
-      set<replaceable>*</replaceable>Filter. If you have more than one filter to chain, you can
+      You can set only one post filter using
+      <methodname>setPostFilter()</methodname>. If you have more than one filter to chain, you can
       wrap them into a single class, implementing the <classname>PHPTAL_Filter</classname>
       interface, which would invoke the filter's chain.
       </para>
@@ -2028,7 +2028,7 @@ $tpl = new PHPTAL('mytemplate.xhtml');
 $tpl->setPostFilter($myFilter);
 echo $tpl->execute();
 ?>
-]]></programlisting></informalexample>
+]]></programlisting></informalexample></simplesect>
     </section>
 
     <section id="trigger-interface">

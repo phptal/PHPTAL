@@ -5,7 +5,7 @@
   <bookinfo>
     <title>PHPTAL Manual</title>
     <subtitle><acronym>PHP</acronym> Template Attribute Language</subtitle>
-    <date>2008-10-03</date>
+    <date>2009-10-25</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
       <address><email>lbedubourg@motion-twin.com</email></address>
@@ -24,6 +24,12 @@
 	</author>	
 
     <revhistory id="revhistory">
+     <revision>
+			  <revnumber>v1.8</revnumber>
+				<date>2009-10-25</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Updates for PHPTAL 1.2.1</revremark>
+		</revision>        
         <revision>
 			  <revnumber>v1.7</revnumber>
 				<date>2009-06-06</date>
@@ -1776,7 +1782,7 @@ php:SomeClass::$staticVar
                 </simplesect>
                 <simplesect id="set-force-reparse">
                     <title><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname></title>
-                <para>Forces reparsing of all templates all the time. It should be used only for testing and debugging. It's useful if you're testing prefilters or changing code of PHPTAL itself.</para>
+                <para>Forces reparsing of all templates all the time. It should be used only for testing and debugging. It's useful if you're testing pre filters or changing code of PHPTAL itself.</para>
                 <warning><para>This slows down <acronym>PHPTAL</acronym> very much. Never enable this on production servers!</para></warning>
             </simplesect>
         </section>
@@ -1942,24 +1948,83 @@ catch (Exception $e){
                 </itemizedlist>    
             </simplesect>    
         </section>
-    </section>
 
+
+				<section id="add-prefilter">
+						<title><methodname>addPreFilter()</methodname> method</title>
+
+						<note><para>In PHPTAL 1.2.1 this method replaced older <methodname>setPreFilter()</methodname> method, which is now deprecated.</para></note>
+						
+						<para>Adds new pre filter that will be applied to the template. Pre filters can modify source code and parsed DOM nodes of the template. Pre filters are applied in other they've been set.</para>
+						
+						<para>See description of <link linkend="prefilters">PHPTAL_PreFilter</link> for more information how to write your own pre filter.</para>
+										
+				</section>
+   </section>
+
+
+		<section id="prefilters">
+			<title>class <classname>PHPTAL_PreFilter</classname></title>
+
+			<para>Pre filters are executed only once before template is compiled. Pre filters operate on template's source code, so they are <emphasis>not</emphasis> able to access value of any template variables. However pre filters can "see" and modify TAL markup.
+			</para>
+			
+			<para>To create pre filter <emphasis>extend</emphasis> <classname>PHPTAL_PreFilter</classname> class and implement only <methodname>filter<replaceable>*</replaceable>()</methodname> methods you need.</para>
+			
+			<simplesect><title><methodname>filter()</methodname></title>
+				<para>Receives template source code as string and is expected to return new source.</para>
+				<para>You can use it to simply find'n'replace fragments of source code. Be careful not to introduce syntax errors in the template.</para>
+				
+				<warning><para>PHPTAL's error messages will refer to line numbers after filtering, which may be confusing if your prefilter adds or remove lines from the source code.</para></warning>
+			</simplesect>
+			
+			<simplesect><title><methodname>filterDOM()</methodname></title>
+				<para>Receives root PHPTAL DOM node of parsed file and should edit it in place.</para>
+				<para>PHPTAL's DOM is a little similar to W3C's DOM, however it does not implement all methods you'd expect. It also has <methodname>getValueEscaped()</methodname> and <methodname>setValueEscaped()</methodname> methods which allow reading of text nodes with entities.</para>
+				
+				<para>Example pre filter that removes all comments:</para>
+				<informalexample><programlisting language="php"><![CDATA[function filterDOM(PHPTAL_Dom_Element $element)
+{
+    foreach($element->childNodes as $node) {
+       if ($node instanceof PHPTAL_Dom_Comment) {
+           $node->parentNode->removeChild($node);
+       }
+       else if ($node instanceof PHPTAL_Dom_Element) {
+           $this->filterDOM($node); /* recursively filter all elements */
+       }
+    }
+}
+]]></programlisting></informalexample>
+			</simplesect>
+			    
+			
+			<simplesect><title><methodname>getCacheId()</methodname></title>
+<para>
+	Returns (any) string that uniquely identifies this filter and its settings, which is used to (in)validate template cache. Each time you return different string, template will be recompiled. Implement this method if result of the filter depends on its configuration.</para>
+	
+	<para> Unlike other filter methods, this one is called on every execution.</para>
+			   
+			</simplesect>
+			<simplesect><title><methodname>getPHPTAL()</methodname></title>
+			 <para>Returns instance of PHPTAL class that uses this prefilter. You can query it to check current encoding or other settings.</para></simplesect>
+			
+
+
+		</section>
     <section id="filter-interface">
       <title>interface <classname>PHPTAL_Filter</classname></title>
 
       <para>
-      This interface allows you to automatically filter templates sources
-      (pre-filters) or <acronym>PHPTAL</acronym> result (post-filters).
-      </para>
-
-      <para>
-      Pre filters are invoked before the template parsing and won't be
-      invoked until the source template file is modified.
+      	This interface allows you to create filters for processing result of template execution. Post filters are set using <methodname>setPostFilter()</methodname> method.
       </para>
 
       <para>
       Post filters are invoked after each template execution.
       </para>
+
+			<tip><para>If your filter is slow, try using <link linkend="prefilters">pre filter</link> instead, which is  executed only once before template is compiled.</para></tip>
+
+			<para>Result of template processing (with values of all variables and no TAL markup) will be passed to your filter's <methodname>filter()</methodname> method:</para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
@@ -1977,15 +2042,15 @@ class MyPostFilter implements PHPTAL_Filter {
 }
 
 $tpl = new PHPTAL('mytemplate.xhtml');
-$tpl->setPreFilter(new MyPreFilter());
 $tpl->setPostFilter(new MyPostFilter());
 echo $tpl->execute();
 ?>
 ]]></programlisting></informalexample>
 
+<simplesect><title>Multiple post filters</title>
       <para>
-      You can set only one pre-Filter and one post-Filter using
-      set<replaceable>*</replaceable>Filter. If you have more than one filter to chain, you can
+      You can set only one post filter using
+      <methodname>setPostFilter()</methodname>. If you have more than one filter to chain, you can
       wrap them into a single class, implementing the <classname>PHPTAL_Filter</classname>
       interface, which would invoke the filter's chain.
       </para>
@@ -2016,7 +2081,7 @@ $tpl = new PHPTAL('mytemplate.xhtml');
 $tpl->setPostFilter($myFilter);
 echo $tpl->execute();
 ?>
-]]></programlisting></informalexample>
+]]></programlisting></informalexample></simplesect>
     </section>
 
     <section id="trigger-interface">
