@@ -1684,110 +1684,7 @@ php:SomeClass::$staticVar
       In older versions of there were constants for configuration. They have been removed in favour of methods.
       </para>
   </section>
-  <section id="configuration">
-      <title>Configuration methods</title>
-
-      <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
-
-      <para>All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:</para>
-        <informalexample><programlisting language="php"><![CDATA[<?php
-  echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
-?>]]></programlisting></informalexample>
-<para>is the same as:</para>
-        <informalexample><programlisting language="php"><![CDATA[<?php
-  $phptal->setPhpCodeDestination('/tmp/phptal');
-  $phptal->setOutputMode(PHPTAL::XML);
-  $phptal->setTemplate('tpl.zpt');
-  echo $phptal->execute();
-?>]]></programlisting></informalexample>
-            
-            
-            <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalisation, etc. They have been described in other sections of this manual.</para>
-            
-            <section id="set-output-mode">
-            <title><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname></title>
-            
-            <para>Changes what syntax is used when generating elements. Valid modes are:</para>
-                <variablelist>
-                    <varlistentry><term><constant>PHPTAL::XHTML</constant></term>
-                        <listitem>
-                            <para>In this mode (which is default) PHPTAL will output XHTML in a way that is backwards-compatible with <acronym>HTML</acronym> browsers.</para>
-                            <itemizedlist>
-                                <listitem>                          <para>Empty elements will be forced to use self-closing form (<sgmltag>&lt;img/&gt;</sgmltag>, <sgmltag>&lt;link/&gt;</sgmltag>), and non-empty elements will always have closing tag.</para>
-                                    <warning>
-                                        <para>XHTML output mode changes <sgmltag>&lt;link&gt;</sgmltag> element in way that is incompatible with RSS. Use XML output mode to generate RSS feeds or use Atom.</para></warning>
-                                </listitem>
-                                <listitem><para>Boolean attribtes (<sgmltag>checked</sgmltag>, <sgmltag>selected</sgmltag>, etc.) will always have value required by the XHTML specification (it simplifies use of <sgmltag>tal:attributes</sgmltag>).</para></listitem>
-                                <listitem><para><code>&lt;![CDATA[</code> blocks will be added or removed automatically and will use special escaping syntax that is safe in both XML and HTML.</para>
-                                    <tip>
-                                    <para>If you're <emphasis>always</emphasis> sending XHTML as <code>application/xhtml+xml</code>, then it's better to use XML output mode.</para></tip>
-                                    </listitem></itemizedlist>                                                                
-                     
-                        </listitem>
-                    </varlistentry>
-                    <varlistentry><term><constant>PHPTAL::HTML5</constant></term>
-                        <listitem>
-                            <para>This mode generates documents that have best compatibility with <code>text/html</code> parsing in current web browsers, but are not XML.</para>
-                            <para>PHPTAL will change DOCTYPEs to <sgmltag>&lt;!DOCTYPE html></sgmltag>. Namespace declarations, name prefixes, explicit <sgmltag>CDATA</sgmltag> sections and other HTML-incompatible constructs will be ommited.</para>
-                            <note>
-                                <para>
-                          This mode is <emphasis>not</emphasis> a "tag soup". PHPTAL will close all elements properly and quote attributes when it's necesary. Output will be properly formatted HTML 5, and fully backwards-compatible with current HTML 4 browsers.
-                    </para>
-                            </note>
-                        </listitem>
-                    </varlistentry>
-                    <varlistentry><term><constant>PHPTAL::XML</constant></term>
-                        <listitem>
-                            <para>This mode outputs "pure" XML without compatibility with <code>text/html</code> parsing. Use this mode when generating feeds, SVG, MathML, RDF and other XML files.</para>
-                        </listitem>
-                    </varlistentry>
-                </variablelist>
-        </section>
-            
-                
-            <section id="set-encoding">
-
-                    <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
-                        <para>Specify charcter encoding used by your templates. The default is <acronym>UTF-8</acronym>.
-                        </para><para><acronym>PHPTAL</acronym> assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.</para>
-                        <note><para><acronym>PHPTAL</acronym> does not read encoding from XML files and never converts character encodings.</para></note>
-                        <tip><para>Save yourself trouble and always use <acronym>UTF-8</acronym> for everything.</para></tip>
-            </section>
-        <section id="config-methods"><title>Other methods</title>
-            
-            <simplesect id="set-template-repository">
-                <title><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname></title>
-                    <para>Specifies where to look for templates. If given a string, it adds it to the list of paths searched. If given array, it replaces the list.</para>
-                    <para>
-                              This doesn't mean all your files need to be in the root
-                              directory, you can use sub folders to organize your template
-                              designer's work.  It's just a shortcut which will allow you to
-                              reference templates without specifying the real path, but
-                              instead their relative path within the repository.
-                      </para>
-                      <tip><para>It's like <code>include_path</code>, but for <acronym>PHPTAL</acronym> templates only.</para></tip>
-            </simplesect>
-            <simplesect id="set-code-destination">
-                <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
-                
-                    <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <function>sys_get_tmp_dir()</function>, which usually is '<filename>/tmp/</filename>' directory.</para>
-                </simplesect>
-                <simplesect id="set-code-extension">
-                    <title><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname></title>
-                    <para>What filename extension should be used for intermediate <acronym>PHP</acronym> files. The default is <filename>php</filename> and frankly, there's no reason to change it.</para>
-                </simplesect>
-                <simplesect id="set-cache-lifetime">
-                    <title><methodname>setCacheLifetime(<replaceable>num_days</replaceable>)</methodname></title>
-                    <para>Maximum number of days intermediate files and fragments cached with <sgmltag>phptal:cache</sgmltag> should be kept.</para>
-                </simplesect>
-                <simplesect id="set-force-reparse">
-                    <title><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname></title>
-                <para>Forces reparsing of all templates all the time. It should be used only for testing and debugging. It's useful if you're testing pre filters or changing code of PHPTAL itself.</para>
-                <warning><para>This slows down <acronym>PHPTAL</acronym> very much. Never enable this on production servers!</para></warning>
-            </simplesect>
-        </section>
-
-    </section>
+  
 
     <section id="phptal-class">
       <title>class <classname>PHPTAL</classname></title>
@@ -1912,6 +1809,110 @@ catch (Exception $e){
 ?>
 ]]></programlisting></informalexample>
 
+<section id="configuration">
+    <title>Configuration methods</title>
+
+    <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
+
+    <para>All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:</para>
+      <informalexample><programlisting language="php"><![CDATA[<?php
+echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
+?>]]></programlisting></informalexample>
+<para>is the same as:</para>
+      <informalexample><programlisting language="php"><![CDATA[<?php
+$phptal->setPhpCodeDestination('/tmp/phptal');
+$phptal->setOutputMode(PHPTAL::XML);
+$phptal->setTemplate('tpl.zpt');
+echo $phptal->execute();
+?>]]></programlisting></informalexample>
+          
+          
+          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalisation, etc. They have been described in other sections of this manual.</para>
+          
+          <section id="set-output-mode">
+          <title><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname></title>
+          
+          <para>Changes what syntax is used when generating elements. Valid modes are:</para>
+              <variablelist>
+                  <varlistentry><term><constant>PHPTAL::XHTML</constant></term>
+                      <listitem>
+                          <para>In this mode (which is default) PHPTAL will output XHTML in a way that is backwards-compatible with <acronym>HTML</acronym> browsers.</para>
+                          <itemizedlist>
+                              <listitem>                          <para>Empty elements will be forced to use self-closing form (<sgmltag>&lt;img/&gt;</sgmltag>, <sgmltag>&lt;link/&gt;</sgmltag>), and non-empty elements will always have closing tag.</para>
+                                  <warning>
+                                      <para>XHTML output mode changes <sgmltag>&lt;link&gt;</sgmltag> element in way that is incompatible with RSS. Use XML output mode to generate RSS feeds or use Atom.</para></warning>
+                              </listitem>
+                              <listitem><para>Boolean attribtes (<sgmltag>checked</sgmltag>, <sgmltag>selected</sgmltag>, etc.) will always have value required by the XHTML specification (it simplifies use of <sgmltag>tal:attributes</sgmltag>).</para></listitem>
+                              <listitem><para><code>&lt;![CDATA[</code> blocks will be added or removed automatically and will use special escaping syntax that is safe in both XML and HTML.</para>
+                                  <tip>
+                                  <para>If you're <emphasis>always</emphasis> sending XHTML as <code>application/xhtml+xml</code>, then it's better to use XML output mode.</para></tip>
+                                  </listitem></itemizedlist>                                                                
+                   
+                      </listitem>
+                  </varlistentry>
+                  <varlistentry><term><constant>PHPTAL::HTML5</constant></term>
+                      <listitem>
+                          <para>This mode generates documents that have best compatibility with <code>text/html</code> parsing in current web browsers, but are not XML.</para>
+                          <para>PHPTAL will change DOCTYPEs to <sgmltag>&lt;!DOCTYPE html></sgmltag>. Namespace declarations, name prefixes, explicit <sgmltag>CDATA</sgmltag> sections and other HTML-incompatible constructs will be ommited.</para>
+                          <note>
+                              <para>
+                        This mode is <emphasis>not</emphasis> a "tag soup". PHPTAL will close all elements properly and quote attributes when it's necesary. Output will be properly formatted HTML 5, and fully backwards-compatible with current HTML 4 browsers.
+                  </para>
+                          </note>
+                      </listitem>
+                  </varlistentry>
+                  <varlistentry><term><constant>PHPTAL::XML</constant></term>
+                      <listitem>
+                          <para>This mode outputs "pure" XML without compatibility with <code>text/html</code> parsing. Use this mode when generating feeds, SVG, MathML, RDF and other XML files.</para>
+                      </listitem>
+                  </varlistentry>
+              </variablelist>
+      </section>
+          
+              
+          <section id="set-encoding">
+
+                  <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
+                      <para>Specify charcter encoding used by your templates. The default is <acronym>UTF-8</acronym>.
+                      </para><para><acronym>PHPTAL</acronym> assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.</para>
+                      <note><para><acronym>PHPTAL</acronym> does not read encoding from XML files and never converts character encodings.</para></note>
+                      <tip><para>Save yourself trouble and always use <acronym>UTF-8</acronym> for everything.</para></tip>
+          </section>
+      <section id="config-methods"><title>Other methods</title>
+          
+          <simplesect id="set-template-repository">
+              <title><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname></title>
+                  <para>Specifies where to look for templates. If given a string, it adds it to the list of paths searched. If given array, it replaces the list.</para>
+                  <para>
+                            This doesn't mean all your files need to be in the root
+                            directory, you can use sub folders to organize your template
+                            designer's work.  It's just a shortcut which will allow you to
+                            reference templates without specifying the real path, but
+                            instead their relative path within the repository.
+                    </para>
+                    <tip><para>It's like <code>include_path</code>, but for <acronym>PHPTAL</acronym> templates only.</para></tip>
+          </simplesect>
+          <simplesect id="set-code-destination">
+              <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
+              
+                  <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <function>sys_get_tmp_dir()</function>, which usually is '<filename>/tmp/</filename>' directory.</para>
+              </simplesect>
+              <simplesect id="set-code-extension">
+                  <title><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname></title>
+                  <para>What filename extension should be used for intermediate <acronym>PHP</acronym> files. The default is <filename>php</filename> and frankly, there's no reason to change it.</para>
+              </simplesect>
+              <simplesect id="set-cache-lifetime">
+                  <title><methodname>setCacheLifetime(<replaceable>num_days</replaceable>)</methodname></title>
+                  <para>Maximum number of days intermediate files and fragments cached with <sgmltag>phptal:cache</sgmltag> should be kept.</para>
+              </simplesect>
+              <simplesect id="set-force-reparse">
+                  <title><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname></title>
+              <para>Forces reparsing of all templates all the time. It should be used only for testing and debugging. It's useful if you're testing pre filters or changing code of PHPTAL itself.</para>
+              <warning><para>This slows down <acronym>PHPTAL</acronym> very much. Never enable this on production servers!</para></warning>
+          </simplesect>
+      </section>
+
+  </section>
 
         <section id="echo-execute">
             <title><methodname>echoExecute()</methodname> method</title>
@@ -1943,7 +1944,7 @@ catch (Exception $e){
                 <para>Typically <acronym>PHPTAL</acronym> allows templates to "inherit" DOCTYPE from another file (useful when subpage is calling main layout template), however that is not possible without buffering.</para>
                 <para>To work around this you can:</para>            
                 <itemizedlist>
-                    <listitem><para>Keep using <code>echo $tpl->execute()</code> until this limitation is removed.</para></listitem>
+                    <listitem><para>Keep using <code>echo $tpl->execute()</code> until this limitation is lifted.</para></listitem>
                     <listitem><para>Remove all DOCTYPEs and XML declarations from templates and echo them from PHP before calling <methodname>echoExecute()</methodname>.</para></listitem>
                 </itemizedlist>    
             </simplesect>    
@@ -2000,14 +2001,18 @@ catch (Exception $e){
 			
 			<simplesect><title><methodname>getCacheId()</methodname></title>
 <para>
-	Returns (any) string that uniquely identifies this filter and its settings, which is used to (in)validate template cache. Each time you return different string, template will be recompiled. Implement this method if result of the filter depends on its configuration.</para>
+	Should return (any) string that uniquely identifies this filter and its settings, which is used to (in)validate template cache. Each time you return different string, template will be recompiled. Implement this method if result of the filter depends on its configuration.</para>
 	
 	<para> Unlike other filter methods, this one is called on every execution.</para>
 			   
+			
+			<tip><para>When developing and testing your filter, set <link linkend="set-force-reparse"><methodname>setForceReparse(true)</methodname></link> to force PHPTAL to update templates every time. Otherwise result of your filter will be cached and you won't see the changes.</para></tip>
+			
 			</simplesect>
 			<simplesect><title><methodname>getPHPTAL()</methodname></title>
 			 <para>Returns instance of PHPTAL class that uses this prefilter. You can query it to check current encoding or other settings.</para></simplesect>
 			
+
 
 
 		</section>
