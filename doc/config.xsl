@@ -129,7 +129,7 @@
       </div>
       <div id="menu">
       <ul>
-          <li class="news"><a href="/index.html">News</a></li>
+          <li class="news"><a href="/">News</a></li>
           <li class="introduction"><a href="/introduction.html">Introduction</a></li>
           <li class="download"><a href="/download.html">Download</a></li>
           <li class="current manuals"><a href="/manuals.html">Manuals</a></li>
