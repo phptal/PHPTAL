@@ -10,7 +10,7 @@ CONFIG=config.xsl
 
 TEMPBASEDIR=./temp
 TEMP=$(TEMPBASEDIR)/$(SRCLANG)
-XHTMLFILES=$(TEMP)/xhtml/index.html
+XHTMLFILES=$(TEMP)/xhtml/
 XHTMLNOCHUNKSFILES=$(TEMP)/xhtml-nochunks/book.html
 TXTFILES=$(TEMP)/txt/book.txt
 
@@ -35,7 +35,7 @@ onepageperchapter: $(XHTMLFILES) output_dir
 	cp -p -- "$(TEMP)/xhtml/"* "$(BUILD)/split/"
 
 allononepage: $(XHTMLNOCHUNKSFILES) output_dir
-	cp -p -- "$(XHTMLNOCHUNKSFILES)" "$(BUILD)/index.html"
+	cp -p -- "$(XHTMLNOCHUNKSFILES)" "$(BUILD)/"
 	
 plaintext: $(TXTFILES) output_dir
 	cp -p -- "$(TXTFILES)" "$(BUILD)/phptal.txt"
