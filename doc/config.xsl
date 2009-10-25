@@ -124,7 +124,7 @@
   
   <xsl:template name="user.header.navigation">
     <div id="header"><div>
-      <h1><abbr>PHPTAL</abbr> PHP Template Attribute Language</h1>
+      <h1><a href="/"><abbr>PHPTAL</abbr> PHP Template Attribute Language</a></h1>
     </div>    
       </div>
       <div id="menu">
