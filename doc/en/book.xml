@@ -1980,9 +1980,8 @@ echo $phptal->execute();
 			</simplesect>
 			
 			<simplesect><title><methodname>filterDOM()</methodname></title>
-				<para>Receives root PHPTAL DOM node of parsed file and should edit it in place.</para>
-				<para>PHPTAL's DOM is a little similar to W3C's DOM, however it does not implement all methods you'd expect. It also has <methodname>getValueEscaped()</methodname> and <methodname>setValueEscaped()</methodname> methods which allow reading of text nodes with entities.</para>
-				
+				<para>Receives root <link linkend="phptal-dom">PHPTAL DOM node</link> of parsed file and should edit it in place.</para>
+			
 				<para>Example pre filter that removes all comments:</para>
 				<informalexample><programlisting language="php"><![CDATA[function filterDOM(PHPTAL_Dom_Element $element)
 {
@@ -2014,6 +2013,71 @@ echo $phptal->execute();
 			
 
 
+
+		</section>
+		
+		<section id="phptal-dom">
+			<title>PHPTAL DOM</title>
+			<para>Internally PHPTAL represents documents using it's own document object model, a little bit similar to W3C's DOM. However, PHPTAL's API has only few basic methods for <link linkend="prefilters">DOM manipulation</link>.</para>
+			
+			<para><classname>PHPTAL_Dom_Element</classname> class has following properties and methods:</para>
+			<itemizedlist>
+				
+				<listitem><fieldsynopsis><type>array</type><varname>childNodes</varname></fieldsynopsis>
+				<para>Numerically indexed array containing children of the element.</para>
+				<warning><para>Please don't edit this array directly. Use <methodname>appendChild()</methodname>, etc.</para></warning>
+				
+				<note><para>PHPTAL does not implement <varname>nextSibling</varname>, <varname>firstChild</varname>, etc.</para></note> 
+				
+				</listitem>
+				
+				<listitem><fieldsynopsis><type>PHPTAL_Dom_Element</type><varname>parentNode</varname></fieldsynopsis>
+				<para>Parent node (element) of the current element. Use it to traverse tree upwards.</para>
+				
+				</listitem>
+				
+				<listitem>	<methodsynopsis><void/><methodname>appendChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
+				<para>Appends node to the element. Node will be removed from its current element and added at the end of this element.</para>
+				<warning><para>PHPTAL does not manage namespace declarations. Moving nodes between elements in different namespaces will change meaning of the document.</para></warning>
+			</listitem><listitem>	<methodsynopsis><void/><methodname>replaceChild</methodname><methodparam><parameter>$new_node</parameter></methodparam> <methodparam><parameter>$old_node</parameter></methodparam></methodsynopsis>
+				<para>Old node will be replaced with new node.</para>
+					
+				</listitem><listitem>
+								<methodsynopsis><void/><methodname>removeChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
+				<para>Remove node from its parent.</para>
+				
+			</listitem><listitem>
+			
+				<methodsynopsis><type>string</type> <methodname>getAttributeNS</methodname><methodparam><parameter>$namespace_uri</parameter></methodparam> <methodparam><parameter>$local_name</parameter></methodparam></methodsynopsis>
+				<para>Returns unescaped (without entities) value of a specific attribute.</para>
+				<informalexample><programlisting language="php">$a->getAttributeNS('','href')</programlisting></informalexample>
+				<tip><para>In XML attributes don't inherit element's namespace, and all XHTML attributes are in the default namespace.</para></tip>
+				
+			</listitem><listitem>
+			
+				<methodsynopsis><type>array</type><methodname>getAttributeNodes</methodname></methodsynopsis>
+				<para>Returns array of <classname>PHPTAL_Dom_Attr</classname> objects, which represent all element's attributes. You can modify attributes' values without using <methodname>setAttributeNodes()</methodname>.</para>
+				
+			</listitem><listitem>
+			
+				<methodsynopsis><void/><methodname>setAttributeNodes</methodname><methodparam>
+				<type>array</type><parameter>$attrs</parameter></methodparam></methodsynopsis>
+				<para>Replaces all elements attributes with the given ones.</para>
+
+			</listitem><listitem>
+			
+				<methodsynopsis><type>string</type><methodname>getLocalName</methodname></methodsynopsis>
+				<para>Returns local name of the element, e.g. <code>&lt;atom:title></code> has local name <code>title</code>.</para>
+
+				</listitem><listitem>
+				
+				<methodsynopsis><type>string</type><methodname>getNamespaceURI</methodname></methodsynopsis>
+				<para>Returns namespace URI of the the element, e.g. <code>&lt;atom:title xmlns="http://www.w3.org/2005/Atom"></code> has namespace <code>http://www.w3.org/2005/Atom</code>.</para>
+				<tip><para>XHTML namespace is <code>http://www.w3.org/1999/xhtml</code>.</para></tip>
+				
+</listitem></itemizedlist>
+
+<para>Text, CDATA and attribute nodes have <methodname>getValueEscaped()</methodname> and <methodname>setValueEscaped()</methodname> methods which allow reading/setting of their text with entities preserved.</para>
 
 		</section>
     <section id="filter-interface">
