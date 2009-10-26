@@ -154,6 +154,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     public function appendChild(PHPTAL_Dom_Node $child)
     {
+        if ($child->parentNode) $child->parentNode->removeChild($child);
         $child->parentNode = $this;
         $this->childNodes[] = $child;
     }
@@ -175,7 +176,10 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         foreach($this->childNodes as $k => $node) {
             if ($node === $oldElement) {
                 $oldElement->parentNode = NULL;
+                
+                if ($newElement->parentNode) $newElement->parentNode->removeChild($child);                
                 $newElement->parentNode = $this;
+                
                 $this->childNodes[$k] = $newElement;
                 return;
             }
