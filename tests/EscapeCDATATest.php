@@ -17,11 +17,14 @@ require_once dirname(__FILE__)."/config.php";
 
 class EscapeCDATATest extends PHPTAL_TestCase {
 
+    private $last_code_path;
+
     private function executeString($str, $params = array())
     {
         $tpl = $this->newPHPTAL();
         foreach ($params as $k => $v) $tpl->set($k,$v);
         $tpl->setSource($str);
+        $this->last_code_path = $tpl->getCodePath();
         return $tpl->execute();
     }
 
@@ -136,30 +139,30 @@ class EscapeCDATATest extends PHPTAL_TestCase {
     function testAutoCDATA()
     {
         $res = $this->executeString('<script> 1 < 2 </script>');
-        $this->assertEquals('<script>/*<![CDATA[*/ 1 < 2 /*]]>*/</script>',$res);
+        $this->assertEquals('<script>/*<![CDATA[*/ 1 < 2 /*]]>*/</script>',$res,$this->last_code_path);
     }
 
     function testAutoCDATA2()
     {
         $res = $this->executeString('<xhtmlz:script xmlns:xhtmlz="http://www.w3.org/1999/xhtml"> 1 < 2 ${php:\'&\' . \'&amp;\'} </xhtmlz:script>');
-        $this->assertEquals('<xhtmlz:script xmlns:xhtmlz="http://www.w3.org/1999/xhtml">/*<![CDATA[*/ 1 < 2 && /*]]>*/</xhtmlz:script>',$res);
+        $this->assertEquals('<xhtmlz:script xmlns:xhtmlz="http://www.w3.org/1999/xhtml">/*<![CDATA[*/ 1 < 2 && /*]]>*/</xhtmlz:script>',$res,$this->last_code_path);
     }
 
     function testNoAutoCDATA()
     {
         $res = $this->executeString('<script> "1 \' 2" </script><script xmlns="foo"> 1 &lt; 2 </script>');
-        $this->assertEquals('<script> "1 \' 2" </script><script xmlns="foo"> 1 &lt; 2 </script>',$res);
+        $this->assertEquals('<script> "1 \' 2" </script><script xmlns="foo"> 1 &lt; 2 </script>',$res,$this->last_code_path);
     }
 
     function testNoAutoCDATA2()
     {
         $res = $this->executeString('<script> a && ${structure foo} </script><script xmlns="foo"> 1 &lt; 2 </script>', array('foo'=>'<foo/>'));
-        $this->assertEquals('<script> a &amp;&amp; <foo/> </script><script xmlns="foo"> 1 &lt; 2 </script>',$res);
+        $this->assertEquals('<script> a &amp;&amp; <foo/> </script><script xmlns="foo"> 1 &lt; 2 </script>',$res,$this->last_code_path);
     }
 
     function testNoAutoCDATA3()
     {
         $res = $this->executeString('<style> html > body </style>');
-        $this->assertEquals('<style> html > body </style>',$res);
+        $this->assertEquals('<style> html > body </style>',$res,$this->last_code_path);
     }
 }

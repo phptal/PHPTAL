@@ -99,13 +99,13 @@ EOT;
         $this->assertEquals($exp, $res);
     }
 
-    public function testNoInterpolAdv()
+    public function testInterpolAdv()
     {
         $src = <<<EOT
 <span title="$$\${foo}"></span>
 EOT;
         $exp = <<<EOT
-<span title="$\${foo}"></span>
+<span title="\$foo value"></span>
 EOT;
         $tpl = $this->newPHPTAL();
         $tpl->setSource($src);

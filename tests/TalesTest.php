@@ -144,6 +144,6 @@ class TalesTest extends PHPTAL_TestCase
         
         $tpl->setSource('<x tal:attributes="y string:$bbb/y/y; x string:$aaaaaaaaaaaaaaaaaaaaa/x/x" />');        
         $tpl->execute();
-    }
+    }    
 }
 
