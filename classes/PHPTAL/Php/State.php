@@ -131,6 +131,8 @@ class PHPTAL_Php_State
 
     /**
      * returns PHP code that generates given string, including dynamic replacements
+     *
+     * It's almost unused.
      */
     public function interpolateTalesVarsInString($string)
     {
@@ -142,10 +144,10 @@ class PHPTAL_Php_State
         while (preg_match('/(?<!\$)\$\{([^\}]+)\}/s', $string, $m)){
             list($ori, $exp) = $m;
             $php  = PHPTAL_Php_TalesInternal::php($exp);
-            $string = str_replace($ori, '\'.'.$php.'.\'', $string); // FIXME: that is not elegant
+            $string = str_replace($ori, '\'.('.$php.').\'', $string); // FIXME: that is not elegant
         }
         $string = str_replace('$${', '${', $string); // FIXME: that is not elegant
-        return '\''.$string.'\'';
+        return '(\''.$string.'\')';
     }
     
     /**

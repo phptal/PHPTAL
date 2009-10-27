@@ -76,4 +76,33 @@ class I18NTranslateTest extends PHPTAL_TestCase
         <p><b class="foo&amp;bar">translated&nbsp;key</b></p>
         </div>'),trim_string($tpl->execute()));
     }
+    
+    
+    function testDomain()
+    {
+        $tpl = $this->newPHPTAL();
+        
+        $tpl->bar = 'baz';
+        
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        $tpl->t = $t;
+                
+        $tpl->setSource('<div i18n:domain="foo${bar}$${quz}">${t/domain}</div>');
+        $this->assertEquals(trim_string('<div>foobaz${quz}</div>'),trim_string($tpl->execute()));
+        
+    }
+
+    function testPHPTalesDomain()
+    {
+        $tpl = $this->newPHPTAL();
+        
+        $tpl->bar = '1';
+        
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        $tpl->t = $t;
+                
+        $tpl->setSource('<div phptal:tales="php" i18n:domain="foo${bar+1}$${quz}">${t.domain}</div>');
+        $this->assertEquals(trim_string('<div>foo2${quz}</div>'),trim_string($tpl->execute()));
+    
+    }
 }
