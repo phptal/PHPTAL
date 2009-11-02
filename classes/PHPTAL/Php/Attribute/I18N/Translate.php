@@ -38,10 +38,11 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
             $this->expression = isset($m[2])?$m[2]:'';
         }
 
+        $this->_prepareNames($codewriter, $this->phpelement);
+
         // if no expression is given, the content of the node is used as
         // a translation key
         if (strlen(trim($this->expression)) == 0){
-            $this->_prepareNames($codewriter, $this->phpelement);
             $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
             $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
             $code = $codewriter->str($key);
@@ -53,8 +54,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
             $code = $codewriter->evaluateExpression($this->expression);
         }
 
-        //$codewriter->pushCode('echo $_translator->translate('.$code.','.($escape ? 'true':'false').');');
-        $this->doEchoAttribute($codewriter, "\$_translator->translate($code, false)");
+        $codewriter->pushCode('echo $_translator->translate('.$code.','.($escape ? 'true':'false').');');
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
@@ -64,16 +64,15 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         $escape = !($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE);
-        //$exp = "\$_translator->translate($exp, " . ($escape ? 'true':'false') . ')';
-        $exp = "\$_translator->translate($exp, false)";
+        $exp = "\$_translator->translate($exp, " . ($escape ? 'true':'false') . ')';
         if (!$islast) {
             $var = $executor->getCodeWriter()->createTempVariable();
             $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
-            $this->doEchoAttribute($executor->getCodeWriter(), $var);
+            $this->pushCode("echo $var");
             $executor->getCodeWriter()->recycleTempVariable($var);
         } else {
             $executor->doElse();
-            $this->doEchoAttribute($executor->getCodeWriter(), $exp);
+            $this->pushCode("echo $exp");
         }
     }
 

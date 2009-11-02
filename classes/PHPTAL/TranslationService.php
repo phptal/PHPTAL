@@ -38,19 +38,25 @@ interface PHPTAL_TranslationService
     function setEncoding($encoding);
 
     /**
-     * Set the domain to use for translations.
+     * Set the domain to use for translations (if different parts of application are translated in different files. This is not for language selection).
      */
     function useDomain($domain);
 
     /**
-     * Set an interpolation var.
+     * Set XHTML-escaped value of a variable used in translation key.
      *
-     * Replace all ${key}s with values in translated strings.
+     * You should use it to replace all ${key}s with values in translated strings.
+     *
+     * @param string $key - name of the variable
+     * @param string $value_escaped - XHTML markup
      */
-    function setVar($key, $value);
+    function setVar($key, $value_escaped);
 
     /**
      * Translate a gettext key and interpolate variables.
+     *
+     * @param string $key - translation key, e.g. "hello ${username}!"
+     * @param string $htmlescape - if true, you should HTML-escape translated string before echoing. You should never HTML-escape interpolated variables.
      */
     function translate($key, $htmlescape=true);
 }

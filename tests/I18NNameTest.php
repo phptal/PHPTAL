@@ -42,10 +42,12 @@ class I18NNameTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/i18n-name-03.html');
         $tpl->setTranslator( new DummyTranslator() );
+        $tpl->mylogin_var = '<mylogin>';
+        
         $res = $tpl->execute();
         $res = trim_string($res);
         $exp = trim_file('output/i18n-name-03.html');
-        $this->assertEquals($exp, $res);
+        $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
     function testBlock()
