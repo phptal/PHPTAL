@@ -63,7 +63,7 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->generateContent($codewriter,true);
     }
 
-    private function generateChainedContent(PHPTAL_Php_CodeWriter $codewriter, $code)
+    protected function generateChainedContent(PHPTAL_Php_CodeWriter $codewriter, $code)
     {
         $executor = new PHPTAL_Php_TalesChainExecutor($codewriter, $code, $this);
     }

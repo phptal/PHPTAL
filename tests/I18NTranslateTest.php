@@ -103,6 +103,63 @@ class I18NTranslateTest extends PHPTAL_TestCase
                 
         $tpl->setSource('<div phptal:tales="php" i18n:domain="foo${bar+1}$${quz}">${t.domain}</div>');
         $this->assertEquals(trim_string('<div>foo2${quz}</div>'),trim_string($tpl->execute()));
+    }
     
+    function testTranslateChain()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        $t->setTranslation('bar','<bar> translated');
+        
+        $tpl->setSource('<div i18n:translate="foo | string:bar">not translated</div>');
+        
+        $this->assertEquals('<div>&lt;bar&gt; translated</div>',$tpl->execute());
+    }
+    
+    function testTranslateChainString()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        
+        $tpl->setSource('<div i18n:translate="foo | string:&lt;bar> translated">not translated</div>');
+        
+        $this->assertEquals('<div>&lt;bar&gt; translated</div>',$tpl->execute());
+    }
+    
+    function testTranslateChainExists()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        $tpl->foo = '<foo> value';
+        
+        $tpl->setSource('<div i18n:translate="foo | string:&lt;bar> translated">not translated</div>');
+        
+        $this->assertEquals('<div>&lt;foo&gt; value</div>',$tpl->execute());
+    }
+        
+    function testTranslateChainExistsTranslated()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        $t->setTranslation('<foo> value','<foo> translated');
+        
+        $tpl->foo = '<foo> value';
+        
+        $tpl->setSource('<div i18n:translate="foo | string:&lt;bar> translated">not translated</div>');
+        
+        $this->assertEquals('<div>&lt;foo&gt; translated</div>',$tpl->execute());
+    }
+
+    function testTranslateChainStructureExistsTranslated()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTranslator( $t = new DummyTranslator() );
+        $t->setTranslation('<foo> value','<foo> translated');
+        
+        $tpl->foo = '<foo> value';
+        
+        $tpl->setSource('<div i18n:translate="structure foo | string:&lt;bar> translated">not translated</div>');
+        
+        $this->assertEquals('<div><foo> translated</div>',$tpl->execute());
     }
 }

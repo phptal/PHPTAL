@@ -27,32 +27,54 @@
  * @package PHPTAL
  * @subpackage Php.attribute.i18n
  */
-class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute
+class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Content
 {
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $escape = true;
+        $this->_echoType = PHPTAL_Php_Attribute::ECHO_TEXT;
         if (preg_match('/^(text|structure)(?:\s+(.*)|\s*$)/', $this->expression, $m)) {
-            if ($m[1]=='structure') $escape=false;
+            if ($m[1]=='structure') { $escape=false; $this->_echoType = PHPTAL_Php_Attribute::ECHO_STRUCTURE; }
             $this->expression = isset($m[2])?$m[2]:'';
         }
 
         // if no expression is given, the content of the node is used as
         // a translation key
-        if (strlen(trim($this->expression)) == 0) {
+        if (strlen(trim($this->expression)) == 0){
+            $this->_prepareNames($codewriter, $this->phpelement);
             $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
             $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
             $code = $codewriter->str($key);
         } else {
             $code = $codewriter->evaluateExpression($this->expression);
+            if(is_array($code))
+                return $this->generateChainedContent($codewriter, $code);
+            
+            $code = $codewriter->evaluateExpression($this->expression);
         }
-        $this->_prepareNames($codewriter, $this->phpelement);
 
-        $codewriter->pushCode('echo $_translator->translate('.$code.','.($escape ? 'true':'false').');');
+        //$codewriter->pushCode('echo $_translator->translate('.$code.','.($escape ? 'true':'false').');');
+        $this->doEchoAttribute($codewriter, "\$_translator->translate($code, false)");
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
+    }
+    
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
+    {
+        $escape = !($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE);
+        //$exp = "\$_translator->translate($exp, " . ($escape ? 'true':'false') . ')';
+        $exp = "\$_translator->translate($exp, false)";
+        if (!$islast) {
+            $var = $executor->getCodeWriter()->createTempVariable();
+            $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
+            $this->doEchoAttribute($executor->getCodeWriter(), $var);
+            $executor->getCodeWriter()->recycleTempVariable($var);
+        } else {
+            $executor->doElse();
+            $this->doEchoAttribute($executor->getCodeWriter(), $exp);
+        }
     }
 
     private function _getTranslationKey(PHPTAL_Dom_Node $tag, $preserve_tags, $encoding)
