@@ -47,7 +47,9 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
         $cache_len = $matches[1];
         if (!is_numeric($cache_len)) {
-            $cache_len = '$ctx->'.$cache_len;
+            $cache_len = $codewriter->evaluateExpression($cache_len);
+            
+            if (is_array($cache_len)) { throw new PHPTAL_ParserException("Chained expressions in cache length are not supported"); }
         }
         switch ($matches[2]) {
             case 'd': $cache_len .= '*24'; /* no break */
