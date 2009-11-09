@@ -63,16 +63,18 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
     
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
+        $codewriter = $executor->getCodeWriter();
+        
         $escape = !($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE);
         $exp = "\$_translator->translate($exp, " . ($escape ? 'true':'false') . ')';
         if (!$islast) {
-            $var = $executor->getCodeWriter()->createTempVariable();
+            $var = $codewriter->createTempVariable();
             $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
-            $this->pushCode("echo $var");
-            $executor->getCodeWriter()->recycleTempVariable($var);
+            $codewriter->pushCode("echo $var");
+            $codewriter->recycleTempVariable($var);
         } else {
             $executor->doElse();
-            $this->pushCode("echo $exp");
+            $codewriter->pushCode("echo $exp");
         }
     }
 
