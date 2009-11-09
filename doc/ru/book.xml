@@ -2291,7 +2291,7 @@ function phptal_tales_money( $src, $nothrow )
           <constant>sys_get_temp_dir()</constant> function if available) or will try to guess where
           it should be, <filename>/tmp</filename> on Unix like systems and <filename>c:\windows\temp</filename> on
           Microsoft ones, to store the compiled templates. The default
-          destination can be changed to your liking by calling <methodname>setPhpCodeDestination()</methodname>
+          destination can be changed to your liking by calling <link linkend="set-code-destination"><methodname>setPhpCodeDestination()</methodname></link>
           method with the appropriate path.
           Be it the system's temp directory or a custom one, it needs to have
           its permissions setup as to allow the <acronym>PHP</acronym> running process (the Apache
@@ -2299,7 +2299,7 @@ function phptal_tales_money( $src, $nothrow )
           update files in that directory.
 </para><para>
           <acronym>PHPTAL</acronym> creates one file for each different template file and one file
-          for each tag if using <sgmltag>phptal:cache</sgmltag>. It doesn't create separate files
+          for each tag if using <link linkend="phptal-cache"><sgmltag>phptal:cache</sgmltag></link>. It doesn't create separate files
           for macros (which are simply compiled as <acronym>PHP</acronym> functions inside the
           compiled template file).
           These files are automatically cleaned up once in a while, more
