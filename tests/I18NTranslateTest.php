@@ -149,6 +149,23 @@ class I18NTranslateTest extends PHPTAL_TestCase
         
         $this->assertEquals('<div>&lt;foo&gt; translated</div>',$tpl->execute());
     }
+    
+     /**
+       * @expectedException PHPTAL_TemplateException
+       */
+    function testRejectsEmptyKey()
+    {
+        $this->newPHPTAL()->setTranslator( $t = new DummyTranslator() )->setSource('<div i18n:translate=""></div>')->execute();
+    }
+
+     /**
+       * @expectedException PHPTAL_TemplateException
+       */
+    function testRejectsEmptyKeyMarkup()
+    {
+        $this->newPHPTAL()->setTranslator( $t = new DummyTranslator() )->setSource('<div i18n:translate=""> <span tal:content="string:test"> </span> </div>')->execute();
+    }
+
 
     function testTranslateChainStructureExistsTranslated()
     {

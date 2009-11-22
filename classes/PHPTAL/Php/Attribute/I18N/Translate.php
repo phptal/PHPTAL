@@ -45,6 +45,9 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
         if (strlen(trim($this->expression)) == 0){
             $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
             $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
+            if ('' === trim($key)) {
+                throw new PHPTAL_TemplateException("Empty translation key", $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
+            }
             $code = $codewriter->str($key);
         } else {
             $code = $codewriter->evaluateExpression($this->expression);
