@@ -106,16 +106,15 @@ class PHPTAL_Context
     {
         if ($this->_parentContext) {
             $this->_parentContext->setDocType($doctype, $called_from_macro);
-        }
-        else if ($this->_echoDeclarations) {
+        } else if ($this->_echoDeclarations) {
             if (!$called_from_macro) {
                 echo $doctype."\n";
             } else {
                 throw new PHPTAL_ConfigurationException("Executed macro in file with DOCTYPE when using echoExecute(). This is not supported yet. Remove DOCTYPE or use PHPTAL->execute().");
-            }            
-        }            
-        else if (!$this->_docType) {            
-            $this->_docType = $doctype;            
+            }
+        }
+        else if (!$this->_docType) {
+            $this->_docType = $doctype;
         }
     }
 
@@ -125,7 +124,7 @@ class PHPTAL_Context
      * This method ensure PHPTAL uses the first xml declaration encountered
      * (main template or any macro template source containing an xml
      * declaration)
-     *     
+     *
      * @param bool $called_from_macro will do nothing if _echoDeclarations is also set
      *
      * @return void
@@ -134,15 +133,13 @@ class PHPTAL_Context
     {
         if ($this->_parentContext) {
             $this->_parentContext->setXmlDeclaration($xmldec, $called_from_macro);
-        }
-        else if ($this->_echoDeclarations) {
+        } else if ($this->_echoDeclarations) {
             if (!$called_from_macro) {
                 echo $xmldec."\n";
             } else {
                 throw new PHPTAL_ConfigurationException("Executed macro in file with XML declaration when using echoExecute(). This is not supported yet. Remove XML declaration or use PHPTAL->execute().");
             }
-        }
-        else if (!$this->_xmlDeclaration) {
+        } else if (!$this->_xmlDeclaration) {
             $this->_xmlDeclaration = $xmldec;
         }
     }

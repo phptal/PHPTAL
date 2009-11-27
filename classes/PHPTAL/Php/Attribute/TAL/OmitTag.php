@@ -51,8 +51,7 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
     {
         if (trim($this->expression) == '') {
             $this->phpelement->headFootDisabled = true;
-        }
-        else {
+        } else {
 
             $this->varname = $codewriter->createTempVariable();
 

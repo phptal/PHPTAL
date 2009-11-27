@@ -60,8 +60,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         $this->xmlns = $xmlns;
 
         // implements inheritance of element's namespace to tal attributes (<metal: use-macro>)
-        foreach ($attribute_nodes as $index => $attr)
-        {
+        foreach ($attribute_nodes as $index => $attr) {
             // it'll work only when qname == localname, which is good
             if ($this->xmlns->isValidAttributeNS($namespace_uri, $attr->getQualifiedName())) {
                 $this->attribute_nodes[$index] = new PHPTAL_Dom_Attr($attr->getQualifiedName(), $namespace_uri, $attr->getValueEscaped(), $attr->getEncoding());
@@ -103,8 +102,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
         $valueEscaped = ''; // sometimes parser generates split text nodes. "normalisation" is needed.
         $value = '';
-        foreach ($this->childNodes as $node)
-        {
+        foreach ($this->childNodes as $node) {
             // leave it alone if there is CDATA, comment, or anything else.
             if (!$node instanceOf PHPTAL_Dom_Text) return;
 
@@ -344,8 +342,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
         if (!$html5mode && $this->isEmptyNode($codewriter->getOutputMode())) {
             $codewriter->pushHTML('/>');
-        }
-        else {
+        } else {
             $codewriter->pushHTML('>');
         }
 
@@ -458,12 +455,10 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             // remove handled xml namespaces
             if (PHPTAL_Dom_Defs::getInstance()->isHandledXmlNs($attr->getQualifiedName(), $attr->getValueEscaped())) {
                 unset($this->attribute_nodes[$index]);
-            }
-            else if ($this->xmlns->isHandledNamespace($attr->getNamespaceURI())) {
+            } else if ($this->xmlns->isHandledNamespace($attr->getNamespaceURI())) {
                 $talAttributes[$attr->getQualifiedName()] = $attr;
                 $attr->hide();
-            }
-            else if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
+            } else if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
                 $attr->setValue($attr->getLocalName());
             }
         }

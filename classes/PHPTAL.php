@@ -1268,12 +1268,9 @@ class PHPTAL
             return;
         }
 
-        if (!$this->resolvers && !$this->_repositories)
-        {
+        if (!$this->resolvers && !$this->_repositories) {
             $this->_source = new PHPTAL_FileSource($this->_path);
-        }
-        else
-        {
+        } else {
             foreach ($this->resolvers as $resolver) {
                 $source = $resolver->resolve($this->_path);
                 if ($source) {

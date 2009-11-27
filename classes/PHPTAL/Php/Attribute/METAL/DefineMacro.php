@@ -45,8 +45,7 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
             throw new PHPTAL_ParserException('Bad macro name "'.$macroname.'"', $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
 
-        if ($codewriter->functionExists($macroname))
-        {
+        if ($codewriter->functionExists($macroname)) {
             throw new PHPTAL_TemplateException("Macro $macroname is defined twice");
         }
 

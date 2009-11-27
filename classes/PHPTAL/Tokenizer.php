@@ -41,8 +41,7 @@ class PHPTAL_Tokenizer
     
     function nextToken()
     {
-        if ($this->offset >= $this->end)
-        {
+        if ($this->offset >= $this->end) {
             $this->current_value = null;
             return $this->current_token = 'EOF';            
         }

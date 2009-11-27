@@ -14,8 +14,7 @@ class PHPTAL_PreFilter_StripComments extends PHPTAL_PreFilter
                 } else {
                     $node->parentNode->removeChild($node);
                 }
-            }
-            else if ($node instanceof PHPTAL_Dom_Element) {
+            } else if ($node instanceof PHPTAL_Dom_Element) {
                 $this->filterDOM($node);
             }
         }

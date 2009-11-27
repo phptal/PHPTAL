@@ -62,8 +62,7 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     
     private function findElementToFilter(PHPTAL_Dom_Element $root)
     {
-        foreach ($root->childNodes as $node)
-        {
+        foreach ($root->childNodes as $node) {
             if (!$node instanceOf PHPTAL_Dom_Element) continue;
             
             if ($node->getAttributeNS("http://www.w3.org/XML/1998/namespace",'space') == 'default') {

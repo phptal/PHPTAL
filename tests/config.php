@@ -15,8 +15,7 @@
 
 
 // This is needed to run tests ran individually without run-tests.php script
-if (!class_exists('PHPTAL'))
-{
+if (!class_exists('PHPTAL')) {
     ob_start();
     
     // try local copy of PHPTAL first, otherwise it might be testing

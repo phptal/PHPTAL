@@ -84,8 +84,7 @@ implements PHPTAL_Php_TalesChainReader
         // i18n needs to read replaced value of the attribute, which is not possible if attribute is completely replaced with conditional code
         if ($this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'attributes')) {
             $this->prepareAttributeUnconditional($codewriter, $qname, $code);
-        }
-        else {
+        } else {
             $this->prepareAttributeConditional($codewriter, $qname, $code);
         }
     }
@@ -97,10 +96,11 @@ implements PHPTAL_Php_TalesChainReader
     {
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
-        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
+        if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE) {
             $value = $codewriter->stringifyCode($code);
-        else
+        } else {
             $value = $codewriter->escapeCode($code);
+        }
         $codewriter->doSetVar($attkey, $value);
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithVariable($attkey);
     }
@@ -197,8 +197,7 @@ implements PHPTAL_Php_TalesChainReader
 
         if (!$islast) {
             $condition = "!phptal_isempty($this->_attkey = ($exp))";
-        }
-        else {
+        } else {
             $condition = "null !== ($this->_attkey = ($exp))";
         }
         $executor->doIf($condition);

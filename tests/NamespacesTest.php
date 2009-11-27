@@ -20,8 +20,7 @@ require_once 'PHPTAL/Namespace.php';
 require_once 'PHPTAL/Namespace/Builtin.php';
 PHPTAL::restoreIncludePath();
 
-if (!class_exists('Test_PHPTAL_Namespace',false))
-{
+if (!class_exists('Test_PHPTAL_Namespace',false)) {
     class Test_PHPTAL_Namespace extends PHPTAL_Namespace_Builtin
     {
     }

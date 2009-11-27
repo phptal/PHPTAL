@@ -198,19 +198,15 @@ class PHPTAL_Php_State
         $dollars = substr($matches[1], strlen($matches[1])/2);        
         
         $code = $matches[3];        
-        if ($format == 'html')
-        {
+        if ($format == 'html') {
             $code = html_entity_decode($code,ENT_QUOTES, $this->getEncoding());        
         }
         
         $code = $this->compileTalesToPHPExpression($code);                
         
-        if (rtrim($matches[2]) == 'structure') // regex captures a space there
-        {
+        if (rtrim($matches[2]) == 'structure') { // regex captures a space there
             return $dollars.'<?php echo '.$this->stringify($code).' ?>';
-        }
-        else 
-        {
+        } else {
             if ($format == 'html') {
                 return $dollars.'<?php echo '.$this->htmlchars($code).' ?>';
             }
@@ -238,8 +234,7 @@ class PHPTAL_Php_State
     public function htmlchars($php)
     {
         // PHP strings can be escaped at compile time
-        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/', $php, $m))
-        {
+        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/', $php, $m)) {
             return "'".htmlspecialchars(str_replace('\\\'',"'", $m[1]), ENT_QUOTES)."'";
         }
         return 'phptal_escape('.$php.')';
@@ -254,8 +249,7 @@ class PHPTAL_Php_State
     public function stringify($php)
     {
         // PHP strings don't need to be changed
-        if (preg_match('/^\'(?:[^\'{]+|\\\\.)*\'$/', $php))
-        {
+        if (preg_match('/^\'(?:[^\'{]+|\\\\.)*\'$/', $php)) {
             return $php;
         }
         return 'phptal_tostring('.$php.')';
