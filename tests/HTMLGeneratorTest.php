@@ -16,10 +16,10 @@
 require_once dirname(__FILE__)."/config.php";
 
 class HTMLGeneratorTest extends PHPTAL_TestCase {
-	
-	function testTalDoesntConsumeNewline()
-	{
-	    $res = $this->newPHPTAL()->setSource('<tal:block tal:condition="php:true">I\'m on a line</tal:block>
+    
+    function testTalDoesntConsumeNewline()
+    {
+        $res = $this->newPHPTAL()->setSource('<tal:block tal:condition="php:true">I\'m on a line</tal:block>
 <tal:block tal:condition="php:true">I\'m on a line</tal:block>')->execute();
 
         $this->assertEquals('I\'m on a line
@@ -27,8 +27,8 @@ I\'m on a line',$res);
     }
     
     function testPHPConsumesNewline()
-	{
-	    $res = $this->newPHPTAL()->setSource('<p><?php echo ""; ?>
+    {
+        $res = $this->newPHPTAL()->setSource('<p><?php echo ""; ?>
 No new line<?php echo ""; ?>
 No new line</p>')->execute();
 

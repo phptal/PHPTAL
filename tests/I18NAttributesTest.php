@@ -96,17 +96,17 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
 
-	function testInterpolation()
-	{
-		$t = new DummyTranslator();
-		$t->setTranslation('foo ${someObject/method} bar ${otherObject/method} buz','ok ${someObject/method} ok ${otherObject/method} ok');
-		
-		$tpl = $this->newPHPTAL('input/i18n-attributes-05.html');
-		$tpl->setTranslator($t);
-		$tpl->someObject = array('method' => 'good');
-		$tpl->otherObject = array('method' => 'great');
-		$res = trim_string($tpl->execute());
-		$exp = trim_file('output/i18n-attributes-05.html');
-		$this->assertEquals($exp, $res);
-	}
+    function testInterpolation()
+    {
+        $t = new DummyTranslator();
+        $t->setTranslation('foo ${someObject/method} bar ${otherObject/method} buz','ok ${someObject/method} ok ${otherObject/method} ok');
+        
+        $tpl = $this->newPHPTAL('input/i18n-attributes-05.html');
+        $tpl->setTranslator($t);
+        $tpl->someObject = array('method' => 'good');
+        $tpl->otherObject = array('method' => 'great');
+        $res = trim_string($tpl->execute());
+        $exp = trim_file('output/i18n-attributes-05.html');
+        $this->assertEquals($exp, $res);
+    }
 }

@@ -42,12 +42,12 @@ class EscapeCDATATest extends PHPTAL_TestCase {
 
     }
 
-	function testDoesEscapeHTMLContent(){
-		$tpl = $this->newPHPTAL('input/escape.html');
-		$exp = trim_file('output/escape.html');
-		$res = trim_string($tpl->execute());
-		$this->assertEquals($exp, $res);
-	}
+    function testDoesEscapeHTMLContent(){
+        $tpl = $this->newPHPTAL('input/escape.html');
+        $exp = trim_file('output/escape.html');
+        $res = trim_string($tpl->execute());
+        $this->assertEquals($exp, $res);
+    }
 
     function testEntityTextInPath()
     {

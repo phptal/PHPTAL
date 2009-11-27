@@ -74,8 +74,8 @@ class XmlParserTest extends PHPTAL_TestCase
         $this->assertEquals(7, $builder->datas);
     }
 
-	
-	/**
+    
+    /**
      * @expectedException PHPTAL_ParserException
      */
     public function testRejectsInvalidAttributes1()
