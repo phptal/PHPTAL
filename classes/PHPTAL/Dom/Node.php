@@ -123,7 +123,7 @@ abstract class PHPTAL_Dom_Node
         if ($prop === 'generator') return self::$_codewriter_bc_hack_;
         if ($prop === 'attributes') {
             $tmp = array(); 
-            foreach($this->getAttributeNodes() as $att) {
+            foreach ($this->getAttributeNodes() as $att) {
                 $tmp[$att->getQualifiedName()] = $att->getValueEscaped();
             }
             return $tmp;

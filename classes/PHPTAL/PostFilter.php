@@ -47,6 +47,7 @@ abstract class PHPTAL_PostFilter implements PHPTAL_Filter
      * Default implementation calls filter(). Override it.
      *
      * @param string $src markup fragment to filter
+     *
      * @return string
      */
     public function filterFragment($src)
@@ -61,6 +62,7 @@ abstract class PHPTAL_PostFilter implements PHPTAL_Filter
      * Default implementation does nothing. Override it.
      *
      * @param string $src template output to filter
+     *
      * @return string
      */
     public function filter($src)

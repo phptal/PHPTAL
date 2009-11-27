@@ -43,12 +43,12 @@ class PHPTAL_Tokenizer
     {
         if ($this->offset >= $this->end)
         {
-            $this->current_value = NULL;
+            $this->current_value = null;
             return $this->current_token = 'EOF';            
         }
         
         //if (!preg_match_all($this->regex, $this->str, $m, PREG_SET_ORDER, $this->offset)) throw new Exception("FAIL {$this->regex} at {$this->offset}");
-        if (!preg_match($this->regex, $this->str, $m, NULL, $this->offset)) throw new Exception("FAIL {$this->regex} didn't match '{$this->str}' at {$this->offset}");        
+        if (!preg_match($this->regex, $this->str, $m, null, $this->offset)) throw new Exception("FAIL {$this->regex} didn't match '{$this->str}' at {$this->offset}");        
         
         $this->offset += strlen($m[0]); // in bytes
         

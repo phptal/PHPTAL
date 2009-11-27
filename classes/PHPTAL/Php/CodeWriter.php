@@ -69,6 +69,7 @@ class PHPTAL_Php_CodeWriter
      * set full '<!DOCTYPE...>' string to output later
      * 
      * @param string $dt
+     *
      * @return void
      */
     public function setDocType($dt)
@@ -80,6 +81,7 @@ class PHPTAL_Php_CodeWriter
      * set full '<?xml ?>' string to output later
      * 
      * @param string $dt
+     *
      * @return void
      */
     public function setXmlDeclaration($dt)
@@ -92,6 +94,7 @@ class PHPTAL_Php_CodeWriter
      * (poor man's namespace)
      * 
      * @param string $prefix
+     *
      * @return void
      */
     public function setFunctionPrefix($prefix)
@@ -111,6 +114,7 @@ class PHPTAL_Php_CodeWriter
      * @see PHPTAL_Php_State::setTalesMode()
      * 
      * @param string $mode
+     *
      * @return string
      */
     public function setTalesMode($mode)
@@ -264,7 +268,7 @@ class PHPTAL_Php_CodeWriter
         $this->indent();
     }
 
-    public function doEnd($expects = NULL)
+    public function doEnd($expects = null)
     {
         if (!count($this->_segments)) {
             if (!$expects) $expects = 'anything';
@@ -272,7 +276,7 @@ class PHPTAL_Php_CodeWriter
         }
                 
         $segment = array_pop($this->_segments);
-        if ($expects !== NULL && $segment !== $expects) {
+        if ($expects !== null && $segment !== $expects) {
             throw new PHPTAL_Exception("Bug: CodeWriter generated end of $expects, but needs to close $segment");
         }
         

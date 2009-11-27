@@ -59,6 +59,7 @@ class PHPTAL_Dom_Defs
      * it will assume elements with no namespace may be XHTML too.
      * 
      * @param string $tagName local name of the tag
+     *
      * @return bool
      */
     public function isEmptyTagNS($namespace_uri, $local_name)
@@ -88,6 +89,7 @@ class PHPTAL_Dom_Defs
      * Returns true if the attribute is an xhtml boolean attribute.
      *
      * @param string $att local name
+     *
      * @return bool
      */
     public function isBooleanAttribute($att)

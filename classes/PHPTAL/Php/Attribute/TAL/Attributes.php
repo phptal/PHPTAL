@@ -51,7 +51,7 @@ implements PHPTAL_Php_TalesChainReader
     {
         // split attributes using ; delimiter
         $attrs = $codewriter->splitExpression($this->expression);
-        foreach($attrs as $exp) {
+        foreach ($attrs as $exp) {
             list($qname, $expression) = $this->parseSetExpression($exp);
             if ($expression) {
                 $this->prepareAttribute($codewriter, $qname, $expression);
@@ -113,7 +113,7 @@ implements PHPTAL_Php_TalesChainReader
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
 
-        $codewriter->doIf("NULL !== ($attkey = ($code))");
+        $codewriter->doIf("null !== ($attkey = ($code))");
 
         if ($this->_echoType !== PHPTAL_Php_Attribute::ECHO_STRUCTURE)
             $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->escapeCode($attkey).".'\"'");
@@ -166,7 +166,7 @@ implements PHPTAL_Php_TalesChainReader
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        foreach($this->vars_to_recycle as $var) $codewriter->recycleTempVariable($var);
+        foreach ($this->vars_to_recycle as $var) $codewriter->recycleTempVariable($var);
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
@@ -199,7 +199,7 @@ implements PHPTAL_Php_TalesChainReader
             $condition = "!phptal_isempty($this->_attkey = ($exp))";
         }
         else {
-            $condition = "NULL !== ($this->_attkey = ($exp))";
+            $condition = "null !== ($this->_attkey = ($exp))";
         }
         $executor->doIf($condition);
 

@@ -48,6 +48,7 @@ class PHPTAL_PluginLoader
      * Load a plugin by its name
      *
      * @param string $name
+     *
      * @return string|false Class name of loaded plugin or false
      */
     public function load($name)

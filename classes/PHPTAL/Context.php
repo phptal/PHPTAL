@@ -99,6 +99,7 @@ class PHPTAL_Context
      * template or any macro template source containing a DOCTYPE.
      *
      * @param bool $called_from_macro will do nothing if _echoDeclarations is also set
+     *
      * @return void
      */
     public function setDocType($doctype,$called_from_macro)
@@ -126,6 +127,7 @@ class PHPTAL_Context
      * declaration)
      *     
      * @param bool $called_from_macro will do nothing if _echoDeclarations is also set
+     *
      * @return void
      */
     public function setXmlDeclaration($xmldec, $called_from_macro)

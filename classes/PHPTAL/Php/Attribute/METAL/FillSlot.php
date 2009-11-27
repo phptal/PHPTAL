@@ -66,13 +66,13 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
             $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
         } else {
             $codewriter->pushCode('ob_start()');
-            $this->function_name = NULL;
+            $this->function_name = null;
         }     
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if ($this->function_name !== NULL) {
+        if ($this->function_name !== null) {
             $codewriter->doEnd();            
             $codewriter->pushCode('$ctx->fillSlotCallback('.$codewriter->str($this->expression).', '.$codewriter->str($this->function_name).', $_thistpl, clone $tpl)'); 
         } else {
@@ -95,6 +95,7 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
     
     /**
      * @param bool $is_nested_in_repeat true if any parent element has tal:repeat
+     *
      * @return rough guess
      */
     private function estimateNumberOfBytesOutput(PHPTAL_Dom_Element $element, $is_nested_in_repeat)
@@ -106,7 +107,7 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
         
         $estimated_bytes = 2*(3+strlen($element->getQualifiedName()));
         
-        foreach($element->getAttributeNodes() as $attr) {
+        foreach ($element->getAttributeNodes() as $attr) {
             $estimated_bytes += 4+strlen($attr->getQualifiedName());
             $estimated_bytes += strlen($attr->getValueEscaped()); // this is shoddy for replaced attributes
         }
@@ -118,7 +119,7 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
             // assume that output in loops is shorter (e.g. table rows) than outside (main content)
             $estimated_bytes += ($has_repeat_attr || $is_nested_in_repeat) ? 500 : 2000;
         } else {
-            foreach($element->childNodes as $node) {
+            foreach ($element->childNodes as $node) {
                 if ($node instanceof PHPTAL_Dom_Element) {
                     $estimated_bytes += $this->estimateNumberOfBytesOutput($node, $has_repeat_attr || $is_nested_in_repeat);
                 } else {

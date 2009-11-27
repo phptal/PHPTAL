@@ -100,7 +100,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
                 return $langCode;
             }
         }
-        return NULL;
+        return null;
     }
 
     /**
@@ -121,6 +121,7 @@ class PHPTAL_GetTextTranslator implements PHPTAL_TranslationService
      * Switches to one of the domains previously set via addDomain()
      *
      * @param string $domain name of translation domain to be used.
+     *
      * @return string - old domain
      */
     public function useDomain($domain)

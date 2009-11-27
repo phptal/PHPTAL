@@ -65,6 +65,7 @@ class PHPTAL_Php_State
      * Valid modes are 'tales' and 'php'
      * 
      * @param string $mode
+     *
      * @return string
      */
     public function setTalesMode($mode)

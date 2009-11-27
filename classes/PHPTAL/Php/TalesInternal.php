@@ -404,6 +404,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      * Use PHPTAL_Php_TalesInternal::compileToPHPExpression() if you always want string.
      *
      * @param bool $nothrow if true, invalid expression will return NULL (at run time) rather than throwing exception
+     *
      * @return string or array
      */
     public static function compileToPHPStatements($expression,$nothrow=false)
@@ -434,7 +435,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         if (strpos($typePrefix, '.')) {
             $classCallback = explode('.', $typePrefix, 2);
             $callbackName  = null;
-            if (!is_callable($classCallback, FALSE, $callbackName)) {
+            if (!is_callable($classCallback, false, $callbackName)) {
                 throw new PHPTAL_UnknownModifierException("Unknown phptal modifier $typePrefix. Function $callbackName does not exists or is not statically callable", $typePrefix);
             }
             $ref = new ReflectionClass($classCallback[0]);

@@ -74,7 +74,7 @@ class IncludePathTest extends PHPTAL_TestCase
                 PHPTAL::restoreIncludePath();
                 
                 if (!$e instanceof ErrorException) throw $e;                
-                $fp = NULL;
+                $fp = null;
             }            
 
             $this->assertTrue(!!$fp, "File should be opened via include path: ".$modified_include_path.'; . = '.getcwd());

@@ -23,8 +23,8 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
             return;
         }            
         
-        $lastTextNode = NULL;
-        foreach($root->childNodes as $node) {
+        $lastTextNode = null;
+        foreach ($root->childNodes as $node) {
             
             // CDATA is not normalized by design
             if ($node instanceOf PHPTAL_Dom_Text) {                
@@ -43,7 +43,7 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
                     $lastTextNode = $node;
                 }
             } else {
-                $lastTextNode = NULL;
+                $lastTextNode = null;
                 if ($node instanceOf PHPTAL_Dom_Element) {                                             
                     $this->filterDOM($node);
                 }
@@ -62,7 +62,7 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     
     private function findElementToFilter(PHPTAL_Dom_Element $root)
     {
-        foreach($root->childNodes as $node)
+        foreach ($root->childNodes as $node)
         {
             if (!$node instanceOf PHPTAL_Dom_Element) continue;
             
@@ -84,7 +84,7 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     
     function normalizeAttributes(PHPTAL_Dom_Element $element)
     {
-        foreach($element->getAttributeNodes() as $attrnode) {
+        foreach ($element->getAttributeNodes() as $attrnode) {
             if ($attrnode->getReplacedState() !== PHPTAL_Dom_Attr::NOT_REPLACED) continue;
             
             $val = $this->normalizeSpace($attrnode->getValueEscaped(), $attrnode->getEncoding());

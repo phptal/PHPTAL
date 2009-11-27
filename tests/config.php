@@ -54,7 +54,7 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
     /**
      * backupGlobals is the worst idea ever.
      */
-    protected $backupGlobals = FALSE;
+    protected $backupGlobals = false;
 
     protected function newPHPTAL($tpl = false)
     {

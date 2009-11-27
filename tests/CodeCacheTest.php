@@ -139,7 +139,7 @@ class CodeCacheTest extends PHPTAL_TestCase
 
         $files = glob($this->codeDestination.'*');
         $this->assertEquals(2,count($files)); // one for template, one for cache
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $this->assertFileExists($file);
             touch($file, time() - 3600*24*100);
         }
@@ -150,7 +150,7 @@ class CodeCacheTest extends PHPTAL_TestCase
         clearstatcache();
 
         // can't check for reparse, because PHPTAL uses function_exists() as a shortcut!
-        foreach($files as $file) {
+        foreach ($files as $file) {
             $this->assertFileNotExists($file);
         }
 

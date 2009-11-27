@@ -16,8 +16,8 @@
 define('PHPTAL_VERSION', '1_2_2a1');
 
 
-/* If you want to use autoload, comment out all lines starting with require_once 'PHPTAL
-   and uncomment the line below: */
+/* If you want to use autoload, comment out all lines starting with 
+   require_once 'PHPTAL and uncomment the line below: */
 
 // spl_autoload_register(array('PHPTAL','autoload'));
 
@@ -50,6 +50,12 @@ PHPTAL::restoreIncludePath();
  * ?>
  * </code>
  *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @link     http://phptal.org/
  */
 class PHPTAL
 {
@@ -65,7 +71,7 @@ class PHPTAL
     /**
      * @see getPreFilters()
      */
-    protected $_prefilters = array();
+    protected $prefilters = array();
 
     /**
      * Prefilters have been redesigned. Old property is no longer used.
@@ -79,26 +85,32 @@ class PHPTAL
      *  list of template source repositories given to file source resolver
      */
     protected $_repositories = array();
+
     /**
      *  template path (path that has been set, not necessarily loaded)
      */
     protected $_path = null;
+
     /**
      *  template source resolvers (classes that search for templates by name)
      */
-    protected $_resolvers = array();
+    protected $resolvers = array();
+
     /**
      *  template source (only set when not working with file)
      */
     protected $_source = null;
+
     /**
      * destination of PHP intermediate file
      */
     protected $_codeFile = null;
+
     /**
      * php function generated for the template
      */
     protected $_functionName = null;
+
     /**
      * set to true when template is ready for execution
      */
@@ -108,6 +120,7 @@ class PHPTAL
      * associative array of phptal:id => PHPTAL_Trigger
      */
     protected $_triggers = array();
+
     /**
      * i18n translator
      */
@@ -117,6 +130,7 @@ class PHPTAL
      * global execution context
      */
     protected $_globalContext = null;
+
     /**
      * current execution context
      */
@@ -125,7 +139,7 @@ class PHPTAL
     /**
      * current template file (changes within macros)
      */
-    public  $_file = false;
+    protected $_file = false;
     
     /**
      * list of on-error caught exceptions
@@ -155,18 +169,18 @@ class PHPTAL
     /**
      * directory where code cache is
      */
-    protected $_phpCodeDestination;
-    protected $_phpCodeExtension = 'php';
+    private $_phpCodeDestination;
+    private $_phpCodeExtension = 'php';
 
     /**
      * number of days
      */
-    protected $_cacheLifetime = 30;
+    private $_cacheLifetime = 30;
 
     /**
      * 1/x
      */
-    protected $_cachePurgeFrequency = 30;
+    private $_cachePurgeFrequency = 30;
 
     /**
      * speeds up calls to external templates
@@ -177,12 +191,12 @@ class PHPTAL
      * restore_include_path() resets path to default in ini,
      * breaking application's custom paths, so a custom backup is necessary.
      */
-    private static $include_path_backup;
+    private static $_include_path_backup;
 
     /**
      * keeps track of multiple calls to setIncludePath()
      */
-    private static $include_path_set_nesting = 0;
+    private static $_include_path_set_nesting = 0;
     
     /**
      * @see PHPTAL::setPluginLoader()
@@ -244,7 +258,9 @@ class PHPTAL
     /**
      * Set template from file path.
      *
-     * @param string $path filesystem path, or any path that will be accepted by source resolver
+     * @param string $path filesystem path, 
+     *                     or any path that will be accepted by source resolver
+     *
      * @return $this
      */
     public function setTemplate($path)
@@ -265,8 +281,9 @@ class PHPTAL
      * Should be used only with temporary template sources.
      * Use setTemplate() or addSourceResolver() whenever possible.
      *
-     * @param string $src The phptal template source.
+     * @param string $src  The phptal template source.
      * @param string $path Fake and 'unique' template path.
+     *
      * @return $this
      */
     public function setSource($src, $path=false)
@@ -292,6 +309,7 @@ class PHPTAL
      * Specify where to look for templates.
      *
      * @param mixed $rep string or Array of repositories
+     *
      * @return $this
      */
     public function setTemplateRepository($rep)
@@ -306,6 +324,8 @@ class PHPTAL
 
     /**
      * Get template repositories.
+     *
+     * @return array
      */
     public function getTemplateRepositories()
     {
@@ -314,6 +334,8 @@ class PHPTAL
 
     /**
      * Clears the template repositories.
+     *
+     * @return $this
      */
     public function clearTemplateRepositories()
     {
@@ -324,12 +346,13 @@ class PHPTAL
     /**
      * Specify how to look for templates.
      *
-     * @param $resolver PHPTAL_SourceResolver
+     * @param PHPTAL_SourceResolver $resolver instance of resolver
+     *
      * @return $this
      */
     public function addSourceResolver(PHPTAL_SourceResolver $resolver)
     {
-        $this->_resolvers[] = $resolver;
+        $this->resolvers[] = $resolver;
         return $this;
     }
 
@@ -337,7 +360,8 @@ class PHPTAL
      * Ignore XML/XHTML comments on parsing.
      * Comments starting with <!--! are always stripped.
      *
-     * @param bool $bool
+     * @param bool $bool if true all comments are stripped during parse
+     *
      * @return $this
      */
     public function stripComments($bool)
@@ -345,9 +369,9 @@ class PHPTAL
         $this->resetPrepared();
         
         if ($bool) {
-            $this->_prefilters['_phptal_strip_comments_'] = "strip_comments";
+            $this->prefilters['_phptal_strip_comments_'] = "strip_comments";
         } else {
-            unset($this->_prefilters['_phptal_strip_comments_']);
+            unset($this->prefilters['_phptal_strip_comments_']);
         }
         return $this;
     }
@@ -362,6 +386,7 @@ class PHPTAL
      * and is neccessary to generate RSS feeds properly.
      *
      * @param int $mode (PHPTAL::XML, PHPTAL::XHTML or PHPTAL::HTML5).
+     *
      * @return $this
      */
     public function setOutputMode($mode)
@@ -378,6 +403,8 @@ class PHPTAL
     /**
      * Get output mode
      * @see setOutputMode()
+     *
+     * @return output mode constant
      */
     public function getOutputMode()
     {
@@ -388,6 +415,7 @@ class PHPTAL
      * Set input and ouput encoding. Encoding is case-insensitive.
      * 
      * @param string $enc example: 'UTF-8'
+     *
      * @return $this
      */
     public function setEncoding($enc)
@@ -404,7 +432,9 @@ class PHPTAL
 
     /**
      * Get input and ouput encoding.
+     *
      * @param string $enc example: 'UTF-8'
+     *
      * @return $this
      */
     public function getEncoding()
@@ -417,6 +447,8 @@ class PHPTAL
      * The path cannot contain characters that would be interpreted by glob() (e.g. *[]?)
      *
      * @param string $path Intermediate file path.
+     *
+     * @return $this
      */
     public function setPhpCodeDestination($path)
     {
@@ -427,6 +459,8 @@ class PHPTAL
 
     /**
      * Get the storage location for intermediate PHP files.
+     *
+     * @return string
      */
     public function getPhpCodeDestination()
     {
@@ -435,7 +469,10 @@ class PHPTAL
 
     /**
      * Set the file extension for intermediate PHP files.
+     *
      * @param string $extension The file extension.
+     *
+     * @return $this
      */
     public function setPhpCodeExtension($extension)
     {
@@ -458,7 +495,9 @@ class PHPTAL
      *
      * DON'T USE IN PRODUCTION - this makes PHPTAL many times slower.
      *
-     * @param bool bool Forced reparse state.
+     * @param bool $bool Forced reparse state.
+     *
+     * @return $this
      */
     public function setForceReparse($bool)
     {
@@ -479,6 +518,10 @@ class PHPTAL
      *
      * This sets encoding used by the translator, so be sure to use encoding-dependent
      * features of the translator (e.g. addDomain) _after_ calling setTranslator.
+     *
+     * @param PHPTAL_TranslationService $t instance
+     *
+     * @return $this
      */
     public function setTranslator(PHPTAL_TranslationService $t)
     {
@@ -499,7 +542,7 @@ class PHPTAL
     final public function setPreFilter(PHPTAL_Filter $filter)
     {
         $this->resetPrepared();
-        $this->_prefilters['_phptal_old_filter_'] = $filter;
+        $this->prefilters['_phptal_old_filter_'] = $filter;
     }
 
     /**
@@ -514,6 +557,7 @@ class PHPTAL
      * 
      * @see PHPTAL::getPreFilterByName()
      * @param mixed $filter PHPTAL_PreFilter object or name of prefilter to add
+     *
      * @return PHPTAL
      */
     final public function addPreFilter($filter)
@@ -524,7 +568,7 @@ class PHPTAL
             throw new PHPTAL_ConfigurationException("addPreFilter expects PHPTAL_PreFilter object or string, which is class name of the prefilter");
         }
         
-        $this->_prefilters[] = $filter;
+        $this->prefilters[] = $filter;
         return $this;
     }
 
@@ -539,7 +583,7 @@ class PHPTAL
      */
     protected function getPreFilters()
     {
-        return $this->_prefilters;
+        return $this->prefilters;
     }
 
     /**
@@ -553,7 +597,7 @@ class PHPTAL
     protected function getPreFiltersCacheId()
     {
         $cacheid = '';
-        foreach($this->getPreFilters() as $key => $prefilter) {
+        foreach ($this->getPreFilters() as $key => $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 $cacheid .= $key.$prefilter->getCacheId();
             } elseif ($prefilter instanceof PHPTAL_Filter) {
@@ -590,11 +634,11 @@ class PHPTAL
             throw new PHPTAL_ConfigurationException("Illegal argument. Name of a filter expected");
         }
 
-        if (!preg_match('/^[a-z][a-z_0-9]*$/i',$name)) {
+        if (!preg_match('/^[a-z][a-z_0-9]*$/i', $name)) {
             throw new PHPTAL_ConfigurationException("Name of the prefilter '$name' is not alphanumeric or does not start with a letter");
         }
 
-        $classname = 'PreFilter_'.preg_replace('/_([a-zA-Z])/e','strtoupper("\1")',ucfirst($name));
+        $classname = 'PreFilter_'.preg_replace('/_([a-zA-Z])/e', 'strtoupper("\1")', ucfirst($name));
 
         if (!class_exists($classname,false)) {
             $pluginloader = $this->getPluginLoader();
@@ -639,7 +683,7 @@ class PHPTAL
     {
         $prefilters = $this->getPreFilters();
         
-        foreach($prefilters as &$prefilter) {
+        foreach ($prefilters as &$prefilter) {
             if (is_string($prefilter)) {
                 $prefilter = $this->getPreFilterByName($prefilter);
             }
@@ -678,6 +722,7 @@ class PHPTAL
      * Returns trigger for specified phptal:id.
      * 
      * @param string $id phptal:id
+     *
      * @return PHPTAL_Trigger or NULL
      */
     public function getTrigger($id)
@@ -694,6 +739,7 @@ class PHPTAL
      *
      * @param string $varname
      * @param mixed $value
+     *
      * @return void
      */
     public function __set($varname, $value)
@@ -707,6 +753,7 @@ class PHPTAL
      * @see PHPTAL::__set()
      * @param string $varname name of the variable
      * @param mixed $value value of the variable
+     *
      * @return $this
      */
     public function set($varname, $value)
@@ -1047,10 +1094,10 @@ class PHPTAL
      */
     public function getFunctionName()
     {
-       // function name is used as base for caching, so it must be unique for
-       // every combination of settings that changes code in compiled template
+        // function name is used as base for caching, so it must be unique for
+        // every combination of settings that changes code in compiled template
 
-       if (!$this->_functionName) {
+        if (!$this->_functionName) {
 
             // just to make tempalte name recognizable
             $basename = preg_replace('/\.[a-z]{3,5}$/','',basename($this->_source->getRealPath()));
@@ -1060,12 +1107,13 @@ class PHPTAL
                     . $this->getEncoding()
                     . $this->getPrefiltersCacheId()
                     . $this->getOutputMode(),
-                    true);
+                    true
+                    );
 
             // uses base64 rather than hex to make filename shorter.
             // there is loss of some bits due to name constraints and case-insensivity,
             // but that's still over 110 bits in addition to basename and timestamp.
-            $hash = strtr(rtrim(base64_encode($hash),"="),"+/=","_A_");
+            $hash = strtr(rtrim(base64_encode($hash), "="), "+/=", "_A_");
 
             $this->_functionName = $this->getFunctionNamePrefix($this->_source->getLastModifiedTime()) .
                                    $basename . '__' . $hash;
@@ -1078,6 +1126,7 @@ class PHPTAL
      * Function name is also base name for the template.
      *
      * @param int $timestamp unix timestamp with template modification date
+     *
      * @return string
      */
     private function getFunctionNamePrefix($timestamp)
@@ -1178,7 +1227,7 @@ class PHPTAL
 
         $prefilters = $this->getInitializedPreFilters();
 
-        foreach($prefilters as $prefilter) {
+        foreach ($prefilters as $prefilter) {
             $data = $prefilter->filter($data);
         }
 
@@ -1188,7 +1237,7 @@ class PHPTAL
 
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
-        foreach($prefilters as $prefilter) {
+        foreach ($prefilters as $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 if ($prefilter->filterDOM($tree)) {
                     throw new PHPTAL_ConfigurationException("Don't return value from filterDOM()");
@@ -1219,13 +1268,13 @@ class PHPTAL
             return;
         }
 
-        if (!$this->_resolvers && !$this->_repositories)
+        if (!$this->resolvers && !$this->_repositories)
         {
             $this->_source = new PHPTAL_FileSource($this->_path);
         }
         else
         {
-            foreach ($this->_resolvers as $resolver) {
+            foreach ($this->resolvers as $resolver) {
                 $source = $resolver->resolve($this->_path);
                 if ($source) {
                     $this->_source = $source;
@@ -1255,11 +1304,11 @@ class PHPTAL
      */
     final public static function setIncludePath()
     {
-        if (!self::$include_path_set_nesting) {
-            self::$include_path_backup = get_include_path();
+        if (!self::$_include_path_set_nesting) {
+            self::$_include_path_backup = get_include_path();
             set_include_path(dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
         }
-        self::$include_path_set_nesting++;
+        self::$_include_path_set_nesting++;
     }
 
     /**
@@ -1267,13 +1316,20 @@ class PHPTAL
      */
     final public static function restoreIncludePath()
     {
-        self::$include_path_set_nesting--;
-        if (!self::$include_path_set_nesting) {
+        self::$_include_path_set_nesting--;
+        if (!self::$_include_path_set_nesting) {
             // restore_include_path() doesn't work properly
-            set_include_path(self::$include_path_backup);
+            set_include_path(self::$_include_path_backup);
         }
     }
 
+    /**
+     * Suitable for callbacks from SPL autoload
+     *
+     * @param string $class class name to load
+     *
+     * @return void
+     */
     final public static function autoload($class)
     {
        static $except = array(

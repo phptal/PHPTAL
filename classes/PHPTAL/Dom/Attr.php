@@ -174,7 +174,7 @@ class PHPTAL_Dom_Attr
     function overwriteValueWithCode($code)
     {
         $this->replacedState = self::VALUE_REPLACED;
-        $this->phpVariable = NULL;
+        $this->phpVariable = null;
         $this->setPHPCode($code);
     }
     

@@ -268,6 +268,7 @@ class PHPTAL_RepeatController implements Iterator
      * Converts an integer number (1 based) to a sequence of letters
      *
      * @param int $int  The number to convert
+     *
      * @return String   The letters equivalent as a, b, c-z ... aa, ab, ac-zz ...
      * @access protected
      */
@@ -289,6 +290,7 @@ class PHPTAL_RepeatController implements Iterator
      * Converts an integer number (1 based) to a roman numeral
      *
      * @param int $int  The number to convert
+     *
      * @return String   The roman numeral
      * @access protected
      */
