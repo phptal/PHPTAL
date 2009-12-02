@@ -1367,7 +1367,7 @@ php:SomeClass::$staticVar
                   instead their relative path within the repository.
               </para>
           </listitem>
-          <listitem><para><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname>: To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <methodname>sys_get_tmp_dir()</methodname>, which usually is '<filename>/tmp/</filename>' directory.</para></listitem>
+          <listitem id="set-code-destination"><para><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname>: To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <methodname>sys_get_tmp_dir()</methodname>, which usually is '<filename>/tmp/</filename>' directory.</para></listitem>
           <listitem><para><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname>: What filename extension should be used for intermediate <acronym>PHP</acronym> files. The default is <filename>php</filename> and frankly, there's no reason to change it.</para></listitem>
           <listitem><para><methodname>setCacheLifetime(<replaceable>num_days</replaceable>)</methodname>: Maximum number of days intermediate files and fragments cached with <sgmltag>phptal:cache</sgmltag> should be kept.</para></listitem>
 
