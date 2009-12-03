@@ -214,6 +214,7 @@ class PHPTAL_Lint
             $phptal->setForceReparse(true);
             $phptal->prepare();
             echo '.';
+            return;
         }
         catch(PHPTAL_UnknownModifierException $e) {
             if ($this->skipUnknownModifiers && is_callable(array($e,'getModifierName'))) {
