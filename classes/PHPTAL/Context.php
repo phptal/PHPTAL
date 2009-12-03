@@ -162,7 +162,7 @@ class PHPTAL_Context
      */
     public function hasSlot($key)
     {
-        return isset($this->_slots[$key]);
+        return isset($this->_slots[$key]) || ($this->_parentContext && $this->_parentContext->hasSlot($key));
     }
 
     /**

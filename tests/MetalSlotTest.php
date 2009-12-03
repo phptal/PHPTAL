@@ -14,6 +14,7 @@
  */
 
 require_once dirname(__FILE__)."/config.php";
+require_once 'I18NDummyTranslator.php';
 
 class MetalSlotTest extends PHPTAL_TestCase
 {
@@ -191,6 +192,38 @@ class MetalSlotTest extends PHPTAL_TestCase
         
         $this->assertNotContains("fillSlotCallback(",$tpl_php_source);
         $this->assertContains("fillSlot(",$tpl_php_source);        
+    }
+    
+    function testSlotBug()
+    {
+        $tpl = $this->newPHPTAL()->setSource(<<<HTML
+        <div>
+         <tal:block metal:define-macro="subpage">
+           <tal:block metal:use-macro="page">
+               <tal:block metal:fill-slot="valuebis">
+                   <div>OK subpage filled page/valuebis</div>
+               </tal:block>
+           </tal:block>
+         </tal:block>
+
+         <tal:block metal:define-macro="page">
+           page/value:<span metal:define-slot="value">FAIL unfilled page/value</span>
+           page/valuebis:<span metal:define-slot="valuebis">FAIL unfilled page/valuebis</span>
+         </tal:block>
+
+         <tal:block metal:use-macro="subpage">
+           <tal:block metal:fill-slot="valuebis">FAIL unused invalid subpage/valuebis</tal:block>
+           <tal:block metal:fill-slot="value">
+               <div>OK toplevel-filled page/value</div>
+           </tal:block>
+         </tal:block>
+        </div>
+HTML
+);
+        
+        $this->assertEquals(
+            trim_string('<div>page/value:<div>OK toplevel-filled page/value</div>page/valuebis:<div>OK subpage filled page/valuebis</div></div>'),
+            trim_string($tpl->execute()), $tpl->getCodePath());
     }
 
 }
