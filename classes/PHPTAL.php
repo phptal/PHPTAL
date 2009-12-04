@@ -288,7 +288,7 @@ class PHPTAL
      */
     public function setSource($src, $path=false)
     {
-        if (!class_exists('PHPTAL_StringSource')) self::autoload('PHPTAL_StringSource');
+        if (!class_exists('PHPTAL_StringSource',false)) self::autoload('PHPTAL_StringSource');
 
         if (!$path) {
             // this prefix tells string source that path has been faked
@@ -1279,7 +1279,7 @@ class PHPTAL
                 }
             }
 
-            if (!class_exists('PHPTAL_FileSourceResolver')) self::autoload('PHPTAL_FileSourceResolver');
+            if (!class_exists('PHPTAL_FileSourceResolver',false)) self::autoload('PHPTAL_FileSourceResolver');
 
             $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
             $this->_source = $resolver->resolve($this->_path);
