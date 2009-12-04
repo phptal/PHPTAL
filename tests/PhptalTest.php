@@ -188,4 +188,12 @@ class PhptalTest extends PHPTAL_TestCase
         $tpl->setEncoding('utf-8');
         $this->assertEquals('UTF-8', $tpl->getEncoding());
     }
+    
+    /**
+     * @expectedException PHPTAL_TemplateException
+     */
+    function testPHPParseErrorDoesNotStopPHPTAL2()
+    {
+        $this->newPHPTAL()->setSource('<x tal:content="php:\'bla\' \'bla\'"/>')->execute();
+    }
 }

@@ -16,7 +16,7 @@
 define('PHPTAL_VERSION', '1_2_2a1');
 
 
-/* If you want to use autoload, comment out all lines starting with 
+/* If you want to use autoload, comment out all lines starting with
    require_once 'PHPTAL and uncomment the line below: */
 
 // spl_autoload_register(array('PHPTAL','autoload'));
@@ -75,7 +75,7 @@ class PHPTAL
 
     /**
      * Prefilters have been redesigned. Old property is no longer used.
-     * 
+     *
      * @deprecated
      */
     private $_prefilter = 'REMOVED: DO NOT USE';
@@ -135,12 +135,12 @@ class PHPTAL
      * current execution context
      */
     protected $_context = null;
-    
+
     /**
      * current template file (changes within macros)
      */
     protected $_file = false;
-    
+
     /**
      * list of on-error caught exceptions
      */
@@ -197,7 +197,7 @@ class PHPTAL
      * keeps track of multiple calls to setIncludePath()
      */
     private static $_include_path_set_nesting = 0;
-    
+
     /**
      * @see PHPTAL::setPluginLoader()
      */
@@ -258,7 +258,7 @@ class PHPTAL
     /**
      * Set template from file path.
      *
-     * @param string $path filesystem path, 
+     * @param string $path filesystem path,
      *                     or any path that will be accepted by source resolver
      *
      * @return $this
@@ -367,7 +367,7 @@ class PHPTAL
     public function stripComments($bool)
     {
         $this->resetPrepared();
-        
+
         if ($bool) {
             $this->prefilters['_phptal_strip_comments_'] = "strip_comments";
         } else {
@@ -392,7 +392,7 @@ class PHPTAL
     public function setOutputMode($mode)
     {
         $this->resetPrepared();
-        
+
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
         }
@@ -413,14 +413,14 @@ class PHPTAL
 
     /**
      * Set input and ouput encoding. Encoding is case-insensitive.
-     * 
+     *
      * @param string $enc example: 'UTF-8'
      *
      * @return $this
      */
     public function setEncoding($enc)
     {
-        $enc = strtoupper($enc);        
+        $enc = strtoupper($enc);
         if ($enc != $this->_encoding) {
             $this->_encoding = $enc;
             if ($this->_translator) $this->_translator->setEncoding($enc);
@@ -533,7 +533,7 @@ class PHPTAL
 
     /**
      * Please use addPreFilter instead.
-     * 
+     *
      * This method and use of PHPTAL_Filter for prefilters are deprecated.
      *
      * @see PHPTAL::addPreFilter()
@@ -546,15 +546,15 @@ class PHPTAL
     }
 
     /**
-     * Add new prefilter to filter chain. 
+     * Add new prefilter to filter chain.
      * Prefilters are called only once template is compiled.
-     * 
+     *
      * You can pass either PHPTAL_PreFilter object or (faster)
      * a string with name the prefilter to apply.
-     * 
+     *
      * Name of the prefilter will be used as prefix for prefilter class name.
      * See getPreFilterByName() for details.
-     * 
+     *
      * @see PHPTAL::getPreFilterByName()
      * @param mixed $filter PHPTAL_PreFilter object or name of prefilter to add
      *
@@ -563,11 +563,11 @@ class PHPTAL
     final public function addPreFilter($filter)
     {
         $this->resetPrepared();
-        
+
         if (!is_string($filter) && !$filter instanceof PHPTAL_PreFilter) {
             throw new PHPTAL_ConfigurationException("addPreFilter expects PHPTAL_PreFilter object or string, which is class name of the prefilter");
         }
-        
+
         $this->prefilters[] = $filter;
         return $this;
     }
@@ -575,9 +575,9 @@ class PHPTAL
     /**
      * Array with all prefilter objects *or strings* for named prefilters.
      * Array keys may be non-numeric!
-     * 
+     *
      * To get actual prefilter object from strings, use getPreFilterByName().
-     * 
+     *
      * @see PHPTAL::getPreFilterByName()
      * @return array
      */
@@ -591,7 +591,7 @@ class PHPTAL
      * Result of prefilters may be cached until this string changes.
      *
      * You can override this function.
-     * 
+     *
      * @return string
      */
     protected function getPreFiltersCacheId()
@@ -617,12 +617,12 @@ class PHPTAL
      * By default this method will try to autoload class with name
      * made by replacing underscores with CamelCase and
      * prepending "PreFilter_" to filter name.
-     * 
+     *
      * foo_bar → PreFilter_FooBar
-     * 
+     *
      * If autoload fails, it will try to load file with
      * name of the class and '.php' appended.
-     * 
+     *
      * @param mixed $name base name of prefilter
      */
     final public function getPreFilterByName($name)
@@ -645,12 +645,12 @@ class PHPTAL
             $loaded_classname = $pluginloader->load($classname);
             if (!$loaded_classname) {
                 $all_paths = array_unique(call_user_func_array('array_merge',$pluginloader->getPaths()));
-                
+
                 throw new PHPTAL_ConfigurationException("Could not load class $classname for prefilter '$name' in: ".implode(', ',$all_paths).". Load class before execution of the template or add path to plugin loader");
             }
             $classname = $loaded_classname;
         }
-        
+
         return new $classname();
     }
 
@@ -662,12 +662,12 @@ class PHPTAL
     final public function getPluginLoader()
     {
         if (!$this->pluginloader) {
-            
+
             PHPTAL::setIncludePath();
             require_once 'PHPTAL/PluginLoader.php';
             require_once 'PHPTAL/PreFilter.php';
             PHPTAL::restoreIncludePath();
-            
+
             $this->pluginloader = new PHPTAL_PluginLoader();
             $this->pluginloader->addPrefixPath('PHPTAL',dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPTAL');
         }
@@ -676,13 +676,13 @@ class PHPTAL
 
     /**
      * Instantiate prefilters
-     * 
+     *
      * @return array of PHPTAL_[Pre]Filter objects
      */
     private function getInitializedPreFilters()
     {
         $prefilters = $this->getPreFilters();
-        
+
         foreach ($prefilters as &$prefilter) {
             if (is_string($prefilter)) {
                 $prefilter = $this->getPreFilterByName($prefilter);
@@ -693,13 +693,13 @@ class PHPTAL
         }
         return $prefilters;
     }
-    
+
     /**
      * Set template post filter.
      * It will be called every time after template generates output.
-     * 
+     *
      * See PHPTAL_PostFilter class.
-     * 
+     *
      * @param PHPTAL_Filter $filter filter instance
      */
     public function setPostFilter(PHPTAL_Filter $filter)
@@ -720,7 +720,7 @@ class PHPTAL
 
     /**
      * Returns trigger for specified phptal:id.
-     * 
+     *
      * @param string $id phptal:id
      *
      * @return PHPTAL_Trigger or NULL
@@ -854,8 +854,8 @@ class PHPTAL
      * execution of macros from templates.
      *
      * $this is caller's context (the file where execution had originally started)
-     * 
-     * @param PHPTAL $local_tpl is PHPTAL instance of the file in which macro is defined 
+     *
+     * @param PHPTAL $local_tpl is PHPTAL instance of the file in which macro is defined
      *                          (it will be different from $this if it's external macro call)
      * @access private
      */
@@ -963,18 +963,19 @@ class PHPTAL
                 // can be captured with output buffering
                 ob_start();
                 try {
-                    eval('require $this->getCodePath();');
-
-                    if (!function_exists($this->getFunctionName())) {
-                        $msg = ob_get_contents();
-                        // greedy .* ensures last match
-                        if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line=$m[1]; else $line=0;
-                        throw new PHPTAL_TemplateException($msg, $this->getCodePath(), $line);
-                    }
+                    eval('?>'.$result);
                 }
                 catch(Exception $e) {
                     ob_end_flush();
                     throw $e;
+                }
+
+                if (!function_exists($this->getFunctionName())) {
+                    $msg = str_replace('eval()\'d code',$this->getCodePath(),ob_get_clean());
+
+                    // greedy .* ensures last match
+                    if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line=$m[1]; else $line=0;
+                    throw new PHPTAL_TemplateException(trim($msg), $this->getCodePath(), $line);
                 }
                 ob_end_clean();
 
@@ -999,7 +1000,7 @@ class PHPTAL
 
     /**
      * set how long compiled templates and phptal:cache files are kept
-     * 
+     *
      * @param $days number of days
      */
     public function setCacheLifetime($days)
@@ -1147,7 +1148,7 @@ class PHPTAL
 
     /**
      * Returns array of exceptions caught by tal:on-error attribute.
-     * 
+     *
      * @return array<Exception>
      */
     public function getErrors()
@@ -1157,7 +1158,7 @@ class PHPTAL
 
     /**
      * Public for phptal templates, private for user.
-     * 
+     *
      * @return void
      * @access private
      */
@@ -1179,7 +1180,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
-     * 
+     *
      * @access private
      */
     public function getGlobalContext()
@@ -1189,7 +1190,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
-     * 
+     *
      * @access private
      */
     final public function pushContext()
@@ -1200,7 +1201,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
-     * 
+     *
      * @access private
      */
     final public function popContext()
@@ -1211,7 +1212,7 @@ class PHPTAL
 
     /**
      * Parse currently set template, prefilter and generate PHP code.
-     * 
+     *
      * @return string (compiled PHP code)
      */
     protected function parse()
@@ -1244,7 +1245,7 @@ class PHPTAL
                 }
             }
         }
-        
+
         $state = new PHPTAL_Php_State($this);
 
         $codewriter = new PHPTAL_Php_CodeWriter($state);
