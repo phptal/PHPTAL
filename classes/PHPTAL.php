@@ -966,7 +966,7 @@ class PHPTAL
                     eval('?>'.$result);
                 }
                 catch(Exception $e) {
-                    ob_end_flush();
+                    ob_end_clean();
                     throw $e;
                 }
 
