@@ -148,6 +148,8 @@ class TalesTest extends PHPTAL_TestCase
     
     function testClosure()
     {
+        $this->markTestIncomplete();
+        
         if (version_compare("5.3",PHP_VERSION,">")) $this->markTestSkipped();
         
         $tpl = $this->newPHPTAL();
@@ -165,6 +167,8 @@ class TalesTest extends PHPTAL_TestCase
     
     function testInvoke()
     {
+        $this->markTestIncomplete();
+        
         if (version_compare("5.3",PHP_VERSION,">")) $this->markTestSkipped();
 
         $tpl = $this->newPHPTAL();
@@ -177,6 +181,8 @@ class TalesTest extends PHPTAL_TestCase
     
     function testInvokeProperty()
     {
+        $this->markTestIncomplete();
+
          if (version_compare("5.3",PHP_VERSION,">")) $this->markTestSkipped();
 
          $tpl = $this->newPHPTAL();
@@ -185,7 +191,19 @@ class TalesTest extends PHPTAL_TestCase
          $tpl->setSource("<x tal:content='invoke/prop'/>");
 
          $this->assertEquals("<x>ok</x>",$tpl->execute());
-     }
+    }
+    
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testForbidsStatementsInCustomModifiers()
+    {
+        $this->markTestIncomplete();
+        
+        $tpl = $this->newPHPTAL();
+        
+        $tpl->setSource('<x tal:content="testmodifier:foo"/>')->execute();
+    }
 }
 
 class TestInvocable
@@ -198,3 +216,7 @@ class TestInvocable
     public $prop = 'ok';
 }
 
+function phptal_tales_testmodifier($expr,$nothrow)
+{
+    return 'print("test");';
+}
