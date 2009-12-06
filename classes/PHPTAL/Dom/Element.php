@@ -430,7 +430,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
                 case PHPTAL_Dom_Attr::VALUE_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName().'="');
-                    $codewriter->pushHTML($attr->getValueEscaped());
+                    // although value is escaped, it could have been escaped for single-quoted attr
+                    $codewriter->pushHTML(str_replace('"','&quot;',$attr->getValueEscaped())); 
                     $codewriter->pushHTML('"');
                     break;
             }

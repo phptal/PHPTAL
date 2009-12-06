@@ -166,5 +166,25 @@ class HTML5ModeTest extends PHPTAL_TestCase
        $tpl->setOutputMode(PHPTAL::XHTML);
        $this->assertEquals('<input checked="checked"/>',$tpl->execute());
    }
+   
+   function testAttributeQuotes()
+   {
+       $res = $this->newPHPTAL()->setSource(trim_string('<a test=\'${php:chr(34)}\' tal:attributes="foo php:chr(34)"
+       class=\'email
+        href="mailto:me"
+       \' 
+       href 
+       = \'	
+       &#x20;&#x6d;&#97;i&#108;&#x74;o&#x3a;&#x20;&#37;&#55;0o&#x72;&#110;&#x65;%&#x36;&#x63;&#x25;&#x34;&#x30;&#x70;&#37;6&#102;%7&#x32;&#x6e;e%&#x36;c&#37;2en&#x65;t?
+       \'>contact me</a>'))->execute();
+       
+       $this->assertEquals(trim_string('<a test="&quot;"
+          class="email
+           href=&quot;mailto:me&quot;
+          " 
+          href="	
+          &#x20;&#x6d;&#97;i&#108;&#x74;o&#x3a;&#x20;&#37;&#55;0o&#x72;&#110;&#x65;%&#x36;&#x63;&#x25;&#x34;&#x30;&#x70;&#37;6&#102;%7&#x32;&#x6e;e%&#x36;c&#37;2en&#x65;t?
+          " foo="&quot;">contact me</a>'),$res);
+   }
 }
 
