@@ -1915,6 +1915,14 @@ echo $phptal->execute();
 
   </section>
 
+
+  <section id="execute">
+      <title><methodname>execute()</methodname> method</title>
+      
+      <para>Executes the template and returns final markup.</para>
+      <para>PHPTAL keeps all variables after execution and this method can be called multiple times. You can use it to create multiple versions of the same page (by changing only some variables between executions) or to generate multiple different templates with same variables (by calling <code>setTemplate()</code> between executions).</para>
+      <note><para>If you need “fresh” copy of PHPTAL, just create a new object.</para></note>
+  </section>
         <section id="echo-execute">
             <title><methodname>echoExecute()</methodname> method</title>
         
