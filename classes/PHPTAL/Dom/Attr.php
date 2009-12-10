@@ -137,7 +137,7 @@ class PHPTAL_Dom_Attr
      */
     private function setPHPCode($code)
     {
-        $this->value_escaped = '<?php '.$code.' ?>';
+        $this->value_escaped = '<?php '.$code." ?>\n";
     }
 
     /**

@@ -205,20 +205,20 @@ class PHPTAL_Php_State
         $code = $this->compileTalesToPHPExpression($code);                
         
         if (rtrim($matches[2]) == 'structure') { // regex captures a space there
-            return $dollars.'<?php echo '.$this->stringify($code).' ?>';
+            return $dollars.'<?php echo '.$this->stringify($code)." ?>\n";
         } else {
             if ($format == 'html') {
-                return $dollars.'<?php echo '.$this->htmlchars($code).' ?>';
+                return $dollars.'<?php echo '.$this->htmlchars($code)." ?>\n";
             }
             if ($format == 'cdata') {
                 // quite complex for an "unescaped" section, isn't it?
                 if ($this->getOutputMode() === PHPTAL::HTML5) {
-                    return $dollars."<?php echo str_replace('</','<\\\\/', ".$this->stringify($code).") ?>";
+                    return $dollars."<?php echo str_replace('</','<\\\\/', ".$this->stringify($code).") ?>\n";
                 } elseif ($this->getOutputMode() === PHPTAL::XHTML) {
                     // both XML and HMTL, because people will inevitably send it as text/html :(
-                    return $dollars."<?php echo strtr(".$this->stringify($code)." ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>";
+                    return $dollars."<?php echo strtr(".$this->stringify($code)." ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>\n";
                 } else {
-                    return $dollars."<?php echo str_replace(']]>',']]]]><![CDATA[>', ".$this->stringify($code).") ?>";
+                    return $dollars."<?php echo str_replace(']]>',']]]]><![CDATA[>', ".$this->stringify($code).") ?>\n";
                 }         
             }
             assert(0);

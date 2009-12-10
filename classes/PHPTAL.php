@@ -963,7 +963,7 @@ class PHPTAL
                 // can be captured with output buffering
                 ob_start();
                 try {
-                    eval('?>'.$result);
+                    eval("?>\n".$result);
                 }
                 catch(Exception $e) {
                     ob_end_clean();

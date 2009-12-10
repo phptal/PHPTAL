@@ -324,4 +324,19 @@ EOT;
         $tpl->setSource('<p>${zero | error}</p>');
         $this->assertEquals('<p>0</p>',$tpl->execute());
     }
+    
+    function testPreservesNewline()
+    {
+        $tpl = $this->newPHPTAL()->setSource('<body>
+${variable1 | string:Line 1}
+<tal:block tal:content="variable2 | string:Line 2"></tal:block>
+Line 3
+</body>');
+        
+        $this->assertEquals('<body>
+Line 1
+Line 2
+Line 3
+</body>',$tpl->execute(), $tpl->getCodePath());
+    }
 }
