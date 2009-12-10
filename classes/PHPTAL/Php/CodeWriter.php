@@ -433,7 +433,7 @@ class PHPTAL_Php_CodeWriter
 
         if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex, $value))
             return $value;
-        else return '"'.str_replace('"','&quot;',$value).'"'; // although value is escaped, it could have been escaped for single-quoted attr
+        else return '"'.$value.'"';
     }
 
     public function pushContext()
