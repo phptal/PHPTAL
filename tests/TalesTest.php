@@ -65,6 +65,20 @@ class TalesTest extends PHPTAL_TestCase
         $this->assertEquals("!(foo())", $res);
     }
 
+    function testNotVar()
+    {
+        $src = "not:foo";
+        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
+        $this->assertEquals('!($ctx->foo)', $res);
+    }
+
+    function testNotPath()
+    {
+        $src = "not:foo/bar/baz";
+        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
+        $this->assertEquals('!($ctx->path($ctx->foo, \'bar/baz\'))', $res);
+    }
+
     function testTrue()
     {
         $tpl = $this->newPHPTAL('input/tales-true.html');
@@ -213,6 +227,15 @@ class TalesTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         
         $tpl->setSource('<x tal:content="testmodifier:foo"/>')->execute();
+    }
+    
+    
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testThrowsInvalidPath()
+    {
+        phptal_tales("I am not valid expression");
     }
     
     function testThrowsUnknownModifier()
