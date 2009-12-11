@@ -86,6 +86,16 @@ class TalesTest extends PHPTAL_TestCase
         $src = 'MyTalesClass.reverse: some';
         $this->assertEquals('strrev($ctx->some)', phptal_tales($src));
     }
+    
+    function testTaleNeverReturnsArray()
+    {
+        $this->assertType('string', phptal_tale('foo | bar | baz | nothing'));
+    }    
+
+    function testTalesReturnsArray()
+    {
+        $this->assertType('array', phptal_tales('foo | bar | baz | nothing'));
+    }    
 
     function testInterpolate1()
     {
@@ -203,6 +213,19 @@ class TalesTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         
         $tpl->setSource('<x tal:content="testmodifier:foo"/>')->execute();
+    }
+    
+    function testThrowsUnknownModifier()
+    {
+        try
+        {
+            phptal_tales('testidontexist:foo');
+            $this->fail();
+        }
+        catch(PHPTAL_UnknownModifierException $e)
+        {
+            $this->assertEquals('testidontexist',$e->getModifierName());
+        }
     }
 }
 

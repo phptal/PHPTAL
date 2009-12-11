@@ -138,6 +138,28 @@ class PhptalTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
 
+    function testStripCommentsReset()
+    {
+        $tpl = $this->newPHPTAL('input/phptal.04.html');
+        $exp = trim_file('output/phptal.04.html');
+        $tpl->stripComments(false);
+        $tpl->stripComments(true);
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $this->assertEquals($exp, $res);
+    }
+
+    function testStripCommentsUnset()
+    {
+        $tpl = $this->newPHPTAL('input/phptal.04.html');
+        $exp = trim_file('input/phptal.04.html');
+        $tpl->stripComments(true);
+        $tpl->stripComments(false);
+        $res = $tpl->execute();
+        $res = trim_string($res);
+        $this->assertEquals($exp, $res);
+    }
+
     function testUnknownOutputMode()
     {
         try {
@@ -196,4 +218,13 @@ class PhptalTest extends PHPTAL_TestCase
     {
         $this->newPHPTAL()->setSource('<x tal:content="php:\'bla\' \'bla\'"/>')->execute();
     }
+    
+    /**
+     * @expectedException PHPTAL_ConfigurationException
+     */
+    function testThrowsIfNoTemplate()
+    {
+        $this->newPHPTAL()->execute();
+    }
+    
 }
