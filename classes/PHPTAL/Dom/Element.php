@@ -305,7 +305,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
      */
     public function setAttributeNS($namespace_uri, $qname, $value)
     {
-        $localname = preg_replace('/^[^:]*:/',$qname);        
+        $localname = preg_replace('/^[^:]*:/','',$qname);        
         if (!($n = $this->getAttributeNodeNS($namespace_uri, $localname))) {
             $this->attribute_nodes[] = $n = new PHPTAL_Dom_Attr($qname, $namespace_uri, null, 'UTF-8'); // FIXME: find encoding
         }

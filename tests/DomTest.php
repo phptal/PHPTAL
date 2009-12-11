@@ -103,4 +103,24 @@ class DOMTest extends PHPTAL_TestCase
         $this->assertNull($el3->parentNode);       
         $this->assertSame($el1,$r->parentNode);       
     }
+    
+    function testSetAttributeNS()
+    {
+        $el = $this->newElement();
+        
+        $this->assertEquals("",$el->getAttributeNS('urn:foons','bar'));
+        $this->assertNull($el->getAttributeNodeNS('urn:foons','bar'));
+        $el->setAttributeNS('urn:foons','bar','b\\az&<x>');
+        $this->assertEquals('b\\az&<x>',$el->getAttributeNS('urn:foons','bar'));
+        $this->assertNotNull($el->getAttributeNodeNS('urn:foons','bar'));
+    }
+    
+    function testSetAttributeNSPrefixed()
+    {
+        $el = $this->newElement();
+        
+        $el->setAttributeNS('urn:foons','xab:bar','b\\az&<x>');
+        $this->assertEquals('b\\az&<x>',$el->getAttributeNS('urn:foons','bar'));
+        $this->assertNotNull($el->getAttributeNodeNS('urn:foons','bar'));
+    }
 }
