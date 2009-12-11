@@ -271,6 +271,11 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         return null;
     }
 
+    /**
+     * If possible, use getAttributeNodeNS and setAttributeNS. 
+     *
+     * NB: This method doesn't handle namespaces properly.
+     */
     public function getOrCreateAttributeNode($qname)
     {
         if ($attr = $this->getAttributeNode($qname)) return $attr;
@@ -287,6 +292,24 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             return $n->getValue();
         }
         return '';
+    }
+
+    /**
+     * Set attribute value. Creates new attribute if it doesn't exist yet.
+     *
+     * @param string $namespace_uri full namespace URI. "" for default namespace
+     * @param string $qname prefixed qualified name (e.g. "atom:feed") or local name (e.g. "p")
+     * @param string $value unescaped value
+     *
+     * @return void
+     */
+    public function setAttributeNS($namespace_uri, $qname, $value)
+    {
+        $localname = preg_replace('/^[^:]*:/',$qname);        
+        if (!($n = $this->getAttributeNodeNS($namespace_uri, $localname))) {
+            $this->attribute_nodes[] = $n = new PHPTAL_Dom_Attr($qname, $namespace_uri, null, 'UTF-8'); // FIXME: find encoding
+        }
+        $n->setValue($value);        
     }
 
     /**
