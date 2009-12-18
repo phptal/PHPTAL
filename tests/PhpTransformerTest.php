@@ -146,5 +146,61 @@ class PhpTransformerTest extends PHPTAL_TestCase
         $src = "'do not tranform this ge string lt eq'";
         $this->assertEquals($src, PHPTAL_Php_Transformer::transform($src));
     }
+    
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testCatchesInvalidEvaledFieldName()
+    {        
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p tal:content="php:user.$0_invalid_" />');
+        $tpl->execute();
+        $this->fail();
+    }
+
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testCatchesInvalidFieldName()
+    {        
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p tal:content="php:user.0_invalid_" />');
+        $tpl->execute();
+        $this->fail();
+    }
+
+
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testCatchesInvalidVarName()
+    {        
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p tal:content="php:0_invalid_" />');
+        $tpl->execute();
+        $this->fail();
+    }
+
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testCatchesInvalidNumber()
+    {        
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p tal:content="php:00..123" />');
+        $tpl->execute();
+        $this->fail();
+    }
+
+    /**
+     * @expectedException PHPTAL_ParserException
+     */
+    function testCatchesInvalidNumber2()
+    {        
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p tal:content="php:0.1.2" />');
+        $tpl->execute();
+        $this->fail();
+    }
 }
 

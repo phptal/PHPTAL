@@ -70,7 +70,7 @@ class PHPTAL_Php_Transformer
 
                 // after whitespace a variable-variable may start, ${var} → $ctx->{$ctx->var}
                 case self::ST_WHITE:
-                    if ($c === '$' && $i < $len-2 && $str[$i+1] === '{')
+                    if ($c === '$' && $i+1 < $len && $str[$i+1] === '{')
                     {
                         $result .= $prefix;
                         $state = self::ST_NONE;
@@ -81,10 +81,15 @@ class PHPTAL_Php_Transformer
                 // no specific state defined, just eat char and see what to do with it.
                 case self::ST_NONE:
                     // begin of eval without {
-                    if ($c === '$' && $i < $len && self::isAlpha($str[$i+1])) {
+                    if ($c === '$' && $i+1 < $len && self::isAlpha($str[$i+1])) {
                         $state = self::ST_EVAL;
                         $mark = $i+1;
                         $result .= $prefix.'{';
+                    }
+                    elseif (self::isDigit($c))
+                    {
+                        $state = self::ST_NUM;
+                        $mark = $i;
                     }
                     // that an alphabetic char, then it should be the begining
                     // of a var
@@ -109,7 +114,7 @@ class PHPTAL_Php_Transformer
                         $result .= $c;
                         // if next char is dot then an object member must
                         // follow
-                        if ($i < $len-1 && $str[$i+1] === '.') {
+                        if ($i+1 < $len && $str[$i+1] === '.') {
                             $result .= '->';
                             $state = self::ST_MEMBER;
                             $mark = $i+2;
@@ -170,7 +175,7 @@ class PHPTAL_Php_Transformer
                     }
                     // instring interpolation, search } and transform the
                     // interpollation to insert it into the string
-                    elseif ($c === '$' && $i < $len && $str[$i+1] === '{') {
+                    elseif ($c === '$' && $i+1 < $len && $str[$i+1] === '{') {
                         $result .= substr($str, $mark, $i-$mark) . '{';
 
                         $sub = 0;
@@ -199,7 +204,7 @@ class PHPTAL_Php_Transformer
                         $mark = $i+1;
                     }
                     // static call, the var is a class name
-                    elseif ($c === ':') {
+                    elseif ($c === ':' && $i+1 < $len && $str[$i+1] === ':') {
                         $result .= substr($str, $mark, $i-$mark+1);
                         $mark = $i+1;
                         $i++;
@@ -290,7 +295,11 @@ class PHPTAL_Php_Transformer
                     }
                     // regular end of member, it is a var
                     else {
-                        $result .= substr($str, $mark, $i-$mark);
+                        $var = substr($str, $mark, $i-$mark);
+                        if ($var !== '' && !preg_match('/^[a-z][a-z0-9_\x7f-\xff]*$/i',$var)) {
+                            throw new PHPTAL_ParserException("Invalid field name '$var' in expression php:$str");
+                        }                        
+                        $result .= $var;
                         if ($eval) { $result .='}'; $eval = false; }
                         $state = self::ST_NONE;
                         $i--;
@@ -347,8 +356,18 @@ class PHPTAL_Php_Transformer
                 // numeric value
                 case self::ST_NUM:
                     if (!self::isDigitCompound($c)) {
-                        $result .= substr($str, $mark, $i-$mark);
-                        $state = self::ST_NONE;
+                        $var = substr($str, $mark, $i-$mark);
+                        
+                        if (self::isAlpha($c) || $c === '_') {
+                            throw new PHPTAL_ParserException("Syntax error in number '$var$c' in expression php:$str");
+                        }
+                        if (!is_numeric($var)) {
+                            throw new PHPTAL_ParserException("Syntax error in number '$var' in expression php:$str");
+                        }
+                    
+                        $result .= $var;
+                        $state = self::ST_NONE; 
+                        $i--;
                     }
                     break;
             }
@@ -366,6 +385,11 @@ class PHPTAL_Php_Transformer
     {
         $c = strtolower($c);
         return $c >= 'a' && $c <= 'z';
+    }
+
+    private static function isDigit($c)
+    {
+        return ($c >= '0' && $c <= '9');
     }
 
     private static function isDigitCompound($c)
