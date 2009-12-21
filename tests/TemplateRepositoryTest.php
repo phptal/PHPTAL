@@ -46,5 +46,35 @@ class TemplateRepositoryTest extends PHPTAL_TestCase
         $tpl->setTemplateRepository(dirname(__FILE__).'/bogus');
         $tpl->setTemplate('phptal.01.html');
         $tpl->execute();
-    }    
+    }   
+    
+    function testRepositoriesAreStrings()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTemplateRepository('/footest');
+        $tpl->setTemplateRepository('bartest');
+        $tpl->setTemplateRepository('testbaz/');
+        
+        $repos = $tpl->getTemplateRepositories();
+        $this->assertType('array',$repos);
+        $this->assertEquals(3,count($repos));
+        
+        foreach($repos as $repo)
+        {
+            $this->assertType('string',$repo);
+            $this->assertContains('test',$repo);
+        }
+    }     
+    
+    function testRepositoryClear()
+    {
+        $tpl = $this->newPHPTAL();
+        $this->assertEquals(0,count($tpl->getTemplateRepositories()));
+
+        $tpl->setTemplateRepository(array('foo','bar'));        
+        $this->assertEquals(2,count($tpl->getTemplateRepositories()));
+        
+        $tpl->clearTemplateRepositories();
+        $this->assertEquals(0,count($tpl->getTemplateRepositories()));
+    }
 }
