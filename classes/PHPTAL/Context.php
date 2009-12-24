@@ -280,9 +280,7 @@ class PHPTAL_Context
      */
     public function __get($varname)
     {
-        if (property_exists($this, $varname)) { // must use property_exists to avoid calling own __isset().
-            return $this->$varname;            // edge case with NULL will be weird
-        }
+        // PHP checks public properties first, there's no need to support them here
 
         // must use isset() to allow custom global contexts with __isset()/__get()
         if (isset($this->_globalContext->$varname)) {
@@ -372,7 +370,7 @@ class PHPTAL_Context
                     continue;
                 }
 
-                if ($base instanceof Countable && ($current === 'length' || $current === 'size')) {
+                if (($current === 'length' || $current === 'size') && $base instanceof Countable) {
                     $base = count($base);
                     continue;
                 }
