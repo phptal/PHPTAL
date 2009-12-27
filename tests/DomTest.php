@@ -42,6 +42,29 @@ class DOMTest extends PHPTAL_TestCase
         $this->assertTrue(isset($el1->childNodes[0]));
         $this->assertSame($el2,$el1->childNodes[0]);
     }
+    
+    function testAppendChildChangesParent()
+    {
+        $el1 = $this->newElement();
+        $el2 = $this->newElement();
+
+        $ch = $this->newElement();
+        
+        $el1->appendChild($ch);
+
+        $this->assertTrue(isset($el1->childNodes[0]));
+        $this->assertSame($ch,$el1->childNodes[0]);
+
+        $el2->appendChild($ch);
+
+        $this->assertTrue(isset($el2->childNodes[0]));
+        $this->assertSame($ch,$el2->childNodes[0]);
+        
+        $this->assertFalse(isset($el1->childNodes[0]));
+
+        $this->assertEquals(0,count($el1->childNodes));
+        $this->assertEquals(1,count($el2->childNodes));
+    }
 
     function testRemoveChild()
     {
