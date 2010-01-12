@@ -339,4 +339,29 @@ Line 2
 Line 3
 </body>',$tpl->execute(), $tpl->getCodePath());
     }
+    
+    function testMultilineInterpolationPHP()
+    {
+        $res = $this->newPHPTAL()->setSource('<p>${php:\'foo
+        bar\'}</p>')->execute();
+        
+        $this->assertEquals('<p>foo
+        bar</p>',$res);
+
+        $res = $this->newPHPTAL()->setSource('<p>${php:\'foo\' .
+        substr(\'barz\' ,
+        0,3)}</p>')->execute();
+        
+        $this->assertEquals('<p>foobar</p>',$res);
+    }
+    
+    
+    function testMultilineInterpolation()
+    {
+        $res = $this->newPHPTAL()->setSource('<p>${string:foo
+        bar}</p>')->execute();
+        
+        $this->assertEquals('<p>foo
+        bar</p>',$res);
+    }
 }
