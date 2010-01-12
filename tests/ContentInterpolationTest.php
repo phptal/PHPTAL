@@ -363,5 +363,25 @@ Line 3
         
         $this->assertEquals('<p>foo
         bar</p>',$res);
+
+        $res = $this->newPHPTAL()->setSource('<p>${structure string:foo
+        bar}</p>')->execute();
+        
+        $this->assertEquals('<p>foo
+        bar</p>',$res);
+    }
+    
+    function testTagsBreakTALES()
+    {
+        $res = $this->newPHPTAL()->setSource('<p>${foo<br/>bar}</p>')->execute();
+        
+        $this->assertEquals('<p>${foo<br/>bar}</p>',$res);
+    }
+
+    function testEscapedTagsDontBreakTALES()
+    {
+        $res = $this->newPHPTAL()->setSource('<p>${structure string:foo&lt;br  />bar}</p>')->execute();
+        
+        $this->assertEquals('<p>foo<br  />bar</p>',$res);
     }
 }
