@@ -2,20 +2,7 @@
 <?php
 
 try
-{
-    $myphptal = dirname(__FILE__) . '/../classes/PHPTAL.php';
-    if (file_exists($myphptal)) {
-        require_once $myphptal;
-    } else {
-        require_once "PHPTAL.php";
-    }
-    
-    if (! defined('PHPTAL_VERSION')) {
-        throw new Exception("Your PHPTAL installation is broken or too new for this tool");
-    }
-    
-    echo "PHPTAL Lint 1.1.1 (PHPTAL ",PHPTAL_VERSION,")\n";
-    
+{    
     if (! empty($_SERVER['REQUEST_URI'])) {
         throw new Exception("Please use this tool from command line");
     }
@@ -35,7 +22,6 @@ try
     if (isset($options['--filenames--'])) {
         $paths = ($options['--filenames--']);
     }
-
     
     if (! count($paths)) {
         usage();
@@ -109,6 +95,9 @@ function display_erorr_array(array $errors)
 
 function usage() 
 {
+    require_phptal();    
+    echo "PHPTAL Lint 1.1.2 (PHPTAL ",PHPTAL_VERSION,")\n";
+    
     echo "Usage: phptal_lint.php [-e extensions] [-i php_file_or_directory] file_or_directory_to_check ...\n";
     echo "  -e comma-separated list of extensions\n";
     echo "  -i phptales file/include file, or directory\n";
@@ -153,6 +142,22 @@ function include_path($tales)
             include_once ("$path");
         }
     }
+}
+
+function require_phptal()
+{    
+    if (class_exists('PHPTAL',false)) return;
+    
+    $myphptal = dirname(__FILE__) . '/../classes/PHPTAL.php';
+    if (file_exists($myphptal)) {
+        require_once $myphptal;
+    } else {
+        require_once "PHPTAL.php";
+    }
+    
+    if (! defined('PHPTAL_VERSION')) {
+        throw new Exception("Your PHPTAL installation is broken or too new for this tool");
+    }    
 }
 
 class PHPTAL_Lint
