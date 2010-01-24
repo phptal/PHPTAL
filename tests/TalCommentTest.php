@@ -51,7 +51,7 @@ class TalCommentTest extends PHPTAL_TestCase
         $this->_att->before($this->_gen);
         $this->_att->after($this->_gen);
         $res = $this->_gen->getResult();
-        $this->assertEquals('<?php /* my dummy comment */; ?>', $res);
+        $this->assertEquals(normalize_phpsource('<?php /* my dummy comment */; ?>'), normalize_phpsource($res));
     }
 
     function testMultiLineComment()
@@ -61,7 +61,7 @@ class TalCommentTest extends PHPTAL_TestCase
         $this->_att->before($this->_gen);
         $this->_att->after($this->_gen);
         $res = $this->_gen->getResult();
-        $this->assertEquals("<?php /* $comment */; ?>", $res);
+        $this->assertEquals(normalize_phpsource("<?php /* $comment */; ?>"), normalize_phpsource($res));
     }
 
     function testTrickyComment()
@@ -72,7 +72,7 @@ class TalCommentTest extends PHPTAL_TestCase
         $this->_att->after($this->_gen);
         $res = $this->_gen->getResult();
         $comment = str_replace('*/', '* /', $comment);
-        $this->assertEquals("<?php /* $comment */; ?>", $res);
+        $this->assertEquals(normalize_phpsource("<?php /* $comment */; ?>"), normalize_phpsource($res));
     }
 
     function testInTemplate()

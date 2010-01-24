@@ -82,13 +82,13 @@ function normalize_html( $src ){
     return $src;
 }
 
-// Old versions of PHPUnit seemed to need it
-// OTOH PHP5-incompatible PEAR throws lots of errors, causing Phing to fail.
-
-// function exception_error_handler($errno, $errstr, $errfile, $errline )
-// {
-//     throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-// }
-// set_error_handler("exception_error_handler", E_ALL | E_STRICT);
-
-
+function normalize_phpsource($code) {
+    $lines = explode("\n", $code);
+    $code = "";
+    foreach ($lines as $line) {
+        $code .= trim($line);
+    }
+    
+    // ignore some no-ops
+    return str_replace(array('<?php ?>','<?php ; ?>','{;'),array('','','{'),$code);
+}

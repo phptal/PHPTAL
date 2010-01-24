@@ -53,8 +53,8 @@ function test(\$tpl) {
 
  ?>
 EOS;
-        $result = $this->trimCode($result);
-        $expected = $this->trimCode($expected);
+        $result = normalize_phpsource($result);
+        $expected = normalize_phpsource($expected);
         $this->assertEquals($result, $expected);
     }
 
@@ -74,22 +74,9 @@ EOS;
 <?php function test2(\$tpl) {?>test2<?php}?>
 <?php function test1(\$tpl) {?>test1test1<?php}?>
 EOS;
-        $res = $this->trimCode($res);
-        $exp = $this->trimCode($exp);
+        $res = normalize_phpsource($res);
+        $exp = normalize_phpsource($exp);
         $this->assertEquals($exp, $res);
-    }
-
-
-    function trimCode( $code )
-    {
-        $lines = explode("\n", $code);
-        $code = "";
-        foreach ($lines as $line) {
-            $code .= trim($line);
-        }
-        
-        // ignore some no-ops
-        return str_replace(array('<?php ?>','<?php ; ?>','{;'),array('','','{'),$code);
     }
 }
 
