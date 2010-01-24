@@ -21,18 +21,17 @@ require_once 'PHPTAL/Dom/Element.php';
 require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
 PHPTAL::restoreIncludePath();
 
-if (!class_exists('DummyPhpNode',false)) {
-    class DummyPhpNode extends PHPTAL_Dom_Element {
-        function __construct() {}
-        function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}
-    }
+
+class DummyDefinePhpNode extends PHPTAL_Dom_Element {
+    function __construct() {}
+    function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}
 }
 
 class TalDefineTest extends PHPTAL_TestCase
 {
     function testExpressionParser()
     {
-        $att = new PHPTAL_Php_Attribute_Tal_Define(new DummyPhpNode(),'a b');
+        $att = new PHPTAL_Php_Attribute_Tal_Define(new DummyDefinePhpNode(),'a b');
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('local a_234z b');
         $this->assertEquals('local', $defineScope);

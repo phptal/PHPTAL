@@ -6,7 +6,6 @@
  *
  * @category HTML
  * @package  PHPTAL
- * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
@@ -15,7 +14,7 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-class PHPTAL_CodeCacheTest extends PHPTAL
+class PHPTAL_TestCodeCache extends PHPTAL
 {
     public $testHasParsed = false;
     function parse()
@@ -32,7 +31,7 @@ class CodeCacheTest extends PHPTAL_TestCase
 
     private function resetPHPTAL()
     {
-        $this->phptal = new PHPTAL_CodeCacheTest();
+        $this->phptal = new PHPTAL_TestCodeCache();
         $this->phptal->setForceReparse(false);
         $this->assertFalse($this->phptal->getForceReparse());
 
