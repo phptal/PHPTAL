@@ -31,21 +31,21 @@ class EscapeCDATATest extends PHPTAL_TestCase {
     function testTrimString()
     {
         $this->assertEquals(
-             trim_string('<foo><bar>]]&gt; foo ]> bar</bar></foo>'),
-             trim_string('<foo> <bar>]]&gt; foo ]&gt; bar </bar> </foo>')
+             normalize_html('<foo><bar>]]&gt; foo ]> bar</bar></foo>'),
+             normalize_html('<foo> <bar>]]&gt; foo ]&gt; bar </bar> </foo>')
         );
 
         $this->assertNotEquals(
-             trim_string('foo]]>bar'),
-             trim_string('foo]]&gt;bar')
+             normalize_html('foo]]>bar'),
+             normalize_html('foo]]&gt;bar')
         );
 
     }
 
     function testDoesEscapeHTMLContent(){
         $tpl = $this->newPHPTAL('input/escape.html');
-        $exp = trim_file('output/escape.html');
-        $res = trim_string($tpl->execute());
+        $exp = normalize_html_file('output/escape.html');
+        $res = normalize_html($tpl->execute());
         $this->assertEquals($exp, $res);
     }
 

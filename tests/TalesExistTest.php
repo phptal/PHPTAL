@@ -26,8 +26,8 @@ class TalesExistTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tales-exist-01.html');
         $tpl->foo = 1;
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tales-exist-01.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tales-exist-01.html');
         $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
@@ -38,8 +38,8 @@ class TalesExistTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tales-exist-02.html');
         $tpl->o = $o;
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tales-exist-02.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tales-exist-02.html');
         $this->assertEquals($exp, $res);
     }
 }

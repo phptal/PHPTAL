@@ -38,10 +38,10 @@ class XmlParserTest extends PHPTAL_TestCase
         <?xml-stylesheet type="text/css" href="/${baz}" ?>
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"/>');
         
-        $this->assertEquals(trim_string('<?xml version="1.0" encoding="utf-8"?>
+        $this->assertEquals(normalize_html('<?xml version="1.0" encoding="utf-8"?>
         <?xml-stylesheet type="text/css" href="/css" ?>
         <?xml-stylesheet type="text/css" href="/quz" ?>
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"></html>'),trim_string($tpl->execute()));
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"></html>'),normalize_html($tpl->execute()));
     }
 
     public function testPHPBlocksNotInterpolated() {
@@ -66,7 +66,7 @@ class XmlParserTest extends PHPTAL_TestCase
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.03.xml')->getResult();
 
-        $this->assertEquals(trim_file('output/xml.03.xml'), trim_string($builder->result));
+        $this->assertEquals(normalize_html_file('output/xml.03.xml'), normalize_html($builder->result));
         $this->assertEquals(3, $builder->elementStarts);
         $this->assertEquals(3, $builder->elementCloses);
         // a '<' character withing some text data make the parser call 2 times
@@ -280,9 +280,9 @@ xxxx/>
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
         <input type="text" value="${phptal_var}" spry:if="i == 1" /></form></body></html>');
         
-        $this->assertEquals(trim_string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        $this->assertEquals(normalize_html('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
-        <input type="text" value="ok" spry:if="i == 1"/></form></body></html>'),trim_string($tpl->execute()));
+        <input type="text" value="ok" spry:if="i == 1"/></form></body></html>'),normalize_html($tpl->execute()));
     }
     
 }

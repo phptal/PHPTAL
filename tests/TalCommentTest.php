@@ -78,16 +78,16 @@ class TalCommentTest extends PHPTAL_TestCase
     function testInTemplate()
     {
         $tpl = $this->newPHPTAL('input/tal-comment.01.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-comment.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-comment.01.html');
         $this->assertEquals($exp, $res);
     }
 
     function testMultilineInTemplate()
     {
         $tpl = $this->newPHPTAL('input/tal-comment.02.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-comment.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-comment.02.html');
         $this->assertEquals($exp, $res);
     }
 

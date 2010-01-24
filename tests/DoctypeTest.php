@@ -21,8 +21,8 @@ class DoctypeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/doctype.01.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/doctype.01.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/doctype.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -30,8 +30,8 @@ class DoctypeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/doctype.02.user.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/doctype.02.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/doctype.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -39,8 +39,8 @@ class DoctypeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/doctype.03.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/doctype.03.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/doctype.03.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -48,8 +48,8 @@ class DoctypeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/doctype.04.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/doctype.04.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/doctype.04.html');
         $this->assertEquals($exp, $res);
     }
     
@@ -78,7 +78,7 @@ class DoctypeTest extends PHPTAL_TestCase
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <hack tal:define="hack php:tpl.setSource(&quot;&lt;hacked/&gt;&quot;)" tal:content="structure hack/execute"/>');
         
-        $this->assertEquals(trim_string('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hack><hacked></hacked></hack>'),
-                            trim_string($tpl->execute()));
+        $this->assertEquals(normalize_html('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hack><hacked></hacked></hack>'),
+                            normalize_html($tpl->execute()));
     }
 }

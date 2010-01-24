@@ -20,32 +20,32 @@ class MetalMacroTest extends PHPTAL_TestCase
     function testSimple()
     {
         $tpl = $this->newPHPTAL('input/metal-macro.01.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-macro.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-macro.01.html');
         $this->assertEquals($exp, $res);
     }
 
     function testExternalMacro()
     {
         $tpl = $this->newPHPTAL('input/metal-macro.02.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-macro.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-macro.02.html');
         $this->assertEquals($exp, $res);
     }
 
     function testBlock()
     {
         $tpl = $this->newPHPTAL('input/metal-macro.03.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-macro.03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-macro.03.html');
         $this->assertEquals($exp, $res);
     }
 
     function testMacroInsideMacro()
     {
         $tpl = $this->newPHPTAL('input/metal-macro.04.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-macro.04.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-macro.04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -58,8 +58,8 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/metal-macro.05.html');
         $tpl->call = $call;
 
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-macro.05.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-macro.05.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -72,16 +72,16 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/metal-macro.06.html');
         $tpl->call = $call;
 
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-macro.06.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-macro.06.html');
         $this->assertEquals($exp, $res);
     }
 
     function testInheritedMacroSlots()
     {
         $tpl = $this->newPHPTAL('input/metal-macro.07.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-macro.07.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-macro.07.html');
         $this->assertEquals($exp, $res);
     }
 

@@ -55,8 +55,8 @@ class TalesStringTest extends PHPTAL_TestCase {
     {
         $tpl = $this->newPHPTAL('input/tales-string-01.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tales-string-01.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tales-string-01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -71,8 +71,8 @@ class TalesStringTest extends PHPTAL_TestCase {
     {
         $tpl = $this->newPHPTAL('input/tales-string-02.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tales-string-02.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tales-string-02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -80,8 +80,8 @@ class TalesStringTest extends PHPTAL_TestCase {
     {
         $tpl = $this->newPHPTAL('input/tales-string-03.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tales-string-03.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tales-string-03.html');
         $this->assertEquals($exp,$res);
     }
     
@@ -94,8 +94,8 @@ class TalesStringTest extends PHPTAL_TestCase {
             <x y="${string:&lt;foo/&gt;}" tal:content="string:&lt;foo/&gt;" />
             <x y="${structure string:&lt;foo/&gt;}" tal:content="structure string:&lt;foo/&gt;" />
         </p>');
-        $this->assertEquals(trim_string('<p>&lt;foo/&gt;<foo/><x y="&lt;foo/&gt;">&lt;foo/&gt;</x><x y="<foo/>"><foo/></x></p>'),
-                            trim_string($tpl->execute()));
+        $this->assertEquals(normalize_html('<p>&lt;foo/&gt;<foo/><x y="&lt;foo/&gt;">&lt;foo/&gt;</x><x y="<foo/>"><foo/></x></p>'),
+                            normalize_html($tpl->execute()));
     }
 }
 

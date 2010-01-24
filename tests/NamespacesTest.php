@@ -30,28 +30,28 @@ class NamespacesTest extends PHPTAL_TestCase
 {
     function testTalAlias()
     {
-        $exp = trim_file('output/namespaces.01.html');
+        $exp = normalize_html_file('output/namespaces.01.html');
         $tpl = $this->newPHPTAL('input/namespaces.01.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 
     function testInherit()
     {
-        $exp = trim_file('output/namespaces.02.html');
+        $exp = normalize_html_file('output/namespaces.02.html');
         $tpl = $this->newPHPTAL('input/namespaces.02.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 
     function testOverwrite()
     {
-        $exp = trim_file('output/namespaces.03.html');
+        $exp = normalize_html_file('output/namespaces.03.html');
         $tpl = $this->newPHPTAL('input/namespaces.03.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 
@@ -68,8 +68,8 @@ class NamespacesTest extends PHPTAL_TestCase
         $tpl->setSource('<metal:block xmlns:metal="non-zope">
                            <block xmlns="http://xml.zope.org/namespaces/tal" content="string:works" />
                          </metal:block>');
-        $this->assertEquals(trim_string('<metal:block xmlns:metal="non-zope"> works </metal:block>'),
-                            trim_string($tpl->execute()));
+        $this->assertEquals(normalize_html('<metal:block xmlns:metal="non-zope"> works </metal:block>'),
+                            normalize_html($tpl->execute()));
     }
 
     function testRedefineBuiltinNamespace()
@@ -79,8 +79,8 @@ class NamespacesTest extends PHPTAL_TestCase
                            <foo:block xmlns="x" xmlns:foo="http://xml.zope.org/namespaces/tal" content="string:works" />
                            <metal:block xmlns="http://xml.zope.org/namespaces/i18n" xmlns:metal="http://xml.zope.org/namespaces/tal" metal:content="string:properly" />
                          </metal:block>');
-        $this->assertEquals(trim_string('<metal:block xmlns:metal="non-zope"> works properly </metal:block>'),
-                            trim_string($tpl->execute()));
+        $this->assertEquals(normalize_html('<metal:block xmlns:metal="non-zope"> works properly </metal:block>'),
+                            normalize_html($tpl->execute()));
     }
     
     // different kind of namespace

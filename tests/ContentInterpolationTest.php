@@ -110,7 +110,7 @@ EOT;
             $$$${var}
         </p>');
         
-        $this->assertEquals(trim_string('<p>
+        $this->assertEquals(normalize_html('<p>
             val&lt;
         
             ${var}
@@ -118,7 +118,7 @@ EOT;
             $val&lt;
         
             $${var}
-        </p>'),trim_string($tpl->execute()));
+        </p>'),normalize_html($tpl->execute()));
     }
     
     function testUnescapeString()
@@ -137,7 +137,7 @@ EOT;
              $$$${var}
          "/>');
 
-         $this->assertEquals(trim_string('<p>
+         $this->assertEquals(normalize_html('<p>
              val&lt;
 
              ${var}
@@ -145,7 +145,7 @@ EOT;
              $val&lt;
 
              $${var}
-         </p>'),trim_string($tpl->execute()));
+         </p>'),normalize_html($tpl->execute()));
      }
     
     function testUnescapeStructure()
@@ -164,7 +164,7 @@ EOT;
             $$$${structure var}
         </p>');
         
-        $this->assertEquals(trim_string('<p>
+        $this->assertEquals(normalize_html('<p>
             val<x/>
         
             ${structure var}
@@ -172,7 +172,7 @@ EOT;
             $val<x/>
         
             $${structure var}
-        </p>'),trim_string($tpl->execute()));
+        </p>'),normalize_html($tpl->execute()));
     }
     
     function testUnescapeCDATA()
@@ -191,7 +191,7 @@ EOT;
             $$$${var}
         ]]></script>');
         
-        $this->assertEquals(trim_string('<script><![CDATA[<
+        $this->assertEquals(normalize_html('<script><![CDATA[<
             val<
         
             ${text var}
@@ -199,7 +199,7 @@ EOT;
             $val<
         
             $${var}
-        ]]></script>'),trim_string($tpl->execute()));
+        ]]></script>'),normalize_html($tpl->execute()));
     }
     
     function testUnescapeCDATAStructure()
@@ -218,7 +218,7 @@ EOT;
             $$$${structure var}
         ]]></script>');
         
-        $this->assertEquals(trim_string('<script><![CDATA[<
+        $this->assertEquals(normalize_html('<script><![CDATA[<
             val<
         
             ${structure var}
@@ -226,7 +226,7 @@ EOT;
             $val<
         
             $${structure var}
-        ]]></script>'),trim_string($tpl->execute()));
+        ]]></script>'),normalize_html($tpl->execute()));
     }
     
     function testUnescapePHPTales()
@@ -245,7 +245,7 @@ EOT;
             $$$${var+1}
         </p>');
         
-        $this->assertEquals(trim_string('<p>
+        $this->assertEquals(normalize_html('<p>
             2
         
             ${var+1}
@@ -253,7 +253,7 @@ EOT;
             $2
         
             $${var+1}
-        </p>'),trim_string($tpl->execute()));
+        </p>'),normalize_html($tpl->execute()));
     }
 
     public function testPHPBlock()

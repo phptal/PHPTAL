@@ -24,8 +24,8 @@ class I18NTranslateTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/i18n-translate-01.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/i18n-translate-01.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/i18n-translate-01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -35,8 +35,8 @@ class I18NTranslateTest extends PHPTAL_TestCase
         $tpl->setTranslator( new DummyTranslator() );
         $tpl->message = "my translate key &";
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/i18n-translate-02.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/i18n-translate-02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -71,10 +71,10 @@ class I18NTranslateTest extends PHPTAL_TestCase
         <p i18n:translate="var"/>
         <p i18n:translate="structure var"/>
         </div>');
-        $this->assertEquals(trim_string('<div>
+        $this->assertEquals(normalize_html('<div>
         <p>&lt;b class=&quot;foo&amp;amp;bar&quot;&gt;translated&amp;nbsp;key&lt;/b&gt;</p>
         <p><b class="foo&amp;bar">translated&nbsp;key</b></p>
-        </div>'),trim_string($tpl->execute()));
+        </div>'),normalize_html($tpl->execute()));
     }
     
     
@@ -88,7 +88,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
         $tpl->t = $t;
                 
         $tpl->setSource('<div i18n:domain="foo${bar}$${quz}">${t/domain}</div>');
-        $this->assertEquals(trim_string('<div>foobaz${quz}</div>'),trim_string($tpl->execute()));
+        $this->assertEquals(normalize_html('<div>foobaz${quz}</div>'),normalize_html($tpl->execute()));
         
     }
 
@@ -102,7 +102,7 @@ class I18NTranslateTest extends PHPTAL_TestCase
         $tpl->t = $t;
                 
         $tpl->setSource('<div phptal:tales="php" i18n:domain="foo${bar+1}$${quz}">${t.domain}</div>');
-        $this->assertEquals(trim_string('<div>foo2${quz}</div>'),trim_string($tpl->execute()));
+        $this->assertEquals(normalize_html('<div>foo2${quz}</div>'),normalize_html($tpl->execute()));
     }
     
     function testTranslateChain()

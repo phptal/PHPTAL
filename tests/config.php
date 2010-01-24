@@ -67,11 +67,11 @@ if (function_exists('date_default_timezone_set')) {
     date_default_timezone_set(@date_default_timezone_get());
 }
 
-function trim_file( $src ){
-    return trim_string( join('', file($src) ) );
+function normalize_html_file( $src ){
+    return normalize_html( join('', file($src) ) );
 }
 
-function trim_string( $src ){
+function normalize_html( $src ){
     $src = trim($src);
     $src = preg_replace('/\s+/usm', ' ', $src);
     $src = str_replace('\n', ' ', $src);

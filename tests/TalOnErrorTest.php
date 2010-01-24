@@ -31,8 +31,8 @@ class TalOnErrorTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-on-error.01.html');
         $tpl->dummy = new OnErrorDummyObject();
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-on-error.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-on-error.01.html');
         $this->assertEquals($exp, $res);
         $errors = $tpl->getErrors();
         $this->assertEquals(1, count($errors));
@@ -43,8 +43,8 @@ class TalOnErrorTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-on-error.02.html');
         $tpl->dummy = new OnErrorDummyObject();
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-on-error.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-on-error.02.html');
         $errors = $tpl->getErrors();
         $this->assertEquals(1, count($errors));
         $this->assertEquals('error thrown', $errors[0]->getMessage());
@@ -55,8 +55,8 @@ class TalOnErrorTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-on-error.03.html');
         $tpl->dummy = new OnErrorDummyObject();
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-on-error.03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-on-error.03.html');
         $errors = $tpl->getErrors();
         $this->assertEquals(1, count($errors));
         $this->assertEquals('error thrown', $errors[0]->getMessage());

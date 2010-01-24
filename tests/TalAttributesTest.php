@@ -24,8 +24,8 @@ class TalAttributesTest extends PHPTAL_TestCase
     function testSimple()
     {
         $tpl = $this->newPHPTAL('input/tal-attributes.01.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-attributes.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-attributes.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -33,8 +33,8 @@ class TalAttributesTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-attributes.02.html');
         $tpl->spanClass = 'dummy';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-attributes.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-attributes.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -42,8 +42,8 @@ class TalAttributesTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-attributes.03.html');
         $tpl->spanClass = 'dummy';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-attributes.03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-attributes.03.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -51,8 +51,8 @@ class TalAttributesTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-attributes.04.html');
         $tpl->spanClass = 'dummy';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-attributes.04.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-attributes.04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -60,8 +60,8 @@ class TalAttributesTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-attributes.05.html');
         $tpl->spanClass = 'dummy';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-attributes.05.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-attributes.05.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -71,8 +71,8 @@ class TalAttributesTest extends PHPTAL_TestCase
         $tpl->href = "http://www.test.com/?foo=bar&buz=biz&<thisissomething";
         $tpl->title = 'bla bla <blabla>';
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-attributes.06.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-attributes.06.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -82,8 +82,8 @@ class TalAttributesTest extends PHPTAL_TestCase
         $tpl->href1 = 0;
         $tpl->href2 = 0;
         $tpl->href3 = 0;
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-attributes.07.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-attributes.07.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -107,7 +107,7 @@ EOT;
 
     function testSingleQuote()
     {
-        $exp = trim_file('output/tal-attributes.08.html');
+        $exp = normalize_html_file('output/tal-attributes.08.html');
         $tpl = $this->newPHPTAL('input/tal-attributes.08.html');
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
@@ -115,7 +115,7 @@ EOT;
 
     function testStructure()
     {
-        $exp = trim_file('output/tal-attributes.09.html');
+        $exp = normalize_html_file('output/tal-attributes.09.html');
         $tpl = $this->newPHPTAL('input/tal-attributes.09.html');
         $tpl->value = "return confirm('hel<lo');";
         $res = $tpl->execute();
@@ -124,7 +124,7 @@ EOT;
 
     function testChainedStructure()
     {
-        $exp = trim_file('output/tal-attributes.10.html');
+        $exp = normalize_html_file('output/tal-attributes.10.html');
         $tpl = $this->newPHPTAL('input/tal-attributes.10.html');
         $tpl->value1 = false;
         $tpl->value2 = "return confirm('hel<lo');";

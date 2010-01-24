@@ -26,8 +26,8 @@ class I18NAttributesTest extends PHPTAL_TestCase
 
         $tpl = $this->newPHPTAL('input/i18n-attributes-01.html');
         $tpl->setTranslator($t);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/i18n-attributes-01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/i18n-attributes-01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -38,8 +38,8 @@ class I18NAttributesTest extends PHPTAL_TestCase
 
         $tpl = $this->newPHPTAL('input/i18n-attributes-02.html');
         $tpl->setTranslator($t);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/i18n-attributes-02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/i18n-attributes-02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -51,8 +51,8 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/i18n-attributes-03.html');
         $tpl->sometitle = 'my-title';
         $tpl->setTranslator($t);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/i18n-attributes-03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/i18n-attributes-03.html');
         $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
@@ -91,8 +91,8 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/i18n-attributes-04.html');
         $tpl->sometitle = 'my-title';
         $tpl->setTranslator($t);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/i18n-attributes-04.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/i18n-attributes-04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -105,8 +105,8 @@ class I18NAttributesTest extends PHPTAL_TestCase
         $tpl->setTranslator($t);
         $tpl->someObject = array('method' => 'good');
         $tpl->otherObject = array('method' => 'great');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/i18n-attributes-05.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/i18n-attributes-05.html');
         $this->assertEquals($exp, $res);
     }
 }

@@ -22,8 +22,8 @@ class TalesPhpTest extends PHPTAL_TestCase {
         $tpl = $this->newPHPTAL('input/php.html');
         $tpl->real = 'real value';
         $tpl->foo = 'real';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/php.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/php.html');
         $this->assertEquals($exp,$res);
     }
     

@@ -74,8 +74,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.01.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.01.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -83,8 +83,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.02.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.02.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -92,8 +92,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.03.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.03.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.03.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -101,8 +101,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.04.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.04.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -110,8 +110,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.05.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.05.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.05.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -119,8 +119,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.06.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.06.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.06.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -128,8 +128,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.07.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.07.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.07.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -137,8 +137,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.08.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.08.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.08.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -146,8 +146,8 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-define.09.html');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.09.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.09.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -156,8 +156,8 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tal-define.10.html');
         $tpl->fname = 'Roger';
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.10.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.10.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -166,8 +166,8 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tal-define.11.html');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.11.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.11.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -176,24 +176,24 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tal-define.12.html');
         $tpl->setOutputMode(PHPTAL::XML);
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-define.12.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-define.12.html');
         $this->assertEquals($exp, $res);
     }
 
     function testDefineGlobal()
     {
-        $exp = trim_file('output/tal-define.13.html');
+        $exp = normalize_html_file('output/tal-define.13.html');
         $tpl = $this->newPHPTAL('input/tal-define.13.html');
-        $res = trim_string($tpl->execute());
+        $res = normalize_html($tpl->execute());
         $this->assertEquals($exp, $res);
     }
 
     function testDefineAlter()
     {
-        $exp = trim_file('output/tal-define.14.html');
+        $exp = normalize_html_file('output/tal-define.14.html');
         $tpl = $this->newPHPTAL('input/tal-define.14.html');
-        $res = trim_string($tpl->execute());
+        $res = normalize_html($tpl->execute());
         $this->assertEquals($exp, $res);
     }
 
@@ -221,8 +221,8 @@ class TalDefineTest extends PHPTAL_TestCase
            ${x}
         </div>
         ');
-        $res = trim_string($tpl->execute());
-        $this->assertEquals(trim_string('<div> ok </div>'), $res);
+        $res = normalize_html($tpl->execute());
+        $this->assertEquals(normalize_html('<div> ok </div>'), $res);
     }
 
     function testGlobalDefineEmptySpan2()
@@ -233,8 +233,8 @@ class TalDefineTest extends PHPTAL_TestCase
            ${x}
         </div>
         ');
-        $res = trim_string($tpl->execute());
-        $this->assertEquals(trim_string('<div> ok </div>'), $res);
+        $res = normalize_html($tpl->execute());
+        $this->assertEquals(normalize_html('<div> ok </div>'), $res);
     }
 
 
@@ -248,8 +248,8 @@ class TalDefineTest extends PHPTAL_TestCase
            ${x}
         </div>
         ');
-        $res = trim_string($tpl->execute());
-        $this->assertEquals(trim_string('<div> <span class="foo"/> ok </div>'), $res);
+        $res = normalize_html($tpl->execute());
+        $this->assertEquals(normalize_html('<div> <span class="foo"/> ok </div>'), $res);
     }
 
     function testGlobalDefineNonEmptySpan2()
@@ -262,8 +262,8 @@ class TalDefineTest extends PHPTAL_TestCase
            ${x}
         </div>
         ');
-        $res = trim_string($tpl->execute());
-        $this->assertEquals(trim_string('<div> <span class="foo"/> ok </div>'), $res);
+        $res = normalize_html($tpl->execute());
+        $this->assertEquals(normalize_html('<div> <span class="foo"/> ok </div>'), $res);
     }
 
     function testDefineTALESInterpolated()

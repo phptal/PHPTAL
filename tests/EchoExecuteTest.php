@@ -36,7 +36,7 @@ class EchoExecuteTest extends PHPTAL_TestCase
         
         $this->assertEquals($res2,$res,"Execution with and without buffering should give same result");
         
-        return trim_string($res);
+        return normalize_html($res);
     }
     
     function testEchoExecute()
@@ -52,7 +52,7 @@ class EchoExecuteTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hello/>');
         
-        $this->assertEquals(trim_string('<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hello></hello>'),$this->echoExecute($tpl));
+        $this->assertEquals(normalize_html('<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hello></hello>'),$this->echoExecute($tpl));
     }
     
     function testEchoExecuteDeclsMacro()
@@ -62,7 +62,7 @@ class EchoExecuteTest extends PHPTAL_TestCase
             $tpl = $this->newPHPTAL();
             $tpl->setSource('<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hello><m metal:define-macro="test">test</m><x metal:use-macro="test"/></hello>');
         
-            $this->assertEquals(trim_string('<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hello><m>test</m></hello>'),$this->echoExecute($tpl));
+            $this->assertEquals(normalize_html('<?xml version="1.0"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hello><m>test</m></hello>'),$this->echoExecute($tpl));
         }
         catch(PHPTAL_ConfigurationException $e)
         {

@@ -21,16 +21,16 @@ class TalOmitTagTest extends PHPTAL_TestCase
     function testSimple()
     {
         $tpl = $this->newPHPTAL('input/tal-omit-tag.01.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-omit-tag.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-omit-tag.01.html');
         $this->assertEquals($exp, $res);
     }
 
     function testWithCondition()
     {
         $tpl = $this->newPHPTAL('input/tal-omit-tag.02.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-omit-tag.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-omit-tag.02.html');
         $this->assertEquals($exp, $res);
     }
 

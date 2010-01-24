@@ -33,8 +33,8 @@ class I18NNameTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/i18n-name-02.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/i18n-name-02.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/i18n-name-02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -45,8 +45,8 @@ class I18NNameTest extends PHPTAL_TestCase
         $tpl->mylogin_var = '<mylogin>';
         
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/i18n-name-03.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/i18n-name-03.html');
         $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
@@ -55,8 +55,8 @@ class I18NNameTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/i18n-name-04.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/i18n-name-04.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/i18n-name-04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -65,8 +65,8 @@ class I18NNameTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/i18n-name-05.html');
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/i18n-name-05.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/i18n-name-05.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -77,8 +77,8 @@ class I18NNameTest extends PHPTAL_TestCase
         $tpl->mails = 100;
         $tpl->setTranslator( new DummyTranslator() );
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/i18n-name-06.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/i18n-name-06.html');
         $this->assertEquals($exp, $res);
     }
 }

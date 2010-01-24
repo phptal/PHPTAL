@@ -24,8 +24,8 @@ class TalReplaceTest extends PHPTAL_TestCase
     function testSimple()
     {
         $tpl = $this->newPHPTAL('input/tal-replace.01.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-replace.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-replace.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -33,8 +33,8 @@ class TalReplaceTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-replace.02.html');
         $tpl->replace = 'my replace';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-replace.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-replace.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -42,40 +42,40 @@ class TalReplaceTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-replace.03.html');
         $tpl->replace = '<foo><bar/></foo>';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-replace.03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-replace.03.html');
         $this->assertEquals($exp, $res);
     }
 
     function testNothing()
     {
         $tpl = $this->newPHPTAL('input/tal-replace.04.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-replace.04.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-replace.04.html');
         $this->assertEquals($exp, $res);
     }
 
     function testDefault()
     {
         $tpl = $this->newPHPTAL('input/tal-replace.05.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-replace.05.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-replace.05.html');
         $this->assertEquals($exp, $res);
     }
 
     function testChain()
     {
         $tpl = $this->newPHPTAL('input/tal-replace.06.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-replace.06.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-replace.06.html');
         $this->assertEquals($exp, $res);
     }
 
     function testBlock()
     {
         $tpl = $this->newPHPTAL('input/tal-replace.07.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-replace.07.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-replace.07.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -100,7 +100,7 @@ EOT;
         $tpl->emptystrv = '';
         $tpl->zerov = 0;
         $res = $tpl->execute();
-        $this->assertEquals(trim_string($exp), trim_string($res));
+        $this->assertEquals(normalize_html($exp), normalize_html($res));
     }
 }
 

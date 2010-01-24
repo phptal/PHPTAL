@@ -42,8 +42,8 @@ class PostFilterTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/postfilter.01.html');
         $tpl->setPostFilter($filter);
         $tpl->value = 'my value';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/postfilter.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/postfilter.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -56,6 +56,6 @@ class PostFilterTest extends PHPTAL_TestCase
         <z metal:use-macro="macro" />
         </x>
         ');
-        $this->assertEquals(trim_string('<x>test-filtered1<y>test-filtered2</y></x>'),trim_string($tpl->execute()));
+        $this->assertEquals(normalize_html('<x>test-filtered1<y>test-filtered2</y></x>'),normalize_html($tpl->execute()));
     }
 }

@@ -52,19 +52,19 @@ class PhptalIdTest extends PHPTAL_TestCase
     {
         $trigger = new MyTrigger();
 
-        $exp = trim_file('output/phptal.id.01.html');
+        $exp = normalize_html_file('output/phptal.id.01.html');
         $tpl = $this->newPHPTAL('input/phptal.id.01.html');
         $tpl->addTrigger('myTable', $trigger);
         $tpl->result = range(0, 3);
 
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
 
         $this->assertEquals($exp, $res);
         $this->assertEquals(false, $trigger->useCache);
 
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
 
         $this->assertEquals($exp, $res);
         $this->assertEquals(true, $trigger->useCache);

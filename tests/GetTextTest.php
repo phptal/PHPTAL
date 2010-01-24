@@ -43,8 +43,8 @@ class GetTextTest extends PHPTAL_TestCase
 
         $tpl = $this->newPHPTAL('input/gettext.01.html');
         $tpl->setTranslator($gettext);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/gettext.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/gettext.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -57,8 +57,8 @@ class GetTextTest extends PHPTAL_TestCase
 
         $tpl = $this->newPHPTAL('input/gettext.02.html');
         $tpl->setTranslator($gettext);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/gettext.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/gettext.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -74,8 +74,8 @@ class GetTextTest extends PHPTAL_TestCase
         $tpl->setTranslator($gettext);
         $tpl->login = 'john';
         $tpl->lastCxDate = '2004-12-25';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/gettext.03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/gettext.03.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -93,8 +93,8 @@ class GetTextTest extends PHPTAL_TestCase
         $tpl->setTranslator($gettext);
         $tpl->login = 'john';
         $tpl->lastCxDate = '2004-12-25';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/gettext.04.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/gettext.04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -108,8 +108,8 @@ class GetTextTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/gettext.05.html');
         $tpl->login = 'john smith';
         $tpl->setTranslator($gettext);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/gettext.05.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/gettext.05.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -124,8 +124,8 @@ class GetTextTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/gettext.06.html');
         $tpl->setTranslator($gettext);
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/gettext.06.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/gettext.06.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -139,8 +139,8 @@ class GetTextTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/gettext.06.html');
         $tpl->setTranslator($gettext);
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_string('<root>
+        $res = normalize_html($res);
+        $exp = normalize_html('<root>
   <span>Not accentuated</span>
   <span>Accentuated key without canonicalization</span>
   <span>Accentuated key without canonicalization</span>
@@ -159,8 +159,8 @@ class GetTextTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/gettext.07.html');
         $tpl->setTranslator($gettext);
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/gettext.07.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/gettext.07.html');
         $this->assertEquals($exp, $res);
     }
 }

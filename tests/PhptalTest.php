@@ -28,8 +28,8 @@ class PhptalTest extends PHPTAL_TestCase
     function testXmlHeader()
     {
         $tpl = $this->newPHPTAL('input/phptal.02.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/phptal.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/phptal.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -88,8 +88,8 @@ class PhptalTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/xml.04.xml');
         $tpl->setOutputMode(PHPTAL::XML);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('input/xml.04.xml');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('input/xml.04.xml');
         $this->assertEquals($exp, $res);
     }
 
@@ -131,32 +131,32 @@ class PhptalTest extends PHPTAL_TestCase
     function testStripComments()
     {
         $tpl = $this->newPHPTAL('input/phptal.04.html');
-        $exp = trim_file('output/phptal.04.html');
+        $exp = normalize_html_file('output/phptal.04.html');
         $tpl->stripComments(true);
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 
     function testStripCommentsReset()
     {
         $tpl = $this->newPHPTAL('input/phptal.04.html');
-        $exp = trim_file('output/phptal.04.html');
+        $exp = normalize_html_file('output/phptal.04.html');
         $tpl->stripComments(false);
         $tpl->stripComments(true);
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 
     function testStripCommentsUnset()
     {
         $tpl = $this->newPHPTAL('input/phptal.04.html');
-        $exp = trim_file('input/phptal.04.html');
+        $exp = normalize_html_file('input/phptal.04.html');
         $tpl->stripComments(true);
         $tpl->stripComments(false);
         $res = $tpl->execute();
-        $res = trim_string($res);
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 
@@ -176,7 +176,7 @@ class PhptalTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/phptal.05.html');
         $res = $tpl->execute();
-        $exp = trim_file('input/phptal.05.html');
+        $exp = normalize_html_file('input/phptal.05.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -185,7 +185,7 @@ class PhptalTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/phptal.06.html');
         $tpl->foo = '<p>hello</p>';
         $res = $tpl->execute();
-        $exp = trim_file('output/phptal.06.html');
+        $exp = normalize_html_file('output/phptal.06.html');
         $this->assertEquals($exp,$res);
     }
     

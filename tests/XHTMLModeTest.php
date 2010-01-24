@@ -42,8 +42,8 @@ class XHTMLModeTest extends PHPTAL_TestCase
         </body>
         </html>');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_string('<html xmlns="http://www.w3.org/1999/xhtml">
+        $res = normalize_html($res);
+        $exp = normalize_html('<html xmlns="http://www.w3.org/1999/xhtml">
                 <head>
                     <title></title>
                     <base href="http://example.com/" />
@@ -87,8 +87,8 @@ class XHTMLModeTest extends PHPTAL_TestCase
         </body>
         </html>');
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_string('<html xmlns="http://www.w3.org/1999/xhtml">
+        $res = normalize_html($res);
+        $exp = normalize_html('<html xmlns="http://www.w3.org/1999/xhtml">
                 <body>
                     <input type="checkbox" checked="checked" />
                     <input type="text" readonly="readonly" />
@@ -129,11 +129,11 @@ class XHTMLModeTest extends PHPTAL_TestCase
           )
         );
         
-        $this->assertEquals(trim_string('<select>
+        $this->assertEquals(normalize_html('<select>
           <option value="1">Option1</option>
           <option value="2" selected="selected">Option2</option>
           <option value="3">Option3</option>
-        </select>'), trim_string($tpl->execute()));
+        </select>'), normalize_html($tpl->execute()));
     }
 }
 

@@ -85,7 +85,7 @@ class TalesTest extends PHPTAL_TestCase
         $tpl->isNotTrue = false;
         $tpl->isTrue = true;
         $res = $tpl->execute();
-        $this->assertEquals(trim_file('output/tales-true.html'), trim_string($res));
+        $this->assertEquals(normalize_html_file('output/tales-true.html'), normalize_html($res));
     }
 
     function testCustom()

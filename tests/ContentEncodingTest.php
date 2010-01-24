@@ -21,8 +21,8 @@ class ContentEncodingTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/content-encoding.xml');
         $res = $tpl->execute();
-        $exp = trim_file('output/content-encoding.xml');
-        $res = trim_string($res);
+        $exp = normalize_html_file('output/content-encoding.xml');
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 

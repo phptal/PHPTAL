@@ -27,8 +27,8 @@ class EscapeHTMLTest extends PHPTAL_TestCase {
 
     function testDoesEscapeHTMLContent(){
         $tpl = $this->newPHPTAL('input/escape.html');
-        $exp = trim_file('output/escape.html');
-        $res = trim_string($tpl->execute());
+        $exp = normalize_html_file('output/escape.html');
+        $res = normalize_html($tpl->execute());
         $this->assertEquals($exp, $res);
     }
 

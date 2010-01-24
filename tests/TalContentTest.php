@@ -26,8 +26,8 @@ class TalContentTest extends PHPTAL_TestCase
     function testSimple()
     {
         $tpl = $this->newPHPTAL('input/tal-content.01.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-content.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-content.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -35,8 +35,8 @@ class TalContentTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-content.02.html');
         $tpl->content = 'my content';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-content.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-content.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -44,32 +44,32 @@ class TalContentTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-content.03.html');
         $tpl->content = '<foo><bar/></foo>';
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-content.03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-content.03.html');
         $this->assertEquals($exp, $res);
     }
 
     function testNothing()
     {
         $tpl = $this->newPHPTAL('input/tal-content.04.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-content.04.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-content.04.html');
         $this->assertEquals($exp, $res);
     }
 
     function testDefault()
     {
         $tpl = $this->newPHPTAL('input/tal-content.05.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-content.05.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-content.05.html');
         $this->assertEquals($exp, $res);
     }
 
     function testChain()
     {
         $tpl = $this->newPHPTAL('input/tal-content.06.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-content.06.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-content.06.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -94,7 +94,7 @@ class TalContentTest extends PHPTAL_TestCase
         $tpl->emptystrv = '';
         $tpl->zerov = 0;
         $res = $tpl->execute();
-        $this->assertEquals(trim_string($exp), trim_string($res));
+        $this->assertEquals(normalize_html($exp), normalize_html($res));
     }
 
     function testObjectEcho()

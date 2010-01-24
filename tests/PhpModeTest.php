@@ -21,8 +21,8 @@ class PhpModeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/php-mode.01.xml');
         $res = $tpl->execute();
-        $exp = trim_file('output/php-mode.01.xml');
-        $res = trim_string($res);
+        $exp = normalize_html_file('output/php-mode.01.xml');
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 
@@ -30,8 +30,8 @@ class PhpModeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/php-mode.02.xml');
         $res = $tpl->execute();
-        $exp = trim_file('output/php-mode.02.xml');
-        $res = trim_string($res);
+        $exp = normalize_html_file('output/php-mode.02.xml');
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 }

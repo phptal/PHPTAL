@@ -84,16 +84,16 @@ class TriggerTest extends PHPTAL_TestCase
         $trigger = new StupidCacheTrigger();
         $tpl = $this->newPHPTAL('input/trigger.01.html');
         $tpl->addTrigger('someid', $trigger);
-        $exp = trim_file('output/trigger.01.html');
+        $exp = normalize_html_file('output/trigger.01.html');
 
         $tpl->someId = 10;
-        $res = trim_string($tpl->execute());
+        $res = normalize_html($tpl->execute());
         $this->assertEquals($exp, $res);
         $this->assertTrue($trigger->isCaching);
         $this->assertEquals('trigger.10', $trigger->cachePath);
 
         $tpl->someId = 10;
-        $res = trim_string($tpl->execute());
+        $res = normalize_html($tpl->execute());
         $this->assertEquals($exp, $res);
         $this->assertFalse($trigger->isCaching);
         $this->assertEquals('trigger.10', $trigger->cachePath);

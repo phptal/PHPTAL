@@ -50,8 +50,8 @@ class OverloadingTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/overloading-01.html');
         $tpl->object = new OverloadTestClass();
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/overloading-01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/overloading-01.html');
         $this->assertEquals($exp, $res);
     }
 }

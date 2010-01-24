@@ -21,8 +21,8 @@ class MetalSlotTest extends PHPTAL_TestCase
     function testSimple()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.01.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-slot.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-slot.01.html');
         $this->assertEquals($exp, $res);
     }
     
@@ -30,8 +30,8 @@ class MetalSlotTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/metal-slot.05.html');
         $tpl->var = "top";
-        $this->assertEquals(trim_string('top=top<div>inusemacro=inusemacro<div>inmacro=inmacro<div>infillslot=infillslot</div>/inmacro=inmacro</div>/inusemacro=inusemacro</div>/top=top'),
-                            trim_string($tpl->execute()), $tpl->getCodePath());
+        $this->assertEquals(normalize_html('top=top<div>inusemacro=inusemacro<div>inmacro=inmacro<div>infillslot=infillslot</div>/inmacro=inmacro</div>/inusemacro=inusemacro</div>/top=top'),
+                            normalize_html($tpl->execute()), $tpl->getCodePath());
     }
 
     function testPreservesTopmostContext()
@@ -49,7 +49,7 @@ class MetalSlotTest extends PHPTAL_TestCase
                 <div metal:fill-slot="s">var = ${var}</div>
             </div>    
         ');
-        $this->assertEquals(trim_string('<div><div><div>var = topmost</div></div></div>'),trim_string($tpl->execute()), $tpl->getCodePath());
+        $this->assertEquals(normalize_html('<div><div><div>var = topmost</div></div></div>'),normalize_html($tpl->execute()), $tpl->getCodePath());
     }
     
     function testRecursiveFillSimple()
@@ -75,24 +75,24 @@ class MetalSlotTest extends PHPTAL_TestCase
             </div>
             ');
             
-        $this->assertEquals(trim_string('<div><div>test1 macro value:<div class="filling value for test1">
+        $this->assertEquals(normalize_html('<div><div>test1 macro value:<div class="filling value for test1">
         <div>test2 macro value:<span class="filling value for test2">foo bar baz</span></div></div></div></div>'),
-                            trim_string($tpl->execute()), $tpl->getCodePath());
+                            normalize_html($tpl->execute()), $tpl->getCodePath());
     }
 
     function testRecusiveFill()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.02.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-slot.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-slot.02.html');
         $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
     function testBlock()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.03.html');
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-slot.03.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-slot.03.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -100,8 +100,8 @@ class MetalSlotTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/metal-slot.04.html');
         $tpl->fillit = true;
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/metal-slot.04.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-slot.04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -120,7 +120,7 @@ class MetalSlotTest extends PHPTAL_TestCase
         $tr->setTranslation("translatemetoo","translatedyouaswell");
         $tpl->setTranslator($tr);
 
-        $this->assertEquals(trim_string('<div><p><span>translatedyouaswell</span></p></div>'),trim_string($tpl->execute()), $tpl->getCodePath());
+        $this->assertEquals(normalize_html('<div><p><span>translatedyouaswell</span></p></div>'),normalize_html($tpl->execute()), $tpl->getCodePath());
     }
     
     /**
@@ -222,8 +222,8 @@ HTML
 );
         
         $this->assertEquals(
-            trim_string('<div>page/value:<div>OK toplevel-filled page/value</div>page/valuebis:<div>OK subpage filled page/valuebis</div></div>'),
-            trim_string($tpl->execute()), $tpl->getCodePath());
+            normalize_html('<div>page/value:<div>OK toplevel-filled page/value</div>page/valuebis:<div>OK subpage filled page/valuebis</div></div>'),
+            normalize_html($tpl->execute()), $tpl->getCodePath());
     }
 
 }

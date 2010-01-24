@@ -21,8 +21,8 @@ class CommentFilterTest extends PHPTAL_TestCase
         $t = $this->newPHPTAL('input/comment-filter-01.html');
         $t->addPreFilter("strip_comments");
         $res = $t->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/comment-filter-01.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/comment-filter-01.html');
         $this->assertEquals($exp,$res);
     }
 
@@ -33,9 +33,9 @@ class CommentFilterTest extends PHPTAL_TestCase
         alert("1990s called"); /* && */
         //--></script>');
         
-        $this->assertEquals(trim_string('<script>//<![CDATA[
+        $this->assertEquals(normalize_html('<script>//<![CDATA[
         alert("1990s called"); /* && */
-        //]]></script>'),trim_string($t->execute()));
+        //]]></script>'),normalize_html($t->execute()));
     }
 
     function testNamespaceAware() {
@@ -45,6 +45,6 @@ class CommentFilterTest extends PHPTAL_TestCase
         alert("1990s called"); /* && */
         //--></script>');
         
-        $this->assertEquals(trim_string('<script xmlns="http://example.com/foo">//</script>'),trim_string($t->execute()));
+        $this->assertEquals(normalize_html('<script xmlns="http://example.com/foo">//</script>'),normalize_html($t->execute()));
     }
 }

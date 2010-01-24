@@ -21,8 +21,8 @@ class TalRepeatTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.01.html');
         $tpl->array = range(0,4);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-repeat.01.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-repeat.01.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -30,8 +30,8 @@ class TalRepeatTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.02.html');
         $tpl->array = range(0,2);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-repeat.02.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-repeat.02.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -40,8 +40,8 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tal-repeat.03.html');
         $tpl->result = new MyIterableWithSize(4);
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-repeat.03.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-repeat.03.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -95,8 +95,8 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/tal-repeat.04.html');
         $tpl->result = array('a'=>0, 'b'=>1, 'c'=>2, 'd'=>3);
         $res = $tpl->execute();
-        $res = trim_string($res);
-        $exp = trim_file('output/tal-repeat.04.html');
+        $res = normalize_html($res);
+        $exp = normalize_html_file('output/tal-repeat.04.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -104,8 +104,8 @@ class TalRepeatTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.05.html');
         $tpl->data = array(1,2,3);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-repeat.05.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-repeat.05.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -114,8 +114,8 @@ class TalRepeatTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.06.html');
         $tpl->data = array(1,2,3);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-repeat.06.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-repeat.06.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -124,8 +124,8 @@ class TalRepeatTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.07.html');
         $tpl->result = array('a'=>0, 'b'=>1, 'c'=>2, 'd'=>3);
-        $res = trim_string($tpl->execute());
-        $exp = trim_file('output/tal-repeat.07.html');
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/tal-repeat.07.html');
         $this->assertEquals($exp, $res);
     }
 
@@ -156,7 +156,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource( '<span tal:omit-tag="" tal:repeat="item items" tal:content="repeat/item/letter"/>' );
         $tpl->items = range( 0, 32 );
-        $res = trim_string( $tpl->execute() );
+        $res = normalize_html( $tpl->execute() );
         $exp = 'abcdefghijklmnopqrstuvwxyzaaabacadaeafag';
         $this->assertEquals( $exp, $res );
     }
@@ -166,7 +166,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource( '<span tal:omit-tag="" tal:repeat="item items" tal:content="string:${repeat/item/roman},"/>' );
         $tpl->items = range( 0, 16 );
-        $res = trim_string( $tpl->execute() );
+        $res = normalize_html( $tpl->execute() );
         $exp = 'i,ii,iii,iv,v,vi,vii,viii,ix,x,xi,xii,xiii,xiv,xv,xvi,xvii,';
         $this->assertEquals( $exp, $res );
     }
@@ -182,8 +182,8 @@ class TalRepeatTest extends PHPTAL_TestCase
             </div>'
         );
         $tpl->items = array( 'apple', 'apple', 'orange', 'orange', 'orange', 'pear', 'kiwi', 'kiwi' );
-        $res = trim_string( $tpl->execute() );
-        $exp = trim_string('
+        $res = normalize_html( $tpl->execute() );
+        $exp = normalize_html('
             <h1>apple</h1>
             <p>apple</p>
             <hr/>
@@ -218,8 +218,8 @@ class TalRepeatTest extends PHPTAL_TestCase
                             array( 'type' => 'bike', 'name' => 'suzuki' ),
                             array( 'type' => 'bike', 'name' => 'honda' ),
         );
-        $res = trim_string( $tpl->execute() );
-        $exp = trim_string('
+        $res = normalize_html( $tpl->execute() );
+        $exp = normalize_html('
             <h1>car</h1>
             <p>bmw</p>
             <p>audi</p>
@@ -325,8 +325,8 @@ class TalRepeatTest extends PHPTAL_TestCase
         $phptal->users2 = array('repeat2');
 
         $this->assertEquals(
-            trim_string('<x> original=original <y> defined=defined <z> repeat=repeat <z> repeat2=repeat2 </z> repeat=repeat </z> defined=defined </y> original=original</x>'),
-            trim_string($phptal->execute()));
+            normalize_html('<x> original=original <y> defined=defined <z> repeat=repeat <z> repeat2=repeat2 </z> repeat=repeat </z> defined=defined </y> original=original</x>'),
+            normalize_html($phptal->execute()));
     }
 }
 

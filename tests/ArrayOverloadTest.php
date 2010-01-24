@@ -54,8 +54,8 @@ class ArrayOverloadTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/array-overload.01.html');
         $tpl->myobject = $arr;
         $res = $tpl->execute();
-        $exp = trim_file('output/array-overload.01.html');
-        $res = trim_string($res);
+        $exp = normalize_html_file('output/array-overload.01.html');
+        $res = normalize_html($res);
         $this->assertEquals($exp, $res);
     }
 }
