@@ -25,7 +25,7 @@
  * ...
  * are provided by this instance.
  *
- * 'repeat' is an StdClass instance created to handle RepeatControllers,
+ * 'repeat' is an stdClass instance created to handle RepeatControllers,
  * 'item' is an instance of this class.
  *
  * @package PHPTAL

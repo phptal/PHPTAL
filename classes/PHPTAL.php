@@ -212,7 +212,7 @@ class PHPTAL
     public function __construct($path=false)
     {
         $this->_path = $path;
-        $this->_globalContext = new StdClass();
+        $this->_globalContext = new stdClass();
         $this->_context = new PHPTAL_Context();
         $this->_context->setGlobal($this->_globalContext);
 

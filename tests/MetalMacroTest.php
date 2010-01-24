@@ -51,7 +51,7 @@ class MetalMacroTest extends PHPTAL_TestCase
 
     function testEvaluatedMacroName()
     {
-        $call = new StdClass();
+        $call = new stdClass();
         $call->first = 1;
         $call->second = 2;
 
@@ -65,7 +65,7 @@ class MetalMacroTest extends PHPTAL_TestCase
 
     function testEvaluatedMacroNameTalesPHP()
     {
-        $call = new StdClass();
+        $call = new stdClass();
         $call->first = 1;
         $call->second = 2;
 

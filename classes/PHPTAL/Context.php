@@ -33,7 +33,7 @@ class PHPTAL_Context
 
     public function __construct()
     {
-        $this->repeat = new StdClass();
+        $this->repeat = new stdClass();
     }
 
     public function __clone()
@@ -52,12 +52,12 @@ class PHPTAL_Context
     }
 
     /**
-     * set StdClass object which has property of every global variable
+     * set stdClass object which has property of every global variable
      * It can use __isset() and __get() [none of them or both]
      *
      * @return void
      */
-    public function setGlobal(StdClass $globalContext)
+    public function setGlobal(stdClass $globalContext)
     {
         $this->_globalContext = $globalContext;
     }

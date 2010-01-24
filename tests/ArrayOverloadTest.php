@@ -46,7 +46,7 @@ class ArrayOverloadTest extends PHPTAL_TestCase
     {
         $arr = new MyArray();
         for ($i=0; $i<20; $i++){
-            $val = new StdClass;
+            $val = new stdClass;
             $val->foo = "foo value $i";
             $arr->push($val);
         }

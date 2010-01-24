@@ -63,7 +63,7 @@ class OldTest extends PHPTAL_TestCase
     function test13()  // default keyword
     {
         $tpl = $this->newPHPTAL('input/old-13.html');
-        $l = new StdClass(); // DummyTag();
+        $l = new stdClass(); // DummyTag();
         $l->href= "http://www.example.com";
         $l->title = "example title";
         $l->name = "my link content";
@@ -162,9 +162,9 @@ class OldTest extends PHPTAL_TestCase
 
     function test31() // test path evals
     {
-        $a = new stdclass;
-        $a->fooval = new stdclass;
-        $a->fooval->b = new stdclass;
+        $a = new stdClass;
+        $a->fooval = new stdClass;
+        $a->fooval->b = new stdClass;
         $a->fooval->b->barval = "it's working";
 
         $tpl = $this->newPHPTAL('input/old-31.html');

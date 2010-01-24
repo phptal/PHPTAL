@@ -33,7 +33,7 @@ class TalesExistTest extends PHPTAL_TestCase
 
     function testLevel2()
     {
-        $o = new StdClass();
+        $o = new stdClass();
         $o->foo = 1;
         $tpl = $this->newPHPTAL('input/tales-exist-02.html');
         $tpl->o = $o;
