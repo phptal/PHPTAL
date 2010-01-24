@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id: $
+ * @link     http://phptal.org/
+ */
+ 
 class PHPTAL_PreFilter_StripComments extends PHPTAL_PreFilter 
 {
     function filterDOM(PHPTAL_Dom_Element $element)

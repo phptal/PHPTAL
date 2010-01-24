@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * PHPTAL templating engine
+ *
+ * PHP Version 5
+ *
+ * @category HTML
+ * @package  PHPTAL
+ * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
+ * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
+ * @version  SVN: $Id:$
+ * @link     http://phptal.org/
+ */
+ 
 require_once dirname(__FILE__)."/config.php";
 
 class IncludePathTest extends PHPTAL_TestCase
