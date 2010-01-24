@@ -107,7 +107,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
      */
     private function generateFillSlots(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Dom_Node $phpelement)
     {
-        if (false == ($phpelement instanceOf PHPTAL_Dom_Element)) {
+        if (false == ($phpelement instanceof PHPTAL_Dom_Element)) {
             return;
         }
 

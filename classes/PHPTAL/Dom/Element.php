@@ -104,7 +104,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         $value = '';
         foreach ($this->childNodes as $node) {
             // leave it alone if there is CDATA, comment, or anything else.
-            if (!$node instanceOf PHPTAL_Dom_Text) return;
+            if (!$node instanceof PHPTAL_Dom_Text) return;
 
             $value .= $node->getValue();
             $valueEscaped .= $node->getValueEscaped();
@@ -324,7 +324,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         if (count($this->contentAttributes) > 0) return true;
         
         foreach ($this->childNodes as $node) {
-            if (!$node instanceOf PHPTAL_Dom_Text || $node->getValueEscaped() !== '') return true;
+            if (!$node instanceof PHPTAL_Dom_Text || $node->getValueEscaped() !== '') return true;
         }
         return false;
     }
@@ -511,11 +511,11 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             $handler = $nsattr->createAttributeHandler($this, $domattr->getValue());
             $this->talHandlers[$prio] = $handler;
 
-            if ($nsattr instanceOf PHPTAL_NamespaceAttributeSurround)
+            if ($nsattr instanceof PHPTAL_NamespaceAttributeSurround)
                 $this->surroundAttributes[] = $handler;
-            else if ($nsattr instanceOf PHPTAL_NamespaceAttributeReplace)
+            else if ($nsattr instanceof PHPTAL_NamespaceAttributeReplace)
                 $this->replaceAttributes[] = $handler;
-            else if ($nsattr instanceOf PHPTAL_NamespaceAttributeContent)
+            else if ($nsattr instanceof PHPTAL_NamespaceAttributeContent)
                 $this->contentAttributes[] = $handler;
             else
                 throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($nsattr));

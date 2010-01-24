@@ -134,9 +134,9 @@ class PhpTransformerTest extends PHPTAL_TestCase
         $this->assertEquals('($test)?true:false', PHPTAL_Php_Transformer::transform('(test)?true:false'));
     }
 
-    function testInstanceOf()
+    function testinstanceof()
     {
-        $this->assertEquals('$test instanceOf Foo', PHPTAL_Php_Transformer::transform('test instanceOf Foo'));
+        $this->assertEquals('$test instanceof Foo', PHPTAL_Php_Transformer::transform('test instanceof Foo'));
     }
 
     function testTransformInString()

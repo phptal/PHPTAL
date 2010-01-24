@@ -146,7 +146,7 @@ class PHPTAL_Dom_DocumentBuilder
             throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$this->_current->getQualifiedName()." > (opened in line ".$this->_current->getSourceLine().") but found < /".$qname." >");
         }
         $this->_current = array_pop($this->_stack);
-        if ($this->_current instanceOf PHPTAL_Dom_Element) {
+        if ($this->_current instanceof PHPTAL_Dom_Element) {
             $this->_xmlns = $this->_current->getXmlnsState(); // restore namespace prefixes info to previous state
         }
     }

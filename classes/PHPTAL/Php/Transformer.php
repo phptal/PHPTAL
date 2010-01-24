@@ -58,7 +58,7 @@ class PHPTAL_Php_Transformer
         $i = 0;
         $inString = false;
         $backslashed = false;
-        $instanceOf = false;
+        $instanceof = false;
         $eval = false;
 
 
@@ -241,13 +241,13 @@ class PHPTAL_Php_Transformer
                         // instanceof keyword
                         elseif ($low === 'instanceof') {
                             $result .= $var;
-                            $instanceOf = true;
+                            $instanceof = true;
                         }
                         // previous was instanceof
-                        elseif ($instanceOf) {
+                        elseif ($instanceof) {
                             // last was instanceof, this var is a class name
                             $result .= $var;
-                            $instanceOf = false;
+                            $instanceof = false;
                         }
                         // regular variable
                         else {
