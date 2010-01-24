@@ -67,14 +67,13 @@ if (function_exists('date_default_timezone_set')) {
     date_default_timezone_set(@date_default_timezone_get());
 }
 
-function normalize_html_file( $src ){
-    return normalize_html( join('', file($src) ) );
+function normalize_html_file($src) {
+    return normalize_html(file_get_contents($src));
 }
 
-function normalize_html( $src ){
+function normalize_html($src) {
     $src = trim($src);
     $src = preg_replace('/\s+/usm', ' ', $src);
-    $src = str_replace('\n', ' ', $src);
     $src = preg_replace('/(?<!]])&gt;/', '>', $src); // > may or may not be escaped, except ]]>
     $src = str_replace('> ', '>', $src);
     $src = str_replace(' <', '<', $src);
@@ -82,11 +81,12 @@ function normalize_html( $src ){
     return $src;
 }
 
-function normalize_phpsource($code) {
+function normalize_phpsource($code, $ignore_newlines = false) {
+    
     $lines = explode("\n", $code);
     $code = "";
     foreach ($lines as $line) {
-        $code .= trim($line);
+        $code .= trim($line).($ignore_newlines? '':"\n");
     }
     
     // ignore some no-ops

@@ -53,8 +53,8 @@ function test(\$tpl) {
 
  ?>
 EOS;
-        $result = normalize_phpsource($result);
-        $expected = normalize_phpsource($expected);
+        $result = normalize_phpsource($result, true);
+        $expected = normalize_phpsource($expected, true);
         $this->assertEquals($result, $expected);
     }
 
@@ -74,8 +74,8 @@ EOS;
 <?php function test2(\$tpl) {?>test2<?php}?>
 <?php function test1(\$tpl) {?>test1test1<?php}?>
 EOS;
-        $res = normalize_phpsource($res);
-        $exp = normalize_phpsource($exp);
+        $res = normalize_phpsource($res, true);
+        $exp = normalize_phpsource($exp, true);
         $this->assertEquals($exp, $res);
     }
 }
