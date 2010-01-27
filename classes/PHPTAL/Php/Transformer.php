@@ -92,8 +92,9 @@ class PHPTAL_Php_Transformer
                         $mark = $i;
                     }
                     // that an alphabetic char, then it should be the begining
-                    // of a var
-                    elseif (self::isAlpha($c) || $c==='_') {
+                    // of a var or static
+                    // && !self::isDigit($c) checked earlier
+                    elseif (self::isVarNameChar($c)) {
                         $state = self::ST_VAR;
                         $mark = $i;
                     }
