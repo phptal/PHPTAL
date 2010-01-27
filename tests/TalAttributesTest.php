@@ -15,10 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-if (!class_exists('DummyTag',false)) {
-    class DummyTag {}
-}
-
 class TalAttributesTest extends PHPTAL_TestCase
 {
     function testSimple()

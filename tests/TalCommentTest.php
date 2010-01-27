@@ -22,11 +22,10 @@ require_once 'PHPTAL/Php/CodeWriter.php';
 require_once 'PHPTAL/Php/State.php';
 PHPTAL::restoreIncludePath();
 
-if (!class_exists('DummyPhpNode',false)) {
-    class DummyPhpNode extends PHPTAL_Dom_Element {
-        function __construct() {}
-        function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}
-    }
+
+class DummyPhpNode extends PHPTAL_Dom_Element {
+    function __construct() {}
+    function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}
 }
 
 class TalCommentTest extends PHPTAL_TestCase
