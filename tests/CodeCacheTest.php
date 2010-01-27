@@ -66,6 +66,7 @@ class CodeCacheTest extends PHPTAL_TestCase
     function tearDown()
     {
         $this->clearCache();
+        parent::tearDown();
     }
 
     function testNoParseOnReexecution()

@@ -36,6 +36,7 @@ if (!class_exists('PHPTAL')) {
 abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
 {
     private $cwd_backup, $buffer_level;
+    
     function setUp()
     {        
         $this->buffer_level = ob_get_level();
@@ -43,7 +44,9 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
         // tests rely on cwd being in tests/
         $this->cwd_backup = getcwd();
         chdir(dirname(__FILE__));
-        
+
+        ob_start(); // buffer test's output
+                        
         parent::setUp();
     }
     
@@ -52,11 +55,16 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
         parent::tearDown();
         
         chdir($this->cwd_backup);
-        
+
+        $content = ob_get_clean();
+            
+        // ensure that test hasn't left buffering on
         $unflushed = 0;
         while(ob_get_level() > $this->buffer_level) {
             ob_end_flush(); $unflushed++;
         }
+    
+        if (strlen($content)) throw new Exception("Test {$this->getName()} output: $content");        
         
         if ($unflushed) throw new Exception("Unflushed buffers: $unflushed");
     }
