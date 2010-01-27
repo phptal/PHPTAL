@@ -45,9 +45,7 @@ class BlockTest extends PHPTAL_TestCase
     function testInvalidNamespaceBlock()
     {
         $t = $this->newPHPTAL();
-                
-        $this->setExpectedException('PHPTAL_Exception');
-        
+
         $t->setSource('<foo:block>foo</foo:block>');        
         $res = $t->execute();       
     }   

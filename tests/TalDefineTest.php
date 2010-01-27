@@ -291,7 +291,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->varvar = 'ok';
         $tpl->varname = 'varvar';
-        $tpl->setSource('<div tal:define="test php:${TalDefineTest::VARNAME}">${test}</div>');
+        $tpl->setSource('<div tal:define="test php:${'.get_class($this).'::VARNAME}">${test}</div>');
         $this->assertEquals('<div>ok</div>',$tpl->execute());
     }
 
