@@ -12,6 +12,7 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+
 /**
  * This class handles template execution context.
  * Holds template variables and carries state/scope across macro executions.

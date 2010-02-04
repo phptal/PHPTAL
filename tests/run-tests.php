@@ -55,8 +55,12 @@ foreach (new DirectoryIterator( dirname(__FILE__) ) as $f) {
     if ($f->isDot() || !$f->isFile()) continue;
 
     if (preg_match('/(.*?Test).php$/', $f->getFileName(), $m)) {
-        require_once $f->getPathName();
-        $alltests->addTestSuite(new PHPUnit_Framework_TestSuite($m[1]));
+        require_once $f->getPathName();        
+        $classname = $m[1];
+        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
+            $classname = __NAMESPACE__ . '\\' . $classname;
+        }
+        $alltests->addTestSuite(new PHPUnit_Framework_TestSuite($classname));
     }
 }
 

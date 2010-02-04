@@ -74,7 +74,7 @@ class PHPTAL_PluginLoader
         // Reverse the registry so that latter added prefixes are checked first
         $registry = array_reverse($this->_registry, true);
 
-        $filePostfix = strtr($name, '_', DIRECTORY_SEPARATOR) . '.php';
+        $filePostfix = strtr($name, '\\_', DIRECTORY_SEPARATOR) . '.php';
         foreach ($registry as $prefix => $paths) {
             $className = $prefix . '_' . $name;
             

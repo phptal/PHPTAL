@@ -451,6 +451,11 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             return $func($expression, $nothrow);
         }
 
+        $func = 'PHPTALNAMESPACE\\phptal_tales_'.str_replace('-','_', $typePrefix);
+        if (function_exists($func)) {
+            return $func($expression, $nothrow);
+        }
+
         // check if it is implemented via runtime function
         $runfunc = 'phptal_runtime_tales_'.str_replace('-','_', $typePrefix);
         if (function_exists($runfunc)) {

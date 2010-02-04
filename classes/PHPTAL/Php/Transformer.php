@@ -400,7 +400,7 @@ class PHPTAL_Php_Transformer
 
     private static function isVarNameChar($c)
     {
-        return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c === '_';
+        return self::isAlpha($c) || ($c >= '0' && $c <= '9') || $c === '_' || $c === '\\';
     }
 
     private static $TranslationTable = array(

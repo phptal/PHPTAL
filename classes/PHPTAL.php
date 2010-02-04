@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_2a2');
+define('PHPTAL_VERSION', '1_2_2a3');
 
 
 /* If you want to use autoload, comment out all lines starting with
@@ -637,8 +637,12 @@ class PHPTAL
         if (!preg_match('/^[a-z][a-z_0-9]*$/i', $name)) {
             throw new PHPTAL_ConfigurationException("Name of the prefilter '$name' is not alphanumeric or does not start with a letter");
         }
-
-        $classname = 'PreFilter_'.preg_replace('/_([a-zA-Z])/e', 'strtoupper("\1")', ucfirst($name));
+        
+        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
+            $classname = __NAMESPACE__ . '\\PreFilter\\'.preg_replace('/_([a-zA-Z])/e', 'strtoupper("\1")', ucfirst($name));
+        } else {
+            $classname = 'PreFilter_'.preg_replace('/_([a-zA-Z])/e', 'strtoupper("\1")', ucfirst($name));
+        }
 
         if (!class_exists($classname,false)) {
             $pluginloader = $this->getPluginLoader();
@@ -1104,7 +1108,8 @@ class PHPTAL
             $basename = preg_replace('/\.[a-z]{3,5}$/','',basename($this->_source->getRealPath()));
             $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,20);
 
-            $hash = md5(PHPTAL_VERSION . $this->_source->getRealPath()
+            $hash = md5(PHPTAL_VERSION . PHP_VERSION
+                    . $this->_source->getRealPath()
                     . $this->getEncoding()
                     . $this->getPrefiltersCacheId()
                     . $this->getOutputMode(),
@@ -1329,8 +1334,8 @@ class PHPTAL
      * @return void
      */
     final public static function autoload($class)
-    {
-       static $except = array(
+    {        
+        static $except = array(
             'PHPTAL_NamespaceAttributeReplace'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeSurround'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeContent'=>'PHPTAL_NamespaceAttribute',
@@ -1343,6 +1348,11 @@ class PHPTAL
             'PHPTAL_UnknownModifierException'=>'PHPTAL_Exception',
             'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',
         );
+        
+        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
+            $class = str_replace(__NAMESPACE__, 'PHPTAL', $class);
+            $class = strtr($class, '\\','_');
+        }        
 
         if (substr($class, 0, 7) !== 'PHPTAL_') return;
 

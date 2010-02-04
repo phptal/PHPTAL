@@ -102,6 +102,8 @@ function normalize_html($src) {
 
 function normalize_phpsource($code, $ignore_newlines = false) {
     
+    $code = str_replace('<?php use pear2\HTML\Template\PHPTAL as P; ?>','',$code);
+    
     $lines = explode("\n", $code);
     $code = "";
     foreach ($lines as $line) {
