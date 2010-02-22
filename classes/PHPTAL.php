@@ -773,42 +773,93 @@ class PHPTAL
      */
     public function execute()
     {
-        if (!$this->_prepared) {
-            // includes generated template PHP code
-            $this->prepare();
-        }
-        $this->_context->_file = $this->_file;
-        $this->_context->echoDeclarations(false);
+        try
+        {
+            if (!$this->_prepared) {
+                // includes generated template PHP code
+                $this->prepare();
+            }
+            $this->_context->_file = $this->_file;
+            $this->_context->echoDeclarations(false);
 
-        $templateFunction = $this->getFunctionName();
-        try {
-            ob_start();
-            $templateFunction($this, $this->_context);
-            $res = ob_get_clean();
+            $templateFunction = $this->getFunctionName();
+            
+            try {
+                ob_start();
+                $templateFunction($this, $this->_context);
+                $res = ob_get_clean();
+            }
+            catch (Exception $e)
+            {
+                ob_end_clean();
+                if ($e instanceof PHPTAL_TemplateException) {
+                    $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
+                }
+                throw $e;
+            }
+            
+            // unshift doctype
+            if ($this->_context->_docType) {
+                $res = $this->_context->_docType . "\n" . $res;
+            }
+
+            // unshift xml declaration
+            if ($this->_context->_xmlDeclaration) {
+                $res = $this->_context->_xmlDeclaration . "\n" . $res;
+            }
+
+            if ($this->_postfilter) {
+                return $this->_postfilter->filter($res);
+            }
         }
         catch (Exception $e)
         {
-            ob_end_clean();
-            if ($e instanceof PHPTAL_TemplateException) {
-                $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
-            }
-            throw $e;
+            $this->handleException($e);                        
         }
-
-        // unshift doctype
-        if ($this->_context->_docType) {
-            $res = $this->_context->_docType . "\n" . $res;
-        }
-
-        // unshift xml declaration
-        if ($this->_context->_xmlDeclaration) {
-            $res = $this->_context->_xmlDeclaration . "\n" . $res;
-        }
-
-        if ($this->_postfilter) {
-            return $this->_postfilter->filter($res);
-        }
+        
         return $res;
+    }
+
+    /**
+     * PHP's default exception handler allows error pages to be indexed and can reveal too much information,
+     * so if possible PHPTAL sets up its own handler to fix this.
+     * 
+     * Doesn't change exception handler if non-default one is set.
+     * 
+     * @return void
+     * @throws Exception
+     */
+    private function handleException(Exception $e)
+    {   
+        // PHPTAL's handler is only useful on fresh HTTP response
+        if (PHP_SAPI !== 'cli' && !headers_sent()) {
+            $old_exception_handler = set_exception_handler(array(__CLASS__,'_defaultExceptionHandler'));
+        
+            if ($old_exception_handler !== NULL) {
+                restore_exception_handler(); // if there's user's exception handler, let it work
+            }
+        }
+        throw $e; // throws instead of outputting immediatelly to support user's try/catch
+    }
+
+    /**
+     * Generates simple error page. Sets appropriate HTTP status to prevent page being indexed.
+     * 
+     * @access private
+     */
+    public static function _defaultExceptionHandler($e)
+    {        
+        header('HTTP/1.1 500 PHPTAL Exception');
+        
+        $title = 'PHPTAL Exception: '.htmlspecialchars($e->getMessage());
+        header('Content-Type:text/html;charset=UTF-8');
+        echo '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>'.$title.'</title></head>';
+        echo '<body><h1>'.$title.'</h1>';
+        echo "<pre>\n".htmlspecialchars($e).'</pre></body></html>';
+        echo str_repeat('    ',100); // IE won't display error pages < 512b
+        
+        error_log($title);
+        exit(1);
     }
 
     /**
@@ -819,26 +870,28 @@ class PHPTAL
      */
     public function echoExecute()
     {
-        if (!$this->_prepared) {
-            // includes generated template PHP code
-            $this->prepare();
-        }
-
-        if ($this->_postfilter) {
-            throw new PHPTAL_ConfigurationException("echoExecute() does not support postfilters");
-        }
-
-        $this->_context->_file = $this->_file;
-        $this->_context->echoDeclarations(true);
-
-        $templateFunction = $this->getFunctionName();
         try {
+            if (!$this->_prepared) {
+                // includes generated template PHP code
+                $this->prepare();
+            }
+
+            if ($this->_postfilter) {
+                throw new PHPTAL_ConfigurationException("echoExecute() does not support postfilters");
+            }
+
+            $this->_context->_file = $this->_file;
+            $this->_context->echoDeclarations(true);
+
+            $templateFunction = $this->getFunctionName();
             $templateFunction($this, $this->_context);
         }
-        catch(PHPTAL_TemplateException $e)
+        catch (Exception $e)
         {
-            $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
-            throw $e;
+            if ($e instanceof PHPTAL_TemplateException) {
+                $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
+            }
+            $this->handleException($e);
         }
     }
 
