@@ -234,7 +234,7 @@ class PHPTAL_Php_State
     public function htmlchars($php)
     {
         // PHP strings can be escaped at compile time
-        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/', $php, $m)) {
+        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/s', $php, $m)) {
             return "'".htmlspecialchars(str_replace('\\\'',"'", $m[1]), ENT_QUOTES)."'";
         }
         return 'phptal_escape('.$php.')';
@@ -249,7 +249,7 @@ class PHPTAL_Php_State
     public function stringify($php)
     {
         // PHP strings don't need to be changed
-        if (preg_match('/^\'(?:[^\'{]+|\\\\.)*\'$/', $php)) {
+        if (preg_match('/^\'(?>[^\'\\\\]+|\\\\.)*\'$|^\s*"(?>[^"\\\\]+|\\\\.)*"\s*$/s', $php)) {
             return $php;
         }
         return 'phptal_tostring('.$php.')';

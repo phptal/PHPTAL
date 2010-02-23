@@ -435,21 +435,23 @@ class PHPTAL_Dom_SaxXmlParser
     {
         $str = str_replace('&apos;','&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
 
-        /* this is ugly kludge to keep <?php ?> blocks unescaped (even in attributes) */
+        /* <?php ?> blocks can't reliably work in attributes (due to escaping impossible in XML)
+           so they have to be converted into special TALES expression
+        */
         $types = ini_get('short_open_tag')?'php|=|':'php';
-        $split = preg_split("/(<\?(?:$types).*?\?>)/", $str, null, PREG_SPLIT_DELIM_CAPTURE);
+        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self','convertPHPBlockToTALES'), $str);
 
-        for($i=0; $i < count($split); $i+=2)
-        {
-            // escape invalid entities and < >
-            $split[$i] = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $split[$i]),array('<'=>'&lt;', ']]>'=>']]&gt;'));
-        }
-        return implode('', $split);
+        // corrects all non-entities
+        $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str),array('<'=>'&lt;', ']]>'=>']]&gt;'));
+
+        return $str;
     }
 
-    public static function _htmlspecialchars($m)
+    private static function convertPHPBlockToTALES($m)
     {
-        return htmlspecialchars($m[0]);
+        list(,$type,$code) = $m;
+        if ($type === '=') $code = 'echo '.$code;
+        return '${structure phptal-internal-php-block:'.str_replace('}','&#125;',htmlspecialchars($code)).'}';
     }
 
     public function getSourceFile()

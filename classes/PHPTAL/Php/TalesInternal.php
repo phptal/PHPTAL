@@ -342,6 +342,25 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     }
 
     /**
+     * phptal-internal-php-block: modifier for emulation of <?php ?> in attributes.
+     * 
+     * Please don't use it in the templates!
+     */
+    static public function phptal_internal_php_block($src)
+    {
+        // Simple echo can be supported via regular method
+        if (preg_match('/^\s*echo\s+((?:[^;]+|"[^"\\\\]*"|\'[^\'\\\\]*\'|\/\*.*?\*\/)+);*\s*$/s',$src,$m))
+        {
+            return $m[1];
+        }
+        
+        // <?php block expects statements, but modifiers must return expressions.
+        // unfortunately this ugliness is the only way to support it currently.
+        // ? > keeps semicolon optional
+        return "eval(".self::string($src.'?>').")";
+    }
+
+    /**
      * exists: modifier.
      *
      * Returns the code required to invoke Context::exists() on specified path.
