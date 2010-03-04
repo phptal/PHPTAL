@@ -30,14 +30,7 @@ if (isset($argv) && count($argv) >= 2) {
         echo "-> running standalone test units $entry\n";
         try
         {
-            require_once $entry;
-            $class = str_replace('.php', '', $entry);
-            $class = basename($class);
-            $printer = new PHPUnit_TextUI_ResultPrinter();
-            $result = new PHPUnit_Framework_TestResult();
-            $result->addListener($printer);
-            $testclass = new ReflectionClass($class);
-            $suite = new PHPUnit_Framework_TestSuite($testclass);
+            $suite = createTestSuiteForFile($entry);
             $runner = new PHPUnit_TextUI_TestRunner();
             $runner->doRun($suite);
         }
@@ -54,13 +47,8 @@ $alltests = new PHPUnit_Framework_TestSuite();
 foreach (new DirectoryIterator( dirname(__FILE__) ) as $f) {
     if ($f->isDot() || !$f->isFile()) continue;
 
-    if (preg_match('/(.*?Test).php$/', $f->getFileName(), $m)) {
-        require_once $f->getPathName();        
-        $classname = $m[1];
-        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
-            $classname = __NAMESPACE__ . '\\' . $classname;
-        }
-        $alltests->addTestSuite(new PHPUnit_Framework_TestSuite($classname));
+    if (preg_match('/(.*?Test).php$/', $f->getFileName())) {        
+        $alltests->addTestSuite(createTestSuiteForFile($f->getPathName()));
     }
 }
 
@@ -68,4 +56,13 @@ foreach (new DirectoryIterator( dirname(__FILE__) ) as $f) {
 $runner = new PHPUnit_TextUI_TestRunner();
 $runner->doRun($alltests);
 
+function createTestSuiteForFile($path)
+{
+    require_once $path;        
+    $classname = basename($path,'.php');
+    if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
+        $classname = __NAMESPACE__ . '\\' . $classname;
+    }
+    return new PHPUnit_Framework_TestSuite($classname);
+}
 
