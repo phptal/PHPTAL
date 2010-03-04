@@ -35,7 +35,7 @@ class MyPreFilter2 implements PHPTAL_Filter
 }
 
 
-class PreFilterTest extends PHPTAL_TestCase
+class OldPreFilterTest extends PHPTAL_TestCase
 {
     function testIt()
     {
