@@ -35,7 +35,7 @@
 */
 class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 {
-    private $cache_tag;
+    private $cache_filename_var;
 
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -57,11 +57,11 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
             case 'm': $cache_len .= '*60'; /* no break */
         }
 
-        $this->cache_tag = '"'.addslashes( $this->phpelement->getQualifiedName() . ':' . $this->phpelement->getSourceLine()).'"';
+        $cache_tag = '"'.addslashes( $this->phpelement->getQualifiedName() . ':' . $this->phpelement->getSourceLine()).'"';
 
         $cache_per_expression = isset($matches[3])?trim($matches[3]):null;
         if ($cache_per_expression == 'url') {
-            $this->cache_tag .= '.$_SERVER["REQUEST_URI"]';
+            $cache_tag .= '.$_SERVER["REQUEST_URI"]';
         } elseif ($cache_per_expression == 'nothing') {
             /* do nothing */
         } elseif ($cache_per_expression) {
@@ -69,12 +69,13 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
              if (is_array($code)) { throw new PHPTAL_ParserException("Chained expressions in per-cache directive are not supported"); }
 
-             $old_cache_tag = $this->cache_tag;
-             $this->cache_tag = '$ctx->cache_tag_';
-             $codewriter->doSetVar($this->cache_tag, '('.$code.')."@".' . $old_cache_tag );
+             $cache_tag = '('.$code.')."@".' . $cache_tag;
         }
 
-        $cond = '!file_exists('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.')) || time() - '.$cache_len.' >= filemtime('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'))';
+        $this->cache_filename_var = $codewriter->createTempVariable();
+        $codewriter->doSetVar($this->cache_filename_var, $codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$cache_tag.')' );
+
+        $cond = '!file_exists('.$this->cache_filename_var.') || time() - '.$cache_len.' >= filemtime('.$this->cache_filename_var.')';
 
         $codewriter->doIf($cond);
         $codewriter->doEval('ob_start()');
@@ -82,10 +83,12 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEval('file_put_contents('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'), ob_get_flush())');
+        $codewriter->doEval('file_put_contents('.$this->cache_filename_var.', ob_get_flush())');
         $codewriter->doElse();
-        $codewriter->doEval('readfile('.$codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$this->cache_tag.'))');
+        $codewriter->doEval('readfile('.$this->cache_filename_var.')');
         $codewriter->doEnd('if');
+
+        $codewriter->recycleTempVariable($this->cache_filename_var);        
     }
 }
 
