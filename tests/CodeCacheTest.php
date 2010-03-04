@@ -153,6 +153,15 @@ class CodeCacheTest extends PHPTAL_TestCase
         foreach ($files as $file) {
             $this->assertFileNotExists($file);
         }
-
+    }
+    
+    function testNested()
+    {
+        $this->phptal->setSource('<div phptal:cache="1m per string: 1"> 1 <div phptal:cache="1h per string: 2"> 2 </div> </div>');
+        
+        $this->assertEquals(normalize_html('<div> 1 <div> 2 </div> </div>'), normalize_html($this->phptal->execute()), "1st run");
+        $this->assertEquals(normalize_html('<div> 1 <div> 2 </div> </div>'), normalize_html($this->phptal->execute()), "2nd run");
+        $this->assertEquals(normalize_html('<div> 1 <div> 2 </div> </div>'), normalize_html($this->phptal->execute()), "3rd run");
+        $this->assertEquals(normalize_html('<div> 1 <div> 2 </div> </div>'), normalize_html($this->phptal->execute()), "4th run");
     }
 }
