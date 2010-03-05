@@ -16,7 +16,7 @@
 require_once dirname(__FILE__)."/config.php";
 
 PHPTAL::setIncludePath();
-require_once 'PHPTAL/Dom/DocumentBuilder.php';
+require_once 'PHPTAL/Dom/PHPTALDocumentBuilder.php';
 require_once 'PHPTAL/Php/CodeWriter.php';
 require_once 'PHPTAL/Php/State.php';
 PHPTAL::restoreIncludePath();
@@ -28,7 +28,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         
         $parser = new PHPTAL_Dom_SaxXmlParser($tpl->getEncoding());
-        $treeGen = $parser->parseFile(new PHPTAL_Dom_DocumentBuilder(),'input/parser.01.xml')->getResult();
+        $treeGen = $parser->parseFile(new PHPTAL_Dom_PHPTALDocumentBuilder(),'input/parser.01.xml')->getResult();
         $state     = new PHPTAL_Php_State($tpl);
         $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doFunction('test', '$tpl');

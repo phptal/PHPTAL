@@ -16,7 +16,7 @@
 require_once dirname(__FILE__)."/config.php";
 
 PHPTAL::setIncludePath();
-require_once 'PHPTAL/Dom/DocumentBuilder.php';
+require_once 'PHPTAL/Dom/PHPTALDocumentBuilder.php';
 PHPTAL::restoreIncludePath();
 
 class XmlParserTest extends PHPTAL_TestCase
@@ -160,7 +160,7 @@ class XmlParserTest extends PHPTAL_TestCase
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try
         {
-            $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),
+            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),
 "<x>1
 
 3
@@ -182,7 +182,7 @@ class XmlParserTest extends PHPTAL_TestCase
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try
         {
-            $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),
+            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),
 "<x foo1='
 2'
 
@@ -206,7 +206,7 @@ bar4='baz'
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try
         {
-            $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),
+            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),
 "
 
 <x foo1='
@@ -231,7 +231,7 @@ xxxx/>
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try
         {
-            $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),"<imrootelement/></ishallnotbeclosed>");
+            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),"<imrootelement/></ishallnotbeclosed>");
             $this->fail("Accepted invalid XML");
         }
         catch(PHPTAL_ParserException $e)
@@ -247,7 +247,7 @@ xxxx/>
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try
         {
-            $parser->parseString(new PHPTAL_Dom_DocumentBuilder(),"<element_a><element_b><element_x/><element_c><element_d><element_e>");
+            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),"<element_a><element_b><element_x/><element_c><element_d><element_e>");
             $this->fail("Accepted invalid XML");
         }
         catch(PHPTAL_ParserException $e)
@@ -354,6 +354,8 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onDocumentStart(){}
     public function onDocumentEnd(){}
+    public function getResult(){return $this->result;}
+    public function setEncoding($e) {}
 }
 
 

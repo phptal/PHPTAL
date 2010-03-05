@@ -1276,7 +1276,8 @@ class PHPTAL
     protected function parse()
     {
         self::setIncludePath();
-        require_once 'PHPTAL/Dom/DocumentBuilder.php';
+        require_once 'PHPTAL/Dom/PHPTALDocumentBuilder.php';
+        require_once 'PHPTAL/Dom/SaxXmlParser.php';
         require_once 'PHPTAL/Php/State.php';
         require_once 'PHPTAL/Php/CodeWriter.php';
         self::restoreIncludePath();
@@ -1291,7 +1292,7 @@ class PHPTAL
         }
 
         $parser = new PHPTAL_Dom_SaxXmlParser($this->_encoding);
-        $builder = new PHPTAL_Dom_DocumentBuilder();
+        $builder = new PHPTAL_Dom_PHPTALDocumentBuilder();
         $realpath = $this->_source->getRealPath();
 
         $tree = $parser->parseString($builder, $data, $realpath)->getResult();
