@@ -177,7 +177,7 @@
            <xsl:apply-templates select="." mode="title.markup"/>
          </a>
        </span>
-       <xsl:text> ➭ </xsl:text>
+       <xsl:text> › </xsl:text>
        </xsl:if>
      </xsl:for-each>
      <!-- And display the current node, but not as a link -->
