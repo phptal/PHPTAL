@@ -2291,7 +2291,7 @@ function phptal_tales_money( $src, $nothrow )
           <constant>sys_get_temp_dir()</constant> function if available) or will try to guess where
           it should be, <filename>/tmp</filename> on Unix like systems and <filename>c:\windows\temp</filename> on
           Microsoft ones, to store the compiled templates. The default
-          destination can be changed to your liking by calling <link linkend="set-code-destination"><methodname>setPhpCodeDestination()</methodname></link>
+          destination can be changed to your liking by calling <methodname>setPhpCodeDestination()</methodname>
           method with the appropriate path.
           Be it the system's temp directory or a custom one, it needs to have
           its permissions setup as to allow the <acronym>PHP</acronym> running process (the Apache
