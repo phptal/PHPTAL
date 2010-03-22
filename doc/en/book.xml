@@ -1566,6 +1566,17 @@ php:SomeClass::$staticVar
 
       </section>
 
+      <section id="tales-true">
+          <title><code>true:</code></title>
+
+          <para>
+          This expression returns <code>true</code> if the path specified after it exists and has value that evaluates to <code>true</code> (the value can be of any type). It is analogous to <acronym>PHP</acronym>'s <code>!empty()</code> construct.</para>
+
+          <tip><para>In <acronym>PHPTALES</acronym> use <function>!empty()</function> instead.</para></tip>
+
+        </section>
+
+
       <section id="tales-default">
         <title><code>default</code></title>
 
