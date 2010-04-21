@@ -109,7 +109,6 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         
         if (false === $namespace_uri) {
             throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >");
-            }
         }
 
         $element = $this->document->createElementNS($namespace_uri, $element_qname);
