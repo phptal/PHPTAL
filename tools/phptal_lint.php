@@ -223,15 +223,16 @@ class PHPTAL_Lint
         }
         catch(PHPTAL_UnknownModifierException $e) {
             if ($this->skipUnknownModifiers && is_callable(array($e,'getModifierName'))) {
-            echo 'S';
+                echo 'S';
                 $this->warnings[] = array(dirname($fullpath), basename($fullpath), "Unknown expression modifier: ".$e->getModifierName()." (use -i to include your custom modifier functions)", $e->getLine());                    
                 return;
             }
         }
         catch(Exception $e) {
-            echo 'E';
         }
 
+        // Takes exception from either of the two catch blocks above
+        echo 'E';
         $this->errors[] = array(dirname($fullpath) , basename($fullpath) , $e->getMessage() , $e->getLine());
     }
 }
