@@ -14,8 +14,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Transformer.php';
-require_once 'PHPTAL/TalesRegistry.php';
 
 /**
  * TALES Specification 1.3

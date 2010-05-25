@@ -13,10 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute/METAL/DefineMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/UseMacro.php';
-require_once 'PHPTAL/Php/Attribute/METAL/DefineSlot.php';
-require_once 'PHPTAL/Php/Attribute/METAL/FillSlot.php';
 
 /**
  * @package PHPTAL

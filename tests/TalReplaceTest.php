@@ -15,9 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Tales.php';
-PHPTAL::restoreIncludePath();
 
 class TalReplaceTest extends PHPTAL_TestCase
 {

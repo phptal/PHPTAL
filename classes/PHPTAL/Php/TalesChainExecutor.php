@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/TalesChainReader.php';
 
 /**
  * @package PHPTAL

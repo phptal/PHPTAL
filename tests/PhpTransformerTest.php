@@ -15,9 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Php/Transformer.php';
-PHPTAL::restoreIncludePath();
 
 class PhpTransformerTest extends PHPTAL_TestCase
 {

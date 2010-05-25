@@ -13,10 +13,6 @@
  * @link     http://phptal.org/
  */
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/SourceResolver.php';
-PHPTAL::restoreIncludePath();
-
 
 /**
  * Finds template on disk by looking through repositories first

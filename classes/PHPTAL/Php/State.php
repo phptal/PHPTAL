@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Tales.php';
 
 /**
  * @package PHPTAL

@@ -15,9 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Context.php';
-PHPTAL::restoreIncludePath();
 
 class PhptalPathTest_DummyClass
 {

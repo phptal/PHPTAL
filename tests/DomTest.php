@@ -15,9 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Dom/PHPTALDocumentBuilder.php';
-PHPTAL::restoreIncludePath();
 
 class DOMTest extends PHPTAL_TestCase
 {

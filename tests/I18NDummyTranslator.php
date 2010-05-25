@@ -13,9 +13,6 @@
  * @link     http://phptal.org/
  */
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/TranslationService.php';
-PHPTAL::restoreIncludePath();
 
 class DummyTranslator implements PHPTAL_TranslationService
 {

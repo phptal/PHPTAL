@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/TalesInternal.php';
 
 /**
  * You can implement this interface to create custom tales modifiers

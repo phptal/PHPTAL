@@ -13,12 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Namespace.php';
-require_once 'PHPTAL/Namespace/Builtin.php';
-require_once 'PHPTAL/Namespace/TAL.php';
-require_once 'PHPTAL/Namespace/METAL.php';
-require_once 'PHPTAL/Namespace/I18N.php';
-require_once 'PHPTAL/Namespace/PHPTAL.php';
 
 /**
  * PHPTAL constants.

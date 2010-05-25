@@ -13,8 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute.php';
-require_once 'PHPTAL/NamespaceAttribute.php';
 
 /**
  * @see PHPTAL_NamespaceAttribute

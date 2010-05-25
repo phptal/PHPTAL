@@ -15,11 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Dom/Node.php';
-require_once 'PHPTAL/Dom/Element.php';
-require_once 'PHPTAL/Php/Attribute/TAL/Define.php';
-PHPTAL::restoreIncludePath();
 
 
 class DummyDefinePhpNode extends PHPTAL_Dom_Element {

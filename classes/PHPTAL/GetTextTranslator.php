@@ -13,11 +13,6 @@
  * @link     http://phptal.org/
  */
 
-PHPTAL::setIncludePath();
-
-require_once 'PHPTAL/TranslationService.php';
-
-PHPTAL::restoreIncludePath();
 
 /**
  * PHPTAL_TranslationService gettext implementation.

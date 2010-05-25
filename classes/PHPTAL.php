@@ -15,14 +15,6 @@
 
 define('PHPTAL_VERSION', '1_2_2a3');
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Source.php';
-require_once 'PHPTAL/FileSource.php';
-require_once 'PHPTAL/RepeatController.php';
-require_once 'PHPTAL/Context.php';
-require_once 'PHPTAL/Exception.php';
-require_once 'PHPTAL/Filter.php';
-PHPTAL::restoreIncludePath();
 spl_autoload_register(array('PHPTAL','autoload'));
 
 /**
@@ -659,10 +651,6 @@ class PHPTAL
     {
         if (!$this->pluginloader) {
 
-            PHPTAL::setIncludePath();
-            require_once 'PHPTAL/PluginLoader.php';
-            require_once 'PHPTAL/PreFilter.php';
-            PHPTAL::restoreIncludePath();
 
             $this->pluginloader = new PHPTAL_PluginLoader();
             $this->pluginloader->addPrefixPath('PHPTAL',dirname(__FILE__).DIRECTORY_SEPARATOR.'PHPTAL');
@@ -1267,13 +1255,6 @@ class PHPTAL
      */
     protected function parse()
     {
-        self::setIncludePath();
-        require_once 'PHPTAL/Dom/PHPTALDocumentBuilder.php';
-        require_once 'PHPTAL/Dom/SaxXmlParser.php';
-        require_once 'PHPTAL/Php/State.php';
-        require_once 'PHPTAL/Php/CodeWriter.php';
-        self::restoreIncludePath();
-
         // instantiate the PHPTAL source parser
         $data = $this->_source->getData();
 

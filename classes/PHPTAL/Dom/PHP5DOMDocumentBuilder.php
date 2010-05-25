@@ -12,7 +12,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Dom/DocumentBuilder.php';
 
 /**
  * DOM Builder

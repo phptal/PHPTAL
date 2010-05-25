@@ -16,13 +16,6 @@
 require_once dirname(__FILE__)."/config.php";
 
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Dom/PHPTALDocumentBuilder.php';
-require_once 'PHPTAL/Php/CodeWriter.php';
-require_once 'PHPTAL/Php/State.php';
-PHPTAL::restoreIncludePath();
-
-
 class DummyPhpNode extends PHPTAL_Dom_Element {
     function __construct() {}
     function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}

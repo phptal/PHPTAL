@@ -13,10 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Tales.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Debug.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Id.php';
-require_once 'PHPTAL/Php/Attribute/PHPTAL/Cache.php';
 
 /**
  * @package PHPTAL

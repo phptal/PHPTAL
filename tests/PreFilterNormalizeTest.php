@@ -15,10 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/PreFilter.php';
-require_once 'PHPTAL/PreFilter/Normalize.php';
-PHPTAL::restoreIncludePath();
 
 class PreFilterNormalizeTest extends PHPTAL_TestCase
 {

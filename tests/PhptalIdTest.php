@@ -15,9 +15,6 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-PHPTAL::setIncludePath();
-require_once 'PHPTAL/Trigger.php';
-PHPTAL::restoreIncludePath();
 
 class MyTrigger implements PHPTAL_Trigger
 {

@@ -13,17 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once 'PHPTAL/Dom/DocumentBuilder.php';
-require_once 'PHPTAL/Dom/XmlnsState.php';
-
-require_once 'PHPTAL/Dom/Node.php';
-require_once 'PHPTAL/Dom/XmlDeclaration.php';
-require_once 'PHPTAL/Dom/DocumentType.php';
-require_once 'PHPTAL/Dom/Text.php';
-require_once 'PHPTAL/Dom/Element.php';
-require_once 'PHPTAL/Dom/Comment.php';
-require_once 'PHPTAL/Dom/CDATASection.php';
-require_once 'PHPTAL/Dom/ProcessingInstruction.php';
 
 /**
  * DOM Builder
