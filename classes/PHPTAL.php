@@ -174,17 +174,6 @@ class PHPTAL
     private $externalMacroTemplatesCache = array();
 
     /**
-     * restore_include_path() resets path to default in ini,
-     * breaking application's custom paths, so a custom backup is necessary.
-     */
-    private static $_include_path_backup;
-
-    /**
-     * keeps track of multiple calls to setIncludePath()
-     */
-    private static $_include_path_set_nesting = 0;
-
-    /**
      * @see PHPTAL::setPluginLoader()
      */
     private $pluginloader;
@@ -1322,33 +1311,23 @@ class PHPTAL
     }
 
     /**
-     * Set include path to contain PHPTAL's directory.
-     * Every call to setIncludePath() MUST have corresponding call
-     * to restoreIncludePath()!
+     * Removed
      *
-     * Calls to setIncludePath/restoreIncludePath can be nested.
-     *
+     * @deprecated
      * @return void
      */
     final public static function setIncludePath()
     {
-        if (!self::$_include_path_set_nesting) {
-            self::$_include_path_backup = get_include_path();
-            set_include_path(dirname(__FILE__) . PATH_SEPARATOR . get_include_path());
-        }
-        self::$_include_path_set_nesting++;
     }
 
     /**
      * Restore include path to state before PHPTAL modified it.
+     * 
+     * @deprecated
+     * @return void
      */
     final public static function restoreIncludePath()
     {
-        self::$_include_path_set_nesting--;
-        if (!self::$_include_path_set_nesting) {
-            // restore_include_path() doesn't work properly
-            set_include_path(self::$_include_path_backup);
-        }
     }
 
     /**
