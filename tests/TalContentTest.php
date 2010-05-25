@@ -13,9 +13,12 @@
  * @link     http://phptal.org/
  */
 
-class DummyToStringObject {
-    public function __construct($value){ $this->_value = $value; }
-    public function __toString(){ return $this->_value; }
+class DummyToStringObject
+{
+    public function __construct($value)
+        { $this->_value = $value; }
+    public function __toString()
+        { return $this->_value; }
     private $_value;
 }
 

@@ -17,34 +17,37 @@ require_once dirname(__FILE__)."/config.php";
 
 class CommentFilterTest extends PHPTAL_TestCase
 {
-    function testStripComments() {
+    function testStripComments()
+    {
         $t = $this->newPHPTAL('input/comment-filter-01.html');
         $t->addPreFilter("strip_comments");
         $res = $t->execute();
         $res = normalize_html($res);
         $exp = normalize_html_file('output/comment-filter-01.html');
-        $this->assertEquals($exp,$res);
+        $this->assertEquals($exp, $res);
     }
 
-    function testPreservesScript() {
+    function testPreservesScript()
+    {
         $t = $this->newPHPTAL();
         $t->addPreFilter("strip_comments");
         $t->setSource('<script>//<!--
         alert("1990s called"); /* && */
         //--></script>');
-        
+
         $this->assertEquals(normalize_html('<script>//<![CDATA[
         alert("1990s called"); /* && */
-        //]]></script>'),normalize_html($t->execute()));
+        //]]></script>'), normalize_html($t->execute()));
     }
 
-    function testNamespaceAware() {
+    function testNamespaceAware()
+    {
         $t = $this->newPHPTAL();
         $t->addPreFilter("strip_comments");
         $t->setSource('<script xmlns="http://example.com/foo">//<!--
         alert("1990s called"); /* && */
         //--></script>');
-        
-        $this->assertEquals(normalize_html('<script xmlns="http://example.com/foo">//</script>'),normalize_html($t->execute()));
+
+        $this->assertEquals(normalize_html('<script xmlns="http://example.com/foo">//</script>'), normalize_html($t->execute()));
     }
 }

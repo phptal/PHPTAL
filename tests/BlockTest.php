@@ -17,14 +17,16 @@ require_once dirname(__FILE__)."/config.php";
 
 class BlockTest extends PHPTAL_TestCase
 {
-    function testTalBlock(){
+    function testTalBlock()
+    {
         $t = $this->newPHPTAL();
         $t->setSource('<tal:block content="string:content"></tal:block>');
         $res = $t->execute();
         $this->assertEquals('content', $res);
     }
 
-    function testMetalBlock(){
+    function testMetalBlock()
+    {
         $t = $this->newPHPTAL();
         $t->setSource('<metal:block>foo</metal:block>');
         $res = $t->execute();

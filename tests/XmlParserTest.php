@@ -21,50 +21,56 @@ PHPTAL::restoreIncludePath();
 
 class XmlParserTest extends PHPTAL_TestCase
 {
-    public function testSimpleParse(){
+    public function testSimpleParse()
+    {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.01.xml')->getResult();
+        $parser->parseFile($builder = new MyDocumentBuilder(), 'input/xml.01.xml')->getResult();
         $expected = trim(join('', file('input/xml.01.xml')));
         $this->assertEquals($expected, $builder->result);
         $this->assertEquals(7, $builder->elementStarts);
         $this->assertEquals(7, $builder->elementCloses);
     }
 
-    public function testXMLStylesheet() {
+    public function testXMLStylesheet()
+    {
         $tpl = $this->newPHPTAL();
         $tpl->baz = 'quz';
         $tpl->setSource('<?xml version="1.0" encoding="utf-8"?>
         <?xml-stylesheet type="text/css" href="/css" ?>
         <?xml-stylesheet type="text/css" href="/${baz}" ?>
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"/>');
-        
+
         $this->assertEquals(normalize_html('<?xml version="1.0" encoding="utf-8"?>
         <?xml-stylesheet type="text/css" href="/css" ?>
         <?xml-stylesheet type="text/css" href="/quz" ?>
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"></html>'),normalize_html($tpl->execute()));
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"></html>'), normalize_html($tpl->execute()));
     }
 
-    public function testPHPBlocksNotInterpolated() {
+    public function testPHPBlocksNotInterpolated()
+    {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<?php echo \'${baz}\' ?><html></html>');
-        
-        $this->assertEquals('${baz}<html></html>',$tpl->execute());
+
+        $this->assertEquals('${baz}<html></html>', $tpl->execute());
     }
 
-    public function testCharactersBeforeBegining() {
+    public function testCharactersBeforeBegining()
+    {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try {
-            $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.02.xml')->getResult();
+            $parser->parseFile($builder = new MyDocumentBuilder(), 'input/xml.02.xml')->getResult();
             $this->assertTrue( false );
         }
-        catch (Exception $e) {
+        catch (Exception $e)
+        {
             $this->assertTrue( true );
         }
     }
 
-    public function testAllowGtAndLtInTextNodes() {
+    public function testAllowGtAndLtInTextNodes()
+    {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseFile($builder = new MyDocumentBuilder(),'input/xml.03.xml')->getResult();
+        $parser->parseFile($builder = new MyDocumentBuilder(), 'input/xml.03.xml')->getResult();
 
         $this->assertEquals(normalize_html_file('output/xml.03.xml'), normalize_html($builder->result));
         $this->assertEquals(3, $builder->elementStarts);
@@ -74,14 +80,14 @@ class XmlParserTest extends PHPTAL_TestCase
         $this->assertEquals(7, $builder->datas);
     }
 
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
     public function testRejectsInvalidAttributes1()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar="bar"baz="baz"/>')->getResult();
+        $parser->parseString($builder = new MyDocumentBuilder(), '<foo bar="bar"baz="baz"/>')->getResult();
         $this->fail($builder->result);
     }
 
@@ -91,21 +97,21 @@ class XmlParserTest extends PHPTAL_TestCase
     public function testRejectsInvalidAttributes2()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseString($builder = new MyDocumentBuilder(),'<foo bar;="bar"/>')->getResult();
+        $parser->parseString($builder = new MyDocumentBuilder(), '<foo bar;="bar"/>')->getResult();
         $this->fail($builder->result);
     }
 
     public function testSkipsBom()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<foo/>")->getResult();
+        $parser->parseString($builder = new MyDocumentBuilder(), "\xef\xbb\xbf<foo/>")->getResult();
         $this->assertEquals("<foo></foo>", $builder->result);
     }
 
     public function testAllowsTrickyQnames()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseString($builder = new MyDocumentBuilder(),"\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>")->getResult();
+        $parser->parseString($builder = new MyDocumentBuilder(), "\xef\xbb\xbf<_.:_ xmlns:_.='tricky'/>")->getResult();
         $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $builder->result);
     }
 
@@ -116,7 +122,7 @@ class XmlParserTest extends PHPTAL_TestCase
         <?xml-stylesheet href='foo1' ?>
         <?xml-stylesheet href='foo2' ?>
         </foo>";
-        $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+        $parser->parseString($builder = new MyDocumentBuilder(), $src)->getResult();
         $this->assertEquals($src, $builder->result);
     }
 
@@ -126,10 +132,11 @@ class XmlParserTest extends PHPTAL_TestCase
         $src = '<a> ]]> </a>';
         try
         {
-            $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+            $parser->parseString($builder = new MyDocumentBuilder(), $src)->getResult();
             $this->assertEquals('<a> ]]&gt; </a>', $builder->result);
         }
-        catch(PHPTAL_ParserException $e) { /* ok - rejecting is one way to do it */ }
+        catch(PHPTAL_ParserException $e)
+        { /* ok - rejecting is one way to do it */ }
     }
 
     /**
@@ -140,7 +147,7 @@ class XmlParserTest extends PHPTAL_TestCase
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         $src = '<a / >';
 
-        $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+        $parser->parseString($builder = new MyDocumentBuilder(), $src)->getResult();
     }
 
     public function testFixOrRejectEntities()
@@ -149,10 +156,11 @@ class XmlParserTest extends PHPTAL_TestCase
         $src = '<a href="?foo=1&bar=baz&copy=true&reg=x"> & ; &#x100; &nbsp; &#10; &--;</a>';
         try
         {
-            $parser->parseString($builder = new MyDocumentBuilder(),$src)->getResult();
+            $parser->parseString($builder = new MyDocumentBuilder(), $src)->getResult();
             $this->assertEquals('<a href="?foo=1&amp;bar=baz&amp;copy=true&amp;reg=x"> &amp; ; &#x100; &nbsp; &#10; &amp;--;</a>', $builder->result);
         }
-        catch(PHPTAL_ParserException $e) { /* ok - rejecting is one way to do it */ }
+        catch(PHPTAL_ParserException $e)
+        { /* ok - rejecting is one way to do it */ }
     }
 
     public function testLineAccuracy()
@@ -173,7 +181,7 @@ class XmlParserTest extends PHPTAL_TestCase
         }
         catch(PHPTAL_ParserException $e)
         {
-            $this->assertEquals(6,$e->srcLine);
+            $this->assertEquals(6, $e->srcLine);
         }
     }
 
@@ -197,7 +205,7 @@ bar4='baz'
         }
         catch(PHPTAL_ParserException $e)
         {
-            $this->assertEquals(7,$e->srcLine);
+            $this->assertEquals(7, $e->srcLine);
         }
     }
 
@@ -207,7 +215,7 @@ bar4='baz'
         try
         {
             $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),
-"
+                "
 
 <x foo1='
 2'
@@ -222,7 +230,7 @@ xxxx/>
         }
         catch(PHPTAL_ParserException $e)
         {
-            $this->assertEquals(8,$e->srcLine);
+            $this->assertEquals(8, $e->srcLine);
         }
     }
 
@@ -231,14 +239,14 @@ xxxx/>
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try
         {
-            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),"<imrootelement/></ishallnotbeclosed>");
+            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(), "<imrootelement/></ishallnotbeclosed>");
             $this->fail("Accepted invalid XML");
         }
         catch(PHPTAL_ParserException $e)
         {
-            $this->assertContains('ishallnotbeclosed',$e->getMessage());
-            $this->assertNotContains('imrootelement',$e->getMessage());
-            $this->assertNotContains("documentElement",$e->getMessage());
+            $this->assertContains('ishallnotbeclosed', $e->getMessage());
+            $this->assertNotContains('imrootelement', $e->getMessage());
+            $this->assertNotContains("documentElement", $e->getMessage());
         }
     }
 
@@ -247,16 +255,16 @@ xxxx/>
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         try
         {
-            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(),"<element_a><element_b><element_x/><element_c><element_d><element_e>");
+            $parser->parseString(new PHPTAL_Dom_PHPTALDocumentBuilder(), "<element_a><element_b><element_x/><element_c><element_d><element_e>");
             $this->fail("Accepted invalid XML");
         }
         catch(PHPTAL_ParserException $e)
         {
-            $this->assertNotContains("documentElement",$e->getMessage());
-            $this->assertRegExp("/element_e.*element_d.*element_c.*element_b.*element_a/",$e->getMessage());
+            $this->assertNotContains("documentElement", $e->getMessage());
+            $this->assertRegExp("/element_e.*element_d.*element_c.*element_b.*element_a/", $e->getMessage());
         }
     }
-    
+
     public function testSPRY()
     {
         $tpl = $this->newPHPTAL();
@@ -271,7 +279,7 @@ xxxx/>
         </html>');
         $tpl->prepare();
     }
-    
+
     public function testSPRY2()
     {
         $tpl = $this->newPHPTAL();
@@ -279,12 +287,12 @@ xxxx/>
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
         <input type="text" value="${phptal_var}" spry:if="i == 1" /></form></body></html>');
-        
+
         $this->assertEquals(normalize_html('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
-        <input type="text" value="ok" spry:if="i == 1"/></form></body></html>'),normalize_html($tpl->execute()));
+        <input type="text" value="ok" spry:if="i == 1"/></form></body></html>'), normalize_html($tpl->execute()));
     }
-    
+
 }
 
 class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
@@ -296,25 +304,29 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     public $datas = 0;
     public $allow_xmldec = true;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->result = '';
         parent::__construct();
     }
 
-    public function onDoctype($dt) {
+    public function onDoctype($dt)
+    {
         $this->specifics++;
         $this->allow_xmldec = false;
         $this->result .= $dt;
     }
 
-    public function onXmlDecl($decl){
+    public function onXmlDecl($decl)
+    {
         if (!$this->allow_xmldec) throw new Exception("more than one xml decl");
         $this->specifics++;
         $this->allow_xmldec = false;
         $this->result .= $decl;
     }
 
-    public function onCDATASection($data) {
+    public function onCDATASection($data)
+    {
         $this->onProcessingInstruction('<![CDATA['.$data.']]>');
     }
 
@@ -325,11 +337,13 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         $this->result .= $data;
     }
 
-    public function onComment($data) {
+    public function onComment($data)
+    {
         $this->onProcessingInstruction('<!--'.$data.'-->');
     }
 
-    public function onElementStart($name, array $attributes) {
+    public function onElementStart($name, array $attributes)
+    {
         $this->allow_xmldec = false;
         $this->elementStarts++;
         $this->result .= "<$name";
@@ -341,13 +355,15 @@ class MyDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         $this->result .= '>';
     }
 
-    public function onElementClose($name){
+    public function onElementClose($name)
+    {
         $this->allow_xmldec = false;
         $this->elementCloses++;
         $this->result .= "</$name>";
     }
 
-    public function onElementData($data){
+    public function onElementData($data)
+    {
         $this->datas++;
         $this->result .= $data;
     }

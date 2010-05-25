@@ -637,7 +637,7 @@ class PHPTAL
         if (!preg_match('/^[a-z][a-z_0-9]*$/i', $name)) {
             throw new PHPTAL_ConfigurationException("Name of the prefilter '$name' is not alphanumeric or does not start with a letter");
         }
-        
+
         if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
             $classname = __NAMESPACE__ . '\\PreFilter\\'.preg_replace('/_([a-zA-Z])/e', 'strtoupper("\1")', ucfirst($name));
         } else {

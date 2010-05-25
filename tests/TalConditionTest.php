@@ -53,7 +53,8 @@ class TalConditionTest extends PHPTAL_TestCase
         try {
             $tpl->execute();
         }
-        catch (Exception $e){
+        catch (Exception $e)
+        {
         }
         $this->assertEquals(true, isset($e));
         // $exp = normalize_html_file('output/tal-condition.04.html');

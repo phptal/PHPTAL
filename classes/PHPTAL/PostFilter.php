@@ -22,7 +22,7 @@ abstract class PHPTAL_PostFilter implements PHPTAL_Filter
     private $phptal;
     /**
      * Set which instance of PHPTAL is using this filter.
-     * 
+     *
      * @param PHPTAL $phptal instance
      */
     final function setPHPTAL(PHPTAL $phptal)
@@ -32,7 +32,7 @@ abstract class PHPTAL_PostFilter implements PHPTAL_Filter
 
     /**
      * Returns PHPTAL class instance that is currently using this postfilter.
-     * 
+     *
      * @return PHPTAL
      */
     final protected function getPHPTAL()

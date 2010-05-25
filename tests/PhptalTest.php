@@ -40,7 +40,8 @@ class PhptalTest extends PHPTAL_TestCase
         try {
             $res = $tpl->execute();
         }
-        catch (Exception $e){
+        catch (Exception $e)
+        {
         }
         $c = ob_get_contents();
         ob_end_clean();
@@ -167,7 +168,8 @@ class PhptalTest extends PHPTAL_TestCase
             $tpl->setOutputMode('unknown');
             $this->assertTrue(false);
         }
-        catch (PHPTAL_Exception $e){
+        catch (PHPTAL_Exception $e)
+        {
             $this->assertTrue(true);
         }
     }

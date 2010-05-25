@@ -23,24 +23,29 @@ class DummyTranslator implements PHPTAL_TranslationService
     public $translations = array();
     public $domain;
 
-    public function setLanguage(){
+    public function setLanguage()
+    {
     }
 
     public function setEncoding($enc) {}
 
-    public function useDomain($domain){
+    public function useDomain($domain)
+    {
         $this->domain = $domain;
     }
 
-    public function setVar($key, $value){
+    public function setVar($key, $value)
+    {
         $this->vars[$key] = $value;
     }
 
-    public function setTranslation($key, $translation){
+    public function setTranslation($key, $translation)
+    {
         $this->translations[$key] = $translation;
     }
 
-    public function translate($key, $escape = true){
+    public function translate($key, $escape = true)
+    {
         if (array_key_exists($key, $this->translations)) {
             $v = $this->translations[$key];
         } else {

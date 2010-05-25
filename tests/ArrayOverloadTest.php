@@ -15,23 +15,28 @@
 
 class MyArray implements ArrayAccess
 {
-    public function push($value) {
+    public function push($value)
+    {
         $this->_values[] =  $value;
     }
 
-    public function offsetGet($index){
+    public function offsetGet($index)
+    {
         return $this->_values[$index];
     }
 
-    public function offsetSet($index, $value){
+    public function offsetSet($index, $value)
+    {
         $this->_values[$index] = $value;
     }
 
-    public function offsetExists($of){
+    public function offsetExists($of)
+    {
         return isset($this->_values[$of]);
     }
 
-    public function offsetUnset($of){
+    public function offsetUnset($of)
+    {
         unset($this->_values[$of]);
     }
 
