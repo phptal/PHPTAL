@@ -187,11 +187,6 @@ class PHPTAL_RepeatController implements Iterator
     private function initializeGroups()
     {
         if (!$this->uses_groups) {
-            if (!class_exists('PHPTAL_RepeatControllerGroups')) {
-                PHPTAL::setIncludePath();
-                require_once "PHPTAL/RepeatControllerGroups.php";
-                PHPTAL::restoreIncludePath();
-            }
             $this->groups = new PHPTAL_RepeatControllerGroups();
             $this->uses_groups = true;
         }

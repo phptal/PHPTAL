@@ -15,13 +15,6 @@
 
 define('PHPTAL_VERSION', '1_2_2a3');
 
-
-/* If you want to use autoload, comment out all lines starting with
-   require_once 'PHPTAL and uncomment the line below: */
-
-// spl_autoload_register(array('PHPTAL','autoload'));
-
-
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Source.php';
 require_once 'PHPTAL/FileSource.php';
@@ -30,6 +23,7 @@ require_once 'PHPTAL/Context.php';
 require_once 'PHPTAL/Exception.php';
 require_once 'PHPTAL/Filter.php';
 PHPTAL::restoreIncludePath();
+spl_autoload_register(array('PHPTAL','autoload'));
 
 /**
  * PHPTAL template entry point.
@@ -288,8 +282,6 @@ class PHPTAL
      */
     public function setSource($src, $path=false)
     {
-        if (!class_exists('PHPTAL_StringSource', false)) self::autoload('PHPTAL_StringSource');
-
         if (!$path) {
             // this prefix tells string source that path has been faked
             $path = PHPTAL_StringSource::NO_PATH_PREFIX.md5($src).'>';
@@ -1338,8 +1330,6 @@ class PHPTAL
                     return;
                 }
             }
-
-            if (!class_exists('PHPTAL_FileSourceResolver', false)) self::autoload('PHPTAL_FileSourceResolver');
 
             $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
             $this->_source = $resolver->resolve($this->_path);
