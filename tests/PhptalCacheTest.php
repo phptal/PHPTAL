@@ -169,7 +169,7 @@ class PhptalCacheTest extends PHPTAL_TestCase
         $this->assertContains( "SECOND", $res );
         $this->assertNotContains( "THRID", $res ); // should be cached
     }
-    
+
     function testVariableExpressionExpiry()
     {
         $tpl = $this->PHPTALWithSource('<div phptal:cache="tales/vartime s" tal:content="var" />');

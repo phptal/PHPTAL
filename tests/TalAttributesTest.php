@@ -133,7 +133,7 @@ EOT;
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:attributes="title missing | nothing"></p>');
         $res = $tpl->execute();
-        $this->assertEquals($res,'<p></p>');
+        $this->assertEquals($res, '<p></p>');
     }
 
     function testNULLValue()
@@ -141,23 +141,23 @@ EOT;
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:attributes="title missing | php:NULL"></p><p tal:attributes="class \'ok\'; title null:blah"></p>');
         $res = $tpl->execute();
-        $this->assertEquals('<p></p><p class="ok"></p>',$res);
+        $this->assertEquals('<p></p><p class="ok"></p>', $res);
     }
 
     function testNULLValueNoAlternative()
     {
-       $tpl = $this->newPHPTAL();
-       $tpl->setSource('<p tal:attributes="title php:NULL"></p>');
-       $res = $tpl->execute();
-       $this->assertEquals('<p></p>',$res);
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p tal:attributes="title php:NULL"></p>');
+        $res = $tpl->execute();
+        $this->assertEquals('<p></p>', $res);
     }
 
     function testNULLValueReversed()
     {
-       $tpl = $this->newPHPTAL();
-       $tpl->setSource('<p tal:attributes="title php:true ? NULL : false; class structure php:false ? NULL : \'fo\\\'o\'; style structure php:true ? NULL : false;"></p>');
-       $res = $tpl->execute();
-       $this->assertEquals('<p class="fo\'o"></p>',$res);
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p tal:attributes="title php:true ? NULL : false; class structure php:false ? NULL : \'fo\\\'o\'; style structure php:true ? NULL : false;"></p>');
+        $res = $tpl->execute();
+        $this->assertEquals('<p class="fo\'o"></p>', $res);
     }
 
     function testEmptyValue()
@@ -165,7 +165,7 @@ EOT;
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:attributes="title missing | \'\'"></p><p tal:attributes="title missing | php:\'\'"></p>');
         $res = $tpl->execute();
-        $this->assertEquals('<p title=""></p><p title=""></p>',$res);
+        $this->assertEquals('<p title=""></p><p title=""></p>', $res);
     }
 
     function testSemicolon()
@@ -173,14 +173,14 @@ EOT;
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:content="\'\\\'a;b;;c;;;d\'" tal:attributes="style \'color:red;; font-weight:bold;;;;\'; title php:\'\\\'test;;test;;;;test\'"></p></div>');
         $res = $tpl->execute();
-        $this->assertEquals($res,'<div><p style="color:red; font-weight:bold;;" title="&#039;test;test;;test">&#039;a;b;;c;;;d</p></div>');
+        $this->assertEquals($res, '<div><p style="color:red; font-weight:bold;;" title="&#039;test;test;;test">&#039;a;b;;c;;;d</p></div>');
     }
 
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
 }
 
 
-function phptal_tales_null($code,$nothrow)
+function phptal_tales_null($code, $nothrow)
 {
     return 'NULL';
 }

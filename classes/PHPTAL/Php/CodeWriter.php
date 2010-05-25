@@ -20,7 +20,7 @@
  * @author Laurent Bedubourg <lbedubourg@motion-twin.com>
  */
 class PHPTAL_Php_CodeWriter
-{    
+{
     /**
      * max id of variable to give as temp
      */
@@ -29,13 +29,13 @@ class PHPTAL_Php_CodeWriter
      * stack with free'd variables
      */
     private $temp_recycling=array();
-    
+
     /**
      * keeps track of seen functions for function_exists
      */
     private $known_functions = array();
 
-    
+
     public function __construct(PHPTAL_Php_State $state)
     {
         $this->_state = $state;
@@ -49,7 +49,7 @@ class PHPTAL_Php_CodeWriter
 
     public function recycleTempVariable($var)
     {
-        if (substr($var,0,6)!=='$_tmp_') throw new PHPTAL_Exception("Invalid variable recycled");
+        if (substr($var, 0, 6)!=='$_tmp_') throw new PHPTAL_Exception("Invalid variable recycled");
         $this->temp_recycling[] = $var;
     }
 
@@ -70,7 +70,7 @@ class PHPTAL_Php_CodeWriter
 
     /**
      * set full '<!DOCTYPE...>' string to output later
-     * 
+     *
      * @param string $dt
      *
      * @return void
@@ -82,7 +82,7 @@ class PHPTAL_Php_CodeWriter
 
     /**
      * set full '<?xml ?>' string to output later
-     * 
+     *
      * @param string $dt
      *
      * @return void
@@ -95,7 +95,7 @@ class PHPTAL_Php_CodeWriter
     /**
      * functions later generated and checked for existence will have this prefix added
      * (poor man's namespace)
-     * 
+     *
      * @param string $prefix
      *
      * @return void
@@ -115,7 +115,7 @@ class PHPTAL_Php_CodeWriter
 
     /**
      * @see PHPTAL_Php_State::setTalesMode()
-     * 
+     *
      * @param string $mode
      *
      * @return string
@@ -211,9 +211,9 @@ class PHPTAL_Php_CodeWriter
             $this->pushCode($code);
         }
     }
-    
+
     /**
-     * Generate XML declaration 
+     * Generate XML declaration
      *
      * @param bool $called_from_macro for error checking: unbuffered output doesn't support that
      */
@@ -239,7 +239,7 @@ class PHPTAL_Php_CodeWriter
         $this->doSetVar('$_translator', '$tpl->getTranslator()');
         $treeGen->generateCode($this);
         $this->doComment("end");
-        $this->doEnd('function');        
+        $this->doEnd('function');
     }
 
     public function doFunction($name, $params)
@@ -277,12 +277,12 @@ class PHPTAL_Php_CodeWriter
             if (!$expects) $expects = 'anything';
             throw new PHPTAL_Exception("Bug: CodeWriter generated end of block without $expects open");
         }
-                
+
         $segment = array_pop($this->_segments);
         if ($expects !== null && $segment !== $expects) {
             throw new PHPTAL_Exception("Bug: CodeWriter generated end of $expects, but needs to close $segment");
         }
-        
+
         $this->unindent();
         if ($segment == 'function') {
             $this->pushCode("\n}\n\n");
@@ -339,7 +339,7 @@ class PHPTAL_Php_CodeWriter
     {
         if (end($this->_segments) !== 'if') {
             throw new PHPTAL_Exception("Bug: CodeWriter generated else without if");
-        }        
+        }
         $this->unindent();
         $this->pushCode('else: ');
         $this->indent();

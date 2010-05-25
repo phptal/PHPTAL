@@ -63,11 +63,11 @@ abstract class PHPTAL_Dom_Node
     {
         return $this->value_escaped;
     }
-    
+
     /**
-     * Set value of the node (type-dependent) to this exact string. 
+     * Set value of the node (type-dependent) to this exact string.
      * String must be HTML-escaped and use node's encoding.
-     * 
+     *
      * @param string $value_escaped new content
      */
     function setValueEscaped($value_escaped)
@@ -81,7 +81,7 @@ abstract class PHPTAL_Dom_Node
      */
     function getValue()
     {
-        return html_entity_decode($this->getValueEscaped(),ENT_QUOTES, $this->encoding);
+        return html_entity_decode($this->getValueEscaped(), ENT_QUOTES, $this->encoding);
     }
 
     /**
@@ -122,7 +122,7 @@ abstract class PHPTAL_Dom_Node
         if ($prop === 'node') return $this;
         if ($prop === 'generator') return self::$_codewriter_bc_hack_;
         if ($prop === 'attributes') {
-            $tmp = array(); 
+            $tmp = array();
             foreach ($this->getAttributeNodes() as $att) {
                 $tmp[$att->getQualifiedName()] = $att->getValueEscaped();
             }
@@ -136,7 +136,7 @@ abstract class PHPTAL_Dom_Node
      * @deprecated
      */
     function getName(){ return $this->getQualifiedName(); }
-    
+
     function __toString()
     {
         return " “".$this->getValue()."” ";

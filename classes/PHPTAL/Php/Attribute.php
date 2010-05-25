@@ -38,18 +38,18 @@ abstract class PHPTAL_Php_Attribute
     protected $phpelement;
 
     /**
-      * Called before element printing.
-      * Default implementation is for backwards compatibility only. Please always override both before() and after().
-      */
+     * Called before element printing.
+     * Default implementation is for backwards compatibility only. Please always override both before() and after().
+     */
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $this->tag = $this->phpelement; $this->phpelement->generator = $codewriter; $this->start(); // FIXME: remove
     }
 
     /**
-      * Called after element printing.
-      * Default implementation is for backwards compatibility only. Please always override both before() and after().
-      */
+     * Called after element printing.
+     * Default implementation is for backwards compatibility only. Please always override both before() and after().
+     */
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $this->tag = $this->phpelement; $this->phpelement->generator = $codewriter; $this->end(); // FIXME: remove

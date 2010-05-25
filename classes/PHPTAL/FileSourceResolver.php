@@ -12,7 +12,7 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
- 
+
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/SourceResolver.php';
 PHPTAL::restoreIncludePath();

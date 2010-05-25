@@ -42,7 +42,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
 
         // if no expression is given, the content of the node is used as
         // a translation key
-        if (strlen(trim($this->expression)) == 0){
+        if (strlen(trim($this->expression)) == 0) {
             $key = $this->_getTranslationKey($this->phpelement, !$escape, $codewriter->getEncoding());
             $key = trim(preg_replace('/\s+/sm'.($codewriter->getEncoding()=='UTF-8'?'u':''), ' ', $key));
             if ('' === trim($key)) {
@@ -51,9 +51,9 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
             $code = $codewriter->str($key);
         } else {
             $code = $codewriter->evaluateExpression($this->expression);
-            if(is_array($code))
+            if (is_array($code))
                 return $this->generateChainedContent($codewriter, $code);
-            
+
             $code = $codewriter->evaluateExpression($this->expression);
         }
 
@@ -63,11 +63,11 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
-    
+
     public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
     {
         $codewriter = $executor->getCodeWriter();
-        
+
         $escape = !($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE);
         $exp = "\$_translator->translate($exp, " . ($escape ? 'true':'false') . ')';
         if (!$islast) {

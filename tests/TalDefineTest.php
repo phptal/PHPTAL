@@ -31,7 +31,7 @@ class TalDefineTest extends PHPTAL_TestCase
 {
     function testExpressionParser()
     {
-        $att = new PHPTAL_Php_Attribute_Tal_Define(new DummyDefinePhpNode(),'a b');
+        $att = new PHPTAL_Php_Attribute_Tal_Define(new DummyDefinePhpNode(), 'a b');
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('local a_234z b');
         $this->assertEquals('local', $defineScope);
@@ -201,7 +201,7 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:define="one \';;\'; two string:;;;;; three php:\';;;;;;\'">${one}-${two}-${three}</p>');
-        $this->assertEquals('<p>;-;;-;;;</p>',$tpl->execute());
+        $this->assertEquals('<p>;-;;-;;;</p>', $tpl->execute());
     }
 
     function testEmpty()
@@ -272,7 +272,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl->varvar = 'ok';
         $tpl->varname = 'varvar';
         $tpl->setSource('<div tal:define="test ${varname}">${test}</div>');
-        $this->assertEquals('<div>ok</div>',$tpl->execute());
+        $this->assertEquals('<div>ok</div>', $tpl->execute());
     }
 
     function testDefinePHPInterpolated()
@@ -281,7 +281,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl->varvar = 'ok';
         $tpl->varname = 'varvar';
         $tpl->setSource('<div tal:define="test php:${varname}">${test}</div>');
-        $this->assertEquals('<div>ok</div>',$tpl->execute());
+        $this->assertEquals('<div>ok</div>', $tpl->execute());
     }
 
     const VARNAME = 'varvar';
@@ -292,7 +292,7 @@ class TalDefineTest extends PHPTAL_TestCase
         $tpl->varvar = 'ok';
         $tpl->varname = 'varvar';
         $tpl->setSource('<div tal:define="test php:${'.get_class($this).'::VARNAME}">${test}</div>');
-        $this->assertEquals('<div>ok</div>',$tpl->execute());
+        $this->assertEquals('<div>ok</div>', $tpl->execute());
     }
 
     function testRedefineSelf()
@@ -314,24 +314,24 @@ class TalDefineTest extends PHPTAL_TestCase
 
         $this->assertEquals('label var', $tpl->execute());
     }
-    
+
     /**
      * @expectedException PHPTAL_Exception
      */
-    function testRejectsInvalidExpression() 
+    function testRejectsInvalidExpression()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<x tal:define="global foo | default"/>');
         $tpl->execute();
     }
-    
+
     function testHasRealContent()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setSource('<y 
+        $tpl->setSource('<y
         phptal:debug="">
-        
-        <x 
+
+        <x
         tal:define="global foo bar | default"
         >
         test
@@ -340,15 +340,15 @@ class TalDefineTest extends PHPTAL_TestCase
         ');
         $tpl->execute();
     }
-    
+
     function testHasRealCDATAContent()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<script tal:define="global foo bar | default"><![CDATA[ x ]]></script>');
         $tpl->execute();
     }
-    
-    
+
+
     function testDefineAndAttributesOnSameElement()
     {
         $tpl = $this->newPHPTAL();
@@ -359,7 +359,7 @@ class TalDefineTest extends PHPTAL_TestCase
                         <td tal:define="event php: row.$team.$event_name" tal:attributes="style \'THIS DOESNT WORK\'">
                            ${event/player/surname}
                        </td>
-                   </tal:block>');        
-        $tpl->execute();  
+                   </tal:block>');
+        $tpl->execute();
     }
 }

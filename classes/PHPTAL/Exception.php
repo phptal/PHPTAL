@@ -72,7 +72,7 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_IOException extends PHPTAL_Exception 
+class PHPTAL_IOException extends PHPTAL_Exception
 {
 }
 
@@ -82,7 +82,7 @@ class PHPTAL_IOException extends PHPTAL_Exception
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception 
+class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception
 {
 }
 
@@ -92,7 +92,7 @@ class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_ConfigurationException extends PHPTAL_Exception 
+class PHPTAL_ConfigurationException extends PHPTAL_Exception
 {
 }
 
@@ -130,7 +130,7 @@ class PHPTAL_UnknownModifierException extends PHPTAL_TemplateException
         $this->modifier_name = $modifier_name;
         parent::__construct($msg);
     }
-    
+
     public function getModifierName()
     {
         return $this->modifier_name;

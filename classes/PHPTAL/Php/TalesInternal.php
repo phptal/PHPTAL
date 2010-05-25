@@ -12,7 +12,7 @@
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
  * @version  SVN: $Id$
  * @link     http://phptal.org/
-*/
+ */
 
 require_once 'PHPTAL/Php/Transformer.php';
 require_once 'PHPTAL/TalesRegistry.php';
@@ -177,7 +177,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $expression = null;
         }
 
-        if (preg_match('/^\'[a-z][a-z0-9_]*\'$/i', $next)) $next = substr($next,1,-1); else $next = '{'.$next.'}';
+        if (preg_match('/^\'[a-z][a-z0-9_]*\'$/i', $next)) $next = substr($next, 1, -1); else $next = '{'.$next.'}';
 
         // if no sub part for this expression, just optimize the generated code
         // and access the $ctx->var
@@ -310,7 +310,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $result .= $c;
         }
         if ($inPath) {
-            $subEval = self::compileToPHPExpression($subPath,false);
+            $subEval = self::compileToPHPExpression($subPath, false);
             $result .= "'.(" . $subEval . ").'";
         }
 
@@ -343,7 +343,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
     /**
      * phptal-internal-php-block: modifier for emulation of <?php ?> in attributes.
-     * 
+     *
      * Please don't use it in the templates!
      */
     static public function phptal_internal_php_block($src)
@@ -353,7 +353,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         {
             return $m[1];
         }
-        
+
         // <?php block expects statements, but modifiers must return expressions.
         // unfortunately this ugliness is the only way to support it currently.
         // ? > keeps semicolon optional
@@ -390,7 +390,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      *
      * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
      * @return string
-    */
+     */
     public static function compileToPHPExpression($expression, $nothrow=false)
     {
         $r = self::compileToPHPStatements($expression, $nothrow);
@@ -426,13 +426,13 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      *
      * @return string or array
      */
-    public static function compileToPHPStatements($expression,$nothrow=false)
+    public static function compileToPHPStatements($expression, $nothrow=false)
     {
         $expression = trim($expression);
 
         // Look for tales modifier (string:, exists:, etc...)
         if (preg_match('/^([a-z][a-z0-9._-]*[a-z0-9]):(.*)$/si', $expression, $m)) {
-            list(,$typePrefix,$expression) = $m;
+            list(, $typePrefix, $expression) = $m;
         }
         // may be a 'string'
         elseif (preg_match('/^\'((?:[^\']|\\\\.)*)\'$/s', $expression, $m)) {
@@ -465,18 +465,18 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         }
 
         // check if it is implemented via code-generating function
-        $func = 'phptal_tales_'.str_replace('-','_', $typePrefix);
+        $func = 'phptal_tales_'.str_replace('-', '_', $typePrefix);
         if (function_exists($func)) {
             return $func($expression, $nothrow);
         }
 
-        $func = 'PHPTALNAMESPACE\\phptal_tales_'.str_replace('-','_', $typePrefix);
+        $func = 'PHPTALNAMESPACE\\phptal_tales_'.str_replace('-', '_', $typePrefix);
         if (function_exists($func)) {
             return $func($expression, $nothrow);
         }
 
         // check if it is implemented via runtime function
-        $runfunc = 'phptal_runtime_tales_'.str_replace('-','_', $typePrefix);
+        $runfunc = 'phptal_runtime_tales_'.str_replace('-', '_', $typePrefix);
         if (function_exists($runfunc)) {
             return "$runfunc(".self::compileToPHPExpression($expression, $nothrow).")";
         }

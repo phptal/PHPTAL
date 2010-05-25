@@ -38,7 +38,7 @@ class PHPTAL_TalesRegistry
     }
 
     protected function __construct()
-    {       
+    {
         $this->registerPrefix('not', array('PHPTAL_Php_TalesInternal', 'not'));
         $this->registerPrefix('path', array('PHPTAL_Php_TalesInternal', 'path'));
         $this->registerPrefix('string', array('PHPTAL_Php_TalesInternal', 'string'));

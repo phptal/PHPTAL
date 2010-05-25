@@ -25,7 +25,7 @@ class MetalSlotTest extends PHPTAL_TestCase
         $exp = normalize_html_file('output/metal-slot.01.html');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testPreservesContext()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.05.html');
@@ -42,16 +42,16 @@ class MetalSlotTest extends PHPTAL_TestCase
             <div metal:define-macro="m">
                 <div tal:define="var string:invalid">
                     <span metal:define-slot="s">empty slot</span>
-                </div>    
+                </div>
             </div>
-            
+
             <div metal:use-macro="m">
                 <div metal:fill-slot="s">var = ${var}</div>
-            </div>    
+            </div>
         ');
-        $this->assertEquals(normalize_html('<div><div><div>var = topmost</div></div></div>'),normalize_html($tpl->execute()), $tpl->getCodePath());
+        $this->assertEquals(normalize_html('<div><div><div>var = topmost</div></div></div>'), normalize_html($tpl->execute()), $tpl->getCodePath());
     }
-    
+
     function testRecursiveFillSimple()
     {
         $tpl = $this->newPHPTAL();
@@ -62,7 +62,7 @@ class MetalSlotTest extends PHPTAL_TestCase
               </div>
 
               <div metal:define-macro="test2">
-                test2 macro value:<span metal:define-slot="value">a value should go here</span>                
+                test2 macro value:<span metal:define-slot="value">a value should go here</span>
               </div>
 
               <div metal:use-macro="test1" class="calls test1 macro">
@@ -74,7 +74,7 @@ class MetalSlotTest extends PHPTAL_TestCase
               </div>
             </div>
             ');
-            
+
         $this->assertEquals(normalize_html('<div><div>test1 macro value:<div class="filling value for test1">
         <div>test2 macro value:<span class="filling value for test2">foo bar baz</span></div></div></div></div>'),
                             normalize_html($tpl->execute()), $tpl->getCodePath());
@@ -116,13 +116,13 @@ class MetalSlotTest extends PHPTAL_TestCase
         ');
 
         $tr = new DummyTranslator();
-        $tr->setTranslation("translateme","translatedyou");
-        $tr->setTranslation("translatemetoo","translatedyouaswell");
+        $tr->setTranslation("translateme", "translatedyou");
+        $tr->setTranslation("translatemetoo", "translatedyouaswell");
         $tpl->setTranslator($tr);
 
-        $this->assertEquals(normalize_html('<div><p><span>translatedyouaswell</span></p></div>'),normalize_html($tpl->execute()), $tpl->getCodePath());
+        $this->assertEquals(normalize_html('<div><p><span>translatedyouaswell</span></p></div>'), normalize_html($tpl->execute()), $tpl->getCodePath());
     }
-    
+
     /**
      * this is violation of TAL specification, but needs to work for backwards compatibility
      */
@@ -132,10 +132,10 @@ class MetalSlotTest extends PHPTAL_TestCase
         $tpl->setSource('<tal:block metal:fill-slot="foo">foocontent</tal:block>');
         $tpl->execute();
         $tpl->setSource('<tal:block metal:define-slot="foo">FAIL</tal:block>');
-        
+
         $this->assertEquals('foocontent', $tpl->execute());
     }
-    
+
     /**
      * this is violation of TAL specification, but needs to work for backwards compatibility
      */
@@ -145,34 +145,34 @@ class MetalSlotTest extends PHPTAL_TestCase
         $tpl->setSource('<p tal:define="x string:x"><tal:block metal:fill-slot="foo">foocontent</tal:block></p>');
         $tpl->execute();
         $tpl->setSource('<p tal:define="y string:y"><tal:block metal:define-slot="foo">FAIL</tal:block></p>');
-        
+
         $this->assertEquals('<p>foocontent</p>', $tpl->execute());
     }
-    
+
     function testUsesCallbackForLargeSlots()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('
         <x metal:define-macro="foo"><y metal:define-slot="s"/></x>
-        
+
         <f metal:use-macro="foo"><s metal:fill-slot="s">
             <loop tal:repeat="n php:range(1,5)">
                 <inner tal:repeat="y php:range(1,5)">
                     <a title="stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff lots of stuff stuff lots of stuff">stuff</a>
                     <a title="stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff lots of stuff stuff lots of stuff">stuff</a>
                     <a title="stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff lots of stuff stuff lots of stuff">stuff</a>
-                </inner>    
-            </loop>    
+                </inner>
+            </loop>
         </s></f>
         ');
-        
-        $res = $tpl->execute();        
-        $this->assertGreaterThan(PHPTAL_Php_Attribute_METAL_FillSlot::CALLBACK_THRESHOLD,strlen($res));
-        
+
+        $res = $tpl->execute();
+        $this->assertGreaterThan(PHPTAL_Php_Attribute_METAL_FillSlot::CALLBACK_THRESHOLD, strlen($res));
+
         $tpl_php_source = file_get_contents($tpl->getCodePath());
-        
-        $this->assertNotContains("fillSlot(",$tpl_php_source);        
-        $this->assertContains("fillSlotCallback(",$tpl_php_source);
+
+        $this->assertNotContains("fillSlot(", $tpl_php_source);
+        $this->assertContains("fillSlotCallback(", $tpl_php_source);
     }
 
     function testUsesBufferForSmallSlots()
@@ -180,20 +180,20 @@ class MetalSlotTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('
         <x metal:define-macro="foo"><y metal:define-slot="s"/></x>
-        
+
         <f metal:use-macro="foo"><s metal:fill-slot="s">
             stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff stuff lots of stuff
         </s></f>
         ');
-        
+
         $tpl->execute();
-        
+
         $tpl_php_source = file_get_contents($tpl->getCodePath());
-        
-        $this->assertNotContains("fillSlotCallback(",$tpl_php_source);
-        $this->assertContains("fillSlot(",$tpl_php_source);        
+
+        $this->assertNotContains("fillSlotCallback(", $tpl_php_source);
+        $this->assertContains("fillSlot(", $tpl_php_source);
     }
-    
+
     function testSlotBug()
     {
         $tpl = $this->newPHPTAL()->setSource(<<<HTML
@@ -220,7 +220,7 @@ class MetalSlotTest extends PHPTAL_TestCase
         </div>
 HTML
 );
-        
+
         $this->assertEquals(
             normalize_html('<div>page/value:<div>OK toplevel-filled page/value</div>page/valuebis:<div>OK subpage filled page/valuebis</div></div>'),
             normalize_html($tpl->execute()), $tpl->getCodePath());

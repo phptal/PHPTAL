@@ -18,7 +18,7 @@
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
 error_reporting( E_ALL | E_STRICT );
-assert_options(ASSERT_ACTIVE,1);
+assert_options(ASSERT_ACTIVE, 1);
 
 chdir(dirname(__FILE__));
 
@@ -47,7 +47,7 @@ $alltests = new PHPUnit_Framework_TestSuite();
 foreach (new DirectoryIterator( dirname(__FILE__) ) as $f) {
     if ($f->isDot() || !$f->isFile()) continue;
 
-    if (preg_match('/(.*?Test).php$/', $f->getFileName())) {        
+    if (preg_match('/(.*?Test).php$/', $f->getFileName())) {
         $alltests->addTestSuite(createTestSuiteForFile($f->getPathName()));
     }
 }
@@ -58,8 +58,8 @@ $runner->doRun($alltests);
 
 function createTestSuiteForFile($path)
 {
-    require_once $path;        
-    $classname = basename($path,'.php');
+    require_once $path;
+    $classname = basename($path, '.php');
     if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
         $classname = __NAMESPACE__ . '\\' . $classname;
     }

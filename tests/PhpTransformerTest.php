@@ -76,16 +76,16 @@ class PhpTransformerTest extends PHPTAL_TestCase
 
     function testEvals()
     {
-        $this->assertEquals('$prefix->{$prefix->a}', trim(PHPTAL_Php_Transformer::transform('$a','$prefix->'),'()'));
+        $this->assertEquals('$prefix->{$prefix->a}', trim(PHPTAL_Php_Transformer::transform('$a', '$prefix->'), '()'));
         $this->assertEquals('$a->{$b}->c', PHPTAL_Php_Transformer::transform('a.$b.c'));
-        $this->assertEquals('$prefix->a->{$prefix->x->y}->z', PHPTAL_Php_Transformer::transform('a.{x.y}.z','$prefix->'));
+        $this->assertEquals('$prefix->a->{$prefix->x->y}->z', PHPTAL_Php_Transformer::transform('a.{x.y}.z', '$prefix->'));
         $this->assertEquals('$a->{$x->y}()', PHPTAL_Php_Transformer::transform('a.{x.y}()'));
     }
 
     function testEvals2()
     {
-        $this->assertEquals('$prefix->{$prefix->var} + $prefix->{$prefix->var}', trim(PHPTAL_Php_Transformer::transform('${var} + ${var}','$prefix->'),'()'));
-        $this->assertEquals('$prefix->{MyClass::CONSTANT}', trim(PHPTAL_Php_Transformer::transform('${MyClass::CONSTANT}','$prefix->'),'()'));
+        $this->assertEquals('$prefix->{$prefix->var} + $prefix->{$prefix->var}', trim(PHPTAL_Php_Transformer::transform('${var} + ${var}', '$prefix->'), '()'));
+        $this->assertEquals('$prefix->{MyClass::CONSTANT}', trim(PHPTAL_Php_Transformer::transform('${MyClass::CONSTANT}', '$prefix->'), '()'));
     }
 
     function testOperators()
@@ -96,19 +96,19 @@ class PhpTransformerTest extends PHPTAL_TestCase
 
     function testStatics()
     {
-        $this->assertEquals('$prefix->x->{MyClass::CONSTANT_UNDER6}', trim(PHPTAL_Php_Transformer::transform('x.${MyClass::CONSTANT_UNDER6}','$prefix->'),'()'));
+        $this->assertEquals('$prefix->x->{MyClass::CONSTANT_UNDER6}', trim(PHPTAL_Php_Transformer::transform('x.${MyClass::CONSTANT_UNDER6}', '$prefix->'), '()'));
         $this->assertEquals('MyClass::method()', PHPTAL_Php_Transformer::transform('MyClass::method()'));
         $this->assertEquals('MyClass::CONSTANT', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT'));
         $this->assertEquals('MyClass::CONSTANT_UNDER', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT_UNDER'));
         $this->assertEquals('MyClass::CONSTANT_UNDER6', PHPTAL_Php_Transformer::transform('MyClass::CONSTANT_UNDER6'));
         $this->assertEquals('MyClass::ConsTant', PHPTAL_Php_Transformer::transform('MyClass::ConsTant'));
-        $this->assertEquals('MyClass::$static', PHPTAL_Php_Transformer::transform('MyClass::$static','$prefix->'));
-        $this->assertEquals('MyClass::$static->foo()', PHPTAL_Php_Transformer::transform('MyClass::$static.foo()','$prefix->'));
+        $this->assertEquals('MyClass::$static', PHPTAL_Php_Transformer::transform('MyClass::$static', '$prefix->'));
+        $this->assertEquals('MyClass::$static->foo()', PHPTAL_Php_Transformer::transform('MyClass::$static.foo()', '$prefix->'));
     }
 
     function testStringEval()
     {
-        $this->assertEquals('"xxx {$prefix->a->{$prefix->b}->c[$prefix->x]} xxx"', PHPTAL_Php_Transformer::transform('"xxx ${a.$b.c[x]} xxx"','$prefix->'));
+        $this->assertEquals('"xxx {$prefix->a->{$prefix->b}->c[$prefix->x]} xxx"', PHPTAL_Php_Transformer::transform('"xxx ${a.$b.c[x]} xxx"', '$prefix->'));
     }
 
     function testDefines()
@@ -146,12 +146,12 @@ class PhpTransformerTest extends PHPTAL_TestCase
         $src = "'do not tranform this ge string lt eq'";
         $this->assertEquals($src, PHPTAL_Php_Transformer::transform($src));
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
     function testCatchesInvalidEvaledFieldName()
-    {        
+    {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:content="php:user.$0_invalid_" />');
         $tpl->execute();
@@ -162,7 +162,7 @@ class PhpTransformerTest extends PHPTAL_TestCase
      * @expectedException PHPTAL_ParserException
      */
     function testCatchesInvalidFieldName()
-    {        
+    {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:content="php:user.0_invalid_" />');
         $tpl->execute();
@@ -174,7 +174,7 @@ class PhpTransformerTest extends PHPTAL_TestCase
      * @expectedException PHPTAL_ParserException
      */
     function testCatchesInvalidVarName()
-    {        
+    {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:content="php:0_invalid_" />');
         $tpl->execute();
@@ -185,7 +185,7 @@ class PhpTransformerTest extends PHPTAL_TestCase
      * @expectedException PHPTAL_ParserException
      */
     function testCatchesInvalidNumber()
-    {        
+    {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:content="php:00..123" />');
         $tpl->execute();
@@ -196,7 +196,7 @@ class PhpTransformerTest extends PHPTAL_TestCase
      * @expectedException PHPTAL_ParserException
      */
     function testCatchesInvalidNumber2()
-    {        
+    {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p tal:content="php:0.1.2" />');
         $tpl->execute();

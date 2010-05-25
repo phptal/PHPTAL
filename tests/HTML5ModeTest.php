@@ -27,7 +27,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
             }
         ]]></script>');
 
-        $this->assertEquals(normalize_html('<!DOCTYPE html><script> if (2 < 5) { alert("<\/foo>"); } </script>'),normalize_html($tpl->execute()));
+        $this->assertEquals(normalize_html('<!DOCTYPE html><script> if (2 < 5) { alert("<\/foo>"); } </script>'), normalize_html($tpl->execute()));
     }
 
     function testCDATAContent()
@@ -35,17 +35,17 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('<!DOCTYPE html><p><![CDATA[<hello>]]></p>');
-        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'),normalize_html($tpl->execute()));
+        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
     }
-    
+
     function testRemovesXHTMLNS()
     {
         $tpl = $this->newPHPTAL()->setOutputMode(PHPTAL::HTML5)->setSource('
         <html     xmlns="http://www.w3.org/1999/xhtml">
             <x:head  xmlns:x="http://www.w3.org/1999/xhtml"/></html>
             ');
-            
-        $this->assertEquals(normalize_html('<html><head></head></html>'),normalize_html($tpl->execute()));
+
+        $this->assertEquals(normalize_html('<html><head></head></html>'), normalize_html($tpl->execute()));
 
     }
 
@@ -54,15 +54,15 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><p><![CDATA[<hello>]]></p>');
-        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'),normalize_html($tpl->execute()));
+        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
     }
-    
+
     function testProlog()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('<?xml version="1.0"?><!DOCTYPE html><p><![CDATA[<hello>]]></p>');
-        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'),normalize_html($tpl->execute()));
+        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
     }
 
     function testEmpty()
@@ -166,23 +166,23 @@ class HTML5ModeTest extends PHPTAL_TestCase
        $tpl->setOutputMode(PHPTAL::XHTML);
        $this->assertEquals('<input checked="checked"/>',$tpl->execute());
    }
-   
+
    function testAttributeQuotes()
    {
        $res = $this->newPHPTAL()->setSource(normalize_html('<a test=\'${php:chr(34)}\' tal:attributes="foo php:chr(34)"
        class=\'email
         href="mailto:me"
-       \' 
-       href 
-       = \'	
+       \'
+       href
+       = \'
        &#x20;&#x6d;&#97;i&#108;&#x74;o&#x3a;&#x20;&#37;&#55;0o&#x72;&#110;&#x65;%&#x36;&#x63;&#x25;&#x34;&#x30;&#x70;&#37;6&#102;%7&#x32;&#x6e;e%&#x36;c&#37;2en&#x65;t?
        \'>contact me</a>'))->execute();
-       
+
        $this->assertEquals(normalize_html('<a test="&quot;"
           class="email
            href=&quot;mailto:me&quot;
-          " 
-          href="	
+          "
+          href="
           &#x20;&#x6d;&#97;i&#108;&#x74;o&#x3a;&#x20;&#37;&#55;0o&#x72;&#110;&#x65;%&#x36;&#x63;&#x25;&#x34;&#x30;&#x70;&#37;6&#102;%7&#x32;&#x6e;e%&#x36;c&#37;2en&#x65;t?
           " foo="&quot;">contact me</a>'),$res);
    }

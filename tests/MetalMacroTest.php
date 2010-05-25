@@ -104,7 +104,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.07.html/this-macro-doesnt-exist"/>');
         $res = $tpl->execute();
         $this->fail('Bad macro name exception not thrown');
-        }
+    }
 
     /**
      * @expectedException PHPTAL_MacroMissingException
@@ -124,9 +124,9 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl->ok_var = '??'; // fallback in case test fails
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.09.html/defined_earlier" />');
         $res = $tpl->execute();
-        $this->assertEquals('Call OK OK',trim(preg_replace('/\s+/',' ',$res)));
+        $this->assertEquals('Call OK OK', trim(preg_replace('/\s+/', ' ', $res)));
     }
-    
+
     /**
      * @expectedException PHPTAL_Exception
      */
@@ -134,15 +134,15 @@ class MetalMacroTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource(
-        '<p>
-          <metal:block define-macro=" foo " /> 
+            '<p>
+          <metal:block define-macro=" foo " />
               <a metal:define-macro="foo">bar</a>
          </p>');
         $tpl->execute();
-        
+
         $this->fail("Allowed duplicate macro");
     }
-    
+
     function testSameMacroCanBeDefinedInDifferentTemplates()
     {
         $tpl = $this->newPHPTAL();
@@ -153,7 +153,7 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl->setSource('<tal:block metal:define-macro=" foo ">2</tal:block>');
         $tpl->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -161,7 +161,7 @@ class MetalMacroTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<phptal:block metal:use-macro="input/metal-macro.10.html/throwerr"/>');
-        
+
         $tpl->execute();
     }
 
@@ -170,10 +170,10 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<phptal:block tal:on-error="string:ok"
         metal:use-macro="input/metal-macro.10.html/throwerr"/>');
-        
-        $this->assertEquals('ok',$tpl->execute());
+
+        $this->assertEquals('ok', $tpl->execute());
     }
-    
+
     function testGlobalDefineInExternalMacro()
     {
         $tpl = $this->newPHPTAL();
@@ -182,8 +182,8 @@ class MetalMacroTest extends PHPTAL_TestCase
             metal:use-macro="input/metal-macro.11.html/redefine"/>
             ${test}
             </metal:block>');
-        
-        $this->assertEquals('ok',trim($tpl->execute()));
+
+        $this->assertEquals('ok', trim($tpl->execute()));
     }
 }
 

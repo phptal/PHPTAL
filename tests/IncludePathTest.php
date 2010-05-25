@@ -11,7 +11,7 @@
  * @version  SVN: $Id:$
  * @link     http://phptal.org/
  */
- 
+
 require_once dirname(__FILE__)."/config.php";
 
 class IncludePathTest extends PHPTAL_TestCase
@@ -23,9 +23,9 @@ class IncludePathTest extends PHPTAL_TestCase
         $path = get_include_path();
 
         PHPTAL::setIncludePath();
-        $this->assertNotEquals($path,get_include_path());
+        $this->assertNotEquals($path, get_include_path());
         PHPTAL::restoreIncludePath();
-        $this->assertEquals($path,get_include_path());
+        $this->assertEquals($path, get_include_path());
     }
 
     function testPreserveCustomPath()
@@ -35,9 +35,9 @@ class IncludePathTest extends PHPTAL_TestCase
         $this->assertContains("./my-custom-path-test/", $path = get_include_path());
 
         PHPTAL::setIncludePath();
-        $this->assertNotEquals($path,get_include_path());
+        $this->assertNotEquals($path, get_include_path());
         PHPTAL::restoreIncludePath();
-        $this->assertEquals($path,get_include_path());
+        $this->assertEquals($path, get_include_path());
 
         $this->assertContains("./my-custom-path-test/", get_include_path());
     }
@@ -47,23 +47,23 @@ class IncludePathTest extends PHPTAL_TestCase
         $path = get_include_path();
 
         PHPTAL::setIncludePath();
-        $this->assertNotEquals($path,get_include_path());
+        $this->assertNotEquals($path, get_include_path());
 
         PHPTAL::setIncludePath();
-        $this->assertNotEquals($path,get_include_path());
+        $this->assertNotEquals($path, get_include_path());
 
         PHPTAL::setIncludePath();
-        $this->assertNotEquals($path,get_include_path());
+        $this->assertNotEquals($path, get_include_path());
 
 
         PHPTAL::restoreIncludePath();
-        $this->assertNotEquals($path,get_include_path());
+        $this->assertNotEquals($path, get_include_path());
 
         PHPTAL::restoreIncludePath();
-        $this->assertNotEquals($path,get_include_path());
+        $this->assertNotEquals($path, get_include_path());
 
         PHPTAL::restoreIncludePath();
-        $this->assertEquals($path,get_include_path());
+        $this->assertEquals($path, get_include_path());
     }
 
     function testIncludePathIsChanged()
@@ -77,20 +77,20 @@ class IncludePathTest extends PHPTAL_TestCase
             PHPTAL::setIncludePath();
             $modified_include_path = get_include_path();
             try
-            {                
-                $fp = @fopen("PHPTAL/Context.php","r",true);
+            {
+                $fp = @fopen("PHPTAL/Context.php", "r", true);
                 PHPTAL::restoreIncludePath();
             }
             catch(Exception $e)
             {
                 PHPTAL::restoreIncludePath();
-                
-                if (!$e instanceof ErrorException) throw $e;                
+
+                if (!$e instanceof ErrorException) throw $e;
                 $fp = null;
-            }            
+            }
 
             $this->assertTrue(!!$fp, "File should be opened via include path: ".$modified_include_path.'; . = '.getcwd());
-            
+
             if ($fp) fclose($fp);
 
             chdir($cwd);

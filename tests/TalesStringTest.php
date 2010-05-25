@@ -82,9 +82,9 @@ class TalesStringTest extends PHPTAL_TestCase {
         $res = $tpl->execute();
         $res = normalize_html($res);
         $exp = normalize_html_file('output/tales-string-03.html');
-        $this->assertEquals($exp,$res);
+        $this->assertEquals($exp, $res);
     }
-    
+
     function testStructure()
     {
         $tpl = $this->newPHPTAL();

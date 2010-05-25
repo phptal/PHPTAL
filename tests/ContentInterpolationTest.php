@@ -92,52 +92,52 @@ EOT;
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
     }
-    
-    
+
+
     function testUnescape()
     {
         $tpl = $this->newPHPTAL();
-        
+
         $tpl->var = 'val<';
-        
+
         $tpl->setSource('<p>
             ${var}
-                     
+
             $${var}
-                     
-            $$${var} 
-                     
+
+            $$${var}
+
             $$$${var}
         </p>');
-        
+
         $this->assertEquals(normalize_html('<p>
             val&lt;
-        
+
             ${var}
-        
+
             $val&lt;
-        
+
             $${var}
-        </p>'),normalize_html($tpl->execute()));
+        </p>'), normalize_html($tpl->execute()));
     }
-    
+
     function testUnescapeString()
     {
-         $tpl = $this->newPHPTAL();
+        $tpl = $this->newPHPTAL();
 
-         $tpl->var = 'val<';
+        $tpl->var = 'val<';
 
-         $tpl->setSource('<p tal:content="string:
+        $tpl->setSource('<p tal:content="string:
              ${var}
 
              $${var}
 
-             $$${var} 
+             $$${var}
 
              $$$${var}
          "/>');
 
-         $this->assertEquals(normalize_html('<p>
+        $this->assertEquals(normalize_html('<p>
              val&lt;
 
              ${var}
@@ -145,115 +145,115 @@ EOT;
              $val&lt;
 
              $${var}
-         </p>'),normalize_html($tpl->execute()));
-     }
-    
+         </p>'), normalize_html($tpl->execute()));
+    }
+
     function testUnescapeStructure()
     {
         $tpl = $this->newPHPTAL();
-        
+
         $tpl->var = 'val<x/>';
-        
+
         $tpl->setSource('<p>
             ${structure var}
-                     
+
             $${structure var}
-                     
-            $$${structure var} 
-                     
+
+            $$${structure var}
+
             $$$${structure var}
         </p>');
-        
+
         $this->assertEquals(normalize_html('<p>
             val<x/>
-        
+
             ${structure var}
-        
+
             $val<x/>
-        
+
             $${structure var}
-        </p>'),normalize_html($tpl->execute()));
+        </p>'), normalize_html($tpl->execute()));
     }
-    
+
     function testUnescapeCDATA()
     {
         $tpl = $this->newPHPTAL();
-        
+
         $tpl->var = 'val<';
-        
+
         $tpl->setSource('<script><![CDATA[<
             ${text var}
-                     
+
             $${text var}
-                     
-            $$${var} 
-                     
+
+            $$${var}
+
             $$$${var}
         ]]></script>');
-        
+
         $this->assertEquals(normalize_html('<script><![CDATA[<
             val<
-        
+
             ${text var}
-        
+
             $val<
-        
+
             $${var}
-        ]]></script>'),normalize_html($tpl->execute()));
+        ]]></script>'), normalize_html($tpl->execute()));
     }
-    
+
     function testUnescapeCDATAStructure()
     {
         $tpl = $this->newPHPTAL();
-        
+
         $tpl->var = 'val<';
-        
+
         $tpl->setSource('<script><![CDATA[<
             ${structure var}
-                     
+
             $${structure var}
-                     
-            $$${structure var} 
-                     
+
+            $$${structure var}
+
             $$$${structure var}
         ]]></script>');
-        
+
         $this->assertEquals(normalize_html('<script><![CDATA[<
             val<
-        
+
             ${structure var}
-        
+
             $val<
-        
+
             $${structure var}
-        ]]></script>'),normalize_html($tpl->execute()));
+        ]]></script>'), normalize_html($tpl->execute()));
     }
-    
+
     function testUnescapePHPTales()
     {
         $tpl = $this->newPHPTAL();
-        
+
         $tpl->var = '1';
-        
+
         $tpl->setSource('<p phptal:tales="php">
             ${var+1}
-                     
+
             $${var+1}
-                     
-            $$${var+1} 
-                     
+
+            $$${var+1}
+
             $$$${var+1}
         </p>');
-        
+
         $this->assertEquals(normalize_html('<p>
             2
-        
+
             ${var+1}
-        
+
             $2
-        
+
             $${var+1}
-        </p>'),normalize_html($tpl->execute()));
+        </p>'), normalize_html($tpl->execute()));
     }
 
     public function testPHPBlock()
@@ -261,11 +261,11 @@ EOT;
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>test<?php echo "<x>"; ?>test<?php print("&amp;") ?>test</p>');
         $this->assertEquals('<p>test<x>test&amp;test</p>', $tpl->execute());
-}
+    }
 
     public function testPHPBlockShort()
     {
-        ini_set('short_open_tag',1);
+        ini_set('short_open_tag', 1);
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
         $tpl = $this->newPHPTAL();
@@ -314,7 +314,7 @@ EOT;
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${error | nothing}</p>');
-        $this->assertEquals('<p></p>',$tpl->execute());
+        $this->assertEquals('<p></p>', $tpl->execute());
     }
 
     function testZeroIsNotEmpty()
@@ -322,9 +322,9 @@ EOT;
         $tpl = $this->newPHPTAL();
         $tpl->zero = '0';
         $tpl->setSource('<p>${zero | error}</p>');
-        $this->assertEquals('<p>0</p>',$tpl->execute());
+        $this->assertEquals('<p>0</p>', $tpl->execute());
     }
-    
+
     function testPreservesNewline()
     {
         $tpl = $this->newPHPTAL()->setSource('<body>
@@ -332,56 +332,56 @@ ${variable1 | string:Line 1}
 <tal:block tal:content="variable2 | string:Line 2"></tal:block>
 Line 3
 </body>');
-        
+
         $this->assertEquals('<body>
 Line 1
 Line 2
 Line 3
-</body>',$tpl->execute(), $tpl->getCodePath());
+</body>', $tpl->execute(), $tpl->getCodePath());
     }
-    
+
     function testMultilineInterpolationPHP()
     {
         $res = $this->newPHPTAL()->setSource('<p>${php:\'foo
         bar\'}</p>')->execute();
-        
+
         $this->assertEquals('<p>foo
-        bar</p>',$res);
+        bar</p>', $res);
 
         $res = $this->newPHPTAL()->setSource('<p>${php:\'foo\' .
         substr(\'barz\' ,
         0,3)}</p>')->execute();
-        
-        $this->assertEquals('<p>foobar</p>',$res);
+
+        $this->assertEquals('<p>foobar</p>', $res);
     }
-    
-    
+
+
     function testMultilineInterpolation()
     {
         $res = $this->newPHPTAL()->setSource('<p>${string:foo
         bar}</p>')->execute();
-        
+
         $this->assertEquals('<p>foo
-        bar</p>',$res);
+        bar</p>', $res);
 
         $res = $this->newPHPTAL()->setSource('<p>${structure string:foo
         bar}</p>')->execute();
-        
+
         $this->assertEquals('<p>foo
-        bar</p>',$res);
+        bar</p>', $res);
     }
-    
+
     function testTagsBreakTALES()
     {
         $res = $this->newPHPTAL()->setSource('<p>${foo<br/>bar}</p>')->execute();
-        
-        $this->assertEquals('<p>${foo<br/>bar}</p>',$res);
+
+        $this->assertEquals('<p>${foo<br/>bar}</p>', $res);
     }
 
     function testEscapedTagsDontBreakTALES()
     {
         $res = $this->newPHPTAL()->setSource('<p>${structure string:foo&lt;br  />bar}</p>')->execute();
-        
-        $this->assertEquals('<p>foo<br  />bar</p>',$res);
+
+        $this->assertEquals('<p>foo<br  />bar</p>', $res);
     }
 }

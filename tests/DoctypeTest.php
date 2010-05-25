@@ -52,21 +52,21 @@ class DoctypeTest extends PHPTAL_TestCase
         $exp = normalize_html_file('output/doctype.04.html');
         $this->assertEquals($exp, $res);
     }
-    
+
     function testClearedOnReexecution()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><whatever/>');
-        
-        $this->assertContains("DOCTYPE html PUBLIC",$tpl->execute());
-        $this->assertContains("DOCTYPE html PUBLIC",$tpl->execute());        
-        
-        $tpl->setSource('<whatever/>');     
 
-        $this->assertNotContains("DOCTYPE html PUBLIC",$tpl->execute());
-        $this->assertNotContains("DOCTYPE html PUBLIC",$tpl->execute());        
+        $this->assertContains("DOCTYPE html PUBLIC", $tpl->execute());
+        $this->assertContains("DOCTYPE html PUBLIC", $tpl->execute());
+
+        $tpl->setSource('<whatever/>');
+
+        $this->assertNotContains("DOCTYPE html PUBLIC", $tpl->execute());
+        $this->assertNotContains("DOCTYPE html PUBLIC", $tpl->execute());
     }
-    
+
     /**
      * this is pretty crazy case of PHPTAL being reused while template is still being executed
      */
@@ -77,7 +77,7 @@ class DoctypeTest extends PHPTAL_TestCase
 
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <hack tal:define="hack php:tpl.setSource(&quot;&lt;hacked/&gt;&quot;)" tal:content="structure hack/execute"/>');
-        
+
         $this->assertEquals(normalize_html('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><hack><hacked></hacked></hack>'),
                             normalize_html($tpl->execute()));
     }

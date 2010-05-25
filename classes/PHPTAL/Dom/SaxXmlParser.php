@@ -185,7 +185,7 @@ class PHPTAL_Dom_SaxXmlParser
                             } else /* isWhiteChar */ {
                                 $state = self::ST_TAG_ATTRIBUTES;
                             }
-                        }                        
+                        }
                         break;
 
                     case self::ST_TAG_CLOSE:
@@ -360,13 +360,13 @@ class PHPTAL_Dom_SaxXmlParser
     private function checkEncoding($str)
     {
         if ($str === '') return '';
-        
+
         if ($this->input_encoding === 'UTF-8') {
-            
+
             // $match expression below somehow triggers quite deep recurrency and stack overflow in preg
             // to avoid this, check string bit by bit, omitting ASCII fragments.
-            if (strlen($str) > 200) {                  
-                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,null,PREG_SPLIT_NO_EMPTY);  
+            if (strlen($str) > 200) {
+                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,null,PREG_SPLIT_NO_EMPTY);
                 foreach ($chunks as $chunk) {
                     if (strlen($chunk) < 200) {
                         $this->checkEncoding($chunk);
@@ -392,8 +392,8 @@ class PHPTAL_Dom_SaxXmlParser
                 for($i=0; $i < count($res); $i+=2)
                 {
                     $res[$i] = self::convertBytesToEntities(array(1=>$res[$i]));
-                }                
-                $this->raiseError("Invalid UTF-8 bytes: ".implode('',$res));
+                }
+                $this->raiseError("Invalid UTF-8 bytes: ".implode('', $res));
             }
         }
         if ($this->input_encoding === 'ISO-8859-1') {
@@ -401,8 +401,8 @@ class PHPTAL_Dom_SaxXmlParser
             // http://www.w3.org/TR/2006/REC-xml11-20060816/#NT-RestrictedChar
             $forbid = '/((?>[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]+))/s';
 
-            if (preg_match($forbid,$str)) {
-                $str = preg_replace_callback($forbid,array('self','convertBytesToEntities'),$str);
+            if (preg_match($forbid, $str)) {
+                $str = preg_replace_callback($forbid, array('self', 'convertBytesToEntities'), $str);
                 $this->raiseError("Invalid ISO-8859-1 characters: ".$str);
             }
         }
@@ -413,7 +413,7 @@ class PHPTAL_Dom_SaxXmlParser
     /**
      * preg callback
      * Changes all bytes to hexadecimal XML entities
-     * 
+     *
      * @param array $m first array element is used for input
      *
      * @return string
@@ -433,25 +433,25 @@ class PHPTAL_Dom_SaxXmlParser
      */
     private function sanitizeEscapedText($str)
     {
-        $str = str_replace('&apos;','&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
+        $str = str_replace('&apos;', '&#39;', $str); // PHP's html_entity_decode doesn't seem to support that!
 
         /* <?php ?> blocks can't reliably work in attributes (due to escaping impossible in XML)
            so they have to be converted into special TALES expression
         */
         $types = ini_get('short_open_tag')?'php|=|':'php';
-        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self','convertPHPBlockToTALES'), $str);
+        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self', 'convertPHPBlockToTALES'), $str);
 
         // corrects all non-entities
-        $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str),array('<'=>'&lt;', ']]>'=>']]&gt;'));
+        $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str), array('<'=>'&lt;', ']]>'=>']]&gt;'));
 
         return $str;
     }
 
     private static function convertPHPBlockToTALES($m)
     {
-        list(,$type,$code) = $m;
+        list(, $type, $code) = $m;
         if ($type === '=') $code = 'echo '.$code;
-        return '${structure phptal-internal-php-block:'.str_replace('}','&#125;',htmlspecialchars($code)).'}';
+        return '${structure phptal-internal-php-block:'.str_replace('}', '&#125;', htmlspecialchars($code)).'}';
     }
 
     public function getSourceFile()

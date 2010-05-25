@@ -19,7 +19,7 @@ PHPTAL::setIncludePath();
 require_once 'PHPTAL/Tales.php';
 PHPTAL::restoreIncludePath();
 
-function phptal_tales_custom($src,$nothrow)
+function phptal_tales_custom($src, $nothrow)
 {
     return 'sprintf("%01.2f", '.PHPTAL_Php_TalesInternal::path($src, $nothrow).')';
 }
@@ -27,7 +27,7 @@ function phptal_tales_custom($src,$nothrow)
 class MyTalesClass implements PHPTAL_Tales
 {
     public static function reverse($exp,$nothrow){
-        return 'strrev('.phptal_tales($exp,$nothrow).')';
+        return 'strrev('.phptal_tales($exp, $nothrow).')';
     }
 }
 
@@ -100,47 +100,47 @@ class TalesTest extends PHPTAL_TestCase
         $src = 'MyTalesClass.reverse: some';
         $this->assertEquals('strrev($ctx->some)', phptal_tales($src));
     }
-    
+
     function testTaleNeverReturnsArray()
     {
         $this->assertType('string', phptal_tale('foo | bar | baz | nothing'));
-    }    
+    }
 
     function testTalesReturnsArray()
     {
         $this->assertType('array', phptal_tales('foo | bar | baz | nothing'));
-    }    
+    }
 
     function testInterpolate1()
     {
-        $this->assertEquals('$ctx->{$ctx->path($ctx->some, \'path\')}',PHPTAL_Php_TalesInternal::compileToPHPStatements('${some/path}'));
+        $this->assertEquals('$ctx->{$ctx->path($ctx->some, \'path\')}', PHPTAL_Php_TalesInternal::compileToPHPStatements('${some/path}'));
     }
 
     function testInterpolate2()
     {
-        $this->assertEquals('$ctx->path($ctx->{$ctx->path($ctx->some, \'path\')}, \'meh\')',phptal_tales('${some/path}/meh'));
+        $this->assertEquals('$ctx->path($ctx->{$ctx->path($ctx->some, \'path\')}, \'meh\')', phptal_tales('${some/path}/meh'));
     }
 
     function testInterpolate3()
     {
-        $this->assertEquals('$ctx->path($ctx->meh, $ctx->path($ctx->some, \'path\'))',PHPTAL_Php_TalesInternal::compileToPHPStatements('meh/${some/path}'));
+        $this->assertEquals('$ctx->path($ctx->meh, $ctx->path($ctx->some, \'path\'))', PHPTAL_Php_TalesInternal::compileToPHPStatements('meh/${some/path}'));
     }
 
     function testInterpolate4()
     {
-        $this->assertEquals('$ctx->path($ctx->{$ctx->meh}, $ctx->blah)',phptal_tales('${meh}/${blah}'));
+        $this->assertEquals('$ctx->path($ctx->{$ctx->meh}, $ctx->blah)', phptal_tales('${meh}/${blah}'));
     }
 
     function testSuperglobals()
     {
-        $this->assertEquals('$ctx->path($ctx->{\'_GET\'}, \'a\')',PHPTAL_Php_TalesInternal::compileToPHPStatements('_GET/a'));
+        $this->assertEquals('$ctx->path($ctx->{\'_GET\'}, \'a\')', PHPTAL_Php_TalesInternal::compileToPHPStatements('_GET/a'));
     }
 
     function testInterpolatedPHP1()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<div tal:content="string:foo${php:true?&apos;bar&apos;:0}${php:false?0:\'b$$a$z\'}"/>');
-        $this->assertEquals('<div>foobarb$$a$z</div>',$tpl->execute());
+        $this->assertEquals('<div>foobarb$$a$z</div>', $tpl->execute());
     }
 
     function testInterpolatedTALES()
@@ -148,39 +148,39 @@ class TalesTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->var = 'ba';
         $tpl->setSource('<div tal:content="string:foo${nonexistant | string:bar$var}z"/>');
-        $this->assertEquals('<div>foobarbaz</div>',$tpl->execute());
+        $this->assertEquals('<div>foobarbaz</div>', $tpl->execute());
     }
 
     function testInterpolatedPHP2()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->somearray = array(1=>9,9,9);
+        $tpl->somearray = array(1=>9, 9, 9);
         $tpl->setSource('<div tal:repeat="x php:somearray"><x tal:replace=\'repeat/${php:
             "x"}/key\'/></div>');
-        $this->assertEquals('<div>1</div><div>2</div><div>3</div>',$tpl->execute());
+        $this->assertEquals('<div>1</div><div>2</div><div>3</div>', $tpl->execute());
     }
-    
+
     function testStringWithLongVarName()
     {
         $tpl = $this->newPHPTAL();
         $tpl->aaaaaaaaaaaaaaaaaaaaa = 'ok';
         $tpl->bbb = 'ok';
-        
-        $tpl->setSource('<x tal:attributes="y string:$bbb/y/y; x string:$aaaaaaaaaaaaaaaaaaaaa/x/x" />');        
+
+        $tpl->setSource('<x tal:attributes="y string:$bbb/y/y; x string:$aaaaaaaaaaaaaaaaaaaaa/x/x" />');
         $tpl->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
     function testForbidsStatementsInCustomModifiers()
-    {        
+    {
         $tpl = $this->newPHPTAL();
-        
+
         $tpl->setSource('<x tal:content="testmodifier:foo"/>')->execute();
     }
-    
-    
+
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -188,7 +188,7 @@ class TalesTest extends PHPTAL_TestCase
     {
         phptal_tales("I am not valid expression");
     }
-    
+
     function testThrowsUnknownModifier()
     {
         try
@@ -198,12 +198,12 @@ class TalesTest extends PHPTAL_TestCase
         }
         catch(PHPTAL_UnknownModifierException $e)
         {
-            $this->assertEquals('testidontexist',$e->getModifierName());
+            $this->assertEquals('testidontexist', $e->getModifierName());
         }
     }
 }
 
-function phptal_tales_testmodifier($expr,$nothrow)
+function phptal_tales_testmodifier($expr, $nothrow)
 {
     return 'print("test");';
 }

@@ -23,7 +23,7 @@ require_once 'PHPTAL/Dom/DocumentBuilder.php';
 class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 {
     private $document;
-    
+
     public function getResult()
     {
         return $this->document;
@@ -35,10 +35,10 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     public function onDocumentStart()
     {
         $this->document = new DOMDocument();
-        
-        $root = $this->document->createElementNS('http://xml.zope.org/namespaces/tal','tal:documentElement');
+
+        $root = $this->document->createElementNS('http://xml.zope.org/namespaces/tal', 'tal:documentElement');
         $this->document->appendChild($root);
-        
+
         $this->_current = $this->document->documentElement;
     }
 
@@ -46,7 +46,7 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     {
         if (count($this->_stack) > 0) {
             $left='</'.$this->_current->localName.'>';
-            for($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->_stack[$i]->localName.'>';
+            for ($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->_stack[$i]->localName.'>';
             throw new PHPTAL_ParserException("Not all elements were closed before end of the document. Missing: ".$left);
         }
     }
@@ -73,40 +73,40 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onProcessingInstruction($data)
     {
-        $this->document->create($this->document->createProcessingInstruction('FIXME',$data));
+        $this->document->create($this->document->createProcessingInstruction('FIXME', $data));
     }
-    
+
     private function decodeEntities($str)
     {
-        return html_entity_decode($attributes['xmlns'], ENT_QUOTES,'UTF-8');
+        return html_entity_decode($attributes['xmlns'], ENT_QUOTES, 'UTF-8');
     }
 
     private function prefixToNamespaceURI($prefix, array $attributes)
-    {    
+    {
         if ($prefix === '') {
             if (isset($attributes['xmlns'])) {
                 return trim($this->decodeEntities($attributes['xmlns']));
-            }             
+            }
             return $this->_current->namespaceURI; // not used for attributes!
         }
         // FIXME: string lookupNamespaceURI ( string $prefix )
         if (isset($attributes['xmlns:'.$prefix])) {
             return trim($this->decodeEntities($attributes['xmlns:'.$prefix]));
         }
-        
+
         return PHPTAL_Dom_Defs::getInstance()->prefixToNamespaceURI($prefix);
     }
 
     public function onElementStart($element_qname, array $attributes)
     {
-        if (preg_match('/^([^:]+):/', $element_qname, $m)) {            
+        if (preg_match('/^([^:]+):/', $element_qname, $m)) {
             $prefix = $m[1];
         } else {
             $prefix = ''; $local_name = $element_qname;
         }
-        
+
         $namespace_uri = $this->prefixToNamespaceURI($prefix, $attributes);
-        
+
         if (false === $namespace_uri) {
             throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >");
         }
@@ -115,10 +115,10 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
         // FIXME: xmlns first?
         foreach ($attributes as $qname=>$encoded_value) {
-            if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {  
+            if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->prefixToNamespaceURI($m[1], $attributes);
-                
+
                 if (false === $attr_namespace_uri) {
                     throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >");
                 }
@@ -127,7 +127,7 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
             }
 
-            if (PHPTAL_Dom_Defs::getInstance()->isHandledNamespace($attr_namespace_uri) 
+            if (PHPTAL_Dom_Defs::getInstance()->isHandledNamespace($attr_namespace_uri)
                 && !PHPTAL_Dom_Defs::getInstance()->isValidAttributeNS($attr_namespace_uri, $local_name)) {
                 throw new PHPTAL_ParserException("Attribute '$local_name' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
             }
@@ -149,14 +149,14 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         if ($this->_current === $this->document->documentElement) {
             throw new PHPTAL_ParserException("Found closing tag for < $qname > where there are no open tags");
         }
-        
+
         $current_qname = $this->_current->localName;
         if ($this->_current->prefix !== NULL) $current_qname = $this->_current->prefix.':'.$current_qname;
-        
+
         if ($current_qname != $qname) {
             throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$current_qname." > but found < /".$qname." >");
         }
-        $this->_current = array_pop($this->_stack);        
+        $this->_current = array_pop($this->_stack);
     }
 
     public function setEncoding($encoding)

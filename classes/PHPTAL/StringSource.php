@@ -29,7 +29,7 @@ class PHPTAL_StringSource implements PHPTAL_Source
 
     public function getLastModifiedTime()
     {
-        if (substr($this->_realpath,0,8) !== self::NO_PATH_PREFIX && file_exists($this->_realpath)) {
+        if (substr($this->_realpath, 0, 8) !== self::NO_PATH_PREFIX && file_exists($this->_realpath)) {
             return @filemtime($this->_realpath);
         }
         return 0;

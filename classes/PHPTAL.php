@@ -288,7 +288,7 @@ class PHPTAL
      */
     public function setSource($src, $path=false)
     {
-        if (!class_exists('PHPTAL_StringSource',false)) self::autoload('PHPTAL_StringSource');
+        if (!class_exists('PHPTAL_StringSource', false)) self::autoload('PHPTAL_StringSource');
 
         if (!$path) {
             // this prefix tells string source that path has been faked
@@ -783,7 +783,7 @@ class PHPTAL
             $this->_context->echoDeclarations(false);
 
             $templateFunction = $this->getFunctionName();
-            
+
             try {
                 ob_start();
                 $templateFunction($this, $this->_context);
@@ -797,7 +797,7 @@ class PHPTAL
                 }
                 throw $e;
             }
-            
+
             // unshift doctype
             if ($this->_context->_docType) {
                 $res = $this->_context->_docType . "\n" . $res;
@@ -814,27 +814,27 @@ class PHPTAL
         }
         catch (Exception $e)
         {
-            $this->handleException($e);                        
+            $this->handleException($e);
         }
-        
+
         return $res;
     }
 
     /**
      * PHP's default exception handler allows error pages to be indexed and can reveal too much information,
      * so if possible PHPTAL sets up its own handler to fix this.
-     * 
+     *
      * Doesn't change exception handler if non-default one is set.
-     * 
+     *
      * @return void
      * @throws Exception
      */
     private function handleException(Exception $e)
-    {   
+    {
         // PHPTAL's handler is only useful on fresh HTTP response
         if (PHP_SAPI !== 'cli' && !headers_sent()) {
-            $old_exception_handler = set_exception_handler(array(__CLASS__,'_defaultExceptionHandler'));
-        
+            $old_exception_handler = set_exception_handler(array(__CLASS__, '_defaultExceptionHandler'));
+
             if ($old_exception_handler !== NULL) {
                 restore_exception_handler(); // if there's user's exception handler, let it work
             }
@@ -844,20 +844,20 @@ class PHPTAL
 
     /**
      * Generates simple error page. Sets appropriate HTTP status to prevent page being indexed.
-     * 
+     *
      * @access private
      */
     public static function _defaultExceptionHandler($e)
-    {        
+    {
         header('HTTP/1.1 500 PHPTAL Exception');
-        
+
         $title = 'PHPTAL Exception: '.htmlspecialchars($e->getMessage());
         header('Content-Type:text/html;charset=UTF-8');
         echo '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>'.$title.'</title></head>';
         echo '<body><h1>'.$title.'</h1>';
         echo "<pre>\n".htmlspecialchars($e).'</pre></body></html>';
-        echo str_repeat('    ',100); // IE won't display error pages < 512b
-        
+        echo str_repeat('    ', 100); // IE won't display error pages < 512b
+
         error_log($title);
         exit(1);
     }
@@ -922,7 +922,7 @@ class PHPTAL
         // contain filename, then the macro is assumed to be local
 
         if (preg_match('/^(.*?)\/([a-z0-9_-]*)$/i', $path, $m)) {
-            list(,$file, $macroName) = $m;
+            list(, $file, $macroName) = $m;
 
             if (isset($this->externalMacroTemplatesCache[$file])) {
                 $tpl = $this->externalMacroTemplatesCache[$file];
@@ -943,7 +943,7 @@ class PHPTAL
             $currentFile = $this->_context->_file;
             $this->_context->_file = $tpl->_file;
 
-            $fun = $tpl->getFunctionName() . '_' . strtr($macroName,"-","_");
+            $fun = $tpl->getFunctionName() . '_' . strtr($macroName, "-", "_");
             if (!function_exists($fun)) {
                 throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file", $this->_source->getRealPath());
             }
@@ -962,7 +962,7 @@ class PHPTAL
             $this->_context->_file = $currentFile;
         } else {
             // call local macro
-            $fun = $local_tpl->getFunctionName() . '_' . strtr($path,"-","_");
+            $fun = $local_tpl->getFunctionName() . '_' . strtr($path, "-", "_");
             if (!function_exists($fun)) {
                 throw new PHPTAL_MacroMissingException("Macro '$path' is not defined", $local_tpl->_source->getRealPath());
             }
@@ -1028,7 +1028,7 @@ class PHPTAL
                 }
 
                 if (!function_exists($this->getFunctionName())) {
-                    $msg = str_replace('eval()\'d code',$this->getCodePath(),ob_get_clean());
+                    $msg = str_replace('eval()\'d code', $this->getCodePath(), ob_get_clean());
 
                     // greedy .* ensures last match
                     if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line=$m[1]; else $line=0;
@@ -1105,7 +1105,7 @@ class PHPTAL
             foreach ($cacheFiles as $index => $file) {
 
                 // comparison here skips filenames that are certainly too new
-                if (strcmp($file,$upperLimit) <= 0 || substr($file, 0, strlen($lowerLimit)) === $lowerLimit) {
+                if (strcmp($file, $upperLimit) <= 0 || substr($file, 0, strlen($lowerLimit)) === $lowerLimit) {
                     $time = filemtime($file);
                     if ($time && $time < $cacheFilesExpire) {
                         @unlink($file);
@@ -1158,8 +1158,8 @@ class PHPTAL
         if (!$this->_functionName) {
 
             // just to make tempalte name recognizable
-            $basename = preg_replace('/\.[a-z]{3,5}$/','',basename($this->_source->getRealPath()));
-            $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_',$basename),"_"), 0,20);
+            $basename = preg_replace('/\.[a-z]{3,5}$/', '', basename($this->_source->getRealPath()));
+            $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_', $basename), "_"), 0, 20);
 
             $hash = md5(PHPTAL_VERSION . PHP_VERSION
                     . $this->_source->getRealPath()
@@ -1192,7 +1192,7 @@ class PHPTAL
     {
         // tpl_ prefix and last modified time must not be changed,
         // because cache cleanup relies on that
-        return 'tpl_' . sprintf("%08x",$timestamp) .'_';
+        return 'tpl_' . sprintf("%08x", $timestamp) .'_';
     }
 
     /**
@@ -1339,7 +1339,7 @@ class PHPTAL
                 }
             }
 
-            if (!class_exists('PHPTAL_FileSourceResolver',false)) self::autoload('PHPTAL_FileSourceResolver');
+            if (!class_exists('PHPTAL_FileSourceResolver', false)) self::autoload('PHPTAL_FileSourceResolver');
 
             $resolver = new PHPTAL_FileSourceResolver($this->_repositories);
             $this->_source = $resolver->resolve($this->_path);
@@ -1388,7 +1388,7 @@ class PHPTAL
      * @return void
      */
     final public static function autoload($class)
-    {        
+    {
         static $except = array(
             'PHPTAL_NamespaceAttributeReplace'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeSurround'=>'PHPTAL_NamespaceAttribute',
@@ -1402,11 +1402,11 @@ class PHPTAL
             'PHPTAL_UnknownModifierException'=>'PHPTAL_Exception',
             'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',
         );
-        
+
         if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
             $class = str_replace(__NAMESPACE__, 'PHPTAL', $class);
-            $class = strtr($class, '\\','_');
-        }        
+            $class = strtr($class, '\\', '_');
+        }
 
         if (substr($class, 0, 7) !== 'PHPTAL_') return;
 
@@ -1414,7 +1414,7 @@ class PHPTAL
             $class = $except[$class];
         }
 
-        $path = dirname(__FILE__) . strtr("_".$class,"_",DIRECTORY_SEPARATOR) . '.php';
+        $path = dirname(__FILE__) . strtr("_".$class, "_", DIRECTORY_SEPARATOR) . '.php';
 
         require $path;
     }

@@ -17,13 +17,13 @@
 // This is needed to run tests ran individually without run-tests.php script
 if (!class_exists('PHPTAL')) {
     ob_start();
-    
+
     // try local copy of PHPTAL first, otherwise it might be testing
     // PEAR version (or another in include path) causing serious WTF!?s.
     if (file_exists(dirname(__FILE__).'/../classes/PHPTAL.php')) {
-        require_once dirname(__FILE__).'/../classes/PHPTAL.php';        
+        require_once dirname(__FILE__).'/../classes/PHPTAL.php';
     } elseif (file_exists(dirname(__FILE__).'/../PHPTAL.php')) {
-        require_once dirname(__FILE__).'/../PHPTAL.php';        
+        require_once dirname(__FILE__).'/../PHPTAL.php';
     } else {
         require_once "PHPTAL.php";
     }
@@ -36,36 +36,36 @@ if (!class_exists('PHPTAL')) {
 abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
 {
     private $cwd_backup, $buffer_level;
-    
+
     function setUp()
-    {        
+    {
         $this->buffer_level = ob_get_level();
-        
+
         // tests rely on cwd being in tests/
         $this->cwd_backup = getcwd();
         chdir(dirname(__FILE__));
 
         ob_start(); // buffer test's output
-                        
+
         parent::setUp();
     }
-    
+
     function tearDown()
     {
         parent::tearDown();
-        
+
         chdir($this->cwd_backup);
 
         $content = ob_get_clean();
-            
+
         // ensure that test hasn't left buffering on
         $unflushed = 0;
-        while(ob_get_level() > $this->buffer_level) {
+        while (ob_get_level() > $this->buffer_level) {
             ob_end_flush(); $unflushed++;
         }
-    
-        if (strlen($content)) throw new Exception("Test {$this->getName()} output: $content");        
-        
+
+        if (strlen($content)) throw new Exception("Test {$this->getName()} output: $content");
+
         if ($unflushed) throw new Exception("Unflushed buffers: $unflushed");
     }
 
@@ -79,7 +79,7 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
         $p = new PHPTAL($tpl);
         $p->setForceReparse(true);
         return $p;
-    }    
+    }
 }
 
 if (function_exists('date_default_timezone_set')) {
@@ -101,15 +101,15 @@ function normalize_html($src) {
 }
 
 function normalize_phpsource($code, $ignore_newlines = false) {
-    
-    $code = str_replace('<?php use pear2\HTML\Template\PHPTAL as P; ?>','',$code);
-    
+
+    $code = str_replace('<?php use pear2\HTML\Template\PHPTAL as P; ?>', '', $code);
+
     $lines = explode("\n", $code);
     $code = "";
     foreach ($lines as $line) {
         $code .= trim($line).($ignore_newlines? '':"\n");
     }
-    
+
     // ignore some no-ops
-    return str_replace(array('<?php ?>','<?php ; ?>','{;'),array('','','{'),$code);
+    return str_replace(array('<?php ?>', '<?php ; ?>', '{;'), array('', '', '{'), $code);
 }

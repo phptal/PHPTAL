@@ -49,7 +49,7 @@ class DummyTranslator implements PHPTAL_TranslationService
 
         if ($escape) $v = htmlspecialchars($v);
 
-        while (preg_match('/\$\{(.*?)\}/sm', $v, $m)){
+        while (preg_match('/\$\{(.*?)\}/sm', $v, $m)) {
             list($src, $var) = $m;
             if (!isset($this->vars[$var])) return "!*$var* is not defined!";
             $v = str_replace($src, $this->vars[$var], $v);

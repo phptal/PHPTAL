@@ -26,10 +26,10 @@ class PhptalUsageTest extends PHPTAL_TestCase
         $t->setTemplate('input/multiuse.02.html');
         $b = $t->execute();
         $this->assertTrue($a != $b, "$a == $b");
-        $this->assertContains('hello',$a);
-        $this->assertContains('hello',$b);
+        $this->assertContains('hello', $a);
+        $this->assertContains('hello', $b);
     }
-        
+
     function testSetSourceReset()
     {
         $t = $this->newPHPTAL();
@@ -38,7 +38,7 @@ class PhptalUsageTest extends PHPTAL_TestCase
         $t->setSource('<p>World</p>');
         $res2 = $t->execute();
 
-        $this->assertNotEquals($res1,$res2);
+        $this->assertNotEquals($res1, $res2);
     }
 }
 

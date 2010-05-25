@@ -18,23 +18,23 @@ require_once dirname(__FILE__)."/config.php";
 PHPTAL::setIncludePath();
 require_once 'PHPTAL/Context.php';
 PHPTAL::restoreIncludePath();
- 
+
 class PhptalPathTest_DummyClass
 {
     public $foo;
-    
+
     protected function protTest()
     {
         return 'prot-method';
     }
-    
+
     public $protTest = 'prot-property';
 
     public function pubTest()
     {
         return 'pub-method';
     }
-    
+
     public $pubTest = 'pub-property';
 }
 
@@ -52,8 +52,8 @@ class PhptalPathTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->obj = new PhptalPathTest_DummyClass();
         $tpl->setSource('<test tal:content="obj/protTest"></test>');
-        
-        $this->assertEquals('<test>prot-property</test>',$tpl->execute());
+
+        $this->assertEquals('<test>prot-property</test>', $tpl->execute());
     }
 
     function testPublicMethodFirst()
@@ -61,8 +61,8 @@ class PhptalPathTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->obj = new PhptalPathTest_DummyClass();
         $tpl->setSource('<test tal:content="obj/pubTest"></test>');
-        
-        $this->assertEquals('<test>pub-method</test>',$tpl->execute());
+
+        $this->assertEquals('<test>pub-method</test>', $tpl->execute());
     }
 
     function testDefinedButNullProperty()

@@ -109,10 +109,10 @@ class XHTMLModeTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL()->setSource('
         <select>
-          <option tal:repeat="option options" tal:attributes="value option/value; 
+          <option tal:repeat="option options" tal:attributes="value option/value;
         selected option/isSelected | nothing" tal:content="option/label"/>
         </select>');
-        
+
         $tpl->options = array(
           array(
              'label' => 'Option1',
@@ -128,7 +128,7 @@ class XHTMLModeTest extends PHPTAL_TestCase
              'value' => 3
           )
         );
-        
+
         $this->assertEquals(normalize_html('<select>
           <option value="1">Option1</option>
           <option value="2" selected="selected">Option2</option>

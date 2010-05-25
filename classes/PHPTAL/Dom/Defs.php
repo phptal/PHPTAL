@@ -45,7 +45,7 @@ class PHPTAL_Dom_Defs
         }
         return self::$_instance;
     }
-    
+
     protected function __construct()
     {
         $this->registerNamespace(new PHPTAL_Namespace_TAL());
@@ -57,7 +57,7 @@ class PHPTAL_Dom_Defs
     /**
      * true if it's empty in XHTML (e.g. <img/>)
      * it will assume elements with no namespace may be XHTML too.
-     * 
+     *
      * @param string $tagName local name of the tag
      *
      * @return bool

@@ -69,7 +69,7 @@ abstract class PHPTAL_NamespaceAttribute
 
     /** PHPTAL_Namespace */
     private $_namespace;
-    
+
     /**
      * @param string $name The attribute name
      * @param int $priority Attribute execution priority

@@ -48,10 +48,10 @@ class TalOmitTagTest extends PHPTAL_TestCase
 
         $tpl->test = $this;
         $tpl->execute();
-        $this->assertEquals(1,$this->call_count);
+        $this->assertEquals(1, $this->call_count);
 
         $tpl->execute();
-        $this->assertEquals(2,$this->call_count);
+        $this->assertEquals(2, $this->call_count);
     }
 
     function testNestedConditions()
@@ -60,7 +60,7 @@ class TalOmitTagTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<span tal:omit-tag="php:true">a<span tal:omit-tag="php:false">b<span tal:omit-tag="php:true">c<span tal:omit-tag="php:false">d<span tal:omit-tag="php:false">e<span tal:omit-tag="php:true">f<span tal:omit-tag="php:true">g</span>h</span>i</span>j</span>k</span></span></span>');
 
-        $this->assertEquals('a<span>bc<span>d<span>efghi</span>j</span>k</span>',$tpl->execute());
+        $this->assertEquals('a<span>bc<span>d<span>efghi</span>j</span>k</span>', $tpl->execute());
     }
 }
 

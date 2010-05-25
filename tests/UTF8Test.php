@@ -20,22 +20,22 @@ class UTF8Test extends PHPTAL_TestCase
     function testFile()
     {
         $this->assertContains(
-            rawurldecode("%D0%97%D0%B0%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B8%D1%80%D1%83%D0%B9%D1%82%D0%B5%D1%81%D1%8C"), 
+            rawurldecode("%D0%97%D0%B0%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B8%D1%80%D1%83%D0%B9%D1%82%D0%B5%D1%81%D1%8C"),
             $this->newPHPTAL('input/utf8.xml')->execute()
         );
     }
-    
+
     function testLipsum()
     {
-            $tpl = $this->newPHPTAL()->setSource(rawurldecode('<?xml version="1.0" encoding="UTF-8"?>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<?xml version="1.0" encoding="UTF-8"?>
                 <test>Lørem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Iñtërnâtiônàlizætiøn, これは日本語のテキストです。読めますか. देखें हिन्दी कैसी नजर आती है। अरे वाह ये तो नजर आती है।. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</test>'))->execute();
     }
-    
+
     function testValidUTF8_1()
     {
-        /* Based on: UTF-8 decoder capability and stress test  
+        /* Based on: UTF-8 decoder capability and stress test
            Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/> - 2003-02-19 */
-        
+
         $tpl = $this->newPHPTAL()->setSource(rawurldecode('<?xml version="1.0" encoding="UTF-8"?>
             <test>
                                                                                              %7C
@@ -54,15 +54,15 @@ class UTF8Test extends PHPTAL_TestCase
 
     function testValidUTF8_2()
     {
-        /* Based on: UTF-8 decoder capability and stress test  
+        /* Based on: UTF-8 decoder capability and stress test
            Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/> - 2003-02-19 */
-        
+
         $tpl = $this->newPHPTAL();
         $tpl->setSource(rawurldecode('<?xml version="1.0" encoding="UTF-8"?>
             <test>                                                                              %7C
             2.2  Last possible sequence of a certain length                               %7C
                                                                                           %7C
-            2.2.1  1 byte  %28U-0000007F%29%3A        %22%7F%22                                        
+            2.2.1  1 byte  %28U-0000007F%29%3A        %22%7F%22
             2.2.2  2 bytes %28U-000007FF%29%3A        %22%DF%BF%22                                       %7C
             2.2.3  3 bytes %28U-0000FFFD%29%3A        %22%EF%BF%BD%22                                       %7C
           </test>'));
@@ -71,9 +71,9 @@ class UTF8Test extends PHPTAL_TestCase
 
     function testValidUTF8_3()
     {
-        /* Based on: UTF-8 decoder capability and stress test  
+        /* Based on: UTF-8 decoder capability and stress test
            Markus Kuhn <http://www.cl.cam.ac.uk/~mgk25/> - 2003-02-19 */
-        
+
         $tpl = $this->newPHPTAL();
         $tpl->setSource(rawurldecode('<?xml version="1.0" encoding="UTF-8"?>
             <test>                                                                                %7C
@@ -85,8 +85,8 @@ class UTF8Test extends PHPTAL_TestCase
                                                                                               %7C</test>'));
         $tpl->execute();
     }
-    
-    
+
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -106,7 +106,7 @@ class UTF8Test extends PHPTAL_TestCase
         3.1.7  6 continuation bytes: "%80%BF%80%BF%80%BF"                                         |
         3.1.8  7 continuation bytes: "%80%BF%80%BF%80%BF%80"                                        |</p>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -120,7 +120,7 @@ class UTF8Test extends PHPTAL_TestCase
                  %A0%A1%A2%A3%A4%A5%A6%A7%A8%A9%AA%AB%AC%AD%AE%AF                                                          |
                  %B0%B1%B2%B3%B4%B5%B6%B7%B8%B9%BA%BB%BC%BD%BE%BF"                                                         |</p>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -178,7 +178,7 @@ class UTF8Test extends PHPTAL_TestCase
                                                                                       |
            "%FC %FD "                                                                     |</p>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -195,7 +195,7 @@ class UTF8Test extends PHPTAL_TestCase
         3.3.2  3-byte sequence with last byte missing %28U%2B0000%29:     "%E0%80"               |
         3.3.3  4-byte sequence with last byte missing %28U%2B0000%29:     "%F0%80%80"               |</p>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -311,7 +311,7 @@ class UTF8Test extends PHPTAL_TestCase
          4.3.2  U%2B0000 %3D e0 80 80          %3D "%E0%80%80"                                       |
          4.3.3  U%2B0000 %3D f0 80 80 80       %3D "%F0%80%80%80"                                       |</p>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -320,7 +320,7 @@ class UTF8Test extends PHPTAL_TestCase
         $this->newPHPTAL()->setSource(rawurldecode('<p title="4.3.4  U%2B0000 %3D f8 80 80 80 80    %3D "%F8%80%80%80%80"                                       |
          4.3.5  U%2B0000 %3D fc 80 80 80 80 80 %3D %FC%80%80%80%80%80   "/>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -334,7 +334,7 @@ class UTF8Test extends PHPTAL_TestCase
         5.1.6  U%2BDF80 %3D ed be 80 %3D "%ED%BE%80"                                                |
         5.1.7  U%2BDFFF %3D ed bf bf %3D "%ED%BF%BF"                                                |</p>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -349,7 +349,7 @@ class UTF8Test extends PHPTAL_TestCase
         5.2.7  U%2BDBFF U%2BDC00 %3D ed af bf ed b0 80 %3D "%ED%AF%BF%ED%B0%80"                               |
         5.2.8  U%2BDBFF U%2BDFFF %3D ed af bf ed bf bf %3D "%ED%AF%BF%ED%BF%BF"                               |</p>'))->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -357,5 +357,5 @@ class UTF8Test extends PHPTAL_TestCase
     {
         $this->newPHPTAL()->setSource(rawurldecode('<p>5.3.1  U%2BFFFE %3D ef bf be %3D "%EF%BF%BE"                                                |
          5.3.2  U%2BFFFF %3D ef bf bf %3D "%EF%BF%BF"                                                |</p>'))->execute();
-    }   
+    }
 }

@@ -30,7 +30,7 @@ class MyPostFilter2 implements PHPTAL_Filter
 {
     public function filter($str)
     {
-        return str_replace('test','test-filtered',$str);
+        return str_replace('test', 'test-filtered', $str);
     }
 }
 
@@ -56,6 +56,6 @@ class PostFilterTest extends PHPTAL_TestCase
         <z metal:use-macro="macro" />
         </x>
         ');
-        $this->assertEquals(normalize_html('<x>test-filtered1<y>test-filtered2</y></x>'),normalize_html($tpl->execute()));
+        $this->assertEquals(normalize_html('<x>test-filtered1<y>test-filtered2</y></x>'), normalize_html($tpl->execute()));
     }
 }

@@ -34,7 +34,7 @@ require_once 'PHPTAL/Dom/ProcessingInstruction.php';
 class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 {
     private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
-    
+
     public function __construct()
     {
         $this->_xmlns = new PHPTAL_Dom_XmlnsState(array(), '');
@@ -54,7 +54,7 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onDocumentStart()
     {
-        $this->documentElement = new PHPTAL_Dom_Element('documentElement', 'http://xml.zope.org/namespaces/tal',array(), $this->getXmlnsState());
+        $this->documentElement = new PHPTAL_Dom_Element('documentElement', 'http://xml.zope.org/namespaces/tal', array(), $this->getXmlnsState());
         $this->documentElement->setSource($this->file, $this->line);
         $this->_current = $this->documentElement;
     }
@@ -63,7 +63,7 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     {
         if (count($this->_stack) > 0) {
             $left='</'.$this->_current->getQualifiedName().'>';
-            for($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->_stack[$i]->getQualifiedName().'>';
+            for ($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->_stack[$i]->getQualifiedName().'>';
             throw new PHPTAL_ParserException("Not all elements were closed before end of the document. Missing: ".$left);
         }
     }
@@ -119,7 +119,7 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
             }
 
-            if ($this->_xmlns->isHandledNamespace($attr_namespace_uri) 
+            if ($this->_xmlns->isHandledNamespace($attr_namespace_uri)
                 && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
                 throw new PHPTAL_ParserException("Attribute '$local_name' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
             }

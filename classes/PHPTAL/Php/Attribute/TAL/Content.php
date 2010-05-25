@@ -60,7 +60,7 @@ implements PHPTAL_Php_TalesChainReader
 
     private function generateDefault(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $this->phpelement->generateContent($codewriter,true);
+        $this->phpelement->generateContent($codewriter, true);
     }
 
     protected function generateChainedContent(PHPTAL_Php_CodeWriter $codewriter, $code)

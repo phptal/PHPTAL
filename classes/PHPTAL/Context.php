@@ -180,7 +180,7 @@ class PHPTAL_Context
                 return $this->_slots[$key];
             }
             ob_start();
-            call_user_func($this->_slots[$key][0],$this->_slots[$key][1],$this->_slots[$key][2]);
+            call_user_func($this->_slots[$key][0], $this->_slots[$key][1], $this->_slots[$key][2]);
             return ob_get_clean();
         } else if ($this->_parentContext) {
             return $this->_parentContext->getSlot($key);
@@ -200,7 +200,7 @@ class PHPTAL_Context
             if (is_string($this->_slots[$key])) {
                 echo $this->_slots[$key];
             } else {
-                call_user_func($this->_slots[$key][0],$this->_slots[$key][1],$this->_slots[$key][2]);
+                call_user_func($this->_slots[$key][0], $this->_slots[$key][1], $this->_slots[$key][2]);
             }
         } else if ($this->_parentContext) {
             return $this->_parentContext->echoSlot($key);
@@ -399,7 +399,7 @@ class PHPTAL_Context
                         $base = $base->__call($current, array());
                         continue;
                     }
-                    catch(BadMethodCallException $e){}
+                    catch(BadMethodCallException $e) {}
                 }
 
                 if ($nothrow) {

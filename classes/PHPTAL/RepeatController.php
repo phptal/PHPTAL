@@ -13,7 +13,7 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
-  
+
 /**
  * Stores tal:repeat information during template execution.
  *
@@ -40,11 +40,11 @@ class PHPTAL_RepeatController implements Iterator
     private $validOnNext;
 
     private $uses_groups = false;
-    
+
     protected $iterator;
     public $index;
     public $end;
-    
+
     /**
      * computed lazily
      */
@@ -67,7 +67,7 @@ class PHPTAL_RepeatController implements Iterator
             $this->iterator = $source;
         } elseif ($source instanceof Traversable) {
             $this->iterator = new IteratorIterator($source);
-        } elseif ($source instanceof DOMNodeList) {            
+        } elseif ($source instanceof DOMNodeList) {
             $array = array();
             foreach ($source as $k=>$v) {
                 $array[$k] = $v;
@@ -233,9 +233,9 @@ class PHPTAL_RepeatController implements Iterator
                 // Compare the current one with the previous in the dictionary
                 $res = $this->groups->first($this->current);
                 return is_bool($res) ? $res : $this->groups;
-                
+
             case 'last':
-                $this->initializeGroups();            
+                $this->initializeGroups();
                 // Compare the next one with the dictionary
                 $res = $this->groups->last( $this->iterator->current() );
                 return is_bool($res) ? $res : $this->groups;

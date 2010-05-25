@@ -41,12 +41,12 @@ implements PHPTAL_Php_TalesChainReader
 {
     /** before creates several variables that need to be freed in after */
     private $vars_to_recycle = array();
-    
+
     /**
      * value for default keyword
      */
     private $_default_escaped;
-    
+
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // split attributes using ; delimiter
@@ -66,7 +66,7 @@ implements PHPTAL_Php_TalesChainReader
 
         // XHTML boolean attribute does not appear when empty or false
         if (PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($qname)) {
-            
+
             // I don't want to mix code for boolean with chained executor
             // so compile it again to simple expression
             if (is_array($code)) {

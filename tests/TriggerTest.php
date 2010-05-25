@@ -66,9 +66,9 @@ class TriggerTest extends PHPTAL_TestCase
     public function setUp()
     {
         parent::setUp();
-        
+
         if (!is_writable('.')) $this->markTestSkipped();
-        
+
         if (file_exists('trigger.10')) unlink('trigger.10');
         if (file_exists('trigger.11')) unlink('trigger.11');
     }
@@ -77,7 +77,7 @@ class TriggerTest extends PHPTAL_TestCase
     {
         if (file_exists('trigger.10')) unlink('trigger.10');
         if (file_exists('trigger.11')) unlink('trigger.11');
-        
+
         parent::tearDown();
     }
 

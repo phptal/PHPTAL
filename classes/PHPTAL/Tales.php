@@ -27,19 +27,19 @@ interface PHPTAL_Tales
 {
 }
 
- 
- /**
-  * translates TALES expression with alternatives into single PHP expression. 
-  * Identical to phptal_tales() for singular expressions.
-  * 
-  * Please use this function rather than PHPTAL_Php_TalesInternal methods.
-  *
-  * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
-  * @return string
+
+/**
+ * translates TALES expression with alternatives into single PHP expression.
+ * Identical to phptal_tales() for singular expressions.
+ *
+ * Please use this function rather than PHPTAL_Php_TalesInternal methods.
+ *
+ * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
+ * @return string
  */
 function phptal_tale($expression, $nothrow=false)
 {
-    return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression,$nothrow);
+    return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression, $nothrow);
 }
 
 /**
@@ -54,6 +54,6 @@ function phptal_tale($expression, $nothrow=false)
  */
 function phptal_tales($expression, $nothrow=false)
 {
-    return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression,$nothrow);
+    return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression, $nothrow);
 }
 

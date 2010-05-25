@@ -65,7 +65,7 @@ class TalConditionTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block tal:condition="foo | bar | baz | nothing">fail!</tal:block>');
         $res = $tpl->execute();
-        $this->assertEquals($res,'');
+        $this->assertEquals($res, '');
     }
 
     function testChainedTrue()
@@ -73,7 +73,7 @@ class TalConditionTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block tal:condition="foo | bar | baz | \'ok!\'">ok</tal:block>');
         $res = $tpl->execute();
-        $this->assertEquals($res,'ok');
+        $this->assertEquals($res, 'ok');
     }
 
     function testChainedShortCircuit()
@@ -81,6 +81,6 @@ class TalConditionTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block tal:condition="foo | \'ok!\' | bar | nothing">ok</tal:block>');
         $res = $tpl->execute();
-        $this->assertEquals($res,'ok');
+        $this->assertEquals($res, 'ok');
     }
 }

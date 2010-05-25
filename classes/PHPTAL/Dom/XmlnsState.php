@@ -72,7 +72,7 @@ class PHPTAL_Dom_XmlnsState
         foreach ($nodeAttributes as $qname => $value) {
             if (preg_match('/^xmlns:(.+)$/', $qname, $m)) {
                 $changed = true;
-                list(,$prefix) = $m;
+                list(, $prefix) = $m;
                 $prefix_to_uri[$prefix] = $value;
             }
 

@@ -29,7 +29,7 @@ class PHPTAL_Php_State
 
     function __construct(PHPTAL $phptal)
     {
-        $this->phptal = $phptal; 
+        $this->phptal = $phptal;
         $this->encoding = $phptal->getEncoding();
         $this->output_mode = $phptal->getOutputMode();
     }
@@ -63,7 +63,7 @@ class PHPTAL_Php_State
     /**
      * Sets new and returns old TALES mode.
      * Valid modes are 'tales' and 'php'
-     * 
+     *
      * @param string $mode
      *
      * @return string
@@ -115,19 +115,19 @@ class PHPTAL_Php_State
         if ($this->getTalesMode() === 'php') {
             return PHPTAL_Php_TalesInternal::php($expression);
         }
-        return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression,false);
+        return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression, false);
     }
 
     /**
      * compile TALES expression according to current talesMode
-     * @return string with PHP code 
+     * @return string with PHP code
      */
     private function compileTalesToPHPExpression($expression)
     {
         if ($this->getTalesMode() === 'php') {
             return PHPTAL_Php_TalesInternal::php($expression);
         }
-        return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression,false);
+        return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression, false);
     }
 
     /**
@@ -142,7 +142,7 @@ class PHPTAL_Php_State
         }
 
         // replace ${var} found in expression
-        while (preg_match('/(?<!\$)\$\{([^\}]+)\}/s', $string, $m)){
+        while (preg_match('/(?<!\$)\$\{([^\}]+)\}/s', $string, $m)) {
             list($ori, $exp) = $m;
             $php  = PHPTAL_Php_TalesInternal::php($exp);
             $string = str_replace($ori, '\'.('.$php.').\'', $string); // FIXME: that is not elegant
@@ -159,7 +159,7 @@ class PHPTAL_Php_State
         return preg_replace_callback('/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
                                      array($this,'_interpolateTalesVarsInHTMLCallback'), $src);
     }
-        
+
     /**
      * callback for interpolating TALES with HTML-escaping
      */
@@ -178,32 +178,32 @@ class PHPTAL_Php_State
         return preg_replace_callback('/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
                                      array($this,'_interpolateTalesVarsInCDATACallback'), $src);
     }
-    
+
     /**
      * callback for interpolating TALES with CDATA escaping
      */
     private function _interpolateTalesVarsInCDATACallback($matches)
     {
-        return $this->_interpolateTalesVarsCallback($matches, 'cdata');        
+        return $this->_interpolateTalesVarsCallback($matches, 'cdata');
     }
 
     private function _interpolateTalesVarsCallback($matches, $format)
     {
         // replaces $${ with literal ${ (or $$$${ with $${ etc)
         if (!empty($matches[4])) {
-            return substr($matches[4],strlen($matches[4])/2).'{';
+            return substr($matches[4], strlen($matches[4])/2).'{';
         }
-        
+
         // same replacement, but before executed expression
-        $dollars = substr($matches[1], strlen($matches[1])/2);        
-        
-        $code = $matches[3];        
+        $dollars = substr($matches[1], strlen($matches[1])/2);
+
+        $code = $matches[3];
         if ($format == 'html') {
-            $code = html_entity_decode($code,ENT_QUOTES, $this->getEncoding());        
+            $code = html_entity_decode($code, ENT_QUOTES, $this->getEncoding());
         }
-        
-        $code = $this->compileTalesToPHPExpression($code);                
-        
+
+        $code = $this->compileTalesToPHPExpression($code);
+
         if (rtrim($matches[2]) == 'structure') { // regex captures a space there
             return $dollars.'<?php echo '.$this->stringify($code)." ?>\n";
         } else {
@@ -219,10 +219,10 @@ class PHPTAL_Php_State
                     return $dollars."<?php echo strtr(".$this->stringify($code)." ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>\n";
                 } else {
                     return $dollars."<?php echo str_replace(']]>',']]]]><![CDATA[>', ".$this->stringify($code).") ?>\n";
-                }         
+                }
             }
             assert(0);
-        }            
+        }
     }
 
     /**
@@ -235,7 +235,7 @@ class PHPTAL_Php_State
     {
         // PHP strings can be escaped at compile time
         if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/s', $php, $m)) {
-            return "'".htmlspecialchars(str_replace('\\\'',"'", $m[1]), ENT_QUOTES)."'";
+            return "'".htmlspecialchars(str_replace('\\\'', "'", $m[1]), ENT_QUOTES)."'";
         }
         return 'phptal_escape('.$php.')';
     }

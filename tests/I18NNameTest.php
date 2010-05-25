@@ -43,7 +43,7 @@ class I18NNameTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/i18n-name-03.html');
         $tpl->setTranslator( new DummyTranslator() );
         $tpl->mylogin_var = '<mylogin>';
-        
+
         $res = $tpl->execute();
         $res = normalize_html($res);
         $exp = normalize_html_file('output/i18n-name-03.html');

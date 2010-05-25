@@ -20,7 +20,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     function testArrayRepeat()
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.01.html');
-        $tpl->array = range(0,4);
+        $tpl->array = range(0, 4);
         $res = normalize_html($tpl->execute());
         $exp = normalize_html_file('output/tal-repeat.01.html');
         $this->assertEquals($exp, $res);
@@ -29,7 +29,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     function testOddEventAndFriends()
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.02.html');
-        $tpl->array = range(0,2);
+        $tpl->array = range(0, 2);
         $res = normalize_html($tpl->execute());
         $exp = normalize_html_file('output/tal-repeat.02.html');
         $this->assertEquals($exp, $res);
@@ -49,9 +49,9 @@ class TalRepeatTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"></p></div>');
-        $tpl->aobj = new MyArrayObj(array(1,2,3));
+        $tpl->aobj = new MyArrayObj(array(1, 2, 3));
 
-        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p><p>1</p><p>2</p><p>3</p></div>',$tpl->execute());
+        $this->assertEquals('<div><p>1</p><p>2</p><p>3</p><p>1</p><p>2</p><p>3</p></div>', $tpl->execute());
     }
 
     function testArrayObjectOneElement()
@@ -60,7 +60,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"></p></div>');
         $tpl->aobj = new MyArrayObj(array(1));
 
-        $this->assertEquals('<div><p>1</p><p>1</p></div>',$tpl->execute());
+        $this->assertEquals('<div><p>1</p><p>1</p></div>', $tpl->execute());
     }
 
     function testArrayObjectZeroElements()
@@ -69,25 +69,25 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl->setSource('<div><p tal:repeat="a aobj" tal:content="a"></p><p tal:repeat="a aobj" tal:content="a"/></div>');
         $tpl->aobj = new MyArrayObj(array());
 
-        $this->assertEquals('<div></div>',$tpl->execute());
+        $this->assertEquals('<div></div>', $tpl->execute());
     }
 
     function testArrayObjectAggregated()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj">${a}${repeat/a/length}</p></div>');
-        $tpl->aobj = new MyArrayObj(new MyArrayObj(array("1","2","3",null)));
+        $tpl->aobj = new MyArrayObj(new MyArrayObj(array("1", "2", "3", null)));
 
-        $this->assertEquals('<div><p>14</p><p>24</p><p>34</p><p>4</p></div>',$tpl->execute());
+        $this->assertEquals('<div><p>14</p><p>24</p><p>34</p><p>4</p></div>', $tpl->execute());
     }
 
     function testArrayObjectNested()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<div><p tal:repeat="a aobj">${a}<b tal:repeat="b aobj" tal:content="b"/></p></div>');
-        $tpl->aobj = new MyArrayObj(array("1","2"));
+        $tpl->aobj = new MyArrayObj(array("1", "2"));
 
-        $this->assertEquals('<div><p>1<b>1</b><b>2</b></p><p>2<b>1</b><b>2</b></p></div>',$tpl->execute());
+        $this->assertEquals('<div><p>1<b>1</b><b>2</b></p><p>2<b>1</b><b>2</b></p></div>', $tpl->execute());
     }
 
     function testHashKey()
@@ -103,7 +103,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     function testRepeatAttributesWithPhp()
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.05.html');
-        $tpl->data = array(1,2,3);
+        $tpl->data = array(1, 2, 3);
         $res = normalize_html($tpl->execute());
         $exp = normalize_html_file('output/tal-repeat.05.html');
         $this->assertEquals($exp, $res);
@@ -113,7 +113,7 @@ class TalRepeatTest extends PHPTAL_TestCase
     function testRepeatAttributesWithMacroPhp()
     {
         $tpl = $this->newPHPTAL('input/tal-repeat.06.html');
-        $tpl->data = array(1,2,3);
+        $tpl->data = array(1, 2, 3);
         $res = normalize_html($tpl->execute());
         $exp = normalize_html_file('output/tal-repeat.06.html');
         $this->assertEquals($exp, $res);
@@ -133,9 +133,9 @@ class TalRepeatTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL();
         $tpl->y = 'somearray';
-        $tpl->somearray = array(1=>9,9,9);
+        $tpl->somearray = array(1=>9, 9, 9);
         $tpl->setSource('<div tal:repeat="x php:${y}">${repeat/x/key}</div>');
-        $this->assertEquals('<div>1</div><div>2</div><div>3</div>',$tpl->execute());
+        $this->assertEquals('<div>1</div><div>2</div><div>3</div>', $tpl->execute());
     }
 
     function testTraversableRepeat()
@@ -147,7 +147,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl->setSource('<tal:block tal:repeat="node nodes"><tal:block tal:condition="php:repeat.node.index==4">(len=${repeat/node/length})</tal:block>${repeat/node/key}${node/tagName}</tal:block>');
         $tpl->nodes = $doc->getElementsByTagName('*');
 
-        $this->assertEquals('0a1b2c3d(len=7)4e5f6g',$tpl->execute());
+        $this->assertEquals('0a1b2c3d(len=7)4e5f6g', $tpl->execute());
 
     }
 
@@ -247,12 +247,12 @@ class TalRepeatTest extends PHPTAL_TestCase
 
     function testSameCallsAsForeach()
     {
-        $foreach = new LogIteratorCalls(array(1,2,3));
+        $foreach = new LogIteratorCalls(array(1, 2, 3));
 
         foreach ($foreach as $k => $x) {
         }
 
-        $controller = new LogIteratorCalls(array(1,2,3));
+        $controller = new LogIteratorCalls(array(1, 2, 3));
 
         $phptal = $this->newPHPTAL();
         $phptal->iter = $controller;
@@ -297,7 +297,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->iter = new MyIterable(10);
         $tpl->setSource('<tal:block tal:repeat="i iter">${repeat/i/start}[${repeat/i/key}/${repeat/i/length}]${repeat/i/end}</tal:block>');
-        $this->assertEquals("1[0/]00[1/]00[2/]00[3/]00[4/]00[5/]00[6/]00[7/]00[8/]00[9/10]1", $tpl->execute(),$tpl->getCodePath());
+        $this->assertEquals("1[0/]00[1/]00[2/]00[3/]00[4/]00[5/]00[6/]00[7/]00[8/]00[9/10]1", $tpl->execute(), $tpl->getCodePath());
     }
 
     function testPushesContext()

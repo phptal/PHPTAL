@@ -16,7 +16,7 @@
 require_once dirname(__FILE__)."/config.php";
 
 class TalesPhpTest extends PHPTAL_TestCase {
-    
+
     function testMix()
     {
         $tpl = $this->newPHPTAL('input/php.html');
@@ -24,14 +24,14 @@ class TalesPhpTest extends PHPTAL_TestCase {
         $tpl->foo = 'real';
         $res = normalize_html($tpl->execute());
         $exp = normalize_html_file('output/php.html');
-        $this->assertEquals($exp,$res);
+        $this->assertEquals($exp, $res);
     }
-    
+
     function testPHPAttribute()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<foo bar="<?php  echo  \'baz\' ; ?>"/>');
-        $this->assertEquals('<foo bar="baz"></foo>',$tpl->execute());
+        $this->assertEquals('<foo bar="baz"></foo>', $tpl->execute());
     }
 }
 

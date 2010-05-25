@@ -23,16 +23,16 @@ abstract class PHPTAL_Dom_DocumentBuilder
 {
     protected $_stack;   /* array<PHPTAL_Dom_Node> */
     protected $_current; /* PHPTAL_Dom_Node */
-    
+
     protected $file, $line;
-    
-    public function __construct() 
+
+    public function __construct()
     {
         $this->_stack = array();
     }
-    
+
     abstract public function getResult();
-    
+
     abstract public function onDocumentStart();
 
     abstract public function onDocumentEnd();

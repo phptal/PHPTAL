@@ -43,7 +43,7 @@ implements PHPTAL_Php_TalesChainReader
     private $_defineScope = null;
     private $_defineVar = null;
     private $_pushedContext = false;
-    
+
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $expressions = $codewriter->splitExpression($this->expression);
@@ -58,7 +58,7 @@ implements PHPTAL_Php_TalesChainReader
             $this->_defineScope = $defineScope;
 
             // <span tal:define="global foo" /> should be invisible, but <img tal:define="bar baz" /> not
-            if ($defineScope != 'global') $definesAnyNonGlobalVars = true; 
+            if ($defineScope != 'global') $definesAnyNonGlobalVars = true;
 
             if ($this->_defineScope != 'global' && !$this->_pushedContext) {
                 $codewriter->pushContext();
@@ -130,8 +130,8 @@ implements PHPTAL_Php_TalesChainReader
         if (!$islast) {
             // must use temp variable, because expression could refer to itself
             $tmp = $cw->createTempVariable();
-                $executor->doIf('('.$tmp.' = '.$exp.') !== null');
-                $cw->doSetVar($var, $tmp);
+            $executor->doIf('('.$tmp.' = '.$exp.') !== null');
+            $cw->doSetVar($var, $tmp);
             $cw->recycleTempVariable($tmp);
         } else {
             $executor->doIf('('.$var.' = '.$exp.') !== null');
@@ -149,7 +149,7 @@ implements PHPTAL_Php_TalesChainReader
         // extract defineScope from expression
         $exp = trim($exp);
         if (preg_match('/^(local|global)\s+(.*?)$/ism', $exp, $m)) {
-            list(,$defineScope, $exp) = $m;
+            list(, $defineScope, $exp) = $m;
             $exp = trim($exp);
         }
 

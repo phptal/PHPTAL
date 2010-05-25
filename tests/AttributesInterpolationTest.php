@@ -124,7 +124,7 @@ EOT;
 
     public function testPHPBlockShort()
     {
-        ini_set('short_open_tag',1);
+        ini_set('short_open_tag', 1);
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
         $tpl = $this->newPHPTAL();

@@ -186,9 +186,9 @@ class PhptalTest extends PHPTAL_TestCase
         $tpl->foo = '<p>hello</p>';
         $res = $tpl->execute();
         $exp = normalize_html_file('output/phptal.06.html');
-        $this->assertEquals($exp,$res);
+        $this->assertEquals($exp, $res);
     }
-    
+
     function testDirAsTemplate()
     {
         try {
@@ -202,15 +202,15 @@ class PhptalTest extends PHPTAL_TestCase
         catch(PHPTAL_Exception $e) {
             $this->fail("Thrown exception ".get_class($e)." (".$e->getMessage().") rather than PHPTAL_IOException");
         }
-    }    
-    
+    }
+
     function testEncodingUppercase()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setEncoding('utf-8');
         $this->assertEquals('UTF-8', $tpl->getEncoding());
     }
-    
+
     /**
      * @expectedException PHPTAL_TemplateException
      */
@@ -218,7 +218,7 @@ class PhptalTest extends PHPTAL_TestCase
     {
         $this->newPHPTAL()->setSource('<x tal:content="php:\'deliberate parse\' \'error test\'"/>')->execute();
     }
-    
+
     /**
      * @expectedException PHPTAL_ConfigurationException
      */
@@ -226,28 +226,28 @@ class PhptalTest extends PHPTAL_TestCase
     {
         $this->newPHPTAL()->execute();
     }
-    
+
     function testCreateMethod()
     {
         $obj = PHPTAL::create();
-        $this->assertType('PHPTAL',$obj);
-        
+        $this->assertType('PHPTAL', $obj);
+
         try {
-            $obj->execute(); 
-            $this->fail("Should not execute without template"); 
+            $obj->execute();
+            $this->fail("Should not execute without template");
         }
         catch(PHPTAL_ConfigurationException $e) {
-            $this->assertContains('No template',$e->getMessage());
+            $this->assertContains('No template', $e->getMessage());
         }
     }
-    
+
     function testCreateWithFileMethod()
     {
         $obj = PHPTAL::create('input/phptal.01.html');
-        $this->assertType('PHPTAL',$obj);        
+        $this->assertType('PHPTAL', $obj);
         $obj->getCodePath();
-    }    
-    
-    
-    
+    }
+
+
+
 }
