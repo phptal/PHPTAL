@@ -218,7 +218,8 @@ class PhptalTest extends PHPTAL_TestCase
      */
     function testPHPParseErrorDoesNotStopPHPTAL2()
     {
-        $this->newPHPTAL()->setSource('<x tal:content="php:\'deliberate parse\' \'error test\'"/>')->execute();
+        $tpl = $this->newPHPTAL()->setSource('<x tal:content="php:\'deliberate parse\' \'error test\'"/>');
+        @$tpl->execute(); // if test dies for no apparent reason, the reason is '@'
     }
 
     /**
