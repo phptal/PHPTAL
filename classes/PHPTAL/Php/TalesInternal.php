@@ -148,10 +148,10 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         if (count($exps) > 1 || isset($string)) {
             $result = array();
             foreach ($exps as $exp) {
-                $result[] = self::compileToPHPStatements(trim($exp), true);
+                $result[] = self::compileToPHPExpressions(trim($exp), true);
             }
             if (isset($string)) {
-                $result[] = self::compileToPHPStatements($string, true);
+                $result[] = self::compileToPHPExpressions($string, true);
             }
             return $result;
         }
@@ -384,25 +384,25 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
     /**
      * translates TALES expression with alternatives into single PHP expression.
-     * Identical to compileExpressionToStatements() for singular expressions.
+     * Identical to compileToPHPExpressions() for singular expressions.
      *
-     * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
+     * @see PHPTAL_Php_TalesInternal::compileToPHPExpressions()
      * @return string
      */
     public static function compileToPHPExpression($expression, $nothrow=false)
     {
-        $r = self::compileToPHPStatements($expression, $nothrow);
+        $r = self::compileToPHPExpressions($expression, $nothrow);
         if (!is_array($r)) return $r;
 
         // this weird ternary operator construct is to execute noThrow inside the expression
-        return '($ctx->noThrow(true)||1?'.self::convertStatementsToExpression($r, $nothrow).':"")';
+        return '($ctx->noThrow(true)||1?'.self::convertExpressionsToExpression($r, $nothrow).':"")';
     }
 
     /*
-     * helper function for compileExpressionToExpression
+     * helper function for compileToPHPExpression
      * @access private
      */
-    private static function convertStatementsToExpression(array $array, $nothrow)
+    private static function convertExpressionsToExpression(array $array, $nothrow)
     {
         if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
             ($array[0]==self::NOTHING_KEYWORD?'null':$array[0]).
@@ -410,7 +410,16 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
         $expr = array_shift($array);
 
-        return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:".self::convertStatementsToExpression($array, $nothrow).')';
+        return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:".self::convertExpressionsToExpression($array, $nothrow).')';
+    }
+
+    /**
+     * @deprecated
+     */
+    public static function compileToPHPStatements($expression, $nothrow=false)
+    {
+        trigger_error("Use phptal_tales() instead", E_USER_WARNING);
+        return self::compileToPHPExpressions($expression, $nothrow);
     }
 
     /**
@@ -424,7 +433,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      *
      * @return string or array
      */
-    public static function compileToPHPStatements($expression, $nothrow=false)
+    public static function compileToPHPExpressions($expression, $nothrow=false)
     {
         $expression = trim($expression);
 
@@ -468,6 +477,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             return $func($expression, $nothrow);
         }
 
+        // The following code is automatically modified in version for PHP 5.3
         $func = 'PHPTALNAMESPACE\\phptal_tales_'.str_replace('-', '_', $typePrefix);
         if (function_exists($func)) {
             return $func($expression, $nothrow);

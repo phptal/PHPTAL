@@ -33,7 +33,7 @@ interface PHPTAL_Tales
  *
  * Please use this function rather than PHPTAL_Php_TalesInternal methods.
  *
- * @see PHPTAL_Php_TalesInternal::compileToPHPStatements()
+ * @see PHPTAL_Php_TalesInternal::compileToPHPExpressions()
  * @return string
  */
 function phptal_tale($expression, $nothrow=false)
@@ -53,6 +53,6 @@ function phptal_tale($expression, $nothrow=false)
  */
 function phptal_tales($expression, $nothrow=false)
 {
-    return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression, $nothrow);
+    return PHPTAL_Php_TalesInternal::compileToPHPExpressions($expression, $nothrow);
 }
 

@@ -33,7 +33,7 @@ class TalesTest extends PHPTAL_TestCase
     function testString()
     {
         $src = 'string:foo bar baz';
-        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
         $this->assertEquals("'foo bar baz'", $res);
 
         $src = "'foo bar baz'";
@@ -44,7 +44,7 @@ class TalesTest extends PHPTAL_TestCase
     function testPhp()
     {
         $src = 'php: foo.x[10].doBar()';
-        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
         $this->assertEquals('$ctx->foo->x[10]->doBar()', $res);
     }
 
@@ -58,21 +58,21 @@ class TalesTest extends PHPTAL_TestCase
     function testNot()
     {
         $src = "not: php: foo()";
-        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
         $this->assertEquals("!(foo())", $res);
     }
 
     function testNotVar()
     {
         $src = "not:foo";
-        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
         $this->assertEquals('!($ctx->foo)', $res);
     }
 
     function testNotPath()
     {
         $src = "not:foo/bar/baz";
-        $res = PHPTAL_Php_TalesInternal::compileToPHPStatements($src);
+        $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
         $this->assertEquals('!($ctx->path($ctx->foo, \'bar/baz\'))', $res);
     }
 
@@ -110,7 +110,7 @@ class TalesTest extends PHPTAL_TestCase
 
     function testInterpolate1()
     {
-        $this->assertEquals('$ctx->{$ctx->path($ctx->some, \'path\')}', PHPTAL_Php_TalesInternal::compileToPHPStatements('${some/path}'));
+        $this->assertEquals('$ctx->{$ctx->path($ctx->some, \'path\')}', PHPTAL_Php_TalesInternal::compileToPHPExpressions('${some/path}'));
     }
 
     function testInterpolate2()
@@ -120,7 +120,7 @@ class TalesTest extends PHPTAL_TestCase
 
     function testInterpolate3()
     {
-        $this->assertEquals('$ctx->path($ctx->meh, $ctx->path($ctx->some, \'path\'))', PHPTAL_Php_TalesInternal::compileToPHPStatements('meh/${some/path}'));
+        $this->assertEquals('$ctx->path($ctx->meh, $ctx->path($ctx->some, \'path\'))', PHPTAL_Php_TalesInternal::compileToPHPExpressions('meh/${some/path}'));
     }
 
     function testInterpolate4()
@@ -130,7 +130,7 @@ class TalesTest extends PHPTAL_TestCase
 
     function testSuperglobals()
     {
-        $this->assertEquals('$ctx->path($ctx->{\'_GET\'}, \'a\')', PHPTAL_Php_TalesInternal::compileToPHPStatements('_GET/a'));
+        $this->assertEquals('$ctx->path($ctx->{\'_GET\'}, \'a\')', PHPTAL_Php_TalesInternal::compileToPHPExpressions('_GET/a'));
     }
 
     function testInterpolatedPHP1()

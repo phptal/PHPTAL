@@ -114,7 +114,7 @@ class PHPTAL_Php_State
         if ($this->getTalesMode() === 'php') {
             return PHPTAL_Php_TalesInternal::php($expression);
         }
-        return PHPTAL_Php_TalesInternal::compileToPHPStatements($expression, false);
+        return PHPTAL_Php_TalesInternal::compileToPHPExpressions($expression, false);
     }
 
     /**
