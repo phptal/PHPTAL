@@ -451,6 +451,28 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $typePrefix = 'path';
         }
 
+        $result = self::getPHPExpressionsForModifier($typePrefix, $expression, $nothrow);
+
+        self::verifyPHPExpressions($typePrefix, $result);
+
+        return $result;
+    }
+
+    private static function verifyPHPExpressions($typePrefix,$expressions)
+    {
+        if (!is_array($expressions)) {
+            $expressions = array($expressions);
+        }
+
+        foreach($expressions as $expr) {
+            if (preg_match('/;\s*$/', $expr)) {
+                throw new PHPTAL_ParserException("Modifier $typePrefix generated PHP statement rather than expression (don't add semicolons)");
+            }
+        }
+    }
+
+    protected static function getPHPExpressionsForModifier($typePrefix, $expression, $nothrow)
+    {
         // is a registered TALES expression modifier
         if (PHPTAL_TalesRegistry::getInstance()->isRegistered($typePrefix)) {
             $callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);
