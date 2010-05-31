@@ -61,7 +61,7 @@ class PHPTAL
 
     /**
      * Prefilters have been redesigned. Old property is no longer used.
-     * 
+     *
      * @deprecated
      */
     private $_prefilter = 'REMOVED: DO NOT USE';
@@ -121,12 +121,12 @@ class PHPTAL
      * current execution context
      */
     protected $_context = null;
-    
+
     /**
      * current template file (changes within macros)
      */
     protected $_file = false;
-    
+
     /**
      * list of on-error caught exceptions
      */
@@ -336,8 +336,8 @@ class PHPTAL
     public function stripComments($bool)
     {
         $this->resetPrepared();
-        
-        if ($bool) {            
+
+        if ($bool) {
             $this->_prefilters['_phptal_strip_comments_'] = new PHPTAL_PreFilter_StripComments();
         } else {
             unset($this->prefilters['_phptal_strip_comments_']);
@@ -361,7 +361,7 @@ class PHPTAL
     public function setOutputMode($mode)
     {
         $this->resetPrepared();
-        
+
         if ($mode != PHPTAL::XHTML && $mode != PHPTAL::XML && $mode != PHPTAL::HTML5) {
             throw new PHPTAL_ConfigurationException('Unsupported output mode '.$mode);
         }
@@ -382,14 +382,14 @@ class PHPTAL
 
     /**
      * Set input and ouput encoding. Encoding is case-insensitive.
-     * 
+     *
      * @param string $enc example: 'UTF-8'
      *
      * @return $this
      */
     public function setEncoding($enc)
     {
-        $enc = strtoupper($enc);        
+        $enc = strtoupper($enc);
         if ($enc != $this->_encoding) {
             $this->_encoding = $enc;
             if ($this->_translator) $this->_translator->setEncoding($enc);
@@ -502,7 +502,7 @@ class PHPTAL
 
     /**
      * Please use addPreFilter instead.
-     * 
+     *
      * This method and use of PHPTAL_Filter for prefilters are deprecated.
      *
      * @see PHPTAL::addPreFilter()
@@ -515,12 +515,12 @@ class PHPTAL
     }
 
     /**
-     * Add new prefilter to filter chain. 
+     * Add new prefilter to filter chain.
      * Prefilters are called only once template is compiled.
-     * 
+     *
      * PreFilters must inherit PHPTAL_PreFilter class.
      * (in future this method will allow string with filter name instead of object)
-     * 
+     *
      * @param mixed $filter PHPTAL_PreFilter object or name of prefilter to add
      *
      * @return PHPTAL
@@ -528,11 +528,11 @@ class PHPTAL
     final public function addPreFilter($filter)
     {
         $this->resetPrepared();
-        
+
         if (!$filter instanceof PHPTAL_PreFilter) {
             throw new PHPTAL_ConfigurationException("addPreFilter expects PHPTAL_PreFilter object");
         }
-        
+
         $this->prefilters[] = $filter;
         return $this;
     }
@@ -540,9 +540,9 @@ class PHPTAL
     /**
      * Array with all prefilter objects *or strings* that are names of prefilter classes.
      * (the latter is not implemented in 1.2.1)
-     * 
+     *
      * Array keys may be non-numeric!
-     * 
+     *
      * @return array
      */
     protected function getPreFilters()
@@ -555,7 +555,7 @@ class PHPTAL
      * Result of prefilters may be cached until this string changes.
      *
      * You can override this function.
-     * 
+     *
      * @return string
      */
     protected function getPreFiltersCacheId()
@@ -581,7 +581,7 @@ class PHPTAL
     private function getPreFilterInstances()
     {
         $prefilters = $this->getPreFilters();
-        
+
         foreach($prefilters as $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {
                 $prefilter->setPHPTAL($this);
@@ -589,13 +589,13 @@ class PHPTAL
         }
         return $prefilters;
     }
-    
+
     /**
      * Set template post filter.
      * It will be called every time after template generates output.
-     * 
+     *
      * See PHPTAL_PostFilter class.
-     * 
+     *
      * @param PHPTAL_Filter $filter filter instance
      */
     public function setPostFilter(PHPTAL_Filter $filter)
@@ -616,7 +616,7 @@ class PHPTAL
 
     /**
      * Returns trigger for specified phptal:id.
-     * 
+     *
      * @param string $id phptal:id
      *
      * @return PHPTAL_Trigger or NULL
@@ -803,8 +803,8 @@ class PHPTAL
      * execution of macros from templates.
      *
      * $this is caller's context (the file where execution had originally started)
-     * 
-     * @param PHPTAL $local_tpl is PHPTAL instance of the file in which macro is defined 
+     *
+     * @param PHPTAL $local_tpl is PHPTAL instance of the file in which macro is defined
      *                          (it will be different from $this if it's external macro call)
      * @access private
      */
@@ -949,7 +949,7 @@ class PHPTAL
 
     /**
      * set how long compiled templates and phptal:cache files are kept
-     * 
+     *
      * @param $days number of days
      */
     public function setCacheLifetime($days)
@@ -1098,7 +1098,7 @@ class PHPTAL
 
     /**
      * Returns array of exceptions caught by tal:on-error attribute.
-     * 
+     *
      * @return array<Exception>
      */
     public function getErrors()
@@ -1108,7 +1108,7 @@ class PHPTAL
 
     /**
      * Public for phptal templates, private for user.
-     * 
+     *
      * @return void
      * @access private
      */
@@ -1130,7 +1130,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
-     * 
+     *
      * @access private
      */
     public function getGlobalContext()
@@ -1140,7 +1140,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
-     * 
+     *
      * @access private
      */
     final public function pushContext()
@@ -1151,7 +1151,7 @@ class PHPTAL
 
     /**
      * only for use in generated template code
-     * 
+     *
      * @access private
      */
     final public function popContext()
@@ -1162,7 +1162,7 @@ class PHPTAL
 
     /**
      * Parse currently set template, prefilter and generate PHP code.
-     * 
+     *
      * @return string (compiled PHP code)
      */
     protected function parse()
@@ -1189,7 +1189,7 @@ class PHPTAL
                 }
             }
         }
-        
+
         $state = new PHPTAL_Php_State($this);
 
         $codewriter = new PHPTAL_Php_CodeWriter($state);
@@ -1245,7 +1245,7 @@ class PHPTAL
 
     /**
      * Restore include path to state before PHPTAL modified it.
-     * 
+     *
      * @deprecated
      * @return void
      */

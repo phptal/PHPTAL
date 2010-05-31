@@ -426,13 +426,13 @@ catch (Exception $e){
 
     <section id="tal-namespace">
       <title><acronym>TAL</acronym>-Namensraum</title>
-      
+
       <para>
         Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/tal</code>. Um das <code>tal:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
-      
+
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
-        
+
         <note>
           <para>
             PHPTAL erzwingt diese Angabe nicht.
@@ -865,15 +865,15 @@ title="google search engine">the google search engine</a>
       <para>
         Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/metal</code>. Um das <code>metal:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
-      
+
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
-        
+
         <note>
           <para>
             PHPTAL erzwingt diese Angabe nicht.
           </para>
         </note>
-        
+
       <para>
         <acronym>METAL</acronym> ist die Kurzform für „Macro Extension for <acronym>TAL</acronym>“. Dieser Namensraum erlaubt es Vorlagendesignern, Makros zu definieren und aufzurufen. Makros können für die rekursive Ausgabe von Daten oder zum Einbinden von Code aus anderen Vorlagen verwendet werden.
       </para>
@@ -1010,7 +1010,7 @@ title="google search engine">the google search engine</a>
 
     <section id="i18n">
       <title><acronym>I18N</acronym> Namensraum</title>
-      
+
       <para>
         Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://xml.zope.org/namespaces/i18n</code>. Um das <code>i18n:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
@@ -1167,15 +1167,15 @@ title="google search engine">the google search engine</a>
       <para>
         Der <acronym>URI</acronym> für diesen Namensraum lautet <code>http://phptal.org/ns/phptal</code>. Um das <code>phptal:</code> Attribut Präfix in <acronym>XML</acronym> zu verwenden, müssen Sie es deklarieren:
       </para>
-      
+
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://phptal.org/ns/phptal" …>]]></programlisting></informalexample>
-      
+
       <note>
         <para>
           PHPTAL erzwingt diese Angabe nicht.
         </para>
       </note>
-      
+
       <para>
         Diese Attribute sind in den <acronym>TAL</acronym>-Spezifikationen nicht enthalten, aber sehr nützlich für die Arbeit mit <acronym>PHPTAL</acronym>.
       </para>
@@ -1254,7 +1254,7 @@ title="google search engine">the google search engine</a>
         <para>
           <sgmltag>&lt;ul></sgmltag> wird für jede Object-ID einzeln 25 Minuten lang gepuffert.
         </para>
-        
+
         <warning>
           <para>
             Seien Sie vorsichtig damit private Daten Ihrer Nutzer zu puffern. Der Zwischenspeicher wird von allen Nutzern geteilt, wenn Sie ihn nicht durch <code>per user/id</code> oder ähnliche Ausdrücke benutzerspezifisch machen.
@@ -1456,10 +1456,10 @@ this page has been readed ${page/countRead} times"/>
             <code>!=</code> : <code>NE</code> (ungleich)
           </para></listitem>
           <listitem><para>
-            <code>&amp;&amp;</code> : <code>AND</code> 
+            <code>&amp;&amp;</code> : <code>AND</code>
           </para></listitem>
           <listitem><para>
-            <code>||</code> : <code>OR</code> 
+            <code>||</code> : <code>OR</code>
           </para></listitem>
         </itemizedlist>
       </section>
@@ -1662,18 +1662,18 @@ php:SomeClass::$staticVar
         Die Konfigurationskonstanten aus älteren Versionen sind durch Methoden ersetzt worden.
       </para>
     </section>
-    
+
     <section id="configuration">
       <title>Konfigurationsmethoden</title>
-      
+
       <para>
         <acronym>PHPTAL</acronym> versucht die bestmöglichen Grundeinstellungen zu verwenden. Eine Änderung sollte nicht <emphasis>nötig</emphasis> sein.
       </para>
-      
+
       <para>
         All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:
       </para>
-      
+
       <informalexample><programlisting language="php"><![CDATA[
 <?php
   echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
@@ -1682,7 +1682,7 @@ php:SomeClass::$staticVar
        <para>
          is the same as:
        </para>
-       
+
        <informalexample><programlisting language="php"><![CDATA[
 <?php
   $phptal->setPhpCodeDestination('/tmp/phptal');
@@ -1691,19 +1691,19 @@ php:SomeClass::$staticVar
   echo $phptal->execute();
 ?>
 ]]></programlisting></informalexample>
-              
-              
+
+
        <para>
          There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalisation, etc. They have been described in other sections of this manual.
        </para>
-              
+
        <section id="set-output-mode">
          <title><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname></title>
-         
+
          <para>
            Changes what syntax is used when generating elements. Valid modes are:
          </para>
-         
+
          <variablelist>
            <varlistentry><term><constant>PHPTAL::XHTML</constant></term>
              <listitem>
@@ -1715,7 +1715,7 @@ php:SomeClass::$staticVar
                   <para>
                     Empty elements will be forced to use self-closing form (<sgmltag>&lt;img/&gt;</sgmltag>, <sgmltag>&lt;link/&gt;</sgmltag>), and non-empty elements will always have closing tag.
                   </para>
-                  
+
                   <warning>
                     <para>
                       XHTML output mode changes <sgmltag>&lt;link&gt;</sgmltag> element in way that is incompatible with RSS. Use XML output mode to generate RSS feeds or use Atom.
@@ -1767,7 +1767,7 @@ php:SomeClass::$staticVar
           </varlistentry>
         </variablelist>
       </section>
-              
+
       <section id="set-encoding">
         <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
         <para>
@@ -1787,7 +1787,7 @@ php:SomeClass::$staticVar
           </para>
         </tip>
       </section>
-      
+
       <section id="config-methods"><title>Other methods</title>
         <simplesect id="set-template-repository">
           <title><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname></title>
@@ -1833,9 +1833,9 @@ php:SomeClass::$staticVar
           </warning>
         </simplesect>
       </section>
-    
+
     </section>
-    
+
     <section id="phptal-class">
       <title>class <classname>PHPTAL</classname></title>
 
@@ -2505,7 +2505,7 @@ try {
 
     // tell PHPTAL to use our translator
     $tpl->setTranslator($tr);
-    
+
     // output translated template
     echo $tpl->execute();
 }
@@ -2523,7 +2523,7 @@ $subject = $tr->translate("Registration information");
 $tr->setVar("user",$username);
 $message = $tr->translate("Dear ${user}, thanks for registering!");
 
-mail($email, $subject, $message); 
+mail($email, $subject, $message);
 ]]></programlisting></informalexample>
 
 <para>If you're using PHPTAL's standard <productname>gettext</productname> translator, you can use <methodname>gettext()</methodname> too.</para>

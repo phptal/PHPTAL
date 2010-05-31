@@ -1120,10 +1120,10 @@ this page has been readed ${page/countRead} times"/>
           <code>!=</code> : <code>NE</code> (not equal)
           </para></listitem>
           <listitem><para>
-          <code>&amp;&amp;</code> : <code>AND</code> 
+          <code>&amp;&amp;</code> : <code>AND</code>
           </para></listitem>
           <listitem><para>
-          <code>||</code> : <code>OR</code> 
+          <code>||</code> : <code>OR</code>
           </para></listitem>
         </itemizedlist>
       </section>
@@ -2079,7 +2079,7 @@ try {
 
     // tell PHPTAL to use our translator
     $tpl->setTranslator($tr);
-    
+
     // output translated template
     echo $tpl->execute();
 }
@@ -2097,7 +2097,7 @@ $subject = $tr->translate("Registration information");
 $tr->setVar("user",$username);
 $message = $tr->translate("Dear ${user}, thanks for registering!");
 
-mail($email, $subject, $message); 
+mail($email, $subject, $message);
 ]]></programlisting></informalexample>
 
 <para>If you're using PHPTAL's standard <code>gettext</code> translator, you can use <methodname>gettext()</methodname> too.</para>

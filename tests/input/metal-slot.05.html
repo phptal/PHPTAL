@@ -9,11 +9,11 @@
             </div>
             /inusemacro=${var}
     </div>
-                
-    <div metal:use-macro="m" tal:define="var string:inusemacro">                
+
+    <div metal:use-macro="m" tal:define="var string:inusemacro">
         invalid=${var}
         <div metal:fill-slot="s" tal:define="var string:infillslot">infillslot=${var}</div>
         /invalid=${var}
-    </div>    
+    </div>
     /top=${var}
 </tal:block>

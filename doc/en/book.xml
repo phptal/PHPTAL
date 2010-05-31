@@ -29,13 +29,13 @@
 				<date>2009-10-25</date>
 				<authorinitials>kl</authorinitials>
 				<revremark>Updates for PHPTAL 1.2.1</revremark>
-		</revision>        
+		</revision>
         <revision>
 			  <revnumber>v1.7</revnumber>
 				<date>2009-06-06</date>
 				<authorinitials>kl</authorinitials>
 				<revremark>Updates for PHPTAL 1.2.0</revremark>
-		</revision>        
+		</revision>
         <revision>
 			  <revnumber>v1.6</revnumber>
 				<date>2008-10-03</date>
@@ -456,20 +456,20 @@ catch (Exception $e){
       <title><acronym>TAL</acronym> namespace</title>
 
       <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/tal</code>. To use <code>tal:</code> attribute prefix in XML you're required to declare it:</para>
-      
+
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
-      
+
       <note><para>PHPTAL does not enforce this requirement.</para></note>
 
       <section id="tal-define">
         <title><sgmltag>tal:define</sgmltag></title>
-        
+
         <para>
         Defines variables in the template.
         </para>
 
         <para>It takes one or multiple semicolon-separated variable definitions.</para>
-        
+
         <para>
         Making a shortcut to a long path:
         </para>
@@ -501,8 +501,8 @@ catch (Exception $e){
         You may also use <sgmltag>tal:define</sgmltag> with other attributes, it will be
         executed before any other attributes on the same element.
 </para>         </tip>
-        
-        
+
+
         <para>
         Creating a string inside the template:
         </para>
@@ -529,7 +529,7 @@ catch (Exception $e){
         In above example, the <sgmltag>&lt;span&gt;</sgmltag> tag won't show up because it has no
         printable content (<varname>hello</varname> variable grabs it) nor attributes.
         </para>
-        
+
         <note><para>This is a special case. It only works if you use the <code>global</code> keyword.</para></note>
 
       </section>
@@ -1251,7 +1251,7 @@ title="google search engine">the google search engine</a>
 </para>
 <informalexample><programlisting language="xml"><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting></informalexample>
              <para><sgmltag>&lt;ul></sgmltag> will be cached for 25 minutes, separately for each object ID.</para>
-             
+
              <warning><para>Be careful when caching users' private data. Cache will be shared with everyone unless you make it user-specific with <code>per user/id</code> or similar expression.</para></warning>
 
              <section id="cache-refresh"><title>Instant refreshing</title>
@@ -1466,10 +1466,10 @@ this page has been readed ${page/countRead} times"/>
           <code>!=</code> : <code>NE</code> (not equal)
           </para></listitem>
           <listitem><para>
-          <code>&amp;&amp;</code> : <code>AND</code> 
+          <code>&amp;&amp;</code> : <code>AND</code>
           </para></listitem>
           <listitem><para>
-          <code>||</code> : <code>OR</code> 
+          <code>||</code> : <code>OR</code>
           </para></listitem>
         </itemizedlist>
       </section>
@@ -1695,7 +1695,7 @@ php:SomeClass::$staticVar
       In older versions of there were constants for configuration. They have been removed in favour of methods.
       </para>
   </section>
-  
+
 
     <section id="phptal-class">
       <title>class <classname>PHPTAL</classname></title>
@@ -1836,13 +1836,13 @@ $phptal->setOutputMode(PHPTAL::XML);
 $phptal->setTemplate('tpl.zpt');
 echo $phptal->execute();
 ?>]]></programlisting></informalexample>
-          
-          
+
+
           <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalisation, etc. They have been described in other sections of this manual.</para>
-          
+
           <section id="set-output-mode">
           <title><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname></title>
-          
+
           <para>Changes what syntax is used when generating elements. Valid modes are:</para>
               <variablelist>
                   <varlistentry><term><constant>PHPTAL::XHTML</constant></term>
@@ -1857,8 +1857,8 @@ echo $phptal->execute();
                               <listitem><para><code>&lt;![CDATA[</code> blocks will be added or removed automatically and will use special escaping syntax that is safe in both XML and HTML.</para>
                                   <tip>
                                   <para>If you're <emphasis>always</emphasis> sending XHTML as <code>application/xhtml+xml</code>, then it's better to use XML output mode.</para></tip>
-                                  </listitem></itemizedlist>                                                                
-                   
+                                  </listitem></itemizedlist>
+
                       </listitem>
                   </varlistentry>
                   <varlistentry><term><constant>PHPTAL::HTML5</constant></term>
@@ -1879,8 +1879,8 @@ echo $phptal->execute();
                   </varlistentry>
               </variablelist>
       </section>
-          
-              
+
+
           <section id="set-encoding">
 
                   <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
@@ -1890,7 +1890,7 @@ echo $phptal->execute();
                       <tip><para>Save yourself trouble and always use <acronym>UTF-8</acronym> for everything.</para></tip>
           </section>
       <section id="config-methods"><title>Other methods</title>
-          
+
           <simplesect id="set-template-repository">
               <title><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname></title>
                   <para>Specifies where to look for templates. If given a string, it adds it to the list of paths searched. If given array, it replaces the list.</para>
@@ -1905,7 +1905,7 @@ echo $phptal->execute();
           </simplesect>
           <simplesect id="set-code-destination">
               <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
-              
+
                   <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <function>sys_get_tmp_dir()</function>, which usually is '<filename>/tmp/</filename>' directory.</para>
               </simplesect>
               <simplesect id="set-code-extension">
@@ -1929,18 +1929,18 @@ echo $phptal->execute();
 
   <section id="execute">
       <title><methodname>execute()</methodname> method</title>
-      
+
       <para>Executes the template and returns final markup.</para>
       <para>PHPTAL keeps all variables after execution and this method can be called multiple times. You can use it to create multiple versions of the same page (by changing only some variables between executions) or to generate multiple different templates with same variables (by calling <code>setTemplate()</code> between executions).</para>
       <note><para>If you need “fresh” copy of PHPTAL, just create a new object.</para></note>
   </section>
         <section id="echo-execute">
             <title><methodname>echoExecute()</methodname> method</title>
-        
+
             <para>Since most common use of <methodname>execute()</methodname> method is to echo its output, <acronym>PHPTAL</acronym> offers convenience method that echoes output immedately without buffering. This enables streaming of arbitrarily large output without hitting memory limit.</para>
 
             <note><para>Fragments of template that use <sgmltag>tal:on-error</sgmltag> or <sgmltag>phptal:cache</sgmltag> are buffered regardless.</para></note>
-        
+
         <para>The code:</para>
             <informalexample><programlisting language="php"><![CDATA[<?php
     $tpl = new PHPTAL('template.xhtml');
@@ -1962,12 +1962,12 @@ echo $phptal->execute();
                 <title>Limitations</title>
                 <para>When <methodname>echoExecute()</methodname> is used, <acronym>PHPTAL</acronym> will throw exception if you call any macro defined in a file that has XML declaration or DOCTYPE.</para>
                 <para>Typically <acronym>PHPTAL</acronym> allows templates to "inherit" DOCTYPE from another file (useful when subpage is calling main layout template), however that is not possible without buffering.</para>
-                <para>To work around this you can:</para>            
+                <para>To work around this you can:</para>
                 <itemizedlist>
                     <listitem><para>Keep using <code>echo $tpl->execute()</code> until this limitation is lifted.</para></listitem>
                     <listitem><para>Remove all DOCTYPEs and XML declarations from templates and echo them from PHP before calling <methodname>echoExecute()</methodname>.</para></listitem>
-                </itemizedlist>    
-            </simplesect>    
+                </itemizedlist>
+            </simplesect>
         </section>
 
 
@@ -2016,14 +2016,14 @@ echo $phptal->execute();
 }
 ]]></programlisting></informalexample>
 			</simplesect>
-			    
+			
 			
 			<simplesect><title><methodname>getCacheId()</methodname></title>
 <para>
 	Should return (any) string that uniquely identifies this filter and its settings, which is used to (in)validate template cache. Each time you return different string, template will be recompiled. Implement this method if result of the filter depends on its configuration.</para>
 	
 	<para> Unlike other filter methods, this one is called on every execution.</para>
-			   
+			
 			
 			<tip><para>When developing and testing your filter, set <link linkend="set-force-reparse"><methodname>setForceReparse(true)</methodname></link> to force PHPTAL to update templates every time. Otherwise result of your filter will be cached and you won't see the changes.</para></tip>
 			
@@ -2047,7 +2047,7 @@ echo $phptal->execute();
 				<para>Numerically indexed array containing children of the element.</para>
 				<warning><para>Please don't edit this array directly. Use <methodname>appendChild()</methodname>, etc.</para></warning>
 				
-				<note><para>PHPTAL does not implement <varname>nextSibling</varname>, <varname>firstChild</varname>, etc.</para></note> 
+				<note><para>PHPTAL does not implement <varname>nextSibling</varname>, <varname>firstChild</varname>, etc.</para></note>
 				
 				</listitem>
 				
@@ -2369,13 +2369,13 @@ echo $tpl->execute();
         This method may be called by the template to change the current
         output language and/or locale (e.g. <code>en_US</code>).
         </para>
-        
+
         <para>
         Its arguments are a list of possible languages. Use
         <function>func_get_args()</function> to get the argument array. The first known
         language should be used by your service.
         </para>
-                
+
         <para>
             Return language that has been set.
         </para>
@@ -2678,7 +2678,7 @@ try {
 
     // tell PHPTAL to use our translator
     $tpl->setTranslator($tr);
-    
+
     // output translated template
     echo $tpl->execute();
 }
@@ -2696,7 +2696,7 @@ $subject = $tr->translate("Registration information");
 $tr->setVar("user",$username);
 $message = $tr->translate("Dear ${user}, thanks for registering!");
 
-mail($email, $subject, $message); 
+mail($email, $subject, $message);
 ]]></programlisting></informalexample>
 
 <para>If you're using PHPTAL's standard <productname>gettext</productname> translator, you can use <function>gettext()</function> too.</para>

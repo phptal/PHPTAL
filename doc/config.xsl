@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-              
+
                 xmlns="http://www.w3.org/1999/xhtml"
                 version="1.0">
 
@@ -30,40 +30,40 @@
   <xsl:param name="html.stylesheet" select="'/new.css /prettify.css'"/>
   <xsl:param name="html.extra.head.links" select="1"></xsl:param>
   <xsl:param name="navig.showtitles">1</xsl:param>
-    
+
   <xsl:param name="header.rule" select="0"></xsl:param>
   <xsl:param name="footer.rule" select="0"></xsl:param>
-  
+
   <xsl:param name="toc.list.type">ol</xsl:param>
   <xsl:param name="toc.section.depth">5</xsl:param>
   <xsl:param name="annotate.toc" select="0"></xsl:param>
 
   <xsl:param name="generate.revhistory.link" select="1"></xsl:param>
   <xsl:param name="generate.id.attributes" select="1"></xsl:param>
-  
+
   <xsl:param name="chapter.autolabel" select="0"></xsl:param>
   <xsl:param name="part.autolabel" select="0"></xsl:param>
   <xsl:param name="section.autolabel" select="0"></xsl:param>
   <xsl:param name="section.autolabel.max.depth">0</xsl:param>
-  
+
   <xsl:param name="generate.section.toc.level" select="1"></xsl:param>
   <xsl:param name="chunk.section.depth" select="2"></xsl:param>
   <xsl:param name="chunk.first.sections" select="1"></xsl:param>
 
   <xsl:param name="table.borders.with.css" select="1"></xsl:param>
   <xsl:param name="points.per.em">16</xsl:param>
-  
+
   <xsl:param name="highlight.source" select="1"></xsl:param>
   <xsl:param name="highlight.default.language">xml</xsl:param>
-    
+
   <xsl:param name="chunker.output.omit-xml-declaration">yes</xsl:param>
   <xsl:param name="chunker.output.doctype-public">-//W3C//DTD XHTML 1.0 Strict//EN</xsl:param>
   <xsl:param name="chunker.output.doctype-system">http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd</xsl:param>
   <xsl:param name="html.cleanup" select="1"></xsl:param>
 
   <xsl:param name="use.id.as.filename" select="1"/>
-  
-  
+
+
   <xsl:template name="header.navigation">
     <xsl:param name="prev" select="/foo"/>
     <xsl:param name="next" select="/foo"/>
@@ -99,7 +99,7 @@
                 <th>
                   <xsl:call-template name="breadcrumbs"/>
                 </th>
-                <td align="right">         
+                <td align="right">
                   <xsl:if test="count($next)&gt;0">
                     <a rel="next">
                       <xsl:attribute name="href">
@@ -121,11 +121,11 @@
       </div>
     </xsl:if>
   </xsl:template>
-  
+
   <xsl:template name="user.header.navigation">
     <div id="header"><div>
       <h1><a href="/"><abbr>PHPTAL</abbr> PHP Template Attribute Language</a></h1>
-    </div>    
+    </div>
       </div>
       <div id="menu">
       <ul>
@@ -138,12 +138,12 @@
       </ul>
       </div>
 
-     
-     
+
+
  </xsl:template>
 
 <xsl:template name="apply-highlighting">
-  <!-- 
+  <!--
     xslthl = saxon = java = pain, and if that wasn't enough, docbook-xsl drops language attribute.
   -->
   <code>
@@ -151,17 +151,17 @@
       <xsl:attribute name="class">
 				<xsl:value-of select="@language"/>
 			</xsl:attribute>
-    </xsl:if>    
-    <xsl:apply-templates/>    
-  </code>  
-</xsl:template>  
- 
- 
+    </xsl:if>
+    <xsl:apply-templates/>
+  </code>
+</xsl:template>
+
+
  <xsl:template name="breadcrumbs">
    <xsl:param name="this.node" select="."/>
-   
+
    <xsl:variable name="ancestors" select="$this.node/ancestor::*" />
-   
+
    <xsl:if test="count($ancestors) &gt; 0">
    <div class="breadcrumbs">
      <xsl:for-each select="$ancestors">

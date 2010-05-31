@@ -20,7 +20,7 @@
     <include name="README"/>
     <include name="COPYING"/>
   </fileset>
-  
+
   <fileset dir="." id="tests">
     <include name="tests/**"/>
     <exclude name="tests/**/.svn/**"/>
@@ -31,7 +31,7 @@
   <fileset dir="tools/" id="tools">
       <include name="*.php"/>
   </fileset>
-  
+
   <target name="main" if="version" depends="versioncheck">
     <phingcall target="test"/>
     <phingcall target="build"/>
@@ -46,13 +46,13 @@
 
   <target name="test">
     <php expression="include 'tests/run-tests.php'"/>
-    
+
     <!-- built-in task displays progres poorly -->
     <!--phpunit haltonfailure="true" haltonerror="true">
       <formatter type="plain" usefile="false"/>
       <batchtest>
         <fileset dir="tests"><include name="*Test.php"/></fileset>
-      </batchtest>  
+      </batchtest>
     </phpunit-->
   </target>
 
@@ -74,14 +74,14 @@
     <mkdir dir="${build.src.dir}"/>
     <copy todir="${build.src.dir}">
       <fileset refid="classes"/>
-      <fileset refid="gendocs"/>    
-      <fileset refid="tests"/>  
-      <fileset refid="tools"/>  
-    </copy>    
+      <fileset refid="gendocs"/>
+      <fileset refid="tests"/>
+      <fileset refid="tools"/>
+    </copy>
   </target>
-  
+
   <target name="pear-package" depends="build">
-    <pearpkg2      
+    <pearpkg2
       name="${phing.project.name}"
       dir="${build.src.dir}">
 
@@ -97,7 +97,7 @@
 
       <option name="channel" value="pear.php.net"/>
       <option name="summary">Zope Page Template implementation for PHP5</option>
-      <option name="description">PHPTAL is a XML-based template engine that generates XML, XHTML and HTML5 using syntax of Zope's Template Attribute Language (TAL, METAL and I18N namespaces). 
+      <option name="description">PHPTAL is a XML-based template engine that generates XML, XHTML and HTML5 using syntax of Zope's Template Attribute Language (TAL, METAL and I18N namespaces).
 PHPTAL compiles templates to PHP for best performance and supports selective caching of output.</option>
 
       <option name="apiversion" value="1.2.0"/>
@@ -120,20 +120,20 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
 
       <option name="releaseversion" value="${version}"/>
       <option name="releasestability" value="beta"/>
-      <option name="license" value="LGPL"/>    
+      <option name="license" value="LGPL"/>
       <option name="phpdep" value="5.1.0"/>
       <option name="pearinstallerdep" value="1.4.6"/>
       <option name="packagetype" value="php"/>
-     
+
       <option name="notes">Test release</option>
-     
-      <mapping name="extdeps">  
+
+      <mapping name="extdeps">
         <element>
           <element key="type" value="ext" />
           <element key="rel" value="has" />
           <element key="name" value="pcre" />
         </element>
-        
+
         <element>
           <element key="type" value="ext" />
           <element key="rel" value="has" />
@@ -141,17 +141,17 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
           <element key="optional" value="yes" />
         </element>
       </mapping>
-                 
+
       <fileset refid="classes"/>
       <fileset refid="gendocs"/>
       <fileset refid="tests"/>
       <fileset refid="tools"/>
-      
+
       <mapping name="dir_roles">
         <element key="tests" value="test"/>
         <element key="tools" value="script"/>
       </mapping>
-      
+
       <mapping name="exceptions">
         <element key="README" value="doc"/>
         <element key="COPYING" value="doc"/>
@@ -167,15 +167,15 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
       <fileset dir="${build.base.dir}">
      	 <include name="${pkgname}/**" />
      	 <include name="package.xml" />
-      </fileset>      
+      </fileset>
     </tar>
   </target>
 
   <target name="pearify">
-    <!-- Finds all PHP files that don't seem to have "?>" and adds it. 
+    <!-- Finds all PHP files that don't seem to have "?>" and adds it.
          This is needed to satisfy PEAR coding standard without polluting PHPTAL codebase with closing tags. -->
-    <exec command="find '${build.src.dir}' -name \*.php \! -exec egrep -q '^\?>$' {} \; -exec sh -c 'printf >>'{}' &quot;\n?>\n&quot;' \;"/>  
-  </target>  
+    <exec command="find '${build.src.dir}' -name \*.php \! -exec egrep -q '^\?>$' {} \; -exec sh -c 'printf >>'{}' &quot;\n?>\n&quot;' \;"/>
+  </target>
 
   <target name="tar-pear" depends="tar">
     <phingcall target="pearify"/>

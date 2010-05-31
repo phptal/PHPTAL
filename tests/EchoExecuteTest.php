@@ -9,7 +9,7 @@
  * @author   Laurent Bedubourg <lbedubourg@motion-twin.com>
  * @author   Kornel Lesiński <kornel@aardvarkmedia.co.uk>
  * @license  http://www.gnu.org/licenses/lgpl.html GNU Lesser General Public License
- * @version  SVN: $Id: EchoExecuteTest.php 584 2009-04-27 11:45:25Z kornel $
+ * @version  SVN: $Id: $
  * @link     http://phptal.org/
  */
 
