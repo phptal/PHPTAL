@@ -338,7 +338,7 @@ class PHPTAL
         $this->resetPrepared();
 
         if ($bool) {
-            $this->_prefilters['_phptal_strip_comments_'] = new PHPTAL_PreFilter_StripComments();
+            $this->prefilters['_phptal_strip_comments_'] = new PHPTAL_PreFilter_StripComments();
         } else {
             unset($this->prefilters['_phptal_strip_comments_']);
         }
