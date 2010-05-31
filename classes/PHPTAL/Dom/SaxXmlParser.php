@@ -320,6 +320,10 @@ class PHPTAL_Dom_SaxXmlParser
                     case self::ST_ATTR_QUOTE:
                         if ($c === $quoteStyle) {
                             $attributes[$attribute] = $this->sanitizeEscapedText($this->checkEncoding(substr($src, $mark, $i-$mark)));
+
+                            // PHPTAL's code generator assumes input is escaped for double-quoted strings. Single-quoted attributes need to be converted.
+                            // FIXME: it should be escaped at later stage.
+                            $attributes[$attribute] = str_replace('"',"&quot;", $attributes[$attribute]);
                             $state = self::ST_TAG_BETWEEN_ATTRIBUTE;
                         }
                         break;
@@ -441,7 +445,7 @@ class PHPTAL_Dom_SaxXmlParser
         $types = ini_get('short_open_tag')?'php|=|':'php';
         $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self', 'convertPHPBlockToTALES'), $str);
 
-        // corrects all non-entities
+        // corrects all non-entities and neutralizes potentially problematic CDATA end marker
         $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str), array('<'=>'&lt;', ']]>'=>']]&gt;'));
 
         return $str;
