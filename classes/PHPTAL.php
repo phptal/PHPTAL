@@ -741,16 +741,30 @@ class PHPTAL
      */
     public static function _defaultExceptionHandler($e)
     {
-        header('HTTP/1.1 500 PHPTAL Exception');
+        if (!headers_sent()) {
+            header('HTTP/1.1 500 PHPTAL Exception');
+            header('Content-Type:text/html;charset='.$this->getEncoding());
+        }
 
-        $title = 'PHPTAL Exception: '.htmlspecialchars($e->getMessage());
-        header('Content-Type:text/html;charset=UTF-8');
-        echo '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><title>'.$title.'</title></head>';
-        echo '<body><h1>'.$title.'</h1>';
-        echo "<pre>\n".htmlspecialchars($e).'</pre></body></html>';
-        echo str_repeat('    ', 100); // IE won't display error pages < 512b
+        if (ini_get('display_errors')) {
+            $title = get_class($e).': '.htmlspecialchars($e->getMessage());
+            $body = '<p><strong>'.htmlspecialchars($e->getMessage()).'</strong></p>'.
+                    '<p>In '.htmlspecialchars($e->getFile());
+            if ($e->getLine()) {
+                $body .= ' line '.$e->getLine();
+            }
+            $body .= "</p><pre>\n".htmlspecialchars($e->getTraceAsString()).'</pre>';
+        } else {
+            $title = "PHPTAL Exception";
+            $body = "<p>This page cannot be displayed.</p><hr/>" .
+             "<p><small>Enable <code>display_errors</code> to see detailed message.</small></p>";
+        }
+        echo '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><style>body{font-family:sans-serif}</style><title>'.$title.'</title></head>';
+        echo '<body><h1>PHPTAL Exception</h1>';
+        echo '</body></html>';
+        echo $body,str_repeat('    ', 100); // IE won't display error pages < 512b
 
-        error_log($title);
+        error_log($e->getMessage());
         exit(1);
     }
 
