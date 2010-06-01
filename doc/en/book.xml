@@ -142,7 +142,7 @@
     </para>
 
     <para>
-    <acronym>TAL</acronym> hides most of its logic in <acronym>XML</acronym> attributes, preserving syntax and strucutre of <acronym>XHTML</acronym>. This allows previewing of <acronym>TAL</acronym> templates in web browser (<acronym>WYSIWYG</acronym> editors, live previews) and doesn't break <acronym>HTML</acronym> syntax highlighting in programmers' editors.
+    <acronym>TAL</acronym> hides most of its logic in <acronym>XML</acronym> attributes, preserving syntax and structure of <acronym>XHTML</acronym>. This allows previewing of <acronym>TAL</acronym> templates in web browser (<acronym>WYSIWYG</acronym> editors, live previews) and doesn't break <acronym>HTML</acronym> syntax highlighting in programmers' editors.
     </para>
 
     <para>
@@ -191,7 +191,7 @@
     <para>
     <acronym>PHPTAL</acronym> is designed to be as customizable as possible for advanced
     developers and performance-eating systems, but still be easy to use for
-    beginners, with a comfortable and simple default behaviour (at least we
+    beginners, with a comfortable and simple default behavior (at least we
     tried :)
     </para>
 
@@ -490,7 +490,7 @@ catch (Exception $e){
 <p tal:content="hello"/>]]></programlisting></informalexample>
 
         	<para>
-        	On the contrary, a local variable is only available inside the element it is defined in (and inside marcos that are called in this element):
+        	On the contrary, a local variable is only available inside the element it is defined in (and inside macros that are called in this element):
         	</para>
 
         	<informalexample><programlisting language="xml"><![CDATA[<span tal:define="hello string:hello world"/>
@@ -1256,7 +1256,7 @@ title="google search engine">the google search engine</a>
 
              <section id="cache-refresh"><title>Instant refreshing</title>
 
-                 <para>Instead of clearing cache, it might be a better idea to put version or last modification timestamp in the <varname>per</varname> parameter. This will cause cached template to be refreshed as soon as version/timestamp changes and no special cache clearing will be neccessary.</para>
+                 <para>Instead of clearing cache, it might be a better idea to put version or last modification timestamp in the <varname>per</varname> parameter. This will cause cached template to be refreshed as soon as version/timestamp changes and no special cache clearing will be necessary.</para>
 <informalexample><programlisting language="xml"><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting></informalexample>
 
                  </section>
@@ -1279,8 +1279,8 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>phptal:tales</sgmltag></title>
 
         <para>
-        This attribute allows us to change the behaviour of <acronym>PHPTALES</acronym>.  The
-        default behaviours is to interpret attribute expressions in a
+        This attribute allows us to change the behavior of <acronym>PHPTALES</acronym>.  The
+        default behaviors is to interpret attribute expressions in a
         very <acronym>ZPT</acronym> way. But sometimes you just would like to have <acronym>PHP</acronym>
         there, and you end up using <code>php:</code> modifier everywhere.
         </para>
@@ -1628,7 +1628,7 @@ php:SomeClass::$staticVar
 
         <para>
         In above examples, we assume that <code>$document->title</code> and
-        <code>$document->content</code> are variables containing preformated <acronym>HTML</acronym>
+        <code>$document->content</code> are variables containing preformatted <acronym>HTML</acronym>
         which must be echoed as is.
         </para>
       </section>
@@ -1668,7 +1668,7 @@ php:SomeClass::$staticVar
 
     <para>
     This section is aimed at <acronym>PHP</acronym> developers and explains how to use and
-    customize <acronym>PHPTAL</acronym> behaviours for simple and advanced usage.
+    customize <acronym>PHPTAL</acronym> behaviors for simple and advanced usage.
     </para>
 
     <itemizedlist>
@@ -1692,7 +1692,7 @@ php:SomeClass::$staticVar
 
       <para> The only constant defined in <filename>PHPTAL.php</filename> is <constant>PHPTAL_VERSION</constant>. It contains version of <acronym>PHPTAL</acronym> library installed on your system (in format: <code>X.X.X</code>).</para>
       <para>
-      In older versions of there were constants for configuration. They have been removed in favour of methods.
+      In older versions of there were constants for configuration. They have been removed in favor of methods.
       </para>
   </section>
 
@@ -1838,7 +1838,7 @@ echo $phptal->execute();
 ?>]]></programlisting></informalexample>
 
 
-          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalisation, etc. They have been described in other sections of this manual.</para>
+          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalization, etc. They have been described in other sections of this manual.</para>
 
           <section id="set-output-mode">
           <title><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname></title>
@@ -1853,7 +1853,7 @@ echo $phptal->execute();
                                   <warning>
                                       <para>XHTML output mode changes <sgmltag>&lt;link&gt;</sgmltag> element in way that is incompatible with RSS. Use XML output mode to generate RSS feeds or use Atom.</para></warning>
                               </listitem>
-                              <listitem><para>Boolean attribtes (<sgmltag>checked</sgmltag>, <sgmltag>selected</sgmltag>, etc.) will always have value required by the XHTML specification (it simplifies use of <sgmltag>tal:attributes</sgmltag>).</para></listitem>
+                              <listitem><para>Boolean attributes (<sgmltag>checked</sgmltag>, <sgmltag>selected</sgmltag>, etc.) will always have value required by the XHTML specification (it simplifies use of <sgmltag>tal:attributes</sgmltag>).</para></listitem>
                               <listitem><para><code>&lt;![CDATA[</code> blocks will be added or removed automatically and will use special escaping syntax that is safe in both XML and HTML.</para>
                                   <tip>
                                   <para>If you're <emphasis>always</emphasis> sending XHTML as <code>application/xhtml+xml</code>, then it's better to use XML output mode.</para></tip>
@@ -1864,10 +1864,10 @@ echo $phptal->execute();
                   <varlistentry><term><constant>PHPTAL::HTML5</constant></term>
                       <listitem>
                           <para>This mode generates documents that have best compatibility with <code>text/html</code> parsing in current web browsers, but are not XML.</para>
-                          <para>PHPTAL will change DOCTYPEs to <sgmltag>&lt;!DOCTYPE html></sgmltag>. Namespace declarations, name prefixes, explicit <sgmltag>CDATA</sgmltag> sections and other HTML-incompatible constructs will be ommited.</para>
+                          <para>PHPTAL will change DOCTYPEs to <sgmltag>&lt;!DOCTYPE html></sgmltag>. Namespace declarations, name prefixes, explicit <sgmltag>CDATA</sgmltag> sections and other HTML-incompatible constructs will be omitted.</para>
                           <note>
                               <para>
-                        This mode is <emphasis>not</emphasis> a "tag soup". PHPTAL will close all elements properly and quote attributes when it's necesary. Output will be properly formatted HTML 5, and fully backwards-compatible with current HTML 4 browsers.
+                        This mode is <emphasis>not</emphasis> a "tag soup". PHPTAL will close all elements properly and quote attributes when it's necessary. Output will be properly formatted HTML 5, and fully backwards-compatible with current HTML 4 browsers.
                   </para>
                           </note>
                       </listitem>
@@ -1884,7 +1884,7 @@ echo $phptal->execute();
           <section id="set-encoding">
 
                   <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
-                      <para>Specify charcter encoding used by your templates. The default is <acronym>UTF-8</acronym>.
+                      <para>Specify character encoding used by your templates. The default is <acronym>UTF-8</acronym>.
                       </para><para><acronym>PHPTAL</acronym> assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.</para>
                       <note><para><acronym>PHPTAL</acronym> does not read encoding from XML files and never converts character encodings.</para></note>
                       <tip><para>Save yourself trouble and always use <acronym>UTF-8</acronym> for everything.</para></tip>
@@ -1937,7 +1937,7 @@ echo $phptal->execute();
         <section id="echo-execute">
             <title><methodname>echoExecute()</methodname> method</title>
 
-            <para>Since most common use of <methodname>execute()</methodname> method is to echo its output, <acronym>PHPTAL</acronym> offers convenience method that echoes output immedately without buffering. This enables streaming of arbitrarily large output without hitting memory limit.</para>
+            <para>Since most common use of <methodname>execute()</methodname> method is to echo its output, <acronym>PHPTAL</acronym> offers convenience method that echoes output immediately without buffering. This enables streaming of arbitrarily large output without hitting memory limit.</para>
 
             <note><para>Fragments of template that use <sgmltag>tal:on-error</sgmltag> or <sgmltag>phptal:cache</sgmltag> are buffered regardless.</para></note>
 
@@ -2763,7 +2763,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-      Modifiers are used at parse time. If you change the behaviour of a
+      Modifiers are used at parse time. If you change the behavior of a
       modifier, you'll have to delete generated <acronym>PHP</acronym> files and reparse
       all templates using it.
       </para>
@@ -2773,7 +2773,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-      Any <acronym>PHP</acronym> function starting with "<constant>phptal_tales_</constant>" is usuable as a
+      Any <acronym>PHP</acronym> function starting with "<constant>phptal_tales_</constant>" is usable as a
       modifier.
       </para>
 

@@ -1311,7 +1311,7 @@ php:SomeClass::$staticVar
 
     <para>
     This section is aimed at <acronym>PHP</acronym> developers and explains how to use and
-    customize <acronym>PHPTAL</acronym> behaviours for simple and advanced usage.
+    customize <acronym>PHPTAL</acronym> behaviors for simple and advanced usage.
     </para>
 
     <itemizedlist>
@@ -1335,7 +1335,7 @@ php:SomeClass::$staticVar
 
       <para> The only constant defined in <filename>PHPTAL.php</filename> is <constant>PHPTAL_VERSION</constant>. It contains version of <acronym>PHPTAL</acronym> library installed on your system (in format: <code>X.X.X</code>).</para>
       <para>
-      In older versions of there were constants for configuration. They have been removed in favour of methods.
+      In older versions of there were constants for configuration. They have been removed in favor of methods.
       </para>
   </section>
   <section id="configuration">
@@ -1374,7 +1374,7 @@ php:SomeClass::$staticVar
           <listitem><para><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname>: forces reparsing of all templates all the time. This slows down <acronym>PHPTAL</acronym> very much, it should be used only for testing and debugging. Never enable this on production servers.</para></listitem>
           </itemizedlist>
 
-          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalisation, etc. They have been described in other sections of this manual.</para>
+          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalization, etc. They have been described in other sections of this manual.</para>
 
     </section>
 
@@ -2164,7 +2164,7 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
       </para>
 
       <para>
-      Modifiers are used at parse time. If you change the behaviour of a
+      Modifiers are used at parse time. If you change the behavior of a
       modifier, you'll have to delete generated <acronym>PHP</acronym> files and reparse
       all templates using it.
       </para>
