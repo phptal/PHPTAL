@@ -15,7 +15,7 @@
 
 require_once dirname(__FILE__)."/config.php";
 
-class MyPreFilter implements PHPTAL_Filter
+class OldMyPreFilter implements PHPTAL_Filter
 {
     public function filter($str)
     {
@@ -26,7 +26,7 @@ class MyPreFilter implements PHPTAL_Filter
     }
 }
 
-class MyPreFilter2 implements PHPTAL_Filter
+class OldMyPreFilter2 implements PHPTAL_Filter
 {
     public function filter($str)
     {
@@ -39,7 +39,7 @@ class OldPreFilterTest extends PHPTAL_TestCase
 {
     function testIt()
     {
-        $filter = new MyPreFilter();
+        $filter = new OldMyPreFilter();
         $tpl = $this->newPHPTAL('input/prefilter.01.html');
         $tpl->setPreFilter($filter);
         $tpl->value = 'my value';
@@ -51,7 +51,7 @@ class OldPreFilterTest extends PHPTAL_TestCase
 
     function testExternalMacro()
     {
-        $filter = new MyPreFilter2();
+        $filter = new OldMyPreFilter2();
         $tpl = $this->newPHPTAL('input/prefilter.02.html');
         $tpl->setPreFilter($filter);
         $res = normalize_html($tpl->execute());
@@ -65,7 +65,7 @@ class OldPreFilterTest extends PHPTAL_TestCase
         $tpl->execute(); // compile and store version without prefilter
 
         $tpl = $this->newPHPTAL('input/prefilter.03.html');
-        $tpl->setPreFilter(new MyPreFilter2());
+        $tpl->setPreFilter(new OldMyPreFilter2());
         $res = normalize_html($tpl->execute());
         $exp = normalize_html('<root>filtered</root>');
         $this->assertEquals($exp, $res);
@@ -76,7 +76,7 @@ class OldPreFilterTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL('input/prefilter.03.html');
         $tpl->execute(); // prepare version without prefilter
 
-        $tpl->setPreFilter(new MyPreFilter2());
+        $tpl->setPreFilter(new OldMyPreFilter2());
         $res = normalize_html($tpl->execute());
         $exp = normalize_html('<root>filtered</root>');
         $this->assertEquals($exp, $res);
