@@ -13,9 +13,9 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_2b1');
+define('PHPTAL_VERSION', '1_2_2b2');
 
-spl_autoload_register(array('PHPTAL','autoload'));
+PHPTAL::autoloadRegister();
 
 /**
  * PHPTAL template entry point.
@@ -1304,5 +1304,27 @@ class PHPTAL
         $path = dirname(__FILE__) . strtr("_".$class, "_", DIRECTORY_SEPARATOR) . '.php';
 
         require $path;
+    }
+
+    /**
+     * Sets up PHPTAL's autoloader.
+     *
+     * If you have to use your own autoloader to load PHPTAL files,
+     * use spl_autoload_unregister(array('PHPTAL','autoload'));
+     *
+     * @return void
+     */
+    final public static function autoloadRegister()
+    {
+        // spl_autoload_register disables oldschool autoload
+        // even if it was added using spl_autoload_register!
+        // this is intended to preserve old autoloader
+
+        $uses_autoload = function_exists('__autoload')
+            && (!($tmp = spl_autoload_functions()) || ($tmp[0] === '__autoload'));
+        spl_autoload_register(array(__CLASS__,'autoload'));
+        if ($uses_autoload) {
+            spl_autoload_register('__autoload');
+        }
     }
 }
