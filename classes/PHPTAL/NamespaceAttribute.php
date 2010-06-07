@@ -97,30 +97,3 @@ abstract class PHPTAL_NamespaceAttribute
         return $this->_namespace->createAttributeHandler($this, $tag, $expression);
     }
 }
-
-/**
- * This type of attribute wraps element
- * @package PHPTAL
- * @subpackage Namespace
- */
-class PHPTAL_NamespaceAttributeSurround extends PHPTAL_NamespaceAttribute
-{
-}
-
-/**
- * This type of attribute replaces element entirely
- * @package PHPTAL
- * @subpackage Namespace
- */
-class PHPTAL_NamespaceAttributeReplace extends PHPTAL_NamespaceAttribute
-{
-}
-
-/**
- * This type of attribute replaces element's content entirely
- * @package PHPTAL
- * @subpackage Namespace
- */
-class PHPTAL_NamespaceAttributeContent extends PHPTAL_NamespaceAttribute
-{
-}
