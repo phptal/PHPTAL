@@ -706,66 +706,10 @@ class PHPTAL
         }
         catch (Exception $e)
         {
-            $this->handleException($e);
+            PHPTAL_ExceptionHandler::handleException($e, $this->getEncoding());
         }
 
         return $res;
-    }
-
-    /**
-     * PHP's default exception handler allows error pages to be indexed and can reveal too much information,
-     * so if possible PHPTAL sets up its own handler to fix this.
-     *
-     * Doesn't change exception handler if non-default one is set.
-     *
-     * @return void
-     * @throws Exception
-     */
-    private function handleException(Exception $e)
-    {
-        // PHPTAL's handler is only useful on fresh HTTP response
-        if (PHP_SAPI !== 'cli' && !headers_sent()) {
-            $old_exception_handler = set_exception_handler(array(__CLASS__, '_defaultExceptionHandler'));
-
-            if ($old_exception_handler !== NULL) {
-                restore_exception_handler(); // if there's user's exception handler, let it work
-            }
-        }
-        throw $e; // throws instead of outputting immediatelly to support user's try/catch
-    }
-
-    /**
-     * Generates simple error page. Sets appropriate HTTP status to prevent page being indexed.
-     *
-     * @access private
-     */
-    public static function _defaultExceptionHandler($e)
-    {
-        if (!headers_sent()) {
-            header('HTTP/1.1 500 PHPTAL Exception');
-            header('Content-Type:text/html;charset='.$this->getEncoding());
-        }
-
-        if (ini_get('display_errors')) {
-            $title = get_class($e).': '.htmlspecialchars($e->getMessage());
-            $body = '<p><strong>'.htmlspecialchars($e->getMessage()).'</strong></p>'.
-                    '<p>In '.htmlspecialchars($e->getFile());
-            if ($e->getLine()) {
-                $body .= ' line '.$e->getLine();
-            }
-            $body .= "</p><pre>\n".htmlspecialchars($e->getTraceAsString()).'</pre>';
-        } else {
-            $title = "PHPTAL Exception";
-            $body = "<p>This page cannot be displayed.</p><hr/>" .
-             "<p><small>Enable <code>display_errors</code> to see detailed message.</small></p>";
-        }
-        echo '<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><style>body{font-family:sans-serif}</style><title>'.$title.'</title></head>';
-        echo '<body><h1>PHPTAL Exception</h1>';
-        echo '</body></html>';
-        echo $body,str_repeat('    ', 100); // IE won't display error pages < 512b
-
-        error_log($e->getMessage());
-        exit(1);
     }
 
     /**
@@ -797,7 +741,7 @@ class PHPTAL
             if ($e instanceof PHPTAL_TemplateException) {
                 $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
             }
-            $this->handleException($e);
+            PHPTAL_ExceptionHandler::handleException($e, $this->getEncoding());
         }
     }
 
