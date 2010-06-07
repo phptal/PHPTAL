@@ -12,12 +12,15 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+
+
 /**
+ * PHPTAL failed to load template
+ *
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_Exception extends Exception
+class PHPTAL_IOException extends PHPTAL_Exception
 {
 }
-
 

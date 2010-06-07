@@ -12,12 +12,14 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+
+
 /**
+ * Parse error in TALES expression.
+ *
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_Exception extends Exception
+class PHPTAL_InvalidVariableNameException extends PHPTAL_Exception
 {
 }
-
-

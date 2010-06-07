@@ -12,12 +12,13 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+
 /**
+ * Runtime error in TALES expression
+ *
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_Exception extends Exception
+class PHPTAL_VariableNotFoundException extends PHPTAL_TemplateException
 {
 }
-
-

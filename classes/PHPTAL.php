@@ -1224,14 +1224,6 @@ class PHPTAL
             'PHPTAL_NamespaceAttributeReplace'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeSurround'=>'PHPTAL_NamespaceAttribute',
             'PHPTAL_NamespaceAttributeContent'=>'PHPTAL_NamespaceAttribute',
-            'PHPTAL_TemplateException'=>'PHPTAL_Exception',
-            'PHPTAL_IOException'=>'PHPTAL_Exception',
-            'PHPTAL_ParserException'=>'PHPTAL_Exception',
-            'PHPTAL_InvalidVariableNameException'=>'PHPTAL_Exception',
-            'PHPTAL_VariableNotFoundException'=>'PHPTAL_Exception',
-            'PHPTAL_ConfigurationException'=>'PHPTAL_Exception',
-            'PHPTAL_UnknownModifierException'=>'PHPTAL_Exception',
-            'PHPTAL_MacroMissingException'=>'PHPTAL_Exception',
         );
 
         if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {

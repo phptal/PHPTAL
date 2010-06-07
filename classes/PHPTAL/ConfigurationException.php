@@ -12,12 +12,14 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+
 /**
+ * You're probably not using PHPTAL class properly
+ *
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_Exception extends Exception
+class PHPTAL_ConfigurationException extends PHPTAL_Exception
 {
 }
-
 

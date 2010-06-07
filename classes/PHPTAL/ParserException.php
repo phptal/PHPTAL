@@ -12,12 +12,14 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+
 /**
+ * XML well-formedness errors and alike.
+ *
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_Exception extends Exception
+class PHPTAL_ParserException extends PHPTAL_TemplateException
 {
 }
-
 

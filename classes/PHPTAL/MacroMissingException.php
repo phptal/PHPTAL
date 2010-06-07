@@ -12,12 +12,14 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
+
 /**
+ * Wrong macro name in metal:use-macro
+ *
  * @package PHPTAL
  * @subpackage Exception
  */
-class PHPTAL_Exception extends Exception
+class PHPTAL_MacroMissingException extends PHPTAL_TemplateException
 {
 }
-
 
