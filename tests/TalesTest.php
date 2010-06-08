@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once dirname(__FILE__)."/config.php";
 
 
 function phptal_tales_custom($src, $nothrow)

@@ -42,7 +42,6 @@ class OverloadTestClass
 }
 
 
-require_once dirname(__FILE__)."/config.php";
 
 class OverloadingTest extends PHPTAL_TestCase
 {

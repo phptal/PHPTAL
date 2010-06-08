@@ -12,7 +12,6 @@
  * @link     http://phptal.org/
  */
 
-require_once dirname(__FILE__)."/config.php";
 
 
 class TokenizerTest extends PHPTAL_TestCase

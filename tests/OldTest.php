@@ -12,7 +12,6 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
-require_once dirname(__FILE__)."/config.php";
 
 class OldTest extends PHPTAL_TestCase
 {

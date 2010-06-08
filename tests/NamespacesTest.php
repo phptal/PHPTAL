@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once dirname(__FILE__)."/config.php";
 
 
 if (!class_exists('Test_PHPTAL_Namespace', false)) {

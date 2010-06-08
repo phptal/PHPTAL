@@ -1,0 +1,14 @@
+<phpunit
+    bootstrap="./tests/config.php"
+    backupGlobals="false"
+    backupStaticAttributes="false"
+    colors="false"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true">
+    <testsuites>
+        <testsuite name="PHPTALtests">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>

@@ -14,7 +14,6 @@
  */
 
 
-require_once dirname(__FILE__)."/config.php";
 
 class TalOmitTagTest extends PHPTAL_TestCase
 {

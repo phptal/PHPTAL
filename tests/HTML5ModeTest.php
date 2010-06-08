@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once dirname(__FILE__)."/config.php";
 
 class HTML5ModeTest extends PHPTAL_TestCase
 {

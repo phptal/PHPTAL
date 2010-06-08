@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once dirname(__FILE__)."/config.php";
 
 class PhptalUsageTest extends PHPTAL_TestCase
 {

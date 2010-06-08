@@ -13,7 +13,6 @@
  * @link     http://phptal.org/
  */
 
-require_once dirname(__FILE__)."/config.php";
 
 class CommentFilterTest extends PHPTAL_TestCase
 {
