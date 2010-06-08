@@ -23,6 +23,7 @@
 class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 {
     private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
+    private $encoding;
 
     public function __construct()
     {
@@ -64,6 +65,9 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onXmlDecl($decl)
     {
+        if (!$this->encoding) {
+            throw new PHPTAL_Exception("Encoding not set");
+        }
         $this->pushNode(new PHPTAL_Dom_XmlDeclaration($decl, $this->encoding));
     }
 
