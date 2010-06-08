@@ -163,8 +163,14 @@ class PHPTAL_Dom_Defs
 
     private static $_instance = null;
     private $_dictionary = array();
+    /**
+     * list of PHPTAL_Namespace objects
+     */
     private $namespaces_by_uri = array();
-    private $prefix_to_uri = array();
+    private $prefix_to_uri = array(
+        'xml'=>'http://www.w3.org/XML/1998/namespace',
+        'xmlns'=>'http://www.w3.org/2000/xmlns/',
+    );
 
     /**
      * This array contains XHTML tags that must be echoed in a &lt;tag/&gt; form
