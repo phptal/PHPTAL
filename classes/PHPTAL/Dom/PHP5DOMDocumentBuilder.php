@@ -21,11 +21,11 @@
  */
 class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 {
-    private $document;
+    private $document, $root;
 
     public function getResult()
     {
-        return $this->document;
+        return $this->document->documentElement;
     }
 
 
@@ -33,19 +33,19 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onDocumentStart()
     {
-        $this->document = new DOMDocument();
+        $this->document = new DOMDocument('1.0','UTF-8');
 
-        $root = $this->document->createElementNS('http://xml.zope.org/namespaces/tal', 'tal:documentElement');
-        $this->document->appendChild($root);
-
-        $this->_current = $this->document->documentElement;
+        $this->root = $this->document->createDocumentFragment();
+        $this->_current = $this->root;
     }
 
     public function onDocumentEnd()
     {
+        $this->document->appendChild($this->root);
+
         if (count($this->_stack) > 0) {
-            $left='</'.$this->_current->localName.'>';
-            for ($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->_stack[$i]->localName.'>';
+            $left='</'.$this->getQName($this->_current).'>';
+            for ($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->getQName($this->_stack[$i]).'>';
             throw new PHPTAL_ParserException("Not all elements were closed before end of the document. Missing: ".$left);
         }
     }
@@ -57,27 +57,35 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onXmlDecl($decl)
     {
-        // FIXME
+        if (preg_match('/\s+standalone\s*=\s*["\']yes/',$decl)) {
+            $this->document->xmlStandalone = true;
+        }
     }
 
     public function onComment($data)
     {
-        $this->document->create($this->document->createComment($data));
+        $this->_current->appendChild($this->document->createComment($data));
     }
 
     public function onCDATASection($data)
     {
-        $this->document->create($this->document->createCDATASection($data));
+        $this->_current->appendChild($this->document->createCDATASection($data));
     }
 
     public function onProcessingInstruction($data)
     {
-        $this->document->create($this->document->createProcessingInstruction('FIXME', $data));
+        // FIXME: doesn't allow non-ASCII target names
+        if (preg_match('/^<\?([A-Z0-9_:.-]+)\s+(.*)\?>$/si', $data, $m)) {
+            list(,$target, $data) = $m;
+            $this->_current->appendChild($this->document->createProcessingInstruction($target, $data));
+        } else {
+            throw new PHPTAL_ParserException("Invalid processsing instruction syntax (PI must start with name followed by whitespace, XML forbids PHP short tags) '$data'");
+        }
     }
 
     private function decodeEntities($str)
     {
-        return html_entity_decode($attributes['xmlns'], ENT_QUOTES, 'UTF-8');
+        return html_entity_decode($str, ENT_QUOTES, 'UTF-8');
     }
 
     private function prefixToNamespaceURI($prefix, array $attributes)
@@ -93,7 +101,8 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
             return trim($this->decodeEntities($attributes['xmlns:'.$prefix]));
         }
 
-        return PHPTAL_Dom_Defs::getInstance()->prefixToNamespaceURI($prefix);
+        $res = PHPTAL_Dom_Defs::getInstance()->prefixToNamespaceURI($prefix);
+        return $res;
     }
 
     public function onElementStart($element_qname, array $attributes)
@@ -112,8 +121,12 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
         $element = $this->document->createElementNS($namespace_uri, $element_qname);
 
+
         // FIXME: xmlns first?
         foreach ($attributes as $qname=>$encoded_value) {
+
+            if ($qname === 'xmlns') continue; // xmlns of the element is set via createElementNS
+
             if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->prefixToNamespaceURI($m[1], $attributes);
@@ -133,24 +146,33 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
             $element->setAttributeNS($attr_namespace_uri, $qname, $this->decodeEntities($encoded_value));
         }
-        $this->document->create($element);
+
         $this->_stack[] =  $this->_current;
+        $this->_current->appendChild($element);
+        assert('$element_qname === $this->getQName($element)');
+
         $this->_current = $element;
+
     }
 
     public function onElementData($data)
     {
-        $this->document->create($this->document->createTextNode($this->decodeEntities($data)));
+        $this->_current->appendChild($this->document->createTextNode($this->decodeEntities($data)));
+    }
+
+    private function getQName(DOMElement $element)
+    {
+        if ($element->prefix !== '') return $element->prefix.':'.$element->localName;
+        return $element->localName;
     }
 
     public function onElementClose($qname)
     {
-        if ($this->_current === $this->document->documentElement) {
+        if (!count($this->_stack)) {
             throw new PHPTAL_ParserException("Found closing tag for < $qname > where there are no open tags");
         }
 
-        $current_qname = $this->_current->localName;
-        if ($this->_current->prefix !== NULL) $current_qname = $this->_current->prefix.':'.$current_qname;
+        $current_qname = $this->getQName($this->_current);
 
         if ($current_qname != $qname) {
             throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$current_qname." > but found < /".$qname." >");
@@ -161,7 +183,7 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     public function setEncoding($encoding)
     {
         if (strtoupper($encoding) !== 'UTF-8') {
-            throw new PHPTAL_ParserException("PHPTAL with PHP5 DOM pre-filters supports only UTF-8 encoding ($encoding was set)");
+            throw new PHPTAL_ConfigurationException("PHPTAL with PHP5 DOM pre-filters supports only UTF-8 encoding ($encoding was set)");
         }
     }
 }
