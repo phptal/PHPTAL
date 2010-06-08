@@ -13,6 +13,8 @@
  * @link     http://phptal.org/
  */
 
+error_reporting( E_ALL | E_STRICT );
+assert_options(ASSERT_ACTIVE, 1);
 
 // This is needed to run tests ran individually without run-tests.php script
 if (!class_exists('PHPTAL')) {
@@ -39,6 +41,9 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
 
     function setUp()
     {
+        $this->assertTrue(defined('PHPTAL_VERSION'));
+        $this->assertTrue(PHPTAL_VERSION >= '1_2_2');
+
         $this->buffer_level = ob_get_level();
 
         // tests rely on cwd being in tests/

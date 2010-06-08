@@ -17,9 +17,6 @@
 //require_once 'PHPUnit/Framework/TestSuite.php';
 require_once 'PHPUnit/TextUI/TestRunner.php';
 
-error_reporting( E_ALL | E_STRICT );
-assert_options(ASSERT_ACTIVE, 1);
-
 chdir(dirname(__FILE__));
 
 require_once "./config.php";
