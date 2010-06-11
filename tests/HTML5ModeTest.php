@@ -166,24 +166,29 @@ class HTML5ModeTest extends PHPTAL_TestCase
        $this->assertEquals('<input checked="checked"/>',$tpl->execute());
    }
 
+   private function decodeNumericEntities($str)
+   {
+       return normalize_html(preg_replace('/&#x?[a-f0-9]+;/ie','htmlspecialchars(html_entity_decode("\\0"))', $str));
+   }
+
    function testAttributeQuotes()
    {
-       $res = $this->newPHPTAL()->setSource(normalize_html('<a test=\'${php:chr(34)}\' tal:attributes="foo php:chr(34)"
+       $res = $this->newPHPTAL()->setSource('<a test=\'${php:chr(34)}\' tal:attributes="foo php:chr(34)"
        class=\'email
         href="mailto:me"
        \'
        href
        = \'
        &#x20;&#x6d;&#97;i&#108;&#x74;o&#x3a;&#x20;&#37;&#55;0o&#x72;&#110;&#x65;%&#x36;&#x63;&#x25;&#x34;&#x30;&#x70;&#37;6&#102;%7&#x32;&#x6e;e%&#x36;c&#37;2en&#x65;t?
-       \'>contact me</a>'))->execute();
+       \'>contact me</a>')->execute();
 
-       $this->assertEquals(normalize_html('<a test="&quot;"
+       $this->assertEquals($this->decodeNumericEntities('<a test="&quot;"
           class="email
            href=&quot;mailto:me&quot;
           "
           href="
-          &#x20;&#x6d;&#97;i&#108;&#x74;o&#x3a;&#x20;&#37;&#55;0o&#x72;&#110;&#x65;%&#x36;&#x63;&#x25;&#x34;&#x30;&#x70;&#37;6&#102;%7&#x32;&#x6e;e%&#x36;c&#37;2en&#x65;t?
-          " foo="&quot;">contact me</a>'),$res);
+           mailto: %70orne%6c%40p%6f%72ne%6c%2enet?
+          " foo="&quot;">contact me</a>'),$this->decodeNumericEntities($res));
    }
 }
 
