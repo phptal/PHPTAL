@@ -199,7 +199,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
             /// code generation
 
-            if ($codewriter->isDebugOn()) {
+            if ($codewriter->isDebugOn() && $this->getSourceLine()) {
                 $codewriter->doSetVar('$ctx->_line', $this->getSourceLine());
                 $codewriter->doComment('tag "'.$this->qualifiedName.'" from line '.$this->getSourceLine());
             }
