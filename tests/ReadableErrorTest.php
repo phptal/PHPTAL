@@ -26,7 +26,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
         }
         catch (PHPTAL_Exception $e)
         {
-            $this->assertTrue(strpos($e->srcFile, 'input/error-01.html') !== false);
+            $this->assertContains('input/error-01.html', $e->srcFile);
             $this->assertEquals(2, $e->srcLine);
         }
         catch (Exception $e)

@@ -16,6 +16,15 @@
 
 class ContentEncodingTest extends PHPTAL_TestCase
 {
+    function testSimpleAnyForm()
+    {
+        $tpl = $this->newPHPTAL('input/content-encoding.xml');
+        $res = $tpl->execute();
+        $exp = html_entity_decode(normalize_html_file('output/content-encoding.xml'), ENT_QUOTES, 'UTF-8');
+        $res = html_entity_decode(normalize_html($res), ENT_QUOTES, 'UTF-8');
+        $this->assertEquals($exp, $res);
+    }
+
     function testSimple()
     {
         $tpl = $this->newPHPTAL('input/content-encoding.xml');
