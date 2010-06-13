@@ -455,7 +455,7 @@ class PHPTAL_Dom_SaxXmlParser
     {
         list(, $type, $code) = $m;
         if ($type === '=') $code = 'echo '.$code;
-        return '${structure phptal-internal-php-block:'.str_replace('}', '&#125;', htmlspecialchars($code)).'}';
+        return '${structure phptal-internal-php-block:'.rawurlencode($code).'}';
     }
 
     public function getSourceFile()

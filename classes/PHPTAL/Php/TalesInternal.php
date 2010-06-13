@@ -346,6 +346,8 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function phptal_internal_php_block($src)
     {
+        $src = rawurldecode($src);
+
         // Simple echo can be supported via regular method
         if (preg_match('/^\s*echo\s+((?:[^;]+|"[^"\\\\]*"|\'[^\'\\\\]*\'|\/\*.*?\*\/)+);*\s*$/s',$src,$m))
         {

@@ -70,14 +70,25 @@ EOT;
     {
         $src = <<<EOT
 <span tal:attributes="title php:'\${foo}\${foo}'"></span>
+EOT;
+    $exp = <<<EOT
+<span title="\${foo}\${foo}"></span>
+EOT;
+        $tpl = $this->newPHPTAL()->setSource($src);
+        $tpl->foo = 'foo value';
+        $res = $tpl->execute();
+        $this->assertEquals($exp, $res);
+    }
+
+    public function testInterpol3b()
+    {
+        $src = <<<EOT
 <span title="<?php echo '\${foo}\${foo}' ?>"></span>
 EOT;
     $exp = <<<EOT
 <span title="\${foo}\${foo}"></span>
-<span title="\${foo}\${foo}"></span>
 EOT;
-        $tpl = $this->newPHPTAL();
-        $tpl->setSource($src);
+        $tpl = $this->newPHPTAL()->setSource($src);
         $tpl->foo = 'foo value';
         $res = $tpl->execute();
         $this->assertEquals($exp, $res);
