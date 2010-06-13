@@ -85,6 +85,21 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
         $p->setForceReparse(true);
         return $p;
     }
+
+    protected function assertXMLEquals($expect, $test)
+    {
+        $doc = new DOMDocument();
+        $this->assertTrue($doc->loadXML($expect), "Can load $expect");
+        $doc->normalize();
+        $expect = $doc->saveXML();
+
+        $doc = new DOMDocument();
+        $this->assertTrue($doc->loadXML($test), "Can load $test");
+        $doc->normalize();
+        $test = $doc->saveXML();
+
+        $this->assertEquals($expect, $test);
+    }
 }
 
 if (function_exists('date_default_timezone_set')) {

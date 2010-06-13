@@ -43,18 +43,15 @@ class NamespacesTest extends PHPTAL_TestCase
 
     function testOverwrite()
     {
-        $exp = normalize_html_file('output/namespaces.03.html');
-        $tpl = $this->newPHPTAL('input/namespaces.03.html');
-        $res = $tpl->execute();
-        $res = normalize_html($res);
-        $this->assertEquals($exp, $res);
+        $res = $this->newPHPTAL('input/namespaces.03.html')->execute();
+        $this->assertEquals(normalize_html_file('output/namespaces.03.html'), normalize_html($res));
     }
 
     function testOverwriteBuiltinNamespace()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource($src='<metal:block xmlns:metal="non-zope" metal:use-macro="just kidding">ok</metal:block>');
-        $this->assertEquals($src, $tpl->execute());
+        $this->assertEquals(normalize_html($src), normalize_html($tpl->execute()));
     }
 
     function testNamespaceWithoutPrefix()

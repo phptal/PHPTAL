@@ -36,10 +36,10 @@ class XmlParserTest extends PHPTAL_TestCase
         <?xml-stylesheet type="text/css" href="/${baz}" ?>
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"/>');
 
-        $this->assertEquals(normalize_html('<?xml version="1.0" encoding="utf-8"?>
+        $this->assertXMLEquals('<?xml version="1.0" encoding="utf-8"?>
         <?xml-stylesheet type="text/css" href="/css" ?>
         <?xml-stylesheet type="text/css" href="/quz" ?>
-        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"></html>'), normalize_html($tpl->execute()));
+        <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl"></html>', $tpl->execute());
     }
 
     public function testPHPBlocksNotInterpolated()
@@ -284,9 +284,9 @@ xxxx/>
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
         <input type="text" value="${phptal_var}" spry:if="i == 1" /></form></body></html>');
 
-        $this->assertEquals(normalize_html('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        $this->assertXMLEquals('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xmlns:spry="http://ns.adobe.com/spry"><body><form>
-        <input type="text" value="ok" spry:if="i == 1"/></form></body></html>'), normalize_html($tpl->execute()));
+        <input type="text" value="ok" spry:if="i == 1"/></form></body></html>', $tpl->execute());
     }
 
 }

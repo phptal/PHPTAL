@@ -88,9 +88,9 @@ class PhptalTest extends PHPTAL_TestCase
     {
         $tpl = $this->newPHPTAL('input/xml.04.xml');
         $tpl->setOutputMode(PHPTAL::XML);
-        $res = normalize_html($tpl->execute());
-        $exp = normalize_html_file('input/xml.04.xml');
-        $this->assertEquals($exp, $res);
+        $res = $tpl->execute();
+        $exp = file_get_contents('input/xml.04.xml');
+        $this->assertXMLEquals($exp, $res);
     }
 
     function testSource()

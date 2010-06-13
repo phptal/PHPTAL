@@ -17,9 +17,9 @@ class PHPTAL_ExceptionHandler
     private $encoding;
     function __construct($encoding)
     {
-        $this->encoding = $encoding; 
+        $this->encoding = $encoding;
     }
-    
+
     /**
      * PHP's default exception handler allows error pages to be indexed and can reveal too much information,
      * so if possible PHPTAL sets up its own handler to fix this.
@@ -71,10 +71,10 @@ class PHPTAL_ExceptionHandler
             $body = "<p>This page cannot be displayed.</p><hr/>" .
                     "<p><small>Enable <code>display_errors</code> to see detailed message.</small></p>";
         }
-        
+
         echo "<!DOCTYPE html><html xmlns='http://www.w3.org/1999/xhtml'><head><style>body{font-family:sans-serif}</style><title>\n";
-        echo $title.'</title></head><body><h1>PHPTAL Exception</h1>'.$body; 
-        error_log($e->getMessage().' in '.$line); 
+        echo $title.'</title></head><body><h1>PHPTAL Exception</h1>'.$body;
+        error_log($e->getMessage().' in '.$line);
         echo '</body></html>'.str_repeat('    ', 100)."\n"; // IE won't display error pages < 512b
         exit(1);
     }
