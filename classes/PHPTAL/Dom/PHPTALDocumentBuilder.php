@@ -101,20 +101,22 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
         $attrnodes = array();
         foreach ($attributes as $qname=>$value) {
-            $local_name = $qname;
+
             if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
-                if (false === $attr_namespace_uri) {
-                    throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >");
-                }
             } else {
+                $local_name = $qname;
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
+            }
+
+            if (false === $attr_namespace_uri) {
+                throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >");
             }
 
             if ($this->_xmlns->isHandledNamespace($attr_namespace_uri)
                 && !$this->_xmlns->isValidAttributeNS($attr_namespace_uri, $local_name)) {
-                throw new PHPTAL_ParserException("Attribute '$local_name' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
+                throw new PHPTAL_ParserException("Attribute '$qname' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
             }
 
             $attrnodes[] = new PHPTAL_Dom_Attr($qname, $attr_namespace_uri, $value, $this->encoding);
