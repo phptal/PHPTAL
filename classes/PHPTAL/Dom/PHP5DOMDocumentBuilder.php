@@ -12,7 +12,6 @@
  * @link     http://phptal.org/
  */
 
-
 /**
  * DOM Builder
  *
@@ -22,10 +21,21 @@
 class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 {
     private $document, $root;
+    private $xmldecl = '', $doctype = '';
 
     public function getResult()
     {
         return $this->document->documentElement;
+    }
+
+    /**
+     * XMLDecl can't be stored in DOM exactly
+     *
+     * @return string
+     */
+    public function getXMLDeclaration()
+    {
+        return $this->xmldecl;
     }
 
 
@@ -33,7 +43,12 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onDocumentStart()
     {
-        $this->document = new DOMDocument('1.0','UTF-8');
+        $this->setDocument(new DOMDocument('1.0','UTF-8'));
+    }
+
+    private function setDocument(DOMDocument $document)
+    {
+        $this->document = $document;
 
         $this->root = $this->document->createDocumentFragment();
         $this->_current = $this->root;
@@ -41,7 +56,15 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onDocumentEnd()
     {
-        $this->document->appendChild($this->root);
+        if ($this->root->childNodes->length == 1 && $this->root->childNodes->item(0) instanceof DOMElement) {
+            $this->document->appendChild($this->root);
+        } else {
+            $wrapper = $this->document->createElementNS('http://xml.zope.org/namespaces/tal','tal:documentElement');
+            if ($this->root->childNodes->length) {
+                $wrapper->appendChild($this->root);
+            }
+            $this->document->appendChild($wrapper);
+        }
 
         if (count($this->_stack) > 0) {
             $left='</'.$this->getQName($this->_current).'>';
@@ -52,13 +75,23 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function onDocType($doctype_string)
     {
-        // FIXME
+        $this->doctype = $doctype_string;
+
+        // This is insane. PHP has no other way of setting DOCTYPE.
+        // I'm not sure if preserving XMLDecl is a good idea.
+        $src = $this->xmldecl . $doctype_string . '<tal:temp xmlns:tal="http://xml.zope.org/namespaces/tal"/>';
+
+        $document = new DOMDocument('1.0','UTF-8');
+        $document->loadXML($src);
+        $document->removeChild($document->documentElement);
+        $this->setDocument($document);
     }
 
     public function onXmlDecl($decl)
     {
+        $this->xmldecl = $decl;
         if (preg_match('/\s+standalone\s*=\s*["\']yes/',$decl)) {
-            $this->document->xmlStandalone = true;
+            $this->document->xmlStandalone = true;  // I'm not sure if that's needed at all
         }
     }
 
@@ -96,24 +129,44 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
             }
             return $this->_current->namespaceURI; // not used for attributes!
         }
-        // FIXME: string lookupNamespaceURI ( string $prefix )
+
+        // FIXME: this should be covered by lookupNamespaceURI() if xmlns attrs were processed first
         if (isset($attributes['xmlns:'.$prefix])) {
             return trim($this->decodeEntities($attributes['xmlns:'.$prefix]));
+        }
+
+        if ($res = $this->_current->lookupNamespaceURI($prefix)) {
+            return $res;
         }
 
         $res = PHPTAL_Dom_Defs::getInstance()->prefixToNamespaceURI($prefix);
         return $res;
     }
 
+    private function findParentWithoutPrefix(DOMNode $current)
+    {
+        while($current instanceof DOMElement && ($current = $current->parentNode)) {
+            if (!$current->prefix) {
+                return $current;
+            }
+        }
+        return NULL;
+    }
+
     public function onElementStart($element_qname, array $attributes)
     {
         if (preg_match('/^([^:]+):/', $element_qname, $m)) {
             $prefix = $m[1];
+            $namespace_uri = $this->prefixToNamespaceURI($prefix, $attributes);
         } else {
-            $prefix = ''; $local_name = $element_qname;
+            $prefix = '';
+            $unprefixed_parent = $this->findParentWithoutPrefix($this->_current);
+            if ($unprefixed_parent) {
+                $namespace_uri = $unprefixed_parent->namespaceURI;
+            } else {
+                $namespace_uri = $this->_current->lookupNamespaceURI(NULL);
+            }
         }
-
-        $namespace_uri = $this->prefixToNamespaceURI($prefix, $attributes);
 
         if (false === $namespace_uri) {
             throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >");
@@ -121,27 +174,23 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
         $element = $this->document->createElementNS($namespace_uri, $element_qname);
 
-
-        // FIXME: xmlns first?
         foreach ($attributes as $qname=>$encoded_value) {
-
-            if ($qname === 'xmlns') continue; // xmlns of the element is set via createElementNS
-
             if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
                 $local_name = $m[2];
                 $attr_namespace_uri = $this->prefixToNamespaceURI($m[1], $attributes);
-
-                if (false === $attr_namespace_uri) {
-                    throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >");
-                }
             } else {
                 $local_name = $qname;
-                $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
+                $attr_namespace_uri = $this->_current->lookupNamespaceURI(NULL); // default NS. Attributes don't inherit namespace per XMLNS spec
             }
 
-            if (PHPTAL_Dom_Defs::getInstance()->isHandledNamespace($attr_namespace_uri)
-                && !PHPTAL_Dom_Defs::getInstance()->isValidAttributeNS($attr_namespace_uri, $local_name)) {
-                throw new PHPTAL_ParserException("Attribute '$local_name' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
+            if (false === $attr_namespace_uri) {
+                throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >");
+            }
+
+            $defs = PHPTAL_Dom_Defs::getInstance();
+            if ($defs->isHandledNamespace($attr_namespace_uri)
+                && !$defs->isValidAttributeNS($attr_namespace_uri, $local_name)) {
+                throw new PHPTAL_ParserException("Attribute '$qname' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
             }
 
             $element->setAttributeNS($attr_namespace_uri, $qname, $this->decodeEntities($encoded_value));
