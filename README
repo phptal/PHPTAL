@@ -1,94 +1,61 @@
-                  PHPTAL - Template Attribute Language for PHP
 
-             Laurent Bedubourg <lbedubourg@motion-twin.com>
-
+# PHPTAL - Template Attribute Language for PHP
 
 
-  Usage requirements
-  ==================
+Usage requirements
+==================
 
-  To use PHPTAL in your projects, you will only require this:
+To use PHPTAL in your projects, you will only require PHP 5.1.2 or later.
 
-  - PHP5
+If you want to use the builtin internationalisation system (I18N) the gettext extension must be compiled into PHP (--with-gettext).
 
-  If you are willing to use the builtin internationalisation system of 
-  (I18N) the gettext extension must be compiled into PHP 
-  (--with-gettext).
 
-  PEAR Install
-  ============
+Non-PEAR install
+================
 
-  Get the latest PHPTAL package on http://phptal.org.  
-  
-  Then run
+To run you only need PHPTAL.php and files in PHPTAL directory. Other files are for unit tests and PEAR installer.
+
+Get the latest PHPTAL package from http://phptal.org.
+
+    tar zxvf PHPTAL-X.X.X.tar.gz
+    mv PHPTAL-X.X.X/PHPTAL* /path/to/your/php/include/path/
+
+
+PEAR Install
+============
+
+Get the latest PHPTAL package from http://phptal.org.
+
+Then run:
 
     pear install PHPTAL-X.X.X.tar.gz
 
 
-  NON PEAR install
-  ================
 
-  Get the latest PHPTAL package on http://phptal.org. 
+Getting the latest development version
+======================================
 
-    tar zxvf PHPTAL-X.X.X.tar.gz
-    mv PHPTAL-X.X.X PHPTAL
-    mv PHPTAL/PHPTAL.php .
-    mv PHPTAL* /path/to/your/php/include/path
-  
-
-  Getting the latest development version
-  ======================================
-
-  You can checkout the latest subversion trunk content using:
+You can checkout the latest development version using:
 
     svn co https://svn.motion-twin.com/phptal/trunk phptal
 
 
-  PHPTAL development requirements
-  ===============================
 
-  If you want to hack PHPTAL (don't forget to send me patches), you will
-  require:
+PHPTAL development requirements
+===============================
 
-  - The PHPTAL development package 
-  - PEAR[0]
-  - Phing[1] to run maintainance tasks in an ant way
-  - PHPUnit2[2] to run tests
-  - PhpDocumentor[3] (optional) to generate PHP documentation
+If you want to hack PHPTAL (don't forget to send me patches), you will require:
 
+  - The PHPTAL development package
+  - PEAR (to easily install other tools)
+    http://pear.php.net
 
-  Phing tasks
-  ===========
-  
-  - phing doc      (call phpdocumentor on classes folder)
-  - phing test     (run tests)
-  - phing main     (test, build, pear-package, tar)
+  - Phing to run maintainance tasks
 
+        pear channel-discover pear.phing.info
+        pear install phing/phing
 
- [0] http://pear.php.net
- [1] http://phing.tigris.org
- [2] http://pear.php.net/package/PHPUnit2
- [3] http://www.phpdoc.org
+  - PHPUnit to run tests
 
-
--- dev notes --
-
-Runtime classes
-===============
-
-- PHPTAL_Exception
-- PHPTAL_Context
-- PHPTAL_RepeatController
-- PHPTAL_Filter
-- PHPTAL_Trigger
-- PHPTAL_TranslationService
-- PHPTAL_GetTextTranslator
-
-Parsetime classes
-=================
-
-- PHPTAL_Dom_SaxXmlParser
-- PHPTAL_Php_Attribute
-- PHPTAL_Dom_Node
-
-
+        pear channel-discover pear.phpunit.de
+        pear install phpunit/PHPUnit

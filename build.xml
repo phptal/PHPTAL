@@ -26,6 +26,7 @@
     <exclude name="tests/**/.svn/**"/>
     <exclude name="tests/**/.rej"/>
     <exclude name="tests/**/.orig"/>
+    <include name="phpunit.xml"/>
   </fileset>
 
   <fileset dir="tools/" id="tools">
