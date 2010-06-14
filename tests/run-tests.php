@@ -12,10 +12,8 @@
  * @version  SVN: $Id$
  * @link     http://phptal.org/
  */
-//require_once 'PHPUnit/Framework/Test.php';
-//require_once 'PHPUnit/Framework/TestCase.php';
-//require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
+
+require_once 'PHPUnit/Autoload.php';
 
 chdir(dirname(__FILE__));
 
