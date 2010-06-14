@@ -133,12 +133,12 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
      *
      * @return bool
      */
-    public function isPHP5DOMNeeded()
+    public function isPHP5DOMNeeded($debug='?')
     {
         $method = new ReflectionMethod($this, 'filterElement');
 
         // checks if method has been overriden
-        return $method->class !== __CLASS__;
+        return $method->getDeclaringClass()->name !== __CLASS__;
     }
 }
 
