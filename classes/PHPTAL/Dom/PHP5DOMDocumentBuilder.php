@@ -25,6 +25,9 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     public function getResult()
     {
+        assert('$this->document instanceof DOMDocument');
+        assert('$this->document->documentElement');
+        assert('$this->document->documentElement instanceof DOMElement');
         return $this->document->documentElement;
     }
 
@@ -127,7 +130,10 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
             if (isset($attributes['xmlns'])) {
                 return trim($this->decodeEntities($attributes['xmlns']));
             }
-            return $this->_current->namespaceURI; // not used for attributes!
+            if ($this->_current instanceof DOMElement) {
+                return $this->_current->namespaceURI; // not used for attributes!
+            }
+            return $this->_current->lookupNamespaceURI(NULL);
         }
 
         // FIXME: this should be covered by lookupNamespaceURI() if xmlns attrs were processed first
@@ -145,10 +151,11 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     private function findParentWithoutPrefix(DOMNode $current)
     {
-        while($current instanceof DOMElement && ($current = $current->parentNode)) {
+        while($current instanceof DOMElement) {
             if (!$current->prefix) {
                 return $current;
             }
+            $current = $current->parentNode;
         }
         return NULL;
     }
@@ -164,13 +171,14 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
             if ($unprefixed_parent) {
                 $namespace_uri = $unprefixed_parent->namespaceURI;
             } else {
-                $namespace_uri = $this->_current->lookupNamespaceURI(NULL);
+                $namespace_uri = $this->prefixToNamespaceURI('', $attributes);
             }
         }
 
         if (false === $namespace_uri) {
             throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >");
         }
+
 
         $element = $this->document->createElementNS($namespace_uri, $element_qname);
 
@@ -199,7 +207,7 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         $this->_stack[] =  $this->_current;
         $this->_current->appendChild($element);
         assert('$element_qname === $this->getQName($element)');
-        assert('$element->namespaceURI === $namespace_uri'); 
+        assert('$element->namespaceURI === $namespace_uri');
         $this->_current = $element;
 
     }

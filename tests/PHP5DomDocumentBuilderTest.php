@@ -30,7 +30,13 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
         $b = new PHPTAL_Dom_PHP5DOMDocumentBuilder();
         $p = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         $p->parseString($b,$str);
-        return $b->getResult();
+        $res = $b->getResult();
+
+        $this->assertType('DOMElement',$res);
+        $this->assertType('DOMDocument',$res->ownerDocument);
+        $this->assertSame($res, $res->ownerDocument->documentElement);
+
+        return $res;
     }
 
     private function parseUnparse($str)
@@ -88,7 +94,7 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
 
     function testRootNS()
     {
-        $res = $this->parse('<root xmlns="urn:foo"/>');
+        $res = $this->parse('<rootfoo xmlns="urn:foo"/>');
         $this->assertType('DOMElement',$res);
         $this->assertEquals('',$res->prefix);
         $this->assertEquals('urn:foo',$res->namespaceURI);

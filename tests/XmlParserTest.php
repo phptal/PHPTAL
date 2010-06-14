@@ -111,6 +111,13 @@ class XmlParserTest extends PHPTAL_TestCase
         $this->assertEquals("<_.:_ xmlns:_.=\"tricky\"></_.:_>", $builder->result);
     }
 
+    public function testRootNS()
+    {
+        $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
+        $parser->parseString($builder = new MyDocumentBuilder(), "<f xmlns='foo:bar'/>")->getResult();
+        $this->assertEquals('<f xmlns="foo:bar"></f>', $builder->result);
+    }
+
     public function testAllowsXMLStylesheet()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
