@@ -30,9 +30,8 @@ class PHPTAL_Dom_PHP5DOMConverter
         if ($doc->doctype) {
             $this->line_number++;
 
-            // it seems that internalSubset isn't as documented in PHP. It's whole source.
-            if ($doc->doctype->internalSubset !== null) {
-                assert('0 === strpos($doc->doctype->internalSubset,"<!DOCTYPE ")');
+            // It seems that internalSubset isn't as documented in PHP. It's whole source.
+            if ($doc->doctype->internalSubset !== null && 0 === strpos($doc->doctype->internalSubset,"<!DOCTYPE ")) {
                 $doctype = $doc->doctype->internalSubset;
             } else {
                 $doctype = '<!DOCTYPE '.$doc->doctype->name;
@@ -40,11 +39,16 @@ class PHPTAL_Dom_PHP5DOMConverter
                 if ($doc->doctype->publicId) {
                     $doctype .= ' PUBLIC "'.$doc->doctype->publicId.'"';
                 } elseif ($doc->doctype->systemId) {
-                    $doctype .= ' SYSTEM "'.$doc->doctype->systemId.'"';
+                    $doctype .= ' SYSTEM';
                 }
-                // if ($doc->doctype->internalSubset !== null) {
-                //     $doctype .= ' ['.$doc->doctype->internalSubset.']';
-                // }
+                
+                if ($doc->doctype->systemId) {
+                    $doctype .= ' "'.$doc->doctype->systemId.'"';
+                }
+
+                if ($doc->doctype->internalSubset !== null && false === strpos($doc->doctype->internalSubset,"<!DOCTYPE")) {
+                     $doctype .= ' ['.$doc->doctype->internalSubset.']';
+                }
                 $doctype .= '>';
             }
             $this->builder->onDocType($doctype);
