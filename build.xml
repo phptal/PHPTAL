@@ -121,7 +121,7 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
       <option name="releaseversion" value="${version}"/>
       <option name="releasestability" value="beta"/>
       <option name="license" value="LGPL"/>
-      <option name="phpdep" value="5.1.0"/>
+      <option name="phpdep" value="5.1.2"/>
       <option name="pearinstallerdep" value="1.4.6"/>
       <option name="packagetype" value="php"/>
 
