@@ -57,4 +57,13 @@ class PreFilterTest extends PHPTAL_TestCase
         $this->assertNotNull($pre->node);
         $this->assertEquals(normalize_html($source), normalize_html($pre->node->ownerDocument->saveXML()));
     }
+    
+    function testPreservesNamespace()
+    {
+        $res = $this->newPHPTAL()->setSource('<html xmlns="http://www.w3.org/1999/xhtml"><title/></html>')
+            ->addPreFilter($pre = new MyPHP5DOMPreFilter())->execute();
+            
+        $this->assertXMLEquals('<html xmlns="http://www.w3.org/1999/xhtml"><title/></html>',$res);
+        $this->assertEquals("http://www.w3.org/1999/xhtml", $pre->node->namespaceURI);
+    }
 }

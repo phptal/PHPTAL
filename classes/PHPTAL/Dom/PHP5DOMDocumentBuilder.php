@@ -199,7 +199,7 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         $this->_stack[] =  $this->_current;
         $this->_current->appendChild($element);
         assert('$element_qname === $this->getQName($element)');
-
+        assert('$element->namespaceURI === $namespace_uri'); 
         $this->_current = $element;
 
     }
