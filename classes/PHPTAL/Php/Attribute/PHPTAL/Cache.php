@@ -42,14 +42,16 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         // number or variable name followed by time unit
         // optional per expression
         if (!preg_match('/^\s*([0-9]+\s*|[a-zA-Z][\/a-zA-Z0-9_]*\s+)([dhms])\s*(?:\;?\s*per\s+([^;]+)|)\s*$/', $this->expression, $matches)) {
-            throw new PHPTAL_ParserException("Cache attribute syntax error: ".$this->expression);
+            throw new PHPTAL_ParserException("Cache attribute syntax error: ".$this->expression,
+                        $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
 
         $cache_len = $matches[1];
         if (!is_numeric($cache_len)) {
             $cache_len = $codewriter->evaluateExpression($cache_len);
 
-            if (is_array($cache_len)) { throw new PHPTAL_ParserException("Chained expressions in cache length are not supported"); }
+            if (is_array($cache_len)) throw new PHPTAL_ParserException("Chained expressions in cache length are not supported",
+                                        $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
         switch ($matches[2]) {
             case 'd': $cache_len .= '*24'; /* no break */
@@ -67,7 +69,8 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         } elseif ($cache_per_expression) {
              $code = $codewriter->evaluateExpression($cache_per_expression);
 
-             if (is_array($code)) { throw new PHPTAL_ParserException("Chained expressions in per-cache directive are not supported"); }
+             if (is_array($code)) throw new PHPTAL_ParserException("Chained expressions in per-cache directive are not supported",
+                                                $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
 
              $cache_tag = '('.$code.')."@".' . $cache_tag;
         }

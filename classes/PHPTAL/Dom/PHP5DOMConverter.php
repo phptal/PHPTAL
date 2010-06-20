@@ -147,7 +147,8 @@ class PHPTAL_Dom_PHP5DOMConverter
                     $this->builder->onElementData('&'.$node->nodeName.';');
                     break;
                 default:
-                    throw new PHPTAL_ParserException("Can't convert node type {$node->nodeType} (".get_class($node).')', $this->file, $this->line_number);
+                    throw new PHPTAL_ParserException("Can't convert node type {$node->nodeType} (".get_class($node).')',
+                                $this->file, $this->line_number);
                 break;
             }
         }

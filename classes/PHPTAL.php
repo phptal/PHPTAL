@@ -877,13 +877,13 @@ class PHPTAL
                     throw $e;
                 }
 
-                    if (!function_exists($this->getFunctionName())) {
+                if (!function_exists($this->getFunctionName())) {
                     $msg = str_replace('eval()\'d code', $this->getCodePath(), ob_get_clean());
 
-                        // greedy .* ensures last match
-                        if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line=$m[1]; else $line=0;
+                    // greedy .* ensures last match
+                    if (preg_match('/.*on line (\d+)$/m', $msg, $m)) $line=$m[1]; else $line=0;
                     throw new PHPTAL_TemplateException(trim($msg), $this->getCodePath(), $line);
-                    }
+                }
                 ob_end_clean();
 
             } else {

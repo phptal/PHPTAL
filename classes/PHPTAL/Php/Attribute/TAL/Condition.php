@@ -85,7 +85,8 @@ implements PHPTAL_Php_TalesChainReader
 
     public function talesChainDefaultKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
-        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions');
+        throw new PHPTAL_ParserException('\'default\' keyword not allowed on conditional expressions',
+                    $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
     }
 
 }

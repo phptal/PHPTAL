@@ -72,7 +72,8 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         if (count($this->_stack) > 0) {
             $left='</'.$this->getQName($this->_current).'>';
             for ($i = count($this->_stack)-1; $i>0; $i--) $left .= '</'.$this->getQName($this->_stack[$i]).'>';
-            throw new PHPTAL_ParserException("Not all elements were closed before end of the document. Missing: ".$left);
+            throw new PHPTAL_ParserException("Not all elements were closed before end of the document. Missing: ".$left,
+                        $this->file, $this->line);
         }
     }
 
@@ -115,7 +116,8 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
             list(,$target, $data) = $m;
             $this->_current->appendChild($this->document->createProcessingInstruction($target, $data));
         } else {
-            throw new PHPTAL_ParserException("Invalid processsing instruction syntax (PI must start with name followed by whitespace, XML forbids PHP short tags) '$data'");
+            throw new PHPTAL_ParserException("Invalid processsing instruction syntax (PI must start with name followed by whitespace, XML forbids PHP short tags) '$data'",
+                        $this->file, $this->line);
         }
     }
 
@@ -176,7 +178,8 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         }
 
         if (false === $namespace_uri) {
-            throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >");
+            throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >",
+                        $this->file, $this->line);
         }
 
 
@@ -192,13 +195,15 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
             }
 
             if (false === $attr_namespace_uri) {
-                throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >");
+                throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >",
+                            $this->file, $this->line);
             }
 
             $defs = PHPTAL_Dom_Defs::getInstance();
             if ($defs->isHandledNamespace($attr_namespace_uri)
                 && !$defs->isValidAttributeNS($attr_namespace_uri, $local_name)) {
-                throw new PHPTAL_ParserException("Attribute '$qname' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute");
+                throw new PHPTAL_ParserException("Attribute '$qname' is in '$attr_namespace_uri' namespace, but is not a supported PHPTAL attribute",
+                            $this->file, $this->line);
             }
 
             $element->setAttributeNS($attr_namespace_uri, $qname, $this->decodeEntities($encoded_value));
@@ -226,13 +231,15 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
     public function onElementClose($qname)
     {
         if (!count($this->_stack)) {
-            throw new PHPTAL_ParserException("Found closing tag for < $qname > where there are no open tags");
+            throw new PHPTAL_ParserException("Found closing tag for < $qname > where there are no open tags",
+                        $this->file, $this->line);
         }
 
         $current_qname = $this->getQName($this->_current);
 
         if ($current_qname != $qname) {
-            throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$current_qname." > but found < /".$qname." >");
+            throw new PHPTAL_ParserException("Tag closure mismatch, expected < /".$current_qname." > but found < /".$qname." >",
+                        $this->file, $this->line);
         }
         $this->_current = array_pop($this->_stack);
     }

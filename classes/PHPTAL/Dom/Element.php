@@ -518,7 +518,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             else if ($nsattr instanceof PHPTAL_NamespaceAttributeContent)
                 $this->contentAttributes[] = $handler;
             else
-                throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($nsattr));
+                throw new PHPTAL_ParserException("Unknown namespace attribute class ".get_class($nsattr),
+                            $this->getSourceFile(), $this->getSourceLine());
 
         }
     }
