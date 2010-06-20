@@ -265,6 +265,16 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         return null;
     }
 
+    public function removeAttributeNS($ns_uri, $localname)
+    {
+        foreach ($this->attribute_nodes as $k => $attr) {
+            if ($attr->getNamespaceURI() === $ns_uri && $attr->getLocalName() === $localname) {
+                unset($this->attribute_nodes[$k]);
+                return;
+            }
+        }
+    }
+
     public function getAttributeNode($qname)
     {
         foreach($this->attribute_nodes as $attr) if ($attr->getQualifiedName() === $qname) return $attr;
