@@ -123,11 +123,6 @@ class PHPTAL
     protected $_context = null;
 
     /**
-     * current template file (changes within macros)
-     */
-    protected $_file = false;
-
-    /**
      * list of on-error caught exceptions
      */
     protected $_errors = array();
@@ -671,7 +666,6 @@ class PHPTAL
                 // includes generated template PHP code
                 $this->prepare();
             }
-            $this->_context->_file = $this->_file;
             $this->_context->echoDeclarations(false);
 
             $templateFunction = $this->getFunctionName();
@@ -684,9 +678,6 @@ class PHPTAL
             catch (Exception $e)
             {
                 ob_end_clean();
-                if ($e instanceof PHPTAL_TemplateException) {
-                    $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
-                }
                 throw $e;
             }
 
@@ -730,7 +721,6 @@ class PHPTAL
                 throw new PHPTAL_ConfigurationException("echoExecute() does not support postfilters");
             }
 
-            $this->_context->_file = $this->_file;
             $this->_context->echoDeclarations(true);
 
             $templateFunction = $this->getFunctionName();
@@ -738,9 +728,6 @@ class PHPTAL
         }
         catch (Exception $e)
         {
-            if ($e instanceof PHPTAL_TemplateException) {
-                $e->hintSrcPosition($this->_context->_file, $this->_context->_line);
-            }
             PHPTAL_ExceptionHandler::handleException($e, $this->getEncoding());
         }
     }
@@ -789,27 +776,13 @@ class PHPTAL
                 $this->externalMacroTemplatesCache[$file] = $tpl;
             }
 
-            // save current file
-            $currentFile = $this->_context->_file;
-            $this->_context->_file = $tpl->_file;
-
             $fun = $tpl->getFunctionName() . '_' . strtr($macroName, "-", "_");
             if (!function_exists($fun)) {
                 throw new PHPTAL_MacroMissingException("Macro '$macroName' is not defined in $file", $this->_source->getRealPath());
             }
-            try
-            {
-                $fun($tpl, $this);
-            }
-            catch(PHPTAL_TemplateException $e)
-            {
-                $e->hintSrcPosition($tpl->_context->_file.'/'.$macroName, $tpl->_context->_line);
-                $this->_context->_file = $currentFile;
-                throw $e;
-            }
 
-            // restore current file
-            $this->_context->_file = $currentFile;
+            $fun($tpl, $this);
+
         } else {
             // call local macro
             $fun = $local_tpl->getFunctionName() . '_' . strtr($path, "-", "_");
@@ -846,7 +819,6 @@ class PHPTAL
 
         // find the template source file and update function name
         $this->setCodeFile();
-        $this->_file = $this->_source->getRealPath();
 
         if (!function_exists($this->getFunctionName())) {
             // parse template if php generated code does not exists or template

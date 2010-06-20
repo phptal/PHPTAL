@@ -20,8 +20,6 @@
  */
 class PHPTAL_Context
 {
-    public $_line = false;
-    public $_file = false;
     public $repeat;
     public $_xmlDeclaration;
     public $_docType;
@@ -296,7 +294,7 @@ class PHPTAL_Context
             return null;
         }
 
-        throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope", $this->_file, $this->_line);
+        throw new PHPTAL_VariableNotFoundException("Unable to find variable '$varname' in current scope");
     }
 
     /**

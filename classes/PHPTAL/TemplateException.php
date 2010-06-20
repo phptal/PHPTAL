@@ -55,6 +55,6 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
         }
 
         $this->file = $this->srcFile;
-        $this->line = (int)$this->srcLine;
+        $this->line = $this->srcLine;
     }
 }
