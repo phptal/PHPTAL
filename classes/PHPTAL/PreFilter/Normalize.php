@@ -99,6 +99,8 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     protected function normalizeAttributes(PHPTAL_Dom_Element $element)
     {
         foreach ($element->getAttributeNodes() as $attrnode) {
+
+            // skip replaced attributes (because getValueEscaped on them is meaningless)
             if ($attrnode->getReplacedState() !== PHPTAL_Dom_Attr::NOT_REPLACED) continue;
 
             $val = $this->normalizeSpace($attrnode->getValueEscaped(), $attrnode->getEncoding());

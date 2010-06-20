@@ -104,4 +104,46 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         return in_array($element->getLocalName(), self::$breaks_line)
             && ($element->getNamespaceURI() === 'http://www.w3.org/1999/xhtml' || $element->getNamespaceURI() === '');
     }
+
+    /**
+     * Consistent sorting of attributes might give slightly better gzip performance
+     */
+    protected function normalizeAttributes(PHPTAL_Dom_Element $element)
+    {
+        parent::normalizeAttributes($element);
+
+        $attrs_by_qname = array();
+        foreach ($element->getAttributeNodes() as $attrnode) {
+            // safe, as there can't be two attrs with same qname
+            $attrs_by_qname[$attrnode->getQualifiedName()] = $attrnode;
+        }
+
+    	if (count($attrs_by_qname) > 1) {
+    		uksort($attrs_by_qname, array($this, 'compareQNames'));
+    		$element->setAttributeNodes(array_values($attrs_by_qname));
+    	}
+    }
+
+    /**
+	 * pre-defined order of attributes roughly by popularity
+	 */
+	private static $attributes_order = array('href', 'src', 'class', 'title', 'width', 'height', 'alt', 'name', 'style', 'lang', 'id', 'rel', 'type');
+
+	/**
+	 * compare names according to $attributes_order array.
+	 * Elements that are not in array, are considered greater than all elements in array,
+	 * and are sorted alphabetically.
+	 */
+	private static function compareQNames($a, $b) {
+		$a_index = array_search($a, self::$attributes_order);
+		$b_index = array_search($b, self::$attributes_order);
+
+		if ($a_index !== false && $b_index !== false) {
+			return $a_index - $b_index;
+		}
+		if ($a_index === false && $b_index === false) {
+			return strcmp($a, $b);
+		}
+		return ($a_index === false) ? 1 : -1;
+	}
 }
