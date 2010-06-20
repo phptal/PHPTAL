@@ -165,12 +165,32 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 	        return;
         }
 
-	    if ('meta' === $element->getLocalName()
-	        && $element->getAttributeNS('','http-equiv') === 'Content-Type'
-	        && $this->getPHPTAL()->getOutputMode() === PHPTAL::HTML5) {
-	        $element->removeAttributeNS('','http-equiv');
-	        $element->removeAttributeNS('','content');
-	        $element->setAttributeNS('','charset',strtolower($this->getPHPTAL()->getEncoding()));
+        if ($this->getPHPTAL()->getOutputMode() !== PHPTAL::HTML5) {
+            return;
+        }
+
+	    if ('meta' === $element->getLocalName() &&
+	        $element->getAttributeNS('','http-equiv') === 'Content-Type') {
+	            $element->removeAttributeNS('','http-equiv');
+	            $element->removeAttributeNS('','content');
+	            $element->setAttributeNS('','charset',strtolower($this->getPHPTAL()->getEncoding()));
+        }
+        elseif ('link' === $element->getLocalName() &&
+            $element->getAttributeNS('','rel') === 'stylesheet') {
+            $element->removeAttributeNS('','type');
+
+        } elseif ('script' === $element->getLocalName()) {
+            $element->removeAttributeNS('','language');
+
+            $type = $element->getAttributeNS('','type');
+            $is_std = preg_match('/^(?:text|application)\/(?:ecma|java)script(\s*;\s*charset\s*=\s*[^;]*)?$/', $type);
+            // For remote scripts type attr shouldn't matter
+            if ($is_std || $element->getAttributeNS('','src')) {
+                $element->removeAttributeNS('','type');
+            }
+        }
+        elseif ('style' === $element->getLocalName()) {
+            $element->removeAttributeNS('','type');
         }
     }
 }
