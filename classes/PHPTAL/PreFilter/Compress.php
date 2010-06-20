@@ -41,6 +41,13 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
         // <pre> may have attributes normalized
         if ($this->isSpaceSensitiveInXHTML($root)) {
+            // HTML 5 (9.1.2.5) specifies quirk that a first *single* newline in <pre> can be removed
+            if (count($root->childNodes) && $root->childNodes[0] instanceof PHPTAL_Dom_Text) {
+                if (substr($root->childNodes[0]->getValueEscaped(),0,1)==="\n") {
+                    $root->childNodes[0]->setValueEscaped(substr($root->childNodes[0]->getValueEscaped(),1));
+                }
+            }
+
             $this->most_recent_text_node = null;
             $this->findElementToFilter($root);
             return;
