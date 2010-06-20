@@ -3,7 +3,7 @@
 class PHPTAL_Dom_PHP5DOMConverter
 {
     private $builder;
-    private $file, $line_number;
+    private $file, $line_number, $use_dom_line_numbers;
 
     function __construct(PHPTAL_Dom_DocumentBuilder $builder)
     {
@@ -15,6 +15,8 @@ class PHPTAL_Dom_PHP5DOMConverter
      */
     final function convertDocument(DOMElement $root, $xmldecl)
     {
+        $this->use_dom_line_numbers = is_callable($root,'getLineNo'); // added in 5.3
+
         $doc = $root->ownerDocument;
         $this->file = $root->ownerDocument->documentURI;
         if (!$this->file) $this->file = 'Converted DOM';
@@ -85,7 +87,7 @@ class PHPTAL_Dom_PHP5DOMConverter
 
     private function convertElement(DOMElement $element, array $declared_prefixes)
     {
-        if (is_callable($element,'getLineNo') && $element->getLineNo()) { // added in 5.3
+        if ($this->use_dom_line_numbers && $element->getLineNo()) {
             $this->line_number = $element->getLineNo();
         }
         $this->builder->setSource($this->file, $this->line_number);
