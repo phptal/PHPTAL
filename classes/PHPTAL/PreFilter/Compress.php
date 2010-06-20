@@ -41,14 +41,14 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
         // <pre> may have attributes normalized
         if ($this->isSpaceSensitiveInXHTML($root)) {
+            $this->most_recent_text_node = null;
+
             // HTML 5 (9.1.2.5) specifies quirk that a first *single* newline in <pre> can be removed
             if (count($root->childNodes) && $root->childNodes[0] instanceof PHPTAL_Dom_Text) {
                 if (substr($root->childNodes[0]->getValueEscaped(),0,1)==="\n") {
                     $root->childNodes[0]->setValueEscaped(substr($root->childNodes[0]->getValueEscaped(),1));
                 }
             }
-
-            $this->most_recent_text_node = null;
             $this->findElementToFilter($root);
             return;
         }
@@ -69,13 +69,12 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
                     $norm = ltrim($norm);
                 }
 
+                $node->setValueEscaped($norm);
+
                 if ($norm !== '') {
                     $this->most_recent_text_node = $node;
                     $this->had_space = (substr($norm,-1) == ' ');
                 }
-
-                $node->setValueEscaped($norm);
-
             } else if ($node instanceof PHPTAL_Dom_Element) {
                 $this->filterDOM($node);
             } else if ($node instanceof PHPTAL_Dom_DocumentType || $node instanceof PHPTAL_Dom_XMLDeclaration) {
@@ -102,8 +101,10 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
     }
 
     private static $breaks_line = array(
-        'div','br','p','pre','tr','td','table','th','tbody','thead','ul','ol','form','title','head','html','body','base','link','meta','style',
-        'fieldset','legend','hr','section','article','nav','aside','hgroup','header','footer','figure','h1','h2','h3','h4','h5','h6','address','blockquote','dd','dt','dl','param',
+        'address','article','aside','base','blockquote','body','br','dd','div','dl','dt','fieldset','figure',
+        'footer','form','h1','h2','h3','h4','h5','h6','head','header','hgroup','hr','html','legend','link',
+        'meta','nav','ol','option','p','param','pre','section','style','table','tbody','td','th','thead',
+        'title','tr','ul',
     );
 
     private function breaksLine(PHPTAL_Dom_Element $element)
