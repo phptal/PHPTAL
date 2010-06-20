@@ -12,6 +12,9 @@
  * @link     http://phptal.org/
  */
 
+/**
+ * Collapses conscutive whitespace, trims attributes, merges adjacent text nodes
+ */
 class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
 {
     function filter($src)
