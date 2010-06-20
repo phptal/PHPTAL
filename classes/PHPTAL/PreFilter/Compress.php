@@ -123,8 +123,11 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             return true;
         }
 
+        if (!$element->parentNode) {
+            return true;
+        }
+
         if ($element->getLocalName() === 'block'
-            && $element->parentNode
             && $element->getNamespaceURI() === 'http://xml.zope.org/namespaces/tal') {
             return $this->breaksLine($element->parentNode);
         }
