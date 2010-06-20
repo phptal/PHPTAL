@@ -27,7 +27,7 @@
 	  </div>
 	</xsl:template>
 
-  <xsl:param name="html.stylesheet" select="'/new.css /prettify.css'"/>
+  <xsl:param name="html.stylesheet" select="'/nifty.css'"/>
   <xsl:param name="html.extra.head.links" select="1"></xsl:param>
   <xsl:param name="navig.showtitles">1</xsl:param>
 
