@@ -47,7 +47,7 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
                     $root->removeChild($node);
                 } else if ($lastTextNode) {
                     // "foo " . " bar" gives 2 spaces.
-                    $norm = str_replace('  ',' ',$lastTextNode->getValueEscaped().$norm);
+                    $norm = $lastTextNode->getValueEscaped().ltrim($norm,' ');
 
                     $lastTextNode->setValueEscaped($norm); // assumes all nodes use same encoding (they do)
                     $root->removeChild($node);
@@ -66,13 +66,13 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     /**
      * Allows <script> to be normalize. Love your semicolons! (or use CDATA)
      */
-    private function isSpaceSensitiveInXHTML(PHPTAL_Dom_Element $element)
+    protected function isSpaceSensitiveInXHTML(PHPTAL_Dom_Element $element)
     {
         return ($element->getLocalName() === 'pre' || $element->getLocalName() === 'textarea')
             && ($element->getNamespaceURI() === 'http://www.w3.org/1999/xhtml' || $element->getNamespaceURI() === '');
     }
 
-    private function findElementToFilter(PHPTAL_Dom_Element $root)
+    protected function findElementToFilter(PHPTAL_Dom_Element $root)
     {
         foreach ($root->childNodes as $node) {
             if (!$node instanceof PHPTAL_Dom_Element) continue;
@@ -86,14 +86,14 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     /**
      * does not trim
      */
-    private function normalizeSpace($text, $encoding)
+    protected function normalizeSpace($text, $encoding)
     {
         $utf_regex_mod = ($encoding=='UTF-8'?'u':'');
 
         return preg_replace('/\s+/'.$utf_regex_mod, ' ', $text);
     }
 
-    function normalizeAttributes(PHPTAL_Dom_Element $element)
+    protected function normalizeAttributes(PHPTAL_Dom_Element $element)
     {
         foreach ($element->getAttributeNodes() as $attrnode) {
             if ($attrnode->getReplacedState() !== PHPTAL_Dom_Attr::NOT_REPLACED) continue;
