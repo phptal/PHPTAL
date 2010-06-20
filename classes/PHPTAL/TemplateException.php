@@ -37,11 +37,16 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
         } else {
             $this->is_src_accurate = $this->setTemplateSource();
         }
+
+        if ($this->is_src_accurate) {
+            $this->file = $this->srcFile;
+            $this->line = (int)$this->srcLine;
+        }
     }
 
     public function __toString()
     {
-        if (!$this->srcFile) return parent::__toString();
+        if (!$this->srcFile || $this->is_src_accurate) return parent::__toString();
         return "From {$this->srcFile} around line {$this->srcLine}\n".parent::__toString();
     }
 
@@ -52,10 +57,17 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
     {
         if ($srcFile && $srcLine) {
             if (!$this->is_src_accurate) {
-                $this->srcFile = $srcFile; $this->srcLine = $srcLine;
+                $this->srcFile = $srcFile;
+                $this->srcLine = $srcLine;
+                $this->is_src_accurate = true;
             } else if ($this->srcLine <= 1 && $this->srcFile === $srcFile) {
                 $this->srcLine = $srcLine;
             }
+        }
+
+        if ($this->is_src_accurate) {
+            $this->file = $this->srcFile;
+            $this->line = (int)$this->srcLine;
         }
     }
 
