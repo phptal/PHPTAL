@@ -47,9 +47,15 @@ function test(\$tpl) {
 
  ?>
 EOS;
+        // ignore debug
+        $result = preg_replace('!<\?php /\* tag ".*?" from line \d+ \*/; \?>!','', $result);
+        $result = preg_replace('!/\* tag ".*?" from line \d+ \*/ ;!','', $result);
+
         $result = normalize_phpsource($result, true);
         $expected = normalize_phpsource($expected, true);
-        $this->assertEquals($result, $expected);
+
+
+        $this->assertEquals($expected, $result);
     }
 
     function testFunctionsGeneration()
