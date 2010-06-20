@@ -133,7 +133,7 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
      *
      * @return bool
      */
-    public function isPHP5DOMNeeded($debug='?')
+    public function isPHP5DOMNeeded()
     {
         $method = new ReflectionMethod($this, 'filterElement');
 

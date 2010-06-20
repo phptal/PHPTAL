@@ -41,7 +41,7 @@ class PHPTAL_Dom_PHP5DOMConverter
                 } elseif ($doc->doctype->systemId) {
                     $doctype .= ' SYSTEM';
                 }
-                
+
                 if ($doc->doctype->systemId) {
                     $doctype .= ' "'.$doc->doctype->systemId.'"';
                 }

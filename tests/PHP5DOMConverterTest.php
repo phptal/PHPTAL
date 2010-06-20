@@ -160,7 +160,7 @@ class PHP5ConverterTest extends PHPTAL_TestCase
         $this->assertParsesTo('startx[x][/x]end','<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><xhtml>&nbsp;</xhtml>');
     }
-    
+
     function testEntityRef()
     {
         $doc = new DOMDocument('1.0','UTF-8');
