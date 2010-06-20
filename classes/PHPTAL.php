@@ -683,7 +683,7 @@ class PHPTAL
 
             // unshift doctype
             if ($this->_context->_docType) {
-                $res = $this->_context->_docType . "\n" . $res;
+                $res = $this->_context->_docType . $res;
             }
 
             // unshift xml declaration

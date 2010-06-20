@@ -107,7 +107,7 @@ class PHPTAL_Context
             $this->_parentContext->setDocType($doctype, $called_from_macro);
         } else if ($this->_echoDeclarations) {
             if (!$called_from_macro) {
-                echo $doctype."\n";
+                echo $doctype;
             } else {
                 throw new PHPTAL_ConfigurationException("Executed macro in file with DOCTYPE when using echoExecute(). This is not supported yet. Remove DOCTYPE or use PHPTAL->execute().");
             }

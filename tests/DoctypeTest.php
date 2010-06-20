@@ -25,6 +25,17 @@ class DoctypeTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
 
+    function testPreservesNewlineAfterDoctype()
+    {
+        $src = "<!DOCTYPE html>\n\n\n<html></html>";
+        $tpl = $this->newPHPTAL()->setSource($src);
+        $this->assertEquals($src,$tpl->execute());
+
+        $src = "<!DOCTYPE html>\n<html></html>";
+        $tpl->setSource($src);
+        $this->assertEquals($src,$tpl->execute());
+    }
+
     function testMacro()
     {
         $tpl = $this->newPHPTAL('input/doctype.02.user.html');
