@@ -80,6 +80,9 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
                 $this->filterDOM($node);
             } else if ($node instanceof PHPTAL_Dom_DocumentType || $node instanceof PHPTAL_Dom_XMLDeclaration) {
                 $this->had_space = true;
+            } else if ($node instanceof PHPTAL_Dom_ProcessingInstruction) {
+                $this->most_recent_text_node = null;
+                $this->had_space = false;
             }
         }
 
@@ -110,8 +113,12 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
     private function breaksLine(PHPTAL_Dom_Element $element)
     {
-        return in_array($element->getLocalName(), self::$breaks_line)
-            && ($element->getNamespaceURI() === 'http://www.w3.org/1999/xhtml' || $element->getNamespaceURI() === '');
+        if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
+	     && $element->getNamespaceURI() !== '') {
+	        return false;
+        }
+
+        return in_array($element->getLocalName(), self::$breaks_line));
     }
 
     /**
