@@ -100,6 +100,12 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
     private function hasNoInterelementSpace(PHPTAL_Dom_Element $element)
     {
+        if ($element->getLocalName() === 'block'
+            && $element->parentNode
+            && $element->getNamespaceURI() === 'http://xml.zope.org/namespaces/tal') {
+            return $this->hasNoInterelementSpace($element->parentNode);
+        }
+
         return in_array($element->getLocalName(), self::$no_interelement_space)
             && ($element->getNamespaceURI() === 'http://www.w3.org/1999/xhtml' || $element->getNamespaceURI() === '');
     }
@@ -117,12 +123,18 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             return true;
         }
 
+        if ($element->getLocalName() === 'block'
+            && $element->parentNode
+            && $element->getNamespaceURI() === 'http://xml.zope.org/namespaces/tal') {
+            return $this->breaksLine($element->parentNode);
+        }
+
         if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
-	     && $element->getNamespaceURI() !== '') {
+	        && $element->getNamespaceURI() !== '') {
 	        return false;
         }
 
-        return in_array($element->getLocalName(), self::$breaks_line));
+        return in_array($element->getLocalName(), self::$breaks_line);
     }
 
     /**
