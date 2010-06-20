@@ -38,6 +38,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         $this->normalizeAttributes($root);
+        $this->elementSpecificOptimizations($root);
 
         // <pre> may have attributes normalized
         if ($this->isSpaceSensitiveInXHTML($root)) {
@@ -135,7 +136,9 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
     /**
 	 * pre-defined order of attributes roughly by popularity
 	 */
-	private static $attributes_order = array('href', 'src', 'class', 'title', 'width', 'height', 'alt', 'name', 'style', 'lang', 'id', 'rel', 'type');
+	private static $attributes_order = array(
+        'href','src','class','rel','type','title','width','height','alt','content','name','style','lang','id',
+    );
 
 	/**
 	 * compare names according to $attributes_order array.
@@ -154,4 +157,20 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 		}
 		return ($a_index === false) ? 1 : -1;
 	}
+
+	private function elementSpecificOptimizations(PHPTAL_Dom_Element $element)
+	{
+	    if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
+	     && $element->getNamespaceURI() !== '') {
+	        return;
+        }
+
+	    if ('meta' === $element->getLocalName()
+	        && $element->getAttributeNS('','http-equiv') === 'Content-Type'
+	        && $this->getPHPTAL()->getOutputMode() === PHPTAL::HTML5) {
+	        $element->removeAttributeNS('','http-equiv');
+	        $element->removeAttributeNS('','content');
+	        $element->setAttributeNS('','charset',strtolower($this->getPHPTAL()->getEncoding()));
+        }
+    }
 }
