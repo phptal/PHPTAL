@@ -113,6 +113,10 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
     private function breaksLine(PHPTAL_Dom_Element $element)
     {
+        if ($element->getAttributeNS('http://xml.zope.org/namespaces/metal','define-macro')) {
+            return true;
+        }
+
         if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
 	     && $element->getNamespaceURI() !== '') {
 	        return false;
