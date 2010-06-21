@@ -107,9 +107,10 @@ class ReadableErrorTest extends PHPTAL_TestCase
         }
         catch (PHPTAL_TemplateException $e)
         {
-            $this->assertType('string',$e->srcFile);
-            $this->assertContains($file, $e->srcFile);
-            $this->assertEquals($line, $e->srcLine);
+            $msg = $e->getMessage();
+            $this->assertType('string',$e->srcFile, $msg);
+            $this->assertContains($file, $e->srcFile, $msg);
+            $this->assertEquals($line, $e->srcLine, $msg);
         }
         catch (Exception $e)
         {
