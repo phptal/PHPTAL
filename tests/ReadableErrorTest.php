@@ -94,7 +94,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
 
     function testLocalMacroNotExists()
     {
-        $this->assertThrowsInLine(5, 'input'.DIRECTORY_SEPARATOR.'error-12.html');
+        $this->assertThrowsInLine(5, 'input'.DIRECTORY_SEPARATOR.'error-13.html');
     }
 
     function assertThrowsInLine($line, $file)
