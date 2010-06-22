@@ -28,6 +28,9 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
         if ($breaks_line) {
             $this->had_space = true;
+        } else if ($this->isInlineBlock($root)) {
+            $this->most_recent_text_node = null;
+            $this->had_space = false;
         }
 
         // let xml:space=preserve preserve attributes as well
@@ -55,6 +58,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal','replace')) {
+            $this->most_recent_text_node = null;
             $this->had_space = false;
             return;
         }
@@ -114,7 +118,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         'address','article','aside','base','blockquote','body','br','dd','div','dl','dt','fieldset','figure',
         'footer','form','h1','h2','h3','h4','h5','h6','head','header','hgroup','hr','html','legend','link',
         'meta','nav','ol','option','p','param','pre','section','style','table','tbody','td','th','thead',
-        'title','tr','ul',
+        'title','tr','ul','details',
     );
 
     private function breaksLine(PHPTAL_Dom_Element $element)
@@ -138,6 +142,20 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         return in_array($element->getLocalName(), self::$breaks_line);
+    }
+    
+    private static $inline_blocks = array(
+        'select','input','button','img','textarea','output','progress','meter',
+    );
+
+    private function isInlineBlock(PHPTAL_Dom_Element $element)
+    {        
+        if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
+	        && $element->getNamespaceURI() !== '') {
+	        return false;
+        }
+
+        return in_array($element->getLocalName(), self::$inline_blocks);
     }
 
     /**
