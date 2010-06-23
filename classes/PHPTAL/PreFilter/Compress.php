@@ -23,6 +23,13 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
     function filterDOM(PHPTAL_Dom_Element $root)
     {
+        // let xml:space=preserve preserve everything
+        if ($root->getAttributeNS("http://www.w3.org/XML/1998/namespace", 'space') == 'preserve') {
+            $this->most_recent_text_node = null;
+            $this->findElementToFilter($root);
+            return;
+        }
+
         $no_spaces = $this->hasNoInterelementSpace($root);
         $breaks_line = $no_spaces || $this->breaksLine($root);
 
@@ -31,13 +38,6 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         } else if ($this->isInlineBlock($root)) {
             $this->most_recent_text_node = null;
             $this->had_space = false;
-        }
-
-        // let xml:space=preserve preserve attributes as well
-        if ($root->getAttributeNS("http://www.w3.org/XML/1998/namespace", 'space') == 'preserve') {
-            $this->most_recent_text_node = null;
-            $this->findElementToFilter($root);
-            return;
         }
 
         $this->normalizeAttributes($root);
@@ -89,11 +89,11 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
                 $this->had_space = false;
             }
         }
-        
+
         // repeated element may need trailing space
         if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal','repeat')) {
             $this->most_recent_text_node = null;
-        }        
+        }
 
         if ($breaks_line) {
             if ($this->most_recent_text_node) {
@@ -143,13 +143,13 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
         return in_array($element->getLocalName(), self::$breaks_line);
     }
-    
+
     private static $inline_blocks = array(
         'select','input','button','img','textarea','output','progress','meter',
     );
 
     private function isInlineBlock(PHPTAL_Dom_Element $element)
-    {        
+    {
         if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
 	        && $element->getNamespaceURI() !== '') {
 	        return false;
