@@ -89,6 +89,11 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
                 $this->had_space = false;
             }
         }
+        
+        // repeated element may need trailing space
+        if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal','repeat')) {
+            $this->most_recent_text_node = null;
+        }        
 
         if ($breaks_line) {
             if ($this->most_recent_text_node) {
