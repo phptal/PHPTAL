@@ -60,6 +60,18 @@ class CompressTest extends PHPTAL_TestCase
         '<div> z<p xmlns="not:xhtml"> ke <br></br> ep </p> z </div>');
     }
 
+    function testTalRepeatBlock()
+    {
+        $this->assertStrips("<div>a<div>x</div><div>x</div><div>x</div>b</div>",
+        "<div>a <div tal:repeat='x php:range(1,3)'> x </div> b</div>");
+    }
+
+    function testTrimsSpaceBeforeBlockSibling()
+    {
+        $this->assertStrips("<div>a<div>b</div>c<div>d</div>e</div>",
+        "<div>a <div>b</div> c <div> d </div> e </div>");
+    }
+
     function testPreservesSpaceAroundImages()
     {
         $this->assertStrips("<div><img/></div>","<div> <img/> </div>");

@@ -44,6 +44,10 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         $breaks_line = $no_spaces || $this->breaksLine($root);
 
         if ($breaks_line) {
+            if ($this->most_recent_text_node) {
+                $this->most_recent_text_node->setValueEscaped(rtrim($this->most_recent_text_node->getValueEscaped()));
+                $this->most_recent_text_node = null;
+            }
             $this->had_space = true;
         } else if ($this->isInlineBlock($root)) {
             $this->most_recent_text_node = null;
@@ -93,13 +97,14 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         }
 
         // repeated element may need trailing space
-        if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal','repeat')) {
+        if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal','repeat')) {
             $this->most_recent_text_node = null;
         }
 
         if ($breaks_line) {
             if ($this->most_recent_text_node) {
                 $this->most_recent_text_node->setValueEscaped(rtrim($this->most_recent_text_node->getValueEscaped()));
+                $this->most_recent_text_node = null;
             }
             $this->had_space = true;
         }
