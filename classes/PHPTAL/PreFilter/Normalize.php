@@ -66,12 +66,10 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
         }
     }
 
-    /**
-     * Allows <script> to be normalize. Love your semicolons! (or use CDATA)
-     */
     protected function isSpaceSensitiveInXHTML(PHPTAL_Dom_Element $element)
     {
-        return ($element->getLocalName() === 'pre' || $element->getLocalName() === 'textarea')
+        $ln = $element->getLocalName();
+        return ($ln === 'script' || $ln === 'pre' || $ln === 'textarea')
             && ($element->getNamespaceURI() === 'http://www.w3.org/1999/xhtml' || $element->getNamespaceURI() === '');
     }
 
