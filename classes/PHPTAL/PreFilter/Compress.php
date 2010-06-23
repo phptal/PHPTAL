@@ -30,6 +30,16 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             return;
         }
 
+        // tal:replace makes element behave like text
+        if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal','replace')) {
+            $this->most_recent_text_node = null;
+            $this->had_space = false;
+            return;
+        }
+
+        $this->normalizeAttributes($root);
+        $this->elementSpecificOptimizations($root);
+
         $no_spaces = $this->hasNoInterelementSpace($root);
         $breaks_line = $no_spaces || $this->breaksLine($root);
 
@@ -39,9 +49,6 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             $this->most_recent_text_node = null;
             $this->had_space = false;
         }
-
-        $this->normalizeAttributes($root);
-        $this->elementSpecificOptimizations($root);
 
         // <pre> may have attributes normalized
         if ($this->isSpaceSensitiveInXHTML($root)) {
@@ -57,11 +64,6 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             return;
         }
 
-        if ($root->getAttributeNS('http://xml.zope.org/namespaces/tal','replace')) {
-            $this->most_recent_text_node = null;
-            $this->had_space = false;
-            return;
-        }
 
         foreach ($root->childNodes as $node) {
 
