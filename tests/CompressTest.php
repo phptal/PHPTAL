@@ -60,6 +60,40 @@ class CompressTest extends PHPTAL_TestCase
         '<div> z<p xmlns="not:xhtml"> ke <br></br> ep </p> z </div>');
     }
 
+    function testPreservesSpaceAroundImages()
+    {
+        $this->assertStrips("<div><img/></div>","<div> <img/> </div>");
+        $this->assertStrips("<div>x <img/></div>","<div> x <img/> </div>");
+        $this->assertStrips("<div>x <img/> y</div>","<div> x <img/> y </div>");
+        $this->assertStrips("<div><img/> y</div>","<div><img/> y </div>");
+    }
+
+    function testPreservesSpaceAroundButtons()
+    {
+        $this->assertStrips("<div><button>Z</button></div>","<div> <button>Z</button> </div>");
+        $this->assertStrips("<div>x <button>Z</button></div>","<div> x <button>Z</button> </div>");
+        $this->assertStrips("<div>x <button>Z</button> y</div>","<div> x <button>Z</button> y </div>");
+        $this->assertStrips("<div><button>Z</button> y</div>","<div><button>Z</button> y </div>");
+
+        $this->markTestIncomplete();
+
+        $this->assertStrips("<div><button>Z</button></div>","<div> <button> Z </button> </div>");
+        $this->assertStrips("<div>x <button>Z</button></div>","<div> x <button> Z </button> </div>");
+        $this->assertStrips("<div>x <button>Z</button> y</div>","<div> x <button> Z </button> y </div>");
+        $this->assertStrips("<div><button>Z</button> y</div>","<div><button> Z </button> y </div>");
+    }
+
+    function testKeepsNewlinesInScript()
+    {
+        $this->assertStrips("<script>//foo\nbar()</script>","<script>//foo\nbar()</script>");
+    }
+
+    function testTalRepeatInline()
+    {
+        $this->assertStrips("<div><a>x </a><a>x </a><a>x </a></div>",
+        "<div><a tal:repeat='x php:range(1,3)'> x </a></div>");
+    }
+
     function testStripsAllInHead()
     {
         $this->assertStrips('<html><head><title></title><link/><script>" ";</script><script></script><meta/><style></style></head></html>',
@@ -145,11 +179,6 @@ class CompressTest extends PHPTAL_TestCase
     {
         $this->assertStrips('<script type="text/javascript;e4x=1"></script><script type="text/hack"></script>',
             '<script type="text/javascript;e4x=1"></script><script type="text/hack"></script>',true);
-    }
-
-    function testTalBlockInBlockIsBlock()
-    {
-        $this->assertStrips("<div>foobar</div>","<div> <tal:block> foo </tal:block> bar </div>");
     }
 
     function testTalBlockInInlineIsInline()
