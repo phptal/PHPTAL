@@ -440,7 +440,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         $expression = trim($expression);
 
         // Look for tales modifier (string:, exists:, etc...)
-        if (preg_match('/^([a-z][a-z0-9._-]*[a-z0-9]):(.*)$/si', $expression, $m)) {
+        if (preg_match('/^([a-z](?:[a-z0-9._-]*[a-z0-9])?):(.*)$/si', $expression, $m)) {
             list(, $typePrefix, $expression) = $m;
         }
         // may be a 'string'
