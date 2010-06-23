@@ -65,18 +65,6 @@ class PHPTAL_Dom_PHP5DOMConverter
         return $this->builder;
     }
 
-    /**
-     * including no prefix
-     */
-    private function parentWithSamePrefix(DOMElement $element)
-    {
-        $prefix = $element->prefix;
-        while($element = $element->parentNode) {
-            if ($element->prefix === $prefix) return $element;
-        }
-        return NULL;
-    }
-
     private function escape($text,$attr)
     {
         $escape = array('&'=>'&amp;','<'=>'&lt;', ']]>'=>']]&gt;');
