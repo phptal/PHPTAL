@@ -225,7 +225,7 @@ HTML
             normalize_html($tpl->execute()), $tpl->getCodePath());
     }
     
-    function testSlotBug2()
+    function testNestedSlots()
     {
         $tpl = $this->newPHPTAL()->setSource('
         <tal:block metal:define-macro="fieldset">
