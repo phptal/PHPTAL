@@ -951,6 +951,27 @@ title="google search engine">the google search engine</a>
 </ul>
 ]]></programlisting></informalexample>
 
+        <simplesect id="macro-callback">
+            <title>Callbacks</title>
+            <para>Since you can use variables in macro names, you can create macros that call back other macros. This is useful in cases where <link linkend="metal-define-slot">slots</link> are not enough.</para>
+            <informalexample><programlisting language="xml"><![CDATA[<!-- this code uses "macroname" variable as name of macro to call back -->
+<ul metal:define-macro="macro-with-callback">
+    <li tal:repeat="item list">
+        <tal:block metal:use-macro="${macroname}"/>
+    </li>
+</ul>
+
+<!-- define callback -->
+<div metal:define-macro="my-callback">
+    this will be called every time
+</div>
+
+<!-- use it with the first macro -->
+<div tal:define="macroname 'my-callback'" metal:use-macro="macro-with-callback"/>]]></programlisting></informalexample>                
+            
+            
+        </simplesect>
+    
       </section>
 
 
@@ -989,6 +1010,9 @@ title="google search engine">the google search engine</a>
         example.
         </para>
 
+
+        <warning><para>Slots work like variables, not like <link linkend="macro-callback">callbacks</link>. <sgmltag>metal:define-slot</sgmltag> in <sgmltag>tal:repeat</sgmltag> will always repeat the same value over and over again.</para></warning>
+
       </section>
 
 
@@ -1018,6 +1042,10 @@ title="google search engine">the google search engine</a>
         Slots give the opportunity to define really customizable and
         reusable page templates with a simple push technology.
         </para>
+        
+        
+        <warning><para>Slots work like variables, not like <link linkend="macro-callback">callbacks</link>. <sgmltag>metal:fill-slot</sgmltag> in <sgmltag>tal:repeat</sgmltag> will keep overwriting same slot over and over again.</para></warning>
+
       </section>
 
     </section><!-- end of METAL namespace -->
