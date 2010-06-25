@@ -224,7 +224,46 @@ HTML
             normalize_html('<div>page/value:<div>OK toplevel-filled page/value</div>page/valuebis:<div>OK subpage filled page/valuebis</div></div>'),
             normalize_html($tpl->execute()), $tpl->getCodePath());
     }
+    
+    function testSlotBug2()
+    {
+        $tpl = $this->newPHPTAL()->setSource('
+        <tal:block metal:define-macro="fieldset">
+        	<fieldset>
+        		<legend><tal:block metal:define-slot="legend" /></legend>
+        		<tal:block metal:define-slot="content" />
+        	</fieldset>
+        </tal:block>
+        
+        <form>
+        	<tal:block metal:use-macro="fieldset">
+        		<tal:block metal:fill-slot="legend">First Level</tal:block>
+        		<tal:block metal:fill-slot="content">
+        			<tal:block metal:use-macro="fieldset">
+        				<tal:block metal:fill-slot="legend">Second Level</tal:block>
+        				<tal:block metal:fill-slot="content">
+        					<label>Question</label><input type="text" name="question" />
+        				</tal:block>
+        			</tal:block>
+        			<input type="submit" value="Send" />
+        		</tal:block>
+        	</tal:block>
+        </form>
+        ');
 
+        $this->assertEquals(normalize_html('
+        <form>
+        	<fieldset>
+        		<legend>First Level</legend>
+        		<fieldset>
+        			<legend>Second Level</legend>
+        			<label>Question</label><input type="text" name="question" />
+        		</fieldset>
+        		<input type="submit" value="Send" />
+        	</fieldset>
+        </form>'),
+        normalize_html($tpl->execute()));
+    }
 }
 
 
