@@ -79,7 +79,7 @@ class MetalSlotTest extends PHPTAL_TestCase
                             normalize_html($tpl->execute()), $tpl->getCodePath());
     }
 
-    function testRecusiveFill()
+    function testRecursiveFill()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.02.html');
         $res = normalize_html($tpl->execute());
