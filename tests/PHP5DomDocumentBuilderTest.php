@@ -152,4 +152,30 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
             <h1 id="contact">Mailing list</h1>
         </tal:block></html>');
     }
+
+    function assertNS($expect, $src)
+    {
+        $this->assertEquals($expect, $this->dumpNS($this->parse($src)));
+    }
+
+    function testNSRootDefault()
+    {
+        $this->assertNS('xhtml:b{xhtml:c{}}',
+                '<b xmlns="http://www.w3.org/1999/xhtml"><c></c></b>');
+    }
+
+    function testNSRootXMLNS()
+    {
+        $this->assertNS('NULL:a{xhtml:b{xhtml:c{}}}',
+                '<a><b xmlns="http://www.w3.org/1999/xhtml"><c></c></b></a>');
+    }
+
+    private function dumpNS(DOMElement $element)
+    {
+        $out = (is_string($element->namespaceURI) ? basename($element->namespaceURI) : gettype($element->namespaceURI)) . ':' . $element->localName . '{';
+        foreach($element->childNodes as $n) {
+            if ($n instanceof DOMElement) $out .= $this->dumpNS($n);
+        }
+        return $out . '}';
+    }
 }

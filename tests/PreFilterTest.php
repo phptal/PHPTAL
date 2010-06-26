@@ -66,13 +66,13 @@ class PreFilterTest extends PHPTAL_TestCase
         $this->assertXMLEquals('<html xmlns="http://www.w3.org/1999/xhtml"><title/></html>',$res);
         $this->assertEquals("http://www.w3.org/1999/xhtml", $pre->node->namespaceURI);
     }
-    
-    
+
+
     function testPreservesUnprefixedAttributes()
     {
         $res = $this->newPHPTAL()->setSource($src = '<html xmlns="http://www.w3.org/1999/xhtml"><head manifest=""/></html>')
             ->addPreFilter($pre = new MyPHP5DOMPreFilter())->execute();
-            
+
         $this->assertXMLEquals($src, $res);
         $this->assertEquals("http://www.w3.org/1999/xhtml", $pre->node->namespaceURI);
     }
