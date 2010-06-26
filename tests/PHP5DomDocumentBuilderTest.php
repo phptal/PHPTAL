@@ -86,7 +86,13 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
         $this->assertEquals($src,$res);
     }
 
-    function testNS()
+    function testXMLNSisNotAttribute()
+    {
+        $res = $this->parse('<root xmlns="foo:bar"/>');
+        $this->assertEquals('',$res->getAttribute('xmlns'));
+    }
+
+    function testNS2()
     {
         $res = $this->parseUnparse($src = '<root xmlns="foo:bar"/>');
         $this->assertEquals($src,$res);
@@ -136,5 +142,14 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
     {
         $res = $this->parseUnparse($src = '<root>&amp;</root>');
         $this->assertEquals($src,$res);
+    }
+
+    function testParseDefaultNS()
+    {
+        $res = $this->parse('<html xmlns="http://www.w3.org/1999/xhtml" metal:use-macro="page.html/main" tal:define="current string:contact; title string:Mailing list &amp; contact">
+          <tal:block metal:fill-slot="content">
+
+            <h1 id="contact">Mailing list</h1>
+        </tal:block></html>');
     }
 }
