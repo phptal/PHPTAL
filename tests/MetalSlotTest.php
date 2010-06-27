@@ -224,7 +224,7 @@ HTML
             normalize_html('<div>page/value:<div>OK toplevel-filled page/value</div>page/valuebis:<div>OK subpage filled page/valuebis</div></div>'),
             normalize_html($tpl->execute()), $tpl->getCodePath());
     }
-    
+
     function testNestedSlots()
     {
         $tpl = $this->newPHPTAL()->setSource('
@@ -234,7 +234,7 @@ HTML
         		<tal:block metal:define-slot="content" />
         	</fieldset>
         </tal:block>
-        
+
         <form>
         	<tal:block metal:use-macro="fieldset">
         		<tal:block metal:fill-slot="legend">First Level</tal:block>

@@ -78,14 +78,6 @@ class PHPTAL_Dom_Defs
         return array_search($uri, $this->prefix_to_uri, true);
     }
 
-    /**
-     * array prefix => uri for prefixes that don't have to be declared in PHPTAL
-     * @return array
-     */
-    public function getPredefinedPrefixes()
-    {
-        return $this->prefix_to_uri;
-    }
 
     /**
      * Returns true if the attribute is an xhtml boolean attribute.
