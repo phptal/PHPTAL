@@ -19,7 +19,15 @@
  */
 class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 {
-    private $had_space=false, $most_recent_text_node=null;
+    /**
+     * keeps track whether last element had trialing whitespace (if not, next element must keep leading space) 
+     */
+    private $had_space=false;
+    
+    /**
+     * last text node before closing tag that may need trailing whitespace trimmed
+     */
+    private $most_recent_text_node=null;
 
     function filterDOM(PHPTAL_Dom_Element $root)
     {
@@ -40,9 +48,13 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         $this->normalizeAttributes($root);
         $this->elementSpecificOptimizations($root);
 
+        // <head>, <tr> don't have any significant whitespace
         $no_spaces = $this->hasNoInterelementSpace($root);
+        
+        // mostly block-level elements
         $breaks_line = $no_spaces || $this->breaksLine($root);
 
+        // start tag newline
         if ($breaks_line) {
             if ($this->most_recent_text_node) {
                 $this->most_recent_text_node->setValueEscaped(rtrim($this->most_recent_text_node->getValueEscaped()));
@@ -50,17 +62,18 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             }
             $this->had_space = true;
         } else if ($this->isInlineBlock($root)) {
+            // spaces around <img> must be kept
             $this->most_recent_text_node = null;
             $this->had_space = false;
         }
 
-        // <pre> may have attributes normalized
+        // <pre>, <textarea> are handled separately from xml:space, because they may have attributes normalized
         if ($this->isSpaceSensitiveInXHTML($root)) {
             $this->most_recent_text_node = null;
 
             // HTML 5 (9.1.2.5) specifies quirk that a first *single* newline in <pre> can be removed
             if (count($root->childNodes) && $root->childNodes[0] instanceof PHPTAL_Dom_Text) {
-                if (substr($root->childNodes[0]->getValueEscaped(),0,1)==="\n") {
+                if (preg_match('/^\n[^\n]/', $root->childNodes[0]->getValueEscaped())) {
                     $root->childNodes[0]->setValueEscaped(substr($root->childNodes[0]->getValueEscaped(),1));
                 }
             }
@@ -72,6 +85,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         foreach ($root->childNodes as $node) {
 
             if ($node instanceof PHPTAL_Dom_Text) {
+                // replaces runs of whitespace with ' '
                 $norm = $this->normalizeSpace($node->getValueEscaped(), $node->getEncoding());
 
                 if ($no_spaces) {
@@ -82,6 +96,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
                 $node->setValueEscaped($norm);
 
+                // collapsed whitespace-only nodes are ignored (otherwise trimming of most_recent_text_node would be useless)
                 if ($norm !== '') {
                     $this->most_recent_text_node = $node;
                     $this->had_space = (substr($norm,-1) == ' ');
@@ -91,6 +106,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             } else if ($node instanceof PHPTAL_Dom_DocumentType || $node instanceof PHPTAL_Dom_XMLDeclaration) {
                 $this->had_space = true;
             } else if ($node instanceof PHPTAL_Dom_ProcessingInstruction) {
+                // PI may output something requiring spaces
                 $this->most_recent_text_node = null;
                 $this->had_space = false;
             }
@@ -101,6 +117,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             $this->most_recent_text_node = null;
         }
 
+        // line break caused by end tag
         if ($breaks_line) {
             if ($this->most_recent_text_node) {
                 $this->most_recent_text_node->setValueEscaped(rtrim($this->most_recent_text_node->getValueEscaped()));
@@ -126,6 +143,9 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             && ($element->getNamespaceURI() === 'http://www.w3.org/1999/xhtml' || $element->getNamespaceURI() === '');
     }
 
+    /**
+     *  li is deliberately omitted, as it's commonly used with display:inline in menus.
+     */
     private static $breaks_line = array(
         'address','article','aside','base','blockquote','body','br','dd','div','dl','dt','fieldset','figure',
         'footer','form','h1','h2','h3','h4','h5','h6','head','header','hgroup','hr','html','legend','link',
@@ -151,6 +171,9 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         return in_array($element->getLocalName(), self::$breaks_line);
     }
 
+    /**
+     *  replaced elements need to preserve spaces before and after
+     */
     private static $inline_blocks = array(
         'select','input','button','img','textarea','output','progress','meter',
     );
@@ -209,6 +232,9 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 		return ($a_index === false) ? 1 : -1;
 	}
 
+    /**
+     * HTML5 doesn't care about boilerplate
+     */
 	private function elementSpecificOptimizations(PHPTAL_Dom_Element $element)
 	{
 	    if ($element->getNamespaceURI() !== 'http://www.w3.org/1999/xhtml'
@@ -220,28 +246,29 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             return;
         }
 
+        // <meta charset>
 	    if ('meta' === $element->getLocalName() &&
 	        $element->getAttributeNS('','http-equiv') === 'Content-Type') {
 	            $element->removeAttributeNS('','http-equiv');
 	            $element->removeAttributeNS('','content');
 	            $element->setAttributeNS('','charset',strtolower($this->getPHPTAL()->getEncoding()));
         }
-        elseif ('link' === $element->getLocalName() &&
-            $element->getAttributeNS('','rel') === 'stylesheet') {
+        elseif (('link' === $element->getLocalName() && $element->getAttributeNS('','rel') === 'stylesheet') ||
+            ('style' === $element->getLocalName())) {
+            // There's only one type of stylesheets that works.
             $element->removeAttributeNS('','type');
-
+            
         } elseif ('script' === $element->getLocalName()) {
             $element->removeAttributeNS('','language');
-
+            
+            // Only remove type that matches default. E4X, vbscript, coffeescript, etc. must be preserved
             $type = $element->getAttributeNS('','type');
             $is_std = preg_match('/^(?:text|application)\/(?:ecma|java)script(\s*;\s*charset\s*=\s*[^;]*)?$/', $type);
-            // For remote scripts type attr shouldn't matter
+            
+            // Remote scripts should have type specified in HTTP headers.
             if ($is_std || $element->getAttributeNS('','src')) {
                 $element->removeAttributeNS('','type');
             }
-        }
-        elseif ('style' === $element->getLocalName()) {
-            $element->removeAttributeNS('','type');
         }
     }
 }
