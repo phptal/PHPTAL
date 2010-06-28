@@ -190,7 +190,7 @@ class CompressTest extends PHPTAL_TestCase
 
     function testShortensHTML5TypesSafely()
     {
-        $this->assertStrips('<script type="text/javascript;e4x=1"></script><script type="text/hack"></script>',
+        $this->assertStrips('<script type="text/javascript;e4x=1"></script><script type=text/hack></script>',
             '<script type="text/javascript;e4x=1"></script><script type="text/hack"></script>',true);
     }
 
@@ -207,6 +207,15 @@ class CompressTest extends PHPTAL_TestCase
     function testPreservesSpaceBeforePI()
     {
         $this->assertStrips("<p>foo bar</p>","<p>foo <?php echo 'bar'; ?></p>");
+    }
+
+    function testTalContent()
+    {
+        $this->assertStrips('<h1 class="title"><a href="a">a</a> » <a href="b">b</a> » </h1>','<h1 class="title" tal:condition="not:exists:blah">
+                            <tal:block tal:repeat="b php:array(\'a\',\'b\')"><a href=" ${b} " tal:content="b" /> » </tal:block>
+                            <tal:block tal:content="blah | nothing"/>
+                        </h1>
+        ');
     }
 
     function testAll()

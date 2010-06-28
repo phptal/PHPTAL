@@ -24,9 +24,9 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
      * If had_space==false, next element must keep leading space.
      */
     private $had_space=false;
-    
+
     /**
-     * last text node before closing tag that may need trailing whitespace trimmed. 
+     * last text node before closing tag that may need trailing whitespace trimmed.
      * It's often last-child, but comments, multiple end tags make that trickier.
      */
     private $most_recent_text_node=null;
@@ -52,7 +52,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 
         // <head>, <tr> don't have any significant whitespace
         $no_spaces = $this->hasNoInterelementSpace($root);
-        
+
         // mostly block-level elements
         $breaks_line = $no_spaces || $this->breaksLine($root);
 
@@ -82,7 +82,6 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             $this->findElementToFilter($root);
             return;
         }
-
 
         foreach ($root->childNodes as $node) {
 
@@ -114,9 +113,15 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             }
         }
 
-        // repeated element may need trailing space
+        // repeated element may need trailing space.
         if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal','repeat')) {
             $this->most_recent_text_node = null;
+        }
+
+        // tal:content may replace element with something without space
+        if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal','content')) {
+            $this->had_space = false;
+            
         }
 
         // line break caused by end tag
@@ -259,14 +264,14 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             ('style' === $element->getLocalName())) {
             // There's only one type of stylesheets that works.
             $element->removeAttributeNS('','type');
-            
+
         } elseif ('script' === $element->getLocalName()) {
             $element->removeAttributeNS('','language');
-            
+
             // Only remove type that matches default. E4X, vbscript, coffeescript, etc. must be preserved
             $type = $element->getAttributeNS('','type');
             $is_std = preg_match('/^(?:text|application)\/(?:ecma|java)script(\s*;\s*charset\s*=\s*[^;]*)?$/', $type);
-            
+
             // Remote scripts should have type specified in HTTP headers.
             if ($is_std || $element->getAttributeNS('','src')) {
                 $element->removeAttributeNS('','type');
