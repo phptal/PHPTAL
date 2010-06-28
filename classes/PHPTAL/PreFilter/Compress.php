@@ -20,12 +20,14 @@
 class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
 {
     /**
-     * keeps track whether last element had trialing whitespace (if not, next element must keep leading space) 
+     * keeps track whether last element had trailing whitespace (or didn't need it).
+     * If had_space==false, next element must keep leading space.
      */
     private $had_space=false;
     
     /**
-     * last text node before closing tag that may need trailing whitespace trimmed
+     * last text node before closing tag that may need trailing whitespace trimmed. 
+     * It's often last-child, but comments, multiple end tags make that trickier.
      */
     private $most_recent_text_node=null;
 
