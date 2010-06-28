@@ -165,7 +165,8 @@ class CompressTest extends PHPTAL_TestCase
 
     function testPreFirstLine()
     {
-        $this->assertStrips("<pre>\n\ntest</pre>", "<pre>\n\n\ntest</pre>");
+        $this->assertStrips("<pre>\n\n\ntest</pre>", "<pre>\n\n\ntest</pre>");
+        $this->assertStrips("<pre>test</pre>", "<pre>\ntest</pre>");
     }
 
     function testDoesNotShortenXHTMLMeta()
