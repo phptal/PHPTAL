@@ -64,6 +64,12 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
     }
 
+    function testAttr()
+    {
+        $this->assertEquals('<html url=http://example.com/?test#test foo=" foo" bar=/bar quz="quz/"></html>',
+            $this->newPHPTAL()->setOutputMode(PHPTAL::HTML5)->setSource('<html url="http://example.com/?test#test" foo=" foo" bar="/bar" quz="quz/"></html>')->execute());
+    }
+
     function testEmpty()
     {
         $tpl = $this->newPHPTAL();

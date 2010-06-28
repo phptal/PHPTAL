@@ -427,17 +427,22 @@ class PHPTAL_Php_CodeWriter
 
     public function quoteAttributeValue($value)
     {
+        // FIXME: interpolation is done _after_ that function, so ${} must be forbidden for now
+
         if ($this->getEncoding() == 'UTF-8') // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
         {
             // regex excludes unicode control characters, all kinds of whitespace and unsafe characters
-            $attr_regex = '/^[^$&\/=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]+$/u'; // FIXME: interpolation is done _after_ that function, so $ must be forbidden for now
+            // and trailing / to avoid confusion with self-closing syntax
+            $unsafe_attr_regex = '/^$|[&=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]|\/$|\${/u';
         } else {
-            $attr_regex = '/^[^$&\/=\'"><\s`\0177-\377]+$/';
+            $unsafe_attr_regex = '/^$|[&=\'"><\s`\0177-\377]|\/$|\${/';
         }
 
-        if ($this->getOutputMode() == PHPTAL::HTML5 && preg_match($attr_regex, $value))
+        if ($this->getOutputMode() == PHPTAL::HTML5 && !preg_match($unsafe_attr_regex, $value)) {
             return $value;
-        else return '"'.$value.'"';
+        } else {
+            return '"'.$value.'"';
+        }
     }
 
     public function pushContext()
