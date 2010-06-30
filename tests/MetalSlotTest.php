@@ -87,6 +87,34 @@ class MetalSlotTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res, $tpl->getCodePath());
     }
 
+    function testRecursiveUnFill()
+    {
+        $tpl = $this->newPHPTAL()->setSource('<div>
+          <div metal:define-macro="test1">
+            <span metal:define-slot="val1"/>
+          </div>
+
+          <div metal:define-macro="test2">
+            <span metal:define-slot="val2">OK</span>
+          </div>
+
+          <div metal:use-macro="test1">
+            <div metal:fill-slot="val1"  tal:omit-tag="">
+              <div metal:use-macro="test2"/>
+              <nothing tal:comment="just to make it use callback code path" tal:repeat="x php:array()"><x tal:repeat="x php:array()" tal:content="x"></x></nothing>
+            </div>
+            <div metal:fill-slot="val2">ERROR</div>
+          </div>
+
+        </div>
+
+        ');
+        $res = normalize_html($tpl->execute());
+        $this->assertEquals('<div><div><div><span>OK</span></div></div></div>', $res, $tpl->getCodePath());
+    }
+
+
+
     function testBlock()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.03.html');
