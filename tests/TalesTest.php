@@ -83,6 +83,17 @@ class TalesTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals(normalize_html_file('output/tales-true.html'), normalize_html($res));
     }
+    
+    function testJSON()
+    {
+        $this->assertEquals('<p>{&quot;foo&quot;:&quot;bar&quot;}</p>', $this->newPHPTAL()->setSource('<p tal:content="json:php:array(&quot;foo&quot;=>&apos;bar&apos;)"/>')->execute());
+        $this->assertEquals('<p>{"foo":"bar"}</p>', $this->newPHPTAL()->setSource('<p tal:content="structure json:php:array(&quot;foo&quot;=>&apos;bar&apos;)"/>')->execute());
+    }
+
+    function testURLEncode()
+    {
+        $this->assertEquals('<p>Hello%20World</p>', $this->newPHPTAL()->setSource('<p tal:content="urlencode:string:Hello World"/>')->execute());
+    }
 
     function testCustom()
     {

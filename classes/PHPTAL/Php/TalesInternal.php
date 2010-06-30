@@ -383,6 +383,21 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         return trim($src);
     }
 
+    /**
+     * json: modifier. Serializes anything as JSON.
+     */
+    static public function json($src, $nothrow)
+    {
+        return 'json_encode('.phptal_tale($src,$nothrow).')';
+    }
+
+    /**
+     * urlencode: modifier. Escapes a string.
+     */
+    static public function urlencode($src, $nothrow)
+    {
+        return 'rawurlencode('.phptal_tale($src,$nothrow).')';
+    }
 
     /**
      * translates TALES expression with alternatives into single PHP expression.
@@ -453,11 +468,17 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $typePrefix = 'path';
         }
 
-        $result = self::getPHPExpressionsForModifier($typePrefix, $expression, $nothrow);
+        // is a registered TALES expression modifier
+        $callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);
+        if ($callback !== NULL)
+        {
+            $result = call_user_func($callback, $expression, $nothrow);
+            self::verifyPHPExpressions($typePrefix, $result);
+            return $result;
+        }
 
-        self::verifyPHPExpressions($typePrefix, $result);
-
-        return $result;
+        $func = 'phptal_tales_'.str_replace('-', '_', $typePrefix);
+        throw new PHPTAL_UnknownModifierException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist", $typePrefix);
     }
 
     private static function verifyPHPExpressions($typePrefix,$expressions)
@@ -471,48 +492,5 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                 throw new PHPTAL_ParserException("Modifier $typePrefix generated PHP statement rather than expression (don't add semicolons)");
             }
         }
-    }
-
-    protected static function getPHPExpressionsForModifier($typePrefix, $expression, $nothrow)
-    {
-        // is a registered TALES expression modifier
-        if (PHPTAL_TalesRegistry::getInstance()->isRegistered($typePrefix)) {
-            $callback = PHPTAL_TalesRegistry::getInstance()->getCallback($typePrefix);
-            return call_user_func($callback, $expression, $nothrow);
-        }
-
-        // class method
-        if (strpos($typePrefix, '.')) {
-            $classCallback = explode('.', $typePrefix, 2);
-            $callbackName  = null;
-            if (!is_callable($classCallback, false, $callbackName)) {
-                throw new PHPTAL_UnknownModifierException("Unknown phptal modifier $typePrefix. Function $callbackName does not exists or is not statically callable", $typePrefix);
-            }
-            $ref = new ReflectionClass($classCallback[0]);
-            if (!$ref->implementsInterface('PHPTAL_Tales')) {
-                throw new PHPTAL_UnknownModifierException("Unable to use phptal modifier $typePrefix as the class $callbackName does not implement the PHPTAL_Tales interface", $typePrefix);
-            }
-            return call_user_func($classCallback, $expression, $nothrow);
-        }
-
-        // check if it is implemented via code-generating function
-        $func = 'phptal_tales_'.str_replace('-', '_', $typePrefix);
-        if (function_exists($func)) {
-            return $func($expression, $nothrow);
-        }
-
-        // The following code is automatically modified in version for PHP 5.3
-        $func = 'PHPTALNAMESPACE\\phptal_tales_'.str_replace('-', '_', $typePrefix);
-        if (function_exists($func)) {
-            return $func($expression, $nothrow);
-        }
-
-        // check if it is implemented via runtime function
-        $runfunc = 'phptal_runtime_tales_'.str_replace('-', '_', $typePrefix);
-        if (function_exists($runfunc)) {
-            return "$runfunc(".self::compileToPHPExpression($expression, $nothrow).")";
-        }
-
-        throw new PHPTAL_UnknownModifierException("Unknown phptal modifier '$typePrefix'. Function '$func' does not exist", $typePrefix);
     }
 }

@@ -47,6 +47,10 @@ class PHPTAL_TalesRegistry
         $this->registerPrefix('exists', array('PHPTAL_Php_TalesInternal', 'exists'));
         $this->registerPrefix('number', array('PHPTAL_Php_TalesInternal', 'number'));
         $this->registerPrefix('true', array('PHPTAL_Php_TalesInternal', 'true'));
+        
+        // these are added as fallbacks
+        $this->registerPrefix('json', array('PHPTAL_Php_TalesInternal', 'json'), true);
+        $this->registerPrefix('urlencode', array('PHPTAL_Php_TalesInternal', 'urlencode'), true);
     }
 
     /**
@@ -56,10 +60,14 @@ class PHPTAL_TalesRegistry
      *
      * @param string $prefix
      * @param mixed $callback
+     * @param bool $is_fallback if true, method will be used as last resort (if there's no phptal_tales_foo)
      */
-    public function registerPrefix($prefix, $callback)
+    public function registerPrefix($prefix, $callback, $is_fallback = false)
     {
-        if ($this->isRegistered($prefix)) {
+        if ($this->isRegistered($prefix) && !$this->_callbacks[$prefix]['is_fallback']) {
+            if ($is_fallback) {
+                return; // simply ignored
+            }
             throw new PHPTAL_ConfigurationException("Expression modifier '$prefix' is already registered");
         }
 
@@ -87,8 +95,7 @@ class PHPTAL_TalesRegistry
             }
         }
 
-
-        $this->_callbacks[$prefix] = $callback;
+        $this->_callbacks[$prefix] = array('callback'=>$callback, 'is_fallback'=>$is_fallback);
     }
 
     /**
@@ -96,20 +103,67 @@ class PHPTAL_TalesRegistry
      */
     public function isRegistered($prefix)
     {
-        return (array_key_exists($prefix, $this->_callbacks));
+        if (array_key_exists($prefix, $this->_callbacks)) {
+            return true;
+        }
+    }
+
+    private function findUnregisteredCallback($typePrefix)
+    {        
+        // class method
+        if (strpos($typePrefix, '.')) {
+            $classCallback = explode('.', $typePrefix, 2);
+            $callbackName  = null;
+            if (!is_callable($classCallback, false, $callbackName)) {
+                throw new PHPTAL_UnknownModifierException("Unknown phptal modifier $typePrefix. Function $callbackName does not exists or is not statically callable", $typePrefix);
+            }
+            $ref = new ReflectionClass($classCallback[0]);
+            if (!$ref->implementsInterface('PHPTAL_Tales')) {
+                throw new PHPTAL_UnknownModifierException("Unable to use phptal modifier $typePrefix as the class $callbackName does not implement the PHPTAL_Tales interface", $typePrefix);
+            }
+            return $classCallback;
+        }
+
+        // check if it is implemented via code-generating function
+        $func = 'phptal_tales_'.str_replace('-', '_', $typePrefix);
+        if (function_exists($func)) {
+            return $func;
+        }
+
+        // The following code is automatically modified in version for PHP 5.3
+        $func = 'PHPTALNAMESPACE\\phptal_tales_'.str_replace('-', '_', $typePrefix);
+        if (function_exists($func)) {
+            return $func;
+        }
+        
+        return NULL;
     }
 
     /**
      * get callback for the prefix
+     *
+     * @return callback or NULL
      */
     public function getCallback($prefix)
     {
-        if (!$this->isRegistered($prefix)) {
-            throw new PHPTAL_ConfigurationException("Expression modifier '$prefix' is not registered");
+        if ($this->isRegistered($prefix) && !$this->_callbacks[$prefix]['is_fallback']) {
+            return $this->_callbacks[$prefix]['callback'];
         }
-        return $this->_callbacks[$prefix];
+        
+        if ($callback = $this->findUnregisteredCallback($prefix)) {
+            return $callback;
+        }
+        
+        if ($this->isRegistered($prefix)) {
+            return $this->_callbacks[$prefix]['callback'];
+        }        
+
+        return NULL;
     }
 
+    /**
+     * {callback, bool is_fallback}
+     */
     private $_callbacks = array();
 }
 
