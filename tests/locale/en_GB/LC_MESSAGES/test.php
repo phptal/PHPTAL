@@ -8,5 +8,3 @@ Content-Transfer-Encoding: 8bit
     'my second translate key' => 'Second test with login=${login} and lastCxDate=${lastCxDate} passed',
     'Welcome ${login}, your last connection date was : ${lastCxDate}' => 'Welcome ${login}, your last connection date was : ${lastCxDate}',
 );
-
-

@@ -27,4 +27,3 @@ class PHPTAL_Dom_XmlDeclaration extends PHPTAL_Dom_Node
         $codewriter->doXmlDeclaration();
     }
 }
-

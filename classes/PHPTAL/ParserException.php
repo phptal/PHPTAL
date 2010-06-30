@@ -22,4 +22,3 @@
 class PHPTAL_ParserException extends PHPTAL_TemplateException
 {
 }
-

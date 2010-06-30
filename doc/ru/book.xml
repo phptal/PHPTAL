@@ -21,7 +21,7 @@
 		<firstname>Антон</firstname><surname>Андриевский</surname>
 			<othername>Валериевич</othername>
       <address><email>x.meglio@gmail.com</email></address>
-	</author>	
+	</author>
 
     <revhistory id="revhistory">
         <revision>
@@ -419,7 +419,7 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
 	<para>Кстати, в этом примере мы не использовали слово 'global' перед определением переменной. В <acronym>PHPTAL</acronym> переменные бывают глобальными и локальными.</para>
-	
+
 	<para>Глобальная переменная будет доступна во всем шаблоне и в вызываемых из него макросов.</para>
 
 	<informalexample><programlisting><![CDATA[<span tal:define="global hello string:hello world"/>

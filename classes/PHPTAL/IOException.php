@@ -23,4 +23,3 @@
 class PHPTAL_IOException extends PHPTAL_Exception
 {
 }
-

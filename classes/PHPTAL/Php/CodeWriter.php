@@ -494,4 +494,3 @@ class PHPTAL_Php_CodeWriter
     private $_xmldeclaration = "";
 }
 
-

@@ -151,13 +151,13 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
           <element key="name" value="gettext" />
           <element key="optional" value="yes" />
         </element>
-        
+
         <element>
           <element key="type" value="ext" />
           <element key="rel" value="has" />
           <element key="name" value="SimpleXML" />
           <element key="optional" value="yes" />
-        </element>        
+        </element>
 
         <element>
           <element key="type" value="ext" />
@@ -191,8 +191,8 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
     <delete file="${tarfile}"/>
     <tar destfile="${tarfile}">
       <fileset dir="${build.base.dir}">
-     	 <include name="${pkgname}/**" />
-     	 <include name="package.xml" />
+	 <include name="${pkgname}/**" />
+	 <include name="package.xml" />
       </fileset>
     </tar>
   </target>
@@ -209,8 +209,8 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
     <delete file="${tarfilepear}"/>
     <tar destfile="${tarfilepear}">
       <fileset dir="${build.base.dir}">
-     	 <include name="${pkgname}/**" />
-     	 <include name="package.xml" />
+	 <include name="${pkgname}/**" />
+	 <include name="package.xml" />
       </fileset>
     </tar>
   </target>

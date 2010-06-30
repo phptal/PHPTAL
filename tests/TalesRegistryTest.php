@@ -20,14 +20,14 @@ class TalesRegistryTest extends PHPTAL_TestCase
         $this->assertSame(PHPTAL_TalesRegistry::getInstance(), PHPTAL_TalesRegistry::getInstance());
         $this->assertType('PHPTAL_TalesRegistry',PHPTAL_TalesRegistry::getInstance());
     }
-    
+
     function testRegisterFunction()
     {
         PHPTAL_TalesRegistry::getInstance()->registerPrefix('registry_test', 'registry_test_callback');
-        
+
         $this->assertEquals('<p>ok1</p>', $this->newPHPTAL()->setSource('<p tal:content="registry_test:number:1"/>')->execute());
     }
-    
+
     /**
      * @expectedException PHPTAL_ConfigurationException
      */
@@ -38,7 +38,7 @@ class TalesRegistryTest extends PHPTAL_TestCase
 
     /**
      * @expectedException PHPTAL_ConfigurationException
-     */    
+     */
     function testCantRegisterTwice()
     {
         PHPTAL_TalesRegistry::getInstance()->registerPrefix('registry_test_3', 'registry_test_callback');

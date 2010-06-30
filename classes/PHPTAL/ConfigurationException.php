@@ -22,4 +22,3 @@
 class PHPTAL_ConfigurationException extends PHPTAL_Exception
 {
 }
-

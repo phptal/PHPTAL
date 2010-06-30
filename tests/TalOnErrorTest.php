@@ -61,4 +61,3 @@ class TalOnErrorTest extends PHPTAL_TestCase
     }
 }
 
-

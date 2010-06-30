@@ -67,4 +67,3 @@ class PhptalIdTest extends PHPTAL_TestCase
     }
 }
 
-

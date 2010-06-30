@@ -121,7 +121,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         // tal:content may replace element with something without space
         if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal','content')) {
             $this->had_space = false;
-            
+            $this->most_recent_text_node = null;
         }
 
         // line break caused by end tag
@@ -208,10 +208,10 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
             $attrs_by_qname[$attrnode->getQualifiedName()] = $attrnode;
         }
 
-    	if (count($attrs_by_qname) > 1) {
-    		uksort($attrs_by_qname, array($this, 'compareQNames'));
-    		$element->setAttributeNodes(array_values($attrs_by_qname));
-    	}
+	if (count($attrs_by_qname) > 1) {
+		uksort($attrs_by_qname, array($this, 'compareQNames'));
+		$element->setAttributeNodes(array_values($attrs_by_qname));
+	}
     }
 
     /**

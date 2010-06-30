@@ -116,4 +116,3 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
     }
 }
 
-

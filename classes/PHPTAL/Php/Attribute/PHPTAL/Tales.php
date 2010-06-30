@@ -43,4 +43,3 @@ class PHPTAL_Php_Attribute_PHPTAL_TALES extends PHPTAL_Php_Attribute
     private $_oldMode;
 }
 
-

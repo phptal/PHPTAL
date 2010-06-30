@@ -164,4 +164,3 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         $this->encoding = $encoding;
     }
 }
-

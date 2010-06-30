@@ -2,20 +2,20 @@
 <?php
 /**
  * This is lint tool for checking corectness of template syntax.
- * 
+ *
  * You can run it on all your templates after upgrade of PHPTAL to check
  * for potential incompatibilities.
- * 
+ *
  * Another good idea is to use it as SVN hook to ensure that you
  * commit only good templates to your repository.
- * 
+ *
  * See more:
  * http://phptal.org/wiki/doku.php/lint
- * 
+ *
  * or run
- * 
+ *
  * ./phptal_lint.php -h
- * 
+ *
  */
 
 $lint = new PHPTAL_Lint_CLI();

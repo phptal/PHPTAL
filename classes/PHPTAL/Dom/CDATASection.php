@@ -45,4 +45,3 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
         }
     }
 }
-

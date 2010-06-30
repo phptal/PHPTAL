@@ -183,4 +183,3 @@ function phptal_tales_null($code, $nothrow)
 {
     return 'NULL';
 }
-

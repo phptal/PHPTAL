@@ -36,12 +36,12 @@ onepageperchapter: $(XHTMLFILES) output_dir
 
 allononepage: $(XHTMLNOCHUNKSFILES) output_dir
 	cp -p -- "$(XHTMLNOCHUNKSFILES)" "$(BUILD)/"
-	
+
 plaintext: $(TXTFILES) output_dir
 	cp -p -- "$(TXTFILES)" "$(BUILD)/phptal.txt"
 
 output_dir:
-	@test -d "$(BUILD)/split" || mkdir -p -- "$(BUILD)/split"	
+	@test -d "$(BUILD)/split" || mkdir -p -- "$(BUILD)/split"
 
 # create temp output directory for current language
 $(TEMP):

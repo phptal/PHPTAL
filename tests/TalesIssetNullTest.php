@@ -55,4 +55,3 @@ class TalesIssetNullTest extends PHPTAL_TestCase
     }
 }
 
-

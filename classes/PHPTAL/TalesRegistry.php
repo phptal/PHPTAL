@@ -47,7 +47,7 @@ class PHPTAL_TalesRegistry
         $this->registerPrefix('exists', array('PHPTAL_Php_TalesInternal', 'exists'));
         $this->registerPrefix('number', array('PHPTAL_Php_TalesInternal', 'number'));
         $this->registerPrefix('true', array('PHPTAL_Php_TalesInternal', 'true'));
-        
+
         // these are added as fallbacks
         $this->registerPrefix('json', array('PHPTAL_Php_TalesInternal', 'json'), true);
         $this->registerPrefix('urlencode', array('PHPTAL_Php_TalesInternal', 'urlencode'), true);
@@ -109,7 +109,7 @@ class PHPTAL_TalesRegistry
     }
 
     private function findUnregisteredCallback($typePrefix)
-    {        
+    {
         // class method
         if (strpos($typePrefix, '.')) {
             $classCallback = explode('.', $typePrefix, 2);
@@ -135,7 +135,7 @@ class PHPTAL_TalesRegistry
         if (function_exists($func)) {
             return $func;
         }
-        
+
         return NULL;
     }
 
@@ -149,14 +149,14 @@ class PHPTAL_TalesRegistry
         if ($this->isRegistered($prefix) && !$this->_callbacks[$prefix]['is_fallback']) {
             return $this->_callbacks[$prefix]['callback'];
         }
-        
+
         if ($callback = $this->findUnregisteredCallback($prefix)) {
             return $callback;
         }
-        
+
         if ($this->isRegistered($prefix)) {
             return $this->_callbacks[$prefix]['callback'];
-        }        
+        }
 
         return NULL;
     }

@@ -25,4 +25,3 @@ class TalesPhpWithReplaceTest extends PHPTAL_TestCase
     }
 }
 
-

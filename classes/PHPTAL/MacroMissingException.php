@@ -22,4 +22,3 @@
 class PHPTAL_MacroMissingException extends PHPTAL_TemplateException
 {
 }
-

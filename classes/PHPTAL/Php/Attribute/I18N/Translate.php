@@ -128,4 +128,3 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
     }
 }
 
-

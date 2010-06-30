@@ -55,4 +55,3 @@ class OverloadingTest extends PHPTAL_TestCase
     }
 }
 
-

@@ -251,4 +251,3 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         }
     }
 }
-

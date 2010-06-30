@@ -40,4 +40,3 @@ class Latin1Test extends PHPTAL_TestCase
              <test>test%88ing</test>'))->execute();
     }
 }
-
