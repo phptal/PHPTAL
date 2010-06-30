@@ -30,10 +30,7 @@
 
   <target name="main" if="version" depends="versioncheck">
     <phingcall target="test"/>
-    <phingcall target="build"/>
-    <phingcall target="pear-package"/>
     <phingcall target="tar"/>
-    <phingcall target="tar-pear"/>
   </target>
 
   <target name="doc">
@@ -189,7 +186,7 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
     </pearpkg2>
   </target>
 
-  <target name="tar" depends="pear-package,build">
+  <target name="tar" depends="build">
     <property name="tarfile" value="${build.base.dir}/${pkgname}.tar.gz"/>
     <delete file="${tarfile}"/>
     <tar destfile="${tarfile}">
@@ -206,7 +203,7 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
     <exec command="find '${build.src.dir}' -name \*.php \! -exec egrep -q '^\?>$' {} \; -exec sh -c 'printf >>'{}' &quot;\n?>\n&quot;' \;"/>
   </target>
 
-  <target name="tar-pear" depends="tar">
+  <target name="tar-pear" depends="pear-package,tar">
     <phingcall target="pearify"/>
     <property name="tarfilepear" value="${build.base.dir}/${pkgname}-pear.tar.gz"/>
     <delete file="${tarfilepear}"/>

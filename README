@@ -55,7 +55,9 @@ If you want to hack PHPTAL (don't forget to send me patches), you will require:
         pear channel-discover pear.phing.info
         pear install phing/phing
 
-  - PHPUnit to run tests
+  - PHPUnit 3.4 to run tests
 
         pear channel-discover pear.phpunit.de
+		pear channel-discover pear.symfony-project.com
+		pear channel-discover components.ez.no
         pear install phpunit/PHPUnit

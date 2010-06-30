@@ -1,4 +1,13 @@
-<phpunit
+<!--
+
+This is PHPUnit configuration file. Install PHPUnit:
+
+http://www.phpunit.de/manual/3.5/en/installation.html
+
+and run "phpunit" command in this directory. It will run all tests,
+ensuring that your copy of PHPTAL works correctly.
+
+--><phpunit
     bootstrap="./tests/config.php"
     backupGlobals="false"
     backupStaticAttributes="false"
