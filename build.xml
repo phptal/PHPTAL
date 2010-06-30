@@ -10,10 +10,7 @@
   <property name="build.src.dir" value="${build.base.dir}/${pkgname}"/>
 
   <fileset dir="classes" id="classes">
-    <include name="**"/>
-    <exclude name="**/.svn/**"/>
-    <exclude name="**/.rej"/>
-    <exclude name="**/.orig"/>
+    <include name="**/*.php"/>
   </fileset>
 
   <fileset dir="." id="gendocs">
@@ -24,8 +21,6 @@
   <fileset dir="." id="tests">
     <include name="tests/**"/>
     <exclude name="tests/**/.svn/**"/>
-    <exclude name="tests/**/.rej"/>
-    <exclude name="tests/**/.orig"/>
     <include name="phpunit.xml"/>
   </fileset>
 
@@ -138,7 +133,39 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
         <element>
           <element key="type" value="ext" />
           <element key="rel" value="has" />
+          <element key="name" value="ctype" />
+        </element>
+
+        <element>
+          <element key="type" value="ext" />
+          <element key="rel" value="has" />
+          <element key="name" value="hash" />
+        </element>
+
+        <element>
+          <element key="type" value="ext" />
+          <element key="rel" value="has" />
+          <element key="name" value="SPL" />
+        </element>
+
+        <element>
+          <element key="type" value="ext" />
+          <element key="rel" value="has" />
           <element key="name" value="gettext" />
+          <element key="optional" value="yes" />
+        </element>
+        
+        <element>
+          <element key="type" value="ext" />
+          <element key="rel" value="has" />
+          <element key="name" value="SimpleXML" />
+          <element key="optional" value="yes" />
+        </element>        
+
+        <element>
+          <element key="type" value="ext" />
+          <element key="rel" value="has" />
+          <element key="name" value="json" />
           <element key="optional" value="yes" />
         </element>
       </mapping>
@@ -154,6 +181,7 @@ PHPTAL compiles templates to PHP for best performance and supports selective cac
       </mapping>
 
       <mapping name="exceptions">
+        <element key="phpunit.xml" value="test"/>
         <element key="README" value="doc"/>
         <element key="COPYING" value="doc"/>
       </mapping>
