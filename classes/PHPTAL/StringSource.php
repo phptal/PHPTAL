@@ -21,10 +21,10 @@ class PHPTAL_StringSource implements PHPTAL_Source
 {
     const NO_PATH_PREFIX = '<string ';
 
-    public function __construct($data, $realpath)
+    public function __construct($data, $realpath = null)
     {
         $this->_data = $data;
-        $this->_realpath = $realpath;
+        $this->_realpath = $realpath ? $realpath : self::NO_PATH_PREFIX.md5($data).'>';
     }
 
     public function getLastModifiedTime()

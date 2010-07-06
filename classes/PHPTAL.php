@@ -252,18 +252,13 @@ class PHPTAL
      *
      * @return $this
      */
-    public function setSource($src, $path=false)
+    public function setSource($src, $path = null)
     {
-        if (!$path) {
-            // this prefix tells string source that path has been faked
-            $path = PHPTAL_StringSource::NO_PATH_PREFIX.md5($src).'>';
-        }
-
         $this->_prepared = false;
         $this->_functionName = null;
         $this->_codeFile = null;
         $this->_source = new PHPTAL_StringSource($src, $path);
-        $this->_path = $path;
+        $this->_path = $this->_source->getRealPath();
         $this->_context->_docType = null;
         $this->_context->_xmlDeclaration = null;
         return $this;
