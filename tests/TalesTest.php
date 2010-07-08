@@ -187,7 +187,6 @@ class TalesTest extends PHPTAL_TestCase
         $tpl->setSource('<x tal:content="testmodifier:foo"/>')->execute();
     }
 
-
     /**
      * @expectedException PHPTAL_ParserException
      */
@@ -207,6 +206,29 @@ class TalesTest extends PHPTAL_TestCase
         {
             $this->assertEquals('testidontexist', $e->getModifierName());
         }
+    }
+
+
+    function testNamespaceFunction()
+    {
+        if (version_compare(PHP_VERSION, '5.3', '<')) $this->markTestSkipped();
+        $this->assertEquals('\strlen($ctx->x)', phptal_tales('php:\strlen(x)'));
+        $this->assertEquals('my\len($ctx->x)', phptal_tales('php:my\len(x)'));
+        $this->assertEquals('my\subns\len($ctx->x)', phptal_tales('php:my\subns\len(x)'));
+    }
+
+    function testNamespaceClass()
+    {
+        if (version_compare(PHP_VERSION, '5.3', '<')) $this->markTestSkipped();
+        $this->assertEquals('\Foo::strlen($ctx->x)', phptal_tales('php:\Foo::strlen(x)'));
+        $this->assertEquals('My\Foo::strlen($ctx->x)', phptal_tales('php:My\Foo::strlen(x)'));
+    }
+
+    function testNamespaceConstant()
+    {
+        if (version_compare(PHP_VERSION, '5.3', '<')) $this->markTestSkipped();
+        $this->assertEquals('My\Foo::TAU', phptal_tales('php:My\Foo::TAU'));
+        $this->assertEquals('$ctx->date_filter->isFilterApplied(\My\Foo::TODAY)', phptal_tales("php: date_filter.isFilterApplied(\My\Foo::TODAY)"));
     }
 }
 
