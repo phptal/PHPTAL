@@ -122,7 +122,7 @@ class PHPTAL_Dom_SaxXmlParser
                 $i=3;
             }
             for (; $i<$len; $i++) {
-                $c = $src[$i];
+                $c = $src[$i]; // Change to substr($src, $i, 1); if you want to use mb_string.func_overload
 
                 if ($c === "\n") $builder->setSource($this->_file, ++$this->_line);
 
@@ -270,7 +270,7 @@ class PHPTAL_Dom_SaxXmlParser
                         break;
 
                     case self::ST_PREPROC:
-                        if ($c === '>' and $src[$i-1] === '?') {
+                        if ($c === '>' and substr($src, $i-1, 1) === '?') {
                             $builder->onProcessingInstruction($this->checkEncoding(substr($src, $mark, $i-$mark+1)));
                             $mark = $i+1; // mark text start
                             $state = self::ST_TEXT;
