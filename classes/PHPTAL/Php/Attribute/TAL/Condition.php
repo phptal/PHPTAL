@@ -52,7 +52,7 @@ implements PHPTAL_Php_TalesChainReader
             $code = 'false';
         }
 
-        $codewriter->doIf($code);
+        $codewriter->doIf('!phptal_isempty(' . $code . ')');
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)

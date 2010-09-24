@@ -80,4 +80,43 @@ class TalConditionTest extends PHPTAL_TestCase
         $res = $tpl->execute();
         $this->assertEquals($res, 'ok');
     }
+
+    function testConditionCountable()
+    {
+        $event = new Event();
+        $event->setArtists(new CountableImpl());
+
+        $tal = $this->newPHPTAL();
+        $tal->setSource('<div tal:condition="event/getArtists">
+                            ${event/getArtists/0/makeDescription | \'fail\'}
+                         </div>');
+
+        $tal->set('event', $event);
+
+        $this->assertEquals("",$tal->execute(), $tal->getCodePath());
+    }
+}
+
+
+class CountableImpl implements Countable {
+
+        /**
+         * @see Countable
+         */
+        public function count() {
+                return 0;
+        }
+}
+
+class Event {
+
+        private $artists;
+
+        public function setArtists($artists) {
+                $this->artists = $artists;
+        }
+
+        public function getArtists() {
+                return $this->artists;
+        }
 }
