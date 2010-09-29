@@ -215,10 +215,7 @@ class PHPTAL
      */
     public function __clone()
     {
-        $context = $this->_context;
-        $this->_context = clone $this->_context;
-        $this->_context->setParent($context);
-        $this->_context->setGlobal($this->_globalContext);
+        $this->_context = $this->_context->pushContext();
     }
 
     /**
