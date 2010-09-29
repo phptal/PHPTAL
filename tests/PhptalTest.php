@@ -261,5 +261,29 @@ class PhptalTest extends PHPTAL_TestCase
     }
 
 
+    function testDoctypeWithClone()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTemplate('input/phptal.07.html');
+        $tpl->execute();
 
+        $tpl2 = clone $tpl;
+
+        $tpl2->setTemplate('input/phptal.09.html');
+        $res = $tpl2->execute();
+
+        $this->assertContains('DOCTYPE',$res);
+    }
+
+    function testDoctypeWithoutClone()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->setTemplate('input/phptal.07.html');
+        $tpl->execute();
+
+        $tpl->setTemplate('input/phptal.09.html');
+        $res = $tpl->execute();
+
+        $this->assertContains('DOCTYPE',$res);
+    }
 }
