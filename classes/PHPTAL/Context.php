@@ -103,6 +103,11 @@ class PHPTAL_Context
      */
     public function setDocType($doctype,$called_from_macro)
     {
+        // FIXME: this is temporary workaround for problem of DOCTYPE disappearing in cloned PHPTAL object (because clone keeps _parentContext)
+        if (!$this->_docType) {
+            $this->_docType = $doctype;
+        }
+
         if ($this->_parentContext) {
             $this->_parentContext->setDocType($doctype, $called_from_macro);
         } else if ($this->_echoDeclarations) {
@@ -130,6 +135,11 @@ class PHPTAL_Context
      */
     public function setXmlDeclaration($xmldec, $called_from_macro)
     {
+        // FIXME
+        if (!$this->_xmlDeclaration) {
+            $this->_xmlDeclaration = $xmldec;
+        }
+
         if ($this->_parentContext) {
             $this->_parentContext->setXmlDeclaration($xmldec, $called_from_macro);
         } else if ($this->_echoDeclarations) {
