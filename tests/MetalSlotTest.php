@@ -292,6 +292,39 @@ HTML
         </form>'),
         normalize_html($tpl->execute()));
     }
+
+    function testResetDefault()
+    {
+        $tpl = $this->newPHPTAL()->setSource('
+        <!--! definition of macro with a slot -->
+        <p metal:define-macro="the-macro">
+          The macro : <tt metal:define-slot="the-slot">the slot</tt>
+        </p>
+
+        <!--! call macro with default slot -->
+        <tal:block metal:use-macro="the-macro" />
+
+        <!--! call macro and fill the slot -->
+        <tal:block metal:use-macro="the-macro">
+          <tt metal:fill-slot="the-slot">something else</tt>
+        </tal:block>
+
+        <!--! call macro with default slot : this FAIL -->
+        <tal:block metal:use-macro="the-macro" />');
+
+        $res = $tpl->execute();
+
+        $this->assertEquals(normalize_html('<p>
+            The macro : <tt>the slot</tt>
+          </p>
+        <p>
+            The macro : <tt>something else</tt>
+          </p>
+        <p>
+            The macro : <tt>the slot</tt>
+          </p>
+        '),normalize_html($res));
+    }
 }
 
 
