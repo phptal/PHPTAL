@@ -553,4 +553,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
     {
         return '<{'.$this->getNamespaceURI().'}:'.$this->getLocalName().'>';
     }
+
+    function setValueEscaped($e) {
+        throw new PHPTAL_Exception("Not supported");
+    }
 }
