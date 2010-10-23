@@ -138,8 +138,8 @@ EOT;
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
         $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p test=\'te&amp;st<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
-        $this->assertEquals('<p test="te&amp;st<x>test&amp;test"></p>', $tpl->execute());
+        $tpl->setSource('<p test=\'te&amp;st short<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
+        $this->assertEquals('<p test="te&amp;st short<x>test&amp;test"></p>', $tpl->execute());
         ini_restore('short_open_tag');
     }
 
@@ -149,10 +149,10 @@ EOT;
         if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
         $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p test=\'te&amp;st<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
+        $tpl->setSource('<p test=\'te&amp;st noshort<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
         try
         {
-            $this->assertEquals(normalize_html('<p test="te&amp;st&lt;? print(&quot;&lt;x&gt;&quot;); ?&gt;test&lt;?= &quot;&amp;&quot; ?&gt;test"></p>'), normalize_html($tpl->execute()));
+            $this->assertEquals(normalize_html('<p test="te&amp;st noshort&lt;? print(&quot;&lt;x&gt;&quot;); ?&gt;test&lt;?= &quot;&amp;&quot; ?&gt;test"></p>'), normalize_html($tpl->execute()));
         }
         catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
         ini_restore('short_open_tag');
