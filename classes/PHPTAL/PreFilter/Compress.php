@@ -121,7 +121,7 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         // tal:content may replace element with something without space
         if (!$breaks_line && $root->getAttributeNS('http://xml.zope.org/namespaces/tal','content')) {
             $this->had_space = false;
-            
+            $this->most_recent_text_node = null;
         }
 
         // line break caused by end tag
