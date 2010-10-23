@@ -16,6 +16,13 @@
 
 class UTF8Test extends PHPTAL_TestCase
 {
+    function testË()
+    {
+        $src = '<div class="box_title">Kopiëren van een rapport</div>';
+        $res = $this->newPHPTAL()->setSource($src)->execute();
+        $this->assertEquals($src,$res);
+    }
+    
     function testFile()
     {
         $this->assertContains(
