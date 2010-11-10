@@ -25,6 +25,34 @@ class MetalSlotTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
 
+    function testVariableSlotName()
+    {
+        $tpl = $this->newPHPTAL()->setSource('<div>
+          <div metal:define-macro="test">
+            <div metal:define-slot="alt${varernative}">
+               This is my alternative text which is shown when alternative slot is not filled
+            </div>
+          </div>
+
+          <div metal:use-macro="test">
+            <div metal:fill-slot="alternative">
+               I don\'t want the alternative
+            </div>
+          </div>
+
+          <div metal:use-macro="test">
+             I want the alternative
+          </div>
+        </div>
+        ');
+
+        $tpl->varernative = 'ernative';
+
+        $res = normalize_html($tpl->execute());
+        $exp = normalize_html_file('output/metal-slot.01.html');
+        $this->assertEquals($exp, $res);
+    }
+
     function testPreservesContext()
     {
         $tpl = $this->newPHPTAL('input/metal-slot.05.html');

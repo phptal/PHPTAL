@@ -48,16 +48,23 @@
  */
 class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute
 {
+    private $tmp_var;
+
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doIf('$ctx->hasSlot('.$codewriter->str($this->expression).')');
-        $codewriter->pushCode('$ctx->echoSlot('.$codewriter->str($this->expression).')');
+        $this->tmp_var = $codewriter->createTempVariable();
+
+        $codewriter->doSetVar($this->tmp_var, $codewriter->interpolateTalesVarsInString($this->expression));
+        $codewriter->doIf('$ctx->hasSlot('.$this->tmp_var.')');
+        $codewriter->pushCode('$ctx->echoSlot('.$this->tmp_var.')');
         $codewriter->doElse();
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doEnd('if');
+
+        $codewriter->recycleTempVariable($this->tmp_var);
     }
 }
 
