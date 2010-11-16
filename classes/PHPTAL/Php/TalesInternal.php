@@ -178,7 +178,11 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         // if no sub part for this expression, just optimize the generated code
         // and access the $ctx->var
         if ($expression === null) {
-            return '$ctx->'.$next;
+            if ($nothrow) {
+                return '$ctx->path($ctx, "' . $next . '", true)';
+            } else {
+                return '$ctx->'.$next;
+            }
         }
 
         // otherwise we have to call PHPTAL_Context::path() to resolve the path at runtime
