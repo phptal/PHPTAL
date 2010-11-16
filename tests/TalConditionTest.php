@@ -57,6 +57,57 @@ class TalConditionTest extends PHPTAL_TestCase
         // $this->assertEquals($exp, $res);
     }
 
+    function testFalsyValues()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->falsyValues = array(0,false,null,'0',"",array(),new CountableImpl());
+
+        $tpl->setSource('<div tal:repeat="val falsyValues">
+            val ${repeat/val/key}
+            <tal:block tal:condition="val">true</tal:block>
+            <tal:block tal:condition="falsyValues/${repeat/val/key}">true</tal:block>
+            <tal:block tal:condition="not:falsyValues/${repeat/val/key}">false</tal:block>
+            <tal:block tal:condition="not:val">false</tal:block>
+            <tal:block tal:condition="not:true:val">false</tal:block>
+        </div>');
+
+        $this->assertEquals(normalize_html("
+        <div>val 0 false false false</div>
+        <div>val 1 false false false</div>
+        <div>val 2 false false false</div>
+        <div>val 3 false false false</div>
+        <div>val 4 false false false</div>
+        <div>val 5 false false false</div>
+        <div>val 6 false false false</div>
+        "), normalize_html($tpl->execute()));
+    }
+
+    function testTruthyValues()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->truthyValues = array(-1,0.00001,true,'null','00'," ",array(false),new CountableImpl(1));
+
+        $tpl->setSource('<div tal:repeat="val truthyValues">
+            val ${repeat/val/key}
+            <tal:block tal:condition="val">true</tal:block>
+            <tal:block tal:condition="truthyValues/${repeat/val/key}">true</tal:block>
+            <tal:block tal:condition="true:truthyValues/${repeat/val/key}">true</tal:block>
+            <tal:block tal:condition="true:val">true</tal:block>
+            <tal:block tal:condition="not:val">false</tal:block>
+        </div>');
+
+        $this->assertEquals(normalize_html("
+        <div>val 0 true true true true</div>
+        <div>val 1 true true true true</div>
+        <div>val 2 true true true true</div>
+        <div>val 3 true true true true</div>
+        <div>val 4 true true true true</div>
+        <div>val 5 true true true true</div>
+        <div>val 6 true true true true</div>
+        <div>val 7 true true true true</div>
+        "), normalize_html($tpl->execute()));
+    }
+
     function testChainedFalse()
     {
         $tpl = $this->newPHPTAL();
@@ -84,7 +135,7 @@ class TalConditionTest extends PHPTAL_TestCase
     function testConditionCountable()
     {
         $event = new Event();
-        $event->setArtists(new CountableImpl());
+        $event->setArtists(new CountableImpl(0));
 
         $tal = $this->newPHPTAL();
         $tal->setSource('<div tal:condition="event/getArtists">
@@ -100,11 +151,15 @@ class TalConditionTest extends PHPTAL_TestCase
 
 class CountableImpl implements Countable {
 
+        function __construct($cnt=0)
+        {
+            $this->cnt = $cnt;
+        }
         /**
          * @see Countable
          */
         public function count() {
-                return 0;
+                return $this->cnt;
         }
 }
 

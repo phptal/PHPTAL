@@ -55,9 +55,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
     static public function true($src, $nothrow)
     {
-        $src = trim($src);
-        if (ctype_alnum($src)) return '!empty($ctx->'.$src.')';
-        return '!!$ctx->path($ctx, '.self::string($src).',true)';
+        return '!phptal_isempty(' . self::compileToPHPExpression($src, true) . ')';
     }
 
     /**
@@ -86,7 +84,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function not($expression, $nothrow)
     {
-        return '!(' . self::compileToPHPExpression($expression, $nothrow) . ')';
+        return 'phptal_isempty(' . self::compileToPHPExpression($expression, $nothrow) . ')';
     }
 
 
@@ -369,7 +367,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     {
         $src = trim($src);
         if (ctype_alnum($src)) return 'isset($ctx->'.$src.')';
-        return '(null !== $ctx->path($ctx,'.self::string($src).', true))';
+        return '(null !== ' . self::compileToPHPExpressions($src, true) . ')';
     }
 
     /**

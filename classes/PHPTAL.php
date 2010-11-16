@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_2_3a1');
+define('PHPTAL_VERSION', '1_2_3a2');
 
 PHPTAL::autoloadRegister();
 
