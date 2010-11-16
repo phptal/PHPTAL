@@ -309,6 +309,17 @@ EOT;
         $tpl->execute();
     }
 
+    /**
+     * @expectedException PHPTAL_VariableNotFoundException
+     */
+    function testErrorsThrow3()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->foo = array();
+        $tpl->setSource('<p>${foo/error | foo/error}</p>');
+        $tpl->execute();
+    }
+
     function testErrorsSilenced()
     {
         $tpl = $this->newPHPTAL();

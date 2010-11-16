@@ -58,21 +58,21 @@ class TalesTest extends PHPTAL_TestCase
     {
         $src = "not: php: foo()";
         $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
-        $this->assertEquals("!(foo())", $res);
+        $this->assertEquals("!phptal_true(foo())", $res);
     }
 
     function testNotVar()
     {
         $src = "not:foo";
         $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
-        $this->assertEquals('!($ctx->foo)', $res);
+        $this->assertEquals('!phptal_true($ctx->foo)', $res);
     }
 
     function testNotPath()
     {
         $src = "not:foo/bar/baz";
         $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($src);
-        $this->assertEquals('!($ctx->path($ctx->foo, \'bar/baz\'))', $res);
+        $this->assertEquals('!phptal_true($ctx->path($ctx->foo, \'bar/baz\'))', $res);
     }
 
     function testTrue()

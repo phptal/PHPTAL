@@ -55,7 +55,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 
     static public function true($src, $nothrow)
     {
-        return '!phptal_isempty(' . self::compileToPHPExpression($src, true) . ')';
+        return 'phptal_true(' . self::compileToPHPExpression($src, true) . ')';
     }
 
     /**
@@ -84,7 +84,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function not($expression, $nothrow)
     {
-        return 'phptal_isempty(' . self::compileToPHPExpression($expression, $nothrow) . ')';
+        return '!phptal_true(' . self::compileToPHPExpression($expression, $nothrow) . ')';
     }
 
 
