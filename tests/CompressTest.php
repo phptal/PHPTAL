@@ -231,6 +231,13 @@ class CompressTest extends PHPTAL_TestCase
         ');
     }
 
+    function testConditionalBR()
+    {
+        $this->assertStrips("<div>foo bar</div>", '<div>foo<br tal:condition="php:false"/> bar</div>');
+        $this->assertStrips("<div>foo bar</div>", '<div>foo<span tal:condition="php:false"/> bar</div>');
+        $this->assertStrips("<div>foo bar</div>", '<div>foo<div tal:condition="php:false"/> bar</div>');
+    }
+
     function testAll()
     {
         $this->assertStrips("<html><head><title>Foo</title></head><body><p><a href=\"test\" title=\"x\">x </a>xu</p><br/>foo</body></html><!-- bla -->",

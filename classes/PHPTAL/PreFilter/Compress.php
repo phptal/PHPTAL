@@ -54,7 +54,8 @@ class PHPTAL_PreFilter_Compress extends PHPTAL_PreFilter_Normalize
         $no_spaces = $this->hasNoInterelementSpace($root);
 
         // mostly block-level elements
-        $breaks_line = $no_spaces || $this->breaksLine($root);
+        // if element is conditional, it may not always break the line
+        $breaks_line = $no_spaces || ($this->breaksLine($root) && !$root->getAttributeNS('http://xml.zope.org/namespaces/tal','condition'));
 
         // start tag newline
         if ($breaks_line) {
