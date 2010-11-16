@@ -433,15 +433,6 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     }
 
     /**
-     * @deprecated
-     */
-    public static function compileToPHPStatements($expression, $nothrow=false)
-    {
-        trigger_error("Use phptal_tales() instead", E_USER_WARNING);
-        return self::compileToPHPExpressions($expression, $nothrow);
-    }
-
-    /**
      * returns PHP code that will evaluate given TALES expression.
      * e.g. "string:foo${bar}" may be transformed to "'foo'.phptal_escape($ctx->bar)"
      *
