@@ -371,7 +371,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     {
         $src = trim($src);
         if (ctype_alnum($src)) return 'isset($ctx->'.$src.')';
-        return '(null !== ' . self::compileToPHPExpressions($src, true) . ')';
+        return '(null !== ' . self::compileToPHPExpression($src, true) . ')';
     }
 
     /**
