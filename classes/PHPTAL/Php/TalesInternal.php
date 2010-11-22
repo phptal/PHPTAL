@@ -173,22 +173,22 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $expression = null;
         }
 
+        if ($nothrow) {
+            return '$ctx->path($ctx, ' . $next . ($expression === null ? '' : '."/".'.$expression) . ', true)';
+        }
+
         if (preg_match('/^\'[a-z][a-z0-9_]*\'$/i', $next)) $next = substr($next, 1, -1); else $next = '{'.$next.'}';
 
         // if no sub part for this expression, just optimize the generated code
         // and access the $ctx->var
         if ($expression === null) {
-            if ($nothrow) {
-                return '$ctx->path($ctx, "' . $next . '", true)';
-            } else {
-                return '$ctx->'.$next;
-            }
+            return '$ctx->'.$next;
         }
 
         // otherwise we have to call PHPTAL_Context::path() to resolve the path at runtime
         // extract the first part of the expression (it will be the PHPTAL_Context::path()
         // $base and pass the remaining of the path to PHPTAL_Context::path()
-        return '$ctx->path($ctx->'.$next.', '.$expression.($nothrow ? ', true' : '').')';
+        return '$ctx->path($ctx->'.$next.', '.$expression.')';
     }
 
     /**
