@@ -57,6 +57,18 @@ class TalConditionTest extends PHPTAL_TestCase
         // $this->assertEquals($exp, $res);
     }
 
+    function testTrueNonExistentVariable()
+    {
+        $tpl = $this->newPHPTAL()->setSource('<div tal:condition="true:doesntexist/nope"></div>');
+        try {
+            $this->assertEquals('', $tpl->execute());
+        }
+        catch(Exception $e)
+        {
+            $this->fail($tpl->getCodePath());
+        }
+    }
+
     function testFalsyValues()
     {
         $tpl = $this->newPHPTAL();
@@ -82,7 +94,7 @@ class TalConditionTest extends PHPTAL_TestCase
         "), normalize_html($tpl->execute()));
     }
 
-    function testTruthyValues()
+    function testTruthyValuesSimple()
     {
         $tpl = $this->newPHPTAL();
         $tpl->truthyValues = array(-1,0.00001,true,'null','00'," ",array(false),new CountableImpl(1));
@@ -90,21 +102,42 @@ class TalConditionTest extends PHPTAL_TestCase
         $tpl->setSource('<div tal:repeat="val truthyValues">
             val ${repeat/val/key}
             <tal:block tal:condition="val">true</tal:block>
-            <tal:block tal:condition="truthyValues/${repeat/val/key}">true</tal:block>
-            <tal:block tal:condition="true:truthyValues/${repeat/val/key}">true</tal:block>
             <tal:block tal:condition="true:val">true</tal:block>
             <tal:block tal:condition="not:val">false</tal:block>
         </div>');
 
         $this->assertEquals(normalize_html("
-        <div>val 0 true true true true</div>
-        <div>val 1 true true true true</div>
-        <div>val 2 true true true true</div>
-        <div>val 3 true true true true</div>
-        <div>val 4 true true true true</div>
-        <div>val 5 true true true true</div>
-        <div>val 6 true true true true</div>
-        <div>val 7 true true true true</div>
+        <div>val 0 true true</div>
+        <div>val 1 true true</div>
+        <div>val 2 true true</div>
+        <div>val 3 true true</div>
+        <div>val 4 true true</div>
+        <div>val 5 true true</div>
+        <div>val 6 true true</div>
+        <div>val 7 true true</div>
+        "), normalize_html($tpl->execute()));
+    }
+
+    function testTruthyValuesComplex()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->truthyValues = array(-1,0.00001,true,'null','00'," ",array(false),new CountableImpl(1));
+
+        $tpl->setSource('<div tal:repeat="val truthyValues">
+            val ${repeat/val/key}
+            <tal:block tal:condition="truthyValues/${repeat/val/key}">true</tal:block>
+            <tal:block tal:condition="true:truthyValues/${repeat/val/key}">true</tal:block>
+        </div>');
+
+        $this->assertEquals(normalize_html("
+        <div>val 0 true true</div>
+        <div>val 1 true true</div>
+        <div>val 2 true true</div>
+        <div>val 3 true true</div>
+        <div>val 4 true true</div>
+        <div>val 5 true true</div>
+        <div>val 6 true true</div>
+        <div>val 7 true true</div>
         "), normalize_html($tpl->execute()));
     }
 
