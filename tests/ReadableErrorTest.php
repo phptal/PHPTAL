@@ -31,7 +31,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
         catch (PHPTAL_Exception $e)
         {
             $expected = 'input'.DIRECTORY_SEPARATOR.'error-02.macro.html';
-            $this->assertType('string',$e->srcFile);
+            $this->assertInternalType('string',$e->srcFile);
             $this->assertContains($expected, $e->srcFile);
             $this->assertEquals(2, $e->srcLine);
         }
@@ -108,7 +108,7 @@ class ReadableErrorTest extends PHPTAL_TestCase
         catch (PHPTAL_TemplateException $e)
         {
             $msg = $e->getMessage();
-            $this->assertType('string',$e->srcFile, $msg);
+            $this->assertInternalType('string',$e->srcFile, $msg);
             $this->assertContains($file, $e->srcFile, $msg);
             $this->assertEquals($line, $e->srcLine, $msg);
         }

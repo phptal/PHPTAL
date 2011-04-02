@@ -52,7 +52,7 @@ class PHP5ConverterTest extends PHPTAL_TestCase
     private function assertReparses($source)
     {
         list($doc,$tree) = $this->parseWithBuilder($source, new PHPTAL_Dom_PHP5DOMDocumentBuilder());
-        $this->assertType('DOMElement',$tree);
+        $this->assertInstanceOf('DOMElement',$tree);
 
         $res = $tree->ownerDocument->saveXML();
         $this->assertEquals(normalize_html($source), normalize_html($res));
@@ -77,7 +77,7 @@ class PHP5ConverterTest extends PHPTAL_TestCase
         $con = new PHPTAL_Dom_PHP5DOMConverter($builder);
         $build = $con->convertDocument($doc->documentElement,$xmldecl);
 
-        $this->assertType('PHPTAL_Dom_DocumentBuilder',$build);
+        $this->assertInstanceOf('PHPTAL_Dom_DocumentBuilder',$build);
         return array($doc,$build->getResult());
     }
 

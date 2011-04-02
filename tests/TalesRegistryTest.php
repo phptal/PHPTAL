@@ -18,7 +18,7 @@ class TalesRegistryTest extends PHPTAL_TestCase
     function testInstance()
     {
         $this->assertSame(PHPTAL_TalesRegistry::getInstance(), PHPTAL_TalesRegistry::getInstance());
-        $this->assertType('PHPTAL_TalesRegistry',PHPTAL_TalesRegistry::getInstance());
+        $this->assertInstanceOf('PHPTAL_TalesRegistry',PHPTAL_TalesRegistry::getInstance());
     }
 
     function testRegisterFunction()

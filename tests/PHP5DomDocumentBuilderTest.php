@@ -32,8 +32,8 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
         $p->parseString($b,$str);
         $res = $b->getResult();
 
-        $this->assertType('DOMElement',$res);
-        $this->assertType('DOMDocument',$res->ownerDocument);
+        $this->assertInstanceOf('DOMElement',$res);
+        $this->assertInstanceOf('DOMDocument',$res->ownerDocument);
         $this->assertSame($res, $res->ownerDocument->documentElement);
 
         return $res;
@@ -42,7 +42,7 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
     private function parseUnparse($str)
     {
         $res = $this->parse($str);
-        $this->assertType('DOMElement',$res);
+        $this->assertInstanceOf('DOMElement',$res);
         return $res->ownerDocument->saveXML($res);
     }
 
@@ -101,7 +101,7 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
     function testRootNS()
     {
         $res = $this->parse('<rootfoo xmlns="urn:foo"/>');
-        $this->assertType('DOMElement',$res);
+        $this->assertInstanceOf('DOMElement',$res);
         $this->assertEquals('',$res->prefix);
         $this->assertEquals('urn:foo',$res->namespaceURI);
     }
@@ -109,8 +109,8 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
     function testContentNS()
     {
         $res = $this->parse('<root xmlns="urn:foo"><y/></root>');
-        $this->assertType('DOMElement',$res);
-        $this->assertType('DOMElement',$res->firstChild);
+        $this->assertInstanceOf('DOMElement',$res);
+        $this->assertInstanceOf('DOMElement',$res->firstChild);
         $this->assertEquals('',$res->firstChild->prefix);
         $this->assertEquals('urn:foo',$res->firstChild->namespaceURI);
     }
@@ -124,7 +124,7 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
     function testRootNSPrefix()
     {
         $res = $this->parse('<x:root xmlns:x="urn:foo"/>');
-        $this->assertType('DOMElement',$res);
+        $this->assertInstanceOf('DOMElement',$res);
         $this->assertEquals('x',$res->prefix);
         $this->assertEquals('urn:foo',$res->namespaceURI);
     }
@@ -132,8 +132,8 @@ class PHP5DOMDocumentBuilderTest extends PHPTAL_TestCase
     function testContentNSPrefix()
     {
         $res = $this->parse('<x:root xmlns:x="urn:foo"><x:y/></x:root>');
-        $this->assertType('DOMElement',$res);
-        $this->assertType('DOMElement',$res->firstChild);
+        $this->assertInstanceOf('DOMElement',$res);
+        $this->assertInstanceOf('DOMElement',$res->firstChild);
         $this->assertEquals('x',$res->firstChild->prefix);
         $this->assertEquals('urn:foo',$res->firstChild->namespaceURI);
     }

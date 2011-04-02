@@ -242,7 +242,7 @@ class PhptalTest extends PHPTAL_TestCase
     function testCreateMethod()
     {
         $obj = PHPTAL::create();
-        $this->assertType('PHPTAL', $obj);
+        $this->assertInstanceOf('PHPTAL', $obj);
 
         try {
             $obj->execute();
@@ -256,7 +256,7 @@ class PhptalTest extends PHPTAL_TestCase
     function testCreateWithFileMethod()
     {
         $obj = PHPTAL::create('input/phptal.01.html');
-        $this->assertType('PHPTAL', $obj);
+        $this->assertInstanceOf('PHPTAL', $obj);
         $obj->getCodePath();
     }
 

@@ -117,12 +117,12 @@ class TalesTest extends PHPTAL_TestCase
 
     function testTaleNeverReturnsArray()
     {
-        $this->assertType('string', phptal_tale('foo | bar | baz | nothing'));
+        $this->assertInternalType('string', phptal_tale('foo | bar | baz | nothing'));
     }
 
     function testTalesReturnsArray()
     {
-        $this->assertType('array', phptal_tales('foo | bar | baz | nothing'));
+        $this->assertInternalType('array', phptal_tales('foo | bar | baz | nothing'));
     }
 
     function testInterpolate1()

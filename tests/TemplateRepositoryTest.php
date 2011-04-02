@@ -55,12 +55,12 @@ class TemplateRepositoryTest extends PHPTAL_TestCase
         $tpl->setTemplateRepository('testbaz/');
 
         $repos = $tpl->getTemplateRepositories();
-        $this->assertType('array', $repos);
+        $this->assertInternalType('array', $repos);
         $this->assertEquals(3, count($repos));
 
         foreach($repos as $repo)
         {
-            $this->assertType('string', $repo);
+            $this->assertInternalType('string', $repo);
             $this->assertContains('test', $repo);
         }
     }

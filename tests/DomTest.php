@@ -28,7 +28,7 @@ class DOMTest extends PHPTAL_TestCase
         $el1 = $this->newElement();
         $el2 = $this->newElement();
 
-        $this->assertType('array', $el1->childNodes);
+        $this->assertInternalType('array', $el1->childNodes);
         $this->assertNull($el2->parentNode);
 
         $el1->appendChild($el2);
