@@ -30,8 +30,7 @@ class TalesStringTest extends PHPTAL_TestCase {
     function testSubPathSimple()
     {
         $res = PHPTAL_Php_TalesInternal::string('hello $name how are you ?');
-        $rgm = preg_match('/\'hello \'.*?\$ctx->name.*?\' how are you \?\'$/', $res);
-        $this->assertEquals(1, $rgm);
+        $this->assertRegExp('/\'hello \'.*?\$ctx->name.*?\' how are you \?\'$/', $res);
     }
 
     function testSubPath()
@@ -43,8 +42,7 @@ class TalesStringTest extends PHPTAL_TestCase {
     function testSubPathExtended()
     {
         $res = PHPTAL_Php_TalesInternal::string('hello ${user/name} how are you ?');
-        $rgm = preg_match('/\'hello \'.*?\$ctx->user, \'name\'.*?\' how are you \?\'$/', $res);
-        $this->assertEquals(1, $rgm);
+        $this->assertRegExp('/\'hello \'.*?\$ctx->user, \'name\'.*?\' how are you \?\'$/', $res);
     }
 
     function testQuote()
@@ -59,8 +57,8 @@ class TalesStringTest extends PHPTAL_TestCase {
     function testDoubleVar()
     {
         $res = PHPTAL_Php_TalesInternal::string('hello $foo $bar');
-        $this->assertEquals(1, preg_match('/ctx->foo/', $res), '$foo not interpolated');
-        $this->assertEquals(1, preg_match('/ctx->bar/', $res), '$bar not interpolated');
+        $this->assertRegExp('/ctx->foo/', $res, '$foo not interpolated');
+        $this->assertRegExp('/ctx->bar/', $res, '$bar not interpolated');
     }
 
     function testDoubleDotComa()
