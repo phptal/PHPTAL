@@ -355,7 +355,7 @@ class PHPTAL_Php_CodeWriter
     public function doEchoRaw($code)
     {
         if ($code === "''") return;
-        $this->pushCode('echo '.$this->stringifyCode($this->interpolateHTML($code)));
+        $this->pushCode('echo '.$this->stringifyCode($code));
     }
 
     public function interpolateHTML($html)
