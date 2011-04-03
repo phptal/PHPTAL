@@ -136,18 +136,7 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInString($string)
     {
-        if ($this->getTalesMode() === 'tales') {
-            return PHPTAL_Php_TalesInternal::string($string);
-        }
-
-        // replace ${var} found in expression
-        while (preg_match('/(?<!\$)\$\{([^\}]+)\}/s', $string, $m)) {
-            list($ori, $exp) = $m;
-            $php  = PHPTAL_Php_TalesInternal::php($exp);
-            $string = str_replace($ori, '\'.('.$php.').\'', $string); // FIXME: that is not elegant
-        }
-        $string = str_replace('$${', '${', $string); // FIXME: that is not elegant
-        return '(\''.$string.'\')';
+        return PHPTAL_Php_TalesInternal::parseString($string, false, ($this->getTalesMode() === 'tales') ? '' : 'php:' );
     }
 
     /**

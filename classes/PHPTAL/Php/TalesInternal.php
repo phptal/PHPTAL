@@ -217,6 +217,14 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function string($expression, $nothrow=false)
     {
+        return self::parseString($expression, $nothrow, '');
+    }
+
+    /**
+     * @param string $tales_prefix prefix added to all TALES in the string
+     */
+    static public function parseString($expression, $nothrow, $tales_prefix)
+    {
         // This is a simple parser which evaluates ${foo} inside
         // 'string:foo ${foo} bar' expressions, it returns the php code which will
         // print the string with correct interpollations.
@@ -277,7 +285,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                 case '}':
                     if ($inAccoladePath) {
                         $inAccoladePath = false;
-                        $subEval = self::compileToPHPExpression($subPath,false);
+                        $subEval = self::compileToPHPExpression($tales_prefix.$subPath,false);
                         $result .= "'.(" . $subEval . ").'";
                         $subPath = '';
                         $lastWasDollar = false;
@@ -301,16 +309,16 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                             $c = '';
                         } else {
                             $inPath = false;
-                            $subEval = self::compileToPHPExpression($subPath,false);
+                            $subEval = self::compileToPHPExpression($tales_prefix.$subPath,false);
                             $result .= "'.(" . $subEval . ").'";
+                            }
                         }
-                    }
                     break;
             }
             $result .= $c;
         }
         if ($inPath) {
-            $subEval = self::compileToPHPExpression($subPath, false);
+            $subEval = self::compileToPHPExpression($tales_prefix.$subPath, false);
             $result .= "'.(" . $subEval . ").'";
         }
 
