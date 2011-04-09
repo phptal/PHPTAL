@@ -182,10 +182,10 @@ class PHPTAL_Php_CodeWriter
         $this->_result .= '<?php '."\n";
         foreach ($this->_codeBuffer as $codeLine) {
             // avoid adding ; after } and {
-            if (!preg_match('/\}\s*$|\{\s*$/', $codeLine))
-                $this->_result .= $codeLine . ' ;'."\n";
-            else
-                $this->_result .= $codeLine;
+            if (!preg_match('/[{};]\s*$/', $codeLine)) {
+                $codeLine .= ' ;'."\n";
+            }
+            $this->_result .= $codeLine;
         }
         $this->_result .= "?>\n";// PHP consumes newline
         $this->_codeBuffer = array();
