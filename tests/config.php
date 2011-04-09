@@ -122,14 +122,22 @@ function normalize_html($src) {
 
 function normalize_phpsource($code, $ignore_newlines = false) {
 
+    // ignore debug
+    $code = preg_replace('!<\?php /\* tag ".*?" from line \d+ \*/ ?; \?>!','', $code);
+    $code = preg_replace('!/\* tag ".*?" from line \d+ \*/ ?;!','', $code);
+
     $code = str_replace('<?php use pear2\HTML\Template\PHPTAL as P; ?>', '', $code);
 
     $lines = explode("\n", $code);
     $code = "";
     foreach ($lines as $line) {
-        $code .= trim($line).($ignore_newlines? '':"\n");
+        $line = trim($line);
+        $code .= $line;
+        if ($ignore_newlines) {
+            if (preg_match('/[A-Z0-9_]$/i',$line)) $code .= ' ';
+        } else $code .= "\n";
     }
 
     // ignore some no-ops
-    return str_replace(array('<?php ?>', '<?php ; ?>', '{;'), array('', '', '{'), $code);
+    return str_replace(array('<?php ?>', '<?php ; ?>', '{;', ' }'), array('', '', '{', '}'), $code);
 }
