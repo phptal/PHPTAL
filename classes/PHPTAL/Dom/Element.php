@@ -15,20 +15,12 @@
 
 
 /**
- * For backwards compatibility only. Do not use!
- * @deprecated
- */
-interface PHPTAL_Php_Tree
-{
-}
-
-/**
  * Document Tag representation.
  *
  * @package PHPTAL
  * @subpackage Dom
  */
-class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
+class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
 {
     protected $qualifiedName, $namespace_uri;
     private $attribute_nodes = array();
@@ -161,9 +153,6 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
-        // For backwards compatibility only!
-        self::$_codewriter_bc_hack_ = $codewriter; // FIXME
-
         try
         {
             /// self-modifications
@@ -361,9 +350,6 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     public function generateContent(PHPTAL_Php_CodeWriter $codewriter = null, $realContent=false)
     {
-        // For backwards compatibility only!
-        if ($codewriter===null) $codewriter = self::$_codewriter_bc_hack_; // FIXME!
-
         if (!$this->isEmptyNode($codewriter->getOutputMode())) {
             if ($realContent || !count($this->contentAttributes)) {
                 foreach($this->childNodes as $child) {
