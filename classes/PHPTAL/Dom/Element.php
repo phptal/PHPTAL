@@ -124,30 +124,6 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         $this->appendChild(new PHPTAL_Dom_Text('*/', $encoding));
     }
 
-    /**
-     * support <?php ?> inside attributes
-     */
-    private function replacePHPAttributes()
-    {
-        foreach ($this->attribute_nodes as $attr) {
-            $split = preg_split("/<\?(php|=|)(.*?)\?>/", $attr->getValueEscaped(), null, PREG_SPLIT_DELIM_CAPTURE);
-            if (count($split)==1) continue;
-
-            $new_value = '';
-            for ($i=0; $i < count($split); $i += 3) {
-                if (strlen($split[$i])) {
-                    $new_value .= 'echo \''.str_replace('\'', '\\\'', $split[$i]).'\';';
-                }
-
-                if (isset($split[$i+2])) {
-                    if ($split[$i+1] === '=') $new_value .= 'echo ';
-                    $new_value .= rtrim($split[$i+2], "; \n\r").';';
-                }
-            }
-            $attr->overwriteValueWithCode($new_value);
-        }
-    }
-
     public function appendChild(PHPTAL_Dom_Node $child)
     {
         if ($child->parentNode) $child->parentNode->removeChild($child);
@@ -192,7 +168,6 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
         {
             /// self-modifications
 
-            $this->replacePHPAttributes();
             if ($codewriter->getOutputMode() === PHPTAL::XHTML) {
                 $this->replaceTextWithCDATA();
             }
