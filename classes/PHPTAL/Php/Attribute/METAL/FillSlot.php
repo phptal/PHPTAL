@@ -63,7 +63,7 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
             $this->function_name = $codewriter->getFunctionPrefix().$function_base_name;
 
             $codewriter->doSetVar('$ctx', '$tpl->getContext()');
-            $codewriter->doSetVar('$_translator', '$tpl->getTranslator()');
+            $codewriter->doInitTranslator();
         } else {
             $codewriter->pushCode('ob_start()');
             $this->function_name = null;

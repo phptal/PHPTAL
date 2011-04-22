@@ -18,6 +18,15 @@ require_once 'I18NDummyTranslator.php';
 
 class I18NTranslateTest extends PHPTAL_TestCase
 {
+    /**
+     * @expectedException PHPTAL_ConfigurationException
+     */
+    function testFailsWhenTranslatorNotSet()
+    {
+        $tpl = $this->newPHPTAL('input/i18n-translate-01.html');
+        $tpl->execute();
+    }
+
     function testStringTranslate()
     {
         $tpl = $this->newPHPTAL('input/i18n-translate-01.html');

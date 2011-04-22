@@ -236,7 +236,7 @@ class PHPTAL_Php_CodeWriter
         $this->doFunction($functionName, 'PHPTAL $tpl, PHPTAL_Context $ctx');
         $this->setFunctionPrefix($functionName . "_");
         $this->doSetVar('$_thistpl', '$tpl');
-        $this->doSetVar('$_translator', '$tpl->getTranslator()');
+        $this->doInitTranslator();
         $treeGen->generateCode($this);
         $this->doComment("end");
         $this->doEnd('function');
@@ -257,6 +257,21 @@ class PHPTAL_Php_CodeWriter
     {
         $comment = str_replace('*/', '* /', $comment);
         $this->pushCode("/* $comment */");
+    }
+
+    public function doInitTranslator()
+    {
+        if ($this->_state->isTranslationOn()) {
+            $this->doSetVar('$_translator', '$tpl->getTranslator()');
+        }
+    }
+
+    public function getTranslatorReference()
+    {
+        if (!$this->_state->isTranslationOn()) {
+            throw new PHPTAL_ConfigurationException("i18n used, but Translator has not been set");
+        }
+        return '$_translator';
     }
 
     public function doEval($code)

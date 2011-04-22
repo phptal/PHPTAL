@@ -58,7 +58,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
             $code = $codewriter->evaluateExpression($this->expression);
         }
 
-        $codewriter->pushCode('echo $_translator->translate('.$code.','.($escape ? 'true':'false').');');
+        $codewriter->pushCode('echo '.$codewriter->getTranslatorReference().'->translate('.$code.','.($escape ? 'true':'false').');');
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
@@ -70,7 +70,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
         $codewriter = $executor->getCodeWriter();
 
         $escape = !($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE);
-        $exp = "\$_translator->translate($exp, " . ($escape ? 'true':'false') . ')';
+        $exp = $codewriter->getTranslatorReference()."->translate($exp, " . ($escape ? 'true':'false') . ')';
         if (!$islast) {
             $var = $codewriter->createTempVariable();
             $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');

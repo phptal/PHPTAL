@@ -80,7 +80,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                     $code = $this->_getTranslationCode($codewriter, $attr->getValue());
                 } elseif ($attr->getReplacedState() === PHPTAL_Dom_Attr::VALUE_REPLACED && $attr->getOverwrittenVariableName()) {
                     // sadly variables won't be interpolated in this translation
-                    $code = 'echo '.$codewriter->escapeCode('$_translator->translate('.$attr->getOverwrittenVariableName().', false)');
+                    $code = 'echo '.$codewriter->escapeCode($codewriter->getTranslatorReference(). '->translate('.$attr->getOverwrittenVariableName().', false)');
                 } else {
                     throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it",
                                 $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
@@ -104,14 +104,14 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
             array_shift($m);
             $m = array_shift($m);
             foreach ($m as $name) {
-                $code .= "\n".'$_translator->setVar('.$codewriter->str($name).','.PHPTAL_Php_TalesInternal::compileToPHPExpression($name).');'; // allow more complex TAL expressions
+                $code .= "\n".$codewriter->getTranslatorReference(). '->setVar('.$codewriter->str($name).','.PHPTAL_Php_TalesInternal::compileToPHPExpression($name).');'; // allow more complex TAL expressions
             }
             $code .= "\n";
         }
 
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
-        $code .= 'echo '.$codewriter->escapeCode('$_translator->translate('.$codewriter->str($key).', false)');
+        $code .= 'echo '.$codewriter->escapeCode($codewriter->getTranslatorReference().'->translate('.$codewriter->str($key).', false)');
         return $code;
     }
 }

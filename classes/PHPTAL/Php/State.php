@@ -42,6 +42,14 @@ class PHPTAL_Php_State
     }
 
     /**
+     * true if PHPTAL has translator set
+     */
+    public function isTranslationOn()
+    {
+        return !!$this->phptal->getTranslator();
+    }
+
+    /**
      * controlled by phptal:debug
      */
     public function setDebug($bool)
