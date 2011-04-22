@@ -109,7 +109,9 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
 
         foreach ($element->getAttributeNodes() as $attr) {
             $estimated_bytes += 4+strlen($attr->getQualifiedName());
-            $estimated_bytes += strlen($attr->getValueEscaped()); // this is shoddy for replaced attributes
+            if ($attr->getReplacedState() === PHPTAL_Dom_Attr::NOT_REPLACED) {
+                $estimated_bytes += strlen($attr->getValueEscaped()); // this is shoddy for replaced attributes
+            }
         }
 
         $has_repeat_attr = $element->hasAttributeNS('http://xml.zope.org/namespaces/tal', 'repeat');
