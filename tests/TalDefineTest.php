@@ -310,7 +310,7 @@ class TalDefineTest extends PHPTAL_TestCase
     }
 
     /**
-     * @expectedException PHPTAL_Exception
+     * @expectedException PHPTAL_TemplateException
      */
     function testRejectsInvalidExpression()
     {

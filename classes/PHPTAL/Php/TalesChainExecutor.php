@@ -49,9 +49,7 @@ class PHPTAL_Php_TalesChainExecutor
 
     public function doElse()
     {
-        if ($this->_chainStarted) {
-            $this->codewriter->doElse();
-        }
+        $this->codewriter->doElse();
     }
 
     public function breakChain()
