@@ -23,81 +23,66 @@ class ReadableErrorTest extends PHPTAL_TestCase
 
     function testMacro()
     {
-        try {
-            $tpl = $this->newPHPTAL('input'.DIRECTORY_SEPARATOR.'error-02.html');
-            $res = $tpl->execute();
-            $this->fail("Not thrown");
-        }
-        catch (PHPTAL_Exception $e)
-        {
-            $expected = 'input'.DIRECTORY_SEPARATOR.'error-02.macro.html';
-            $this->assertInternalType('string',$e->srcFile);
-            $this->assertContains($expected, $e->srcFile);
-            $this->assertEquals(2, $e->srcLine);
-        }
-        catch (Exception $e)
-        {
-            throw $e;
-        }
+        $this->assertThrowsInLine(2, 'input/error-02.html', 'input/error-02.macro.html');
     }
 
     function testAfterMacro()
     {
-        $this->assertThrowsInLine(3, 'input'.DIRECTORY_SEPARATOR.'error-03.html');
+        $this->assertThrowsInLine(3, 'input/error-03.html');
     }
 
     function testParseError()
     {
-        $this->assertThrowsInLine(7, 'input'.DIRECTORY_SEPARATOR.'error-04.html');
+        $this->assertThrowsInLine(7, 'input/error-04.html');
     }
 
     function testMissingVar()
     {
-        $this->assertThrowsInLine(5, 'input'.DIRECTORY_SEPARATOR.'error-05.html');
+        $this->assertThrowsInLine(5, 'input/error-05.html');
     }
 
     function testMissingVarInterpol()
     {
         $this->markTestSkipped("can't fix it now");
-        $this->assertThrowsInLine(5, 'input'.DIRECTORY_SEPARATOR.'error-06.html');
+        $this->assertThrowsInLine(5, 'input/error-06.html');
     }
 
     function testMissingExpr()
     {
-        $this->assertThrowsInLine(6, 'input'.DIRECTORY_SEPARATOR.'error-07.html');
+        $this->assertThrowsInLine(6, 'input/error-07.html');
     }
 
     function testPHPSyntax()
     {
-        $this->assertThrowsInLine(9, 'input'.DIRECTORY_SEPARATOR.'error-08.html');
+        $this->assertThrowsInLine(9, 'input/error-08.html');
     }
 
     function testTranslate()
     {
-        $this->assertThrowsInLine(8, 'input'.DIRECTORY_SEPARATOR.'error-09.html');
+        $this->assertThrowsInLine(8, 'input/error-09.html');
     }
 
     function testMacroName()
     {
-        $this->assertThrowsInLine(4, 'input'.DIRECTORY_SEPARATOR.'error-10.html');
+        $this->assertThrowsInLine(4, 'input/error-10.html');
     }
 
     function testTALESParse()
     {
-        $this->assertThrowsInLine(2, 'input'.DIRECTORY_SEPARATOR.'error-11.html');
+        $this->assertThrowsInLine(2, 'input/error-11.html');
     }
 
     function testMacroNotExists()
     {
-        $this->assertThrowsInLine(3, 'input'.DIRECTORY_SEPARATOR.'error-12.html');
+        $this->assertThrowsInLine(3, 'input/error-12.html');
     }
 
     function testLocalMacroNotExists()
     {
-        $this->assertThrowsInLine(5, 'input'.DIRECTORY_SEPARATOR.'error-13.html');
+        $this->assertThrowsInLine(5, 'input/error-13.html');
     }
 
-    function assertThrowsInLine($line, $file)
+    function assertThrowsInLine($line, $file, $expected_file = NULL)
     {
         try {
             $tpl = $this->newPHPTAL($file);
@@ -105,16 +90,11 @@ class ReadableErrorTest extends PHPTAL_TestCase
             $res = $tpl->execute();
             $this->fail("Not thrown");
         }
-        catch (PHPTAL_TemplateException $e)
-        {
+        catch (PHPTAL_TemplateException $e) {
             $msg = $e->getMessage();
             $this->assertInternalType('string',$e->srcFile, $msg);
-            $this->assertContains($file, $e->srcFile, $msg);
-            $this->assertEquals($line, $e->srcLine, $msg);
-        }
-        catch (Exception $e)
-        {
-            throw $e;
+            $this->assertContains($expected_file ? $expected_file : $file, $e->srcFile, $msg);
+            $this->assertEquals($line, $e->srcLine, "Wrong line number: ". $msg . "\n". $tpl->getCodePath());
         }
     }
 }
