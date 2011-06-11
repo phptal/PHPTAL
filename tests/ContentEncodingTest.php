@@ -38,8 +38,8 @@ class ContentEncodingTest extends PHPTAL_TestCase
     {
         $p = $this->newPHPTAL();
         $p->setSource('<p tal:content="foo"/>');
-        $p->foo = array('bar'=>'a&aa', '<bbb>', null, -1);
-        $this->assertEquals('<p>a&amp;aa, &lt;bbb&gt;, , -1</p>', $p->execute());
+        $p->foo = array('bar'=>'a&aa', '<bbb>', null, -1, false);
+        $this->assertEquals('<p>a&amp;aa, &lt;bbb&gt;, , -1, 0</p>', $p->execute());
     }
 }
 

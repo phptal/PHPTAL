@@ -507,14 +507,8 @@ function phptal_escape($var)
 {
     if (is_string($var)) {
         return htmlspecialchars($var, ENT_QUOTES);
-    } elseif (is_object($var)) {
-        return htmlspecialchars((string)$var, ENT_QUOTES);
-    } elseif (is_bool($var)) {
-        return (int)$var;
-    } elseif (is_array($var)) {
-        return htmlspecialchars(implode(', ', $var), ENT_QUOTES);
     }
-    return $var;
+    return htmlspecialchars(phptal_tostring($var), ENT_QUOTES);
 }
 
 /**
@@ -529,7 +523,7 @@ function phptal_tostring($var)
     } elseif (is_bool($var)) {
         return (int)$var;
     } elseif (is_array($var)) {
-        return implode(', ', $var);
+        return implode(', ', array_map('phptal_tostring', $var));
     } elseif ($var instanceof SimpleXMLElement) {
 
         /* There is no sane way to tell apart element and attribute nodes
