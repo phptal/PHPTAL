@@ -92,9 +92,10 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         $this->_xmlns = $this->_xmlns->newElement($attributes);
 
         if (preg_match('/^([^:]+):/', $element_qname, $m)) {
-            $namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
+            $prefix = $m[1];
+            $namespace_uri = $this->_xmlns->prefixToNamespaceURI($prefix);
             if (false === $namespace_uri) {
-                throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >",
+                throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >. You must have xmlns:$prefix declaration in the same document.",
                             $this->file, $this->line);
             }
         } else {
@@ -105,16 +106,16 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
         foreach ($attributes as $qname=>$value) {
 
             if (preg_match('/^([^:]+):(.+)$/', $qname, $m)) {
-                $local_name = $m[2];
-                $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($m[1]);
+                list(,$prefix, $local_name) = $m;
+                $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($prefix);
+
+            if (false === $attr_namespace_uri) {
+                    throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >. You must have xmlns:$prefix declaration in the same document.",
+                            $this->file, $this->line);
+            }
             } else {
                 $local_name = $qname;
                 $attr_namespace_uri = ''; // default NS. Attributes don't inherit namespace per XMLNS spec
-            }
-
-            if (false === $attr_namespace_uri) {
-                throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >",
-                            $this->file, $this->line);
             }
 
             if ($this->_xmlns->isHandledNamespace($attr_namespace_uri)
