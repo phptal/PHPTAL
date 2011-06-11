@@ -402,7 +402,7 @@ class PHPTAL_Php_CodeWriter
      */
     public function str($string)
     {
-        return '\''.str_replace('\'', '\\\'', $string).'\'';
+        return "'".strtr($string,array("'"=>'\\\'','\\'=>'\\\\'))."'";
     }
 
     public function escapeCode($code)

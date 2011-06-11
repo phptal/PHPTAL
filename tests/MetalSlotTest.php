@@ -353,6 +353,20 @@ HTML
           </p>
         '),normalize_html($res));
     }
+
+    function testTrickyName()
+    {
+        $tricky = "\\x&apos;\\\\&apos;&quot;\t\r\n\\";
+        $res = $this->newPHPTAL()->setSource("
+            <x metal:define-macro='t'>
+            <tal:block metal:define-slot='$tricky'>slot</tal:block>
+            </x>
+            <y metal:use-macro='t'>
+            <tal:block metal:fill-slot='$tricky'>filled</tal:block>
+            </y>
+        ")->execute();
+        $this->assertEquals(normalize_html('<x>filled</x>'), normalize_html($res));
+    }
 }
 
 
