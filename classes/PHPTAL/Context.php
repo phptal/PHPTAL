@@ -234,7 +234,8 @@ class PHPTAL_Context
         assert('is_callable($callback)');
         $this->_slots[$key] = array($callback, $_thistpl, $tpl);
         if ($this->_parentContext) {
-            $this->_parentContext->fillSlotCallback($key,  $callback, $_thistpl, $tpl);
+            // Works around bug with tal:define popping context after fillslot
+            $this->_parentContext->_slots[$key] = array($callback, $_thistpl, $tpl);
         }
     }
 
