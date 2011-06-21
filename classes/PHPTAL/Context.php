@@ -224,8 +224,8 @@ class PHPTAL_Context
     {
         $this->_slots[$key] = $content;
         if ($this->_parentContext) {
-            // setting slots in any context (probably violates TAL, but works around bug with tal:define popping context after fillslot)
-            $this->_parentContext->fillSlot($key, $content);
+            // Works around bug with tal:define popping context after fillslot
+            $this->_parentContext->_slots[$key] = $content;
         }
     }
 

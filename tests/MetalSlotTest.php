@@ -191,19 +191,6 @@ class MetalSlotTest extends PHPTAL_TestCase
         $this->assertEquals('foocontent', $tpl->execute());
     }
 
-    /**
-     * this is violation of TAL specification, but needs to work for backwards compatibility
-     */
-    function testFillPreservedAcrossCalls2()
-    {
-        $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p tal:define="x string:x"><tal:block metal:fill-slot="foo">foocontent</tal:block></p>');
-        $tpl->execute();
-        $tpl->setSource('<p tal:define="y string:y"><tal:block metal:define-slot="foo">FAIL</tal:block></p>');
-
-        $this->assertEquals('<p>foocontent</p>', $tpl->execute());
-    }
-
     function testUsesCallbackForLargeSlots()
     {
         $tpl = $this->newPHPTAL();
