@@ -381,6 +381,29 @@ catch (Exception $e){
     template designers but must be read by <acronym>PHP</acronym> integrators as well.
     </para>
 
+    <section id="variableRefs">
+     <title>Referencing variables with ${}</title>
+     <para>
+     When working with templates and you want to reference a variable within the text, you can use the ${variableName} notation.
+     </para>
+      <para>
+      For example,
+      </para>
+     <informalexample><programlisting language="xml"><![CDATA[<span>You have ${count} credits left.</span>
+]]></programlisting></informalexample>
+
+     <para>You can also use the same PHPTALES paths as in other PHPTAL constructs:</para>
+     <informalexample><programlisting language="xml"><![CDATA[<span>Your best friend is: ${php: !some.other() ? "me" : "your dog"}</span>
+]]></programlisting></informalexample>
+     <tip>
+     <para>
+       If you have to exscape the ${var} notation, write $${var}.
+    </para></tip>
+
+
+
+    </section>
+
     <section id="attributes">
       <title>Attribute priority</title>
 
