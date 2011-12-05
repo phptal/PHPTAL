@@ -861,10 +861,11 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>tal:on-error</sgmltag></title>
 
         <para>
-        This attribute replaces the tag by the <sgmltag>tal:on-error</sgmltag> expression
-        evaluation if a path error is detected in the tag content, or if
-        any <acronym>PHP</acronym> exception is thrown in the tag content.
-        </para>
+            When any runtime error occurs while generating the element, the element will be replaced with result of <emphasis>expression</emphasis> in the <sgmltag>tal:on-error</sgmltag> attribute.</para>
+
+        <para>
+            Runtime errors are references to non-existent variables/paths/macros and any <acronym>PHP</acronym> exceptions thrown in the tag content.</para>
+
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:on-error="string:No username defined here"
       tal:content="user/name">the user name here</span>
@@ -872,7 +873,7 @@ title="google search engine">the google search engine</a>
 
         <para>
         If an error occurs accessing '<varname>name</varname>' or '<varname>user</varname>', the error string
-        will be shown at the tag's place.
+        will be shown instead of the <code>&lt;span></code> element.
         </para>
 
         <para>
@@ -886,6 +887,8 @@ title="google search engine">the google search engine</a>
 </span>
 ]]></programlisting></informalexample>
 
+        <note><para>Due to optimizations performed by <acronym>PHPTAL</acronym>, <sgmltag>tal:on-error</sgmltag> on element containing element with <sgmltag>metal:fill-slot</sgmltag> may not catch errors that happened inside the slot.</para></note>
+
       </section>
 
     </section><!-- end of TAL namespace -->
@@ -897,7 +900,7 @@ title="google search engine">the google search engine</a>
 
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:metal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
 
-        <note><para>PHPTAL does not enforce this requirement.</para></note>
+        <note><para><acronym>PHPTAL</acronym> does not enforce this requirement.</para></note>
 
 
       <para>
