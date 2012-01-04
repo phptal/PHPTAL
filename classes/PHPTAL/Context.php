@@ -312,18 +312,15 @@ class PHPTAL_Context
      *
      * @access private
      */
-    private static function pathError($base, $path, $current)
+    private static function pathError($base, $path, $current, $basename)
     {
-        $basename = '';
-        // PHPTAL_Context::path gets data in format ($object, "rest/of/the/path"),
-        // so name of the object is not really known and something in its place
-        // needs to be figured out
         if ($current !== $path) {
             $pathinfo = " (in path '.../$path')";
-            if (preg_match('!([^/]+)/'.preg_quote($current, '!').'(?:/|$)!', $path, $m)) {
-                $basename = "'".$m[1]."' ";
-            }
         } else $pathinfo = '';
+
+        if (!empty($basename)) {
+            $basename = "'" . $basename . "' ";
+        }
 
         if (is_array($base)) {
             throw new PHPTAL_VariableNotFoundException("Array {$basename}doesn't have key named '$current'$pathinfo");
@@ -356,10 +353,16 @@ class PHPTAL_Context
     {
         if ($base === null) {
             if ($nothrow) return null;
-            PHPTAL_Context::pathError($base, $path, $path);
+            PHPTAL_Context::pathError($base, $path, $path, $path);
         }
 
-        foreach (explode('/', $path) as $current) {
+        $chunks  = explode('/', $path);
+        $current = null;
+
+        for ($i = 0; $i < count($chunks); $i++) {
+            $prev    = $current;
+            $current = $chunks[$i];
+
             // object handling
             if (is_object($base)) {
                 // look for method. Both method_exists and is_callable are required because of __call() and protected methods
@@ -414,7 +417,7 @@ class PHPTAL_Context
                     return null;
                 }
 
-                PHPTAL_Context::pathError($base, $path, $current);
+                PHPTAL_Context::pathError($base, $path, $current, $prev);
             }
 
             // array handling
@@ -434,7 +437,7 @@ class PHPTAL_Context
                 if ($nothrow)
                     return null;
 
-                PHPTAL_Context::pathError($base, $path, $current);
+                PHPTAL_Context::pathError($base, $path, $current, $prev);
             }
 
             // string handling
@@ -457,7 +460,7 @@ class PHPTAL_Context
             if ($nothrow)
                 return null;
 
-            PHPTAL_Context::pathError($base, $path, $current);
+            PHPTAL_Context::pathError($base, $path, $current, $prev);
         }
 
         return $base;

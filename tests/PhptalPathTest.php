@@ -61,6 +61,26 @@ class PhptalPathTest extends PHPTAL_TestCase
         $this->assertEquals('<test>pub-method</test>', $tpl->execute());
     }
 
+    function testNestedArrays()
+    {
+        $tpl = $this->newPHPTAL();
+        $tpl->arr = array('items' => array (
+                array (
+                    'details' => array()
+                )
+            ) );
+        $tpl->setSource('<test tal:content="arr/items/0/details/0/notfound"></test>');
+
+        try {
+            $output = $tpl->execute();
+        } catch (PHPTAL_VariableNotFoundException $E) {
+            $this->assertRegExp("/Array 'details' doesn/", $E->getMessage());
+            return;
+        }
+
+        $this->fail('Execute must throw PHPTAL_VariableNotFoundException');
+    }
+
     function testDefinedButNullProperty()
     {
         $src = <<<EOS
