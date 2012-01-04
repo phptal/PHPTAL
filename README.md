@@ -7,7 +7,7 @@ Usage requirements
 
 To use PHPTAL in your projects, you will only require PHP 5.1.2 or later.
 
-If you want to use the builtin internationalisation system (I18N) the gettext extension must be compiled into PHP (--with-gettext).
+If you want to use the builtin internationalisation system (I18N) the gettext extension must be compiled into PHP (`--with-gettext`).
 
 
 Non-PEAR install
