@@ -2030,7 +2030,7 @@ echo $phptal->execute();
 
 						<note><para>In PHPTAL 1.2.1 this method replaced older <methodname>setPreFilter()</methodname> method, which is now deprecated.</para></note>
 
-						<para>Adds new pre filter that will be applied to the template. Pre filters can modify source code and parsed DOM nodes of the template. Pre filters are applied in other they've been set.</para>
+						<para>Adds new pre filter that will be applied to the template. Pre filters can modify source code and parsed DOM nodes of the template. Pre filters are applied in order they've been set.</para>
 
 						<para>See description of <link linkend="prefilters">PHPTAL_PreFilter</link> for more information how to write your own pre filter.</para>
 
