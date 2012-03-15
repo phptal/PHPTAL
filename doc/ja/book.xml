@@ -1,0 +1,3013 @@
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book lang="en">
+
+  <bookinfo>
+    <title>PHPTAL Manual</title>
+    <subtitle><acronym>PHP</acronym> Template Attribute Language</subtitle>
+    <date>2009-10-25</date>
+    <author>
+      <firstname>Laurent</firstname><surname>Bédubourg</surname>
+      <address><email>lbedubourg@motion-twin.com</email></address>
+    </author>
+    <author>
+       <firstname>Kornel</firstname><surname>Lesiński</surname>
+       <address><email>kornel@aardvarkmedia.co.uk</email></address>
+    </author>
+	<author>
+		<firstname>Dan</firstname><surname>Sheppard</surname>
+	</author>
+	<author>
+		<firstname>Anton</firstname><surname>Andriyevskyy</surname>
+			<othername>Valeriyevich</othername>
+      <address><email>x.meglio@gmail.com</email></address>
+	</author>
+
+    <revhistory id="revhistory">
+     <revision>
+			  <revnumber>v1.8</revnumber>
+				<date>2009-10-25</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Updates for PHPTAL 1.2.1</revremark>
+		</revision>
+        <revision>
+			  <revnumber>v1.7</revnumber>
+				<date>2009-06-06</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Updates for PHPTAL 1.2.0</revremark>
+		</revision>
+        <revision>
+			  <revnumber>v1.6</revnumber>
+				<date>2008-10-03</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Fixed errors spotted by Anton.</revremark>
+		</revision>
+        <revision>
+			  <revnumber>v1.5</revnumber>
+				<date>2008-08-21</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Removed old defines, documented configuration methods.</revremark>
+		  </revision>
+        <revision>
+			  <revnumber>v1.4</revnumber>
+				<date>2008-08-18</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Corrections and updates for PHPTAL 1.1.13</revremark>
+		  </revision>
+		  <revision>
+			  <revnumber>v1.3</revnumber>
+				<date>2008-01-27</date>
+				<authorinitials>kl</authorinitials>
+				<revremark>Updated for PHPTAL 1.1.10</revremark>
+		  </revision>
+		  <revision>
+			  <revnumber>v1.2</revnumber>
+				<date>2005-12-10</date>
+				<authorinitials>ds</authorinitials>
+				<revremark>English Corrections by Dan Sheppard</revremark>
+		  </revision>
+      <revision>
+        <revnumber>v1.1</revnumber>
+        <date>2005-03-29</date>
+        <authorinitials>lb</authorinitials>
+        <revremark>Added section about PHPTAL class</revremark>
+      </revision>
+      <revision>
+        <revnumber>v1.0</revnumber>
+        <date>2005-03-27</date>
+        <authorinitials>lb</authorinitials>
+        <revremark>Converted draft to docbook</revremark>
+      </revision>
+    </revhistory>
+
+    <!--
+    <abstract>
+      <para>
+      Bla bla bla PHPTAL
+      </para>
+    </abstract>
+    -->
+  </bookinfo>
+
+  <article id="introduction">
+    <title>Introduction</title>
+
+    <para>
+    <acronym>PHPTAL</acronym> is an implementation of the excellent Zope Page Template
+    (<acronym>ZPT</acronym>) system for <acronym>PHP</acronym>. <acronym>PHPTAL</acronym> supports <acronym><link linkend="tal-namespace">TAL</link></acronym>, <acronym><link linkend="metal">METAL</link></acronym>, <acronym><link linkend="tal-namespace">I18N</link></acronym> namespaces.
+    </para>
+
+    <para>
+    <acronym><link linkend="phptales">PHPTALES</link></acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
+    Expression Syntax. It defines how <acronym>XML</acronym> attribute values are handled.
+    </para>
+
+    <para>
+    As <acronym>PHPTALES</acronym> is similar to <acronym>TALES</acronym>, it should be easy to port python <acronym>TAL</acronym>
+    templates into <acronym>PHP</acronym> ones (and vice versa).
+    </para>
+
+    <para>
+    To be <acronym>TAL</acronym> compliant, <acronym>PHPTAL</acronym> implements XPath-like access to data.
+    </para>
+
+    <para>
+    <acronym>PHPTAL</acronym> is freely distributed under the <acronym>LGPL</acronym> license, it is
+    developed by Laurent Bedubourg
+    <email>lbedubourg@motion-twin.com</email> and maintained by Kornel Lesiński.
+    </para>
+
+  </article>
+
+  <article id="whyusephptal">
+    <title>Why use <acronym>PHPTAL</acronym></title>
+
+    <para>
+    <acronym>XML</acronym>/<acronym>HTML</acronym> templates exist to separate logic from presentation in web
+    services. This separation brings more than one accompanying benefit.
+    </para>
+
+    <itemizedlist>
+      <listitem><para>better application design</para></listitem>
+      <listitem><para>easier task repartition</para></listitem>
+      <listitem><para>better maintainability</para></listitem>
+      <listitem><para>easy web skins</para></listitem>
+    </itemizedlist>
+
+    <para>
+    Most template systems uses <sgmltag>&lt;? ?&gt;</sgmltag>, <sgmltag>&lt;% %&gt;</sgmltag> or
+    <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag> tags to find their sections. It
+    allows easier template system development but doesn't really help
+    template designers.
+    </para>
+
+    <para>
+    <acronym>TAL</acronym> hides most of its logic in <acronym>XML</acronym> attributes, preserving syntax and structure of <acronym>XHTML</acronym>. This allows previewing of <acronym>TAL</acronym> templates in web browser (<acronym>WYSIWYG</acronym> editors, live previews) and doesn't break <acronym>HTML</acronym> syntax highlighting in programmers' editors.
+    </para>
+
+    <para>
+    If you have already worked with a simple template system, then you must
+    have encountered something looking like:
+    </para>
+
+    <informalexample><programlisting language="xml"><![CDATA[<table>
+  <%loop myarray as myitem %>
+  <tr>
+    <td><% myitem %></td>
+  </tr>
+  <%/loop%>
+</table>
+]]></programlisting></informalexample>
+
+    <para>
+    Well, with <acronym>PHPTAL</acronym> you now can write:
+    </para>
+
+    <informalexample><programlisting language="xml"><![CDATA[<table>
+  <tr tal:repeat="myitem myarray">
+    <td tal:content="myitem">
+      text replaced by the item value
+    </td>
+    <td tal:replace="">sample 1</td>
+    <td tal:replace="">sample 2</td>
+    <td tal:replace="">sample 3</td>
+  </tr>
+</table>
+]]></programlisting></informalexample>
+
+    <para>
+    The above code will render correctly with the sample
+    text in normal web browser, so you can present it to your clients even if the code
+    required to get '<code>myarray</code>' values doesn't yet exist.
+    </para>
+
+    <para>
+    Another big advantage of <acronym>PHPTAL</acronym> is that you benefit from more than 3
+    years of Zope community experience, documentation, examples, and help.
+    <acronym>PHPTAL</acronym> relies on this community to provide its users a great deal
+    of useful information.
+    </para>
+
+    <para>
+    <acronym>PHPTAL</acronym> is designed to be as customizable as possible for advanced
+    developers and performance-eating systems, but still be easy to use for
+    beginners, with a comfortable and simple default behavior (at least we
+    tried :)
+    </para>
+
+  </article>
+
+  <article id="installation">
+    <title>Installation</title>
+
+    <para>
+    <acronym>PHPTAL</acronym> is released as a <acronym>PEAR</acronym> package (see <ulink
+    url="http://pear.php.net">pear.php.net</ulink>).  You can
+    download the <acronym>PHPTAL</acronym> library on the <acronym>PHPTAL</acronym> website: <ulink
+    url="http://phptal.org">phptal.org</ulink>.
+    </para>
+
+    <para>
+    You can install it using the <acronym>PEAR</acronym> utility:
+    </para>
+
+    <informalexample><programlisting language="sh"><![CDATA[pear install http://phptal.org/latest.tar.gz
+]]></programlisting></informalexample>
+
+
+    <para>
+    Once installed, you can upgrade <acronym>PHPTAL</acronym> easily on each <acronym>PHPTAL</acronym> update
+    using <acronym>PEAR</acronym>:
+    </para>
+
+    <informalexample><programlisting language="sh"><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
+]]></programlisting></informalexample>
+
+    <para>
+    If you do not use <acronym>PEAR</acronym> or do not have it installed on your system,
+    you can still install <acronym>PHPTAL</acronym> by unzipping the downloaded archive.
+    </para>
+
+    <informalexample><programlisting language="sh"><![CDATA[tar zxvf PHPTAL-X.X.X.tar.gz
+cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
+]]></programlisting></informalexample>
+
+    <para>
+    This will install the <filename>PHPTAL.php</filename> file and the associated <acronym>PHPTAL</acronym>
+    folder in <filename>/path/to/your/lib/folder</filename>.
+    </para>
+
+  </article>
+
+  <article id="firstexample">
+    <title>First example</title>
+
+    <para>
+    To get a first impression of <acronym>PHPTAL</acronym> usage, a simple example is
+    better than many words.
+    </para>
+
+    <para>
+    Your template is a valid <acronym>XML</acronym>/<acronym>HTML</acronym> document (with a root element).
+    Here's a file named '<filename>my_template_file.xhtml</filename>'.
+    </para>
+
+    <informalexample><programlisting language="xml"><![CDATA[<?xml version="1.0"?>
+<html>
+  <head>
+    <title tal:content="title">
+      Place for the page title
+    </title>
+  </head>
+  <body>
+    <h1 tal:content="title">sample title</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr tal:repeat="person people">
+          <td tal:content="person/name">person's name</td>
+          <td tal:content="person/phone">person's phone</td>
+        </tr>
+        <tr tal:replace="">
+          <td>sample name</td>
+          <td>sample phone</td>
+        </tr>
+        <tr tal:replace="">
+          <td>sample name</td>
+          <td>sample phone</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
+]]></programlisting></informalexample>
+
+    <para>
+    In <acronym>PHP</acronym>, you just have to include the <acronym>PHPTAL</acronym> library, and maybe
+    configure a few variables to customize the template system.
+    </para>
+
+    <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL.php';
+
+// create a new template object
+$template = new PHPTAL('my_template_file.xhtml');
+
+// the Person class
+class Person {
+    public $name;
+    public $phone;
+
+    function Person($name, $phone) {
+        $this->name = $name;
+        $this->phone = $phone;
+    }
+}
+
+// let's create an array of objects for test purpose
+$people = array();
+$people[] = new Person("foo", "01-344-121-021");
+$people[] = new Person("bar", "05-999-165-541");
+$people[] = new Person("baz", "01-389-321-024");
+$people[] = new Person("quz", "05-321-378-654");
+
+// put some data into the template context
+$template->title = 'The title value';
+$template->people = $people;
+
+// execute the template
+try {
+    echo $template->execute();
+}
+catch (Exception $e){
+    echo $e;
+}
+?>
+]]></programlisting></informalexample>
+
+    <para>
+    If you execute the <acronym>PHP</acronym> script, you will obtain something similar to
+    what follows.
+    </para>
+
+    <informalexample><programlisting language="xml"><![CDATA[<?xml version="1.0"?>
+<html>
+  <head>
+    <title>The title value</title>
+  </head>
+  <body>
+    <h1>The title value</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>foo</td>
+          <td>01-344-121-021</td>
+        </tr><tr> <td>bar</td>
+          <td>05-999-165-541</td>
+        </tr><tr> <td>baz</td>
+          <td>01-389-321-024</td>
+        </tr><tr> <td>quz</td>
+          <td>05-321-378-654</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
+]]></programlisting></informalexample>
+
+    <para>
+
+    <acronym>PHPTAL</acronym> doesn't care much about line breaks and indentation in files it reads and generates. If you want source code of generated <acronym>HTML</acronym> files to be pretty (with line breaks and perfect indentation), then you might need to postprocess it with <acronym>HTML</acronym> Tidy.
+    </para>
+
+  </article>
+
+  <article id="attributelanguage">
+    <title>Template Attribute Language</title>
+
+    <para>
+    This section describes <acronym>TAL</acronym> and its extensions. It mainly targets
+    template designers but must be read by <acronym>PHP</acronym> integrators as well.
+    </para>
+
+    <section id="variableRefs">
+     <title>Referencing variables with ${}</title>
+     <para>
+     When working with templates and you want to reference a variable within the text, you can use the ${variableName} notation.
+     </para>
+      <para>
+      For example,
+      </para>
+     <informalexample><programlisting language="xml"><![CDATA[<span>You have ${count} credits left.</span>
+]]></programlisting></informalexample>
+
+     <para>You can also use the same PHPTALES paths as in other PHPTAL constructs:</para>
+     <informalexample><programlisting language="xml"><![CDATA[<span>Your best friend is: ${php: !some.other() ? "me" : "your dog"}</span>
+]]></programlisting></informalexample>
+     <tip>
+     <para>
+       If you have to exscape the ${var} notation, write $${var}.
+    </para></tip>
+
+
+
+    </section>
+
+    <section id="attributes">
+      <title>Attribute priority</title>
+
+      <para>
+      It is important to note that the order of declaration of
+      attributes is irrelevant.
+      </para>
+
+      <para>
+      For example,
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<span tal:define="usersList application/listUsers"
+      tal:condition="somecondition"
+      tal:repeat="user usersList"
+>…</span>
+]]></programlisting></informalexample>
+
+      <para>
+      Is <emphasis>exactly</emphasis> the same as:
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<span tal:repeat="user usersList"
+      tal:condition="somecondition"
+      tal:define="usersList application/listUsers"
+>…</span>
+]]></programlisting></informalexample>
+
+      <para>
+      Priority is the same as described by the <acronym>TAL</acronym> specification:
+      </para>
+
+      <orderedlist>
+        <listitem><para><sgmltag>define</sgmltag></para></listitem>
+        <listitem><para><sgmltag>condition</sgmltag></para></listitem>
+        <listitem><para><sgmltag>repeat</sgmltag></para></listitem>
+        <listitem><para><sgmltag>content</sgmltag> or <sgmltag>replace</sgmltag></para></listitem>
+        <listitem><para><sgmltag>attributes</sgmltag></para></listitem>
+        <listitem><para><sgmltag>omit-tag</sgmltag></para></listitem>
+      </orderedlist>
+
+<!-- Hard to understand here, just skip this for now
+      <para>
+      Because <acronym>PHPTAL</acronym> implements METAL and I18N, this list is completed
+      as follow:
+      </para>
+
+    1.  phptal:debug
+    2.  phptal:tales
+    3.  phptal:omit-tag (not exactly the same position but same effect)
+    4.  metal:define-macro
+    5.  tal:on-error
+    6.  i18n:domain
+    7.  tal:define
+    8.  i18n:name
+    9.  i18n:translate
+    10. tal:condition
+    11. phptal:id
+    12. tal:repeat
+    13. tal:attributes
+    14. tal:replace
+    15. metal:use-macro
+    16. metal:define-slot
+    17. metal:fill-slot
+    18. i18n:attributes
+    19. tal:content
+    20. tal:comment
+-->
+
+    </section>
+
+    <section id="tal-namespace">
+      <title><acronym>TAL</acronym> namespace</title>
+
+      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/tal</code>. To use <code>tal:</code> attribute prefix in XML you're required to declare it:</para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
+
+      <note><para>PHPTAL does not enforce this requirement.</para></note>
+
+      <section id="tal-define">
+        <title><sgmltag>tal:define</sgmltag></title>
+
+        <para>
+        Defines variables in the template.
+        </para>
+
+        <para>It takes one or multiple semicolon-separated variable definitions.</para>
+
+        <para>
+        Making a shortcut to a long path:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<div tal:define="destname path/to/existing/variable">…</div>
+]]></programlisting></informalexample>
+
+<para>
+        Defining more than one variable at the same time:
+</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:define="fname string:Paul; lname string:Dupond">…</span>
+]]></programlisting></informalexample>
+
+        <para>Each definition may start with <code>global</code> keyword which makes variable available everywhere later in the template and all macros. Global variables can be redefined.</para>
+
+		<informalexample><programlisting language="xml"><![CDATA[<span tal:define="global hello string:hello world"/>
+<p tal:content="hello"/>]]></programlisting></informalexample>
+
+		<para>
+		On the contrary, a local variable is only available inside the element it is defined in (and inside macros that are called in this element):
+		</para>
+
+		<informalexample><programlisting language="xml"><![CDATA[<span tal:define="hello string:hello world"/>
+<p tal:content="hello"/> <!-- will produce an undefined variable error -->]]></programlisting></informalexample>
+
+
+        <tip><para>
+        You may also use <sgmltag>tal:define</sgmltag> with other attributes, it will be
+        executed before any other attributes on the same element.
+</para>         </tip>
+
+
+        <para>
+        Creating a string inside the template:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:define="destname string:some string" />
+]]></programlisting></informalexample>
+
+        <para>
+        Defining a string containing another variable:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:define="fname string:Paul; hello string:Hello $fname! Welcome to this page" />
+]]></programlisting></informalexample>
+
+        <para>
+        A small trick which uses content of the element (useful if you need to define very complex value):
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:define="global hello">Hello ${fname}! Welcome to this page</span>
+]]></programlisting></informalexample>
+
+
+        <para>
+        In above example, the <sgmltag>&lt;span&gt;</sgmltag> tag won't show up because it has no
+        printable content (<varname>hello</varname> variable grabs it) nor attributes.
+        </para>
+
+        <note><para>This is a special case. It only works if you use the <code>global</code> keyword.</para></note>
+
+      </section>
+
+
+      <section id="tal-condition">
+        <title><sgmltag>tal:condition</sgmltag></title>
+
+        <para>
+        The element and its content will be shown only if the condition
+        is evaluated to true.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<p tal:condition="identified"> Welcome member … </p>
+]]></programlisting></informalexample>
+
+        <informalexample><programlisting language="xml"><![CDATA[<p tal:condition="not: identified">
+  Please login before accessing this page
+</p>
+]]></programlisting></informalexample>
+
+        <para>
+        If the <acronym>PHP</acronym> backend does not provide your templates with enough
+        methods, you will often have to fall back to <acronym>PHP</acronym> for special
+        conditions:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:comment="show only if more than five items in the cart"
+      tal:condition="php: cart.countItems() GT 5">…</span>
+]]></programlisting></informalexample>
+
+        <para>
+        This may put too much logic inside the template and it is
+        sometimes preferable to provide boolean attributes or accessible
+        methods to the template:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="cart/hasEnoughItems">…</span>
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="tal-repeat">
+        <title><sgmltag>tal:repeat</sgmltag></title>
+
+        <para>
+        This attribute handles iterable objects like arrays, associative
+        arrays, and objects implementing the <acronym>PHP5</acronym> <constant>Iterator</constant> class.
+        </para>
+
+        <para>
+        The <sgmltag>repeat</sgmltag> attribute repeats its element and its content until
+        the end of the specified resource.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="item some/result">
+  <td tal:content="item">text replaced by item</td>
+</tr>
+]]></programlisting></informalexample>
+
+        <para>
+        Within a loop, you can access the current loop information
+        (and that of its parent for nested loops) using specific
+        <varname>repeat/<replaceable>*</replaceable></varname> paths.
+        </para>
+
+        <para>
+        In the above example:
+        </para>
+
+        <itemizedlist>
+          <listitem><para>
+            <varname>repeat/item/key</varname>    : returns the item's key if some/result is
+            an associative resource (index otherwise)
+          </para></listitem>
+          <listitem><para>
+          <varname>repeat/item/index</varname>  : returns the item index (0 to count-1)
+          </para></listitem>
+          <listitem><para>
+          <varname>repeat/item/number</varname> : returns the item number (1 to count)
+          </para></listitem>
+          <listitem><para>
+          <varname>repeat/item/even</varname>   : returns true if item index is even
+          </para></listitem>
+          <listitem><para>
+          <varname>repeat/item/odd</varname>    : returns true if item index is odd
+          </para></listitem>
+          <listitem><para>
+          <varname>repeat/item/start</varname>  : returns true if item is the first one
+          </para></listitem>
+          <listitem><para>
+          <varname>repeat/item/end</varname>    : returns true if item is the last one
+          </para></listitem>
+          <listitem><para>
+          <varname>repeat/item/length</varname> : returns the number of elements in
+          some/result
+          </para></listitem>
+        </itemizedlist>
+
+        <para>
+        "<varname>item</varname>" depends on the receiver variable defined in <sgmltag>tal:repeat</sgmltag>
+        expression.
+        </para>
+
+        <para>
+        The most common usage of <sgmltag>tal:repeat</sgmltag> is in using some <acronym>SQL</acronym>
+        database result.  The following code will work if <varname>playersRanking</varname> contains object that implements <acronym>PHP</acronym>'s <constant>Iterator</constant> interface:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<table>
+  <thead>
+    <tr>
+      <th>Position</th>
+      <th>Player</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr tal:repeat="ranking playersRanking">
+      <td tal:content="ranking/position"/>
+      <td tal:content="ranking/player"/>
+      <td tal:content="ranking/score"/>
+    </tr>
+  </tbody>
+</table>
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="tal-omit-tag">
+        <title><sgmltag>tal:omit-tag</sgmltag></title>
+
+        <para>
+        This attribute asks the <acronym>PHPTAL</acronym> parser to ignore the elements's open and
+        close tag, its content will still be evaluated.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:omit-tag="condition">
+  if the condition is true, then only this text will appear and span open and close will be removed
+</span>
+]]></programlisting></informalexample>
+
+        <para>
+        Will produce:
+        </para>
+
+        <informalexample><programlisting><![CDATA[only this text will appear, span open and close will be removed
+]]></programlisting></informalexample>
+
+        <para>
+        This attribute is useful when you want to create element optionally, e.g. hide a link if certain condition is met.
+        </para>
+
+        <para>If you want element that is never output, you can use <sgmltag>tal:block</sgmltag></para>
+        <informalexample><programlisting language="xml"><![CDATA[<tal:block tal:repeat="x php:range(1,10)">only this text will appear, ten times.</tal:block>
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="tal-replace">
+        <title><sgmltag>tal:replace</sgmltag></title>
+
+        <para>
+        This attribute will replace the entire tag with a value, or by
+        nothing if no value is given.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="string:this beautiful string">
+  this ugly string and span
+</span>
+]]></programlisting></informalexample>
+
+        <para>
+        Will produce:
+        </para>
+
+        <informalexample><programlisting><![CDATA[this beautiful string
+]]></programlisting></informalexample>
+
+        <para>
+        <sgmltag>tal:replace</sgmltag> can also be used to create samples in source
+        templates, but remove them from final output.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<table>
+  <tr tal:repeat="item myresult">
+    <td tal:content="item">item value</td>
+  </tr>
+  <tr tal:replace="">
+    <td>sample 1</td>
+  </tr>
+  <tr tal:replace="">
+    <td>sample 2</td>
+  </tr>
+</table>
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="tal-content">
+        <title><sgmltag>tal:content</sgmltag></title>
+
+        <para>
+        This attribute replaces the tag content with the evaluation of
+        its expression.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:define="myvar string:my string"/>
+<span tal:content="myvar">will be replaced</span>
+]]></programlisting></informalexample>
+
+        <para>
+        Will produce:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span>my string</span>
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="tal-attributes">
+        <title><sgmltag>tal:attributes</sgmltag></title>
+
+        <para>
+        This attribute changes tag attribute(s) value(s).
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<a href="http://www.foo.com" title="some foo link"
+   tal:attributes="href somelink/href; title somelink/title"
+  tal:content="somelink/text"
+>sample link</a>
+]]></programlisting></informalexample>
+
+        <para>
+        With a '<varname>somelink</varname>' having:
+        </para>
+
+        <informalexample><programlisting language="php"><![CDATA[$somelink->href = "http://www.google.com";
+$somelink->title = "google search engine";
+$somelink->text = "the google search engine";
+]]></programlisting></informalexample>
+
+        <para>
+        Will produce:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<a href="http://www.google.com"
+title="google search engine">the google search engine</a>
+]]></programlisting></informalexample>
+
+        <para>Semicolon (<literal>;</literal>) separates attributes. If you want semicolon to be output in an attribute, you have to double it (<literal>;;</literal>).</para>
+
+        <para>
+        A somewhat complicated example involving <sgmltag>tal:repeat</sgmltag>:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="ranking playerRankings"
+    tal:attributes="class php: repeat.ranking.odd ? 'odd' : NULL">
+    …
+</tr>
+]]></programlisting></informalexample>
+
+        <para>
+        The <code>php:</code> modifier will be explained later, basically if the line
+        is odd then <sgmltag>tr</sgmltag> will have a <sgmltag>class</sgmltag> attribute with "odd" as value,
+        otherwise, no class will be set.
+        </para>
+
+        <para>
+        The "<code>condition ? then : else</code>" is a regular <acronym>PHP</acronym> expression which
+        must be used with care but has proven to be useful on more
+        than one occasion.
+        </para>
+
+        <para>
+        A better way to achieve the same result would be to ask your <acronym>PHP</acronym>
+        coder to create a custom modifier for your needs (see <acronym>PHP</acronym>
+        integration / custom modifiers) which would be used as follows:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="ranking playerRankings"
+    tal:attributes="class css-odd:repeat/ranking/odd">
+  …
+</tr>
+]]></programlisting></informalexample>
+
+        <para>
+        The modifier would return "odd" if <varname>repeat/ranking/odd</varname> is true,
+        <constant>NULL</constant> otherwise.
+        </para>
+<section id="optional-attrs"><title>Optional attributes</title>
+        <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in <acronym>PHP</acronym>) as last alternative,
+            attribute won't be added at all if there's no value for it (this avoids adding empty attributes):</para>
+        <informalexample><programlisting language="xml"><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting></informalexample>
+
+        <para><acronym>XHTML</acronym> attributes like <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag>, etc. are properly handled automatically.</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting></informalexample>
+
+        <warning><para>
+            Remember that <acronym>XHTML</acronym> is case-sensitive, so <sgmltag>SELECTED</sgmltag> attribute is an error in <acronym>XHTML</acronym>. Use <sgmltag>selected</sgmltag>.
+        </para></warning>
+      </section>
+    </section>
+      <section id="tal-on-error">
+        <title><sgmltag>tal:on-error</sgmltag></title>
+
+        <para>
+            When any runtime error occurs while generating the element, the element will be replaced with result of <emphasis>expression</emphasis> in the <sgmltag>tal:on-error</sgmltag> attribute.</para>
+
+        <para>
+            Runtime errors are references to non-existent variables/paths/macros and any <acronym>PHP</acronym> exceptions thrown in the tag content.</para>
+
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:on-error="string:No username defined here"
+      tal:content="user/name">the user name here</span>
+]]></programlisting></informalexample>
+
+        <para>
+        If an error occurs accessing '<varname>name</varname>' or '<varname>user</varname>', the error string
+        will be shown instead of the <code>&lt;span></code> element.
+        </para>
+
+        <para>
+        This also works on more than one level of template:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:on-error="string:error occurred somewhere">
+  <span tal:content="user/firstname"/>
+  <span tal:content="user/lastname"/>
+  <span metal:use-macro="userMenu" />
+</span>
+]]></programlisting></informalexample>
+
+        <note><para>Due to optimizations performed by <acronym>PHPTAL</acronym>, <sgmltag>tal:on-error</sgmltag> on element containing element with <sgmltag>metal:fill-slot</sgmltag> may not catch errors that happened inside the slot.</para></note>
+
+      </section>
+
+    </section><!-- end of TAL namespace -->
+
+    <section id="metal">
+      <title><acronym>METAL</acronym> namespace</title>
+
+      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/metal</code>. To use <code>metal:</code> attribute prefix in XML you're required to declare it:</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:metal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
+
+        <note><para><acronym>PHPTAL</acronym> does not enforce this requirement.</para></note>
+
+
+      <para>
+      <acronym>METAL</acronym> stands for 'Macro Extension for <acronym>TAL</acronym>'. This namespace allows template designers to define and call macros. Macros can be used to output data recursively or to include code from other template files.
+      </para>
+
+      <section id="metal-define-macro">
+        <title><sgmltag>metal:define-macro</sgmltag></title>
+
+        <para>
+        This attribute declares a macro. Think of macros as library of
+        small templates which can be reused in any other template.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<div metal:define-macro="main_menu">
+  <ul>
+    <li><a href="/">home</a></li>
+    <li><a href="/products">products</a></li>
+    <li><a href="/contact">contact</a></li>
+  </ul>
+
+  <div>
+    Last modified:
+    <span tal:content="mdate">page modification date</span>
+  </div>
+</div>
+]]></programlisting></informalexample>
+
+        <para>
+        Macros inherit all variables from their caller. In the above example,
+        the variable '<varname>mdate</varname>' depends on the template that calls the
+        macro.
+        </para>
+      </section>
+
+      <section id="metal-use-macro">
+        <title><sgmltag>metal:use-macro</sgmltag></title>
+
+        <para>
+        This attribute calls a macro and includes its result in the
+        current template.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span
+  tal:comment="main_menu template requires 'mdate' variable"
+  tal:define="mdate page/last_modified"
+  metal:use-macro="main_menu"
+/>
+]]></programlisting></informalexample>
+
+        <para>
+        You can refer to external macros defined in other templates by
+        specifying the template source file.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
+]]></programlisting></informalexample>
+
+        <para>
+        It is interesting to note that you can also use the <acronym>PHPTAL</acronym> inline
+        replacement feature inside the <sgmltag>use-macro</sgmltag> attribute value:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
+]]></programlisting></informalexample>
+
+
+        <para>Macro can call itself. This way you can output arrays recursively:</para>
+        <informalexample><programlisting language="xml"><![CDATA[<ul metal:define-macro="show-list">
+    <li tal:repeat="item list">
+        <tal:block tal:condition="php:is_array(item)" tal:define="list item" metal:use-macro="show-list" />
+        <tal:block tal:condition="php:!is_array(item)" tal:content="item" />
+    </li>
+</ul>
+]]></programlisting></informalexample>
+
+        <simplesect id="macro-callback">
+            <title>Callbacks</title>
+            <para>Since you can use variables in macro names, you can create macros that call back other macros. This is useful in cases where <link linkend="metal-define-slot">slots</link> are not enough.</para>
+            <informalexample><programlisting language="xml"><![CDATA[<!-- this code uses "macroname" variable as name of macro to call back -->
+<ul metal:define-macro="macro-with-callback">
+    <li tal:repeat="item list">
+        <tal:block metal:use-macro="${macroname}"/>
+    </li>
+</ul>
+
+<!-- define callback -->
+<div metal:define-macro="my-callback">
+    this will be called every time
+</div>
+
+<!-- use it with the first macro -->
+<div tal:define="macroname 'my-callback'" metal:use-macro="macro-with-callback"/>]]></programlisting></informalexample>
+
+
+        </simplesect>
+
+      </section>
+
+
+      <section id="metal-define-slot">
+        <title><sgmltag>metal:define-slot</sgmltag></title>
+
+        <para>
+        This attribute must appear inside a <sgmltag>metal:define-macro</sgmltag> tag.
+        </para>
+
+        <para>
+        Slots can be replaced by caller template with some custom
+        dynamically-generated <acronym>XML</acronym>/<acronym>XHTML</acronym>.
+        </para>
+
+        <para>
+        Slots can be thought of like reverse includes, a macro can be an
+        entire page and slots customize this page depending on the <acronym>URL</acronym>.
+        For instance, a slot may contain the latest news in the home page
+        or user actions when the member is logged in.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span metal:define-slot="news_place">
+  <table>
+    <tr tal:repeat="item php:latestNews()">
+      <td tal:content="item/value">news description</td>
+    </tr>
+  </table>
+</span>
+]]></programlisting></informalexample>
+
+        <para>
+        The above example defines a place called
+        '<emphasis>news_place</emphasis>' which can be overwritten by
+        caller templates. See next section for the continuation of this
+        example.
+        </para>
+
+
+        <warning><para>Slots work like variables, not like <link linkend="macro-callback">callbacks</link>. <sgmltag>metal:define-slot</sgmltag> in <sgmltag>tal:repeat</sgmltag> will always repeat the same value over and over again.</para></warning>
+
+      </section>
+
+
+      <section id="metal-fill-slot">
+        <title><sgmltag>metal:fill-slot</sgmltag></title>
+
+        <para>
+        This attribute can occur only inside <sgmltag>metal:use-macro</sgmltag> element.
+        </para>
+
+        <para>
+        This explicitly tells <acronym>PHPTAL</acronym> to replace a defined slot with the
+        content provided inside the <sgmltag>metal:fill-slot</sgmltag> attribute.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
+  <h2>user menu</h2>
+  <ul>
+    <li><a href="/user/action/inbox">inbox</a></li>
+    <li><a href="/user/action/new">new mail</a></li>
+    <li><a href="/user/action/disconnect">disconnect</a></li>
+  </ul>
+</span>
+]]></programlisting></informalexample>
+
+        <para>
+        Slots give the opportunity to define really customizable and
+        reusable page templates with a simple push technology.
+        </para>
+
+
+        <warning><para>Slots work like variables, not like <link linkend="macro-callback">callbacks</link>. <sgmltag>metal:fill-slot</sgmltag> in <sgmltag>tal:repeat</sgmltag> will keep overwriting same slot over and over again.</para></warning>
+
+      </section>
+
+    </section><!-- end of METAL namespace -->
+
+
+    <section id="i18n">
+      <title><acronym>I18N</acronym> namespace</title>
+
+
+      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/i18n</code>. To use <code>i18n:</code> attribute prefix in XML you're required to declare it:</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:i18n="http://xml.zope.org/namespaces/i18n" …>]]></programlisting></informalexample>
+
+        <note><para>PHPTAL does not enforce this requirement.</para></note>
+
+
+
+      <note><para>
+      <acronym>i18n</acronym> is a short name for 'internationalization'. This
+      namespace allow template designers to specify some text zones that
+      must be translated during template evaluation.
+      </para></note>
+
+      <section id="i18n-translate">
+        <title><sgmltag>i18n:translate</sgmltag></title>
+
+        <para>
+        This attribute defines some text part that must be translated
+        using <acronym>PHPTAL</acronym>'s translation system.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="string:welcome_message">Welcome here</div>
+]]></programlisting></informalexample>
+
+        <para>
+        In the above example, <acronym>PHPTAL</acronym> will looks for a translation key
+        named 'welcome_message' and will replace the content of the tag
+        with the equivalent in currently requested language.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="">Welcome here</div>
+]]></programlisting></informalexample>
+
+        <para>
+        This usage is a little different, no translation key is given,
+        thus <acronym>PHPTAL</acronym> will use the content of the tag 'Welcome here' as
+        the translation key.  This is a regular translation if
+        translation system knows the key 'Welcome here'.
+        </para>
+
+        <para>
+        If no translation is found, the key will be used as the
+        translation result. That's why using readable message instead
+        of keys may be a good choice.
+        </para>
+
+        <para>
+        Please note that the key to translate may be contained in a
+        variable, to allow dynamic key selection.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<div tal:define="welcome random_welcome_message">
+  <div i18n:translate="welcome">…</div>
+</div>]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="i18n-attributes">
+          <title><sgmltag>i18n:attributes</sgmltag></title>
+
+          <para>
+              Defines which attributes should be translated. Takes semicolon-separated list of attributes and keys similar to those for <sgmltag>i18n:translate</sgmltag>.
+          </para>
+          <informalexample><programlisting language="xml"><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="i18n-name">
+        <title><sgmltag>i18n:name</sgmltag></title>
+
+        <para>
+        This attribute sets a translation variable value.
+        </para>
+
+        <para>
+        Translations may contain <varname>${xxx}</varname> strings where "<varname>xxx</varname>" is the
+        name of a variable that needs to be interpolated dynamically.
+        </para>
+
+        <para>
+        The value of this variable will be set to the tag and its
+        content. If you don't need the tag around the value, use
+        <sgmltag>tal:replace</sgmltag> instead of <sgmltag>tal:content</sgmltag>. <sgmltag>tal:omit-tag</sgmltag> may help if the
+        value is a concatenation of strings.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
+<!-- <span>${some/path}</span> -->
+
+<span i18n:name="myVar" tal:replace="some/path"/>
+<!-- ${some/path} -->
+
+<span i18n:name="myVar">foo</span>
+<!-- <span>foo</span> -->
+
+<span i18n:name="myVar" tal:omit-tag="">foo</span>
+<!-- foo -->
+]]></programlisting></informalexample>
+
+        <para>
+        An example of i18n usage:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="">
+  Welcome <span i18n:name="user" tal:replace="user/name"/>,
+  you have <span i18n:name="mails" tal:replace="user/nbrMails"/>
+  unread mails.
+</div>
+]]></programlisting></informalexample>
+
+        <para>
+        The translation key of this example will be:
+        </para>
+
+        <informalexample><programlisting><![CDATA["Welcome ${user}, you have ${mails} unread mails."
+]]></programlisting></informalexample>
+
+        <para>
+        <acronym>PHPTAL</acronym> will replace <varname>${user}</varname> with <varname>${user/name}</varname> and <varname>${mails}</varname> with
+        <varname>${user/nbrMails}</varname> in translation.
+        </para>
+
+        <para>
+        More information about <acronym>I18N</acronym> with <acronym>PHPTAL</acronym> is available in the <acronym>PHP</acronym>
+        section of this book.
+        </para>
+      </section>
+
+      <section id="xhtml-in-translations"><title><acronym>XHTML</acronym> in translations</title>
+          <para>By defaults translations are assumed to contain only text, so <acronym>PHPTAL</acronym> escapes all "<literal>&lt;</literal>" characters.</para>
+          <para>You can use <code>structure</code> keyword in <sgmltag>i18n:translate</sgmltag> to disable escaping and use translated text as-is:</para>
+
+           <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="structure '<b>bold text</b>'" />]]></programlisting></informalexample>
+      <para>Gives:</para>
+
+             <informalexample><programlisting language="xml"><![CDATA[<div><b>bold text</b></div>]]></programlisting></informalexample>
+
+      <warning><para>Caveats: This will only work in simplest cases – <acronym>TAL</acronym> attributes inside translated strings are ignored. Ill-formed <acronym>XHTML</acronym> in translations will break page well-formedness.</para></warning>
+    </section>
+
+    </section><!-- end of I18N namespace -->
+
+
+    <section id="phptal-namespace">
+      <title><acronym>PHPTAL</acronym> namespace</title>
+
+
+      <para><acronym>URI</acronym> for this namespace is <code>http://phptal.org/ns/phptal</code>. To use <code>phptal:</code> attribute prefix in XML you're required to declare it:</para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://phptal.org/ns/phptal" …>]]></programlisting></informalexample>
+
+        <note><para>PHPTAL does not enforce this requirement.</para></note>
+
+
+      <para>
+      These attributes are not defined in <acronym>TAL</acronym> specifications, but are
+      useful when working with <acronym>PHPTAL</acronym>.
+      </para>
+
+      <section id="phptal-debug">
+        <title><sgmltag>phptal:debug</sgmltag></title>
+
+        <para>
+        This attribute toggles the activation of <acronym>PHPTAL</acronym> debugging for
+        the content of the tag it is defined in.
+        </para>
+
+        <note><para>To debug errors in macros called across templates you need to add <sgmltag>phptal:debug</sgmltag> in template which <emphasis>defines</emphasis> the macro, not the one which uses it.</para></note>
+
+        <para>
+        The debug mode stores information like filename and source line
+        number in the template, so exceptions thrown by incorrect path
+        access will contain more information about where they where
+        thrown.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html>
+  <head>
+    …
+  </head>
+  <body>
+    <div id="menu">
+      …
+    </div>
+    <div id="leftPane" phptal:debug=""
+      tal:comment="this div seems buggy, keep
+      trace of where errors are thrown">
+          …
+    </div>
+  </body>
+</html>
+]]></programlisting></informalexample>
+
+      </section>
+
+
+           <section id="phptal-cache">
+              <title><sgmltag>phptal:cache</sgmltag></title>
+
+              <para>
+              This attribute causes output of entire element (including its tag) to be cached on disk and not re-evaluated until cache expires.
+              </para>
+
+              <note><para>Use of cache is beneficial only for elements that use very complex expressions, macros from external files or <acronym>PHP</acronym> expressions/objects that access the database. Otherwise uncached templates will be just as fast.</para></note>
+
+                <para>Content of this attribute is a duration (how long element should be kept in cache) written as number with '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' or '<constant>s</constant>' suffix.
+            </para>
+            <informalexample><programlisting language="xml"><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting></informalexample>
+            <para>                  <sgmltag>&lt;div></sgmltag> will be evaluated at most once per 3 hours.</para>
+
+            <para>Duration can be followed by optional "<varname>per</varname>" parameter that defines how cache should be shared. By default cache is shared between all pages that use that template.
+                  You can add "<varname>per url</varname>" to have separate copy of given element for every <acronym>URL</acronym>.
+</para>
+
+            <informalexample><programlisting language="xml"><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting></informalexample>
+          <para><sgmltag>&lt;ol></sgmltag> will be cached for one day, separately for each page.</para>
+<para>
+                  You can add "<varname>per expression</varname>" to have different cache copy for every different value of an expression (which MUST evaluate to a string).
+                  <note><para>Expression cannot refer to variables defined using <sgmltag>tal:define</sgmltag> on the same element.</para></note>
+</para>
+<informalexample><programlisting language="xml"><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting></informalexample>
+             <para><sgmltag>&lt;ul></sgmltag> will be cached for 25 minutes, separately for each object ID.</para>
+
+             <warning><para>Be careful when caching users' private data. Cache will be shared with everyone unless you make it user-specific with <code>per user/id</code> or similar expression.</para></warning>
+
+             <section id="cache-refresh"><title>Instant refreshing</title>
+
+                 <para>Instead of clearing cache, it might be a better idea to put version or last modification timestamp in the <varname>per</varname> parameter. This will cause cached template to be refreshed as soon as version/timestamp changes and no special cache clearing will be necessary.</para>
+<informalexample><programlisting language="xml"><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting></informalexample>
+
+                 </section>
+
+
+<section id="cache-limits"><title>Limitations:</title>
+
+
+            <itemizedlist>
+              <listitem><para>
+                  <sgmltag>phptal:cache</sgmltag> blocks can be nested, but outmost block will cache other blocks regardless of their freshness. </para></listitem><listitem><para>You cannot use <sgmltag>metal:fill-slot</sgmltag> inside elements with <sgmltag>phptal:cache</sgmltag>.</para></listitem></itemizedlist>
+
+
+</section>
+
+            </section>
+
+
+      <section id="phptal-tales">
+        <title><sgmltag>phptal:tales</sgmltag></title>
+
+        <para>
+        This attribute allows us to change the behavior of <acronym>PHPTALES</acronym>.  The
+        default behaviors is to interpret attribute expressions in a
+        very <acronym>ZPT</acronym> way. But sometimes you just would like to have <acronym>PHP</acronym>
+        there, and you end up using <code>php:</code> modifier everywhere.
+        </para>
+
+        <para>
+        Another problem concerning <acronym>PHPTALES</acronym> is the way <acronym>PHPTAL</acronym> has to
+        interpret paths. For example,
+        <varname>myobject/mymethod/property/10/othermethod/hashkey</varname> takes relatively long to
+        interpret (but don't worry about this too much – don't optimize until you find that it is <emphasis>really</emphasis> a problem with performance!)
+        </para>
+
+        <para>
+        <acronym>PHPTAL</acronym> has (at runtime) to take myobject and discover that it
+        is an object; find out that '<varname>mymethod</varname>' is a method of this
+        object (rather than a variable), and then to call it; explore
+        the result to determine that it is an object with a property; find that its value is an array; find the '<varname>ten</varname>'
+        element of this array, and determine that it is an object;
+        decide that <varname>othermethod</varname> is a method of this object (rather
+        than a variable), and get the result of its execution; find
+        that it is an object, and then retrieve the value
+        for the key '<varname>hashkey</varname>'.
+        </para>
+
+        <para>
+        Of course this was an extreme example and most of the time we
+        don't care, because the process is fast enough. But what if this
+        very long path is called inside a big <sgmltag>tal:repeat</sgmltag>? D'oh!
+        <sgmltag>phptal:tales</sgmltag> can help us here:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html>
+  <body>
+    <table phptal:tales="php">
+      <tr tal:repeat="myobject document.getChildren()">
+        <td
+          tal:content="myobject.mymethod().property[10].otherMethod().hashkey"></td>
+      </tr>
+    </table>
+  </body>
+</html>
+]]></programlisting></informalexample>
+
+        <para>
+        Please note that the above example does the same as:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<html>
+  <body>
+    <table>
+      <tr tal:repeat="myobject php:document.getChildren()">
+        <td
+          tal:content="php:myobject.mymethod().property[10].otherMethod().hashkey"></td>
+      </tr>
+    </table>
+  </body>
+</html>
+]]></programlisting></informalexample>
+
+        <note><para>
+        <code>php:</code> modifier is explained in its <link linkend="tales-php">own chapter</link>.
+        </para></note>
+      </section>
+
+    </section><!-- end of <acronym>PHPTAL</acronym> namespace -->
+
+    <section id="phptal-blocks">
+      <title><sgmltag>tal:block</sgmltag></title>
+
+      <para>
+      <sgmltag>tal:block</sgmltag> is a syntactic sugar for elements which contains many <acronym>TAL</acronym>
+      attributes which are not to be echoed.
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<tal:block define="myvar string:Some value"/>
+]]></programlisting></informalexample>
+
+      <para>
+      is the same as:
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<span tal:define="myvar string:Some value" tal:omit-tag=""/>
+]]></programlisting></informalexample>
+
+      <para>
+      Another example:
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<tal:block condition="someCondition" repeat="item someRepeat">
+  <div metal:use-macro="x"/>
+</tal:block>
+]]></programlisting></informalexample>
+
+      <para>
+      is the same as:
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<div tal:omit-tag=""
+     tal:condition="someCondition"
+     tal:repeat="item someRepeat">
+  <div metal:use-macro="x"/>
+</div>
+]]></programlisting></informalexample>
+
+    </section><!-- end of *:block -->
+
+    <section id="phptales">
+      <title><acronym>PHPTALES</acronym></title>
+
+      <para>
+      <acronym>PHPTALES</acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
+		    Expression Syntax which is the syntax used inside <acronym>TAL</acronym>, <acronym>METAL</acronym>, <acronym>PHPTAL</acronym> attributes and <code>${…}</code> inline expressions. </para>
+		<para>In previous examples, you should have seen some
+      <acronym>PHPTALES</acronym> examples (<code>string:</code>, <code>php:</code>, <code>not:</code>, …). This chapter
+      describes the usage of <acronym>PHPTALES</acronym> in templates.
+      </para>
+
+      <para>
+      The value of a <acronym>TAL</acronym> attribute may contain more than one expression
+      (ex: <sgmltag>tal:define</sgmltag>), in which case each expression must be separated
+      from the next one with a '<literal>;</literal>' character.
+      </para>
+
+      <section id="tales-path">
+        <title>path:</title>
+
+        <para>
+        This is the default modifier used in <acronym>TAL</acronym> expression when no
+        other modifier is specified.
+        </para>
+
+        <para>
+        The following lines will give the same result:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:content="data/user/name"/>
+<span tal:content="path:data/user/name"/>
+<span>${data/user/name}</span>
+]]></programlisting></informalexample>
+
+        <para>
+        Inside the template or inside expression strings, you can refer
+        to a context variable using its path in the form
+        <code>${path/to/my/variable}</code>
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<h1>${document/title}</h1>
+<span tal:replace="string:welcome ${user/name},
+this page has been readed ${page/countRead} times"/>
+]]></programlisting></informalexample>
+
+			<warning><para>If you try to read variable that does not exist, PHPTAL will throw an exception. Use <link linkend="tales-exists">exists:</link> to check if variable can be read</para></warning>
+
+      </section>
+
+      <section id="conditional">
+        <title>Alternative <acronym>PHP</acronym> operator syntax</title>
+
+        <para>
+        Because '<literal>&lt;</literal>', '<literal>&gt;</literal>' and '<literal>&amp;</literal>' characters are cumbersome to use in XML, <acronym>PHPTAL</acronym> provides alternative syntax for <acronym>PHP</acronym> operators using these characters, and a few more for consistency.
+        </para>
+
+        <remark>
+        These operators can be used only in <code>php:</code> expressions.
+        </remark>
+
+        <itemizedlist>
+          <listitem><para>
+          <code>&lt;</code> : <code>LT</code> (less than)
+          </para></listitem>
+          <listitem><para>
+          <code>&gt;</code> : <code>GT</code> (greater than)
+          </para></listitem>
+          <listitem><para>
+          <code>&lt;=</code> : <code>LE</code> (less or equal)
+          </para></listitem>
+          <listitem><para>
+          <code>&gt;=</code> : <code>GE</code> (greater or equal)
+          </para></listitem>
+          <listitem><para>
+          <code>==</code> : <code>EQ</code> (equal)
+          </para></listitem>
+          <listitem><para>
+          <code>!=</code> : <code>NE</code> (not equal)
+          </para></listitem>
+          <listitem><para>
+          <code>&amp;&amp;</code> : <code>AND</code>
+          </para></listitem>
+          <listitem><para>
+          <code>||</code> : <code>OR</code>
+          </para></listitem>
+        </itemizedlist>
+      </section>
+
+      <section id="tales-string">
+        <title><code>string:</code></title>
+
+        <para>
+        Because expressions are separated by a '<literal>;</literal>' character, and
+        because '<literal>$</literal>' marks the start of a path, you must use:
+        </para>
+
+        <itemizedlist>
+          <listitem><para>
+          '<literal>;;</literal>' when you want to insert a real '<literal>;</literal>' character in a string,
+          </para></listitem>
+          <listitem><para>
+          '<literal>$$</literal>' when you want to insert a real '<literal>$</literal>' character in a string.
+          </para></listitem>
+        </itemizedlist>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="string:this is a $$100 page"/>
+string:foo $bar baz       <!-- will replace $bar -->
+string:foo $$bar baz      <!-- no interpolation -->
+string:foo ; php:doFoo()  <!-- two different expressions -->
+string:foo ;; php:doFoo() <!-- only string -->
+]]></programlisting></informalexample>
+      </section>
+
+      <section id="tales-php">
+        <title><code>php:</code></title>
+
+        <para>
+        This expression evaluates what follows as a regular <acronym>PHP</acronym>
+        expression except that '<code>-&gt;</code>' is replaced by dots '<code>.</code>' and
+        variable names are prefixed with a dollar '<literal>$</literal>'
+        sign.
+        </para>
+
+        <para>
+        A dot '<code>.</code>' separated from the rest of expression by spaces is
+        assumed to be a concatenation sign.
+        </para>
+
+        <informalexample><programlisting><![CDATA[php:htmlentities(foo)
+php:'string ${varReplaced}'
+php:'string ${some.path().to[0].var}'
+php:NOT foo OR (bar GT baz)
+php:a + b
+php:array('a', 'b', 'c')
+php:range(0, 90)
+php:foo . a.b.c(e) . htmlentities(SomeClass::staticMethod())
+php:SomeClass::ConstOfClass
+php:SomeClass::$staticVar
+]]></programlisting></informalexample>
+
+        <para>
+        <code>php:</code> should be used with care and won't be needed in 80% of
+        your templates but sometimes you will need to invoke some
+        special <acronym>PHP</acronym> method to be certain whether a user is logged in, or
+        to retrieve specific complex data depending on some conditions,
+        dynamically inside the template.
+        </para>
+      </section>
+
+      <section id="tales-not">
+        <title><code>not:</code></title>
+
+        <para>
+        This expression is a boolean one, useful in <sgmltag>tal:condition</sgmltag>
+        statements.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="not: logged">not logged</span>
+]]></programlisting></informalexample>
+      </section>
+
+      <section id="tales-exists">
+        <title><code>exists:</code></title>
+
+        <para>
+        This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <function>isset()</function>.</para>
+
+        <para>
+        Normally using a path which doesn't exist throws an error like "Cannot find variable '<varname>foo</varname>' in current scope". Thus, uncertain paths must be checked first:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
+  Use user/preferences here if defined
+</span>
+]]></programlisting></informalexample>
+
+        <tip><para>In <acronym>PHPTALES</acronym> use <function>isset()</function> instead.</para></tip>
+
+      </section>
+
+      <section id="tales-true">
+          <title><code>true:</code></title>
+
+          <para>
+          This expression returns <code>true</code> if the path specified after it exists and has value that evaluates to <code>true</code> (the value can be of any type). It is analogous to <acronym>PHP</acronym>'s <code>!empty()</code> construct.</para>
+
+          <tip><para>In <acronym>PHPTALES</acronym> use <function>!empty()</function> instead.</para></tip>
+
+        </section>
+
+
+      <section id="tales-default">
+        <title><code>default</code></title>
+
+        <para>
+        This is not an expression but a keyword, allowing template
+        designers to keep the content of a tag as an alternative value
+        if an error occurs, or if something is not defined.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:define="myVar path/to/possible/var | default">
+  default my var value
+</span>
+
+<span tal:content="some/var | other/path | default">
+  no some/var and no other/path found here
+</span>
+
+<a href="unknown.xhtml" title="Unknown page"
+   tal:attributes="href item/href | default; title item/title | default"
+   tal:content="item/title | default">Unknown page</a>
+]]></programlisting></informalexample>
+
+        <para>
+        Above examples introduce the '<literal>|</literal>' character that allows the
+        definition of alternatives for defines or prints.
+        </para>
+      </section>
+
+      <section id="tales-structure">
+        <title><code>structure</code></title>
+
+        <para>
+        This is not an expression modifier but a keyword.
+        </para>
+
+        <para>
+        While printing variables inside <acronym>PHPTAL</acronym> templates, you will
+        have noticed that <acronym>PHPTAL</acronym> encodes each variable to ensure the
+        validity of the output document.
+        </para>
+
+        <para>
+        Sometimes, you may use <acronym>HTML</acronym>/<acronym>XML</acronym> variables which must be echoed as is.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<h1 tal:content="structure document/title"/>
+<span tal:replace="structure document/content"/>
+]]></programlisting></informalexample>
+
+        <para>
+        In above examples, we assume that <code>$document->title</code> and
+        <code>$document->content</code> are variables containing preformatted <acronym>HTML</acronym>
+        which must be echoed as is.
+        </para>
+      </section>
+
+      <section id="expression-chains">
+        <title>Expression chains</title>
+
+        <para>
+        An expression chain is a list of expressions separated by '<literal>|</literal>'
+        characters.
+        </para>
+
+        <para>
+        While evaluating expressions separated by '<literal>|</literal>', <acronym>PHPTAL</acronym> will stop
+        its evaluation when an expression value is not null and no error
+        was raised while evaluating the expression.
+        </para>
+
+        <para>
+        As a <code>string:</code> expression is always true, <code>string:</code> always terminates
+        an expression chain whatever expression may follow.
+        </para>
+
+        <para>
+        You can use <code>php:</code> expressions inside expression chains, like any
+        other expression.
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting></informalexample>
+      </section>
+
+    </section><!-- end of TALES -->
+  </article>
+
+  <article id="phpintegration">
+    <title><acronym>PHP</acronym> Integration</title>
+
+    <para>
+    This section is aimed at <acronym>PHP</acronym> developers and explains how to use and
+    customize <acronym>PHPTAL</acronym> behaviors for simple and advanced usage.
+    </para>
+
+    <itemizedlist>
+      <listitem><para>
+      <classname>PHPTAL</classname>: the main <acronym>PHPTAL</acronym> class. It is used to load and execute templates.
+      </para></listitem>
+      <listitem><para>
+      <classname>PHPTAL_Filter</classname>: filtering template sources and <acronym>PHPTAL</acronym> output.
+      </para></listitem>
+      <listitem><para>
+      <classname>PHPTAL_Trigger</classname>: handles output of elements with <sgmltag>phptal:id</sgmltag>.
+      </para></listitem>
+      <listitem><para>
+      <classname>PHPTAL_TranslationService</classname>: for replacing the built-in <constant>gettext</constant> support
+      with your own internationalization system.
+      </para></listitem>
+    </itemizedlist>
+
+    <section id="constants">
+      <title>Constants</title>
+
+      <para> The only constant defined in <filename>PHPTAL.php</filename> is <constant>PHPTAL_VERSION</constant>. It contains version of <acronym>PHPTAL</acronym> library installed on your system (in format: <code>X.X.X</code>).</para>
+      <para>
+      In older versions of there were constants for configuration. They have been removed in favor of methods.
+      </para>
+  </section>
+
+
+    <section id="phptal-class">
+      <title>class <classname>PHPTAL</classname></title>
+
+      <para>
+      This is the main library class for you to use.
+      </para>
+
+      <para>
+      The most common method of use:
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+
+// include the library
+require_once 'PHPTAL.php';
+
+// instantiate a new PHPTAL object using specified template file
+$tpl = new PHPTAL('mytemplate.xhtml');
+
+// setting some template context variables
+$tpl->title  = 'my title';
+$tpl->values = array(1,2,3,4);
+$tpl->user   = new User('Joe');
+
+// execute the template and echo the result in a 'secure' way
+try {
+    echo $tpl->execute();
+}
+catch (Exception $e){
+    echo "Exception thrown while processing template\n";
+    echo $e;
+}
+?>
+]]></programlisting></informalexample>
+
+      <para>
+      You can perfectly well choose to specify the template source
+      after setting context variables.
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+…
+$tpl = new PHPTAL();
+
+// it is a matter of taste but you can use the set() method instead of
+// setting context using PHPTAL::__set() like above
+$tpl->set('title', 'my title');
+$tpl->set('values', array(1,2,3,4));
+$tpl->set('user', new User('Joe'));
+
+$tpl->setTemplate('mytemplate.xhtml');
+…
+?>
+]]></programlisting></informalexample>
+
+      <para>
+      You can also decide to use a generated string as the template
+      source instead of using an existing template file:
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+
+$src = <<<EOS
+<html>
+  <head>
+  <title tal:content="title">my title</title>
+  </head>
+  <body>
+    <h1 tal:content="title">my title</h1>
+  </body>
+</html>
+EOS;
+
+require_once 'PHPTAL.php';
+$tpl = new PHPTAL();
+$tpl->setSource($src);
+$tpl->title = 'this is my title';
+try {
+    echo $tpl->execute();
+}
+catch (Exception $e){
+    echo $e;
+}
+
+?>
+]]></programlisting></informalexample>
+
+      <para>
+      In the above example, because <acronym>PHPTAL</acronym> requires a template source
+      identifier (usually the template file realpath), <acronym>PHPTAL</acronym> will use the md5
+      of the <varname>$src</varname> parameter as a unique identifier. You may decide to force the
+      identifier using a second <methodname>setSource()</methodname> argument:
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+$src = <<<EOS
+<html>
+  <head>
+  <title tal:content="title">my title</title>
+  </head>
+  <body>
+    <h1 tal:content="title">my title</h1>
+  </body>
+</html>
+EOS;
+
+require_once 'PHPTAL.php';
+$tpl = new PHPTAL();
+
+// If you specify where the source comes from (second argument to setSource),
+// PHPTAL will be able to generate more helpful error messages.
+$tpl->setSource($src, __FILE__);
+$tpl->title = 'this is my title';
+try {
+    echo $tpl->execute();
+}
+catch (Exception $e){
+    echo $e;
+}
+
+?>
+]]></programlisting></informalexample>
+
+<section id="configuration">
+    <title>Configuration methods</title>
+
+    <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
+
+    <para>All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:</para>
+      <informalexample><programlisting language="php"><![CDATA[<?php
+echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
+?>]]></programlisting></informalexample>
+<para>is the same as:</para>
+      <informalexample><programlisting language="php"><![CDATA[<?php
+$phptal->setPhpCodeDestination('/tmp/phptal');
+$phptal->setOutputMode(PHPTAL::XML);
+$phptal->setTemplate('tpl.zpt');
+echo $phptal->execute();
+?>]]></programlisting></informalexample>
+
+
+          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalization, etc. They have been described in other sections of this manual.</para>
+
+          <section id="set-output-mode">
+          <title><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname></title>
+
+          <para>Changes what syntax is used when generating elements. Valid modes are:</para>
+              <variablelist>
+                  <varlistentry><term><constant>PHPTAL::XHTML</constant></term>
+                      <listitem>
+                          <para>In this mode (which is default) PHPTAL will output XHTML in a way that is backwards-compatible with <acronym>HTML</acronym> browsers.</para>
+                          <itemizedlist>
+                              <listitem>                          <para>Empty elements will be forced to use self-closing form (<sgmltag>&lt;img/&gt;</sgmltag>, <sgmltag>&lt;link/&gt;</sgmltag>), and non-empty elements will always have closing tag.</para>
+                                  <warning>
+                                      <para>XHTML output mode changes <sgmltag>&lt;link&gt;</sgmltag> element in way that is incompatible with RSS. Use XML output mode to generate RSS feeds or use Atom.</para></warning>
+                              </listitem>
+                              <listitem><para>Boolean attributes (<sgmltag>checked</sgmltag>, <sgmltag>selected</sgmltag>, etc.) will always have value required by the XHTML specification (it simplifies use of <sgmltag>tal:attributes</sgmltag>).</para></listitem>
+                              <listitem><para><code>&lt;![CDATA[</code> blocks will be added or removed automatically and will use special escaping syntax that is safe in both XML and HTML.</para>
+                                  <tip>
+                                  <para>If you're <emphasis>always</emphasis> sending XHTML as <code>application/xhtml+xml</code>, then it's better to use XML output mode.</para></tip>
+                                  </listitem></itemizedlist>
+
+                      </listitem>
+                  </varlistentry>
+                  <varlistentry><term><constant>PHPTAL::HTML5</constant></term>
+                      <listitem>
+                          <para>This mode generates documents that have best compatibility with <code>text/html</code> parsing in current web browsers, but are not XML.</para>
+                          <para>PHPTAL will change DOCTYPEs to <sgmltag>&lt;!DOCTYPE html></sgmltag>. Namespace declarations, name prefixes, explicit <sgmltag>CDATA</sgmltag> sections and other HTML-incompatible constructs will be omitted.</para>
+                          <note>
+                              <para>
+                        This mode is <emphasis>not</emphasis> a "tag soup". PHPTAL will close all elements properly and quote attributes when it's necessary. Output will be properly formatted HTML 5, and fully backwards-compatible with current HTML 4 browsers.
+                  </para>
+                          </note>
+                      </listitem>
+                  </varlistentry>
+                  <varlistentry><term><constant>PHPTAL::XML</constant></term>
+                      <listitem>
+                          <para>This mode outputs "pure" XML without compatibility with <code>text/html</code> parsing. Use this mode when generating feeds, SVG, MathML, RDF and other XML files.</para>
+                      </listitem>
+                  </varlistentry>
+              </variablelist>
+      </section>
+
+
+          <section id="set-encoding">
+
+                  <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
+                      <para>Specify character encoding used by your templates. The default is <acronym>UTF-8</acronym>.
+                      </para><para><acronym>PHPTAL</acronym> assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.</para>
+                      <note><para><acronym>PHPTAL</acronym> does not read encoding from XML files and never converts character encodings.</para></note>
+                      <tip><para>Save yourself trouble and always use <acronym>UTF-8</acronym> for everything.</para></tip>
+          </section>
+      <section id="config-methods"><title>Other methods</title>
+
+          <simplesect id="set-template-repository">
+              <title><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname></title>
+                  <para>Specifies where to look for templates. If given a string, it adds it to the list of paths searched. If given array, it replaces the list.</para>
+                  <para>
+                            This doesn't mean all your files need to be in the root
+                            directory, you can use sub folders to organize your template
+                            designer's work.  It's just a shortcut which will allow you to
+                            reference templates without specifying the real path, but
+                            instead their relative path within the repository.
+                    </para>
+                    <tip><para>It's like <code>include_path</code>, but for <acronym>PHPTAL</acronym> templates only.</para></tip>
+          </simplesect>
+          <simplesect id="set-code-destination">
+              <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
+
+                  <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <function>sys_get_tmp_dir()</function>, which usually is '<filename>/tmp/</filename>' directory.</para>
+              </simplesect>
+              <simplesect id="set-code-extension">
+                  <title><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname></title>
+                  <para>What filename extension should be used for intermediate <acronym>PHP</acronym> files. The default is <filename>php</filename> and frankly, there's no reason to change it.</para>
+              </simplesect>
+              <simplesect id="set-cache-lifetime">
+                  <title><methodname>setCacheLifetime(<replaceable>num_days</replaceable>)</methodname></title>
+                  <para>Maximum number of days intermediate files and fragments cached with <sgmltag>phptal:cache</sgmltag> should be kept.</para>
+                  <para>The default is 30 days. Cache is scanned and cleaned up only when PHPTAL recompiles a file, and only (on average) once per 30 recompiles. You can simply <link linkend="sysadmin">delete cached files</link> if you don't want to wait until PHPTAL clears them.</para>
+              </simplesect>
+              <simplesect id="set-force-reparse">
+                  <title><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname></title>
+              <para>Forces reparsing of all templates all the time. It should be used only for testing and debugging. It's useful if you're testing pre filters or changing code of PHPTAL itself.</para>
+              <warning><para>This slows down <acronym>PHPTAL</acronym> very much. Never enable this on production servers!</para></warning>
+          </simplesect>
+      </section>
+
+  </section>
+
+
+  <section id="execute">
+      <title><methodname>execute()</methodname> method</title>
+
+      <para>Executes the template and returns final markup.</para>
+      <para>PHPTAL keeps all variables after execution and this method can be called multiple times. You can use it to create multiple versions of the same page (by changing only some variables between executions) or to generate multiple different templates with same variables (by calling <code>setTemplate()</code> between executions).</para>
+      <note><para>If you need “fresh” copy of PHPTAL, just create a new object.</para></note>
+  </section>
+        <section id="echo-execute">
+            <title><methodname>echoExecute()</methodname> method</title>
+
+            <para>Since most common use of <methodname>execute()</methodname> method is to echo its output, <acronym>PHPTAL</acronym> offers convenience method that echoes output immediately without buffering. This enables streaming of arbitrarily large output without hitting memory limit.</para>
+
+            <note><para>Fragments of template that use <sgmltag>tal:on-error</sgmltag> or <sgmltag>phptal:cache</sgmltag> are buffered regardless.</para></note>
+
+        <para>The code:</para>
+            <informalexample><programlisting language="php"><![CDATA[<?php
+    $tpl = new PHPTAL('template.xhtml');
+    $tpl->echoExecute();
+?>]]></programlisting></informalexample>
+
+<para>is same as:</para>
+
+            <informalexample><programlisting language="php"><![CDATA[<?php
+    $tpl = new PHPTAL('template.xhtml');
+    echo $tpl->execute();
+?>]]></programlisting></informalexample>
+
+<para>but little faster.</para>
+
+            <warning><para>Currently <methodname>echoExecute()</methodname> method has some unexpected limitations.</para></warning>
+
+            <simplesect>
+                <title>Limitations</title>
+                <para>When <methodname>echoExecute()</methodname> is used, <acronym>PHPTAL</acronym> will throw exception if you call any macro defined in a file that has XML declaration or DOCTYPE.</para>
+                <para>Typically <acronym>PHPTAL</acronym> allows templates to "inherit" DOCTYPE from another file (useful when subpage is calling main layout template), however that is not possible without buffering.</para>
+                <para>To work around this you can:</para>
+                <itemizedlist>
+                    <listitem><para>Keep using <code>echo $tpl->execute()</code> until this limitation is lifted.</para></listitem>
+                    <listitem><para>Remove all DOCTYPEs and XML declarations from templates and echo them from PHP before calling <methodname>echoExecute()</methodname>.</para></listitem>
+                </itemizedlist>
+            </simplesect>
+        </section>
+
+
+				<section id="add-prefilter">
+						<title><methodname>addPreFilter()</methodname> method</title>
+
+						<note><para>In PHPTAL 1.2.1 this method replaced older <methodname>setPreFilter()</methodname> method, which is now deprecated.</para></note>
+
+						<para>Adds new pre filter that will be applied to the template. Pre filters can modify source code and parsed DOM nodes of the template. Pre filters are applied in order they've been set.</para>
+
+						<para>See description of <link linkend="prefilters">PHPTAL_PreFilter</link> for more information how to write your own pre filter.</para>
+
+				</section>
+   </section>
+
+
+		<section id="prefilters">
+			<title>class <classname>PHPTAL_PreFilter</classname></title>
+
+			<para>Pre filters are executed only once before template is compiled. Pre filters operate on template's source code, so they are <emphasis>not</emphasis> able to access value of any template variables. However pre filters can "see" and modify TAL markup.
+			</para>
+
+			<para>To create pre filter <emphasis>extend</emphasis> <classname>PHPTAL_PreFilter</classname> class and implement only <methodname>filter<replaceable>*</replaceable>()</methodname> methods you need.</para>
+
+			<simplesect><title><methodname>filter()</methodname></title>
+				<para>Receives template source code as string and is expected to return new source.</para>
+				<para>You can use it to simply find'n'replace fragments of source code. Be careful not to introduce syntax errors in the template.</para>
+
+				<warning><para>PHPTAL's error messages will refer to line numbers after filtering, which may be confusing if your prefilter adds or remove lines from the source code.</para></warning>
+			</simplesect>
+
+			<simplesect><title><methodname>filterDOM()</methodname></title>
+				<para>Receives root <link linkend="phptal-dom">PHPTAL DOM node</link> of parsed file and should edit it in place.</para>
+
+				<para>Example pre filter that removes all comments:</para>
+				<informalexample><programlisting language="php"><![CDATA[function filterDOM(PHPTAL_Dom_Element $element)
+{
+    foreach($element->childNodes as $node) {
+       if ($node instanceof PHPTAL_Dom_Comment) {
+           $node->parentNode->removeChild($node);
+       }
+       else if ($node instanceof PHPTAL_Dom_Element) {
+           $this->filterDOM($node); /* recursively filter all elements */
+       }
+    }
+}
+]]></programlisting></informalexample>
+			</simplesect>
+
+
+			<simplesect><title><methodname>getCacheId()</methodname></title>
+<para>
+	Should return (any) string that uniquely identifies this filter and its settings, which is used to (in)validate template cache. Each time you return different string, template will be recompiled. Implement this method if result of the filter depends on its configuration.</para>
+
+	<para> Unlike other filter methods, this one is called on every execution.</para>
+
+
+			<tip><para>When developing and testing your filter, set <link linkend="set-force-reparse"><methodname>setForceReparse(true)</methodname></link> to force PHPTAL to update templates every time. Otherwise result of your filter will be cached and you won't see the changes.</para></tip>
+
+			</simplesect>
+			<simplesect><title><methodname>getPHPTAL()</methodname></title>
+			 <para>Returns instance of PHPTAL class that uses this prefilter. You can query it to check current encoding or other settings.</para></simplesect>
+
+
+
+
+		</section>
+
+		<section id="phptal-dom">
+			<title>PHPTAL DOM</title>
+			<para>Internally PHPTAL represents documents using it's own document object model, a little bit similar to W3C's DOM. However, PHPTAL's API has only few basic methods for <link linkend="prefilters">DOM manipulation</link>.</para>
+
+			<para><classname>PHPTAL_Dom_Element</classname> class has following properties and methods:</para>
+			<itemizedlist>
+
+				<listitem><fieldsynopsis><type>array</type><varname>childNodes</varname></fieldsynopsis>
+				<para>Numerically indexed array containing children of the element.</para>
+				<warning><para>Please don't edit this array directly. Use <methodname>appendChild()</methodname>, etc.</para></warning>
+
+				<note><para>PHPTAL does not implement <varname>nextSibling</varname>, <varname>firstChild</varname>, etc.</para></note>
+
+				</listitem>
+
+				<listitem><fieldsynopsis><type>PHPTAL_Dom_Element</type><varname>parentNode</varname></fieldsynopsis>
+				<para>Parent node (element) of the current element. Use it to traverse tree upwards.</para>
+
+				</listitem>
+
+				<listitem>	<methodsynopsis><void/><methodname>appendChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
+				<para>Appends node to the element. Node will be removed from its current element and added at the end of this element.</para>
+				<warning><para>PHPTAL does not manage namespace declarations. Moving nodes between elements in different namespaces will change meaning of the document.</para></warning>
+			</listitem><listitem>	<methodsynopsis><void/><methodname>replaceChild</methodname><methodparam><parameter>$new_node</parameter></methodparam> <methodparam><parameter>$old_node</parameter></methodparam></methodsynopsis>
+				<para>Old node will be replaced with new node.</para>
+
+				</listitem><listitem>
+								<methodsynopsis><void/><methodname>removeChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
+				<para>Remove node from its parent.</para>
+
+			</listitem><listitem>
+
+				<methodsynopsis><type>string</type> <methodname>getAttributeNS</methodname><methodparam><parameter>$namespace_uri</parameter></methodparam> <methodparam><parameter>$local_name</parameter></methodparam></methodsynopsis>
+				<para>Returns unescaped (without entities) value of a specific attribute.</para>
+				<informalexample><programlisting language="php">$a->getAttributeNS('','href')</programlisting></informalexample>
+				<tip><para>In XML attributes don't inherit element's namespace, and all XHTML attributes are in the default namespace.</para></tip>
+
+			</listitem><listitem>
+
+				<methodsynopsis><type>array</type><methodname>getAttributeNodes</methodname></methodsynopsis>
+				<para>Returns array of <classname>PHPTAL_Dom_Attr</classname> objects, which represent all element's attributes. You can modify attributes' values without using <methodname>setAttributeNodes()</methodname>.</para>
+
+			</listitem><listitem>
+
+				<methodsynopsis><void/><methodname>setAttributeNodes</methodname><methodparam>
+				<type>array</type><parameter>$attrs</parameter></methodparam></methodsynopsis>
+				<para>Replaces all elements attributes with the given ones.</para>
+
+			</listitem><listitem>
+
+				<methodsynopsis><type>string</type><methodname>getLocalName</methodname></methodsynopsis>
+				<para>Returns local name of the element, e.g. <code>&lt;atom:title></code> has local name <code>title</code>.</para>
+
+				</listitem><listitem>
+
+				<methodsynopsis><type>string</type><methodname>getNamespaceURI</methodname></methodsynopsis>
+				<para>Returns namespace URI of the the element, e.g. <code>&lt;atom:title xmlns="http://www.w3.org/2005/Atom"></code> has namespace <code>http://www.w3.org/2005/Atom</code>.</para>
+				<tip><para>XHTML namespace is <code>http://www.w3.org/1999/xhtml</code>.</para></tip>
+
+</listitem></itemizedlist>
+
+<para>Text, CDATA and attribute nodes have <methodname>getValueEscaped()</methodname> and <methodname>setValueEscaped()</methodname> methods which allow reading/setting of their text with entities preserved.</para>
+
+		</section>
+    <section id="filter-interface">
+      <title>interface <classname>PHPTAL_Filter</classname></title>
+
+      <para>
+	This interface allows you to create filters for processing result of template execution. Post filters are set using <methodname>setPostFilter()</methodname> method.
+      </para>
+
+      <para>
+      Post filters are invoked after each template execution.
+      </para>
+
+			<tip><para>If your filter is slow, try using <link linkend="prefilters">pre filter</link> instead, which is  executed only once before template is compiled.</para></tip>
+
+			<para>Result of template processing (with values of all variables and no TAL markup) will be passed to your filter's <methodname>filter()</methodname> method:</para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL.php';
+
+class MyPreFilter implements PHPTAL_Filter {
+    public function filter($source){
+        return $source;
+    }
+}
+
+class MyPostFilter implements PHPTAL_Filter {
+    public function filter($xhtml){
+        return $xhtml;
+    }
+}
+
+$tpl = new PHPTAL('mytemplate.xhtml');
+$tpl->setPostFilter(new MyPostFilter());
+echo $tpl->execute();
+?>
+]]></programlisting></informalexample>
+
+<simplesect><title>Multiple post filters</title>
+      <para>
+      You can set only one post filter using
+      <methodname>setPostFilter()</methodname>. If you have more than one filter to chain, you can
+      wrap them into a single class, implementing the <classname>PHPTAL_Filter</classname>
+      interface, which would invoke the filter's chain.
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL.php';
+
+class FilterChain implements PHPTAL_Filter {
+    private $_filters = array();
+
+    public function add(PHPTAL_Filter $filter){
+        $this->_filters[] = $filter;
+    }
+
+    public function filter($source){
+        foreach($this->_filters as $filter){
+            $source = $filter->filter($source);
+        }
+        return $source;
+    }
+}
+
+$myfilter = new FilterChain();
+$myfilter->add(new CommentFilter());  // imaginary filter
+$myfilter->add(new TidyFilter());     // imaginary filter
+
+$tpl = new PHPTAL('mytemplate.xhtml');
+$tpl->setPostFilter($myFilter);
+echo $tpl->execute();
+?>
+]]></programlisting></informalexample></simplesect>
+    </section>
+
+    <section id="trigger-interface">
+      <title>interface <classname>PHPTAL_Trigger</classname></title>
+
+      <para>
+      The <sgmltag>phptal:id</sgmltag> attribute was added into the <acronym>PHPTAL</acronym> for the <acronym>PHP5</acronym>
+      version to replace the old <classname>PHPTAL_Cache</classname> interface and to abstract
+      it a little more.
+      </para>
+
+      <para>
+      When a <sgmltag>phptal:id</sgmltag> is reached, <acronym>PHPTAL</acronym> will look in its triggers list
+      for a matching id and will invoke the trigger <methodname>start()</methodname> and <methodname>end()</methodname>
+      methods before entering the element, and just after it.
+      </para>
+
+      <para>
+      If the <methodname>PHPTAL_Trigger::start()</methodname> method returns
+      <constant>PHPTAL_Trigger::SKIPTAG</constant>, <acronym>PHPTAL</acronym> will ignore the element and its
+      content (<methodname>start()</methodname> may echo something to replace it).
+      </para>
+
+      <para>
+      If your trigger wants the element and its content to be executed,
+      you'll have to return <constant>PHPTAL_Trigger::PROCEED</constant>.
+      </para>
+
+      <para>
+      The <methodname>PHPTAL_Trigger::end()</methodname> will be called after the element
+      (whether it has been executed or not). This allows you to build
+      cache systems using <function>ob_start()</function> in <methodname>start()</methodname> and <function>ob_get_contents()</function>,
+      <function>ob_end_clean()</function> in <methodname>end()</methodname>.
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<html>
+  …
+  <div>
+    …
+    foo bar baz <span tal:replace="id"/> foo bar baz
+    …
+  </div>
+  …
+</html>
+]]></programlisting></informalexample>
+
+      <para>
+      For some reason we decide the <sgmltag>&lt;div&gt;</sgmltag> block requires to be cached. We
+      introduce a <sgmltag>phptal:id</sgmltag> into the template:
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<html>
+  …
+  <div phptal:id="somePossiblyUniqueKeyword">
+    …
+    foo bar baz <span tal:replace="id"/> foo bar baz
+    …
+  </div>
+  …
+</html>
+]]></programlisting></informalexample>
+
+      <para>
+      Then we write our trigger which will cache the <sgmltag>&lt;div&gt;</sgmltag> content:
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL.php';
+require_once 'PHPTAL/Trigger.php';
+
+class CacheTrigger implements PHPTAL_Trigger
+{
+    public function start($phptalid, $tpl)
+    {
+        // this cache depends on 'id' which must appears in
+        // the template execution context
+        $this->_cachePath = 'cache.' . $tpl->getContext()->id;
+
+        // if already cached, read the cache and tell PHPTAL to
+        // ignore the tag content
+        if (file_exists($this->_cachePath)){
+            $this->_usedCache = true;
+            readfile($this->_cachePath);
+            return self::SKIPTAG;
+        }
+
+        // no cache found, we start an output buffer and tell
+        // PHPTAL to proceed (ie: execute the tag content)
+        $this->_usedCache = false;
+        ob_start();
+        return self::PROCEED;
+    }
+
+    // Invoked after tag execution
+    public function end($phptalid, $tpl)
+    {
+        // end of tag, if cached file used, do nothing
+        if ($this->_usedCache){
+            return;
+        }
+
+        // otherwise, get the content of the output buffer
+        // and write it into the cache file for later usage
+        $content = ob_get_contents();
+        ob_end_clean();
+        echo $content;
+
+        $f = fopen($this->_cachePath, 'w');
+        fwrite($f, $content);
+        fclose($f);
+    }
+
+    private $_cachePath;
+    private $_usedCache;
+}
+?>
+]]></programlisting></informalexample>
+
+      <para>
+      The key here is to return from <methodname>start()</methodname> with either <constant>SKIPTAG</constant> or
+      <constant>PROCEED</constant>.
+      </para>
+
+      <para>
+      When <constant>SKIPTAG</constant> is returned, <acronym>PHPTAL</acronym> will just ignore the tag and call
+      end().  This usually means that the trigger takes the hand in
+      deciding what to show there.
+      </para>
+
+      <para>
+      When <constant>PROCEED</constant> is returned, <acronym>PHPTAL</acronym> will execute the tag and its
+      content as usual, then call <methodname>end()</methodname>. This allows our cache class to
+      play with output buffers to execute the tag once and to store the
+      result in a file which will be used in later calls.
+      </para>
+
+      <para>
+      To install our trigger we use:
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL.php';
+require_once 'CacheTrigger.php'; // our custom trigger
+
+$trigger = new CacheTrigger();
+
+$tpl = new PHPTAL('test.xhtml');
+
+// this trigger will only be called for phptal:id="triggerId"
+$tpl->addTrigger('somePossiblyUniqueKeyword', $trigger);
+
+$tpl->id = 1;
+
+echo $tpl->execute();
+
+?>
+]]></programlisting></informalexample>
+
+      <para>
+      You can add as many triggers as you like to your templates.  A
+      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>…
+      etc…
+      </para>
+    </section>
+
+    <section id="translation-interface">
+      <title>interface <classname>PHPTAL_TranslationService</classname></title>
+
+      <para>
+      <acronym>PHPTAL</acronym> comes with a default gettext translation service, as shown
+      in another section. For some reason you may prefer to implement
+      your own service of translation.
+      </para>
+
+      <para>
+      The <classname>PHPTAL_TranslationService</classname> interface is here to serve your
+      needs.
+      </para>
+
+      <para>
+      The usage of your service will be the same as the
+      <classname>PHPTAL_GetTextTranslator</classname>.
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[$tpl->setTranslator($yourOwnTranslatorInstance);
+]]></programlisting></informalexample>
+
+      <para>
+      Your implementation must define the following methods:
+      </para>
+
+      <section id="i18n-setlanguage">
+        <title>method <methodname>setLanguage(<replaceable>…</replaceable>)</methodname></title>
+
+        <para>
+        This method may be called by the template to change the current
+        output language and/or locale (e.g. <code>en_US</code>).
+        </para>
+
+        <para>
+        Its arguments are a list of possible languages. Use
+        <function>func_get_args()</function> to get the argument array. The first known
+        language should be used by your service.
+        </para>
+
+        <para>
+            Return language that has been set.
+        </para>
+
+        <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL/TranslationService.php';
+
+class MyTranslator implements PHPTAL_TranslationService {
+…
+    public function setLanguage(){
+        $langs = func_get_args();
+        foreach($langs as $lang){
+            // if $lang known use it and stop the loop
+            $this->_currentLang = $lang;
+            break;
+        }
+        return $this->_currentLang;
+    }
+    …
+    private $_currentLang;
+}
+?>
+]]></programlisting></informalexample>
+      </section>
+
+      <section id="i18n-usedomain">
+        <title>method <methodname>useDomain(<replaceable>$domain</replaceable>)</methodname></title>
+
+        <para>
+        If you decided to store your translations into separate files,
+        one for each application, for example, this method allows you to
+        select the translation domain from your templates (<sgmltag>i18n:domain</sgmltag>).
+        </para>
+
+        <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL/TranslationService.php';
+
+class MyTranslator implements PHPTAL_TranslationService {
+    …
+    public function useDomain($domain){
+        if (!array_key_exists($domain, $this->_domains)){
+            $file = "domains/$this->_currentLang/$domain.php";
+            $this->_domains[$domain] = include($file);
+        }
+        $this->_currentDomain = $this->_domains[$domain];
+    }
+    …
+    private $_currentDomain;
+    private $_domains = array();
+}
+?>
+]]></programlisting></informalexample>
+
+        <para>
+        The above example is a possible translation solution where keys
+        are stored in <acronym>PHP</acronym> files which return an associative array of
+        key =&gt; translation.
+        </para>
+      </section>
+
+      <section id="i18n-setvar">
+        <title>method <methodname>setVar(<replaceable>$key</replaceable>,<replaceable>$value</replaceable>)</methodname></title>
+
+        <para>
+        This method matches <sgmltag>i18n:name</sgmltag> calls. It builds an interpolation
+        context for later translate calls.
+        </para>
+
+        <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL/TranslationService.php';
+
+class MyTranslator implements PHPTAL_TranslationService {
+    …
+    public function setVar($key, $value){
+        $this->_context[$key] = $value;
+    }
+    …
+    private $_context = array();
+}
+?>
+]]></programlisting></informalexample>
+      </section>
+
+      <section id="i18n-translatekey">
+        <title>method <methodname>translate(<replaceable>$key</replaceable>)</methodname></title>
+
+        <para>
+        The last and most important method to implement, it asks your
+        service to translate the specified key for the currently selected
+        language.
+        </para>
+
+        <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL/TranslationService.php';
+
+class MyTranslator implements PHPTAL_TranslationService {
+    …
+    public function translate($key){
+        $value = $this->_currentDomain[$key];
+
+        // interpolate ${myvar} using context associative array
+        while (preg_match('/\${(.*?)\}/sm', $value, $m)){
+            list($src,$var) = $m;
+            if (!array_key_exists($var, $this->_context)){
+                $err = sprintf('Interpolation error, var "%s" not set',
+                               $var);
+                throw new Exception($err);
+            }
+            $value = str_replace($src, $this->_context[$var], $value);
+        }
+
+        return $value;
+    }
+    …
+}
+?>
+]]></programlisting></informalexample>
+      </section>
+
+
+        <section id="i18n-setencoding">
+          <title>method <methodname>setEncoding(<replaceable>$encoding</replaceable>)</methodname></title>
+
+          <para>
+              <acronym>PHPTAL</acronym> class calls this method to inform your translation service what encoding is used by the template. <methodname>translate()</methodname> method should return strings in that encoding. If you always use the same encoding for templates and translation files (i.e. UTF-8), you can leave this method empty.
+          </para>
+        </section>
+    </section> <!-- end of PHPTAL_TranslationService -->
+
+
+    <section id="gettext">    <?dbhtml stop-chunking?>
+      <title>Working with gettext</title>
+
+      <para>
+      <literal>gettext</literal> is a standard <acronym>GNU</acronym> internationalization
+      / translation system which can be used with <acronym>PHP</acronym> and which is
+      supported by <acronym>PHPTAL</acronym>.
+      </para>
+
+      <para>
+      The usage of <productname>gettext</productname> is simple but you will
+      have to perform some tests to be sure everything works fine on your
+      system.
+      </para>
+
+      <para>
+      First, <acronym>PHP</acronym> must be compiled with the
+      <parameter>--with-gettext</parameter> flag. See <acronym>PHP</acronym> documentation
+      for how to do this.
+      </para>
+
+      <para>
+      You can test your installation using following peace of code:
+      </para>
+
+      <informalexample><programlisting role="php"><![CDATA[//
+// test if gettext extension is installed with php
+//
+
+if (!function_exists("gettext"))
+{
+    echo "gettext is not installed\n";
+}
+else
+{
+    echo "gettext is supported\n";
+}
+]]></programlisting></informalexample>
+
+      <section id="i18n-directory"><?dbhtml stop-chunking?>
+        <title>Creating the translation directory structure</title>
+
+        <para>
+        The <acronym>PHP</acronym> <productname>gettext</productname> extension requires a specific structure which
+        will contain your translation files.
+        </para>
+
+        <informalexample><programlisting><![CDATA[/path/to/your/translation_root/en_US/LC_MESSAGES/
+/path/to/your/translation_root/en_GB/LC_MESSAGES/
+/path/to/your/translation_root/fr_FR/LC_MESSAGES/
+/path/to/your/translation_root/es_ES/LC_MESSAGES/
+… and so on …
+]]></programlisting></informalexample>
+
+        <para>
+        The language code is composed of two characters defining the
+        language itself (en, fr, es, …) and two characters defining
+        the country (US, GB, FR, ES, …).
+        </para>
+
+        <para>
+        The directory pattern is:
+        </para>
+
+        <informalexample><programlisting><![CDATA[<path_to_where_you_want>/<ll_CC>/LC_MESSAGES/
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="po-files"><?dbhtml stop-chunking?>
+        <title>Portable Object files</title>
+
+        <para>
+        PO files are plain text files that contain your translation.
+        You can safely edit them by hand.
+        </para>
+
+        <para>
+        po minimalistic example (<filename>en_US/LC_MESSAGES/mydomain.po</filename>):
+        </para>
+
+        <informalexample><programlisting language="po"><![CDATA[msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Simple test"
+msgstr "A small sentence in english"
+]]></programlisting></informalexample>
+
+        <para>
+        Once edited, each PO file must be indexed using:
+        </para>
+
+        <informalexample><programlisting language="sh"><![CDATA[msgfmt mydomain.po -o mydomain.mo
+]]></programlisting></informalexample>
+
+        <para>
+        This command won't work if you don't have <productname>gettext</productname> tools
+        installed on your system.
+        </para>
+
+        <para>
+        This will produce a MO file (machine object) indexing your
+        translation for quick access.
+        </para>
+
+        <para>
+        Then you have to translate this file in other languages.
+        </para>
+
+        <para>
+        po minimalistic example (<filename>fr_FR/LC_MESSAGES/mydomain.po</filename>):
+        </para>
+
+        <informalexample><programlisting language="po"><![CDATA[msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "Simple test"
+msgstr "Une petite phrase en français"
+]]></programlisting></informalexample>
+
+        <para>
+        The translation file must also be indexed:
+        </para>
+
+        <informalexample><programlisting language="sh"><![CDATA[msgfmt mydomain.po -o mydomain.mo
+]]></programlisting></informalexample>
+
+      </section>
+
+      <section id="i18n-domains">
+        <title>Translation Domain</title>
+
+        <para>
+        The domain is matched against your translation file names. In
+        above examples we used 'mydomain' as domain name.
+        </para>
+
+        <para>
+        You can have more than one domain for the same application, it
+        can enhance <productname>gettext</productname>'s performance to split your application
+        translations in more than one file.
+        </para>
+      </section>
+
+      <section id="php-in-phptal">
+        <title>Using Translator in <acronym>PHP</acronym></title>
+
+        <informalexample><programlisting language="php"><![CDATA[<?php
+require_once 'PHPTAL.php';
+require_once 'PHPTAL/GetTextTranslator.php';
+
+try {
+    $tr = new PHPTAL_GetTextTranslator();
+
+    // set language to use for this session (first valid language will
+    // be used)
+    $tr->setLanguage('en_GB.utf8', 'en_GB');
+
+    // register gettext domain to use
+    $tr->addDomain('mydomain', '/path/to/your/translation_root');
+
+    // specify current domain
+    $tr->useDomain('mydomain');
+
+    $tpl = new PHPTAL('mytemplate.xhtml');
+
+    // tell PHPTAL to use our translator
+    $tpl->setTranslator($tr);
+
+    // output translated template
+    echo $tpl->execute();
+}
+catch (Exception $e){
+    echo $e;
+}
+]]></programlisting></informalexample>
+
+<para>If you need to translate some other text, that is not in the template (e.g. plaintext e-mail message), you can reuse PHPTAL's translator:</para>
+
+<informalexample><programlisting language="php"><![CDATA[$tr = $tpl->getTranslator();
+
+$subject = $tr->translate("Registration information");
+
+$tr->setVar("user",$username);
+$message = $tr->translate("Dear ${user}, thanks for registering!");
+
+mail($email, $subject, $message);
+]]></programlisting></informalexample>
+
+<para>If you're using PHPTAL's standard <productname>gettext</productname> translator, you can use <function>gettext()</function> too.</para>
+
+      </section>
+
+      <section id="var-interpolation">
+        <title>Variable interpolation</title>
+
+        <para>
+        The <acronym>I18N</acronym> namespace allows some variable interpolation in your
+        translations.
+        </para>
+
+        <informalexample><programlisting language="gettext"><![CDATA[# english
+msgid "welcome"
+msgstr "Welcome ${name} you have ${n} mails!"
+
+# french
+msgid "welcome"
+msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
+]]></programlisting></informalexample>
+
+        <para>
+        A template can use this interpolation as follows:
+        </para>
+
+        <informalexample><programlisting language="xml"><![CDATA[<span i18n:translate="welcome">
+  Welcome
+  <span i18n:name="name" tal:replace="user/name"/>
+  you currently have
+  <span i18n:name="n" tal:replace="user/unreadeMails"/>
+  unread messages!
+</span>
+]]></programlisting></informalexample>
+
+        <para>
+        Because <sgmltag>i18n:translate</sgmltag> contains a value <computeroutput>'welcome'</computeroutput>, the template
+        data will be ignored and the message given by <productname>gettext</productname> will be
+        used instead.
+        </para>
+
+      </section>
+
+    </section>
+
+    <section id="custom-modifiers">
+      <title>Creating custom expression modifiers</title>
+
+      <para>
+      <acronym>PHPTAL</acronym> comes with some basic expression modifiers (<code>not:</code>, <code>exists:</code>,
+      <code>string:</code>, <code>php:</code>, <code>path:</code>).
+      </para>
+
+      <para>
+      These modifiers are defined by <acronym>ZPT</acronym> specifications but <acronym>PHPTALES</acronym> can
+      be extended with your own modifiers to manipulate strings, date,
+      money numbers, objects, whatever…
+      </para>
+
+      <para>
+      The aim of a modifier is to return some <acronym>PHP</acronym> code that will be
+      included in the template <acronym>PHP</acronym> source.
+      </para>
+
+      <para>
+      Modifiers are used at parse time. If you change the behavior of a
+      modifier, you'll have to delete generated <acronym>PHP</acronym> files and reparse
+      all templates using it.
+      </para>
+
+      <para>
+      Please note that modifiers produce code, and mustn't echo data!
+      </para>
+
+      <para>
+      Any <acronym>PHP</acronym> function starting with "<constant>phptal_tales_</constant>" is usable as a
+      modifier.
+      </para>
+
+      <para>
+      Modifiers takes two arguments:
+      </para>
+
+      <itemizedlist>
+        <listitem><para>
+        <varname>$src</varname>: the source string after the "modifier:" keyword
+        </para></listitem>
+        <listitem><para>
+	  <varname>$nothrow</varname>: a boolean which determines whether exceptions may
+	  be thrown or not by <function>phptal_path()</function> resolution. This boolean
+	  must be propagated whenever you call another <function>phptal_tales_<replaceable>*</replaceable></function>
+	  modifier from within your own modifier.
+	</para></listitem>
+      </itemizedlist>
+
+      <para>
+      For example, in the following <acronym>TAL</acronym> template,
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="some-modifier: my/path/value"/>
+]]></programlisting></informalexample>
+
+      <para>
+      The src argument will be "<varname>my/path/value</varname>", and the <varname>$nothrow</varname> boolean
+      will be false, because <sgmltag>tal:replace</sgmltag> requires the path to be fully
+      resolvable.
+      </para>
+
+      <para>
+      An expression like:
+      </para>
+
+      <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="some-modifier: my/path/value | other/path"/>
+]]></programlisting></informalexample>
+
+      <para>
+      Will use 2 modifiers:
+      </para>
+
+      <itemizedlist>
+        <listitem><para>
+        some-modifier: with "<code>my/path/value</code>" as <varname>$src</varname> argument and
+         <varname>$nothrow</varname> set to true because an alternative exists
+        </para></listitem>
+        <listitem><para>
+        path: with "<code>other/path</code>" as <varname>$src</varname>, and <varname>$nothrow</varname> set to false
+        because in case the alternative is not found, <sgmltag>tal:replace</sgmltag> will
+        be in trouble.
+        </para></listitem>
+      </itemizedlist>
+
+      <para>
+      Remember, <code>path:</code> is the implicit modifier used when no other
+      modifier is specified.
+      </para>
+
+      <para>
+      Modifiers can use other modifiers to generate simpler <acronym>PHP</acronym>
+      code. The example below shows this.
+      </para>
+
+      <informalexample><programlisting language="php"><![CDATA[//
+// This modifier will return a money formated string (XXX.XX)
+//
+// usage:
+//
+//      money: path/to/my/amount
+//
+// this modifier uses phptal_tales() function to generate the
+// PHP code that will return the value of the modifier argument.
+//
+// in the example:
+//
+//      money: path/to/my/amount
+//
+// the produced code will be something looking like:
+//
+//      sprintf("%01.2f", phptal_path($ctx->path, "to/my/amount"))
+//
+// This code will be included right into the template where needed.
+//
+// @param string $src
+//      The expression string
+// @param string $nothrow
+//      A boolean indicating if exceptions may be throw by phptal_path if
+//      the path does not exists.
+// @return string
+//      PHP code to include in the template
+//
+function phptal_tales_money( $src, $nothrow )
+{
+    // remove spaces we do not require here
+    $src = trim($src);
+    return 'sprintf("%01.2f", '.phptal_tales($src, $nothrow).')';
+}
+]]></programlisting></informalexample>
+
+    </section>
+
+  </article>
+
+  <appendix id="sysadmin">
+      <title>Note for system administrators</title>
+      <para>
+          <acronym>PHPTAL</acronym> functions by generating <acronym>PHP</acronym> files from the template's logic,
+          this means that it needs a directory to store those generated files so
+          they can be parsed by the <acronym>PHP</acronym> interpreter.
+</para><para>
+          By default <acronym>PHPTAL</acronym> will use the system's temp directory (via <acronym>PHP</acronym>'s
+          <function>sys_get_temp_dir()</function> function if available) or will try to guess where
+          it should be, <filename>/tmp</filename> on Unix like systems and <filename>c:\windows\temp</filename> on
+          Microsoft ones, to store the compiled templates. The default
+          destination can be changed to your liking by calling <link linkend="set-code-destination"><methodname>setPhpCodeDestination()</methodname></link>
+          method with the appropriate path.
+          Be it the system's temp directory or a custom one, it needs to have
+          its permissions setup as to allow the <acronym>PHP</acronym> running process (the Apache
+          user if using mod_php or the cgi/fastcgi user otherwise) to create and
+          update files in that directory.
+</para><para>
+          <acronym>PHPTAL</acronym> creates one file for each different template file and one file
+          for each tag if using <link linkend="phptal-cache"><sgmltag>phptal:cache</sgmltag></link>. It doesn't create separate files
+          for macros (which are simply compiled as <acronym>PHP</acronym> functions inside the
+          compiled template file).
+          These files are automatically cleaned up once in a while, more
+          specifically, each time a template is compiled there is random
+          probability, controlled by <methodname>setCachePurgeFrequency()</methodname> method, which will
+          just delete files older than set by <methodname>setCacheLifetime()</methodname> method.
+          </para><para>
+          Alternatively you can also schedule the deletion of old/unused files
+          by running this from an Unix-like shell (e.g. in a cron job):
+</para><informalexample><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -delete</programlisting></informalexample>
+</appendix>
+  <appendix id="usefullinks">
+    <title>Useful links</title>
+
+    <itemizedlist>
+      <listitem><para>
+      <ulink url="http://www.zope.org/Wikis/Projects/ZPT/"><acronym>ZPT</acronym></ulink>
+      Zope Page Template front page,
+      </para></listitem>
+      <listitem><para>
+      <ulink
+url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TAL/"><acronym>TAL</acronym></ulink>
+the Template Attribute Language page,
+      </para></listitem>
+      <listitem><para>
+      <ulink
+url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/METAL"><acronym>METAL</acronym></ulink>
+is the Macro Expansion of TAL,
+      </para></listitem>
+      <listitem><para>
+      <ulink
+url="http://www.zope.org/Wikis/DevSite/Projects/ZPT/TALES"><acronym>TALES</acronym></ulink>
+the <acronym>TAL</acronym> Expression Syntax.
+      </para></listitem>
+    </itemizedlist>
+  </appendix>
+
+  <appendix id="greetings">
+    <title>Greetings</title>
+
+    <para>Big thanks goes to:</para>
+
+    <itemizedlist>
+      <listitem><para>
+      <acronym>ZPT</acronym> team, who made these useful specifications,
+      </para></listitem>
+      <listitem><para>
+      The <acronym>PHPTAL</acronym> community for their support, help and reports,
+      </para></listitem>
+      <listitem><para>
+      Jean-Michel Hiver, who 'forced' me to look at them,
+      </para></listitem>
+      <listitem><para>
+      Olivier Parisy, the first enthusiastic <acronym>PHPTAL</acronym> user and bug finder,
+      </para></listitem>
+    </itemizedlist>
+  </appendix>
+</book>
