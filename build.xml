@@ -88,7 +88,7 @@
       <option name="packagefile" value="package.xml"/>
       <option name="baseinstalldir" value="/"/>
 
-      <option name="channel" value="pear.php.net"/>
+      <option name="channel" value="__uri"/>
       <option name="summary">Zope Page Template implementation for PHP5</option>
       <option name="description">PHPTAL is a XML-based template engine that generates XML, XHTML and HTML5 using syntax of Zope's Template Attribute Language (TAL, METAL and I18N namespaces).
 PHPTAL compiles templates to PHP for best performance and supports selective caching of output.</option>
