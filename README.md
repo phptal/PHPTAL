@@ -1,6 +1,7 @@
 
 # PHPTAL - Template Attribute Language for PHP
 
+Master: [![Build Status](https://secure.travis-ci.org/pornel/PHPTAL.png?branch=master)](http://travis-ci.org/pornel/PHPTAL)
 
 Usage requirements
 ==================
