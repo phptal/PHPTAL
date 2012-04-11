@@ -2,6 +2,7 @@
     "name": "phptal/phptal",
     "homepage": "http://phptal.org/",
     "description": "PHPTAL is a templating engine for PHP5 that implements Zope Page Templates syntax",
+    "license": "LGPLv2",
     "type": "library",
     "keywords": [
         "zope",
