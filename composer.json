@@ -27,10 +27,7 @@
     "autoload": {
         "psr-0": {
             "PHPTAL": "classes/"
-        },
-        "classmap": [
-            "classes/"
-        ]
+        }
     },
     "config": {
         "bin-dir": "tools"
