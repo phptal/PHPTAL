@@ -224,7 +224,8 @@ class PHPTAL_Dom_PHP5DOMDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 
     private function getQName(DOMElement $element)
     {
-        if ($element->prefix !== '') return $element->prefix.':'.$element->localName;
+        // PHP bug: DOMElement's namespace unexpectedly changed to 'default' from '' after appending to some namespaced parent. (5.3 only?)
+        if ($element->prefix !== '' && $element->prefix !== 'default') { return $element->prefix.':'.$element->localName; }
         return $element->localName;
     }
 
