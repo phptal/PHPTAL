@@ -145,8 +145,14 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         // generate the array of sub expressions and return it.
         if (count($exps) > 1 || isset($string)) {
             $result = array();
-            foreach ($exps as $exp) {
-                $result[] = self::compileToPHPExpressions(trim($exp), true);
+            foreach ($exps as $i=>$exp) {
+                if(isset($string) || $i < count($exps) - 1) {
+                    $result[] = self::compileToPHPExpressions(trim($exp), true);
+                }
+                else {
+                    // the last expression can thorw exception.
+                    $result[] = self::compileToPHPExpressions(trim($exp), false);
+                }
             }
             if (isset($string)) {
                 $result[] = self::compileToPHPExpressions($string, true);
