@@ -91,7 +91,7 @@ class PHPTAL_PreFilter_Normalize extends PHPTAL_PreFilter
     {
         $utf_regex_mod = ($encoding=='UTF-8'?'u':'');
 
-        return preg_replace('/[ \t]+/'.$utf_regex_mod, ' ', $text); // \s removes nbsp
+        return preg_replace('/[ \t\r\n]+/'.$utf_regex_mod, ' ', $text); // \s removes nbsp
     }
 
     protected function normalizeAttributes(PHPTAL_Dom_Element $element)

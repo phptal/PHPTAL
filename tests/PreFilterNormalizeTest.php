@@ -22,7 +22,7 @@ class PreFilterNormalizeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL()->setSource("<p>\t\n\rhello       world</p>");
         $tpl->addPreFilter(new PHPTAL_PreFilter_Normalize());
 
-        $this->assertEquals("<p> \n\rhello world</p>", $tpl->execute());
+        $this->assertEquals("<p> hello world</p>", $tpl->execute());
     }
 
     function testPreSkipped()
@@ -46,7 +46,7 @@ class PreFilterNormalizeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL()->setSource("<p title='   foo \r\n bar \t\tbaz '>  </p>");
         $tpl->addPreFilter(new PHPTAL_PreFilter_Normalize());
 
-        $this->assertEquals('<p title="foo '."\n".' bar baz"> </p>', $tpl->execute());
+        $this->assertEquals('<p title="foo bar baz"> </p>', $tpl->execute());
     }
 
     function testNormalizesPreAttrs()
@@ -54,7 +54,7 @@ class PreFilterNormalizeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL()->setSource("<pre title='   foo \r\n bar \t\tbaz '>  </pre>");
         $tpl->addPreFilter(new PHPTAL_PreFilter_Normalize());
 
-        $this->assertEquals('<pre title="foo '."\n".' bar baz">  </pre>', $tpl->execute());
+        $this->assertEquals('<pre title="foo bar baz">  </pre>', $tpl->execute());
     }
 
     function testSkipsXMLSpacePreserve()
@@ -64,7 +64,7 @@ class PreFilterNormalizeTest extends PHPTAL_TestCase
 
         $tpl->addPreFilter(new PHPTAL_PreFilter_Normalize());
 
-        $this->assertEquals('<p title="foo '."\n".' bar baz">'."\n".' <span xml:space="preserve" title=" spa  ced "> '.
+        $this->assertEquals('<p title="foo bar baz"> <span xml:space="preserve" title=" spa  ced "> '.
         "\n".' </span> </p>',$tpl->execute());
     }
 
@@ -75,8 +75,8 @@ class PreFilterNormalizeTest extends PHPTAL_TestCase
 
         $tpl->addPreFilter(new PHPTAL_PreFilter_Normalize());
 
-        $this->assertEquals('<p title="foo '."\n".' bar baz">'."\n".' <span xml:space="preserve" title=" spa  ced "> '.
-        "\n".' <x xml:space="default" y="a">'."\n".'</x> </span> </p>',$tpl->execute());
+        $this->assertEquals('<p title="foo bar baz"> <span xml:space="preserve" title=" spa  ced "> '.
+        "\n".' <x xml:space="default" y="a"> </x> </span> </p>',$tpl->execute());
     }
 
 

@@ -28,13 +28,13 @@ class CompressTest extends PHPTAL_TestCase
 
     function testConsecutiveSpace()
     {
-        $this->assertStrips("<p>foo bar\n\n\n baz</p>",
+        $this->assertStrips("<p>foo bar baz</p>",
         "<p>foo     \t bar\n\n\n baz</p>");
     }
 
     function testPreservesPre()
     {
-        $this->assertStrips("<p>foo \n bar</p><pre>  \tfoo\t   \nbar   </pre>",
+        $this->assertStrips("<p>foo bar</p><pre>  \tfoo\t   \nbar   </pre>",
         "<p>foo   \t\n bar</p><pre>  \tfoo\t   \nbar   </pre>");
     }
 
