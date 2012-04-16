@@ -1092,41 +1092,15 @@ class PHPTAL
         $data = $this->_source->getData();
 
         $prefilters = $this->getPreFilterInstances();
-        $use_php5_dom_builder = false;
-
         foreach($prefilters as $prefilter) {
             $data = $prefilter->filter($data);
-
-            if ($prefilter instanceof PHPTAL_PreFilter && $prefilter->isPHP5DOMNeeded()) {
-                $use_php5_dom_builder = true;
-            }
         }
 
         $realpath = $this->_source->getRealPath();
         $parser = new PHPTAL_Dom_SaxXmlParser($this->_encoding);
 
-        if ($use_php5_dom_builder) {
-            $builder = new PHPTAL_Dom_PHP5DOMDocumentBuilder();
-            $parser->parseString($builder, $data, $realpath);
-            $php5_dom_tree = $builder->getResult();
-            $xmldecl = $builder->getXMLDeclaration();
-
-            foreach ($prefilters as $prefilter) {
-                if ($prefilter instanceof PHPTAL_PreFilter) {
-                    if ($prefilter->filterElement($php5_dom_tree) !== NULL) {
-                        throw new PHPTAL_ConfigurationException("Don't return value from filterElement()");
-                    }
-                }
-            }
-
-            $converter = new PHPTAL_Dom_PHP5DOMConverter(new PHPTAL_Dom_PHPTALDocumentBuilder());
-            $tree = $converter->convertDocument($php5_dom_tree, $xmldecl)->getResult();
-
-
-        } else {
-            $builder = new PHPTAL_Dom_PHPTALDocumentBuilder();
-            $tree = $parser->parseString($builder, $data, $realpath)->getResult();
-        }
+        $builder = new PHPTAL_Dom_PHPTALDocumentBuilder();
+        $tree = $parser->parseString($builder, $data, $realpath)->getResult();
 
         foreach($prefilters as $prefilter) {
             if ($prefilter instanceof PHPTAL_PreFilter) {

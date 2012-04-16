@@ -127,19 +127,6 @@ abstract class PHPTAL_PreFilter implements PHPTAL_Filter
     {
         $this->phptal = $phptal;
     }
-
-    /**
-     * if filterElement is not implemented, DOM for it doesn't need to be created.
-     *
-     * @return bool
-     */
-    public function isPHP5DOMNeeded()
-    {
-        $method = new ReflectionMethod($this, 'filterElement');
-
-        // checks if method has been overriden
-        return $method->getDeclaringClass()->name !== __CLASS__;
-    }
 }
 
 
