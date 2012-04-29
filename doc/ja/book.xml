@@ -5,7 +5,7 @@
   <bookinfo>
     <title>PHPTAL Manual</title>
     <subtitle><acronym>PHP</acronym> Template Attribute Language</subtitle>
-    <date>2009-10-25</date>
+    <date>2012-04-30</date>
     <author>
       <firstname>Laurent</firstname><surname>Bédubourg</surname>
       <address><email>lbedubourg@motion-twin.com</email></address>
@@ -14,68 +14,20 @@
        <firstname>Kornel</firstname><surname>Lesiński</surname>
        <address><email>kornel@aardvarkmedia.co.uk</email></address>
     </author>
-	<author>
-		<firstname>Dan</firstname><surname>Sheppard</surname>
-	</author>
-	<author>
-		<firstname>Anton</firstname><surname>Andriyevskyy</surname>
-			<othername>Valeriyevich</othername>
+        <author>
+                <firstname>Dan</firstname><surname>Sheppard</surname>
+        </author>
+        <author>
+                <firstname>Anton</firstname><surname>Andriyevskyy</surname>
+                        <othername>Valeriyevich</othername>
       <address><email>x.meglio@gmail.com</email></address>
-	</author>
+        </author>
 
     <revhistory id="revhistory">
-     <revision>
-			  <revnumber>v1.8</revnumber>
-				<date>2009-10-25</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Updates for PHPTAL 1.2.1</revremark>
-		</revision>
-        <revision>
-			  <revnumber>v1.7</revnumber>
-				<date>2009-06-06</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Updates for PHPTAL 1.2.0</revremark>
-		</revision>
-        <revision>
-			  <revnumber>v1.6</revnumber>
-				<date>2008-10-03</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Fixed errors spotted by Anton.</revremark>
-		</revision>
-        <revision>
-			  <revnumber>v1.5</revnumber>
-				<date>2008-08-21</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Removed old defines, documented configuration methods.</revremark>
-		  </revision>
-        <revision>
-			  <revnumber>v1.4</revnumber>
-				<date>2008-08-18</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Corrections and updates for PHPTAL 1.1.13</revremark>
-		  </revision>
-		  <revision>
-			  <revnumber>v1.3</revnumber>
-				<date>2008-01-27</date>
-				<authorinitials>kl</authorinitials>
-				<revremark>Updated for PHPTAL 1.1.10</revremark>
-		  </revision>
-		  <revision>
-			  <revnumber>v1.2</revnumber>
-				<date>2005-12-10</date>
-				<authorinitials>ds</authorinitials>
-				<revremark>English Corrections by Dan Sheppard</revremark>
-		  </revision>
-      <revision>
-        <revnumber>v1.1</revnumber>
-        <date>2005-03-29</date>
-        <authorinitials>lb</authorinitials>
-        <revremark>Added section about PHPTAL class</revremark>
-      </revision>
       <revision>
         <revnumber>v1.0</revnumber>
-        <date>2005-03-27</date>
-        <authorinitials>lb</authorinitials>
+        <date>2012-04-30</date>
+        <authorinitials>tetsuya</authorinitials>
         <revremark>Converted draft to docbook</revremark>
       </revision>
     </revhistory>
@@ -90,64 +42,56 @@
   </bookinfo>
 
   <article id="introduction">
-    <title>Introduction</title>
+    <title>はじめに</title>
 
     <para>
-    <acronym>PHPTAL</acronym> is an implementation of the excellent Zope Page Template
-    (<acronym>ZPT</acronym>) system for <acronym>PHP</acronym>. <acronym>PHPTAL</acronym> supports <acronym><link linkend="tal-namespace">TAL</link></acronym>, <acronym><link linkend="metal">METAL</link></acronym>, <acronym><link linkend="tal-namespace">I18N</link></acronym> namespaces.
+    <acronym>PHPTAL</acronym>は Zope Page Template
+    (<acronym>ZPT</acronym>)の<acronym>PHP</acronym>による実装です。 <acronym>PHPTAL</acronym>は<acronym><link linkend="tal-namespace">TAL</link></acronym>、<acronym><link linkend="metal">METAL</link></acronym>、<acronym><link linkend="tal-namespace">I18N</link></acronym> namespaces をサポートしています。
     </para>
 
     <para>
-    <acronym><link linkend="phptales">PHPTALES</link></acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
-    Expression Syntax. It defines how <acronym>XML</acronym> attribute values are handled.
+    <acronym><link linkend="phptales">PHPTALES</link></acronym> は <acronym>TALES</acronym>(Template Attribute Language Expression Syntax)に相当しており、<acronym>XML</acronym> のattributeを処理する方法を定義しています。
     </para>
 
     <para>
-    As <acronym>PHPTALES</acronym> is similar to <acronym>TALES</acronym>, it should be easy to port python <acronym>TAL</acronym>
-    templates into <acronym>PHP</acronym> ones (and vice versa).
+    <acronym>PHPTALES</acronym>は<acronym>TALES</acronym>と相似しているので、pythonで書かれた<acronym>TAL</acronym>
+    テンプレートを簡単に<acronym>PHP</acronym>へ（逆もまた同様に）移植できます。
     </para>
 
     <para>
-    To be <acronym>TAL</acronym> compliant, <acronym>PHPTAL</acronym> implements XPath-like access to data.
+    <acronym>TAL</acronym>に対応するために、<acronym>PHPTAL</acronym>はデータに対するXPath的なアクセスを実装しています。
     </para>
 
     <para>
-    <acronym>PHPTAL</acronym> is freely distributed under the <acronym>LGPL</acronym> license, it is
-    developed by Laurent Bedubourg
-    <email>lbedubourg@motion-twin.com</email> and maintained by Kornel Lesiński.
+    <acronym>PHPTAL</acronym>は Laurent Bedubourg <email>lbedubourg@motion-twin.com</email> によって開発され、Kornel Lesiński によってメンテナンスされており、<acronym>LGPL</acronym>ライセンスの元で自由に配付することができます。
     </para>
 
   </article>
 
   <article id="whyusephptal">
-    <title>Why use <acronym>PHPTAL</acronym></title>
+    <title>なぜ<acronym>PHPTAL</acronym>を使うのか</title>
 
     <para>
-    <acronym>XML</acronym>/<acronym>HTML</acronym> templates exist to separate logic from presentation in web
-    services. This separation brings more than one accompanying benefit.
+    <acronym>XML</acronym>/<acronym>HTML</acronym>テンプレートはウェブサービスにおけるロジックとプレゼンテーション（デザイン）を分離するために存在しています。この分離によって、以下の様なメリットを得る事ができます。
     </para>
 
     <itemizedlist>
-      <listitem><para>better application design</para></listitem>
-      <listitem><para>easier task repartition</para></listitem>
-      <listitem><para>better maintainability</para></listitem>
+      <listitem><para>よりよいデザイン（見た目）</para></listitem>
+      <listitem><para>容易な作業分割</para></listitem>
+      <listitem><para>優れたメンテナンス性</para></listitem>
       <listitem><para>easy web skins</para></listitem>
     </itemizedlist>
 
     <para>
-    Most template systems uses <sgmltag>&lt;? ?&gt;</sgmltag>, <sgmltag>&lt;% %&gt;</sgmltag> or
-    <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag> tags to find their sections. It
-    allows easier template system development but doesn't really help
-    template designers.
+    ほとんどのテンプレートシステムがセクション検知のために<sgmltag>&lt;? ?&gt;</sgmltag>, <sgmltag>&lt;% %&gt;</sgmltag> もしくは
+    <sgmltag>&lt;xxx:yyy&gt;&lt;/xxx:yyy&gt;</sgmltag> のようなタグを使います。これらはテンプレートシステムによる開発を容易にしますが、デザイナーの助けにはなりません。
     </para>
 
     <para>
-    <acronym>TAL</acronym> hides most of its logic in <acronym>XML</acronym> attributes, preserving syntax and structure of <acronym>XHTML</acronym>. This allows previewing of <acronym>TAL</acronym> templates in web browser (<acronym>WYSIWYG</acronym> editors, live previews) and doesn't break <acronym>HTML</acronym> syntax highlighting in programmers' editors.
+    <acronym>TAL</acronym>は、そのほとんどのロジックを<acronym>XML</acronym>のattributeとして記述しますので <acronym>XHTML</acronym>の文法を崩すことがありません。なので、<acronym>TAL</acronym>テンプレートはそのままWebブラウザ(<acronym>WYSIWYG</acronym>のライブプレビュー機能をもったエディタ)でプレビューできますし、<acronym>HTML</acronym>エディタによるハイライト表示も可能です。
     </para>
 
-    <para>
-    If you have already worked with a simple template system, then you must
-    have encountered something looking like:
+    <para>もしあなたが一般的なテンプレートシステムを使っているのなら、以下の様なコードになっているでしょう。
     </para>
 
     <informalexample><programlisting language="xml"><![CDATA[<table>
@@ -160,55 +104,46 @@
 ]]></programlisting></informalexample>
 
     <para>
-    Well, with <acronym>PHPTAL</acronym> you now can write:
+    これを<acronym>PHPTAL</acronym>で書くとこうなります。
     </para>
 
     <informalexample><programlisting language="xml"><![CDATA[<table>
   <tr tal:repeat="myitem myarray">
     <td tal:content="myitem">
-      text replaced by the item value
+      このテキストはmyitemの値で置き換えられます。
     </td>
-    <td tal:replace="">sample 1</td>
-    <td tal:replace="">sample 2</td>
-    <td tal:replace="">sample 3</td>
+    <td tal:replace="">サンプル 1</td>
+    <td tal:replace="">サンプル 2</td>
+    <td tal:replace="">サンプル 3</td>
   </tr>
 </table>
 ]]></programlisting></informalexample>
 
-    <para>
-    The above code will render correctly with the sample
-    text in normal web browser, so you can present it to your clients even if the code
-    required to get '<code>myarray</code>' values doesn't yet exist.
+    <para>上記のコードはWebブラウザ上で正しく表示されますので、変数'<code>myarray</code>'が存在していなくてもWebページとして正しく表示する事ができます。
     </para>
 
     <para>
-    Another big advantage of <acronym>PHPTAL</acronym> is that you benefit from more than 3
-    years of Zope community experience, documentation, examples, and help.
-    <acronym>PHPTAL</acronym> relies on this community to provide its users a great deal
-    of useful information.
+    それ意外にも<acronym>PHPTAL</acronym>の大きなアドバンテージとして、<acronym>PHPTAL</acronym>はZopeのコミュニティにより長年蓄積された、経験、ドキュメント、サンプル、およびヘルプといった豊富な提供物を享受することができるということが挙げられます。
     </para>
 
     <para>
-    <acronym>PHPTAL</acronym> is designed to be as customizable as possible for advanced
-    developers and performance-eating systems, but still be easy to use for
-    beginners, with a comfortable and simple default behavior (at least we
-    tried :)
+    <acronym>PHPTAL</acronym>は開発者やパフォーマンスを要求するシステムのためにカスタマイズすることができるように設計されています。が、初心者でも簡単に使えるように、快適さとシンプルな振る舞いのままにしておいてください。（私はそう勤めています:)
     </para>
 
   </article>
 
   <article id="installation">
-    <title>Installation</title>
+    <title>インストール</title>
 
     <para>
-    <acronym>PHPTAL</acronym> is released as a <acronym>PEAR</acronym> package (see <ulink
-    url="http://pear.php.net">pear.php.net</ulink>).  You can
-    download the <acronym>PHPTAL</acronym> library on the <acronym>PHPTAL</acronym> website: <ulink
-    url="http://phptal.org">phptal.org</ulink>.
+    <acronym>PHPTAL</acronym> は <acronym>PEAR</acronym> パッケージ (<ulink
+    url="http://pear.php.net">pear.php.net</ulink>を参照)としてリリースされています。
+    <acronym>PHPTAL</acronym>のライブラリは<acronym>PHPTAL</acronym>のウェブサイト(<ulink
+    url="http://phptal.org">phptal.org</ulink>)からダウンロードすることができます。
     </para>
 
     <para>
-    You can install it using the <acronym>PEAR</acronym> utility:
+    <acronym>PEAR</acronym>のユーティリティを使う場合は以下の様にインストールします:
     </para>
 
     <informalexample><programlisting language="sh"><![CDATA[pear install http://phptal.org/latest.tar.gz
@@ -216,16 +151,14 @@
 
 
     <para>
-    Once installed, you can upgrade <acronym>PHPTAL</acronym> easily on each <acronym>PHPTAL</acronym> update
-    using <acronym>PEAR</acronym>:
+    一度インストールしてしまえば、<acronym>PEAR</acronym>を使って<acronym>PHPTAL</acronym>をアップグレードすることができます:
     </para>
 
     <informalexample><programlisting language="sh"><![CDATA[pear upgrade http://phptal.org/latest.tar.gz
 ]]></programlisting></informalexample>
 
     <para>
-    If you do not use <acronym>PEAR</acronym> or do not have it installed on your system,
-    you can still install <acronym>PHPTAL</acronym> by unzipping the downloaded archive.
+    もしあなたが<acronym>PEAR</acronym>を使いたくない場合や、あなたのシステムに<acronym>PEAR</acronym>がインストールされていない場合は、アーカイブをダウンロードして解凍することでもインストールすることができます:
     </para>
 
     <informalexample><programlisting language="sh"><![CDATA[tar zxvf PHPTAL-X.X.X.tar.gz
@@ -233,53 +166,50 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 ]]></programlisting></informalexample>
 
     <para>
-    This will install the <filename>PHPTAL.php</filename> file and the associated <acronym>PHPTAL</acronym>
-    folder in <filename>/path/to/your/lib/folder</filename>.
+    これにより <filename>PHPTAL.php</filename> ファイルと <acronym>PHPTAL</acronym>フォルダが <filename>/path/to/your/lib/folder</filename>にインストールされます。
     </para>
 
   </article>
 
   <article id="firstexample">
-    <title>First example</title>
+    <title>最初の例</title>
 
     <para>
-    To get a first impression of <acronym>PHPTAL</acronym> usage, a simple example is
-    better than many words.
+    <acronym>PHPTAL</acronym>の使い勝手を体験するためには、多くの言葉より簡単な例の方が良いでしょう。
     </para>
 
     <para>
-    Your template is a valid <acronym>XML</acronym>/<acronym>HTML</acronym> document (with a root element).
-    Here's a file named '<filename>my_template_file.xhtml</filename>'.
+    以下の様なvalidな(ルートエレメントを持った)<acronym>XML</acronym>/<acronym>HTML</acronym>を用意し、'<filename>my_template_file.xhtml</filename>'と名前を付けてください。
     </para>
 
     <informalexample><programlisting language="xml"><![CDATA[<?xml version="1.0"?>
 <html>
   <head>
     <title tal:content="title">
-      Place for the page title
+      ページタイトル（リプレースされます）
     </title>
   </head>
   <body>
-    <h1 tal:content="title">sample title</h1>
+    <h1 tal:content="title">サンプルタイトル</h1>
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Phone</th>
+          <th>氏名</th>
+          <th>電話番号</th>
         </tr>
       </thead>
       <tbody>
         <tr tal:repeat="person people">
-          <td tal:content="person/name">person's name</td>
-          <td tal:content="person/phone">person's phone</td>
+          <td tal:content="person/name">個人の氏名</td>
+          <td tal:content="person/phone">個人の電話番号</td>
         </tr>
         <tr tal:replace="">
-          <td>sample name</td>
-          <td>sample phone</td>
+          <td>サンプル氏名</td>
+          <td>サンプル電話番号</td>
         </tr>
         <tr tal:replace="">
-          <td>sample name</td>
-          <td>sample phone</td>
+          <td>サンプル氏名</td>
+          <td>サンプル電話番号</td>
         </tr>
       </tbody>
     </table>
@@ -288,14 +218,13 @@ cp -r PHPTAL-X.X.X/PHPTAL* /path/to/your/lib/folder
 ]]></programlisting></informalexample>
 
     <para>
-    In <acronym>PHP</acronym>, you just have to include the <acronym>PHPTAL</acronym> library, and maybe
-    configure a few variables to customize the template system.
+    <acronym>PHP</acronym>側では、<acronym>PHPTAL</acronym>ライブラリをインクルードし、テンプレートシステムのいくつかの項目を設定してください。
     </para>
 
     <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
 
-// create a new template object
+// テンプレートオブジェクトを生成
 $template = new PHPTAL('my_template_file.xhtml');
 
 // the Person class
@@ -309,18 +238,18 @@ class Person {
     }
 }
 
-// let's create an array of objects for test purpose
+// テスト用の配列を作成
 $people = array();
 $people[] = new Person("foo", "01-344-121-021");
 $people[] = new Person("bar", "05-999-165-541");
 $people[] = new Person("baz", "01-389-321-024");
 $people[] = new Person("quz", "05-321-378-654");
 
-// put some data into the template context
+// テンプレート用にいくつかの値をセット
 $template->title = 'The title value';
 $template->people = $people;
 
-// execute the template
+// テンプレート実行
 try {
     echo $template->execute();
 }
@@ -331,8 +260,7 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
     <para>
-    If you execute the <acronym>PHP</acronym> script, you will obtain something similar to
-    what follows.
+    <acronym>PHP</acronym>スクリプトを実行すれば、以下の様な結果が得られます。
     </para>
 
     <informalexample><programlisting language="xml"><![CDATA[<?xml version="1.0"?>
@@ -368,7 +296,7 @@ catch (Exception $e){
 
     <para>
 
-    <acronym>PHPTAL</acronym> doesn't care much about line breaks and indentation in files it reads and generates. If you want source code of generated <acronym>HTML</acronym> files to be pretty (with line breaks and perfect indentation), then you might need to postprocess it with <acronym>HTML</acronym> Tidy.
+    <acronym>PHPTAL</acronym>は出力の際、ファイル中の改行やインデントをあまり意識しません。もしあなたが美しい(改行やインデントが施された)<acronym>HTML</acronym>を出力したいのであれば、<acronym>HTML</acronym> Tidyによって後処理を行ってください。
     </para>
 
   </article>
@@ -377,27 +305,25 @@ catch (Exception $e){
     <title>Template Attribute Language</title>
 
     <para>
-    This section describes <acronym>TAL</acronym> and its extensions. It mainly targets
-    template designers but must be read by <acronym>PHP</acronym> integrators as well.
+    このセクションでは<acronym>TAL</acronym>とその拡張について説明します。これは主にテンプレートのデザイナーを対象としていますが、<acronym>PHP</acronym>の開発者も同様に目を通しておいてください。
     </para>
 
     <section id="variableRefs">
-     <title>Referencing variables with ${}</title>
-     <para>
-     When working with templates and you want to reference a variable within the text, you can use the ${variableName} notation.
+     <title>${}記法による変数の参照</title>
+     <para>テンプレートの実行時に、テキスト中で変数を指定したい場合、${変数名}という記法が使用できます。
      </para>
-      <para>
-      For example,
+      <para>例:
+
       </para>
-     <informalexample><programlisting language="xml"><![CDATA[<span>You have ${count} credits left.</span>
+     <informalexample><programlisting language="xml"><![CDATA[<span>あなたの残高は ${count} です。</span>
 ]]></programlisting></informalexample>
 
-     <para>You can also use the same PHPTALES paths as in other PHPTAL constructs:</para>
-     <informalexample><programlisting language="xml"><![CDATA[<span>Your best friend is: ${php: !some.other() ? "me" : "your dog"}</span>
+     <para>PHPTALESのパスやPHPTAL構文も同様に使用可能です:</para>
+     <informalexample><programlisting language="xml"><![CDATA[<span>あなたの親友は ${php: !some.other() ? "me" : "your dog"}です。</span>
 ]]></programlisting></informalexample>
      <tip>
      <para>
-       If you have to exscape the ${var} notation, write $${var}.
+      もし ${var} 記法をエスケープしたい場合は、$${var}の様に記述してください。
     </para></tip>
 
 
@@ -405,15 +331,12 @@ catch (Exception $e){
     </section>
 
     <section id="attributes">
-      <title>Attribute priority</title>
+      <title>Attributeの優先度</title>
+
+      <para>属性宣言の順序は無関係であることに注意してください。</para>
 
       <para>
-      It is important to note that the order of declaration of
-      attributes is irrelevant.
-      </para>
-
-      <para>
-      For example,
+      例えば、
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<span tal:define="usersList application/listUsers"
@@ -423,7 +346,7 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
       <para>
-      Is <emphasis>exactly</emphasis> the same as:
+      これは以下と<emphasis>全く</emphasis>同一です。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<span tal:repeat="user usersList"
@@ -433,7 +356,7 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
       <para>
-      Priority is the same as described by the <acronym>TAL</acronym> specification:
+      優先度は<acronym>TAL</acronym>の仕様と同等です。
       </para>
 
       <orderedlist>
@@ -478,70 +401,69 @@ catch (Exception $e){
     <section id="tal-namespace">
       <title><acronym>TAL</acronym> namespace</title>
 
-      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/tal</code>. To use <code>tal:</code> attribute prefix in XML you're required to declare it:</para>
+      <para>namecpaceの<acronym>URI</acronym>は<code>http://xml.zope.org/namespaces/tal</code>です。XML中で<code>tal:</code>を利用するためには以下の記述が必要です。</para>
 
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
 
-      <note><para>PHPTAL does not enforce this requirement.</para></note>
+      <note><para>PHPTALが強制するものではではありません。</para></note>
 
       <section id="tal-define">
         <title><sgmltag>tal:define</sgmltag></title>
 
         <para>
-        Defines variables in the template.
+        テンプレート中で利用する変数を定義します。
         </para>
 
-        <para>It takes one or multiple semicolon-separated variable definitions.</para>
+        <para>セミコロンで区切ることで、一つ以上の変数を定義することができます。</para>
 
         <para>
-        Making a shortcut to a long path:
+        以下は長いパスへのショートカットの例です。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div tal:define="destname path/to/existing/variable">…</div>
 ]]></programlisting></informalexample>
 
 <para>
-        Defining more than one variable at the same time:
+        複数の変数を同時に定義する例です。
 </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:define="fname string:Paul; lname string:Dupond">…</span>
 ]]></programlisting></informalexample>
 
-        <para>Each definition may start with <code>global</code> keyword which makes variable available everywhere later in the template and all macros. Global variables can be redefined.</para>
+        <para><code>global</code>キーワードとともに変数を定義すると、その変数はグローバル変数としてテンプレートやマクロのどこからでも参照できるようになります。また、グローバル変数は再定義することもできます。</para>
 
-		<informalexample><programlisting language="xml"><![CDATA[<span tal:define="global hello string:hello world"/>
+                <informalexample><programlisting language="xml"><![CDATA[<span tal:define="global hello string:hello world"/>
 <p tal:content="hello"/>]]></programlisting></informalexample>
 
-		<para>
-		On the contrary, a local variable is only available inside the element it is defined in (and inside macros that are called in this element):
-		</para>
+                <para>
+                その一方で、ローカル変数はその変数が定義されたエレメントの中(およびその中で呼ばれたマクロ内)でのみ有効となります。
+                </para>
 
-		<informalexample><programlisting language="xml"><![CDATA[<span tal:define="hello string:hello world"/>
-<p tal:content="hello"/> <!-- will produce an undefined variable error -->]]></programlisting></informalexample>
+                <informalexample><programlisting language="xml"><![CDATA[<span tal:define="hello string:hello world"/>
+<p tal:content="hello"/> <!-- undefined variable error の可能性があります -->]]></programlisting></informalexample>
 
 
         <tip><para>
-        You may also use <sgmltag>tal:define</sgmltag> with other attributes, it will be
-        executed before any other attributes on the same element.
+        <sgmltag>tal:define</sgmltag>を他のattributeと共に使用した場合、同一エレメント内では他のattributeよりも先に実行されます。
 </para>         </tip>
 
 
         <para>
-        Creating a string inside the template:
+        文字列をテンプレート中で定義することができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:define="destname string:some string" />
 ]]></programlisting></informalexample>
 
         <para>
-        Defining a string containing another variable:
+        他の変数を含んだ変数も定義することができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:define="fname string:Paul; hello string:Hello $fname! Welcome to this page" />
 ]]></programlisting></informalexample>
 
         <para>
-        A small trick which uses content of the element (useful if you need to define very complex value):
+        エレメントのコンテントを利用して定義することもできます。(複雑な値を定義したいときに便利です)
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:define="global hello">Hello ${fname}! Welcome to this page</span>
@@ -549,8 +471,8 @@ catch (Exception $e){
 
 
         <para>
-        In above example, the <sgmltag>&lt;span&gt;</sgmltag> tag won't show up because it has no
-        printable content (<varname>hello</varname> variable grabs it) nor attributes.
+        上記の例では<sgmltag>&lt;span&gt;</sgmltag>タグは表示されません。なぜなら<sgmltag>tal:define</sgmltag>は出力対象となるattributeでは無いからです。
+        (ただしコンテントは<varname>hello</varname>変数によって保持されます。)
         </para>
 
         <note><para>This is a special case. It only works if you use the <code>global</code> keyword.</para></note>
@@ -562,32 +484,27 @@ catch (Exception $e){
         <title><sgmltag>tal:condition</sgmltag></title>
 
         <para>
-        The element and its content will be shown only if the condition
-        is evaluated to true.
+        評価した結果が真の場合のみ、このエレメントとコンテントを出力します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<p tal:condition="identified"> Welcome member … </p>
 ]]></programlisting></informalexample>
 
         <informalexample><programlisting language="xml"><![CDATA[<p tal:condition="not: identified">
-  Please login before accessing this page
+  このページにアクセスする前にログインしてください。
 </p>
 ]]></programlisting></informalexample>
 
         <para>
-        If the <acronym>PHP</acronym> backend does not provide your templates with enough
-        methods, you will often have to fall back to <acronym>PHP</acronym> for special
-        conditions:
+        もし<acronym>PHP</acronym>側でメソッドが用意されていない場合、例外処理のためにテンプレート側で<acronym>PHP</acronym>による処理を記述する必要があります。
         </para>
 
-        <informalexample><programlisting language="xml"><![CDATA[<span tal:comment="show only if more than five items in the cart"
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:comment="カートに五つ以上の商品がある場合のみ表示します"
       tal:condition="php: cart.countItems() GT 5">…</span>
 ]]></programlisting></informalexample>
 
         <para>
-        This may put too much logic inside the template and it is
-        sometimes preferable to provide boolean attributes or accessible
-        methods to the template:
+        これではテンプレート内に複雑な処理が入ってしまいますので、真偽値を返すアクセスしやすいメソッドを用意することが望ましいでしょう。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="cart/hasEnoughItems">…</span>
@@ -599,67 +516,60 @@ catch (Exception $e){
         <title><sgmltag>tal:repeat</sgmltag></title>
 
         <para>
-        This attribute handles iterable objects like arrays, associative
-        arrays, and objects implementing the <acronym>PHP5</acronym> <constant>Iterator</constant> class.
+        このattributeは配列や連想配列、<acronym>PHP5</acronym>の<constant>Iterator</constant>クラスを実装したオブジェクトといった反復可能なオブジェクトを扱います。
         </para>
 
         <para>
-        The <sgmltag>repeat</sgmltag> attribute repeats its element and its content until
-        the end of the specified resource.
+        <sgmltag>repeat</sgmltag> attributeは、それが記述されたエレメントと、そのコンテントを指定されたリソースの終りが来るまで繰り返します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="item some/result">
-  <td tal:content="item">text replaced by item</td>
+  <td tal:content="item">ここは変数itemの値で置き換えられます</td>
 </tr>
 ]]></programlisting></informalexample>
 
         <para>
-        Within a loop, you can access the current loop information
-        (and that of its parent for nested loops) using specific
-        <varname>repeat/<replaceable>*</replaceable></varname> paths.
+        ループの間、<varname>repeat/<replaceable>*</replaceable></varname>パスを使うことで、現時点のループの(およびその親ループの)情報を参照することができます。
         </para>
 
         <para>
-        In the above example:
+        上記の例においては以下が使用できます。
         </para>
 
         <itemizedlist>
           <listitem><para>
-            <varname>repeat/item/key</varname>    : returns the item's key if some/result is
-            an associative resource (index otherwise)
+            <varname>repeat/item/key</varname>    : some/resultが連想配列であれば（でなければインデックス）が返されます
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/index</varname>  : returns the item index (0 to count-1)
+          <varname>repeat/item/index</varname>  : itemのインデックスが返されます(0からcount-1まで)
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/number</varname> : returns the item number (1 to count)
+          <varname>repeat/item/number</varname> : 何番目のitemであるかが返されます(1からcountまで)
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/even</varname>   : returns true if item index is even
+          <varname>repeat/item/even</varname>   : itemのインデックスが偶数であれば真が返されます
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/odd</varname>    : returns true if item index is odd
+          <varname>repeat/item/odd</varname>    : itemのインデックスが奇数であれば真が返されます
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/start</varname>  : returns true if item is the first one
+          <varname>repeat/item/start</varname>  : 最初のitemであれば真が返されます。
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/end</varname>    : returns true if item is the last one
+          <varname>repeat/item/end</varname>    : 最後のitemであれば真が返されます。
           </para></listitem>
           <listitem><para>
-          <varname>repeat/item/length</varname> : returns the number of elements in
-          some/result
+          <varname>repeat/item/length</varname> : some/resultの総数が返されます
           </para></listitem>
         </itemizedlist>
 
         <para>
-        "<varname>item</varname>" depends on the receiver variable defined in <sgmltag>tal:repeat</sgmltag>
-        expression.
+        "<varname>item</varname>" は、<sgmltag>tal:repeat</sgmltag>式のの中でレシーバとして定義された変数です。
         </para>
 
         <para>
-        The most common usage of <sgmltag>tal:repeat</sgmltag> is in using some <acronym>SQL</acronym>
-        database result.  The following code will work if <varname>playersRanking</varname> contains object that implements <acronym>PHP</acronym>'s <constant>Iterator</constant> interface:
+        <sgmltag>tal:repeat</sgmltag>は、多くの場合<acronym>SQL</acronym>の実行結果に対して使用されます。
+        以下の例では<varname>playersRanking</varname>が<acronym>PHP</acronym>の<constant>Iterator</constant>インターフェースを実装し、オブジェクトを含んでいるとして動作します:
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<table>
@@ -686,28 +596,27 @@ catch (Exception $e){
         <title><sgmltag>tal:omit-tag</sgmltag></title>
 
         <para>
-        This attribute asks the <acronym>PHPTAL</acronym> parser to ignore the elements's open and
-        close tag, its content will still be evaluated.
+        このattributeは<acronym>PHPTAL</acronym>パーサーに対して、開始タグと終了タグを消去するように指示します。ただし内容は評価されます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:omit-tag="condition">
-  if the condition is true, then only this text will appear and span open and close will be removed
+もしconditionがtrueなら、このテキストは表示され、spanの開始タグと終了タグは消去されます。
 </span>
 ]]></programlisting></informalexample>
 
         <para>
-        Will produce:
+		  これは以下の結果を返します。
         </para>
 
-        <informalexample><programlisting><![CDATA[only this text will appear, span open and close will be removed
+        <informalexample><programlisting><![CDATA[もしconditionがtrueなら、このテキストは表示され、spanの開始タグと終了タグは消去されます。
 ]]></programlisting></informalexample>
 
-        <para>
-        This attribute is useful when you want to create element optionally, e.g. hide a link if certain condition is met.
+        <para>このattributeは任意のエレメントを生成したいときに役立ちます。たとえば特定の条件下でリンクを隠したい場合などです。
+
         </para>
 
-        <para>If you want element that is never output, you can use <sgmltag>tal:block</sgmltag></para>
-        <informalexample><programlisting language="xml"><![CDATA[<tal:block tal:repeat="x php:range(1,10)">only this text will appear, ten times.</tal:block>
+        <para>もしエレメントも出力したくないのであれば<sgmltag>tal:block</sgmltag>を使ってください。</para>
+        <informalexample><programlisting language="xml"><![CDATA[<tal:block tal:repeat="x php:range(1,10)">この文は１０回表示されます。</tal:block>
 ]]></programlisting></informalexample>
 
       </section>
@@ -715,37 +624,34 @@ catch (Exception $e){
       <section id="tal-replace">
         <title><sgmltag>tal:replace</sgmltag></title>
 
-        <para>
-        This attribute will replace the entire tag with a value, or by
-        nothing if no value is given.
+        <para>このattributeはタグ全体を値で置き換えます。値が無い場合は何も表示しません。
         </para>
 
-        <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="string:this beautiful string">
-  this ugly string and span
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="string:美しい文字列">
+クソ見苦しい文章とspan
 </span>
 ]]></programlisting></informalexample>
 
         <para>
-        Will produce:
+        実行すると以下の様になります:
         </para>
 
-        <informalexample><programlisting><![CDATA[this beautiful string
+        <informalexample><programlisting><![CDATA[美しい文字列
 ]]></programlisting></informalexample>
 
         <para>
-        <sgmltag>tal:replace</sgmltag> can also be used to create samples in source
-        templates, but remove them from final output.
+        <sgmltag>tal:replace</sgmltag>はテンプレート中のサンプルとして記載したいが、実行結果からは取り除きたい場合に最適です。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<table>
   <tr tal:repeat="item myresult">
-    <td tal:content="item">item value</td>
+    <td tal:content="item">itemの値</td>
   </tr>
   <tr tal:replace="">
-    <td>sample 1</td>
+    <td>サンプル 1</td>
   </tr>
   <tr tal:replace="">
-    <td>sample 2</td>
+    <td>サンプル 2</td>
   </tr>
 </table>
 ]]></programlisting></informalexample>
@@ -755,17 +661,15 @@ catch (Exception $e){
       <section id="tal-content">
         <title><sgmltag>tal:content</sgmltag></title>
 
-        <para>
-        This attribute replaces the tag content with the evaluation of
-        its expression.
+        <para>このattributeはタグのコンテントを式の実行結果で置き換えます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:define="myvar string:my string"/>
-<span tal:content="myvar">will be replaced</span>
+<span tal:content="myvar">置き換えられます</span>
 ]]></programlisting></informalexample>
 
         <para>
-        Will produce:
+        以下、実行結果:
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span>my string</span>
@@ -776,18 +680,17 @@ catch (Exception $e){
       <section id="tal-attributes">
         <title><sgmltag>tal:attributes</sgmltag></title>
 
-        <para>
-        This attribute changes tag attribute(s) value(s).
+        <para>このattributeはタグのattributeの値を置き換えます。（複数指定可）
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<a href="http://www.foo.com" title="some foo link"
    tal:attributes="href somelink/href; title somelink/title"
   tal:content="somelink/text"
->sample link</a>
+>サンプルリンク</a>
 ]]></programlisting></informalexample>
 
         <para>
-        With a '<varname>somelink</varname>' having:
+        <varname>somelink</varname>が以下の値を持っている場合:
         </para>
 
         <informalexample><programlisting language="php"><![CDATA[$somelink->href = "http://www.google.com";
@@ -803,10 +706,10 @@ $somelink->text = "the google search engine";
 title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
-        <para>Semicolon (<literal>;</literal>) separates attributes. If you want semicolon to be output in an attribute, you have to double it (<literal>;;</literal>).</para>
+        <para>セミコロン（<literal>;</literal>）で対象を区切ることができます。セミコロン自体を出力したい場合は二つ重ねて下さい（<literal>;;</literal>）。</para>
 
         <para>
-        A somewhat complicated example involving <sgmltag>tal:repeat</sgmltag>:
+        次は<sgmltag>tal:repeat</sgmltag>に関する若干複雑な例です:
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="ranking playerRankings"
@@ -816,21 +719,15 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-        The <code>php:</code> modifier will be explained later, basically if the line
-        is odd then <sgmltag>tr</sgmltag> will have a <sgmltag>class</sgmltag> attribute with "odd" as value,
-        otherwise, no class will be set.
+        <code>php:</code>モディファイアについては後ほど説明しますが、行が複数なら<sgmltag>tr</sgmltag>の<sgmltag>class</sgmltag>属性の値を"odd"に設定し、そうでなければ<sgmltag>class</sgmltag>属性を無くします。
         </para>
 
         <para>
-        The "<code>condition ? then : else</code>" is a regular <acronym>PHP</acronym> expression which
-        must be used with care but has proven to be useful on more
-        than one occasion.
+        この"<code>condition ? then : else</code>" は慎重に利用しなければならない<acronym>PHP</acronym>の構文ですが、今回はメリットが大きいと判断して利用しています。
         </para>
 
         <para>
-        A better way to achieve the same result would be to ask your <acronym>PHP</acronym>
-        coder to create a custom modifier for your needs (see <acronym>PHP</acronym>
-        integration / custom modifiers) which would be used as follows:
+        同じ結果を得るためのよりよい方法は、ニーズに合ったカスタムモモディファイア（<acronym>PHP</acronym>による開発 / カスタムモディファイア　を参照）を作成してもらう事です。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="ranking playerRankings"
@@ -840,44 +737,35 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-        The modifier would return "odd" if <varname>repeat/ranking/odd</varname> is true,
-        <constant>NULL</constant> otherwise.
+        このcss-oddモディファイアは、<varname>repeat/ranking/odd</varname>がtrueの場合に"odd"を返し、falseの場合にはNULLを返すように作られています。
         </para>
 <section id="optional-attrs"><title>Optional attributes</title>
-        <para>If you use <acronym>TALES</acronym> alternatives in <sgmltag>tal:attributes</sgmltag> and use <varname>nothing</varname> (or <varname>NULL</varname> in <acronym>PHP</acronym>) as last alternative,
-            attribute won't be added at all if there's no value for it (this avoids adding empty attributes):</para>
+        <para>もしあなたが<sgmltag>tal:attributes</sgmltag>の中で<acronym>TALES</acronym>を利用し、またそれが<varname>nothing</varname> （もしくは <acronym>PHP</acronym>における<varname>NULL</varname>）を返す場合、attributeは追加されません。（これは空のattributeが付加されるのを防ぐためです。）:</para>
         <informalexample><programlisting language="xml"><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting></informalexample>
 
-        <para><acronym>XHTML</acronym> attributes like <sgmltag>selected</sgmltag>, <sgmltag>checked</sgmltag>, etc. are properly handled automatically.</para>
+        <para><sgmltag>selected</sgmltag>や<sgmltag>checked</sgmltag>のような<acronym>XHTML</acronym>属性は自動的に処理されます。</para>
 
         <informalexample><programlisting language="xml"><![CDATA[<input type="checkbox" tal:attributes="checked object/isChecked"/>]]></programlisting></informalexample>
 
         <warning><para>
-            Remember that <acronym>XHTML</acronym> is case-sensitive, so <sgmltag>SELECTED</sgmltag> attribute is an error in <acronym>XHTML</acronym>. Use <sgmltag>selected</sgmltag>.
+覚えておいて戴きたいのは、<acronym>XHTML</acronym>はcase-senitiveである（大文字小文字を区別する）ということです。そのため、<sgmltag>SELECTED</sgmltag>ではなく、<sgmltag>selected</sgmltag>と記述する必要があります。
         </para></warning>
       </section>
     </section>
       <section id="tal-on-error">
         <title><sgmltag>tal:on-error</sgmltag></title>
 
-        <para>
-            When any runtime error occurs while generating the element, the element will be replaced with result of <emphasis>expression</emphasis> in the <sgmltag>tal:on-error</sgmltag> attribute.</para>
+        <para>エレメントの生成時における不正な参照やパス、存在しないマクロ、<acronym>PHP</acronym>の例外といった実行時エラーが発生した場合に、そのエレメントを<sgmltag>tal:on-error</sgmltag>の内容で置き換えます。</para>
 
-        <para>
-            Runtime errors are references to non-existent variables/paths/macros and any <acronym>PHP</acronym> exceptions thrown in the tag content.</para>
-
-
-        <informalexample><programlisting language="xml"><![CDATA[<span tal:on-error="string:No username defined here"
-      tal:content="user/name">the user name here</span>
+        <informalexample><programlisting language="xml"><![CDATA[<span tal:on-error="string:ユーザー名が定義されていません"
+      tal:content="user/name">ユーザー名</span>
 ]]></programlisting></informalexample>
 
         <para>
-        If an error occurs accessing '<varname>name</varname>' or '<varname>user</varname>', the error string
-        will be shown instead of the <code>&lt;span></code> element.
+        もし '<varname>name</varname>' や '<varname>user</varname>'へのアクセスでエラーが発生した場合、エラーメッセージがタグのあった場所に表示されます。
         </para>
 
-        <para>
-        This also works on more than one level of template:
+        <para>含んでいるマクロ内に対しても有効に動作します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:on-error="string:error occurred somewhere">
@@ -887,7 +775,7 @@ title="google search engine">the google search engine</a>
 </span>
 ]]></programlisting></informalexample>
 
-        <note><para>Due to optimizations performed by <acronym>PHPTAL</acronym>, <sgmltag>tal:on-error</sgmltag> on element containing element with <sgmltag>metal:fill-slot</sgmltag> may not catch errors that happened inside the slot.</para></note>
+        <note><para> <acronym>PHPTAL</acronym>による最適化のため、<sgmltag>tal:on-error</sgmltag>が記述されたエレメントが<sgmltag>metal:fill-slot</sgmltag>が記述されたエレメントを含む場合、そのスロット内のエラーをキャッチしません。</para></note>
 
       </section>
 
@@ -896,23 +784,23 @@ title="google search engine">the google search engine</a>
     <section id="metal">
       <title><acronym>METAL</acronym> namespace</title>
 
-      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/metal</code>. To use <code>metal:</code> attribute prefix in XML you're required to declare it:</para>
+      <para><acronym>METAL</acronym>のnamespaceは<code>http://xml.zope.org/namespaces/metal</code>です。<code>metal:</code>を利用するためには以下の記述が必要です。。</para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:metal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
 
-        <note><para><acronym>PHPTAL</acronym> does not enforce this requirement.</para></note>
+        <note><para><acronym>PHPTAL</acronym>が強制するものではありません。</para></note>
 
 
       <para>
-      <acronym>METAL</acronym> stands for 'Macro Extension for <acronym>TAL</acronym>'. This namespace allows template designers to define and call macros. Macros can be used to output data recursively or to include code from other template files.
+      <acronym>METAL</acronym> は 'Macro Extension for <acronym>TAL</acronym>'という意味です。このnamespaceによってデザイナーが<acronym>XML</acronym>/<acronym>XHTML</acronym>のマクロを定義し、呼び出せるようになります。
       </para>
+      <para>マクロによって再帰的に出力を行ったり、他のテンプレートからコードを取り込んだりすることができます。</para>
 
       <section id="metal-define-macro">
         <title><sgmltag>metal:define-macro</sgmltag></title>
 
         <para>
-        This attribute declares a macro. Think of macros as library of
-        small templates which can be reused in any other template.
+        この<code>metal:define-macro</code>により、マクロを定義します。マクロとは、小さなテンプレートを他の場所でも再利用できるライブラリのようなものと考えてください。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div metal:define-macro="main_menu">
@@ -924,24 +812,20 @@ title="google search engine">the google search engine</a>
 
   <div>
     Last modified:
-    <span tal:content="mdate">page modification date</span>
+    <span tal:content="mdate">更新日</span>
   </div>
 </div>
 ]]></programlisting></informalexample>
 
         <para>
-        Macros inherit all variables from their caller. In the above example,
-        the variable '<varname>mdate</varname>' depends on the template that calls the
-        macro.
+        マクロは呼び出し元から全ての変数を引き継ぎます。上記の例では、変数'<varname>mdate</varname>'はマクロの呼び出し元のテンプレートに依存します。
         </para>
       </section>
 
       <section id="metal-use-macro">
         <title><sgmltag>metal:use-macro</sgmltag></title>
 
-        <para>
-        This attribute calls a macro and includes its result in the
-        current template.
+        <para><code>metal:use-macro</code>はマクロを呼び出し、テンプレート内に展開します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span
@@ -951,24 +835,20 @@ title="google search engine">the google search engine</a>
 />
 ]]></programlisting></informalexample>
 
-        <para>
-        You can refer to external macros defined in other templates by
-        specifying the template source file.
+        <para>他のテンプレートで定義された外部のマクロも参照することができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span metal:use-macro="site_macros.xhtml/main_menu"/>
 ]]></programlisting></informalexample>
 
-        <para>
-        It is interesting to note that you can also use the <acronym>PHPTAL</acronym> inline
-        replacement feature inside the <sgmltag>use-macro</sgmltag> attribute value:
+        <para><sgmltag>use-macro</sgmltag>内で<acronym>PHPTAL</acronym>の変数展開を使うことができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span metal:use-macro="${design}/site_macros.xhtml/main_menu"/>
 ]]></programlisting></informalexample>
 
 
-        <para>Macro can call itself. This way you can output arrays recursively:</para>
+        <para>マクロは再帰的に自分自身を呼び出すこともできます。</para>
         <informalexample><programlisting language="xml"><![CDATA[<ul metal:define-macro="show-list">
     <li tal:repeat="item list">
         <tal:block tal:condition="php:is_array(item)" tal:define="list item" metal:use-macro="show-list" />
@@ -978,21 +858,21 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <simplesect id="macro-callback">
-            <title>Callbacks</title>
-            <para>Since you can use variables in macro names, you can create macros that call back other macros. This is useful in cases where <link linkend="metal-define-slot">slots</link> are not enough.</para>
-            <informalexample><programlisting language="xml"><![CDATA[<!-- this code uses "macroname" variable as name of macro to call back -->
+            <title>コールバック</title>
+            <para>マクロの名称を変数に設定することで、あるマクロを他のマクロにおいてコールバックさせることができます。<link linkend="metal-define-slot">slots</link>では要件を満たせない場合に有用です。</para>
+            <informalexample><programlisting language="xml"><![CDATA[<!-- このコードでは"macroname"変数をコールバック用に利用しています -->
 <ul metal:define-macro="macro-with-callback">
     <li tal:repeat="item list">
         <tal:block metal:use-macro="${macroname}"/>
     </li>
 </ul>
 
-<!-- define callback -->
+<!-- コールバック定義 -->
 <div metal:define-macro="my-callback">
-    this will be called every time
+    いつでも呼び出せます
 </div>
 
-<!-- use it with the first macro -->
+<!-- 最初に定義したマクロで利用します -->
 <div tal:define="macroname 'my-callback'" metal:use-macro="macro-with-callback"/>]]></programlisting></informalexample>
 
 
@@ -1005,39 +885,33 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>metal:define-slot</sgmltag></title>
 
         <para>
-        This attribute must appear inside a <sgmltag>metal:define-macro</sgmltag> tag.
+        <code>metal:define-slot</code>は、<sgmltag>metal:define-macro</sgmltag>タグの中に現れなければなりません。
         </para>
 
         <para>
-        Slots can be replaced by caller template with some custom
-        dynamically-generated <acronym>XML</acronym>/<acronym>XHTML</acronym>.
+        マクロ中にあるスロットは、呼び出し元のテンプレートによって置き換えられる領域です。
         </para>
 
         <para>
-        Slots can be thought of like reverse includes, a macro can be an
-        entire page and slots customize this page depending on the <acronym>URL</acronym>.
-        For instance, a slot may contain the latest news in the home page
-        or user actions when the member is logged in.
+        スロットはincludeの逆と考えてることができ、マクロの一部分や全体を呼び出し元から改変することができます。
+        以下に続く例では、ログインしている場合にはアクション一覧を、そうで無い場合にはスロット内に最新ニュース一覧が表示されることになります。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span metal:define-slot="news_place">
   <table>
     <tr tal:repeat="item php:latestNews()">
-      <td tal:content="item/value">news description</td>
+      <td tal:content="item/value">ニュース記事</td>
     </tr>
   </table>
 </span>
 ]]></programlisting></informalexample>
 
         <para>
-        The above example defines a place called
-        '<emphasis>news_place</emphasis>' which can be overwritten by
-        caller templates. See next section for the continuation of this
-        example.
+        '<emphasis>news_place</emphasis>'と言う名前で定義されたスロットは、呼び出し元のテンプレートから上書きすることができます。引き続き次のセクションを見て下さい。
         </para>
 
 
-        <warning><para>Slots work like variables, not like <link linkend="macro-callback">callbacks</link>. <sgmltag>metal:define-slot</sgmltag> in <sgmltag>tal:repeat</sgmltag> will always repeat the same value over and over again.</para></warning>
+        <warning><para>スロットは変数として振る舞います。<link linkend="macro-callback">コールバック</link>ではありません。<sgmltag>tal:repeat</sgmltag>内の<sgmltag>metal:define-slot</sgmltag>は同じ値で何度も繰り返されます</para></warning>
 
       </section>
 
@@ -1046,31 +920,24 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>metal:fill-slot</sgmltag></title>
 
         <para>
-        This attribute can occur only inside <sgmltag>metal:use-macro</sgmltag> element.
+        <code>metal:fill-slot</code>は<sgmltag>metal:use-macro</sgmltag>内でのみ利用可能です。
         </para>
 
         <para>
-        This explicitly tells <acronym>PHPTAL</acronym> to replace a defined slot with the
-        content provided inside the <sgmltag>metal:fill-slot</sgmltag> attribute.
+        呼び出し先で定義されたスロット名を<sgmltag>metal:fill-slot</sgmltag>に指定することで、このエレメント内のコンテンツでそのスロットを置き換えます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="logged" metal:fill-slot="news_place">
   <h2>user menu</h2>
   <ul>
     <li><a href="/user/action/inbox">inbox</a></li>
-    <li><a href="/user/action/new">new mail</a></li>
-    <li><a href="/user/action/disconnect">disconnect</a></li>
+    <li><a href="/user/action/new"メール作成</a></li>
+    <li><a href="/user/action/disconnect">切断</a></li>
   </ul>
 </span>
 ]]></programlisting></informalexample>
 
-        <para>
-        Slots give the opportunity to define really customizable and
-        reusable page templates with a simple push technology.
-        </para>
-
-
-        <warning><para>Slots work like variables, not like <link linkend="macro-callback">callbacks</link>. <sgmltag>metal:fill-slot</sgmltag> in <sgmltag>tal:repeat</sgmltag> will keep overwriting same slot over and over again.</para></warning>
+        <warning><para>スロットは<link linkend="macro-callback">コールバック</link>ではなく、変数のように扱われます。<sgmltag>tal:repeat</sgmltag>内の<sgmltag>metal:fill-slot</sgmltag>は同じ値で繰り返されます。</para></warning>
 
       </section>
 
@@ -1081,56 +948,46 @@ title="google search engine">the google search engine</a>
       <title><acronym>I18N</acronym> namespace</title>
 
 
-      <para><acronym>URI</acronym> for this namespace is <code>http://xml.zope.org/namespaces/i18n</code>. To use <code>i18n:</code> attribute prefix in XML you're required to declare it:</para>
+      <para>namespaceの<acronym>URI</acronym>は<code>http://xml.zope.org/namespaces/i18n</code>です。XML中で<code>i18n:</code>を利用するためには以下の記述が必要です。</para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:i18n="http://xml.zope.org/namespaces/i18n" …>]]></programlisting></informalexample>
 
-        <note><para>PHPTAL does not enforce this requirement.</para></note>
+        <note><para>PHPTALが強制するものではありません。</para></note>
 
 
 
       <note><para>
-      <acronym>i18n</acronym> is a short name for 'internationalization'. This
-      namespace allow template designers to specify some text zones that
-      must be translated during template evaluation.
+      <acronym>i18n</acronym>は 'internationalization'の略です。
+      このnamespaceによって、デザイナはテンプレートの実行時に翻訳されるテキストゾーンを指定することができます。
       </para></note>
 
       <section id="i18n-translate">
         <title><sgmltag>i18n:translate</sgmltag></title>
 
         <para>
-        This attribute defines some text part that must be translated
-        using <acronym>PHPTAL</acronym>'s translation system.
+        このattributeは<acronym>PHPTAL</acronym>の翻訳機能を使って翻訳される文を指定します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="string:welcome_message">Welcome here</div>
 ]]></programlisting></informalexample>
 
         <para>
-        In the above example, <acronym>PHPTAL</acronym> will looks for a translation key
-        named 'welcome_message' and will replace the content of the tag
-        with the equivalent in currently requested language.
+        上記の例では<acronym>PHPTAL</acronym>は'welcome_message'というキーを探し、タグの内容を要求された言語で置き換えます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="">Welcome here</div>
 ]]></programlisting></informalexample>
 
         <para>
-        This usage is a little different, no translation key is given,
-        thus <acronym>PHPTAL</acronym> will use the content of the tag 'Welcome here' as
-        the translation key.  This is a regular translation if
-        translation system knows the key 'Welcome here'.
+        この用法は少し異なります。キーが指定されていないので、<acronym>PHPTAL</acronym>はタグの内容である'Welcome here'をキーとして利用します。
         </para>
 
         <para>
-        If no translation is found, the key will be used as the
-        translation result. That's why using readable message instead
-        of keys may be a good choice.
+        翻訳機能がキー'Welcome here'を参照できれば翻訳されますが、見つからなければキーそのものが翻訳結果として利用されます。
         </para>
 
         <para>
-        Please note that the key to translate may be contained in a
-        variable, to allow dynamic key selection.
+        動的なキー指定のために、キーには変数を指定することができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div tal:define="welcome random_welcome_message">
@@ -1143,7 +1000,7 @@ title="google search engine">the google search engine</a>
           <title><sgmltag>i18n:attributes</sgmltag></title>
 
           <para>
-              Defines which attributes should be translated. Takes semicolon-separated list of attributes and keys similar to those for <sgmltag>i18n:translate</sgmltag>.
+              翻訳するattributeを指定できます。 <sgmltag>i18n:translate</sgmltag>には、attributeと翻訳キーをセミコロンで区切って記述します。
           </para>
           <informalexample><programlisting language="xml"><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
 ]]></programlisting></informalexample>
@@ -1154,19 +1011,16 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>i18n:name</sgmltag></title>
 
         <para>
-        This attribute sets a translation variable value.
+        このattributeは翻訳文内の置換変数に値をセットします。
         </para>
 
         <para>
-        Translations may contain <varname>${xxx}</varname> strings where "<varname>xxx</varname>" is the
-        name of a variable that needs to be interpolated dynamically.
+        翻訳文には<varname>${xxx}</varname>という形で置換変数を含むことができ、"<varname>xxx</varname>"という名前の変数により、必要に応じて動的に補間されます。
         </para>
 
         <para>
-        The value of this variable will be set to the tag and its
-        content. If you don't need the tag around the value, use
-        <sgmltag>tal:replace</sgmltag> instead of <sgmltag>tal:content</sgmltag>. <sgmltag>tal:omit-tag</sgmltag> may help if the
-        value is a concatenation of strings.
+        この変数の値は、タグとその内容で有効となります。もし値にタグが必要でないなら、<sgmltag>tal:content</sgmltag>の代わりに<sgmltag>tal:replace</sgmltag>を使って下さい。
+        <sgmltag>tal:omit-tag</sgmltag>は翻訳文字が長い文字列である場合に便利です。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span i18n:name="myVar" tal:content="some/path"/>
@@ -1183,7 +1037,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-        An example of i18n usage:
+        i18nの利用例です。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="">
@@ -1194,33 +1048,32 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-        The translation key of this example will be:
+        この例における翻訳文は以下の様な値が考えられます。
         </para>
 
-        <informalexample><programlisting><![CDATA["Welcome ${user}, you have ${mails} unread mails."
+        <informalexample><programlisting><![CDATA["ようこそ ${user}さん。 ${mails}件の未読メールがあります。"
 ]]></programlisting></informalexample>
 
         <para>
-        <acronym>PHPTAL</acronym> will replace <varname>${user}</varname> with <varname>${user/name}</varname> and <varname>${mails}</varname> with
-        <varname>${user/nbrMails}</varname> in translation.
+        <acronym>PHPTAL</acronym>は翻訳時に<varname>${user}</varname>を<varname>${user/name}</varname>に、<varname>${mails}</varname>を
+        <varname>${user/nbrMails}</varname>に置換します。
         </para>
 
         <para>
-        More information about <acronym>I18N</acronym> with <acronym>PHPTAL</acronym> is available in the <acronym>PHP</acronym>
-        section of this book.
+        <acronym>PHPTAL</acronym>の<acronym>I18N</acronym>に関するこれ以上の情報は、このサイトの<link linkend="phpintegration"><acronym>PHP</acronym>セクション</link>を参照して下さい。
         </para>
       </section>
 
       <section id="xhtml-in-translations"><title><acronym>XHTML</acronym> in translations</title>
-          <para>By defaults translations are assumed to contain only text, so <acronym>PHPTAL</acronym> escapes all "<literal>&lt;</literal>" characters.</para>
-          <para>You can use <code>structure</code> keyword in <sgmltag>i18n:translate</sgmltag> to disable escaping and use translated text as-is:</para>
+          <para>通常、翻訳はテキストのみだと考えられます。<acronym>PHPTAL</acronym>はすべての"<literal>&lt;</literal>"をエスケープします。</para>
+          <para>バージョン1.1.14からは<sgmltag>i18n:translate</sgmltag>内で<code>structure</code>を使うことでエスケープを無効化することができます。</para>
 
            <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="structure '<b>bold text</b>'" />]]></programlisting></informalexample>
-      <para>Gives:</para>
+      <para>これは以下を得ます</para>
 
              <informalexample><programlisting language="xml"><![CDATA[<div><b>bold text</b></div>]]></programlisting></informalexample>
 
-      <warning><para>Caveats: This will only work in simplest cases – <acronym>TAL</acronym> attributes inside translated strings are ignored. Ill-formed <acronym>XHTML</acronym> in translations will break page well-formedness.</para></warning>
+      <warning><para>これは単純な場合にのみ利用できます。翻訳された文字内の<acronym>TAL</acronym>属性はそのまま出力されることになります。翻訳内にIll-formedな<acronym>XHTML</acronym>を含んでいた場合、ページのwell-formednessを壊してしまいます。</para></warning>
     </section>
 
     </section><!-- end of I18N namespace -->
@@ -1230,33 +1083,31 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTAL</acronym> namespace</title>
 
 
-      <para><acronym>URI</acronym> for this namespace is <code>http://phptal.org/ns/phptal</code>. To use <code>phptal:</code> attribute prefix in XML you're required to declare it:</para>
+      <para>namespaceの<acronym>URI</acronym>は<code>http://phptal.org/ns/phptal</code>です。
+XML中で<code>phptal:</code>を利用するためには以下の記述が必要です。</para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://phptal.org/ns/phptal" …>]]></programlisting></informalexample>
 
-        <note><para>PHPTAL does not enforce this requirement.</para></note>
+        <note><para>PHPTALが強制するものではありません。</para></note>
 
 
       <para>
-      These attributes are not defined in <acronym>TAL</acronym> specifications, but are
-      useful when working with <acronym>PHPTAL</acronym>.
+      このattributeは<acronym>TAL</acronym>の仕様には存在しませんが、<acronym>PHPTAL</acronym>にはとても便利です。
       </para>
 
       <section id="phptal-debug">
         <title><sgmltag>phptal:debug</sgmltag></title>
 
         <para>
-        This attribute toggles the activation of <acronym>PHPTAL</acronym> debugging for
-        the content of the tag it is defined in.
+        このattributeは、それが指定されたタグの内容に対して<acronym>PHPTAL</acronym>のデバッグ指定を切替えます。
         </para>
 
-        <note><para>To debug errors in macros called across templates you need to add <sgmltag>phptal:debug</sgmltag> in template which <emphasis>defines</emphasis> the macro, not the one which uses it.</para></note>
+        <note><para>
+        テンプレート内で呼ばれたマクロのエラーをデバッグするには、マクロを定義しているテンプレートでも<sgmltag>phptal:debug</sgmltag>を指定する必要があります。
+        </para></note>
 
         <para>
-        The debug mode stores information like filename and source line
-        number in the template, so exceptions thrown by incorrect path
-        access will contain more information about where they where
-        thrown.
+        デバッグモードでは、ファイル名やテンプレートの行番号を格納しますので、不正なパスによる例外が投げられた場合でも寄り多くの情報を得る事ができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html>
@@ -1283,45 +1134,45 @@ title="google search engine">the google search engine</a>
               <title><sgmltag>phptal:cache</sgmltag></title>
 
               <para>
-              This attribute causes output of entire element (including its tag) to be cached on disk and not re-evaluated until cache expires.
+              このattributeは、キャッシュ期限が切れるまでこのタグに含まれる要素全てをディスク上にキャッシュし、再評価されないようにします。
               </para>
 
-              <note><para>Use of cache is beneficial only for elements that use very complex expressions, macros from external files or <acronym>PHP</acronym> expressions/objects that access the database. Otherwise uncached templates will be just as fast.</para></note>
+              <note><para>キャッシュが有用なのは、外部ファイルのマクロや、データベースアクセスを伴う<acronym>PHP</acronym>式やオブジェクト等の複雑な要素の場合のみです。それ以外の場合、非キャッシュのテンプレートも同じくらい高速です。</para></note>
 
-                <para>Content of this attribute is a duration (how long element should be kept in cache) written as number with '<constant>d</constant>', '<constant>h</constant>', '<constant>m</constant>' or '<constant>s</constant>' suffix.
+                <para>このattributeの有効期間（どのくらいの間キャッシュされるか）は '<constant>d</constant>'、'<constant>h</constant>'、'<constant>m</constant>'や'<constant>s</constant>'サフィックスを伴う数値によって指定することができます。
             </para>
             <informalexample><programlisting language="xml"><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting></informalexample>
-            <para>                  <sgmltag>&lt;div></sgmltag> will be evaluated at most once per 3 hours.</para>
+            <para>上記の例では、<sgmltag>&lt;div></sgmltag>の中身は３時間に１度評価されます。</para>
 
-            <para>Duration can be followed by optional "<varname>per</varname>" parameter that defines how cache should be shared. By default cache is shared between all pages that use that template.
-                  You can add "<varname>per url</varname>" to have separate copy of given element for every <acronym>URL</acronym>.
+            <para>有効期間には"<varname>per</varname>"オプションを付け、キャッシュがどのように共有されるかを指定することができます。
+                  例えば"<varname>per url</varname>"と指定すると、 <acronym>URL</acronym>毎のキャッシュを持たせることができます。
 </para>
 
             <informalexample><programlisting language="xml"><![CDATA[<ol id="breadcrumbs" phptal:cache="1d per url">…</ol>]]></programlisting></informalexample>
-          <para><sgmltag>&lt;ol></sgmltag> will be cached for one day, separately for each page.</para>
+          <para><sgmltag>&lt;ol></sgmltag>はURL毎に１日間キャッシュされます。</para>
 <para>
-                  You can add "<varname>per expression</varname>" to have different cache copy for every different value of an expression (which MUST evaluate to a string).
-                  <note><para>Expression cannot refer to variables defined using <sgmltag>tal:define</sgmltag> on the same element.</para></note>
+                  "<varname>per expression</varname>"と指定することで、式の値ごとにキャッシュを保持することがえきます（実行結果は文字列でなければなりません）。
+                  <note><para>式では同一のエレメント内で<sgmltag>tal:define</sgmltag>によって定義された変数を参照することはできません。</para></note>
 </para>
 <informalexample><programlisting language="xml"><![CDATA[<ul id="user-info" phptal:cache="25m per object/id">…</ul>]]></programlisting></informalexample>
-             <para><sgmltag>&lt;ul></sgmltag> will be cached for 25 minutes, separately for each object ID.</para>
+             <para><sgmltag>&lt;ul></sgmltag>はobjectのid毎に２５分間キャッシュされます。</para>
 
-             <warning><para>Be careful when caching users' private data. Cache will be shared with everyone unless you make it user-specific with <code>per user/id</code> or similar expression.</para></warning>
+             <warning><para>ユーザーのプライベートな情報をキャッシュする際は気をつけて下さい。<code>per user/id</code>等の様にユーザー毎の指定をしない限り、全ての利用者で共有されてしまいます。</para></warning>
 
-             <section id="cache-refresh"><title>Instant refreshing</title>
+             <section id="cache-refresh"><title>キャッシュのリフレッシュ</title>
 
-                 <para>Instead of clearing cache, it might be a better idea to put version or last modification timestamp in the <varname>per</varname> parameter. This will cause cached template to be refreshed as soon as version/timestamp changes and no special cache clearing will be necessary.</para>
+                 <para>キャッシュをクリアする代わりに、<varname>per</varname>パラメータに対してバージョンや最終更新時刻を付加することは良いアイデアです。これにより、キャッシュされたテンプレートはバージョンやタイムスタンプが変わるタイミングでリフレッシュされるため、キャッシュクリアのための特別な処理が不要になります。</para>
 <informalexample><programlisting language="xml"><![CDATA[<div phptal:cache="100d per php:news.id . news.last_modified_date">…</div>]]></programlisting></informalexample>
 
                  </section>
 
 
-<section id="cache-limits"><title>Limitations:</title>
+<section id="cache-limits"><title>キャッシュにおける制限</title>
 
 
             <itemizedlist>
               <listitem><para>
-                  <sgmltag>phptal:cache</sgmltag> blocks can be nested, but outmost block will cache other blocks regardless of their freshness. </para></listitem><listitem><para>You cannot use <sgmltag>metal:fill-slot</sgmltag> inside elements with <sgmltag>phptal:cache</sgmltag>.</para></listitem></itemizedlist>
+                  <sgmltag>phptal:cache</sgmltag>のブロックはネストすることができます。ただし、一番外側のブロックは内部のブロックを鮮度を無視してキャッシュします。</para></listitem><listitem><para><sgmltag>phptal:cache</sgmltag>の中で<sgmltag>metal:fill-slot</sgmltag>を使うことはできません。</para></listitem></itemizedlist>
 
 
 </section>
@@ -1333,36 +1184,25 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>phptal:tales</sgmltag></title>
 
         <para>
-        This attribute allows us to change the behavior of <acronym>PHPTALES</acronym>.  The
-        default behaviors is to interpret attribute expressions in a
-        very <acronym>ZPT</acronym> way. But sometimes you just would like to have <acronym>PHP</acronym>
-        there, and you end up using <code>php:</code> modifier everywhere.
+        このattributeによって<acronym>PHPTALES</acronym>の挙動を変えることができます。
+        <acronym>PHPTALES</acronym>は通常、<acronym>ZPT</acronym>の仕様に従ってattribute式を解釈しますが、例えば<code>php:</code>を大量に記述しなければならない場合があったとします。
+       </para>
+
+        <para>
+        一方、<acronym>PHPTALES</acronym>の問題として<acronym>PHPTAL</acronym>がパスを解釈する際の問題があります。
+        例えば、<varname>myobject/mymethod/property/10/othermethod/hashkey</varname>という記述は解釈に比較的長い時間がかかります。（ではありますが、パスが長すぎるかどうかについては、そのパフォーマンスが<emphasis>実際に</emphasis>問題になるまでは気にしすぎないようにしてください。）
         </para>
 
         <para>
-        Another problem concerning <acronym>PHPTALES</acronym> is the way <acronym>PHPTAL</acronym> has to
-        interpret paths. For example,
-        <varname>myobject/mymethod/property/10/othermethod/hashkey</varname> takes relatively long to
-        interpret (but don't worry about this too much – don't optimize until you find that it is <emphasis>really</emphasis> a problem with performance!)
+        <acronym>PHPTAL</acronym>は'<varname>mymethod</varname>'を受け、実行時にそれがオブジェクトであることを判別したうえで、
+        '<varname>mymethod</varname>'がそのオブジェクトの変数では無くメソッドであることを判別します。そしてそのメソッドをコールした後に
+        戻り値がプロパティをもったオブジェクトであることを判別し、それは配列であり、１０番目の要素を持ち、それはまたオブジェクトであり、
+        そのオブジェクトの<varname>othermethod</varname>は変数では無くメソッドであり、それは戻り値があり、その戻り値はオブジェクトであり、
+        キー'<varname>hashkey</varname>'に関連づけられた値を持つ。と解釈します。
         </para>
 
         <para>
-        <acronym>PHPTAL</acronym> has (at runtime) to take myobject and discover that it
-        is an object; find out that '<varname>mymethod</varname>' is a method of this
-        object (rather than a variable), and then to call it; explore
-        the result to determine that it is an object with a property; find that its value is an array; find the '<varname>ten</varname>'
-        element of this array, and determine that it is an object;
-        decide that <varname>othermethod</varname> is a method of this object (rather
-        than a variable), and get the result of its execution; find
-        that it is an object, and then retrieve the value
-        for the key '<varname>hashkey</varname>'.
-        </para>
-
-        <para>
-        Of course this was an extreme example and most of the time we
-        don't care, because the process is fast enough. But what if this
-        very long path is called inside a big <sgmltag>tal:repeat</sgmltag>? D'oh!
-        <sgmltag>phptal:tales</sgmltag> can help us here:
+        もちろんこれは極端な例であり、またこのプロセスは十分高速です。しかし、このようなとても長いパスが深い<sgmltag>tal:repeat</sgmltag>の中で呼ばれたら？D'oh!（ホーマー・シンプソンを参照）<sgmltag>phptal:tales</sgmltag>は以下の様に私たちの助けになります。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html>
@@ -1378,7 +1218,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-        Please note that the above example does the same as:
+        上記の例は以下の記述と同等です。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html>
@@ -1394,7 +1234,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <note><para>
-        <code>php:</code> modifier is explained in its <link linkend="tales-php">own chapter</link>.
+        <code>php:</code>モディファイアについては <link linkend="tales-php"><code>php:</code>の章</link>で解説します。
         </para></note>
       </section>
 
@@ -1404,22 +1244,21 @@ title="google search engine">the google search engine</a>
       <title><sgmltag>tal:block</sgmltag></title>
 
       <para>
-      <sgmltag>tal:block</sgmltag> is a syntactic sugar for elements which contains many <acronym>TAL</acronym>
-      attributes which are not to be echoed.
+      <sgmltag>tal:block</sgmltag>は、多くの<acronym>TAL</acronym> attributeを持つエレメントを表示させたくないためのシンタックスシュガーです。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<tal:block define="myvar string:Some value"/>
 ]]></programlisting></informalexample>
 
       <para>
-      is the same as:
+      上記は以下と同等です。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<span tal:define="myvar string:Some value" tal:omit-tag=""/>
 ]]></programlisting></informalexample>
 
       <para>
-      Another example:
+      もう一つの例として
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<tal:block condition="someCondition" repeat="item someRepeat">
@@ -1428,7 +1267,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
       <para>
-      is the same as:
+      これは以下と同等です。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<div tal:omit-tag=""
@@ -1444,29 +1283,25 @@ title="google search engine">the google search engine</a>
       <title><acronym>PHPTALES</acronym></title>
 
       <para>
-      <acronym>PHPTALES</acronym> is the equivalent of <acronym>TALES</acronym>, the Template Attribute Language
-		    Expression Syntax which is the syntax used inside <acronym>TAL</acronym>, <acronym>METAL</acronym>, <acronym>PHPTAL</acronym> attributes and <code>${…}</code> inline expressions. </para>
-		<para>In previous examples, you should have seen some
-      <acronym>PHPTALES</acronym> examples (<code>string:</code>, <code>php:</code>, <code>not:</code>, …). This chapter
-      describes the usage of <acronym>PHPTALES</acronym> in templates.
+      <acronym>PHPTALES</acronym>は<acronym>TALES</acronym>（Template Attribute Language Expression Syntaxの略です）に相当し、<acronym>TAL</acronym>や<acronym>METAL</acronym>、<acronym>PHPTAL</acronym>のattributeおよび、 <code>${…}</code>のインライン式において使用できます。 </para>
+      <para>これまでの例で、いくつかの<acronym>PHPTALES</acronym>の例（<code>string:</code>、<code>php:</code>、<code>not:</code>、…）を見てきたと思います。
+            この章ではテンプレート中における<acronym>PHPTALES</acronym>の使い方について説明します。
       </para>
 
       <para>
-      The value of a <acronym>TAL</acronym> attribute may contain more than one expression
-      (ex: <sgmltag>tal:define</sgmltag>), in which case each expression must be separated
-      from the next one with a '<literal>;</literal>' character.
+      <acronym>TAL</acronym> attributeの値は、大抵一つ以上の式を含み（例：<sgmltag>tal:define</sgmltag>）、
+      それらの式は、'<literal>;</literal>'によって分割されます。
       </para>
 
       <section id="tales-path">
         <title>path:</title>
 
         <para>
-        This is the default modifier used in <acronym>TAL</acronym> expression when no
-        other modifier is specified.
+        これは<acronym>TAL</acronym>式において、何のモディファイアも書かれていない場合のデフォルト動作です。
         </para>
 
         <para>
-        The following lines will give the same result:
+        以下の行は同じ結果となります。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:content="data/user/name"/>
@@ -1475,9 +1310,7 @@ title="google search engine">the google search engine</a>
 ]]></programlisting></informalexample>
 
         <para>
-        Inside the template or inside expression strings, you can refer
-        to a context variable using its path in the form
-        <code>${path/to/my/variable}</code>
+        <code>${path/to/my/variable}</code>の書式を使うことで、テンプレート中や式中の文字列からコンテキストの変数を参照することができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<h1>${document/title}</h1>
@@ -1485,39 +1318,39 @@ title="google search engine">the google search engine</a>
 this page has been readed ${page/countRead} times"/>
 ]]></programlisting></informalexample>
 
-			<warning><para>If you try to read variable that does not exist, PHPTAL will throw an exception. Use <link linkend="tales-exists">exists:</link> to check if variable can be read</para></warning>
+                        <warning><para>存在しない変数を参照しようとした場合、PHPTALは例外を投げます。変数が参照可能かどうかを調べるには<link linkend="tales-exists">exists:</link>を利用してください。</para></warning>
 
       </section>
 
       <section id="conditional">
-        <title>Alternative <acronym>PHP</acronym> operator syntax</title>
+        <title><acronym>PHP</acronym>オペレータの代替書式</title>
 
         <para>
-        Because '<literal>&lt;</literal>', '<literal>&gt;</literal>' and '<literal>&amp;</literal>' characters are cumbersome to use in XML, <acronym>PHPTAL</acronym> provides alternative syntax for <acronym>PHP</acronym> operators using these characters, and a few more for consistency.
+        '<literal>&lt;</literal>'、 '<literal>&gt;</literal>'や'<literal>&amp;</literal>'といった文字はXML中で使うには厄介です。<acronym>PHPTAL</acronym>は<acronym>PHP</acronym>オペレータの代替書式を提供します。
         </para>
 
         <remark>
-        These operators can be used only in <code>php:</code> expressions.
+        これらの代替書式は<code>php:</code>式の中でのみ利用できます。
         </remark>
 
         <itemizedlist>
           <listitem><para>
-          <code>&lt;</code> : <code>LT</code> (less than)
+          <code>&lt;</code> : <code>LT</code> (未満)
           </para></listitem>
           <listitem><para>
-          <code>&gt;</code> : <code>GT</code> (greater than)
+          <code>&gt;</code> : <code>GT</code> (超)
           </para></listitem>
           <listitem><para>
-          <code>&lt;=</code> : <code>LE</code> (less or equal)
+          <code>&lt;=</code> : <code>LE</code> (以下)
           </para></listitem>
           <listitem><para>
-          <code>&gt;=</code> : <code>GE</code> (greater or equal)
+          <code>&gt;=</code> : <code>GE</code> (以上)
           </para></listitem>
           <listitem><para>
-          <code>==</code> : <code>EQ</code> (equal)
+          <code>==</code> : <code>EQ</code> (等しい)
           </para></listitem>
           <listitem><para>
-          <code>!=</code> : <code>NE</code> (not equal)
+          <code>!=</code> : <code>NE</code> (等しくない)
           </para></listitem>
           <listitem><para>
           <code>&amp;&amp;</code> : <code>AND</code>
@@ -1532,24 +1365,24 @@ this page has been readed ${page/countRead} times"/>
         <title><code>string:</code></title>
 
         <para>
-        Because expressions are separated by a '<literal>;</literal>' character, and
-        because '<literal>$</literal>' marks the start of a path, you must use:
+        式のセパレータは'<literal>;</literal>'であり、
+        '<literal>$</literal>'はパスの開始を意味しますので、以下の様にエスケープする必要があります。
         </para>
 
         <itemizedlist>
           <listitem><para>
-          '<literal>;;</literal>' when you want to insert a real '<literal>;</literal>' character in a string,
+          '<literal>;;</literal>'は'<literal>;</literal>'そのものを文字として使いたい場合。
           </para></listitem>
           <listitem><para>
-          '<literal>$$</literal>' when you want to insert a real '<literal>$</literal>' character in a string.
+          '<literal>$$</literal>'は'<literal>$</literal>'そのものを文字として使いたい場合。
           </para></listitem>
         </itemizedlist>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="string:this is a $$100 page"/>
-string:foo $bar baz       <!-- will replace $bar -->
-string:foo $$bar baz      <!-- no interpolation -->
-string:foo ; php:doFoo()  <!-- two different expressions -->
-string:foo ;; php:doFoo() <!-- only string -->
+string:foo $bar baz       <!-- $barで置換されます -->
+string:foo $$bar baz      <!-- 置換は行われません -->
+string:foo ; php:doFoo()  <!-- 二つの式として解釈されます -->
+string:foo ;; php:doFoo() <!-- "foo ; php:doFoo()"という文字列として解釈されます -->
 ]]></programlisting></informalexample>
       </section>
 
@@ -1557,15 +1390,11 @@ string:foo ;; php:doFoo() <!-- only string -->
         <title><code>php:</code></title>
 
         <para>
-        This expression evaluates what follows as a regular <acronym>PHP</acronym>
-        expression except that '<code>-&gt;</code>' is replaced by dots '<code>.</code>' and
-        variable names are prefixed with a dollar '<literal>$</literal>'
-        sign.
+        この式は<acronym>PHP</acronym>を実行しますが、'<code>-&gt;</code>'はドット'<code>.</code>'に置き換える必要があり、変数のプリフィクスである'<literal>$</literal>'は省略しなければなりません。
         </para>
 
         <para>
-        A dot '<code>.</code>' separated from the rest of expression by spaces is
-        assumed to be a concatenation sign.
+        空白を挟んだドット'<code>.</code>'は文字列の連結を意味します。
         </para>
 
         <informalexample><programlisting><![CDATA[php:htmlentities(foo)
@@ -1581,11 +1410,9 @@ php:SomeClass::$staticVar
 ]]></programlisting></informalexample>
 
         <para>
-        <code>php:</code> should be used with care and won't be needed in 80% of
-        your templates but sometimes you will need to invoke some
-        special <acronym>PHP</acronym> method to be certain whether a user is logged in, or
-        to retrieve specific complex data depending on some conditions,
-        dynamically inside the template.
+        <code>php:</code>は慎重に利用すべきであり、おそらくその８割の場合で必要ありません。
+        ですが、なんらかの特別な<acronym>PHP</acronym>のメソッドを実行する必要がある場合や、
+        状態に依存した複雑な形式のデータを検索しなければならない場合などでは必要とされるでしょう。
         </para>
       </section>
 
@@ -1593,8 +1420,7 @@ php:SomeClass::$staticVar
         <title><code>not:</code></title>
 
         <para>
-        This expression is a boolean one, useful in <sgmltag>tal:condition</sgmltag>
-        statements.
+        この式は一つの論理演算子です。<sgmltag>tal:condition</sgmltag>内で便利です。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="not: logged">not logged</span>
@@ -1605,18 +1431,20 @@ php:SomeClass::$staticVar
         <title><code>exists:</code></title>
 
         <para>
-        This expression returns <code>true</code> if the path specified after it exists, and <code>false</code> otherwise. It is analogous to <acronym>PHP</acronym>'s <function>isset()</function>.</para>
+        この式は、パスが事前に定義されている場合に<code>true</code>を返し、そうで無い場合に <code>false</code>を返します。
+        つまり<acronym>PHP</acronym>の<function>isset()</function>のように働きます。</para>
 
         <para>
-        Normally using a path which doesn't exist throws an error like "Cannot find variable '<varname>foo</varname>' in current scope". Thus, uncertain paths must be checked first:
+        通常、存在しないパスを利用しようとした場合、"Cannot find variable '<varname>foo</varname>' in current scope"
+        のようなエラーが発生します。ですので、以下の様にして不確実なパスは先にチェックしておきます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:condition="exists:user/preferences" tal:content="user/preferences">
-  Use user/preferences here if defined
+   user/preferences が定義されていれば利用します
 </span>
 ]]></programlisting></informalexample>
 
-        <tip><para>In <acronym>PHPTALES</acronym> use <function>isset()</function> instead.</para></tip>
+        <tip><para><acronym>PHPTALES</acronym>の内部では<function>isset()</function>が呼ばれています。</para></tip>
 
       </section>
 
@@ -1624,9 +1452,10 @@ php:SomeClass::$staticVar
           <title><code>true:</code></title>
 
           <para>
-          This expression returns <code>true</code> if the path specified after it exists and has value that evaluates to <code>true</code> (the value can be of any type). It is analogous to <acronym>PHP</acronym>'s <code>!empty()</code> construct.</para>
+          この式はパスが存在する場合（その型が何であっても）、またはそれが<code>true</code>が代入された変数である場合に<code>true</code>を返します。
+          <acronym>PHP</acronym>の<code>!empty()</code>のようなものです。</para>
 
-          <tip><para>In <acronym>PHPTALES</acronym> use <function>!empty()</function> instead.</para></tip>
+          <tip><para><acronym>PHPTALES</acronym>の内部では<function>!empty()</function>が呼ばれています。</para></tip>
 
         </section>
 
@@ -1635,27 +1464,24 @@ php:SomeClass::$staticVar
         <title><code>default</code></title>
 
         <para>
-        This is not an expression but a keyword, allowing template
-        designers to keep the content of a tag as an alternative value
-        if an error occurs, or if something is not defined.
+        これは式では無くキーワードです。エラーが発生した場合や、何かが定義されていない場合に、タグの内容を値として利用することをデザイナーに許可します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:define="myVar path/to/possible/var | default">
-  default my var value
+   varのデフォルト値です
 </span>
 
 <span tal:content="some/var | other/path | default">
-  no some/var and no other/path found here
+  some/varもother/pathも存在しない場合、この文字列が表示されます。
 </span>
 
 <a href="unknown.xhtml" title="Unknown page"
    tal:attributes="href item/href | default; title item/title | default"
-   tal:content="item/title | default">Unknown page</a>
+   tal:content="item/title | default">不明なページ</a>
 ]]></programlisting></informalexample>
 
         <para>
-        Above examples introduce the '<literal>|</literal>' character that allows the
-        definition of alternatives for defines or prints.
+        上記の例では'<literal>|</literal>'を利用し、代替としてのデフォルトの定義や表示を行っています。
         </para>
       </section>
 
@@ -1663,17 +1489,15 @@ php:SomeClass::$staticVar
         <title><code>structure</code></title>
 
         <para>
-        This is not an expression modifier but a keyword.
+        これも式では無くキーワードです。
         </para>
 
         <para>
-        While printing variables inside <acronym>PHPTAL</acronym> templates, you will
-        have noticed that <acronym>PHPTAL</acronym> encodes each variable to ensure the
-        validity of the output document.
+        <acronym>PHPTAL</acronym>のテンプレート中で変数を表示する際、出力の妥当性を確保するために<acronym>PHPTAL</acronym>によって全ての変数がエンコードされます。
         </para>
 
         <para>
-        Sometimes, you may use <acronym>HTML</acronym>/<acronym>XML</acronym> variables which must be echoed as is.
+        とはいえ、<acronym>HTML</acronym>/<acronym>XML</acronym>をそのまま出力したい場合があるかもしれません。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<h1 tal:content="structure document/title"/>
@@ -1681,34 +1505,31 @@ php:SomeClass::$staticVar
 ]]></programlisting></informalexample>
 
         <para>
-        In above examples, we assume that <code>$document->title</code> and
-        <code>$document->content</code> are variables containing preformatted <acronym>HTML</acronym>
-        which must be echoed as is.
+        上記の例では、<code>$document->title</code>と
+        <code>$document->content</code>の値はそのまま出力可能な<acronym>HTML</acronym>
+        であると仮定してください。
         </para>
       </section>
 
       <section id="expression-chains">
-        <title>Expression chains</title>
+        <title>式の連結</title>
 
         <para>
-        An expression chain is a list of expressions separated by '<literal>|</literal>'
-        characters.
+        式は'<literal>|</literal>'で区切ることで連結することができます。
         </para>
 
         <para>
-        While evaluating expressions separated by '<literal>|</literal>', <acronym>PHPTAL</acronym> will stop
-        its evaluation when an expression value is not null and no error
-        was raised while evaluating the expression.
+        <acronym>PHPTAL</acronym>は'<literal>|</literal>'で区切られた式を実行する際、
+        その式の結果が非nullもしくはエラー無しであれば式の実行を停止します。
         </para>
 
         <para>
-        As a <code>string:</code> expression is always true, <code>string:</code> always terminates
-        an expression chain whatever expression may follow.
+        例えば<code>string:</code>式は常にtrueを返しますので、その後にどのような式を続けたとしても<code>string:</code>
+        の場所で式の実行は停止します。
         </para>
 
         <para>
-        You can use <code>php:</code> expressions inside expression chains, like any
-        other expression.
+        連結式の中で<code>php:</code>式を使うこともできます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<h1 tal:content="page/title | page/alternativeTitle | php:get_default_title()" />]]></programlisting></informalexample>
@@ -1718,64 +1539,63 @@ php:SomeClass::$staticVar
   </article>
 
   <article id="phpintegration">
-    <title><acronym>PHP</acronym> Integration</title>
+    <title><acronym>PHP</acronym>による開発</title>
 
     <para>
-    This section is aimed at <acronym>PHP</acronym> developers and explains how to use and
-    customize <acronym>PHPTAL</acronym> behaviors for simple and advanced usage.
+    この章は<acronym>PHP</acronym>の開発者を対象とし、
+    一歩進んだ<acronym>PHPTAL</acronym>の使い方とカスタマイズ方法について解説します。
     </para>
 
     <itemizedlist>
       <listitem><para>
-      <classname>PHPTAL</classname>: the main <acronym>PHPTAL</acronym> class. It is used to load and execute templates.
+      <classname>PHPTAL</classname>: <acronym>PHPTAL</acronym>のメインとなるクラスです。テンプレートを読込み、実行します。
       </para></listitem>
       <listitem><para>
-      <classname>PHPTAL_Filter</classname>: filtering template sources and <acronym>PHPTAL</acronym> output.
+      <classname>PHPTAL_Filter</classname>: テンプレートや<acronym>PHPTAL</acronym>の出力をフィルタリングします。
       </para></listitem>
       <listitem><para>
-      <classname>PHPTAL_Trigger</classname>: handles output of elements with <sgmltag>phptal:id</sgmltag>.
+      <classname>PHPTAL_Trigger</classname>: <sgmltag>phptal:id</sgmltag>要素のハンドリングと出力を行います。
       </para></listitem>
       <listitem><para>
-      <classname>PHPTAL_TranslationService</classname>: for replacing the built-in <constant>gettext</constant> support
-      with your own internationalization system.
+      <classname>PHPTAL_TranslationService</classname>: 独自の多言語化のために<constant>gettext</constant>の置き換えをサポートします。
       </para></listitem>
     </itemizedlist>
 
     <section id="constants">
-      <title>Constants</title>
+      <title>定数</title>
 
-      <para> The only constant defined in <filename>PHPTAL.php</filename> is <constant>PHPTAL_VERSION</constant>. It contains version of <acronym>PHPTAL</acronym> library installed on your system (in format: <code>X.X.X</code>).</para>
+      <para>唯一の定数<constant>PHPTAL_VERSION</constant>が<filename>PHPTAL.php</filename>で定義されています。これは<acronym>PHPTAL</acronym>のバージョンを（<code>X.X.X</code>フォーマットで）含んでいます。</para>
       <para>
-      In older versions of there were constants for configuration. They have been removed in favor of methods.
+      古いバージョンには設定のための定数が存在していましたが、それらはすべてメソッドで置き換えられました。
       </para>
   </section>
 
 
     <section id="phptal-class">
-      <title>class <classname>PHPTAL</classname></title>
+      <title><classname>PHPTAL</classname>クラス</title>
 
       <para>
-      This is the main library class for you to use.
+      ライブラリの主役となるクラスです。 
       </para>
 
       <para>
-      The most common method of use:
+      一般的に利用するメソッドを持ちます。 
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
 
-// include the library
+// ライブラリをinclude
 require_once 'PHPTAL.php';
 
-// instantiate a new PHPTAL object using specified template file
+// 使用するテンプレートを指定してPHPTALオブジェクトを生成
 $tpl = new PHPTAL('mytemplate.xhtml');
 
-// setting some template context variables
+// コンテキスト変数を設定
 $tpl->title  = 'my title';
 $tpl->values = array(1,2,3,4);
 $tpl->user   = new User('Joe');
 
-// execute the template and echo the result in a 'secure' way
+// テンプレートを実行し、'安全'な方法でその戻り値を取得
 try {
     echo $tpl->execute();
 }
@@ -1787,16 +1607,14 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
       <para>
-      You can perfectly well choose to specify the template source
-      after setting context variables.
+      コンテキスト変数を設定した後でテンプレートを指定することもできます。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
 …
 $tpl = new PHPTAL();
 
-// it is a matter of taste but you can use the set() method instead of
-// setting context using PHPTAL::__set() like above
+// 代入の代わりにset()メソッドを使うこともできます。
 $tpl->set('title', 'my title');
 $tpl->set('values', array(1,2,3,4));
 $tpl->set('user', new User('Joe'));
@@ -1807,8 +1625,7 @@ $tpl->setTemplate('mytemplate.xhtml');
 ]]></programlisting></informalexample>
 
       <para>
-      You can also decide to use a generated string as the template
-      source instead of using an existing template file:
+      ファイルの代わりに文字列をテンプレートとして使用することもできます。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
@@ -1839,10 +1656,10 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
       <para>
-      In the above example, because <acronym>PHPTAL</acronym> requires a template source
-      identifier (usually the template file realpath), <acronym>PHPTAL</acronym> will use the md5
-      of the <varname>$src</varname> parameter as a unique identifier. You may decide to force the
-      identifier using a second <methodname>setSource()</methodname> argument:
+      上記の例では<acronym>PHPTAL</acronym>は<varname>$src</varname>のmd5を一意な識別子として使用します。
+      これは<acronym>PHPTAL</acronym>がテンプレートに対し一意な識別子を要求するためです。
+      （大抵の場合はテンプレートファイルのパスが識別子として使用されます。）
+      <methodname>setSource()</methodname>の第二引数で識別子を指定することができます。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
@@ -1860,8 +1677,9 @@ EOS;
 require_once 'PHPTAL.php';
 $tpl = new PHPTAL();
 
-// If you specify where the source comes from (second argument to setSource),
-// PHPTAL will be able to generate more helpful error messages.
+
+// ソースコードのファイル名をsetSourceの第二引数に指定することで
+// PHPTALが有用なエラーメッセージを生成することができるようになります。
 $tpl->setSource($src, __FILE__);
 $tpl->title = 'this is my title';
 try {
@@ -1875,15 +1693,16 @@ catch (Exception $e){
 ]]></programlisting></informalexample>
 
 <section id="configuration">
-    <title>Configuration methods</title>
+    <title>設定メソッド</title>
 
-    <para><acronym>PHPTAL</acronym> tries to use best defaults possible and you shouldn't <emphasis>need</emphasis> to change any of the settings.</para>
+    <para><acronym>PHPTAL</acronym>は可能な限り最適な設定を使用しますので、ほとんどの場合、設定を変更する必要はありません。</para>
 
-    <para>All of these are methods of the <classname>PHPTAL</classname> class. <methodname>set<replaceable>*</replaceable></methodname> methods return instance of their class, so you can chain them:</para>
+    <para><classname>PHPTAL</classname>クラスの<methodname>set<replaceable>*</replaceable></methodname>メソッドは
+          そのインスタンスを返すので、メソッドチェーンにすることができます。</para>
       <informalexample><programlisting language="php"><![CDATA[<?php
 echo $phptal->setPhpCodeDestination('/tmp/phptal')->setOutputMode(PHPTAL::XML)->setTemplate('tpl.zpt')->execute();
 ?>]]></programlisting></informalexample>
-<para>is the same as:</para>
+<para>これは以下と同等です。</para>
       <informalexample><programlisting language="php"><![CDATA[<?php
 $phptal->setPhpCodeDestination('/tmp/phptal');
 $phptal->setOutputMode(PHPTAL::XML);
@@ -1892,43 +1711,44 @@ echo $phptal->execute();
 ?>]]></programlisting></informalexample>
 
 
-          <para>There are other <methodname>set<replaceable>*</replaceable></methodname> methods for filters, internationalization, etc. They have been described in other sections of this manual.</para>
+          <para>フィルターや国際化など、これら以外の<methodname>set<replaceable>*</replaceable></methodname>メソッドは、このマニュアルの他の章で解説します。</para>
 
           <section id="set-output-mode">
           <title><methodname>setOutputMode(<replaceable>mode</replaceable>)</methodname></title>
 
-          <para>Changes what syntax is used when generating elements. Valid modes are:</para>
+          <para>出力する書式を変更できます。指定可能なモードは以下です。</para>
               <variablelist>
                   <varlistentry><term><constant>PHPTAL::XHTML</constant></term>
                       <listitem>
-                          <para>In this mode (which is default) PHPTAL will output XHTML in a way that is backwards-compatible with <acronym>HTML</acronym> browsers.</para>
+                          <para>このモード（デフォルト）では PHPTALは<acronym>HTML</acronym>ブラウザの後方互換のためにXHTMLを出力します。</para>
                           <itemizedlist>
-                              <listitem>                          <para>Empty elements will be forced to use self-closing form (<sgmltag>&lt;img/&gt;</sgmltag>, <sgmltag>&lt;link/&gt;</sgmltag>), and non-empty elements will always have closing tag.</para>
+                              <listitem>                          <para>空のエレメントは、空要素タグ (<sgmltag>&lt;img/&gt;</sgmltag>や<sgmltag>&lt;link/&gt;</sgmltag>)が強制されます。空では無いエレメントは必ず閉じられます。</para>
                                   <warning>
-                                      <para>XHTML output mode changes <sgmltag>&lt;link&gt;</sgmltag> element in way that is incompatible with RSS. Use XML output mode to generate RSS feeds or use Atom.</para></warning>
+                                      <para>XHTMLアウトプットモードは RSSと互換性のない形に<sgmltag>&lt;link&gt;</sgmltag>エレメントを変換してしまいます。RSSフィードやAtomを生成する場合はXMLモードを使用してください。</para></warning>
                               </listitem>
-                              <listitem><para>Boolean attributes (<sgmltag>checked</sgmltag>, <sgmltag>selected</sgmltag>, etc.) will always have value required by the XHTML specification (it simplifies use of <sgmltag>tal:attributes</sgmltag>).</para></listitem>
-                              <listitem><para><code>&lt;![CDATA[</code> blocks will be added or removed automatically and will use special escaping syntax that is safe in both XML and HTML.</para>
+                              <listitem><para>真偽値のattribute (<sgmltag>checked</sgmltag>や<sgmltag>selected</sgmltag>等)はXHTMLの仕様により、常に値を持ちます。（<sgmltag>tal:attributes</sgmltag>の利用を容易にします。）</para></listitem>
+                              <listitem><para><code>&lt;![CDATA[</code>ブロックは自動的に追加、もしくは削除され、XMLとXHTMLの両方にとって安全な構文にエスケープされます。</para>
                                   <tip>
-                                  <para>If you're <emphasis>always</emphasis> sending XHTML as <code>application/xhtml+xml</code>, then it's better to use XML output mode.</para></tip>
+                                  <para>もし<emphasis>常に</emphasis>XHTMLを<code>application/xhtml+xml</code>として出力したい場合、
+                                        XMLアウトプットモードの使用をお勧めします。</para></tip>
                                   </listitem></itemizedlist>
 
                       </listitem>
                   </varlistentry>
                   <varlistentry><term><constant>PHPTAL::HTML5</constant></term>
                       <listitem>
-                          <para>This mode generates documents that have best compatibility with <code>text/html</code> parsing in current web browsers, but are not XML.</para>
-                          <para>PHPTAL will change DOCTYPEs to <sgmltag>&lt;!DOCTYPE html></sgmltag>. Namespace declarations, name prefixes, explicit <sgmltag>CDATA</sgmltag> sections and other HTML-incompatible constructs will be omitted.</para>
+                          <para>このモードでは現行のブラウザに適した<code>text/html</code>でドキュメントを生成します。</para>
+                          <para>PHPTALはDOCTYPEを<sgmltag>&lt;!DOCTYPE html></sgmltag>に変換し、namespaceの定義や属性のプリフィクス、明示的な<sgmltag>CDATA</sgmltag>セクションなどのHTML非互換要素を削除します。</para>
                           <note>
                               <para>
-                        This mode is <emphasis>not</emphasis> a "tag soup". PHPTAL will close all elements properly and quote attributes when it's necessary. Output will be properly formatted HTML 5, and fully backwards-compatible with current HTML 4 browsers.
+                        このモードは"tag soup"<emphasis>ではありません</emphasis>。PHPTALは全てのエレメントを閉じ、必要であればattributeをクオートします。出力は適切なフォーマットのHTML5であり、HTML4ブラウザとの後方互換も保たれます。
                   </para>
                           </note>
                       </listitem>
                   </varlistentry>
                   <varlistentry><term><constant>PHPTAL::XML</constant></term>
                       <listitem>
-                          <para>This mode outputs "pure" XML without compatibility with <code>text/html</code> parsing. Use this mode when generating feeds, SVG, MathML, RDF and other XML files.</para>
+                          <para>このモードは<code>text/html</code>とは互換性を持たない"純粋な"XMLを出力します。SVGやMathML、RDFといったXMLを出力する際に使用してください。</para>
                       </listitem>
                   </varlistentry>
               </variablelist>
@@ -1938,43 +1758,44 @@ echo $phptal->execute();
           <section id="set-encoding">
 
                   <title><methodname>setEncoding(<replaceable>encoding</replaceable>)</methodname></title>
-                      <para>Specify character encoding used by your templates. The default is <acronym>UTF-8</acronym>.
-                      </para><para><acronym>PHPTAL</acronym> assumes that encoding of all templates and generated documents is the same. BOM (Byte Order Marker) is removed from UTF-8 documents.</para>
-                      <note><para><acronym>PHPTAL</acronym> does not read encoding from XML files and never converts character encodings.</para></note>
-                      <tip><para>Save yourself trouble and always use <acronym>UTF-8</acronym> for everything.</para></tip>
+                      <para>テンプレートのエンコーディングを指定します。デフォルトは<acronym>UTF-8</acronym>です。
+                      </para><para><acronym>PHPTAL</acronym>は全てのテンプレートおよびドキュメントは同じエンコーディングであると想定します。BOM (Byte Order Marker)はUTF-8ドキュメントから削除します。</para>
+                      <note><para><acronym>PHPTAL</acronym>はXMLファイルからencodingを決定しません。また、エンコーディングの変換も行いません。</para></note>
+                      <tip><para>トラブル防止のために常に<acronym>UTF-8</acronym>を使いましょう。</para></tip>
           </section>
-      <section id="config-methods"><title>Other methods</title>
+      <section id="config-methods"><title>その他のメソッド</title>
 
           <simplesect id="set-template-repository">
               <title><methodname>setTemplateRepository(<replaceable>string_or_array</replaceable>)</methodname></title>
-                  <para>Specifies where to look for templates. If given a string, it adds it to the list of paths searched. If given array, it replaces the list.</para>
+                  <para>テンプレートをどこから探すかを指定します。文字列を指定すれば検索パスの中に追加され、配列を指定すれば検索パスを置き換えます。</para>
                   <para>
-                            This doesn't mean all your files need to be in the root
-                            directory, you can use sub folders to organize your template
-                            designer's work.  It's just a shortcut which will allow you to
-                            reference templates without specifying the real path, but
-                            instead their relative path within the repository.
+                            これは全てのファイルをルートディレクトリにおかなくても良いと言うことを意味します。
+                            デザイナーとの協働のためにサブフォルダを提供することができ、
+                            実パスでは無くソースツリーの中の相対パスによってテンプレートを参照することができます。
                     </para>
-                    <tip><para>It's like <code>include_path</code>, but for <acronym>PHPTAL</acronym> templates only.</para></tip>
+                    <tip><para>これは<code>include_path</code>の様ですが、<acronym>PHPTAL</acronym>テンプレートのみに影響します。</para></tip>
           </simplesect>
           <simplesect id="set-code-destination">
               <title><methodname>setPhpCodeDestination(<replaceable>path</replaceable>)</methodname></title>
 
-                  <para>To tell <acronym>PHPTAL</acronym> where to store its intermediate (temporary) <acronym>PHP</acronym> files. By default it uses directory given by  <acronym>PHP</acronym>'s <function>sys_get_tmp_dir()</function>, which usually is '<filename>/tmp/</filename>' directory.</para>
+                  <para><acronym>PHPTAL</acronym>に一時的な<acronym>PHP</acronym>ファイルの置き場所を指定します。
+                        デフォルトでは<acronym>PHP</acronym>の<function>sys_get_tmp_dir()</function>で指定されるディレクトリです。
+                        そしてそれは大抵'<filename>/tmp/</filename>'です。</para>
               </simplesect>
               <simplesect id="set-code-extension">
                   <title><methodname>setPhpCodeExtension(<replaceable>string</replaceable>)</methodname></title>
-                  <para>What filename extension should be used for intermediate <acronym>PHP</acronym> files. The default is <filename>php</filename> and frankly, there's no reason to change it.</para>
+                  <para>一時的な<acronym>PHP</acronym>ファイルの拡張子を指定します。デフォルトは<filename>php</filename>であり、変更の必要は無いでしょう。</para>
               </simplesect>
               <simplesect id="set-cache-lifetime">
                   <title><methodname>setCacheLifetime(<replaceable>num_days</replaceable>)</methodname></title>
-                  <para>Maximum number of days intermediate files and fragments cached with <sgmltag>phptal:cache</sgmltag> should be kept.</para>
-                  <para>The default is 30 days. Cache is scanned and cleaned up only when PHPTAL recompiles a file, and only (on average) once per 30 recompiles. You can simply <link linkend="sysadmin">delete cached files</link> if you don't want to wait until PHPTAL clears them.</para>
+                  <para>一時的なPHPファイルと<sgmltag>phptal:cache</sgmltag>を最大で何日間保持するかをしてできます。</para>
+                  <para>デフォルトでは３０日間です。キャッシュはPHPTALがファイルをコンパイルする際にのみスキャンされ廃棄されます。（平均して３０回のコンパイルにつき１回です。）PHPTALのキャッシュクリアを待たず、単純に<link linkend="sysadmin">キャッシュの削除</link>を行うこともできます。</para>
               </simplesect>
               <simplesect id="set-force-reparse">
                   <title><methodname>setForceReparse(<replaceable>boolean</replaceable>)</methodname></title>
-              <para>Forces reparsing of all templates all the time. It should be used only for testing and debugging. It's useful if you're testing pre filters or changing code of PHPTAL itself.</para>
-              <warning><para>This slows down <acronym>PHPTAL</acronym> very much. Never enable this on production servers!</para></warning>
+              <para>常時にテンプレートのパースを実行します。テストとデバッグの際にのみ利用してください。
+                    PHPTAL自体に手を加えた場合や、pre filterのテストの際に有用です。</para>
+              <warning><para><acronym>PHPTAL</acronym>の挙動が大変遅くなります。</para></warning>
           </simplesect>
       </section>
 
@@ -1984,190 +1805,205 @@ echo $phptal->execute();
   <section id="execute">
       <title><methodname>execute()</methodname> method</title>
 
-      <para>Executes the template and returns final markup.</para>
-      <para>PHPTAL keeps all variables after execution and this method can be called multiple times. You can use it to create multiple versions of the same page (by changing only some variables between executions) or to generate multiple different templates with same variables (by calling <code>setTemplate()</code> between executions).</para>
-      <note><para>If you need “fresh” copy of PHPTAL, just create a new object.</para></note>
+      <para>テンプレートを実行し、マークアップを返します。</para>
+      <para>PHPTALは複数回実行された場合でも、全ての変数を保持しています。
+            このことを利用して同一ページのバージョニング（変数の差分のみ）や、同一変数セット下での
+            複数テンプレート生成（<code>setTemplate()</code>を使用します）を行うことができます。
+      </para>
+      <note><para> “新鮮な”PHPTALのコピーが必要な場合は、新しいオブジェクトを生成してください。</para></note>
   </section>
         <section id="echo-execute">
             <title><methodname>echoExecute()</methodname> method</title>
 
-            <para>Since most common use of <methodname>execute()</methodname> method is to echo its output, <acronym>PHPTAL</acronym> offers convenience method that echoes output immediately without buffering. This enables streaming of arbitrarily large output without hitting memory limit.</para>
+            <para><methodname>execute()</methodname>の最も一般的な使い方はそれを出力させることです。
+                  <acronym>PHPTAL</acronym>はバッファリングせずに即時に出力させるためのメソッドを提供しています。
+                  大きなサイズの出力を行う際に、メモリの制約に引っかからないようになります。
+            </para>
 
-            <note><para>Fragments of template that use <sgmltag>tal:on-error</sgmltag> or <sgmltag>phptal:cache</sgmltag> are buffered regardless.</para></note>
+            <note><para><sgmltag>tal:on-error</sgmltag>や<sgmltag>phptal:cache</sgmltag>で分割されたテンプレートはバッファリングされます。</para></note>
 
-        <para>The code:</para>
+        <para>このコードは</para>
             <informalexample><programlisting language="php"><![CDATA[<?php
     $tpl = new PHPTAL('template.xhtml');
     $tpl->echoExecute();
 ?>]]></programlisting></informalexample>
 
-<para>is same as:</para>
+<para>以下と同等です。</para>
 
             <informalexample><programlisting language="php"><![CDATA[<?php
     $tpl = new PHPTAL('template.xhtml');
     echo $tpl->execute();
 ?>]]></programlisting></informalexample>
 
-<para>but little faster.</para>
+<para>ただし、若干高速です。</para>
 
-            <warning><para>Currently <methodname>echoExecute()</methodname> method has some unexpected limitations.</para></warning>
+            <warning><para>現時点での<methodname>echoExecute()</methodname>には予期せぬ制限があります。</para></warning>
 
             <simplesect>
-                <title>Limitations</title>
-                <para>When <methodname>echoExecute()</methodname> is used, <acronym>PHPTAL</acronym> will throw exception if you call any macro defined in a file that has XML declaration or DOCTYPE.</para>
-                <para>Typically <acronym>PHPTAL</acronym> allows templates to "inherit" DOCTYPE from another file (useful when subpage is calling main layout template), however that is not possible without buffering.</para>
-                <para>To work around this you can:</para>
+                <title>制限</title>
+                <para><methodname>echoExecute()</methodname>を使う際、XMLの宣言部やDOCTYPE指定を持つファイル内でマクロの定義がなされていた場合、<acronym>PHPTAL</acronym>は例外を発生させます。</para>
+                <para>一般的に<acronym>PHPTAL</acronym>は他のファイルからDOCTYPEを"継承"することを許容します。ではありますが、それはバッファリングを回避することはできません。</para>
+                <para>その場合は以下を試してみてください。</para>
                 <itemizedlist>
-                    <listitem><para>Keep using <code>echo $tpl->execute()</code> until this limitation is lifted.</para></listitem>
-                    <listitem><para>Remove all DOCTYPEs and XML declarations from templates and echo them from PHP before calling <methodname>echoExecute()</methodname>.</para></listitem>
+                    <listitem><para>制約を引き上げた後に<code>echo $tpl->execute()</code>を使ってください。</para></listitem>
+                    <listitem><para><methodname>echoExecute()</methodname>が呼ばれる前に、全てのDOCTYPEとXML宣言を削除してください。</para></listitem>
                 </itemizedlist>
             </simplesect>
         </section>
 
 
-				<section id="add-prefilter">
-						<title><methodname>addPreFilter()</methodname> method</title>
+                                <section id="add-prefilter">
+                                                <title><methodname>addPreFilter()</methodname> method</title>
 
-						<note><para>In PHPTAL 1.2.1 this method replaced older <methodname>setPreFilter()</methodname> method, which is now deprecated.</para></note>
+                                                <note><para>PHPTAL1.2.1以降、<methodname>setPreFilter()</methodname>は非推奨となり、このメソッドに置き換えられました。</para></note>
 
-						<para>Adds new pre filter that will be applied to the template. Pre filters can modify source code and parsed DOM nodes of the template. Pre filters are applied in order they've been set.</para>
+                                                <para>テンプレートに適用させる新たなプリフィルターを追加します。プリフィルターは
+                                                      ソースコードやテンプレート中のパースされたDOMノードに変更を加えることができます。
+                                                      追加されたプリフィルターは全て適用されます。</para>
 
-						<para>See description of <link linkend="prefilters">PHPTAL_PreFilter</link> for more information how to write your own pre filter.</para>
+                                                <para>独自のプリフィルターを作成する場合は<link linkend="prefilters">PHPTAL_PreFilter</link>を参照してください。</para>
 
-				</section>
+                                </section>
    </section>
 
 
-		<section id="prefilters">
-			<title>class <classname>PHPTAL_PreFilter</classname></title>
+                <section id="prefilters">
+                        <title><classname>PHPTAL_PreFilter</classname>クラス</title>
 
-			<para>Pre filters are executed only once before template is compiled. Pre filters operate on template's source code, so they are <emphasis>not</emphasis> able to access value of any template variables. However pre filters can "see" and modify TAL markup.
-			</para>
+                        <para>プリフィルターはテンプレートがコンパイルされる前に一度だけ実行されます。
+                              プリフィルターはテンプレートのソースコードを処理しますが、それらの値や変数には
+                              アクセスすることが<emphasis>できません</emphasis>。TALマークアップを"見"たり、編集することができます。
+                        </para>
 
-			<para>To create pre filter <emphasis>extend</emphasis> <classname>PHPTAL_PreFilter</classname> class and implement only <methodname>filter<replaceable>*</replaceable>()</methodname> methods you need.</para>
+                        <para>プリフィルターを作成する際は、<classname>PHPTAL_PreFilter</classname>クラスを<emphasis>extend</emphasis>し、必要に応じて<methodname>filter<replaceable>*</replaceable>()</methodname>メソッドを実装してください。</para>
 
-			<simplesect><title><methodname>filter()</methodname></title>
-				<para>Receives template source code as string and is expected to return new source.</para>
-				<para>You can use it to simply find'n'replace fragments of source code. Be careful not to introduce syntax errors in the template.</para>
+                        <simplesect><title><methodname>filter()</methodname></title>
+                                <para>テンプレートを文字列として受取り、新しいテンプレートを返すことが期待されます。</para>
+                                <para>ソースコードを単純に検索/置換する際に利用できます。ただしテンプレートの文法エラーは検出しないので注意してください。</para>
 
-				<warning><para>PHPTAL's error messages will refer to line numbers after filtering, which may be confusing if your prefilter adds or remove lines from the source code.</para></warning>
-			</simplesect>
+                                <warning><para>PHPTALのエラーメッセージはフィルタリング後の行番号を参照しますので、プリフィルターによる行の追加や削除は混乱の元になります。</para></warning>
+                        </simplesect>
 
-			<simplesect><title><methodname>filterDOM()</methodname></title>
-				<para>Receives root <link linkend="phptal-dom">PHPTAL DOM node</link> of parsed file and should edit it in place.</para>
+                        <simplesect><title><methodname>filterDOM()</methodname></title>
+                                <para>パースされたファイルのルートとなる<link linkend="phptal-dom">PHPTAL DOM ノード</link>を受取り、それを編集します。</para>
 
-				<para>Example pre filter that removes all comments:</para>
-				<informalexample><programlisting language="php"><![CDATA[function filterDOM(PHPTAL_Dom_Element $element)
+                                <para>以下のサンプルは全てのコメントを削除するプリフィルターです。</para>
+                                <informalexample><programlisting language="php"><![CDATA[function filterDOM(PHPTAL_Dom_Element $element)
 {
     foreach($element->childNodes as $node) {
        if ($node instanceof PHPTAL_Dom_Comment) {
            $node->parentNode->removeChild($node);
        }
        else if ($node instanceof PHPTAL_Dom_Element) {
-           $this->filterDOM($node); /* recursively filter all elements */
+           $this->filterDOM($node); /* 全てのエレメントを再帰的に処理します */
        }
     }
 }
 ]]></programlisting></informalexample>
-			</simplesect>
+                        </simplesect>
 
 
-			<simplesect><title><methodname>getCacheId()</methodname></title>
-<para>
-	Should return (any) string that uniquely identifies this filter and its settings, which is used to (in)validate template cache. Each time you return different string, template will be recompiled. Implement this method if result of the filter depends on its configuration.</para>
+                        <simplesect><title><methodname>getCacheId()</methodname></title>
+<para>このフィルターと設定に対する一意な文字列を返さなければなりません。これはテンプレートのキャッシングに利用されます。
+      異なる文字列が返されたときは、常にテンプレートが再コンパイルされます。
+      フィルターの出力がプロパティなどの設定に依存する場合、このメソッドを実装してください。
+</para>
 
-	<para> Unlike other filter methods, this one is called on every execution.</para>
-
-
-			<tip><para>When developing and testing your filter, set <link linkend="set-force-reparse"><methodname>setForceReparse(true)</methodname></link> to force PHPTAL to update templates every time. Otherwise result of your filter will be cached and you won't see the changes.</para></tip>
-
-			</simplesect>
-			<simplesect><title><methodname>getPHPTAL()</methodname></title>
-			 <para>Returns instance of PHPTAL class that uses this prefilter. You can query it to check current encoding or other settings.</para></simplesect>
+        <para>他のメソッドとは異なり実行の際に毎回呼ばれます。</para>
 
 
+                        <tip><para>フィルターの開発（やテスト）中はPHPTALが強制的にテンプレートをコンパイルするように<link linkend="set-force-reparse"><methodname>setForceReparse(true)</methodname></link>を設定してください。でなければ、フィルターの出力はキャッシュされるために、変更点がチェックできなくなります。</para></tip>
+
+                        </simplesect>
+                        <simplesect><title><methodname>getPHPTAL()</methodname></title>
+                         <para>このフィルターで利用されているPHPTALのインスタンスを返します。エンコーディングやその他の設定などを取得するために使用します。</para></simplesect>
 
 
-		</section>
 
-		<section id="phptal-dom">
-			<title>PHPTAL DOM</title>
-			<para>Internally PHPTAL represents documents using it's own document object model, a little bit similar to W3C's DOM. However, PHPTAL's API has only few basic methods for <link linkend="prefilters">DOM manipulation</link>.</para>
 
-			<para><classname>PHPTAL_Dom_Element</classname> class has following properties and methods:</para>
-			<itemizedlist>
+                </section>
 
-				<listitem><fieldsynopsis><type>array</type><varname>childNodes</varname></fieldsynopsis>
-				<para>Numerically indexed array containing children of the element.</para>
-				<warning><para>Please don't edit this array directly. Use <methodname>appendChild()</methodname>, etc.</para></warning>
+                <section id="phptal-dom">
+                        <title>PHPTAL DOM</title>
+                        <para>PHPTALの内部では、ドキュメントをW3C'のDOM（に近い形）として表現します。
+                              一方で、PHPTALのAPIではいくつかの基本的な<link linkend="prefilters">DOM操作メソッド</link>が用意されています。</para>
 
-				<note><para>PHPTAL does not implement <varname>nextSibling</varname>, <varname>firstChild</varname>, etc.</para></note>
+                        <para><classname>PHPTAL_Dom_Element</classname>クラスは以下のプロパティとメソッドを提供します。</para>
+                        <itemizedlist>
 
-				</listitem>
+                                <listitem><fieldsynopsis><type>array</type><varname>childNodes</varname></fieldsynopsis>
+                                <para>数値でインデックスされた配列に子エレメントが入っています。</para>
+                                <warning><para>この配列を直接編集せず、<methodname>appendChild()</methodname>などを利用してください。</para></warning>
 
-				<listitem><fieldsynopsis><type>PHPTAL_Dom_Element</type><varname>parentNode</varname></fieldsynopsis>
-				<para>Parent node (element) of the current element. Use it to traverse tree upwards.</para>
+                                <note><para>PHPTALは<varname>nextSibling</varname>や<varname>firstChild</varname>などは提供していません。</para></note>
 
-				</listitem>
+                                </listitem>
 
-				<listitem>	<methodsynopsis><void/><methodname>appendChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
-				<para>Appends node to the element. Node will be removed from its current element and added at the end of this element.</para>
-				<warning><para>PHPTAL does not manage namespace declarations. Moving nodes between elements in different namespaces will change meaning of the document.</para></warning>
-			</listitem><listitem>	<methodsynopsis><void/><methodname>replaceChild</methodname><methodparam><parameter>$new_node</parameter></methodparam> <methodparam><parameter>$old_node</parameter></methodparam></methodsynopsis>
-				<para>Old node will be replaced with new node.</para>
+                                <listitem><fieldsynopsis><type>PHPTAL_Dom_Element</type><varname>parentNode</varname></fieldsynopsis>
+                                <para>現在のエレメントの親ノード（親エレメント）です。DOMツリーを上へ向かう際に利用してください。</para>
 
-				</listitem><listitem>
-								<methodsynopsis><void/><methodname>removeChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
-				<para>Remove node from its parent.</para>
+                                </listitem>
 
-			</listitem><listitem>
+                                <listitem>      <methodsynopsis><void/><methodname>appendChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
+                                <para>エレメントにノードを追加します。</para>
+                                <warning><para>PHPTALはnamespaceの定義を扱うことができません。異なるnamespaceのエレメントでノードを移動させた場合、ドキュメントの意味が変わってしまいます。</para></warning>
+                        </listitem><listitem>   <methodsynopsis><void/><methodname>replaceChild</methodname><methodparam><parameter>$new_node</parameter></methodparam> <methodparam><parameter>$old_node</parameter></methodparam></methodsynopsis>
+                                <para>ノードを入れ替えます。</para>
 
-				<methodsynopsis><type>string</type> <methodname>getAttributeNS</methodname><methodparam><parameter>$namespace_uri</parameter></methodparam> <methodparam><parameter>$local_name</parameter></methodparam></methodsynopsis>
-				<para>Returns unescaped (without entities) value of a specific attribute.</para>
-				<informalexample><programlisting language="php">$a->getAttributeNS('','href')</programlisting></informalexample>
-				<tip><para>In XML attributes don't inherit element's namespace, and all XHTML attributes are in the default namespace.</para></tip>
+                                </listitem><listitem>
+                                                                <methodsynopsis><void/><methodname>removeChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
+                                <para>ノードをその親から削除します。</para>
 
-			</listitem><listitem>
+                        </listitem><listitem>
 
-				<methodsynopsis><type>array</type><methodname>getAttributeNodes</methodname></methodsynopsis>
-				<para>Returns array of <classname>PHPTAL_Dom_Attr</classname> objects, which represent all element's attributes. You can modify attributes' values without using <methodname>setAttributeNodes()</methodname>.</para>
+                                <methodsynopsis><type>string</type> <methodname>getAttributeNS</methodname><methodparam><parameter>$namespace_uri</parameter></methodparam> <methodparam><parameter>$local_name</parameter></methodparam></methodsynopsis>
+                                <para>エンティティ以外のエスケープされていない値をattributeから取得します。</para>
+                                <informalexample><programlisting language="php">$a->getAttributeNS('','href')</programlisting></informalexample>
+                                <tip><para>XML内ではattributeはエレメントのnamespaceを継承しません。全てのXHTML attributeはデフォルトのnamespaceに属します。</para></tip>
 
-			</listitem><listitem>
+                        </listitem><listitem>
 
-				<methodsynopsis><void/><methodname>setAttributeNodes</methodname><methodparam>
-				<type>array</type><parameter>$attrs</parameter></methodparam></methodsynopsis>
-				<para>Replaces all elements attributes with the given ones.</para>
+                                <methodsynopsis><type>array</type><methodname>getAttributeNodes</methodname></methodsynopsis>
+                                <para>全てのエレメントのattributeを表す<classname>PHPTAL_Dom_Attr</classname>オブジェクトの配列を返します。これを使えば<methodname>setAttributeNodes()</methodname>を使わずにattributeの値を変更することができます。</para>
 
-			</listitem><listitem>
+                        </listitem><listitem>
 
-				<methodsynopsis><type>string</type><methodname>getLocalName</methodname></methodsynopsis>
-				<para>Returns local name of the element, e.g. <code>&lt;atom:title></code> has local name <code>title</code>.</para>
+                                <methodsynopsis><void/><methodname>setAttributeNodes</methodname><methodparam>
+                                <type>array</type><parameter>$attrs</parameter></methodparam></methodsynopsis>
+                                <para>エレメントのattributesを全て置き換えます。</para>
 
-				</listitem><listitem>
+                        </listitem><listitem>
 
-				<methodsynopsis><type>string</type><methodname>getNamespaceURI</methodname></methodsynopsis>
-				<para>Returns namespace URI of the the element, e.g. <code>&lt;atom:title xmlns="http://www.w3.org/2005/Atom"></code> has namespace <code>http://www.w3.org/2005/Atom</code>.</para>
-				<tip><para>XHTML namespace is <code>http://www.w3.org/1999/xhtml</code>.</para></tip>
+                                <methodsynopsis><type>string</type><methodname>getLocalName</methodname></methodsynopsis>
+                                <para>エレメントのローカルネームを返します。例：<code>&lt;atom:title></code>は<code>title</code>を持ちます。</para>
+
+                                </listitem><listitem>
+
+                                <methodsynopsis><type>string</type><methodname>getNamespaceURI</methodname></methodsynopsis>
+                                <para>エレメントのnamespace URIを返します。例：<code>&lt;atom:title xmlns="http://www.w3.org/2005/Atom"></code>のnamespaceは<code>http://www.w3.org/2005/Atom</code>です。</para>
+                                <tip><para>XHTML namespaceは<code>http://www.w3.org/1999/xhtml</code>です。</para></tip>
 
 </listitem></itemizedlist>
 
-<para>Text, CDATA and attribute nodes have <methodname>getValueEscaped()</methodname> and <methodname>setValueEscaped()</methodname> methods which allow reading/setting of their text with entities preserved.</para>
+<para>テキストやCDATA、attributeノードは、テキストの実体を読み書きするために<methodname>getValueEscaped()</methodname>や<methodname>setValueEscaped()</methodname>メソッドを持っています。</para>
 
-		</section>
+                </section>
     <section id="filter-interface">
-      <title>interface <classname>PHPTAL_Filter</classname></title>
+      <title><classname>PHPTAL_Filter</classname>インターフェース</title>
 
       <para>
-	This interface allows you to create filters for processing result of template execution. Post filters are set using <methodname>setPostFilter()</methodname> method.
+        このインターフェースを使って、テンプレートの実行結果に対するフィルターを作成することができます。
+        ポストフィルターは<methodname>setPostFilter()</methodname>メソッドを使ってセットします。
       </para>
 
       <para>
-      Post filters are invoked after each template execution.
+      ポストフィルターはテンプレートの実行後に毎回適用されます。
       </para>
 
-			<tip><para>If your filter is slow, try using <link linkend="prefilters">pre filter</link> instead, which is  executed only once before template is compiled.</para></tip>
+                        <tip><para>もしポストフィルターによって動作が遅くなる場合、<link linkend="prefilters">プリフィルター</link>
+                                   を代わりに使ってみてください。プリフィルターはテンプレートのコンパイル時に一度だけ実行されます。</para></tip>
 
-			<para>Result of template processing (with values of all variables and no TAL markup) will be passed to your filter's <methodname>filter()</methodname> method:</para>
+                        <para> テンプレートの実行結果（全ての変数置換とTALマークアップの適用後）が、あなたのフィルターの<methodname>filter()</methodname>メソッドに渡されます。</para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
@@ -2190,12 +2026,12 @@ echo $tpl->execute();
 ?>
 ]]></programlisting></informalexample>
 
-<simplesect><title>Multiple post filters</title>
+<simplesect><title>多段ポストフィルター</title>
       <para>
-      You can set only one post filter using
-      <methodname>setPostFilter()</methodname>. If you have more than one filter to chain, you can
-      wrap them into a single class, implementing the <classname>PHPTAL_Filter</classname>
-      interface, which would invoke the filter's chain.
+      一つだけポストフィルターを使う場合は
+      <methodname>setPostFilter()</methodname>が使えますが、もし複数のフィルターチェインがある場合、
+      フィルターチェインをinvokeするように<classname>PHPTAL_Filter</classname>を実装することで、
+      それらを一つのクラスとしてラップすることができます。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
@@ -2228,36 +2064,32 @@ echo $tpl->execute();
     </section>
 
     <section id="trigger-interface">
-      <title>interface <classname>PHPTAL_Trigger</classname></title>
+      <title><classname>PHPTAL_Trigger</classname>インターフェース</title>
 
       <para>
-      The <sgmltag>phptal:id</sgmltag> attribute was added into the <acronym>PHPTAL</acronym> for the <acronym>PHP5</acronym>
-      version to replace the old <classname>PHPTAL_Cache</classname> interface and to abstract
-      it a little more.
+      <sgmltag>phptal:id</sgmltag> attribute は、<acronym>PHP5</acronym>のために古い<classname>PHPTAL_Cache</classname>インターフェースを置き換え、abstractなものとして<acronym>PHPTAL</acronym>に追加されました。 
       </para>
 
       <para>
-      When a <sgmltag>phptal:id</sgmltag> is reached, <acronym>PHPTAL</acronym> will look in its triggers list
-      for a matching id and will invoke the trigger <methodname>start()</methodname> and <methodname>end()</methodname>
-      methods before entering the element, and just after it.
+      テンプレートの解釈が<sgmltag>phptal:id</sgmltag>に達した時点で、<acronym>PHPTAL</acronym>はトリガーリストから
+      idに一致するトリガーを探し、その<methodname>start()</methodname>メソッドをエレメントの開始時に、
+      <methodname>end()</methodname>メソッドを終了時に実行します。
       </para>
 
       <para>
-      If the <methodname>PHPTAL_Trigger::start()</methodname> method returns
-      <constant>PHPTAL_Trigger::SKIPTAG</constant>, <acronym>PHPTAL</acronym> will ignore the element and its
-      content (<methodname>start()</methodname> may echo something to replace it).
+      もし<methodname>PHPTAL_Trigger::start()</methodname> が<constant>PHPTAL_Trigger::SKIPTAG</constant>を返す場合、
+      <acronym>PHPTAL</acronym>はこのエレメントとその内容を無視します。
+      （それに変わる何かを<methodname>start()</methodname>が出力するかもしれません。）
       </para>
 
       <para>
-      If your trigger wants the element and its content to be executed,
-      you'll have to return <constant>PHPTAL_Trigger::PROCEED</constant>.
+      もしトリガーの実行のためにエレメントや内容が必要な場合は<constant>PHPTAL_Trigger::PROCEED</constant>を返す必要があります。
       </para>
 
       <para>
-      The <methodname>PHPTAL_Trigger::end()</methodname> will be called after the element
-      (whether it has been executed or not). This allows you to build
-      cache systems using <function>ob_start()</function> in <methodname>start()</methodname> and <function>ob_get_contents()</function>,
-      <function>ob_end_clean()</function> in <methodname>end()</methodname>.
+      <methodname>PHPTAL_Trigger::end()</methodname>はエレメント終了時に呼ばれます。これにより、
+      <methodname>start()</methodname>内で<function>ob_start()</function>を、<methodname>end()</methodname>内で
+      <function>ob_get_contents()</function>と<function>ob_end_clean()</function>を使ったキャッシュシステムを作ることもできます。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<html>
@@ -2272,8 +2104,8 @@ echo $tpl->execute();
 ]]></programlisting></informalexample>
 
       <para>
-      For some reason we decide the <sgmltag>&lt;div&gt;</sgmltag> block requires to be cached. We
-      introduce a <sgmltag>phptal:id</sgmltag> into the template:
+      何らかの理由により<sgmltag>&lt;div&gt;</sgmltag>ブロックをキャッシュすることとし、
+      テンプレートに<sgmltag>phptal:id</sgmltag>を導入します。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<html>
@@ -2288,7 +2120,7 @@ echo $tpl->execute();
 ]]></programlisting></informalexample>
 
       <para>
-      Then we write our trigger which will cache the <sgmltag>&lt;div&gt;</sgmltag> content:
+      そのうえで<sgmltag>&lt;div&gt;</sgmltag>をキャッシュするトリガーを作成します。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
@@ -2299,35 +2131,34 @@ class CacheTrigger implements PHPTAL_Trigger
 {
     public function start($phptalid, $tpl)
     {
-        // this cache depends on 'id' which must appears in
-        // the template execution context
+        // このキャッシュは、テンプレート実行時に現れた'id'に依存します。
         $this->_cachePath = 'cache.' . $tpl->getContext()->id;
 
-        // if already cached, read the cache and tell PHPTAL to
-        // ignore the tag content
+        // もし既にキャッシュが存在する場合、キャッシュを読み込んだ上で
+        // PHPTALにはこのタグの内容を無視するように通知します。
         if (file_exists($this->_cachePath)){
             $this->_usedCache = true;
             readfile($this->_cachePath);
             return self::SKIPTAG;
         }
 
-        // no cache found, we start an output buffer and tell
-        // PHPTAL to proceed (ie: execute the tag content)
+        // キャッシュが存在しない場合は出力を開始し、
+        // PHPTALに処理を依頼します。
         $this->_usedCache = false;
         ob_start();
         return self::PROCEED;
     }
 
-    // Invoked after tag execution
+    // タグの処理後に呼ばれます
     public function end($phptalid, $tpl)
     {
-        // end of tag, if cached file used, do nothing
+        // 終了タグ処理。キャッシュヒットの場合は何もしません。
         if ($this->_usedCache){
             return;
         }
 
-        // otherwise, get the content of the output buffer
-        // and write it into the cache file for later usage
+        // そうでなければ、出力バッファの内容を取得し、出力した後に
+        // キャッシュファイルに書き出します。
         $content = ob_get_contents();
         ob_end_clean();
         echo $content;
@@ -2344,36 +2175,32 @@ class CacheTrigger implements PHPTAL_Trigger
 ]]></programlisting></informalexample>
 
       <para>
-      The key here is to return from <methodname>start()</methodname> with either <constant>SKIPTAG</constant> or
-      <constant>PROCEED</constant>.
+      注意すべきは<constant>SKIPTAG</constant>か<constant>PROCEED</constant>のどちらかが<methodname>start()</methodname>の戻り値となる点です。
       </para>
 
       <para>
-      When <constant>SKIPTAG</constant> is returned, <acronym>PHPTAL</acronym> will just ignore the tag and call
-      end().  This usually means that the trigger takes the hand in
-      deciding what to show there.
+      <constant>SKIPTAG</constant>が返される場合、<acronym>PHPTAL</acronym>はタグを無視し<methodname>end()</methodname>を呼びます。これは大抵の場合、トリガーはそこに表示すべき何かを受け取ります。
       </para>
 
       <para>
-      When <constant>PROCEED</constant> is returned, <acronym>PHPTAL</acronym> will execute the tag and its
-      content as usual, then call <methodname>end()</methodname>. This allows our cache class to
-      play with output buffers to execute the tag once and to store the
-      result in a file which will be used in later calls.
+      <constant>PROCEED</constant>が返される場合、<acronym>PHPTAL</acronym>は通常通りタグと内容を実行し、
+      <methodname>end()</methodname>を呼びます。
+      これにより実行結果をファイルに出力し、後で再利用するようなアウトプットバッファをもったキャッシュクラスの実装が可能になっています。
       </para>
 
       <para>
-      To install our trigger we use:
+      このトリガーを利用するには以下のように記述します。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
-require_once 'CacheTrigger.php'; // our custom trigger
+require_once 'CacheTrigger.php'; // 自作トリガー
 
 $trigger = new CacheTrigger();
 
 $tpl = new PHPTAL('test.xhtml');
 
-// this trigger will only be called for phptal:id="triggerId"
+// このトリガーは phptal:id="triggerId"の時だけ呼ばれます。
 $tpl->addTrigger('somePossiblyUniqueKeyword', $trigger);
 
 $tpl->id = 1;
@@ -2384,54 +2211,49 @@ echo $tpl->execute();
 ]]></programlisting></informalexample>
 
       <para>
-      You can add as many triggers as you like to your templates.  A
-      generic cache trigger may also handle more than one <sgmltag>phptal:id</sgmltag>…
-      etc…
+      テンプレートには多くのトリガーを追加することができます。
+      一般的なキャッシュトリガーは一つ以上の<sgmltag>phptal:id</sgmltag>やその他を利用するでしょう。
       </para>
     </section>
 
     <section id="translation-interface">
-      <title>interface <classname>PHPTAL_TranslationService</classname></title>
+      <title><classname>PHPTAL_TranslationService</classname>インターフェース</title>
 
       <para>
-      <acronym>PHPTAL</acronym> comes with a default gettext translation service, as shown
-      in another section. For some reason you may prefer to implement
-      your own service of translation.
+      他のセクションでも示されているように、<acronym>PHPTAL</acronym>は標準ではgettextによる翻訳機能を提供
+      していますが、独自の機能を実装することもできます。
       </para>
 
       <para>
-      The <classname>PHPTAL_TranslationService</classname> interface is here to serve your
-      needs.
+      <classname>PHPTAL_TranslationService</classname>インターフェースはそのような時に使用します。
       </para>
 
       <para>
-      The usage of your service will be the same as the
-      <classname>PHPTAL_GetTextTranslator</classname>.
+      使い方は
+      <classname>PHPTAL_GetTextTranslator</classname>と同様となります。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[$tpl->setTranslator($yourOwnTranslatorInstance);
 ]]></programlisting></informalexample>
 
       <para>
-      Your implementation must define the following methods:
+      以下のメソッドを実装する必要があります。
       </para>
 
       <section id="i18n-setlanguage">
-        <title>method <methodname>setLanguage(<replaceable>…</replaceable>)</methodname></title>
+        <title><methodname>setLanguage(<replaceable>…</replaceable>)</methodname>メソッド</title>
 
         <para>
-        This method may be called by the template to change the current
-        output language and/or locale (e.g. <code>en_US</code>).
+        このメソッドはテンプレートの出力言語およびロケール（<code>ja_JP</code>等）を切替える際に呼ばれます。
         </para>
 
         <para>
-        Its arguments are a list of possible languages. Use
-        <function>func_get_args()</function> to get the argument array. The first known
-        language should be used by your service.
+        引数として、利用可能な言語の配列をとります。引数配列を扱うために、<function>func_get_args()</function>を使ってください。
+        あなたのサービスに対しては母国語を利用するべきでしょう。
         </para>
 
         <para>
-            Return language that has been set.
+            以下の例では、設定された言語を返します。
         </para>
 
         <informalexample><programlisting language="php"><![CDATA[<?php
@@ -2442,7 +2264,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     public function setLanguage(){
         $langs = func_get_args();
         foreach($langs as $lang){
-            // if $lang known use it and stop the loop
+            // もし$langが既知ならそれを利用し、ループを終了します。
             $this->_currentLang = $lang;
             break;
         }
@@ -2456,12 +2278,10 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-usedomain">
-        <title>method <methodname>useDomain(<replaceable>$domain</replaceable>)</methodname></title>
+        <title><methodname>useDomain(<replaceable>$domain</replaceable>)</methodname>メソッド</title>
 
         <para>
-        If you decided to store your translations into separate files,
-        one for each application, for example, this method allows you to
-        select the translation domain from your templates (<sgmltag>i18n:domain</sgmltag>).
+        アプリケーション毎に一つずつのように、分割したファイルに翻訳文を保存する場合、このメソッドによってテンプレートのドメインを選択することができます。(<sgmltag>i18n:domain</sgmltag>)
         </para>
 
         <informalexample><programlisting language="php"><![CDATA[<?php
@@ -2484,16 +2304,15 @@ class MyTranslator implements PHPTAL_TranslationService {
 ]]></programlisting></informalexample>
 
         <para>
-        The above example is a possible translation solution where keys
-        are stored in <acronym>PHP</acronym> files which return an associative array of
-        key =&gt; translation.
+        上記の例では、キーと翻訳文の連想配列を返す<acronym>PHP</acronym>ファイルを元とした翻訳を可能にしています。
         </para>
       </section>
 
       <section id="i18n-setvar">
-        <title>method <methodname>setVar(<replaceable>$key</replaceable>,<replaceable>$value</replaceable>)</methodname></title>
+        <title><methodname>setVar(<replaceable>$key</replaceable>,<replaceable>$value</replaceable>)</methodname>メソッド</title>
 
         <para>
+        このメソッドは<sgmltag>i18n:name</sgmltag>呼び出しに相当します。後の呼び出しのためにコンテキストに保存しておきます。
         This method matches <sgmltag>i18n:name</sgmltag> calls. It builds an interpolation
         context for later translate calls.
         </para>
@@ -2514,11 +2333,10 @@ class MyTranslator implements PHPTAL_TranslationService {
       </section>
 
       <section id="i18n-translatekey">
-        <title>method <methodname>translate(<replaceable>$key</replaceable>)</methodname></title>
+        <title><methodname>translate(<replaceable>$key</replaceable>)</methodname>メソッド</title>
 
         <para>
-        The last and most important method to implement, it asks your
-        service to translate the specified key for the currently selected
+        最後になりますが、実装にとって重要なメソッドです。その時点で指定された言語の元で、キーに関連づけられた翻訳文を返します。
         language.
         </para>
 
@@ -2530,7 +2348,7 @@ class MyTranslator implements PHPTAL_TranslationService {
     public function translate($key){
         $value = $this->_currentDomain[$key];
 
-        // interpolate ${myvar} using context associative array
+        // コンテキストの連想配列を使って${myvar}を補完します。
         while (preg_match('/\${(.*?)\}/sm', $value, $m)){
             list($src,$var) = $m;
             if (!array_key_exists($var, $this->_context)){
@@ -2551,60 +2369,57 @@ class MyTranslator implements PHPTAL_TranslationService {
 
 
         <section id="i18n-setencoding">
-          <title>method <methodname>setEncoding(<replaceable>$encoding</replaceable>)</methodname></title>
+          <title><methodname>setEncoding(<replaceable>$encoding</replaceable>)</methodname>メソッド</title>
 
           <para>
-              <acronym>PHPTAL</acronym> class calls this method to inform your translation service what encoding is used by the template. <methodname>translate()</methodname> method should return strings in that encoding. If you always use the same encoding for templates and translation files (i.e. UTF-8), you can leave this method empty.
+              <acronym>PHPTAL</acronym>クラスはテンプレートに使われているエンコードを教えるためにこのメソッドを呼びます。
+              <methodname>translate()</methodname>メソッドはそのエンコーディングで文字列を返す必要があります。 
+              常にテンプレートと翻訳ファイルに同じエンコーディング（例えばUTF-8）を使うのであれば、このメソッドは空にしておいて良いでしょう。
           </para>
         </section>
     </section> <!-- end of PHPTAL_TranslationService -->
 
 
     <section id="gettext">    <?dbhtml stop-chunking?>
-      <title>Working with gettext</title>
+      <title>gettextによる処理</title>
 
       <para>
-      <literal>gettext</literal> is a standard <acronym>GNU</acronym> internationalization
-      / translation system which can be used with <acronym>PHP</acronym> and which is
-      supported by <acronym>PHPTAL</acronym>.
+      <literal>gettext</literal>は<acronym>PHP</acronym>から使える標準的な<acronym>GNU</acronym>の
+      国際化/翻訳システムであり、<acronym>PHPTAL</acronym>.でもサポートされています。
       </para>
 
       <para>
-      The usage of <productname>gettext</productname> is simple but you will
-      have to perform some tests to be sure everything works fine on your
-      system.
+      <productname>gettext</productname>の使い方は単純ですが、あなたのシステムで使えるかどうかを確かめるためにいくつかのテストを実行してください。
       </para>
 
       <para>
-      First, <acronym>PHP</acronym> must be compiled with the
-      <parameter>--with-gettext</parameter> flag. See <acronym>PHP</acronym> documentation
-      for how to do this.
+      まず最初に、<acronym>PHP</acronym>が<parameter>--with-gettext</parameter>付きでコンパイルされている
+      必要があります。（コンパイル方法は<acronym>PHP</acronym>のドキュメントを参照してください。）
       </para>
 
       <para>
-      You can test your installation using following peace of code:
+      以下のコードでテストすることができます。
       </para>
 
       <informalexample><programlisting role="php"><![CDATA[//
-// test if gettext extension is installed with php
+// gettext extentionがPHPにインストールされているかのテスト
 //
 
 if (!function_exists("gettext"))
 {
-    echo "gettext is not installed\n";
+    echo "gettextがインストールされていません\n";
 }
 else
 {
-    echo "gettext is supported\n";
+    echo "gettextがサポートされています\n";
 }
 ]]></programlisting></informalexample>
 
       <section id="i18n-directory"><?dbhtml stop-chunking?>
-        <title>Creating the translation directory structure</title>
+        <title>翻訳辞書の作成</title>
 
         <para>
-        The <acronym>PHP</acronym> <productname>gettext</productname> extension requires a specific structure which
-        will contain your translation files.
+        <acronym>PHP</acronym>の<productname>gettext</productname> extensionは翻訳ファイルを含む特殊な構造を必要とします。
         </para>
 
         <informalexample><programlisting><![CDATA[/path/to/your/translation_root/en_US/LC_MESSAGES/
@@ -2615,13 +2430,12 @@ else
 ]]></programlisting></informalexample>
 
         <para>
-        The language code is composed of two characters defining the
-        language itself (en, fr, es, …) and two characters defining
-        the country (US, GB, FR, ES, …).
+        言語コードは、その言語自身(en, fr, es, ja,…)を表す２文字の文字で表現されます。
+        さらに続く二つの文字は国(US, GB, FR, ES, JP, …).を定義します。
         </para>
 
         <para>
-        The directory pattern is:
+        ディレクトリパターンは以下です。
         </para>
 
         <informalexample><programlisting><![CDATA[<path_to_where_you_want>/<ll_CC>/LC_MESSAGES/
@@ -2630,15 +2444,15 @@ else
       </section>
 
       <section id="po-files"><?dbhtml stop-chunking?>
-        <title>Portable Object files</title>
+        <title>Portable Object ファイル</title>
 
         <para>
-        PO files are plain text files that contain your translation.
-        You can safely edit them by hand.
+        POファイルは翻訳を含んだプレインテキストです。
+        特殊なツールを使わず、人手で編集することができます。
         </para>
 
         <para>
-        po minimalistic example (<filename>en_US/LC_MESSAGES/mydomain.po</filename>):
+        以下は最も小さなPOファイルの例です。(<filename>en_US/LC_MESSAGES/mydomain.po</filename>):
         </para>
 
         <informalexample><programlisting language="po"><![CDATA[msgid ""
@@ -2651,28 +2465,26 @@ msgstr "A small sentence in english"
 ]]></programlisting></informalexample>
 
         <para>
-        Once edited, each PO file must be indexed using:
+        一度編集したらインデックス化しなければなりません。
         </para>
 
         <informalexample><programlisting language="sh"><![CDATA[msgfmt mydomain.po -o mydomain.mo
 ]]></programlisting></informalexample>
 
         <para>
-        This command won't work if you don't have <productname>gettext</productname> tools
-        installed on your system.
+        あなたのシステムに<productname>gettext</productname>がインストールされていなければこのコマンドは動作しません。
         </para>
 
         <para>
-        This will produce a MO file (machine object) indexing your
-        translation for quick access.
+        このコマンドにより、翻訳文に素早くアクセスするためにインデックス化されたMO(machine object)ファイルが生成されます。
         </para>
 
         <para>
-        Then you have to translate this file in other languages.
+        そして、あなたは他の言語でこのファイルを翻訳する必要があります。
         </para>
 
         <para>
-        po minimalistic example (<filename>fr_FR/LC_MESSAGES/mydomain.po</filename>):
+        最小の例は以下です。 (<filename>ja_JP/LC_MESSAGES/mydomain.po</filename>):
         </para>
 
         <informalexample><programlisting language="po"><![CDATA[msgid ""
@@ -2680,12 +2492,12 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-msgid "Simple test"
-msgstr "Une petite phrase en français"
+msgid "シンプルなテストです"
+msgstr "日本語による小文です"
 ]]></programlisting></informalexample>
 
         <para>
-        The translation file must also be indexed:
+        そして再度インデックス化します。
         </para>
 
         <informalexample><programlisting language="sh"><![CDATA[msgfmt mydomain.po -o mydomain.mo
@@ -2694,22 +2506,20 @@ msgstr "Une petite phrase en français"
       </section>
 
       <section id="i18n-domains">
-        <title>Translation Domain</title>
+        <title>Translationドメイン</title>
 
         <para>
-        The domain is matched against your translation file names. In
-        above examples we used 'mydomain' as domain name.
+        ドメインは翻訳ファイルを逆からマッチングします。先ほどまでの例では'mydomain'をドメイン名として利用してきました。
         </para>
 
         <para>
-        You can have more than one domain for the same application, it
-        can enhance <productname>gettext</productname>'s performance to split your application
-        translations in more than one file.
+        一つのアプリケーションで複数のドメインを持つことができ、複数のファイルに翻訳文を分割することで
+        <productname>gettext</productname>のパフォーマンスを向上させることができます。
         </para>
       </section>
 
       <section id="php-in-phptal">
-        <title>Using Translator in <acronym>PHP</acronym></title>
+        <title><acronym>PHP</acronym>内での翻訳</title>
 
         <informalexample><programlisting language="php"><![CDATA[<?php
 require_once 'PHPTAL.php';
@@ -2718,22 +2528,22 @@ require_once 'PHPTAL/GetTextTranslator.php';
 try {
     $tr = new PHPTAL_GetTextTranslator();
 
-    // set language to use for this session (first valid language will
-    // be used)
+    // このセッション内で利用する言語セット
+    // 最初に有効と判断された言語が利用されます
     $tr->setLanguage('en_GB.utf8', 'en_GB');
 
-    // register gettext domain to use
+    // 利用したいgettextドメインを登録
     $tr->addDomain('mydomain', '/path/to/your/translation_root');
 
-    // specify current domain
+    // 現在のドメインを指定
     $tr->useDomain('mydomain');
 
     $tpl = new PHPTAL('mytemplate.xhtml');
 
-    // tell PHPTAL to use our translator
+    // PHPTALにtranslatorをセット
     $tpl->setTranslator($tr);
 
-    // output translated template
+    // 翻訳されたテンプレートを出力
     echo $tpl->execute();
 }
 catch (Exception $e){
@@ -2741,7 +2551,7 @@ catch (Exception $e){
 }
 ]]></programlisting></informalexample>
 
-<para>If you need to translate some other text, that is not in the template (e.g. plaintext e-mail message), you can reuse PHPTAL's translator:</para>
+<para>もしプレインテキストのe-mailの様なテンプレートではない文字列を翻訳したい場合、<acronym>PHPTAL</acronym>のtransratorを転用することができます。</para>
 
 <informalexample><programlisting language="php"><![CDATA[$tr = $tpl->getTranslator();
 
@@ -2753,29 +2563,28 @@ $message = $tr->translate("Dear ${user}, thanks for registering!");
 mail($email, $subject, $message);
 ]]></programlisting></informalexample>
 
-<para>If you're using PHPTAL's standard <productname>gettext</productname> translator, you can use <function>gettext()</function> too.</para>
+<para>もしPHPTALの標準<productname>gettext</productname>翻訳を使っているならば、<function>gettext()</function>もまた転用可能です。</para>
 
       </section>
 
       <section id="var-interpolation">
-        <title>Variable interpolation</title>
+        <title>変数補間</title>
 
         <para>
-        The <acronym>I18N</acronym> namespace allows some variable interpolation in your
-        translations.
+        <acronym>I18N</acronym> namespaceは、翻訳文内の変数を補間することができます。
         </para>
 
         <informalexample><programlisting language="gettext"><![CDATA[# english
 msgid "welcome"
 msgstr "Welcome ${name} you have ${n} mails!"
 
-# french
+# 日本語
 msgid "welcome"
-msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
+msgstr "ようこそ ${name} さん。 ${n} 件のメールがあります!"
 ]]></programlisting></informalexample>
 
         <para>
-        A template can use this interpolation as follows:
+        テンプレートはこの補間部分を以下の様に利用できます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span i18n:translate="welcome">
@@ -2788,9 +2597,8 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
 ]]></programlisting></informalexample>
 
         <para>
-        Because <sgmltag>i18n:translate</sgmltag> contains a value <computeroutput>'welcome'</computeroutput>, the template
-        data will be ignored and the message given by <productname>gettext</productname> will be
-        used instead.
+        <sgmltag>i18n:translate</sgmltag>は値として<computeroutput>'welcome'</computeroutput>を持つので、
+        テンプレート自体のデータは無視され、<productname>gettext</productname>による翻訳文が代わりに表示されます。
         </para>
 
       </section>
@@ -2798,132 +2606,125 @@ msgstr "Bienvenue ${name} vous avez recu ${n} messages!"
     </section>
 
     <section id="custom-modifiers">
-      <title>Creating custom expression modifiers</title>
+      <title>カスタム式モディファイアの作成</title>
 
       <para>
-      <acronym>PHPTAL</acronym> comes with some basic expression modifiers (<code>not:</code>, <code>exists:</code>,
-      <code>string:</code>, <code>php:</code>, <code>path:</code>).
+      <acronym>PHPTAL</acronym>は基本的な式モディファイアを提供しています(<code>not:</code>, <code>exists:</code>,
+      <code>string:</code>, <code>php:</code>, <code>path:</code>)。
       </para>
 
       <para>
-      These modifiers are defined by <acronym>ZPT</acronym> specifications but <acronym>PHPTALES</acronym> can
-      be extended with your own modifiers to manipulate strings, date,
-      money numbers, objects, whatever…
+      これらのモディファイアは<acronym>ZPT</acronym>の仕様によって定義されていますが、
+      <acronym>PHPTALES</acronym>では文字列、通貨、オブジェクト等の操作のためにモディファイアを拡張することができます。
       </para>
 
       <para>
-      The aim of a modifier is to return some <acronym>PHP</acronym> code that will be
-      included in the template <acronym>PHP</acronym> source.
+      モディファイアの目的は、テンプレートPHPソースに含めるためのPHPコードを返す事です。
       </para>
 
       <para>
-      Modifiers are used at parse time. If you change the behavior of a
-      modifier, you'll have to delete generated <acronym>PHP</acronym> files and reparse
-      all templates using it.
+      モディファイアはパース時に利用されます。もしモディファイアの挙動を変えたい場合、
+      生成された<acronym>PHP</acronym>ファイルを削除し、そのものディファイアが使われているテンプレートを
+      再度パースしなければなりません。
       </para>
 
       <para>
-      Please note that modifiers produce code, and mustn't echo data!
+      なお、モディファイアはコードを処理しますが、データを処理することはありません。
       </para>
 
       <para>
-      Any <acronym>PHP</acronym> function starting with "<constant>phptal_tales_</constant>" is usable as a
-      modifier.
+      "<constant>phptal_tales_</constant>"で始まる<acronym>PHP</acronym>関数がモディファイアとして利用できます。
       </para>
 
       <para>
-      Modifiers takes two arguments:
+      モディファイアは二つの引数を持ちます。
       </para>
 
       <itemizedlist>
         <listitem><para>
-        <varname>$src</varname>: the source string after the "modifier:" keyword
+        <varname>$src</varname>: "modifier:"句の後に続く文字列です。
         </para></listitem>
         <listitem><para>
-	  <varname>$nothrow</varname>: a boolean which determines whether exceptions may
-	  be thrown or not by <function>phptal_path()</function> resolution. This boolean
-	  must be propagated whenever you call another <function>phptal_tales_<replaceable>*</replaceable></function>
-	  modifier from within your own modifier.
-	</para></listitem>
+          <varname>$nothrow</varname>: <function>phptal_path()</function>の解決において、例外を投げるかどうか
+          を表すbooleanです。
+          モディファイアの中で別のモディファイア（<function>phptal_tales_<replaceable>*</replaceable></function>）を呼ぶ場合は
+          必ず例外を伝播させなければなりません。
+        </para></listitem>
       </itemizedlist>
 
       <para>
-      For example, in the following <acronym>TAL</acronym> template,
+      例えば以下の<acronym>TAL</acronym>テンプレートを見てください。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="some-modifier: my/path/value"/>
 ]]></programlisting></informalexample>
 
       <para>
-      The src argument will be "<varname>my/path/value</varname>", and the <varname>$nothrow</varname> boolean
-      will be false, because <sgmltag>tal:replace</sgmltag> requires the path to be fully
-      resolvable.
+      src引数は "<varname>my/path/value</varname>"となり、 <varname>$nothrow</varname>はfalseとなります。
+      なぜなら<sgmltag>tal:replace</sgmltag>は常に解決可能なパスを要求するからです。
       </para>
 
       <para>
-      An expression like:
+      また、以下の様な式では、
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="some-modifier: my/path/value | other/path"/>
 ]]></programlisting></informalexample>
 
       <para>
-      Will use 2 modifiers:
+      二つのモディファイアが使われています。
       </para>
 
       <itemizedlist>
         <listitem><para>
-        some-modifier: with "<code>my/path/value</code>" as <varname>$src</varname> argument and
-         <varname>$nothrow</varname> set to true because an alternative exists
+        some-modifier: "<code>my/path/value</code>"が<varname>$src</varname>に、
+        <varname>$nothrow</varname>はtrueとなります。なぜなら代替式が存在するからです。
         </para></listitem>
         <listitem><para>
-        path: with "<code>other/path</code>" as <varname>$src</varname>, and <varname>$nothrow</varname> set to false
-        because in case the alternative is not found, <sgmltag>tal:replace</sgmltag> will
-        be in trouble.
+        path: "<code>other/path</code>"が<varname>$src</varname>に、<varname>$nothrow</varname>はfalseとなります。
+        なぜなら、さらなる代替式が必要な際に<sgmltag>tal:replace</sgmltag>に問題が発生するためです。
         </para></listitem>
       </itemizedlist>
 
       <para>
-      Remember, <code>path:</code> is the implicit modifier used when no other
-      modifier is specified.
+      <code>path:</code>は、モディファイアが指定されていない場合の暗黙のモディファイアであることを忘れないでください。
       </para>
 
       <para>
-      Modifiers can use other modifiers to generate simpler <acronym>PHP</acronym>
-      code. The example below shows this.
+      モディファイアはシンプルなな<acronym>PHP</acronym>コードを生成するために他のモディファイアを使う事ができます。
       </para>
 
       <informalexample><programlisting language="php"><![CDATA[//
-// This modifier will return a money formated string (XXX.XX)
+//  このモディファイアは会計フォーマット(XXX.XX)の文字列を返します。
 //
 // usage:
 //
 //      money: path/to/my/amount
 //
-// this modifier uses phptal_tales() function to generate the
-// PHP code that will return the value of the modifier argument.
+// このモディファイアは、モディファイアの引数を返すPHPコードを生成するために
+// phptaL-tales()関数を利用します
 //
-// in the example:
+// 例:
 //
 //      money: path/to/my/amount
 //
-// the produced code will be something looking like:
+// これは以下の様に処理されます。
 //
 //      sprintf("%01.2f", phptal_path($ctx->path, "to/my/amount"))
 //
-// This code will be included right into the template where needed.
+// このコードは必要に応じてテンプレートに記述されます。
 //
 // @param string $src
-//      The expression string
+//      式文字列
 // @param string $nothrow
-//      A boolean indicating if exceptions may be throw by phptal_path if
+//      パスが存在しなかった場合にphptal_pathに例外を送出させるかを示す真偽値
 //      the path does not exists.
 // @return string
-//      PHP code to include in the template
+//      このテンプレートに含めるPHPコード
 //
 function phptal_tales_money( $src, $nothrow )
 {
-    // remove spaces we do not require here
+    // スペースは削除します
     $src = trim($src);
     return 'sprintf("%01.2f", '.phptal_tales($src, $nothrow).')';
 }
@@ -2934,34 +2735,28 @@ function phptal_tales_money( $src, $nothrow )
   </article>
 
   <appendix id="sysadmin">
-      <title>Note for system administrators</title>
+      <title>システム管理者のために</title>
       <para>
-          <acronym>PHPTAL</acronym> functions by generating <acronym>PHP</acronym> files from the template's logic,
-          this means that it needs a directory to store those generated files so
-          they can be parsed by the <acronym>PHP</acronym> interpreter.
+          <acronym>PHPTAL</acronym>の機能は、テンプレートロジックによって<acronym>PHP</acronym>ファイルを生成することです。
+          それはつまり、それらの生成されたファイルをおくためのディレクトリが必要であり、そこは<acronym>PHP</acronym>
+          インタプリタによってパース可能でなければならないと言うことです。
 </para><para>
-          By default <acronym>PHPTAL</acronym> will use the system's temp directory (via <acronym>PHP</acronym>'s
-          <function>sys_get_temp_dir()</function> function if available) or will try to guess where
-          it should be, <filename>/tmp</filename> on Unix like systems and <filename>c:\windows\temp</filename> on
-          Microsoft ones, to store the compiled templates. The default
-          destination can be changed to your liking by calling <link linkend="set-code-destination"><methodname>setPhpCodeDestination()</methodname></link>
-          method with the appropriate path.
-          Be it the system's temp directory or a custom one, it needs to have
-          its permissions setup as to allow the <acronym>PHP</acronym> running process (the Apache
-          user if using mod_php or the cgi/fastcgi user otherwise) to create and
-          update files in that directory.
+          標準状態の<acronym>PHPTAL</acronym>は、システムのテンポラリディレクトリ (有効であれば <acronym>PHP</acronym>の
+          <function>sys_get_temp_dir()</function>)、つまりUnix系なら<filename>/tmp</filename>、マイクロソフト系であれば
+          <filename>c:\windows\temp</filename>にコンパイルされたテンプレートを置こうとします。
+          この標準の出力先は<link linkend="set-code-destination"><methodname>setPhpCodeDestination()</methodname></link>に
+          適切なパスを指定することで変更できます。
+          システムのテンポラリディレクトリ、もしくは指定されたそのパスは、<acronym>PHP</acronym>のプロセス
+          （もしmod_phpならapacheの実行ユーザ−、そうで無いならcgiやfastcgiのユーザー）がファイルをcreateおよびupdate
+          できるようにパーミッションを設定しておく必要があります。
 </para><para>
-          <acronym>PHPTAL</acronym> creates one file for each different template file and one file
-          for each tag if using <link linkend="phptal-cache"><sgmltag>phptal:cache</sgmltag></link>. It doesn't create separate files
-          for macros (which are simply compiled as <acronym>PHP</acronym> functions inside the
-          compiled template file).
-          These files are automatically cleaned up once in a while, more
-          specifically, each time a template is compiled there is random
-          probability, controlled by <methodname>setCachePurgeFrequency()</methodname> method, which will
-          just delete files older than set by <methodname>setCacheLifetime()</methodname> method.
+          <acronym>PHPTAL</acronym>はテンプレート毎に、さらには<link linkend="phptal-cache"><sgmltag>phptal:cache</sgmltag></link>
+          が使われたタグ毎にファイルを生成します。なお、マクロに対しては生成しません。単に<acronym>PHP</acronym>関数としてコンパイルされるだけです。
+          これらのファイルは時々自動的にクリーンアップされます。具体的には、
+          <methodname>setCacheLifetime()</methodname>によって設定されているよりも古いものが、
+          <methodname>setCachePurgeFrequency()</methodname>メソッドによって設定された確率に従って削除されます。
           </para><para>
-          Alternatively you can also schedule the deletion of old/unused files
-          by running this from an Unix-like shell (e.g. in a cron job):
+          その代わりに、古い（もしくは長く使われていない）ファイルを消すようなスクリプトをcronなどでスケジュールしておくこともできます。
 </para><informalexample><programlisting>find /tmp/ -name tpl_\* \( -atime +1 -o -mtime +14 \) -delete</programlisting></informalexample>
 </appendix>
   <appendix id="usefullinks">
