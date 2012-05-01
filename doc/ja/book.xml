@@ -46,11 +46,11 @@
 
     <para>
     <acronym>PHPTAL</acronym>は Zope Page Template
-    (<acronym>ZPT</acronym>)の<acronym>PHP</acronym>による実装です。 <acronym>PHPTAL</acronym>は<acronym><link linkend="tal-namespace">TAL</link></acronym>、<acronym><link linkend="metal">METAL</link></acronym>、<acronym><link linkend="tal-namespace">I18N</link></acronym> namespaces をサポートしています。
+    (<acronym>ZPT</acronym>)の<acronym>PHP</acronym>による実装です。 <acronym>PHPTAL</acronym>は<acronym><link linkend="tal-namespace">TAL</link></acronym>、<acronym><link linkend="metal">METAL</link></acronym>、<acronym><link linkend="tal-namespace">I18N</link></acronym> 名前空間をサポートしています。
     </para>
 
     <para>
-    <acronym><link linkend="phptales">PHPTALES</link></acronym> は <acronym>TALES</acronym>(Template Attribute Language Expression Syntax)に相当しており、<acronym>XML</acronym> のattributeを処理する方法を定義しています。
+    <acronym><link linkend="phptales">PHPTALES</link></acronym> は <acronym>TALES</acronym>(Template Attribute Language Expression Syntax)に相当しており、<acronym>XML</acronym> の属性を処理する方法を定義しています。
     </para>
 
     <para>
@@ -72,14 +72,14 @@
     <title>なぜ<acronym>PHPTAL</acronym>を使うのか</title>
 
     <para>
-    <acronym>XML</acronym>/<acronym>HTML</acronym>テンプレートはウェブサービスにおけるロジックとプレゼンテーション（デザイン）を分離するために存在しています。この分離によって、以下の様なメリットを得る事ができます。
+    <acronym>XML</acronym>/<acronym>HTML</acronym>テンプレートはWebサービスにおけるロジックとプレゼンテーション（デザイン）を分離するために存在しています。この分離によって、以下の様なメリットを得る事ができます。
     </para>
 
     <itemizedlist>
       <listitem><para>よりよいデザイン（見た目）</para></listitem>
       <listitem><para>容易な作業分割</para></listitem>
       <listitem><para>優れたメンテナンス性</para></listitem>
-      <listitem><para>easy web skins</para></listitem>
+      <listitem><para>簡単なWebスキン</para></listitem>
     </itemizedlist>
 
     <para>
@@ -88,7 +88,7 @@
     </para>
 
     <para>
-    <acronym>TAL</acronym>は、そのほとんどのロジックを<acronym>XML</acronym>のattributeとして記述しますので <acronym>XHTML</acronym>の文法を崩すことがありません。なので、<acronym>TAL</acronym>テンプレートはそのままWebブラウザ(<acronym>WYSIWYG</acronym>のライブプレビュー機能をもったエディタ)でプレビューできますし、<acronym>HTML</acronym>エディタによるハイライト表示も可能です。
+    <acronym>TAL</acronym>は、そのほとんどのロジックを<acronym>XML</acronym>の属性として記述しますので <acronym>XHTML</acronym>の文法を崩すことがありません。なので、<acronym>TAL</acronym>テンプレートはそのままWebブラウザ(<acronym>WYSIWYG</acronym>のライブプレビュー機能をもったエディタ)でプレビューできますし、<acronym>HTML</acronym>エディタによるハイライト表示も可能です。
     </para>
 
     <para>もしあなたが一般的なテンプレートシステムを使っているのなら、以下の様なコードになっているでしょう。
@@ -123,7 +123,7 @@
     </para>
 
     <para>
-    それ意外にも<acronym>PHPTAL</acronym>の大きなアドバンテージとして、<acronym>PHPTAL</acronym>はZopeのコミュニティにより長年蓄積された、経験、ドキュメント、サンプル、およびヘルプといった豊富な提供物を享受することができるということが挙げられます。
+    それ以外にも<acronym>PHPTAL</acronym>の大きなアドバンテージとして、<acronym>PHPTAL</acronym>はZopeのコミュニティにより長年蓄積された、経験、ドキュメント、サンプル、およびヘルプといった豊富な提供物を享受することができるということが挙げられます。
     </para>
 
     <para>
@@ -138,7 +138,7 @@
     <para>
     <acronym>PHPTAL</acronym> は <acronym>PEAR</acronym> パッケージ (<ulink
     url="http://pear.php.net">pear.php.net</ulink>を参照)としてリリースされています。
-    <acronym>PHPTAL</acronym>のライブラリは<acronym>PHPTAL</acronym>のウェブサイト(<ulink
+    <acronym>PHPTAL</acronym>のライブラリは<acronym>PHPTAL</acronym>のWebサイト(<ulink
     url="http://phptal.org">phptal.org</ulink>)からダウンロードすることができます。
     </para>
 
@@ -331,7 +331,7 @@ catch (Exception $e){
     </section>
 
     <section id="attributes">
-      <title>Attributeの優先度</title>
+      <title>属性の優先度</title>
 
       <para>属性宣言の順序は無関係であることに注意してください。</para>
 
@@ -399,9 +399,9 @@ catch (Exception $e){
     </section>
 
     <section id="tal-namespace">
-      <title><acronym>TAL</acronym> namespace</title>
+      <title><acronym>TAL</acronym> 名前空間</title>
 
-      <para>namecpaceの<acronym>URI</acronym>は<code>http://xml.zope.org/namespaces/tal</code>です。XML中で<code>tal:</code>を利用するためには以下の記述が必要です。</para>
+      <para>名前空間の<acronym>URI</acronym>は<code>http://xml.zope.org/namespaces/tal</code>です。XML中で<code>tal:</code>を利用するためには以下の記述が必要です。</para>
 
       <informalexample><programlisting language="xml"><![CDATA[<html xmlns:tal="http://xml.zope.org/namespaces/tal" …>]]></programlisting></informalexample>
 
@@ -444,7 +444,7 @@ catch (Exception $e){
 
 
         <tip><para>
-        <sgmltag>tal:define</sgmltag>を他のattributeと共に使用した場合、同一エレメント内では他のattributeよりも先に実行されます。
+        <sgmltag>tal:define</sgmltag>を他の属性と共に使用した場合、同一エレメント内では他の属性よりも先に実行されます。
 </para>         </tip>
 
 
@@ -471,7 +471,7 @@ catch (Exception $e){
 
 
         <para>
-        上記の例では<sgmltag>&lt;span&gt;</sgmltag>タグは表示されません。なぜなら<sgmltag>tal:define</sgmltag>は出力対象となるattributeでは無いからです。
+        上記の例では<sgmltag>&lt;span&gt;</sgmltag>タグは表示されません。なぜなら<sgmltag>tal:define</sgmltag>は出力対象となる属性では無いからです。
         (ただしコンテントは<varname>hello</varname>変数によって保持されます。)
         </para>
 
@@ -516,11 +516,11 @@ catch (Exception $e){
         <title><sgmltag>tal:repeat</sgmltag></title>
 
         <para>
-        このattributeは配列や連想配列、<acronym>PHP5</acronym>の<constant>Iterator</constant>クラスを実装したオブジェクトといった反復可能なオブジェクトを扱います。
+        この属性は配列や連想配列、<acronym>PHP5</acronym>の<constant>Iterator</constant>クラスを実装したオブジェクトといった反復可能なオブジェクトを扱います。
         </para>
 
         <para>
-        <sgmltag>repeat</sgmltag> attributeは、それが記述されたエレメントと、そのコンテントを指定されたリソースの終りが来るまで繰り返します。
+        <sgmltag>repeat</sgmltag> 属性は、それが記述されたエレメントと、そのコンテントを指定されたリソースの終りが来るまで繰り返します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<tr tal:repeat="item some/result">
@@ -564,12 +564,12 @@ catch (Exception $e){
         </itemizedlist>
 
         <para>
-        "<varname>item</varname>" は、<sgmltag>tal:repeat</sgmltag>式のの中でレシーバとして定義された変数です。
+        "<varname>item</varname>" は、<sgmltag>tal:repeat</sgmltag>式の中でレシーバとして定義された変数です。
         </para>
 
         <para>
         <sgmltag>tal:repeat</sgmltag>は、多くの場合<acronym>SQL</acronym>の実行結果に対して使用されます。
-        以下の例では<varname>playersRanking</varname>が<acronym>PHP</acronym>の<constant>Iterator</constant>インターフェースを実装し、オブジェクトを含んでいるとして動作します:
+        以下の例では<varname>playersRanking</varname>が<acronym>PHP</acronym>の<constant>Iterator</constant>インターフェースを実装し、オブジェクトを含んでいるものとして動作します:
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<table>
@@ -596,7 +596,7 @@ catch (Exception $e){
         <title><sgmltag>tal:omit-tag</sgmltag></title>
 
         <para>
-        このattributeは<acronym>PHPTAL</acronym>パーサーに対して、開始タグと終了タグを消去するように指示します。ただし内容は評価されます。
+        この属性は<acronym>PHPTAL</acronym>パーサーに対して、開始タグと終了タグを消去するように指示します。ただし内容は評価されます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:omit-tag="condition">
@@ -611,7 +611,7 @@ catch (Exception $e){
         <informalexample><programlisting><![CDATA[もしconditionがtrueなら、このテキストは表示され、spanの開始タグと終了タグは消去されます。
 ]]></programlisting></informalexample>
 
-        <para>このattributeは任意のエレメントを生成したいときに役立ちます。たとえば特定の条件下でリンクを隠したい場合などです。
+        <para>この属性は任意のエレメントを生成したいときに役立ちます。たとえば特定の条件下でリンクを隠したい場合などです。
 
         </para>
 
@@ -624,7 +624,7 @@ catch (Exception $e){
       <section id="tal-replace">
         <title><sgmltag>tal:replace</sgmltag></title>
 
-        <para>このattributeはタグ全体を値で置き換えます。値が無い場合は何も表示しません。
+        <para>この属性はタグ全体を値で置き換えます。値が無い場合は何も表示しません。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:replace="string:美しい文字列">
@@ -661,7 +661,7 @@ catch (Exception $e){
       <section id="tal-content">
         <title><sgmltag>tal:content</sgmltag></title>
 
-        <para>このattributeはタグのコンテントを式の実行結果で置き換えます。
+        <para>この属性はタグのコンテントを式の実行結果で置き換えます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<span tal:define="myvar string:my string"/>
@@ -680,7 +680,7 @@ catch (Exception $e){
       <section id="tal-attributes">
         <title><sgmltag>tal:attributes</sgmltag></title>
 
-        <para>このattributeはタグのattributeの値を置き換えます。（複数指定可）
+        <para>この属性はタグの属性の値を置き換えます。（複数指定可）
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<a href="http://www.foo.com" title="some foo link"
@@ -739,8 +739,8 @@ title="google search engine">the google search engine</a>
         <para>
         このcss-oddモディファイアは、<varname>repeat/ranking/odd</varname>がtrueの場合に"odd"を返し、falseの場合にはNULLを返すように作られています。
         </para>
-<section id="optional-attrs"><title>Optional attributes</title>
-        <para>もしあなたが<sgmltag>tal:attributes</sgmltag>の中で<acronym>TALES</acronym>を利用し、またそれが<varname>nothing</varname> （もしくは <acronym>PHP</acronym>における<varname>NULL</varname>）を返す場合、attributeは追加されません。（これは空のattributeが付加されるのを防ぐためです。）:</para>
+<section id="optional-attrs"><title>選択的な属性</title>
+        <para>もしあなたが<sgmltag>tal:attributes</sgmltag>の中で<acronym>TALES</acronym>を利用し、またそれが<varname>nothing</varname> （もしくは <acronym>PHP</acronym>における<varname>NULL</varname>）を返す場合、属性は追加されません。（これは空の属性が付加されるのを防ぐためです。）:</para>
         <informalexample><programlisting language="xml"><![CDATA[… tal:attributes="title object/tooltip | nothing"> ]]></programlisting></informalexample>
 
         <para><sgmltag>selected</sgmltag>や<sgmltag>checked</sgmltag>のような<acronym>XHTML</acronym>属性は自動的に処理されます。</para>
@@ -779,12 +779,12 @@ title="google search engine">the google search engine</a>
 
       </section>
 
-    </section><!-- end of TAL namespace -->
+    </section><!-- end of TAL 名前空間 -->
 
     <section id="metal">
-      <title><acronym>METAL</acronym> namespace</title>
+      <title><acronym>METAL</acronym> 名前空間</title>
 
-      <para><acronym>METAL</acronym>のnamespaceは<code>http://xml.zope.org/namespaces/metal</code>です。<code>metal:</code>を利用するためには以下の記述が必要です。。</para>
+      <para><acronym>METAL</acronym>の名前空間は<code>http://xml.zope.org/namespaces/metal</code>です。<code>metal:</code>を利用するためには以下の記述が必要です。。</para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:metal="http://xml.zope.org/namespaces/metal" …>]]></programlisting></informalexample>
 
@@ -792,7 +792,7 @@ title="google search engine">the google search engine</a>
 
 
       <para>
-      <acronym>METAL</acronym> は 'Macro Extension for <acronym>TAL</acronym>'という意味です。このnamespaceによってデザイナーが<acronym>XML</acronym>/<acronym>XHTML</acronym>のマクロを定義し、呼び出せるようになります。
+      <acronym>METAL</acronym> は 'Macro Extension for <acronym>TAL</acronym>'という意味です。この名前空間によってデザイナーが<acronym>XML</acronym>/<acronym>XHTML</acronym>のマクロを定義し、呼び出せるようになります。
       </para>
       <para>マクロによって再帰的に出力を行ったり、他のテンプレートからコードを取り込んだりすることができます。</para>
 
@@ -941,14 +941,14 @@ title="google search engine">the google search engine</a>
 
       </section>
 
-    </section><!-- end of METAL namespace -->
+    </section><!-- end of METAL 名前空間 -->
 
 
     <section id="i18n">
-      <title><acronym>I18N</acronym> namespace</title>
+      <title><acronym>I18N</acronym> 名前空間</title>
 
 
-      <para>namespaceの<acronym>URI</acronym>は<code>http://xml.zope.org/namespaces/i18n</code>です。XML中で<code>i18n:</code>を利用するためには以下の記述が必要です。</para>
+      <para>名前空間の<acronym>URI</acronym>は<code>http://xml.zope.org/namespaces/i18n</code>です。XML中で<code>i18n:</code>を利用するためには以下の記述が必要です。</para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:i18n="http://xml.zope.org/namespaces/i18n" …>]]></programlisting></informalexample>
 
@@ -958,14 +958,14 @@ title="google search engine">the google search engine</a>
 
       <note><para>
       <acronym>i18n</acronym>は 'internationalization'の略です。
-      このnamespaceによって、デザイナはテンプレートの実行時に翻訳されるテキストゾーンを指定することができます。
+      この名前空間によって、デザイナはテンプレートの実行時に翻訳されるテキストゾーンを指定することができます。
       </para></note>
 
       <section id="i18n-translate">
         <title><sgmltag>i18n:translate</sgmltag></title>
 
         <para>
-        このattributeは<acronym>PHPTAL</acronym>の翻訳機能を使って翻訳される文を指定します。
+        この属性は<acronym>PHPTAL</acronym>の翻訳機能を使って翻訳される文を指定します。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<div i18n:translate="string:welcome_message">Welcome here</div>
@@ -1000,7 +1000,7 @@ title="google search engine">the google search engine</a>
           <title><sgmltag>i18n:attributes</sgmltag></title>
 
           <para>
-              翻訳するattributeを指定できます。 <sgmltag>i18n:translate</sgmltag>には、attributeと翻訳キーをセミコロンで区切って記述します。
+              翻訳する属性を指定できます。 <sgmltag>i18n:translate</sgmltag>には、<sgmltag>i18n:translate</sgmltag>のような属性とキーのリストをセミコロンで区切って記述します。
           </para>
           <informalexample><programlisting language="xml"><![CDATA[<img i18n:attributes="alt 'picture alternative text';title thetitle" alt="Picture" title="${thetitle}" />
 ]]></programlisting></informalexample>
@@ -1011,7 +1011,7 @@ title="google search engine">the google search engine</a>
         <title><sgmltag>i18n:name</sgmltag></title>
 
         <para>
-        このattributeは翻訳文内の置換変数に値をセットします。
+        この属性は翻訳文内の置換変数に値をセットします。
         </para>
 
         <para>
@@ -1064,7 +1064,7 @@ title="google search engine">the google search engine</a>
         </para>
       </section>
 
-      <section id="xhtml-in-translations"><title><acronym>XHTML</acronym> in translations</title>
+      <section id="xhtml-in-translations"><title>翻訳の中の<acronym>XHTML</acronym></title>
           <para>通常、翻訳はテキストのみだと考えられます。<acronym>PHPTAL</acronym>はすべての"<literal>&lt;</literal>"をエスケープします。</para>
           <para>バージョン1.1.14からは<sgmltag>i18n:translate</sgmltag>内で<code>structure</code>を使うことでエスケープを無効化することができます。</para>
 
@@ -1076,14 +1076,14 @@ title="google search engine">the google search engine</a>
       <warning><para>これは単純な場合にのみ利用できます。翻訳された文字内の<acronym>TAL</acronym>属性はそのまま出力されることになります。翻訳内にIll-formedな<acronym>XHTML</acronym>を含んでいた場合、ページのwell-formednessを壊してしまいます。</para></warning>
     </section>
 
-    </section><!-- end of I18N namespace -->
+    </section><!-- end of I18N 名前空間 -->
 
 
     <section id="phptal-namespace">
-      <title><acronym>PHPTAL</acronym> namespace</title>
+      <title><acronym>PHPTAL</acronym> 名前空間</title>
 
 
-      <para>namespaceの<acronym>URI</acronym>は<code>http://phptal.org/ns/phptal</code>です。
+      <para>名前空間の<acronym>URI</acronym>は<code>http://phptal.org/ns/phptal</code>です。
 XML中で<code>phptal:</code>を利用するためには以下の記述が必要です。</para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html xmlns:phptal="http://phptal.org/ns/phptal" …>]]></programlisting></informalexample>
@@ -1092,14 +1092,14 @@ XML中で<code>phptal:</code>を利用するためには以下の記述が必要
 
 
       <para>
-      このattributeは<acronym>TAL</acronym>の仕様には存在しませんが、<acronym>PHPTAL</acronym>にはとても便利です。
+      この属性は<acronym>TAL</acronym>の仕様には存在しませんが、<acronym>PHPTAL</acronym>にはとても便利です。
       </para>
 
       <section id="phptal-debug">
         <title><sgmltag>phptal:debug</sgmltag></title>
 
         <para>
-        このattributeは、それが指定されたタグの内容に対して<acronym>PHPTAL</acronym>のデバッグ指定を切替えます。
+        この属性は、それが指定されたタグの内容に対して<acronym>PHPTAL</acronym>のデバッグ指定を切替えます。
         </para>
 
         <note><para>
@@ -1107,7 +1107,7 @@ XML中で<code>phptal:</code>を利用するためには以下の記述が必要
         </para></note>
 
         <para>
-        デバッグモードでは、ファイル名やテンプレートの行番号を格納しますので、不正なパスによる例外が投げられた場合でも寄り多くの情報を得る事ができます。
+        デバッグモードでは、ファイル名やテンプレートの行番号を格納しますので、不正なパスによる例外が投げられた場合でもより多くの情報を得る事ができます。
         </para>
 
         <informalexample><programlisting language="xml"><![CDATA[<html>
@@ -1134,12 +1134,12 @@ XML中で<code>phptal:</code>を利用するためには以下の記述が必要
               <title><sgmltag>phptal:cache</sgmltag></title>
 
               <para>
-              このattributeは、キャッシュ期限が切れるまでこのタグに含まれる要素全てをディスク上にキャッシュし、再評価されないようにします。
+              この属性は、キャッシュ期限が切れるまでこのタグに含まれる要素全てをディスク上にキャッシュし、再評価されないようにします。
               </para>
 
               <note><para>キャッシュが有用なのは、外部ファイルのマクロや、データベースアクセスを伴う<acronym>PHP</acronym>式やオブジェクト等の複雑な要素の場合のみです。それ以外の場合、非キャッシュのテンプレートも同じくらい高速です。</para></note>
 
-                <para>このattributeの有効期間（どのくらいの間キャッシュされるか）は '<constant>d</constant>'、'<constant>h</constant>'、'<constant>m</constant>'や'<constant>s</constant>'サフィックスを伴う数値によって指定することができます。
+                <para>この属性の有効期間（どのくらいの間キャッシュされるか）は '<constant>d</constant>'、'<constant>h</constant>'、'<constant>m</constant>'や'<constant>s</constant>'サフィックスを伴う数値によって指定することができます。
             </para>
             <informalexample><programlisting language="xml"><![CDATA[<div class="footer" phptal:cache="3h">…</div>]]></programlisting></informalexample>
             <para>上記の例では、<sgmltag>&lt;div></sgmltag>の中身は３時間に１度評価されます。</para>
@@ -1184,8 +1184,8 @@ XML中で<code>phptal:</code>を利用するためには以下の記述が必要
         <title><sgmltag>phptal:tales</sgmltag></title>
 
         <para>
-        このattributeによって<acronym>PHPTALES</acronym>の挙動を変えることができます。
-        <acronym>PHPTALES</acronym>は通常、<acronym>ZPT</acronym>の仕様に従ってattribute式を解釈しますが、例えば<code>php:</code>を大量に記述しなければならない場合があったとします。
+        この属性によって<acronym>PHPTALES</acronym>の挙動を変えることができます。
+        <acronym>PHPTALES</acronym>は通常、<acronym>ZPT</acronym>の仕様に従って属性式を解釈しますが、例えば<code>php:</code>を大量に記述しなければならない場合があったとします。
        </para>
 
         <para>
@@ -1238,13 +1238,13 @@ XML中で<code>phptal:</code>を利用するためには以下の記述が必要
         </para></note>
       </section>
 
-    </section><!-- end of <acronym>PHPTAL</acronym> namespace -->
+    </section><!-- end of <acronym>PHPTAL</acronym> 名前空間 -->
 
     <section id="phptal-blocks">
       <title><sgmltag>tal:block</sgmltag></title>
 
       <para>
-      <sgmltag>tal:block</sgmltag>は、多くの<acronym>TAL</acronym> attributeを持つエレメントを表示させたくないためのシンタックスシュガーです。
+      <sgmltag>tal:block</sgmltag>は、多くの<acronym>TAL</acronym> 属性を持つエレメントを表示させたくないためのシンタックスシュガーです。
       </para>
 
       <informalexample><programlisting language="xml"><![CDATA[<tal:block define="myvar string:Some value"/>
@@ -1283,13 +1283,13 @@ XML中で<code>phptal:</code>を利用するためには以下の記述が必要
       <title><acronym>PHPTALES</acronym></title>
 
       <para>
-      <acronym>PHPTALES</acronym>は<acronym>TALES</acronym>（Template Attribute Language Expression Syntaxの略です）に相当し、<acronym>TAL</acronym>や<acronym>METAL</acronym>、<acronym>PHPTAL</acronym>のattributeおよび、 <code>${…}</code>のインライン式において使用できます。 </para>
+      <acronym>PHPTALES</acronym>は<acronym>TALES</acronym>（Template Attribute Language Expression Syntaxの略です）に相当し、<acronym>TAL</acronym>や<acronym>METAL</acronym>、<acronym>PHPTAL</acronym>の属性および、 <code>${…}</code>のインライン式において使用できます。 </para>
       <para>これまでの例で、いくつかの<acronym>PHPTALES</acronym>の例（<code>string:</code>、<code>php:</code>、<code>not:</code>、…）を見てきたと思います。
             この章ではテンプレート中における<acronym>PHPTALES</acronym>の使い方について説明します。
       </para>
 
       <para>
-      <acronym>TAL</acronym> attributeの値は、大抵一つ以上の式を含み（例：<sgmltag>tal:define</sgmltag>）、
+      <acronym>TAL</acronym>属性の値は、大抵一つ以上の式を含み（例：<sgmltag>tal:define</sgmltag>）、
       それらの式は、'<literal>;</literal>'によって分割されます。
       </para>
 
@@ -1323,10 +1323,10 @@ this page has been readed ${page/countRead} times"/>
       </section>
 
       <section id="conditional">
-        <title><acronym>PHP</acronym>オペレータの代替書式</title>
+        <title><acronym>PHP</acronym>演算子の代替書式</title>
 
         <para>
-        '<literal>&lt;</literal>'、 '<literal>&gt;</literal>'や'<literal>&amp;</literal>'といった文字はXML中で使うには厄介です。<acronym>PHPTAL</acronym>は<acronym>PHP</acronym>オペレータの代替書式を提供します。
+        '<literal>&lt;</literal>'、 '<literal>&gt;</literal>'や'<literal>&amp;</literal>'といった文字はXML中で使うには厄介です。<acronym>PHPTAL</acronym>は<acronym>PHP</acronym>演算子の代替書式を提供します。
         </para>
 
         <remark>
@@ -1338,7 +1338,7 @@ this page has been readed ${page/countRead} times"/>
           <code>&lt;</code> : <code>LT</code> (未満)
           </para></listitem>
           <listitem><para>
-          <code>&gt;</code> : <code>GT</code> (超)
+          <code>&gt;</code> : <code>GT</code> (より大きい)
           </para></listitem>
           <listitem><para>
           <code>&lt;=</code> : <code>LE</code> (以下)
@@ -1726,7 +1726,7 @@ echo $phptal->execute();
                                   <warning>
                                       <para>XHTMLアウトプットモードは RSSと互換性のない形に<sgmltag>&lt;link&gt;</sgmltag>エレメントを変換してしまいます。RSSフィードやAtomを生成する場合はXMLモードを使用してください。</para></warning>
                               </listitem>
-                              <listitem><para>真偽値のattribute (<sgmltag>checked</sgmltag>や<sgmltag>selected</sgmltag>等)はXHTMLの仕様により、常に値を持ちます。（<sgmltag>tal:attributes</sgmltag>の利用を容易にします。）</para></listitem>
+                              <listitem><para>真偽値の属性(<sgmltag>checked</sgmltag>や<sgmltag>selected</sgmltag>等)はXHTMLの仕様により、常に値を持ちます。（<sgmltag>tal:attributes</sgmltag>の利用を容易にします。）</para></listitem>
                               <listitem><para><code>&lt;![CDATA[</code>ブロックは自動的に追加、もしくは削除され、XMLとXHTMLの両方にとって安全な構文にエスケープされます。</para>
                                   <tip>
                                   <para>もし<emphasis>常に</emphasis>XHTMLを<code>application/xhtml+xml</code>として出力したい場合、
@@ -1738,10 +1738,10 @@ echo $phptal->execute();
                   <varlistentry><term><constant>PHPTAL::HTML5</constant></term>
                       <listitem>
                           <para>このモードでは現行のブラウザに適した<code>text/html</code>でドキュメントを生成します。</para>
-                          <para>PHPTALはDOCTYPEを<sgmltag>&lt;!DOCTYPE html></sgmltag>に変換し、namespaceの定義や属性のプリフィクス、明示的な<sgmltag>CDATA</sgmltag>セクションなどのHTML非互換要素を削除します。</para>
+                          <para>PHPTALはDOCTYPEを<sgmltag>&lt;!DOCTYPE html></sgmltag>に変換し、名前空間の定義や属性のプリフィクス、明示的な<sgmltag>CDATA</sgmltag>セクションなどのHTML非互換要素を削除します。</para>
                           <note>
                               <para>
-                        このモードは"tag soup"<emphasis>ではありません</emphasis>。PHPTALは全てのエレメントを閉じ、必要であればattributeをクオートします。出力は適切なフォーマットのHTML5であり、HTML4ブラウザとの後方互換も保たれます。
+                        このモードは"tag soup"<emphasis>ではありません</emphasis>。PHPTALは全てのエレメントを閉じ、必要であれば属性値をクオートします。出力は適切なフォーマットのHTML5であり、HTML4ブラウザとの後方互換も保たれます。
                   </para>
                           </note>
                       </listitem>
@@ -1803,7 +1803,7 @@ echo $phptal->execute();
 
 
   <section id="execute">
-      <title><methodname>execute()</methodname> method</title>
+      <title><methodname>execute()</methodname> メソッド</title>
 
       <para>テンプレートを実行し、マークアップを返します。</para>
       <para>PHPTALは複数回実行された場合でも、全ての変数を保持しています。
@@ -1813,7 +1813,7 @@ echo $phptal->execute();
       <note><para> “新鮮な”PHPTALのコピーが必要な場合は、新しいオブジェクトを生成してください。</para></note>
   </section>
         <section id="echo-execute">
-            <title><methodname>echoExecute()</methodname> method</title>
+            <title><methodname>echoExecute()</methodname> メソッド</title>
 
             <para><methodname>execute()</methodname>の最も一般的な使い方はそれを出力させることです。
                   <acronym>PHPTAL</acronym>はバッファリングせずに即時に出力させるためのメソッドを提供しています。
@@ -1853,7 +1853,7 @@ echo $phptal->execute();
 
 
                                 <section id="add-prefilter">
-                                                <title><methodname>addPreFilter()</methodname> method</title>
+                                                <title><methodname>addPreFilter()</methodname> メソッド</title>
 
                                                 <note><para>PHPTAL1.2.1以降、<methodname>setPreFilter()</methodname>は非推奨となり、このメソッドに置き換えられました。</para></note>
 
@@ -1946,7 +1946,7 @@ echo $phptal->execute();
 
                                 <listitem>      <methodsynopsis><void/><methodname>appendChild</methodname><methodparam><parameter>$node</parameter></methodparam></methodsynopsis>
                                 <para>エレメントにノードを追加します。</para>
-                                <warning><para>PHPTALはnamespaceの定義を扱うことができません。異なるnamespaceのエレメントでノードを移動させた場合、ドキュメントの意味が変わってしまいます。</para></warning>
+                                <warning><para>PHPTALは名前空間の定義を扱うことができません。異なる名前空間のエレメントでノードを移動させた場合、ドキュメントの意味が変わってしまいます。</para></warning>
                         </listitem><listitem>   <methodsynopsis><void/><methodname>replaceChild</methodname><methodparam><parameter>$new_node</parameter></methodparam> <methodparam><parameter>$old_node</parameter></methodparam></methodsynopsis>
                                 <para>ノードを入れ替えます。</para>
 
@@ -1957,20 +1957,20 @@ echo $phptal->execute();
                         </listitem><listitem>
 
                                 <methodsynopsis><type>string</type> <methodname>getAttributeNS</methodname><methodparam><parameter>$namespace_uri</parameter></methodparam> <methodparam><parameter>$local_name</parameter></methodparam></methodsynopsis>
-                                <para>エンティティ以外のエスケープされていない値をattributeから取得します。</para>
+                                <para>エンティティ以外のエスケープされていない値を属性から取得します。</para>
                                 <informalexample><programlisting language="php">$a->getAttributeNS('','href')</programlisting></informalexample>
-                                <tip><para>XML内ではattributeはエレメントのnamespaceを継承しません。全てのXHTML attributeはデフォルトのnamespaceに属します。</para></tip>
+                                <tip><para>XML内では属性はエレメントの名前空間を継承しません。全てのXHTML属性はデフォルトの名前空間に属します。</para></tip>
 
                         </listitem><listitem>
 
                                 <methodsynopsis><type>array</type><methodname>getAttributeNodes</methodname></methodsynopsis>
-                                <para>全てのエレメントのattributeを表す<classname>PHPTAL_Dom_Attr</classname>オブジェクトの配列を返します。これを使えば<methodname>setAttributeNodes()</methodname>を使わずにattributeの値を変更することができます。</para>
+                                <para>全てのエレメントの属性を表す<classname>PHPTAL_Dom_Attr</classname>オブジェクトの配列を返します。これを使えば<methodname>setAttributeNodes()</methodname>を使わずに属性の値を変更することができます。</para>
 
                         </listitem><listitem>
 
                                 <methodsynopsis><void/><methodname>setAttributeNodes</methodname><methodparam>
                                 <type>array</type><parameter>$attrs</parameter></methodparam></methodsynopsis>
-                                <para>エレメントのattributesを全て置き換えます。</para>
+                                <para>エレメントの属性を全て置き換えます。</para>
 
                         </listitem><listitem>
 
@@ -1980,12 +1980,12 @@ echo $phptal->execute();
                                 </listitem><listitem>
 
                                 <methodsynopsis><type>string</type><methodname>getNamespaceURI</methodname></methodsynopsis>
-                                <para>エレメントのnamespace URIを返します。例：<code>&lt;atom:title xmlns="http://www.w3.org/2005/Atom"></code>のnamespaceは<code>http://www.w3.org/2005/Atom</code>です。</para>
-                                <tip><para>XHTML namespaceは<code>http://www.w3.org/1999/xhtml</code>です。</para></tip>
+                                <para>エレメントの名前空間 URI を返します。例：<code>&lt;atom:title xmlns="http://www.w3.org/2005/Atom"></code>の名前空間は<code>http://www.w3.org/2005/Atom</code>です。</para>
+                                <tip><para>XHTML 名前空間は<code>http://www.w3.org/1999/xhtml</code>です。</para></tip>
 
 </listitem></itemizedlist>
 
-<para>テキストやCDATA、attributeノードは、テキストの実体を読み書きするために<methodname>getValueEscaped()</methodname>や<methodname>setValueEscaped()</methodname>メソッドを持っています。</para>
+<para>テキストやCDATA、属性ノードは、テキストの実体を読み書きするために<methodname>getValueEscaped()</methodname>や<methodname>setValueEscaped()</methodname>メソッドを持っています。</para>
 
                 </section>
     <section id="filter-interface">
@@ -2067,7 +2067,7 @@ echo $tpl->execute();
       <title><classname>PHPTAL_Trigger</classname>インターフェース</title>
 
       <para>
-      <sgmltag>phptal:id</sgmltag> attribute は、<acronym>PHP5</acronym>のために古い<classname>PHPTAL_Cache</classname>インターフェースを置き換え、abstractなものとして<acronym>PHPTAL</acronym>に追加されました。 
+      <sgmltag>phptal:id</sgmltag>属性は、<acronym>PHP5</acronym>バージョンのために<acronym>PHPTAL</acronym>に追加され、古い<classname>PHPTAL_Cache</classname>インターフェースを置き換え、それをやや抽象化します。
       </para>
 
       <para>
@@ -2571,7 +2571,7 @@ mail($email, $subject, $message);
         <title>変数補間</title>
 
         <para>
-        <acronym>I18N</acronym> namespaceは、翻訳文内の変数を補間することができます。
+        <acronym>I18N</acronym> 名前空間は、翻訳文内の変数を補間することができます。
         </para>
 
         <informalexample><programlisting language="gettext"><![CDATA[# english
