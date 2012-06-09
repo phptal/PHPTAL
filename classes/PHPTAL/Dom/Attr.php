@@ -105,7 +105,7 @@ class PHPTAL_Dom_Attr
      */
     function setValue($val)
     {
-        $this->value_escaped = htmlspecialchars($val);
+        $this->value_escaped = htmlspecialchars($val, ENT_QUOTES, $this->encoding);
     }
 
     /**

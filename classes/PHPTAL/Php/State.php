@@ -231,9 +231,9 @@ class PHPTAL_Php_State
     {
         // PHP strings can be escaped at compile time
         if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/s', $php, $m)) {
-            return "'".htmlspecialchars(str_replace('\\\'', "'", $m[1]), ENT_QUOTES)."'";
+            return "'".htmlspecialchars(str_replace('\\\'', "'", $m[1]), ENT_QUOTES, $this->encoding)."'";
         }
-        return 'phptal_escape('.$php.')';
+        return 'phptal_escape('.$php.', \''.$this->encoding.'\')';
     }
 
     /**

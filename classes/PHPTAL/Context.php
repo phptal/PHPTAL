@@ -507,12 +507,12 @@ function phptal_true($var)
  *
  * @access private
  */
-function phptal_escape($var)
+function phptal_escape($var, $encoding)
 {
     if (is_string($var)) {
-        return htmlspecialchars($var, ENT_QUOTES);
+        return htmlspecialchars($var, ENT_QUOTES, $encoding);
     }
-    return htmlspecialchars(phptal_tostring($var), ENT_QUOTES);
+    return htmlspecialchars(phptal_tostring($var), ENT_QUOTES, $encoding);
 }
 
 /**

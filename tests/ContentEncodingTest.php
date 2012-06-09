@@ -41,5 +41,21 @@ class ContentEncodingTest extends PHPTAL_TestCase
         $p->foo = array('bar'=>'a&aa', '<bbb>', null, -1, false);
         $this->assertEquals('<p>a&amp;aa, &lt;bbb&gt;, , -1, 0</p>', $p->execute());
     }
+
+    function testNonUTF8()
+    {
+        // Japanes primary 5 characters just like "ABCDE".
+        $text     = mb_convert_encoding(rawurldecode("%E3%81%82%E3%81%84%E3%81%86%E3%81%88%E3%81%8A"), 'euc-jp', 'utf-8');
+
+        $source   = '<div><p data="' . $text . '">' . $text . '</p><p><![CDATA[' . $text . ']]></p><p tal:content="text" tal:attributes="data text">here</p></div>';
+        $expected = '<div><p data="' . $text . '">' . $text . '</p><p>' . $text . '</p><p data="' . $text . '">' . $text . '</p></div>';
+
+        $p = $this->newPHPTAL();
+        $p->setEncoding('euc-jp');
+        $p->setSource($source);
+        $p->text = $text;
+        $output = $p->execute();
+        $this->assertEquals($expected, $output);
+    }
 }
 
