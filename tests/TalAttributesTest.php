@@ -175,8 +175,6 @@ EOT;
         $this->assertEquals($res, '<div><p style="color:red; font-weight:bold;;" title="&#039;test;test;;test">&#039;a;b;;c;;;d</p></div>');
     }
 
-    //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
-
     function testBoolean()
     {
         $booleanAttrs = array(
@@ -189,7 +187,7 @@ EOT;
             // XHTML
             $tpl = $this->newPHPTAL();
             $tpl->setOutputMode(PHPTAL::XHTML);
-            $tpl->setSource('<p tal:attributes="'.$name.' attrval"></p>');
+            $tpl->setSource('<p '.$name.'="123" tal:attributes="'.$name.' attrval"></p>');
             $tpl->attrval = true;
             $res = $tpl->execute();
             $this->assertEquals('<p '.$name.'="'.$name.'"></p>', $res);
@@ -199,7 +197,7 @@ EOT;
             // HTML5
             $tpl = $this->newPHPTAL();
             $tpl->setOutputMode(PHPTAL::HTML5);
-            $tpl->setSource('<p tal:attributes="'.$name.' attrval"></p>');
+            $tpl->setSource('<p '.$name.'="123" tal:attributes="'.$name.' attrval"></p>');
             $tpl->attrval = true;
             $res = $tpl->execute();
             $this->assertEquals('<p '.$name.'></p>', $res);

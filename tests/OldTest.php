@@ -74,17 +74,6 @@ class OldTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
 
-    function test15() // boolean attributes
-    {
-        $tpl = $this->newPHPTAL('input/old-15.html');
-        $tpl->checked = true;
-        $tpl->notchecked = false;
-        $res = $tpl->execute();
-        $res = normalize_html($res);
-        $exp = normalize_html_file('output/old-15.html');
-        $this->assertEquals($exp, $res);
-    }
-
     function test16() // default in attributes
     {
         $tpl = $this->newPHPTAL('input/old-16.html');
