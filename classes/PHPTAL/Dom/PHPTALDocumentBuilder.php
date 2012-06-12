@@ -95,8 +95,7 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
             $prefix = $m[1];
             $namespace_uri = $this->_xmlns->prefixToNamespaceURI($prefix);
             if (false === $namespace_uri) {
-                throw new PHPTAL_ParserException("There is no namespace declared for prefix of element < $element_qname >. You must have xmlns:$prefix declaration in the same document.",
-                            $this->file, $this->line);
+                $namespace_uri = 'http://undefined/ns/' . $prefix;
             }
         } else {
             $namespace_uri = $this->_xmlns->getCurrentDefaultNamespaceURI();
@@ -110,8 +109,7 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
                 $attr_namespace_uri = $this->_xmlns->prefixToNamespaceURI($prefix);
 
             if (false === $attr_namespace_uri) {
-                    throw new PHPTAL_ParserException("There is no namespace declared for prefix of attribute $qname of element < $element_qname >. You must have xmlns:$prefix declaration in the same document.",
-                            $this->file, $this->line);
+                $namespace_uri = 'http://undefined/ns/' . $prefix;
             }
             } else {
                 $local_name = $qname;

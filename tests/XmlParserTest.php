@@ -177,7 +177,7 @@ class XmlParserTest extends PHPTAL_TestCase
 3
  4
 <!-- 5 -->
-            <x:y/> error in line 6!
+            <<x:y/> error in line 6!
             </x>
         ");
             $this->fail("Accepted invalid XML");

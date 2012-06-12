@@ -37,14 +37,14 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
     }
 
-    function testRemovesXHTMLNS()
+    function testNotRemovesXHTMLNS()
     {
         $tpl = $this->newPHPTAL()->setOutputMode(PHPTAL::HTML5)->setSource('
         <html     xmlns="http://www.w3.org/1999/xhtml">
             <x:head  xmlns:x="http://www.w3.org/1999/xhtml"/></html>
             ');
 
-        $this->assertEquals(normalize_html('<html><head></head></html>'), normalize_html($tpl->execute()));
+        $this->assertEquals(normalize_html('<html xmlns=http://www.w3.org/1999/xhtml><x:head xmlns:x=http://www.w3.org/1999/xhtml></x:head></html>'), normalize_html($tpl->execute()));
 
     }
 
@@ -97,7 +97,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         </html>');
         $res = $tpl->execute();
         $res = normalize_html($res);
-        $exp = normalize_html('<!DOCTYPE html><html>
+        $exp = normalize_html('<!DOCTYPE html><html xmlns=http://www.w3.org/1999/xhtml>
                 <head>
                     <title></title>
                     <base href="http://example.com/">
@@ -143,7 +143,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         </html>');
         $res = $tpl->execute();
         $res = normalize_html($res);
-        $exp = normalize_html('<html>
+        $exp = normalize_html('<html xmlns=http://www.w3.org/1999/xhtml>
                 <body>
                     <input type=checkbox checked>
                     <input type=text readonly>

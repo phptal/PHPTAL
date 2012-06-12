@@ -338,17 +338,11 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             $codewriter->doIf($this->headPrintCondition);
         }
 
-        $html5mode = ($codewriter->getOutputMode() === PHPTAL::HTML5);
-
-        if ($html5mode) {
-            $codewriter->pushHTML('<'.$this->getLocalName());
-        } else {
-            $codewriter->pushHTML('<'.$this->qualifiedName);
-        }
+        $codewriter->pushHTML('<'.$this->qualifiedName);
 
         $this->generateAttributes($codewriter);
 
-        if (!$html5mode && $this->isEmptyNode($codewriter->getOutputMode())) {
+        if ($codewriter->getOutputMode() !== PHPTAL::HTML5 && $this->isEmptyNode($codewriter->getOutputMode())) {
             $codewriter->pushHTML('/>');
         } else {
             $codewriter->pushHTML('>');
@@ -388,11 +382,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
             $codewriter->doIf($this->footPrintCondition);
         }
 
-        if ($codewriter->getOutputMode() === PHPTAL::HTML5) {
-            $codewriter->pushHTML('</'.$this->getLocalName().'>');
-        } else {
-            $codewriter->pushHTML('</'.$this->getQualifiedName().'>');
-        }
+        $codewriter->pushHTML('</'.$this->getQualifiedName().'>');
 
         if ($this->footPrintCondition) {
             $codewriter->doEnd('if');
@@ -410,15 +400,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node implements PHPTAL_Php_Tree
 
     private function generateAttributes(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $html5mode = ($codewriter->getOutputMode() === PHPTAL::HTML5);
-
         foreach ($this->getAttributeNodes() as $attr) {
-
-            // xmlns:foo is not allowed in text/html
-            if ($html5mode && $attr->isNamespaceDeclaration()) {
-                continue;
-            }
-
             switch ($attr->getReplacedState()) {
                 case PHPTAL_Dom_Attr::NOT_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName());

@@ -94,4 +94,20 @@ class ParserTest extends PHPTAL_TestCase
         catch(PHPTAL_Exception $e) {}
     }
 
+    public function testIllegalNamespaceAccepted()
+    {
+        $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
+        try
+        {
+            $parser->parseString(
+                new PHPTAL_Dom_PHPTALDocumentBuilder(),
+                '<html foo:bar="baz" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml">
+                    <g:plusone size="medium" href="http://phptal.org/"></g:plusone>
+                 </html>'
+            );
+        }
+        catch(PHPTAL_Exception $e) {
+            $this->fail("Namespace extended tag can't be parsed: " . $e->getMessage());
+        }
+    }
 }
