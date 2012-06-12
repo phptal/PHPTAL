@@ -176,6 +176,38 @@ EOT;
     }
 
     //TODO: test xhtml boolean attributes (currently tested in 'old' tests)
+
+    function testBoolean()
+    {
+        $booleanAttrs = array(
+            'checked','disabled','autoplay','async','autofocus','controls',
+            'default','defer','formnovalidate','hidden','ismap','itemscope',
+            'loop','multiple','novalidate','open','pubdate','readonly',
+            'required','reversed','scoped','seamless','selected'
+        );
+        foreach($booleanAttrs as $name) {
+            // XHTML
+            $tpl = $this->newPHPTAL();
+            $tpl->setOutputMode(PHPTAL::XHTML);
+            $tpl->setSource('<p tal:attributes="'.$name.' attrval"></p>');
+            $tpl->attrval = true;
+            $res = $tpl->execute();
+            $this->assertEquals('<p '.$name.'="'.$name.'"></p>', $res);
+            $tpl->attrval = false;
+            $res = $tpl->execute();
+            $this->assertEquals('<p></p>', $res);
+            // HTML5
+            $tpl = $this->newPHPTAL();
+            $tpl->setOutputMode(PHPTAL::HTML5);
+            $tpl->setSource('<p tal:attributes="'.$name.' attrval"></p>');
+            $tpl->attrval = true;
+            $res = $tpl->execute();
+            $this->assertEquals('<p '.$name.'></p>', $res);
+            $tpl->attrval = false;
+            $res = $tpl->execute();
+            $this->assertEquals('<p></p>', $res);
+        }
+    }
 }
 
 
