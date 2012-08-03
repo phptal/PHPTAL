@@ -42,7 +42,7 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
             $codewriter->pushHTML($codewriter->interpolateCDATA('<![CDATA['.$value.']]>'));
         } else {
             $codewriter->pushHTML($codewriter->interpolateHTML(
-                htmlspecialchars($value, ENT_NOQUOTES, $codewriter->getEncoding())
+                htmlspecialchars($value, ENT_QUOTES, $codewriter->getEncoding())
             ));
         }
     }
