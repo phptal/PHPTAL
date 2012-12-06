@@ -193,14 +193,21 @@ class PHPTAL_Dom_Defs
         'basefont',
         'br',
         'col',
+        'colgroup', /* only if the span attribute is present */
+        'command',
+        'embed',
         'frame',
         'hr',
         'img',
         'input',
         'isindex',
+        'keygen',
         'link',
         'meta',
         'param',
+        'wbr',
+        'source',
+        'track',
     );
 
     /**
@@ -208,17 +215,33 @@ class PHPTAL_Dom_Defs
      * contained (ie: they are present or not).
      */
     private static $XHTML_BOOLEAN_ATTRIBUTES = array(
+        'autoplay',
+        'async',
+        'autofocus',
         'checked',
         'compact',
+        'controls',
         'declare',
+        'default',
         'defer',
         'disabled',
+        'formnovalidate',
+        'hidden',
         'ismap',
+        'itemscope',
+        'loop',
         'multiple',
         'noresize',
         'noshade',
+        'novalidate',
         'nowrap',
+        'open',
+        'pubdate',
         'readonly',
+        'required',
+        'reversed',
+        'scoped',
+        'seamless',
         'selected',
     );
 }
