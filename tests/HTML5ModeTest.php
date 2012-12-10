@@ -121,6 +121,23 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
 
+
+    function testEmptyAll()
+    {
+        $emptyElements = array(
+            'area','base','basefont','br','col','colgroup', /* only if the span attribute is present */
+            'command','embed','frame','hr','img','input','isindex','keygen','link',
+            'meta','param','wbr','source','track',
+        );
+        foreach($emptyElements as $name) {
+            $tpl = $this->newPHPTAL();
+            $tpl->setOutputMode(PHPTAL::HTML5);
+            $tpl->setSource('<'.$name.' id="123">foo</'.$name.'>');
+            $res = $tpl->execute();
+            $this->assertEquals('<'.$name.' id=123>', $res);
+        }
+    }
+
     function testBoolean()
     {
         $tpl = $this->newPHPTAL();
