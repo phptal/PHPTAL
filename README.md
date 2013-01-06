@@ -13,10 +13,50 @@ If you want to use the builtin internationalisation system (I18N) the gettext ex
 
 Non-PEAR install
 ================
-
 To run you only need PHPTAL.php and files in PHPTAL directory. Other files are for unit tests and PEAR installer.
+You can either use Composer to get the files for you or download them directly.
 
-Get the latest PHPTAL package from http://phptal.org.
+Composer install
+----------------
+To add PHPTAL as a local, per-project dependency to your project, simply add a 
+dependency on `phptal/phptal` to your project's `composer.json` file and run 
+Composer with the `build` or `update` command. 
+
+Here is a minimal example of a `composer.json` file that just defines a 
+development-time dependency on PHPTAL 1.2:
+
+    {
+        "require": {
+            "phptal/phptal": "1.2.*"
+        }
+    }
+    
+For a standalone, system-wide installation via Composer, a composer.json similar 
+to the one shown below can be used from an arbitary directory.
+
+    {
+        "name": "phptal",
+        "description": "phptal",
+        "require": {
+            "phptal/phptal": "1.2.*"
+        },
+        "config": {
+            "bin-dir": "/path/where/to/install/phptal/"
+        }
+    }
+    
+Once you have [installed Composer][composer-install] you simply need to run the following command 
+from the root of your project:
+
+    php composer.phar install
+
+or if you have Composer installed as a binary:
+
+    composer install
+
+Direct Download
+---------------    
+You can also get the latest PHPTAL package directly from [phptal.org][phptal].
 
     tar zxvf PHPTAL-X.X.X.tar.gz
     mv PHPTAL-X.X.X/PHPTAL* /path/to/your/php/include/path/
@@ -25,7 +65,7 @@ Get the latest PHPTAL package from http://phptal.org.
 PEAR Install
 ============
 
-Get the latest PHPTAL package from http://phptal.org.
+Get the latest PHPTAL package from [phptal.org][phptal].
 
 Then run:
 
@@ -40,7 +80,7 @@ You can checkout the latest development version using:
 
     svn co https://svn.motion-twin.com/phptal/trunk phptal
 
-
+Or you can fork or clone it from [the PHPTAL git repository on Github][phptal-github].
 
 PHPTAL development requirements
 ===============================
@@ -62,3 +102,19 @@ If you want to hack PHPTAL (don't forget to send me patches), you will require:
 		pear channel-discover pear.symfony-project.com
 		pear channel-discover components.ez.no
         pear install phpunit/PHPUnit
+        
+Installing development requirements with Composer
+--------------------------------------------------
+All the development dependencies can be installed with Composer by running the
+install command (or the update command, if you've already got a stable version 
+through Composer) with the `--dev` flag from the root of your project directory:
+
+    php composer.phar install --dev
+
+or if you have Composer installed as a binary:
+
+    composer install --dev 
+
+[phptal]: http://phptal.org/
+[composer-install]: http://getcomposer.org/download/
+[phptal-github]: https://github.com/pornel/PHPTAL
