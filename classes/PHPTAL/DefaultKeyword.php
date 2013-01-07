@@ -30,5 +30,10 @@ class PHPTAL_DefaultKeyword implements Countable
     {
         return 1;
     }
+
+    public function jsonSerialize()
+    {
+        return new stdClass;
+    }
 }
 ?>

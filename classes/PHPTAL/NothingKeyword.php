@@ -30,5 +30,10 @@ class PHPTAL_NothingKeyword implements PHPTAL_Keywords
     {
         return 0;
     }
+
+    public function jsonSerialize()
+    {
+        return null;
+    }
 }
 ?>
