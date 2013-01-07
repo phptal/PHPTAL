@@ -50,8 +50,8 @@
  */
 class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 {
-    const DEFAULT_KEYWORD = '_DEFAULT_DEFAULT_DEFAULT_DEFAULT_';
-    const NOTHING_KEYWORD = '_NOTHING_NOTHING_NOTHING_NOTHING_';
+    const DEFAULT_KEYWORD = 'new PHPTAL_DefaultKeyword';
+    const NOTHING_KEYWORD = 'new PHPTAL_NothingKeyword';
 
     static public function true($src, $nothrow)
     {
