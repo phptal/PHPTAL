@@ -47,7 +47,11 @@ class GetTextTest extends PHPTAL_TestCase
     function testLang()
     {
         $gettext = $this->getTextTranslator();
-        $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
+        try {
+            $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
+        } catch(PHPTAL_ConfigurationException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
         $gettext->addDomain('test');
         $gettext->useDomain('test');
 
@@ -61,7 +65,11 @@ class GetTextTest extends PHPTAL_TestCase
     function testInterpol()
     {
         $gettext = $this->getTextTranslator();
-        $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
+        try {
+            $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
+        } catch(PHPTAL_ConfigurationException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
         $gettext->setEncoding('UTF-8');
         $gettext->addDomain('test');
         $gettext->useDomain('test');
@@ -79,7 +87,11 @@ class GetTextTest extends PHPTAL_TestCase
     {
         $gettext = $this->getTextTranslator();
         $gettext->setEncoding('UTF-8');
-        $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
+        try {
+            $gettext->setLanguage('fr_FR', 'fr_FR@euro', 'fr_FR.utf8');
+        } catch(PHPTAL_ConfigurationException $e) {
+            $this->markTestSkipped($e->getMessage());
+        }
         $gettext->addDomain('test');
         $gettext->addDomain('test2');
         $gettext->useDomain('test');
