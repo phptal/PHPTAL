@@ -44,6 +44,8 @@ class ContentEncodingTest extends PHPTAL_TestCase
 
     function testNonUTF8()
     {
+        if (!function_exists('mb_convert_encoding')) $this->markTestSkipped();
+
         // Japanes primary 5 characters just like "ABCDE".
         $text     = mb_convert_encoding(rawurldecode("%E3%81%82%E3%81%84%E3%81%86%E3%81%88%E3%81%8A"), 'euc-jp', 'utf-8');
 

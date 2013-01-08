@@ -19,7 +19,7 @@
  * @package PHPTAL
  * @subpackage Keywords
  */
-interface PHPTAL_Keywords extends Countable, JsonSerializable
+interface PHPTAL_Keywords extends Countable
 {
     public function __toString();
 }
