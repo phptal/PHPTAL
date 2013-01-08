@@ -46,12 +46,14 @@ class PHPTAL_Php_Attribute_METAL_DefineMacro extends PHPTAL_Php_Attribute
                 $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
 
-        if ($codewriter->functionExists($macroname)) {
+        $function_name = $codewriter->getPrefixedFunctionName($macroname);
+
+        if ($codewriter->functionExists($function_name)) {
             throw new PHPTAL_TemplateException("Macro $macroname is defined twice",
                 $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
         }
 
-        $codewriter->doFunction($macroname, 'PHPTAL $_thistpl, PHPTAL $tpl');
+        $codewriter->doFunction($function_name, 'PHPTAL $_thistpl, PHPTAL $tpl');
         $codewriter->doSetVar('$tpl', new PHPTAL_Expr_PHP('clone $tpl'));
         $codewriter->doSetVar('$ctx', new PHPTAL_Expr_PHP('$tpl->getContext()'));
         $codewriter->doInitTranslator();

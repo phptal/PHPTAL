@@ -82,14 +82,14 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
         $cond = new PHPTAL_Expr_PHP('!file_exists(',$this->cache_filename_var,') || time() - ',$cache_len,' >= filemtime(',$this->cache_filename_var,')');
 
         $codewriter->doIf($cond);
-        $codewriter->doEval(new PHPTAL_Expr_PHP('ob_start()'));
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('ob_start()'));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEval(new PHPTAL_Expr_PHP('file_put_contents(',$this->cache_filename_var,', ob_get_flush())'));
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('file_put_contents(',$this->cache_filename_var,', ob_get_flush())'));
         $codewriter->doElse();
-        $codewriter->doEval(new PHPTAL_Expr_PHP('readfile(',$this->cache_filename_var,')'));
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('readfile(',$this->cache_filename_var,')'));
         $codewriter->doEnd('if');
 
         $codewriter->recycleTempVariable($this->cache_filename_var);

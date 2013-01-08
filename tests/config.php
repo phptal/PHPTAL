@@ -120,13 +120,21 @@ function normalize_html($src) {
     return $src;
 }
 
-function normalize_phpsource($code, $ignore_newlines = false) {
+function normalize_phpsource($code_in, $ignore_newlines = false)
+{
+    $code = '';
+    foreach(token_get_all($code_in) as $token) {
+        if (!is_array($token)) $code .= $token;
+        else {
+            if ($token[0]==T_WHITESPACE) $code .= ' ';
+            else if ($token[0]!=T_COMMENT) $code .= $token[1];
+        }
+    }
 
-    // ignore debug
-    $code = preg_replace('!<\?php /\* tag ".*?" from line \d+ \*/ ?; \?>!','', $code);
-    $code = preg_replace('!/\* tag ".*?" from line \d+ \*/ ?;!','', $code);
+    $code = preg_replace("/echo '([^']*)';/",'?>$1<?php ', $code);
+    $code = preg_replace('/;\s*\?>/','?>', $code);
 
-    $code = str_replace('<?php use pear2\HTML\Template\PHPTAL as P; ?>', '', $code);
+    $code = str_replace('use pear2\HTML\Template\PHPTAL as P;', '', $code);
 
     $lines = explode("\n", $code);
     $code = "";
@@ -138,6 +146,11 @@ function normalize_phpsource($code, $ignore_newlines = false) {
         } else $code .= "\n";
     }
 
+    $code = preg_replace('/<\?php[\s;]*\?>/','',$code);
+    $code = preg_replace('/\s+\?>/','?>',$code);
+    $code = preg_replace('/\?><\?php\s*/','',$code);
+
+
     // ignore some no-ops
-    return str_replace(array('<?php ?>', '<?php ; ?>', '{;', ' }'), array('', '', '{', '}'), $code);
+    return str_replace(array('<?php ?>', '<?php ; ?>', '{;', ' }', '};'), array('', '', '{', '}', '}'), $code);
 }

@@ -63,8 +63,8 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
 
         // local macro (no filename specified) and non dynamic macro name
         // can be called directly if it's a known function (just generated or seen in previous compilation)
-        if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $codewriter->functionExists($macroname)) {
-            $code = new PHPTAL_Expr_PHP($codewriter->getFunctionPrefix() . $macroname . '($_thistpl, $tpl)');
+        if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $codewriter->functionExists($codewriter->getPrefixedFunctionName($macroname))) {
+            $code = new PHPTAL_Expr_PHP($codewriter->getPrefixedFunctionName($macroname) . '($_thistpl, $tpl)');
             $codewriter->pushCode($code);
         }
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
@@ -123,7 +123,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // if the tag contains one of the allowed attribute, we generate it
         foreach (self::$ALLOWED_ATTRIBUTES as $qname => $uri) {
             if ($phpelement->hasAttributeNS($uri, $qname)) {
-                $phpelement->generateCode($codewriter);
+                $codewriter->pushCode($phpelement->generateCode($codewriter->getState()));
                 return;
             }
         }

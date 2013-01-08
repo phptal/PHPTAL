@@ -268,8 +268,8 @@ EOT;
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
         $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
-        $this->assertEquals('<p>test<x>test&amp;test</p>', $tpl->execute());
+        $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test<?= "x"; echo "y";?></p>');
+        $this->assertEquals('<p>test<x>test&amp;testxy</p>', $tpl->execute());
         ini_restore('short_open_tag');
     }
 

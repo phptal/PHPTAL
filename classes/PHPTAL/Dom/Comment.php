@@ -19,10 +19,14 @@
  */
 class PHPTAL_Dom_Comment extends PHPTAL_Dom_Node
 {
-    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_State $state)
     {
+        $codewriter = new PHPTAL_Php_CodeWriter($state);
+
         if (!preg_match('/^\s*!/', $this->getValueEscaped())) {
             $codewriter->pushHTML('<!--'.$this->getValueEscaped().'-->');
         }
+
+        return $codewriter->getRoot();
     }
 }

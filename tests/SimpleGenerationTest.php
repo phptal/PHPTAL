@@ -27,7 +27,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $state->setDebug(false);
         $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doFunction('test', '$tpl');
-        $treeGen->generateCode($codewriter);
+        $codewriter->pushCode($treeGen->generateCode($state));
         $codewriter->doEnd('function');
         $result = $codewriter->getResult();
 
@@ -69,8 +69,8 @@ EOS;
         $codewriter->doEnd();
         $res = $codewriter->getResult();
         $exp = <<<EOS
-<?php function test2(\$tpl) {?>test2<?php}?>
 <?php function test1(\$tpl) {?>test1test1<?php}?>
+<?php function test2(\$tpl) {?>test2<?php}?>
 EOS;
         $res = normalize_phpsource($res, true);
         $exp = normalize_phpsource($exp, true);

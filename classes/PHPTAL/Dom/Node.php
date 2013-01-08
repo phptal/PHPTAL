@@ -95,7 +95,7 @@ abstract class PHPTAL_Dom_Node
     /**
      * use CodeWriter to compile this element to PHP code
      */
-    public abstract function generateCode(PHPTAL_Php_CodeWriter $gen);
+    public abstract function generateCode(PHPTAL_Php_State $gen);
 
     function __toString()
     {

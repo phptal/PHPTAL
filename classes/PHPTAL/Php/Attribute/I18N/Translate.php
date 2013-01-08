@@ -120,7 +120,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
         foreach ($tag->childNodes as $child) {
             if ($child instanceof PHPTAL_Dom_Element) {
                 if ($child->hasAttributeNS('http://xml.zope.org/namespaces/i18n', 'name')) {
-                    $child->generateCode($codewriter);
+                    $codewriter->pushCode($child->generateCode($codewriter->getState()));
                 } else {
                     $this->_prepareNames($codewriter, $child);
                 }

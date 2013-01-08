@@ -23,8 +23,10 @@
  */
 class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
 {
-    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_State $state)
     {
+        $codewriter = new PHPTAL_Php_CodeWriter($state);
+
         $mode = $codewriter->getOutputMode();
         $value = $this->getValueEscaped();
         $inCDATAelement = PHPTAL_Dom_Defs::getInstance()->isCDATAElementInHTML($this->parentNode->getNamespaceURI(), $this->parentNode->getLocalName());
@@ -43,5 +45,7 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
         } else {
             $codewriter->doEchoRaw($codewriter->interpolateHTML(htmlspecialchars($value, ENT_QUOTES, $codewriter->getEncoding())));
         }
+
+        return $codewriter->getRoot();
     }
 }

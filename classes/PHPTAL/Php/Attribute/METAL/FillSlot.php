@@ -59,8 +59,8 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
     {
         if ($this->shouldUseCallback()) {
             $function_base_name = 'slot_'.preg_replace('/[^a-z0-9]/', '_', $this->expression).'_'.(self::$uid++);
-            $codewriter->doFunction($function_base_name, 'PHPTAL $_thistpl, PHPTAL $tpl');
-            $this->function_name = $codewriter->getFunctionPrefix().$function_base_name;
+            $this->function_name = $codewriter->getPrefixedFunctionName($function_base_name);
+            $codewriter->doFunction($this->function_name, 'PHPTAL $_thistpl, PHPTAL $tpl');
 
             $codewriter->doSetVar('$ctx', new PHPTAL_Expr_PHP('$tpl->getContext()'));
             $codewriter->doInitTranslator();

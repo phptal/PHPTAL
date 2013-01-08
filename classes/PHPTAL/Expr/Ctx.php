@@ -5,7 +5,13 @@ class PHPTAL_Expr_Ctx extends PHPTAL_Expr_Var
     private $prop;
     function __construct(PHPTAL_Expr $prop)
     {
-        $this->prop = $prop->optimized();
+        $this->prop = $prop;
+    }
+
+    function optimized()
+    {
+        $this->prop = $this->prop->optimized();
+        return $this;
     }
 
     function compiled()

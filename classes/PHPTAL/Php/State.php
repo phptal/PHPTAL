@@ -26,6 +26,22 @@ class PHPTAL_Php_State
     private $output_mode;
     private $phptal;
 
+    public $_doctype,$_xmldeclaration;
+
+    /**
+     * max id of variable to give as temp
+     */
+    private $temp_var_counter=0;
+    /**
+     * stack with free'd variables
+     */
+    private $temp_recycling=array();
+
+    /**
+     * keeps track of seen functions for function_exists
+     */
+    private $known_functions = array();
+
     function __construct(PHPTAL $phptal)
     {
         $this->phptal = $phptal;
@@ -65,6 +81,50 @@ class PHPTAL_Php_State
     public function isDebugOn()
     {
         return $this->debug;
+    }
+
+    public function createTempVariable()
+    {
+        if (count($this->temp_recycling)) return array_shift($this->temp_recycling);
+        return new PHPTAL_Expr_TempVar('$_tmp_'.(++$this->temp_var_counter));
+    }
+
+    public function recycleTempVariable(PHPTAL_Expr_TempVar $var)
+    {
+        $this->temp_recycling[] = $var;
+    }
+
+    private $_functionPrefix = "";
+
+    /**
+     * functions later generated and checked for existence will have this prefix added
+     * (poor man's namespace)
+     *
+     * @param string $prefix
+     *
+     * @return void
+     */
+    public function setFunctionPrefix($prefix)
+    {
+        $this->_functionPrefix = $prefix;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFunctionPrefix()
+    {
+        return $this->_functionPrefix;
+    }
+
+    public function functionExists($name)
+    {
+        return isset($this->known_functions[$name]);
+    }
+
+    public function setFunctionExists($name)
+    {
+        $this->known_functions[$name] = true;
     }
 
     /**

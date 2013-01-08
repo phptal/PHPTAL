@@ -45,16 +45,6 @@ abstract class PHPTAL_Namespace
         return $this->namespace_uri;
     }
 
-    public function hasAttribute($attributeName)
-    {
-        return array_key_exists(strtolower($attributeName), $this->_attributes);
-    }
-
-    public function getAttribute($attributeName)
-    {
-        return $this->_attributes[strtolower($attributeName)];
-    }
-
     public function addAttribute(PHPTAL_NamespaceAttribute $attribute)
     {
         $attribute->setNamespace($this);

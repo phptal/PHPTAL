@@ -151,8 +151,10 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
         throw new PHPTAL_Exception("Given node is not child of ".$this->getQualifiedName());
     }
 
-    public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
+    public function generateCode(PHPTAL_Php_State $state)
     {
+        $codewriter = new PHPTAL_Php_CodeWriter($state);
+
         try
         {
             /// self-modifications
@@ -162,7 +164,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
             }
 
             /// code generation
-            if (count($this->surroundAttributes) || count($this->contentAttributes) || count($this->replaceAttributes)) {
+            if ($this->getSourceLine()) {
                 $codewriter->doComment('tag "'.$this->qualifiedName.'" from line '.$this->getSourceLine());
             }
 
@@ -186,6 +188,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
             $e->hintSrcPosition($this->getSourceFile(), $this->getSourceLine());
             throw $e;
         }
+
+        return $codewriter->getRoot();
     }
 
     /**
@@ -352,7 +356,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
         if (!$this->isEmptyNode($codewriter->getOutputMode())) {
             if ($realContent || !count($this->contentAttributes)) {
                 foreach($this->childNodes as $child) {
-                    $child->generateCode($codewriter);
+                    $codewriter->pushCode($child->generateCode($codewriter->getState()));
                 }
             }
             else foreach($this->contentAttributes as $att) {

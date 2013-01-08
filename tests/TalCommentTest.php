@@ -17,7 +17,10 @@
 
 class DummyPhpNode extends PHPTAL_Dom_Element {
     function __construct() {}
-    function generateCode(PHPTAL_Php_CodeWriter $codewriter) {}
+    function generateCode(PHPTAL_Php_State $state)
+    {
+        return new PHPTAL_Expr_Block();
+    }
 }
 
 class TalCommentTest extends PHPTAL_TestCase

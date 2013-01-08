@@ -2,79 +2,69 @@
 
 class PHPTAL_Expr_Block extends PHPTAL_Expr_Stmt
 {
+    private $braces;
+    const NO_BRACES=-1, OPT_BRACES=0, BRACES=1;
+
+    function __construct($braces = self::OPT_BRACES)
+    {
+        $this->braces = $braces;
+    }
+
     private $expressions = array();
 
-    function append(PHPTAL_Expr_Stmt $expr, $indent='')
+    function append(PHPTAL_Expr_Stmt $expr)
     {
-        $this->expressions[] = array($indent, $expr);
+        $this->expressions[] = $expr;
     }
 
-    private function isExpressionEchoOfStrings(PHPTAL_Expr_Stmt $e)
+    private function mergeAdjacentEchos()
     {
-        if ($e instanceof PHPTAL_Expr_Comment) return true;
-
-        if (!$e instanceof PHPTAL_Expr_Echo) return false;
-
-        foreach($e->subexpressions as $subexpr) {
-            if (!$subexpr instanceof PHPTAL_Expr_String) return false;
-        }
-
-        return true;
-    }
-
-    function removePrecedingEcho()
-    {
-        $result='';
-        // change echo to HTML from beginning of code
-        foreach($this->expressions as $k => $codeLine) {
-            if (!$this->isExpressionEchoOfStrings($codeLine[1])) break;
-            if ($codeLine[1] instanceof PHPTAL_Expr_Comment) continue;
-
-            foreach($codeLine[1]->subexpressions as $subexpr) {
-                $result .= $subexpr->getStringValue();
+        $lastexp = NULL;
+        foreach($this->expressions as $k => $exp) {
+            if ($exp instanceof PHPTAL_Expr_Echo && $lastexp instanceof PHPTAL_Expr_Echo) {
+                $lastexp->appendEcho($exp);
+                unset($this->expressions[$k]);
+            } else {
+                $lastexp = $exp;
             }
-
-            unset($this->expressions[$k]);
         }
-        return $result;
     }
 
-    function removeFollowingEcho()
+    function optimized()
     {
-        // change echo to HTML from end of code
-        $end_result = '';
-        foreach(array_reverse($this->expressions,true) as $k => $codeLine) {
-            if (!$this->isExpressionEchoOfStrings($codeLine[1])) break;
-            if ($codeLine[1] instanceof PHPTAL_Expr_Comment) continue;
+        $this->mergeAdjacentEchos();
+        foreach($this->expressions as &$e) $e = $e->optimized();
 
-            foreach($codeLine[1]->subexpressions as $subexpr) {
-                $end_result = $subexpr->getStringValue() . $end_result;
-            }
-
-            unset($this->expressions[$k]);
-        }
-        return $end_result;
+        if ($this->braces === self::NO_BRACES && count($this->expressions) == 1) return $this->expressions[0];
+        return $this;
     }
-
 
     function compiled()
     {
-        if (count($this->expressions) == 0) return '';
+        if (count($this->expressions) == 0) {
+            return $this->braces === self::BRACES ? '{}' : '';
+        }
 
-        $result = '';
+        $result = $this->braces === self::NO_BRACES ? '' : "{\n";
 
         // output remaining code
         $nl = count($this->expressions)==1 ? " " : "\n";
 
         $result .= $nl;
         foreach ($this->expressions as $codeLine) {
-            $codeLine = $codeLine[0] . $codeLine[1];
+            assert('$codeLine instanceof PHPTAL_Expr_Stmt');
+            $line = $codeLine->compiled();
             // avoid adding ; after } and {
-            if (!preg_match('/[{};]\s*$/', $codeLine)) {
-                $codeLine .= ';'.$nl;
+            if (!$codeLine instanceof PHPTAL_Expr_Try &&
+                !$codeLine instanceof PHPTAL_Expr_Block &&
+                !$codeLine instanceof PHPTAL_Expr_Comment &&
+                !$codeLine instanceof PHPTAL_Expr_If &&
+                !$codeLine instanceof PHPTAL_Expr_Catch && !preg_match('/[{;]\s*$/', $line)) {
+
+                $line .= ';';
             }
-            $result .= $codeLine;
+            $result .= $nl.$line;
         }
-        return $result;
+        return $result . ($this->braces === self::NO_BRACES ? '' : "}\n");
     }
 }

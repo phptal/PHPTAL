@@ -21,36 +21,26 @@
  */
 class PHPTAL_Php_CodeWriter
 {
-    /**
-     * max id of variable to give as temp
-     */
-    private $temp_var_counter=0;
-    /**
-     * stack with free'd variables
-     */
-    private $temp_recycling=array();
-
-    /**
-     * keeps track of seen functions for function_exists
-     */
-    private $known_functions = array();
-
-
     public function __construct(PHPTAL_Php_State $state)
     {
-        $this->currentBlock = new PHPTAL_Expr_Block();
         $this->_state = $state;
+        $this->rootBlock = new PHPTAL_Expr_Block(PHPTAL_Expr_Block::NO_BRACES);
+        $this->pushBlock($this->rootBlock);
+    }
+
+    public function getState()
+    {
+        return $this->_state;
     }
 
     public function createTempVariable()
     {
-        if (count($this->temp_recycling)) return array_shift($this->temp_recycling);
-        return new PHPTAL_Expr_TempVar('$_tmp_'.(++$this->temp_var_counter));
+        return $this->_state->createTempVariable();
     }
 
     public function recycleTempVariable(PHPTAL_Expr_TempVar $var)
     {
-        $this->temp_recycling[] = $var;
+        $this->_state->recycleTempVariable($var);
     }
 
     public function getCacheFilesBaseName()
@@ -58,14 +48,14 @@ class PHPTAL_Php_CodeWriter
         return $this->_state->getCacheFilesBaseName();
     }
 
+    public function getRoot()
+    {
+        return $this->rootBlock;
+    }
+
     public function getResult()
     {
-        $this->flush();
-        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
-            return '<?php use '.'PHPTALNAMESPACE as P; ?>'.trim($this->_result);
-        } else {
-            return trim($this->_result);
-        }
+        return '<?php '.$this->getRoot()->optimized().'?>';
     }
 
     /**
@@ -77,7 +67,7 @@ class PHPTAL_Php_CodeWriter
      */
     public function setDocType($dt)
     {
-        $this->_doctype = $dt;
+        $this->_state->_doctype = $dt;
     }
 
     /**
@@ -89,28 +79,12 @@ class PHPTAL_Php_CodeWriter
      */
     public function setXmlDeclaration($dt)
     {
-        $this->_xmldeclaration = $dt;
+        $this->_state->_xmldeclaration = $dt;
     }
 
-    /**
-     * functions later generated and checked for existence will have this prefix added
-     * (poor man's namespace)
-     *
-     * @param string $prefix
-     *
-     * @return void
-     */
-    public function setFunctionPrefix($prefix)
+    public function getPrefixedFunctionName($name)
     {
-        $this->_functionPrefix = $prefix;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFunctionPrefix()
-    {
-        return $this->_functionPrefix;
+        return $this->_state->getFunctionPrefix() . $name;
     }
 
     /**
@@ -138,22 +112,6 @@ class PHPTAL_Php_CodeWriter
         return $this->_state->evaluateExpression($src);
     }
 
-    public function indent()
-    {
-        $this->_indentation ++;
-    }
-
-    public function unindent()
-    {
-        $this->_indentation --;
-    }
-
-    public function flush()
-    {
-        $this->flushCode();
-        $this->flushHtml();
-    }
-
     public function noThrow($bool)
     {
         if ($bool) {
@@ -163,28 +121,6 @@ class PHPTAL_Php_CodeWriter
         }
     }
 
-    public function flushCode()
-    {
-        $this->_result .= $this->currentBlock->removePrecedingEcho();
-        $post = $this->currentBlock->removeFollowingEcho();
-
-        $code = $this->currentBlock->compiled();
-        if ('' !== $code) {
-            $this->_result .= '<?php'.$code."?>\n";
-        }
-        $this->_result .= $post;
-
-        $this->currentBlock = new PHPTAL_Expr_Block();
-    }
-
-    public function flushHtml()
-    {
-        if (count($this->_htmlBuffer) == 0) return;
-
-        $this->_result .= implode('', $this->_htmlBuffer);
-        $this->_htmlBuffer = array();
-    }
-
     /**
      * Generate code for setting DOCTYPE
      *
@@ -192,8 +128,8 @@ class PHPTAL_Php_CodeWriter
      */
     public function doDoctype($called_from_macro = false)
     {
-        if ($this->_doctype) {
-            $code = new PHPTAL_Expr_PHP('$ctx->setDocType(',new PHPTAL_Expr_String($this->_doctype),',',
+        if ($this->_state->_doctype) {
+            $code = new PHPTAL_Expr_PHP('$ctx->setDocType(',new PHPTAL_Expr_String($this->_state->_doctype),',',
                 ($called_from_macro?'true':'false'),')');
             $this->pushCode($code);
         }
@@ -206,8 +142,8 @@ class PHPTAL_Php_CodeWriter
      */
     public function doXmlDeclaration($called_from_macro = false)
     {
-        if ($this->_xmldeclaration && $this->getOutputMode() !== PHPTAL::HTML5) {
-            $code = new PHPTAL_Expr_PHP('$ctx->setXmlDeclaration(',new PHPTAL_Expr_String($this->_xmldeclaration),',',
+        if ($this->_state->_xmldeclaration && $this->getOutputMode() !== PHPTAL::HTML5) {
+            $code = new PHPTAL_Expr_PHP('$ctx->setXmlDeclaration(',new PHPTAL_Expr_String($this->_state->_xmldeclaration),',',
                 ($called_from_macro?'true':'false').')');
             $this->pushCode($code);
         }
@@ -215,30 +151,34 @@ class PHPTAL_Php_CodeWriter
 
     public function functionExists($name)
     {
-        return isset($this->known_functions[$this->_functionPrefix . $name]);
+        assert('false !== strpos($name,$this->_state->getFunctionPrefix())');
+        return $this->_state->functionExists($name);
     }
 
     public function doTemplateFile($functionName, PHPTAL_Dom_Element $treeGen)
     {
         $this->doComment("\n*** DO NOT EDIT THIS FILE ***\n\nGenerated by PHPTAL from ".$treeGen->getSourceFile()." (edit that file instead)");
+
+        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
+            $this->pushCode(new PHPTAL_Expr_PHP('use '.'PHPTALNAMESPACE as P'));
+        }
+
         $this->doFunction($functionName, 'PHPTAL $tpl, PHPTAL_Context $ctx');
-        $this->setFunctionPrefix($functionName . "_");
-        $this->doSetVar('$_thistpl', new PHPTAL_Expr_PHP('$tpl'));
+        $this->_state->setFunctionPrefix($functionName . "_");
+        $this->doSetVar(new PHPTAL_Expr_Var('$_thistpl'), new PHPTAL_Expr_Var('$tpl'));
         $this->doInitTranslator();
-        $treeGen->generateCode($this);
+        $this->pushCode($treeGen->generateCode($this->_state));
         $this->doComment("end");
         $this->doEnd('function');
     }
 
     public function doFunction($name, $params)
     {
-        $name = $this->_functionPrefix . $name;
-        $this->known_functions[$name] = true;
+        $this->_state->setFunctionExists($name);
 
-        $this->pushCodeWriterContext();
-        $this->pushCode(new PHPTAL_Expr_PHP("function $name($params) {\n"));
-        $this->indent();
-        $this->_segments[] =  'function';
+        $fn = new PHPTAL_Expr_Func($name,$params);
+        $this->rootBlock->append($fn);
+        $this->pushBlock($fn->getBodyBlock(), $fn);
     }
 
     public function doComment($comment)
@@ -261,50 +201,25 @@ class PHPTAL_Php_CodeWriter
         return '$_translator';
     }
 
-    public function doEval(PHPTAL_Expr_Stmt $code)
-    {
-        $this->pushCode($code);
-    }
-
     public function doForeach($out, PHPTAL_Expr $source)
     {
-        $this->_segments[] =  'foreach';
-        $this->pushCode(new PHPTAL_Expr_PHP("foreach (",$source," as ",$out,"):"));
-        $this->indent();
+        $this->pushCode($foreach = new PHPTAL_Expr_Foreach($out, $source));
+        $this->pushBlock($foreach->getBlock(), $foreach);
     }
 
     public function doEnd($expects = null)
     {
-        if (!count($this->_segments)) {
-            if (!$expects) $expects = 'anything';
-            throw new PHPTAL_Exception("Bug: CodeWriter generated end of block without $expects open");
-        }
+        $pop = $this->popBlock();
 
-        $segment = array_pop($this->_segments);
-        if ($expects !== null && $segment !== $expects) {
-            throw new PHPTAL_Exception("Bug: CodeWriter generated end of $expects, but needs to close $segment");
-        }
-
-        $this->unindent();
-        if ($segment == 'function') {
-            $this->pushCode(new PHPTAL_Expr_PHP("\n}\n\n"));
-            $this->flush();
-            $functionCode = $this->_result;
-            $this->popCodeWriterContext();
-            $this->_result = $functionCode . $this->_result;
-        } elseif ($segment == 'try')
-            $this->pushCode(new PHPTAL_Expr_PHP('}'));
-        elseif ($segment == 'catch')
-            $this->pushCode(new PHPTAL_Expr_PHP('}'));
-        else
-            $this->pushCode(new PHPTAL_Expr_PHP("end$segment"));
+        if ($expects === 'function' && !$pop instanceof PHPTAL_Expr_Func) throw new PHPTAL_Exception("Popped $expects in wrong order");
+        if ($expects === 'if' && !$pop instanceof PHPTAL_Expr_If) throw new PHPTAL_Exception("Popped $expects in wrong order");
+        if ($expects === 'foreach' && !$pop instanceof PHPTAL_Expr_Foreach) throw new PHPTAL_Exception("Popped $expects in wrong order");
     }
 
     public function doTry()
     {
-        $this->_segments[] =  'try';
-        $this->pushCode(new PHPTAL_Expr_PHP('try {'));
-        $this->indent();
+        $this->pushCode($try = new PHPTAL_Expr_Try());
+        $this->pushBlock($try->getBlock(), $try);
     }
 
     public function doSetVar($varname, $code)
@@ -314,37 +229,31 @@ class PHPTAL_Php_CodeWriter
 
     public function doCatch($exception,$var)
     {
-        $this->doEnd('try');
-        $this->_segments[] =  'catch';
-        $this->pushCode(new PHPTAL_Expr_PHP('catch(',$exception,' ',$var,') {'));
-        $this->indent();
+        $try = $this->popBlock();
+        assert('$try instanceof PHPTAL_Expr_Try');
+        $this->pushBlock($try->addCatchBlock($exception,$var), $try);
     }
 
     public function doIf(PHPTAL_Expr $condition)
     {
-        $this->_segments[] =  'if';
-        $this->pushCode(new PHPTAL_Expr_PHP('if (',$condition,'): '));
-        $this->indent();
+        $this->pushCode($if = new PHPTAL_Expr_If($condition));
+        $this->pushBlock($if->getThenBlock(), $if);
     }
 
     public function doElseIf(PHPTAL_Expr $condition)
     {
-        if (end($this->_segments) !== 'if') {
-            throw new PHPTAL_Exception("Bug: CodeWriter generated elseif without if");
-        }
-        $this->unindent();
-        $this->pushCode(new PHPTAL_Expr_PHP('elseif (',$condition,'): '));
-        $this->indent();
+        $if = $this->popBlock();
+        assert('$if instanceof PHPTAL_Expr_If');
+        $else = $if->getElseBlock();
+        $else->append($newif = new PHPTAL_Expr_If($condition));
+        $this->pushBlock($newif->getThenBlock(), $newif);
     }
 
     public function doElse()
     {
-        if (end($this->_segments) !== 'if') {
-            throw new PHPTAL_Exception("Bug: CodeWriter generated else without if");
-        }
-        $this->unindent();
-        $this->pushCode(new PHPTAL_Expr_PHP('else: '));
-        $this->indent();
+        $if = $this->popBlock();
+        assert('$if instanceof PHPTAL_Expr_If');
+        $this->pushBlock($if->getElseBlock(), $if);
     }
 
     /**
@@ -358,7 +267,6 @@ class PHPTAL_Php_CodeWriter
 
     public function doEcho(PHPTAL_Expr $code)
     {
-        $this->flush();
         $this->pushCode(new PHPTAL_Expr_Echo(new PHPTAL_Expr_Escape($code)));
     }
 
@@ -383,14 +291,13 @@ class PHPTAL_Php_CodeWriter
         assert('is_string($html)');
         assert('false === strpos($html,"<?php")');
         if ($html === "") return;
-        $this->flushCode();
-        $this->_htmlBuffer[] =  $html;
+        $this->doEchoRaw(new PHPTAL_Expr_String($html));
     }
 
     public function pushCode(PHPTAL_Expr_Stmt $codeLine)
     {
-        $this->flushHtml();
-        $this->currentBlock->append($codeLine->optimized(), $this->indentSpaces());
+        assert('$this->currentBlock instanceof PHPTAL_Expr_Block');
+        $this->currentBlock->append($codeLine);
     }
 
     public function getEncoding()
@@ -421,33 +328,8 @@ class PHPTAL_Php_CodeWriter
 
     public function quoteAttributeValue(PHPTAL_Expr $value)
     {
-        $value = $value->optimized();
+        return new PHPTAL_Expr_Quote($value, $this->getOutputMode(), $this->getEncoding());
 
-        if ($this->isUnquotedStringSafe($value)) return $value;
-
-        return new PHPTAL_Expr_Append(
-            new PHPTAL_Expr_String('"'),
-            $value,
-            new PHPTAL_Expr_String('"'));
-
-    }
-
-    private function isUnquotedStringSafe(PHPTAL_Expr $value)
-    {
-        if ($value instanceof PHPTAL_Expr_String) {
-        if ($this->getEncoding() == 'UTF-8') // HTML 5: 8.1.2.3 Attributes ; http://code.google.com/p/html5lib/issues/detail?id=93
-        {
-            // regex excludes unicode control characters, all kinds of whitespace and unsafe characters
-            // and trailing / to avoid confusion with self-closing syntax
-            $unsafe_attr_regex = '/^$|[&=\'"><\s`\pM\pC\pZ\p{Pc}\p{Sk}]|\/$/u';
-        } else {
-            $unsafe_attr_regex = '/^$|[&=\'"><\s`\0177-\377]|\/$/';
-        }
-
-            return $this->getOutputMode() == PHPTAL::HTML5 && !preg_match($unsafe_attr_regex, $value->getStringValue());
-
-        }
-        return false;
     }
 
     public function pushContext()
@@ -460,42 +342,24 @@ class PHPTAL_Php_CodeWriter
         $this->doSetVar('$ctx', new PHPTAL_Expr_PHP('$tpl->popContext()'));
     }
 
-    // ~~~~~ Private members ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    private function indentSpaces()
+    private function pushBlock(PHPTAL_Expr_Stmt $c, $usercontext = NULL)
     {
-        return str_repeat("\t", $this->_indent);
+        $this->blocks[] = array($c, $usercontext);
+        $this->currentBlock = $c;
     }
 
-    private function pushCodeWriterContext()
+    private function popBlock()
     {
-        $this->_contexts[] =  clone $this;
-        $this->_result = "";
-        $this->_indent = 0;
-        $this->currentBlock = new PHPTAL_Expr_Block();
-        $this->_htmlBuffer = array();
-        $this->_segments = array();
+        if (count($this->blocks)<=1) throw new PHPTAL_Exception("PHPTAL Bug: attempted to pop last block");
+
+        list(,$usercontext) = array_pop($this->blocks);
+        $this->currentBlock = $this->blocks[count($this->blocks)-1][0];
+        return $usercontext;
     }
 
-    private function popCodeWriterContext()
-    {
-        $oldContext = array_pop($this->_contexts);
-        $this->_result = $oldContext->_result;
-        $this->_indent = $oldContext->_indent;
-        $this->currentBlock = $oldContext->currentBlock;
-        $this->_htmlBuffer = $oldContext->_htmlBuffer;
-        $this->_segments = $oldContext->_segments;
-    }
+    private $blocks = array();
+    private $currentBlock, $rootBlock;
 
     private $_state;
-    private $_result = "";
-    private $_indent = 0;
-    private $currentBlock;
-    private $_htmlBuffer = array();
-    private $_segments = array();
-    private $_contexts = array();
-    private $_functionPrefix = "";
-    private $_doctype = "";
-    private $_xmldeclaration = "";
 }
 
