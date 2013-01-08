@@ -162,8 +162,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
             }
 
             /// code generation
-
-            if ($this->getSourceLine()) {
+            if (count($this->surroundAttributes) || count($this->contentAttributes) || count($this->replaceAttributes)) {
                 $codewriter->doComment('tag "'.$this->qualifiedName.'" from line '.$this->getSourceLine());
             }
 
@@ -420,12 +419,12 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
                     break;
 
                 case PHPTAL_Dom_Attr::FULLY_REPLACED:
-                    $codewriter->pushHTML($attr->getValueEscaped());
+                    $codewriter->doEchoRaw($attr->getOverwrittenExpression());
                     break;
 
                 case PHPTAL_Dom_Attr::VALUE_REPLACED:
                     $codewriter->pushHTML(' '.$attr->getQualifiedName().'="');
-                    $codewriter->pushHTML($attr->getValueEscaped());
+                    $codewriter->doEchoOrPushCode($attr->getOverwrittenExpression());
                     $codewriter->pushHTML('"');
                     break;
             }
@@ -469,7 +468,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
                 throw new PHPTAL_TemplateException(sprintf("Attribute conflict in < %s > '%s' cannot appear with '%s'",
                                $this->qualifiedName,
                                $key,
-                               $temp[$nsattr->getPriority()][0]->getNamespace()->getPrefix() . ':' . $temp[$nsattr->getPriority()][0]->getLocalName()
+                               $temp[$nsattr->getPriority()][0]->getNamespace()->getPrefix() . ':' .
+                               $temp[$nsattr->getPriority()][0]->getLocalName()
                                ), $this->getSourceFile(), $this->getSourceLine());
             }
             $temp[$nsattr->getPriority()] = array($nsattr, $domattr);

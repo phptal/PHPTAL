@@ -23,9 +23,12 @@ class PHPTAL_Dom_ProcessingInstruction extends PHPTAL_Dom_Node
 {
     public function generateCode(PHPTAL_Php_CodeWriter $codewriter)
     {
-        if (preg_match('/^<\?(?:php|[=\s])/i', $this->getValueEscaped())) {
+        $types = ini_get('short_open_tag')?'php|=|':'php';
+        if (preg_match("/<\?($types)(.*?)\?>/", $this->getValueEscaped(), $m)) {
+            list(,$type,$code) = $m;
+            if ($type === '=') $code = 'echo '.$code;
             // block will be executed as PHP
-            $codewriter->pushHTML($this->getValueEscaped());
+            $codewriter->pushCode(new PHPTAL_Expr_PHP($code));
         } else {
             $codewriter->doEchoRaw(new PHPTAL_Expr_String("<"));
             $codewriter->doEchoRaw($codewriter->interpolateHTML(substr($this->getValueEscaped(), 1)));

@@ -1,6 +1,6 @@
 <?php
 
-class PHPTAL_Expr_Echo extends PHPTAL_Expr
+class PHPTAL_Expr_Echo extends PHPTAL_Expr_Stmt
 {
     public $subexpressions;
 
@@ -17,19 +17,21 @@ class PHPTAL_Expr_Echo extends PHPTAL_Expr
 
             if ($s instanceof PHPTAL_Expr_String && '' === $s->getStringValue()) unset($this->subexpressions[$k]);
         }
+
+        $prepend = array();
+        foreach($this->subexpressions as $k => $expr) {
+            if (!$expr instanceof PHPTAL_Expr_Append) break;
+            $prepend = array_merge($prepend, $expr->getSubexpressions());
+            unset($this->subexpressions[$k]);
+        }
+        $this->subexpressions = array_merge($prepend, $this->subexpressions);
+
+
         return $this;
     }
 
     function append(PHPTAL_Expr $expr)
     {
-        if ($expr instanceof PHPTAL_Expr_Append) {
-            $expr = $expr->optimized();
-            if ($expr instanceof PHPTAL_Expr_Append) {
-                $this->subexpressions = array_merge($this->subexpressions, $expr->getSubexpressions());
-                return;
-            }
-        }
-
         $this->subexpressions[] = $expr;
     }
 

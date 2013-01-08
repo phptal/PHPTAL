@@ -24,6 +24,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $parser = new PHPTAL_Dom_SaxXmlParser($tpl->getEncoding());
         $treeGen = $parser->parseFile(new PHPTAL_Dom_PHPTALDocumentBuilder(), 'input/parser.01.xml')->getResult();
         $state     = new PHPTAL_Php_State($tpl);
+        $state->setDebug(false);
         $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doFunction('test', '$tpl');
         $treeGen->generateCode($codewriter);
@@ -33,7 +34,7 @@ class SimpleGenerationTest extends PHPTAL_TestCase
         $expected = <<<EOS
 <?php
 function test(\$tpl) {
-\$ctx->setXmlDeclaration('<?xml version="1.0"?>',false) ;?>
+\$ctx->setXmlDeclaration('<?xml version="1.0"?>',false);?>
 <html>
   <head>
     <title>test document</title>

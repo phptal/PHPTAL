@@ -1,20 +1,5 @@
 <?php
 
-abstract class PHPTAL_Expr
-{
-    abstract function compiled();
-
-    function optimized()
-    {
-        return $this;
-    }
-
-    function __toString()
-    {
-        return $this->compiled();
-    }
-}
-
 class PHPTAL_Expr_PHP extends PHPTAL_Expr
 {
     public $subexpressions;
@@ -26,7 +11,7 @@ class PHPTAL_Expr_PHP extends PHPTAL_Expr
         $this->subexpressions = $subexpressions;
     }
 
-    function append(PHPTAL_Expr $expr)
+    function append(PHPTAL_Expr_Stmt $expr)
     {
         $this->subexpressions[] = $expr;
     }
@@ -34,10 +19,10 @@ class PHPTAL_Expr_PHP extends PHPTAL_Expr
     function optimized()
     {
         foreach($this->subexpressions as &$s) {
-            if ($s instanceof PHPTAL_Expr) $s = $s->optimized();
+            if ($s instanceof PHPTAL_Expr_Stmt) $s = $s->optimized();
         }
 
-        if (count($this->subexpressions) == 1 && $this->subexpressions[0] instanceof PHPTAL_Expr) {
+        if (count($this->subexpressions) == 1 && $this->subexpressions[0] instanceof PHPTAL_Expr_Stmt) {
             return $this->subexpressions[0];
         }
         return $this;
@@ -47,14 +32,4 @@ class PHPTAL_Expr_PHP extends PHPTAL_Expr
     {
         return implode('', $this->subexpressions);
     }
-}
-
-class PHPTAL_Expr_Nothing extends PHPTAL_Expr
-{
-    function compiled() {assert(0);}
-}
-
-class PHPTAL_Expr_Default extends PHPTAL_Expr
-{
-    function compiled() {assert(0);}
 }

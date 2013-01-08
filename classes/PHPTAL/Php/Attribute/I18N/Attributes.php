@@ -78,10 +78,10 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
 
                 if ($attr->getReplacedState() === PHPTAL_Dom_Attr::NOT_REPLACED) {
                     $code = $this->_getTranslationCode($codewriter, $attr->getValue());
-                } elseif ($attr->getReplacedState() === PHPTAL_Dom_Attr::VALUE_REPLACED && $attr->getOverwrittenVariableName()) {
+                } elseif ($attr->getReplacedState() === PHPTAL_Dom_Attr::VALUE_REPLACED) {
                     // sadly variables won't be interpolated in this translation
                     $code = new PHPTAL_Expr_Echo(new PHPTAL_Expr_Escape(
-                        new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->translate(',$attr->getOverwrittenVariableName(),', false)')));
+                        new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->translate(',$attr->getOverwrittenExpression(),', false)')));
                 } else {
                     throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it",
                                 $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
@@ -100,7 +100,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
      */
     private function _getTranslationCode(PHPTAL_Php_CodeWriter $codewriter, $key)
     {
-        $code = new PHPTAL_Expr_PHP();
+        $code = new PHPTAL_Expr_Block();
 
         if (preg_match_all('/\$\{(.*?)\}/', $key, $m)) {
             array_shift($m);
@@ -108,9 +108,8 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
             foreach ($m as $name) {
                 $code->append(new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->setVar(',
                     new PHPTAL_Expr_String($name),',',
-                    PHPTAL_Php_TalesInternal::compileToPHPExpression($name),');')); // allow more complex TAL expressions
+                    PHPTAL_Php_TalesInternal::compileToPHPExpression($name),')')); // allow more complex TAL expressions
             }
-            $code->append(new PHPTAL_Expr_PHP("\n"));
         }
 
         // notice the false boolean which indicate that the html is escaped

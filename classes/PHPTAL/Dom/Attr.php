@@ -25,7 +25,7 @@ class PHPTAL_Dom_Attr
     /**
      * attribute's value can be overriden with a variable
      */
-    private $phpVariable;
+    private $valueAsExpression;
     const HIDDEN = -1;
     const NOT_REPLACED = 0;
     const VALUE_REPLACED = 1;
@@ -117,6 +117,7 @@ class PHPTAL_Dom_Attr
      */
     function getValueEscaped()
     {
+        assert('$this->replacedState === self::NOT_REPLACED');
         return $this->value_escaped;
     }
 
@@ -133,14 +134,6 @@ class PHPTAL_Dom_Attr
     }
 
     /**
-     * set PHP code as value of this attribute. Code is expected to echo the value.
-     */
-    private function setPHPCode(PHPTAL_Expr $code)
-    {
-        $this->value_escaped = '<?php '.$code." ?>\n";
-    }
-
-    /**
      * hide this attribute. It won't be generated.
      */
     function hide()
@@ -151,39 +144,36 @@ class PHPTAL_Dom_Attr
     /**
      * generate value of this attribute from variable
      */
-    function overwriteValueWithVariable(PHPTAL_Expr_Var $phpVariable)
+    function overwriteValueWithVariable(PHPTAL_Expr_Var $var)
     {
         $this->replacedState = self::VALUE_REPLACED;
-        $this->phpVariable = $phpVariable;
-        $this->setPHPCode(new PHPTAL_Expr_Echo($phpVariable));
+        $this->valueAsExpression = $var;
     }
 
     /**
      * generate complete syntax of this attribute using variable
      */
-    function overwriteFullWithVariable(PHPTAL_Expr_Var $phpVariable)
+    function overwriteFullWithVariable(PHPTAL_Expr_Var $var)
     {
         $this->replacedState = self::FULLY_REPLACED;
-        $this->phpVariable = $phpVariable;
-        $this->setPHPCode(new PHPTAL_Expr_Echo($phpVariable));
+        $this->valueAsExpression = $var;
     }
 
     /**
      * use any PHP code to generate this attribute's value
      */
-    function overwriteValueWithCode(PHPTAL_Expr $code)
+    function overwriteValueWithCode(PHPTAL_Expr_Stmt $code)
     {
         $this->replacedState = self::VALUE_REPLACED;
-        $this->phpVariable = null;
-        $this->setPHPCode($code);
+        $this->valueAsExpression = $code;
     }
 
     /**
      * if value was overwritten with variable, get its name
      */
-    function getOverwrittenVariableName()
+    function getOverwrittenExpression()
     {
-        return $this->phpVariable;
+        return $this->valueAsExpression;
     }
 
     /**

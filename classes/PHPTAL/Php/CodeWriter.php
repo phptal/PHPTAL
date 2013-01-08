@@ -38,6 +38,7 @@ class PHPTAL_Php_CodeWriter
 
     public function __construct(PHPTAL_Php_State $state)
     {
+        $this->currentBlock = new PHPTAL_Expr_Block();
         $this->_state = $state;
     }
 
@@ -162,58 +163,18 @@ class PHPTAL_Php_CodeWriter
         }
     }
 
-    private function isExpressionEchoOfStrings(PHPTAL_Expr $e)
-    {
-        if (!$e instanceof PHPTAL_Expr_Echo) return false;
-
-        foreach($e->subexpressions as $subexpr) {
-            if (!$subexpr instanceof PHPTAL_Expr_String) return false;
-        }
-
-        return true;
-    }
-
     public function flushCode()
     {
-        if (count($this->_codeBuffer) == 0) return;
+        $this->_result .= $this->currentBlock->removePrecedingEcho();
+        $post = $this->currentBlock->removeFollowingEcho();
 
-        // change echo to HTML from beginning of code
-        foreach($this->_codeBuffer as $k => $codeLine) {
-            if (!$this->isExpressionEchoOfStrings($codeLine[1])) break;
-
-            foreach($codeLine[1]->subexpressions as $subexpr) {
-                $this->_result .= $subexpr->getStringValue();
-            }
-
-            unset($this->_codeBuffer[$k]);
+        $code = $this->currentBlock->compiled();
+        if ('' !== $code) {
+            $this->_result .= '<?php'.$code."?>\n";
         }
+        $this->_result .= $post;
 
-        // change echo to HTML from end of code
-        $end_result = '';
-        foreach(array_reverse($this->_codeBuffer,true) as $k => $codeLine) {
-            if (!$this->isExpressionEchoOfStrings($codeLine[1])) break;
-
-            foreach($codeLine[1]->subexpressions as $subexpr) {
-                $end_result = $subexpr->getStringValue() . $end_result;
-            }
-
-            unset($this->_codeBuffer[$k]);
-        }
-
-        // output remaining code
-        $nl = count($this->_codeBuffer)==1 ? " " : "\n";
-
-        $this->_result .= '<?php'.$nl;
-        foreach ($this->_codeBuffer as $codeLine) {
-            $codeLine = $codeLine[0] . $codeLine[1];
-            // avoid adding ; after } and {
-            if (!preg_match('/[{};]\s*$/', $codeLine)) {
-                $codeLine .= ';'.$nl;
-            }
-            $this->_result .= $codeLine;
-        }
-        $this->_result .= "?>\n" . $end_result;// PHP consumes newline
-        $this->_codeBuffer = array();
+        $this->currentBlock = new PHPTAL_Expr_Block();
     }
 
     public function flushHtml()
@@ -282,8 +243,7 @@ class PHPTAL_Php_CodeWriter
 
     public function doComment($comment)
     {
-        $comment = str_replace('*/', '* /', $comment);
-        $this->pushCode(new PHPTAL_Expr_PHP("/* $comment */"));
+        $this->pushCode(new PHPTAL_Expr_Comment($comment));
     }
 
     public function doInitTranslator()
@@ -301,7 +261,7 @@ class PHPTAL_Php_CodeWriter
         return '$_translator';
     }
 
-    public function doEval(PHPTAL_Expr $code)
+    public function doEval(PHPTAL_Expr_Stmt $code)
     {
         $this->pushCode($code);
     }
@@ -387,17 +347,23 @@ class PHPTAL_Php_CodeWriter
         $this->indent();
     }
 
+    /**
+     * FIXME: this is not a right design
+     */
+    public function doEchoOrPushCode(PHPTAL_Expr_Stmt $code)
+    {
+        if ($code instanceof PHPTAL_Expr) $this->doEchoRaw($code);
+        else $this->pushCode($code);
+    }
+
     public function doEcho(PHPTAL_Expr $code)
     {
-        if ($code === "''") return;
         $this->flush();
         $this->pushCode(new PHPTAL_Expr_Echo(new PHPTAL_Expr_Escape($code)));
     }
 
     public function doEchoRaw(PHPTAL_Expr $code)
     {
-        if ($code === "''") return;
-        if (is_string($code)) $code = new PHPTAL_Expr_PHP($code);
         $this->pushCode(new PHPTAL_Expr_Echo(new PHPTAL_Expr_Stringify($code)));
     }
 
@@ -415,15 +381,16 @@ class PHPTAL_Php_CodeWriter
     public function pushHTML($html)
     {
         assert('is_string($html)');
+        assert('false === strpos($html,"<?php")');
         if ($html === "") return;
         $this->flushCode();
         $this->_htmlBuffer[] =  $html;
     }
 
-    public function pushCode(PHPTAL_Expr $codeLine)
+    public function pushCode(PHPTAL_Expr_Stmt $codeLine)
     {
         $this->flushHtml();
-        $this->_codeBuffer[] =array($this->indentSpaces(), $codeLine->optimized());
+        $this->currentBlock->append($codeLine->optimized(), $this->indentSpaces());
     }
 
     public function getEncoding()
@@ -505,7 +472,7 @@ class PHPTAL_Php_CodeWriter
         $this->_contexts[] =  clone $this;
         $this->_result = "";
         $this->_indent = 0;
-        $this->_codeBuffer = array();
+        $this->currentBlock = new PHPTAL_Expr_Block();
         $this->_htmlBuffer = array();
         $this->_segments = array();
     }
@@ -515,7 +482,7 @@ class PHPTAL_Php_CodeWriter
         $oldContext = array_pop($this->_contexts);
         $this->_result = $oldContext->_result;
         $this->_indent = $oldContext->_indent;
-        $this->_codeBuffer = $oldContext->_codeBuffer;
+        $this->currentBlock = $oldContext->currentBlock;
         $this->_htmlBuffer = $oldContext->_htmlBuffer;
         $this->_segments = $oldContext->_segments;
     }
@@ -523,7 +490,7 @@ class PHPTAL_Php_CodeWriter
     private $_state;
     private $_result = "";
     private $_indent = 0;
-    private $_codeBuffer = array();
+    private $currentBlock;
     private $_htmlBuffer = array();
     private $_segments = array();
     private $_contexts = array();
