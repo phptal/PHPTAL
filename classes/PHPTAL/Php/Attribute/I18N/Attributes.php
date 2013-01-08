@@ -80,7 +80,8 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
                     $code = $this->_getTranslationCode($codewriter, $attr->getValue());
                 } elseif ($attr->getReplacedState() === PHPTAL_Dom_Attr::VALUE_REPLACED && $attr->getOverwrittenVariableName()) {
                     // sadly variables won't be interpolated in this translation
-                    $code = 'echo '.$codewriter->escapeCode($codewriter->getTranslatorReference(). '->translate('.$attr->getOverwrittenVariableName().', false)');
+                    $code = new PHPTAL_Expr_Echo(new PHPTAL_Expr_Escape(
+                        new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->translate(',$attr->getOverwrittenVariableName(),', false)')));
                 } else {
                     throw new PHPTAL_TemplateException("Unable to translate attribute $qname, because other TAL attributes are using it",
                                 $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
@@ -99,19 +100,23 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
      */
     private function _getTranslationCode(PHPTAL_Php_CodeWriter $codewriter, $key)
     {
-        $code = '';
+        $code = new PHPTAL_Expr_PHP();
+
         if (preg_match_all('/\$\{(.*?)\}/', $key, $m)) {
             array_shift($m);
             $m = array_shift($m);
             foreach ($m as $name) {
-                $code .= "\n".$codewriter->getTranslatorReference(). '->setVar('.$codewriter->str($name).','.PHPTAL_Php_TalesInternal::compileToPHPExpression($name).');'; // allow more complex TAL expressions
+                $code->append(new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->setVar(',
+                    new PHPTAL_Expr_String($name),',',
+                    PHPTAL_Php_TalesInternal::compileToPHPExpression($name),');')); // allow more complex TAL expressions
             }
-            $code .= "\n";
+            $code->append(new PHPTAL_Expr_PHP("\n"));
         }
 
         // notice the false boolean which indicate that the html is escaped
         // elsewhere looks like an hack doesn't it ? :)
-        $code .= 'echo '.$codewriter->escapeCode($codewriter->getTranslatorReference().'->translate('.$codewriter->str($key).', false)');
+        $code->append(new PHPTAL_Expr_Echo(new PHPTAL_Expr_Escape(
+            new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->translate(',new PHPTAL_Expr_String($key),', false)'))));
         return $code;
     }
 }

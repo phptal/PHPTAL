@@ -27,13 +27,13 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
 
         $codewriter->doSetVar(
             $this->var,
-            '$tpl->getTrigger('.$codewriter->str($this->expression).')'
+            new PHPTAL_Expr_PHP('$tpl->getTrigger(',new PHPTAL_Expr_String($this->expression),')')
         );
 
         // if trigger found and trigger tells to proceed, we execute
         // the node content
-        $codewriter->doIf($this->var.' &&
-            '.$this->var.'->start('.$codewriter->str($this->expression).', $tpl) === PHPTAL_Trigger::PROCEED');
+        $codewriter->doIf(new PHPTAL_Expr_PHP($this->var,' && ',
+            $this->var,'->start(',new PHPTAL_Expr_String($this->expression),', $tpl) === PHPTAL_Trigger::PROCEED'));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
@@ -44,7 +44,7 @@ class PHPTAL_Php_Attribute_PHPTAL_ID extends PHPTAL_Php_Attribute
         // if trigger found, notify the end of the node
         $codewriter->doIf($this->var);
         $codewriter->pushCode(
-            $this->var.'->end('.$codewriter->str($this->expression).', $tpl)'
+            new PHPTAL_Expr_PHP($this->var,'->end(',new PHPTAL_Expr_String($this->expression),', $tpl)')
         );
         $codewriter->doEnd('if');
         $codewriter->recycleTempVariable($this->var);

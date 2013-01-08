@@ -27,8 +27,8 @@ class PHPTAL_Dom_ProcessingInstruction extends PHPTAL_Dom_Node
             // block will be executed as PHP
             $codewriter->pushHTML($this->getValueEscaped());
         } else {
-            $codewriter->doEchoRaw("'<'");
-            $codewriter->pushHTML(substr($codewriter->interpolateHTML($this->getValueEscaped()), 1));
+            $codewriter->doEchoRaw(new PHPTAL_Expr_String("<"));
+            $codewriter->doEchoRaw($codewriter->interpolateHTML(substr($this->getValueEscaped(), 1)));
         }
     }
 }

@@ -36,12 +36,12 @@ class PHPTAL_Php_Attribute_I18N_Name extends PHPTAL_Php_Attribute
 {
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushCode('ob_start()');
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('ob_start()'));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->pushCode($codewriter->getTranslatorReference().'->setVar('.$codewriter->str($this->expression).', ob_get_clean())');
+        $codewriter->pushCode(new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->setVar(',new PHPTAL_Expr_String($this->expression),', ob_get_clean())'));
     }
 }
 

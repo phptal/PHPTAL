@@ -60,7 +60,7 @@ EOS;
         $state = new PHPTAL_Php_State($this->newPHPTAL());
         $codewriter = new PHPTAL_Php_CodeWriter($state);
         $codewriter->doFunction('test1', '$tpl');
-        $codewriter->pushHTML($codewriter->interpolateHTML('test1'));
+        $codewriter->doEchoRaw($codewriter->interpolateHTML('test1'));
         $codewriter->doFunction('test2', '$tpl');
         $codewriter->pushHTML('test2');
         $codewriter->doEnd();

@@ -62,10 +62,10 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
             $codewriter->doFunction($function_base_name, 'PHPTAL $_thistpl, PHPTAL $tpl');
             $this->function_name = $codewriter->getFunctionPrefix().$function_base_name;
 
-            $codewriter->doSetVar('$ctx', '$tpl->getContext()');
+            $codewriter->doSetVar('$ctx', new PHPTAL_Expr_PHP('$tpl->getContext()'));
             $codewriter->doInitTranslator();
         } else {
-            $codewriter->pushCode('ob_start()');
+            $codewriter->pushCode(new PHPTAL_Expr_PHP('ob_start()'));
             $this->function_name = null;
         }
     }
@@ -74,9 +74,12 @@ class PHPTAL_Php_Attribute_METAL_FillSlot extends PHPTAL_Php_Attribute
     {
         if ($this->function_name !== null) {
             $codewriter->doEnd();
-            $codewriter->pushCode('$ctx->fillSlotCallback('.$codewriter->str($this->expression).', '.$codewriter->str($this->function_name).', $_thistpl, clone $tpl)');
+            $codewriter->pushCode(new PHPTAL_Expr_PHP('$ctx->fillSlotCallback(',
+                new PHPTAL_Expr_String($this->expression), ', ',
+                new PHPTAL_Expr_String($this->function_name), ', $_thistpl, clone $tpl)'));
         } else {
-            $codewriter->pushCode('$ctx->fillSlot('.$codewriter->str($this->expression).', ob_get_clean())');
+            $codewriter->pushCode(new PHPTAL_Expr_PHP('$ctx->fillSlot(',new PHPTAL_Expr_String($this->expression),
+                ', ob_get_clean())'));
         }
     }
 

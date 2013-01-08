@@ -74,18 +74,19 @@ class PHPTAL_Php_Attribute_TAL_Repeat extends PHPTAL_Php_Attribute
         $this->var = $codewriter->createTempVariable();
 
         // alias to repeats handler to avoid calling extra getters on each variable access
-        $codewriter->doSetVar($this->var, '$ctx->repeat');
+        $codewriter->doSetVar($this->var, new PHPTAL_Expr_Ctx(new PHPTAL_Expr_String('repeat')));
 
         list($varName, $expression) = $this->parseSetExpression($this->expression);
         $code = $codewriter->evaluateExpression($expression);
 
         // instantiate controller using expression
-        $codewriter->doSetVar( $this->var.'->'.$varName, 'new PHPTAL_RepeatController('.$code.')'."\n" );
+        $varacces = new PHPTAL_Expr_PHP($this->var,'->'.$varName);
+        $codewriter->doSetVar( $varacces, new PHPTAL_Expr_PHP('new PHPTAL_RepeatController(',$code,')'."\n") );
 
         $codewriter->pushContext();
 
         // Lets loop the iterator with a foreach construct
-        $codewriter->doForeach('$ctx->'.$varName, $this->var.'->'.$varName);
+        $codewriter->doForeach(new PHPTAL_Expr_Ctx(new PHPTAL_Expr_String($varName)), $varacces);
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)

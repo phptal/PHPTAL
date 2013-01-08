@@ -50,12 +50,9 @@
  */
 class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
 {
-    const DEFAULT_KEYWORD = 'new PHPTAL_DefaultKeyword';
-    const NOTHING_KEYWORD = 'new PHPTAL_NothingKeyword';
-
     static public function true($src, $nothrow)
     {
-        return 'phptal_true(' . self::compileToPHPExpression($src, true) . ')';
+        return new PHPTAL_Expr_PHP('phptal_true(', self::compileToPHPExpression($src, true), ')');
     }
 
     /**
@@ -84,7 +81,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function not($expression, $nothrow)
     {
-        return '!phptal_true(' . self::compileToPHPExpression($expression, $nothrow) . ')';
+        return new PHPTAL_Expr_PHP('!phptal_true(', self::compileToPHPExpression($expression, $nothrow), ')');
     }
 
 
@@ -124,9 +121,8 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     static public function path($expression, $nothrow=false)
     {
         $expression = trim($expression);
-        if ($expression == 'default') return self::DEFAULT_KEYWORD;
-        if ($expression == 'nothing') return self::NOTHING_KEYWORD;
-        if ($expression == '')        return self::NOTHING_KEYWORD;
+        if ($expression === 'default') return new PHPTAL_Expr_Default();
+        if ($expression === 'nothing' || $expression === '') return new PHPTAL_Expr_Nothing();
 
         // split OR expressions terminated by a string
         if (preg_match('/^(.*?)\s*\|\s*?(string:.*)$/sm', $expression, $m)) {
@@ -147,8 +143,8 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             $result = array();
             foreach ($exps as $i=>$exp) {
                 if(isset($string) || $i < count($exps) - 1) {
-                    $result[] = self::compileToPHPExpressions(trim($exp), true);
-                }
+                $result[] = self::compileToPHPExpressions(trim($exp), true);
+            }
                 else {
                     // the last expression can thorw exception.
                     $result[] = self::compileToPHPExpressions(trim($exp), false);
@@ -169,6 +165,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             }
 
             $next = self::string($m[1]);
+            assert('$next instanceof PHPTAL_Expr');
             $expression = self::string($m[2]);
         } else {
             if (!self::checkExpressionPart($expression)) {
@@ -176,25 +173,29 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
             }
 
             $next = self::string($expression);
+            assert('$next instanceof PHPTAL_Expr');
             $expression = null;
         }
 
         if ($nothrow) {
-            return '$ctx->path($ctx, ' . $next . ($expression === null ? '' : '."/".'.$expression) . ', true)';
+            $next = new PHPTAL_Expr_Append($next);
+            if (null !== $expression) {
+                $next->append(new PHPTAL_Expr_String("/"));
+                $next->append($expression);
+            }
+            return new PHPTAL_Expr_PHP('$ctx->path($ctx, ', $next , ', true)');
         }
-
-        if (preg_match('/^\'[a-z][a-z0-9_]*\'$/i', $next)) $next = substr($next, 1, -1); else $next = '{'.$next.'}';
 
         // if no sub part for this expression, just optimize the generated code
         // and access the $ctx->var
         if ($expression === null) {
-            return '$ctx->'.$next;
+            return new PHPTAL_Expr_Ctx($next);
         }
 
         // otherwise we have to call PHPTAL_Context::path() to resolve the path at runtime
         // extract the first part of the expression (it will be the PHPTAL_Context::path()
         // $base and pass the remaining of the path to PHPTAL_Context::path()
-        return '$ctx->path($ctx->'.$next.', '.$expression.')';
+        return new PHPTAL_Expr_PHP('$ctx->path(',new PHPTAL_Expr_Ctx($next),', ',$expression,')');
     }
 
     /**
@@ -239,7 +240,10 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         $inPath = false;
         $inAccoladePath = false;
         $lastWasDollar = false;
-        $result = '';
+
+        $string_part = '';
+        $result = new PHPTAL_Expr_Append();
+
         $len = strlen($expression);
         for ($i=0; $i<$len; $i++) {
             $c = $expression[$i];
@@ -261,18 +265,12 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                         $subPath .= $c;
                         $c = '';
                     }
-                    else {
-                        $c = '\\\\';
-                    }
                     break;
 
                 case '\'':
                     if ($inAccoladePath) {
                         $subPath .= $c;
                         $c = '';
-                    }
-                    else {
-                        $c = '\\\'';
                     }
                     break;
 
@@ -291,8 +289,11 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                 case '}':
                     if ($inAccoladePath) {
                         $inAccoladePath = false;
-                        $subEval = self::compileToPHPExpression($tales_prefix.$subPath,false);
-                        $result .= "'.(" . $subEval . ").'";
+                        if ($string_part !== '') {
+                            $result->append(new PHPTAL_Expr_String($string_part));
+                            $string_part='';
+                        }
+                        $result->append(self::compileToPHPExpression($tales_prefix.$subPath,false));
                         $subPath = '';
                         $lastWasDollar = false;
                         $c = '';
@@ -315,34 +316,27 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
                             $c = '';
                         } else {
                             $inPath = false;
-                            $subEval = self::compileToPHPExpression($tales_prefix.$subPath,false);
-                            $result .= "'.(" . $subEval . ").'";
+                            if ($string_part !== '') {
+                                $result->append(new PHPTAL_Expr_String($string_part));
+                                $string_part='';
                             }
+                            $result->append(self::compileToPHPExpression($tales_prefix.$subPath,false));
+                            $subPath = '';
                         }
+                    }
                     break;
             }
-            $result .= $c;
+            $string_part .= $c;
+        }
+
+        if ($string_part !== '') {
+            $result->append(new PHPTAL_Expr_String($string_part));
         }
         if ($inPath) {
-            $subEval = self::compileToPHPExpression($tales_prefix.$subPath, false);
-            $result .= "'.(" . $subEval . ").'";
+            $result->append(self::compileToPHPExpression($tales_prefix.$subPath,false));
         }
 
-        // optimize ''.foo.'' to foo
-        $result = preg_replace("/^(?:''\.)?(.*?)(?:\.'')?$/", '\1', '\''.$result.'\'');
-
-        /*
-            The following expression (with + in first alternative):
-            "/^\(((?:[^\(\)]+|\([^\(\)]*\))*)\)$/"
-
-            did work properly for (aaaaaaa)aa, but not for (aaaaaaaaaaaaaaaaaaaaa)aa
-            WTF!?
-        */
-
-        // optimize (foo()) to foo()
-        $result = preg_replace("/^\(((?:[^\(\)]|\([^\(\)]*\))*)\)$/", '\1', $result);
-
-        return $result;
+        return $result->optimized();
     }
 
     /**
@@ -352,7 +346,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function php($src)
     {
-        return PHPTAL_Php_Transformer::transform($src, '$ctx->');
+        return new PHPTAL_Expr_PHP(PHPTAL_Php_Transformer::transform($src, '$ctx->'));
     }
 
     /**
@@ -367,13 +361,13 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         // Simple echo can be supported via regular method
         if (preg_match('/^\s*echo\s+((?:[^;]+|"[^"\\\\]*"|\'[^\'\\\\]*\'|\/\*.*?\*\/)+);*\s*$/s',$src,$m))
         {
-            return $m[1];
+            return new PHPTAL_Expr_PHP($m[1]);
         }
 
         // <?php block expects statements, but modifiers must return expressions.
         // unfortunately this ugliness is the only way to support it currently.
         // ? > keeps semicolon optional
-        return "eval(".self::string($src.'?>').")";
+        return new PHPTAL_Expr_PHP("eval(",self::string($src.'?>'),")");
     }
 
     /**
@@ -384,8 +378,8 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     static public function exists($src, $nothrow)
     {
         $src = trim($src);
-        if (ctype_alnum($src)) return 'isset($ctx->'.$src.')';
-        return '(null !== ' . self::compileToPHPExpression($src, true) . ')';
+        if (ctype_alnum($src)) return new PHPTAL_Expr_PHP('isset(',new PHPTAL_Expr_Ctx(new PHPTAL_Expr_String($src)),')');
+        return new PHPTAL_Expr_PHP('(null !== ' , self::compileToPHPExpression($src, true) , ')');
     }
 
     /**
@@ -396,7 +390,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
     static public function number($src, $nothrow)
     {
         if (!is_numeric(trim($src))) throw new PHPTAL_ParserException("'$src' is not a number");
-        return trim($src);
+        return new PHPTAL_Expr_PHP(trim($src));
     }
 
     /**
@@ -404,7 +398,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function json($src, $nothrow)
     {
-        return 'json_encode('.phptal_tale($src,$nothrow).')';
+        return new PHPTAL_Expr_PHP('json_encode(',self::compileToPHPExpression($src,$nothrow),')');
     }
 
     /**
@@ -412,7 +406,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     static public function urlencode($src, $nothrow)
     {
-        return 'rawurlencode('.phptal_tale($src,$nothrow).')';
+        return new PHPTAL_Expr_PHP('rawurlencode(',self::compileToPHPExpression($src,$nothrow),')');
     }
 
     /**
@@ -428,7 +422,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         if (!is_array($r)) return $r;
 
         // this weird ternary operator construct is to execute noThrow inside the expression
-        return '($ctx->noThrow(true)||1?'.self::convertExpressionsToExpression($r, $nothrow).':"")';
+        return new PHPTAL_Expr_PHP('($ctx->noThrow(true)||1?',self::convertExpressionsToExpression($r, $nothrow),':"")');
     }
 
     /*
@@ -437,13 +431,16 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
      */
     private static function convertExpressionsToExpression(array $array, $nothrow)
     {
-        if (count($array)==1) return '($ctx->noThrow('.($nothrow?'true':'false').')||1?('.
-            ($array[0]==self::NOTHING_KEYWORD?'null':$array[0]).
-            '):"")';
+        if (count($array)==1) {
+            return new PHPTAL_Expr_PHP('($ctx->noThrow(',($nothrow?'true':'false'),')||1?(',
+                ($array[0] instanceof PHPTAL_Expr_Nothing?'null':$array[0]),
+                '):"")');
+        }
 
         $expr = array_shift($array);
 
-        return "(!phptal_isempty(\$_tmp5=$expr) && (\$ctx->noThrow(false)||1)?\$_tmp5:".self::convertExpressionsToExpression($array, $nothrow).')';
+        return new PHPTAL_Expr_PHP("(!phptal_isempty(\$_tmp5=",$expr,") && " .
+            "(\$ctx->noThrow(false)||1)?\$_tmp5:",self::convertExpressionsToExpression($array, $nothrow),')');
     }
 
     /**
@@ -481,6 +478,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         {
             $result = call_user_func($callback, $expression, $nothrow);
             self::verifyPHPExpressions($typePrefix, $result);
+            if (is_string($result)) $result = new PHPTAL_Expr_PHP($result);
             return $result;
         }
 
@@ -495,7 +493,7 @@ class PHPTAL_Php_TalesInternal implements PHPTAL_Tales
         }
 
         foreach($expressions as $expr) {
-            if (preg_match('/;\s*$/', $expr)) {
+            if (!is_object($expr) && preg_match('/;\s*$/', $expr)) {
                 throw new PHPTAL_ParserException("Modifier $typePrefix generated PHP statement rather than expression (don't add semicolons)");
             }
         }

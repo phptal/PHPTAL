@@ -55,8 +55,8 @@ class PHPTAL_Php_Attribute_METAL_DefineSlot extends PHPTAL_Php_Attribute
         $this->tmp_var = $codewriter->createTempVariable();
 
         $codewriter->doSetVar($this->tmp_var, $codewriter->interpolateTalesVarsInString($this->expression));
-        $codewriter->doIf('$ctx->hasSlot('.$this->tmp_var.')');
-        $codewriter->pushCode('$ctx->echoSlot('.$this->tmp_var.')');
+        $codewriter->doIf(new PHPTAL_Expr_PHP('$ctx->hasSlot(',$this->tmp_var,')'));
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('$ctx->echoSlot(',$this->tmp_var,')'));
         $codewriter->doElse();
     }
 

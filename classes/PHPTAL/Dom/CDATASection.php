@@ -31,7 +31,7 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
 
         // in HTML5 must limit it to <script> and <style>
         if ($mode === PHPTAL::HTML5 && $inCDATAelement) {
-            $codewriter->pushHTML($codewriter->interpolateCDATA(str_replace('</', '<\/', $value)));
+            $codewriter->doEchoRaw($codewriter->interpolateCDATA(str_replace('</', '<\/', $value)));
         } elseif (($mode === PHPTAL::XHTML && $inCDATAelement)  // safe for text/html
              || ($mode === PHPTAL::XML && preg_match('/[<>&]/', $value))  // non-useless in XML
              || ($mode !== PHPTAL::HTML5 && preg_match('/<\?|\${structure/', $value)))  // hacks with structure (in X[HT]ML) may need it
@@ -39,11 +39,9 @@ class PHPTAL_Dom_CDATASection extends PHPTAL_Dom_Node
             // in text/html "</" is dangerous and the only sensible way to escape is ECMAScript string escapes.
             if ($mode === PHPTAL::XHTML) $value = str_replace('</', '<\/', $value);
 
-            $codewriter->pushHTML($codewriter->interpolateCDATA('<![CDATA['.$value.']]>'));
+            $codewriter->doEchoRaw($codewriter->interpolateCDATA('<![CDATA['.$value.']]>'));
         } else {
-            $codewriter->pushHTML($codewriter->interpolateHTML(
-                htmlspecialchars($value, ENT_QUOTES, $codewriter->getEncoding())
-            ));
+            $codewriter->doEchoRaw($codewriter->interpolateHTML(htmlspecialchars($value, ENT_QUOTES, $codewriter->getEncoding())));
         }
     }
 }

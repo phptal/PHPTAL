@@ -59,11 +59,11 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
             case 'm': $cache_len .= '*60'; /* no break */
         }
 
-        $cache_tag = '"'.addslashes( $this->phpelement->getQualifiedName() . ':' . $this->phpelement->getSourceLine()).'"';
+        $cache_tag = new PHPTAL_Expr_String($this->phpelement->getQualifiedName() . ':' . $this->phpelement->getSourceLine());
 
         $cache_per_expression = isset($matches[3])?trim($matches[3]):null;
         if ($cache_per_expression == 'url') {
-            $cache_tag .= '.$_SERVER["REQUEST_URI"]';
+            $cache_tag = new PHPTAL_Expr_Append($cache_tag, new PHPTAL_Expr_PHP('$_SERVER["REQUEST_URI"]'));
         } elseif ($cache_per_expression == 'nothing') {
             /* do nothing */
         } elseif ($cache_per_expression) {
@@ -72,23 +72,24 @@ class PHPTAL_Php_Attribute_PHPTAL_Cache extends PHPTAL_Php_Attribute
              if (is_array($code)) throw new PHPTAL_ParserException("Chained expressions in per-cache directive are not supported",
                                                 $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
 
-             $cache_tag = '('.$code.')."@".' . $cache_tag;
+             $cache_tag = new PHPTAL_Expr_Append($code,new PHPTAL_Expr_String("@"),$cache_tag);
         }
 
         $this->cache_filename_var = $codewriter->createTempVariable();
-        $codewriter->doSetVar($this->cache_filename_var, $codewriter->str($codewriter->getCacheFilesBaseName()).'.md5('.$cache_tag.')' );
+        $codewriter->doSetVar($this->cache_filename_var,
+            new PHPTAL_Expr_Append(new PHPTAL_Expr_String($codewriter->getCacheFilesBaseName()),new PHPTAL_Expr_PHP('md5(',$cache_tag,')')));
 
-        $cond = '!file_exists('.$this->cache_filename_var.') || time() - '.$cache_len.' >= filemtime('.$this->cache_filename_var.')';
+        $cond = new PHPTAL_Expr_PHP('!file_exists(',$this->cache_filename_var,') || time() - ',$cache_len,' >= filemtime(',$this->cache_filename_var,')');
 
         $codewriter->doIf($cond);
-        $codewriter->doEval('ob_start()');
+        $codewriter->doEval(new PHPTAL_Expr_PHP('ob_start()'));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
-        $codewriter->doEval('file_put_contents('.$this->cache_filename_var.', ob_get_flush())');
+        $codewriter->doEval(new PHPTAL_Expr_PHP('file_put_contents(',$this->cache_filename_var,', ob_get_flush())'));
         $codewriter->doElse();
-        $codewriter->doEval('readfile('.$this->cache_filename_var.')');
+        $codewriter->doEval(new PHPTAL_Expr_PHP('readfile(',$this->cache_filename_var,')'));
         $codewriter->doEnd('if');
 
         $codewriter->recycleTempVariable($this->cache_filename_var);

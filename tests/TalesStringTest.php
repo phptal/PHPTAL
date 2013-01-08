@@ -19,29 +19,29 @@ class TalesStringTest extends PHPTAL_TestCase {
 
     function testSimple()
     {
-        $this->assertEquals('\'this is a string\'', PHPTAL_Php_TalesInternal::string('this is a string'));
+        $this->assertEquals('\'this is a string\'', (string)PHPTAL_Php_TalesInternal::string('this is a string'));
     }
 
     function testDoubleDollar()
     {
-        $this->assertEquals('\'this is a $string\'', PHPTAL_Php_TalesInternal::string('this is a $$string'));
+        $this->assertEquals('\'this is a $string\'', (string)PHPTAL_Php_TalesInternal::string('this is a $$string'));
     }
 
     function testSubPathSimple()
     {
-        $res = PHPTAL_Php_TalesInternal::string('hello $name how are you ?');
+        $res = (string)PHPTAL_Php_TalesInternal::string('hello $name how are you ?');
         $this->assertRegExp('/\'hello \'.*?\$ctx->name.*?\' how are you \?\'$/', $res);
     }
 
     function testSubPath()
     {
-        $res = PHPTAL_Php_TalesInternal::string('${name}');
+        $res = (string)PHPTAL_Php_TalesInternal::string('${name}');
         $this->assertRegExp('/^(\'\'\s*?\.*)?\$ctx->name(.*?\'\')?$/', $res);
     }
 
     function testSubPathExtended()
     {
-        $res = PHPTAL_Php_TalesInternal::string('hello ${user/name} how are you ?');
+        $res = (string)PHPTAL_Php_TalesInternal::string('hello ${user/name} how are you ?');
         $this->assertRegExp('/\'hello \'.*?\$ctx->user, \'name\'.*?\' how are you \?\'$/', $res);
     }
 
@@ -56,7 +56,7 @@ class TalesStringTest extends PHPTAL_TestCase {
 
     function testDoubleVar()
     {
-        $res = PHPTAL_Php_TalesInternal::string('hello $foo $bar');
+        $res = (string)PHPTAL_Php_TalesInternal::string('hello $foo $bar');
         $this->assertRegExp('/ctx->foo/', $res, '$foo not interpolated');
         $this->assertRegExp('/ctx->bar/', $res, '$bar not interpolated');
     }

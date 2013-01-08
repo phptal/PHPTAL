@@ -48,11 +48,11 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         // Force a falsy condition if the nothing keyword is active
-        if ($code == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
+        if ($code instanceof PHPTAL_Expr_Nothing) {
             $code = 'false';
         }
 
-        $codewriter->doIf('phptal_true(' . $code . ')');
+        $codewriter->doIf(new PHPTAL_Expr_PHP('phptal_true(' , $code , ')'));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
@@ -61,25 +61,30 @@ implements PHPTAL_Php_TalesChainReader
     }
 
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, PHPTAL_Expr $exp, $islast)
     {
         // check if the expression is empty
         if ($exp !== 'false') {
-            $this->expressions[] = '!phptal_isempty(' . $exp . ')';
+            $this->expressions[] = new PHPTAL_Expr_PHP('!phptal_isempty(' , $exp , ')');
         }
 
         if ($islast) {
+            $expressions = new PHPTAL_Expr_PHP();
+            foreach($this->expressions as $i => $expr) {
+                if ($i) $expressions->append(new PHPTAL_Expr_PHP(' || '));
+                $expressions->append($expr);
+            }
             // for the last one in the chain build a ORed condition
-            $executor->getCodeWriter()->doIf( implode(' || ', $this->expressions ) );
+            $executor->getCodeWriter()->doIf($expressions);
             // The executor will always end an if so we output a dummy if
-            $executor->doIf('false');
+            $executor->doIf(new PHPTAL_Expr_PHP('false'));
         }
     }
 
     public function talesChainNothingKeyword(PHPTAL_Php_TalesChainExecutor $executor)
     {
         // end the chain
-        $this->talesChainPart($executor, 'false', true);
+        $this->talesChainPart($executor, new PHPTAL_Expr_PHP('false'), true);
         $executor->breakChain();
     }
 

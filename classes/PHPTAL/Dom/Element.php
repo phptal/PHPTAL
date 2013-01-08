@@ -411,7 +411,8 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
                     if ($codewriter->getOutputMode() !== PHPTAL::HTML5
                         || !PHPTAL_Dom_Defs::getInstance()->isBooleanAttribute($attr->getQualifiedName())) {
                         $html = $codewriter->interpolateHTML($attr->getValueEscaped());
-                        $codewriter->pushHTML('='.$codewriter->quoteAttributeValue($html));
+                        $codewriter->pushHTML('=');
+                        $codewriter->doEchoRaw($codewriter->quoteAttributeValue($html));
                     }
                     break;
 

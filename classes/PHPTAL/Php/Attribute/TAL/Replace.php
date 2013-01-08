@@ -50,12 +50,12 @@ implements PHPTAL_Php_TalesChainReader
         }
 
         // nothing do nothing
-        if ($code == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
+        if ($code instanceof PHPTAL_Expr_Nothing) {
             return;
         }
 
         // default generate default tag content
-        if ($code == PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD) {
+        if ($code instanceof PHPTAL_Expr_Default) {
             return $this->generateDefault($codewriter);
         }
 
@@ -89,11 +89,11 @@ implements PHPTAL_Php_TalesChainReader
         $executor->breakChain();
     }
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, PHPTAL_Expr $exp, $islast)
     {
         if (!$islast) {
             $var = $executor->getCodeWriter()->createTempVariable();
-            $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
+            $executor->doIf(new PHPTAL_Expr_PHP('!phptal_isempty(',$var,' = ',$exp,')'));
             $this->doEchoAttribute($executor->getCodeWriter(), $var);
             $executor->getCodeWriter()->recycleTempVariable($var);
         } else {

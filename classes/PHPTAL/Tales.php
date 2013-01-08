@@ -38,7 +38,7 @@ interface PHPTAL_Tales
  */
 function phptal_tale($expression, $nothrow=false)
 {
-    return PHPTAL_Php_TalesInternal::compileToPHPExpression($expression, $nothrow);
+    return (string)PHPTAL_Php_TalesInternal::compileToPHPExpression($expression, $nothrow);
 }
 
 /**
@@ -53,6 +53,10 @@ function phptal_tale($expression, $nothrow=false)
  */
 function phptal_tales($expression, $nothrow=false)
 {
-    return PHPTAL_Php_TalesInternal::compileToPHPExpressions($expression, $nothrow);
+    $res = PHPTAL_Php_TalesInternal::compileToPHPExpressions($expression, $nothrow);
+    if ($res instanceof PHPTAL_Expr) {
+        return $res->compiled();
+    }
+    return $res;
 }
 

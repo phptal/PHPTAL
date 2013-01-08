@@ -152,16 +152,7 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInHTML($src)
     {
-        return preg_replace_callback('/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
-                                     array($this,'_interpolateTalesVarsInHTMLCallback'), $src);
-    }
-
-    /**
-     * callback for interpolating TALES with HTML-escaping
-     */
-    private function _interpolateTalesVarsInHTMLCallback($matches)
-    {
-        return $this->_interpolateTalesVarsCallback($matches, 'html');
+        return $this->interpolateTalesVars($src, 'html');
     }
 
     /**
@@ -171,84 +162,72 @@ class PHPTAL_Php_State
      */
     public function interpolateTalesVarsInCDATA($src)
     {
-        return preg_replace_callback('/((?:\$\$)*)\$\{(structure |text )?(.*?)\}|((?:\$\$)+)\{/isS',
-                                     array($this,'_interpolateTalesVarsInCDATACallback'), $src);
+        return $this->interpolateTalesVars($src, 'cdata');
     }
 
-    /**
-     * callback for interpolating TALES with CDATA escaping
-     */
-    private function _interpolateTalesVarsInCDATACallback($matches)
+    public function interpolateTalesVars($src, $format)
     {
-        return $this->_interpolateTalesVarsCallback($matches, 'cdata');
-    }
+        $result = new PHPTAL_Expr_Append();
 
-    private function _interpolateTalesVarsCallback($matches, $format)
-    {
-        // replaces $${ with literal ${ (or $$$${ with $${ etc)
-        if (!empty($matches[4])) {
-            return substr($matches[4], strlen($matches[4])/2).'{';
-        }
+        $types = ini_get('short_open_tag')?'php|=|':'php';
+        $parts = preg_split("/<\\?($types)(.*?)\\?>\n?/is", $src, NULL, PREG_SPLIT_DELIM_CAPTURE);
 
-        // same replacement, but before executed expression
-        $dollars = substr($matches[1], strlen($matches[1])/2);
+        foreach(array_chunk($parts, 3) as $php_part) {
+            $parts = preg_split('/(?<!\$)((?:\$\$)*)\$\{(structure |text )?(.*?)\}/isS',$php_part[0], NULL, PREG_SPLIT_DELIM_CAPTURE);
+            foreach(array_chunk($parts, 4) as $part) {
 
-        $code = $matches[3];
-        if ($format == 'html') {
-            $code = html_entity_decode($code, ENT_QUOTES, $this->getEncoding());
-        }
+                // replace $${ with ${
+                $text = preg_replace('/(\$+)\1(?={)/', '$1', $part[0]);
 
-        $code = $this->compileTalesToPHPExpression($code);
+                if (isset($part[1])) {
+                    // put back extra $$s before ${}
+                    $text .= substr($part[1], strlen($part[1])/2);
+                }
 
-        if (rtrim($matches[2]) == 'structure') { // regex captures a space there
-            return $dollars.'<?php echo '.$this->stringify($code)." ?>\n";
-        } else {
-            if ($format == 'html') {
-                return $dollars.'<?php echo '.$this->htmlchars($code)." ?>\n";
-            }
-            if ($format == 'cdata') {
-                // quite complex for an "unescaped" section, isn't it?
-                if ($this->getOutputMode() === PHPTAL::HTML5) {
-                    return $dollars."<?php echo str_replace('</','<\\\\/', ".$this->stringify($code).") ?>\n";
-                } elseif ($this->getOutputMode() === PHPTAL::XHTML) {
-                    // both XML and HMTL, because people will inevitably send it as text/html :(
-                    return $dollars."<?php echo strtr(".$this->stringify($code)." ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/')) ?>\n";
-                } else {
-                    return $dollars."<?php echo str_replace(']]>',']]]]><![CDATA[>', ".$this->stringify($code).") ?>\n";
+                if ($text !== '') {
+                    $result->append(new PHPTAL_Expr_String($text));
+                }
+
+                if (isset($part[3])) {
+                    $code = $part[3];
+                    if ($format == 'html') $code = html_entity_decode($code, ENT_QUOTES, $this->getEncoding());
+                    $code = $this->compileTalesToPHPExpression($code);
+                    $result->append($this->escapeCode($code, $part[2], $format));
                 }
             }
-            assert(0);
+
+             if (isset($php_part[2])) {
+                 $code = rtrim($php_part[2],';');
+                 if ($php_part[1]=='=') {
+                     $result->append(new PHPTAL_Expr_PHP($code));
+                 } else {
+                     $result->append(PHPTAL_Php_TalesInternal::phptal_internal_php_block($code));
+                 }
+             }
         }
+        return $result->optimized();
     }
 
-    /**
-     * expects PHP code and returns PHP code that will generate escaped string
-     * Optimizes case when PHP string is given.
-     *
-     * @return php code
-     */
-    public function htmlchars($php)
+    private function escapeCode(PHPTAL_Expr $code, $structure, $format)
     {
-        // PHP strings can be escaped at compile time
-        if (preg_match('/^\'((?:[^\'{]+|\\\\.)*)\'$/s', $php, $m)) {
-            return "'".htmlspecialchars(str_replace('\\\'', "'", $m[1]), ENT_QUOTES, $this->encoding)."'";
+        if (rtrim($structure) == 'structure') { // regex captures a space there
+            return new PHPTAL_Expr_Stringify($code);
         }
-        return 'phptal_escape('.$php.', \''.$this->encoding.'\')';
-    }
-
-    /**
-     * allow proper printing of any object
-     * (without escaping - for use with structure keyword)
-     *
-     * @return php code
-     */
-    public function stringify($php)
-    {
-        // PHP strings don't need to be changed
-        if (preg_match('/^\'(?>[^\'\\\\]+|\\\\.)*\'$|^\s*"(?>[^"\\\\]+|\\\\.)*"\s*$/s', $php)) {
-            return $php;
+        if ($format == 'html') {
+            return new PHPTAL_Expr_Escape($code);
         }
-        return 'phptal_tostring('.$php.')';
+        if ($format == 'cdata') {
+            // quite complex for an "unescaped" section, isn't it?
+            if ($this->getOutputMode() === PHPTAL::HTML5) {
+                return new PHPTAL_Expr_PHP("str_replace('</','<\\\\/', ",new PHPTAL_Expr_Stringify($code),")");
+            } elseif ($this->getOutputMode() === PHPTAL::XHTML) {
+                // both XML and HMTL, because people will inevitably send it as text/html :(
+                return new PHPTAL_Expr_PHP("strtr(",new PHPTAL_Expr_Stringify($code)," ,array(']]>'=>']]]]><![CDATA[>','</'=>'<\\/'))");
+            } else {
+                return new PHPTAL_Expr_PHP("str_replace(']]>',']]]]><![CDATA[>', ",new PHPTAL_Expr_Stringify($code),")");
+            }
+        }
+        assert(0);
     }
 }
 

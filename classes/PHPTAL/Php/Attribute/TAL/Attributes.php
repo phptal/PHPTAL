@@ -92,14 +92,14 @@ implements PHPTAL_Php_TalesChainReader
     /**
      * attribute will be output regardless of its evaluated value. NULL behaves just like "".
      */
-    private function prepareAttributeUnconditional(PHPTAL_Php_CodeWriter $codewriter, $qname, $code)
+    private function prepareAttributeUnconditional(PHPTAL_Php_CodeWriter $codewriter, $qname, PHPTAL_Expr $code)
     {
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE) {
-            $value = $codewriter->stringifyCode($code);
+            $value = new PHPTAL_Expr_Stringify($code);
         } else {
-            $value = $codewriter->escapeCode($code);
+            $value = new PHPTAL_Expr_Escape($code);
         }
         $codewriter->doSetVar($attkey, $value);
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteValueWithVariable($attkey);
@@ -108,20 +108,22 @@ implements PHPTAL_Php_TalesChainReader
     /**
      * If evaluated value of attribute is NULL, it will not be output at all.
      */
-    private function prepareAttributeConditional(PHPTAL_Php_CodeWriter $codewriter, $qname, $code)
+    private function prepareAttributeConditional(PHPTAL_Php_CodeWriter $codewriter, $qname, PHPTAL_Expr $code)
     {
         // regular attribute which value is the evaluation of $code
         $attkey = $this->getVarName($qname, $codewriter);
 
-        $codewriter->doIf("null !== ($attkey = ($code))");
+        $codewriter->doIf(new PHPTAL_Expr_PHP("null !== (",$attkey," = (",$code,"))"));
 
         if ($this->_echoType !== PHPTAL_Php_Attribute::ECHO_STRUCTURE)
-            $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->escapeCode($attkey).".'\"'");
+            $codewriter->doSetVar($attkey,
+                new PHPTAL_Expr_Append(new PHPTAL_Expr_String(" $qname=\""),new PHPTAL_Expr_Escape($attkey),new PHPTAL_Expr_String('"')));
         else
-            $codewriter->doSetVar($attkey, $codewriter->str(" $qname=\"").".".$codewriter->stringifyCode($attkey).".'\"'");
+            $codewriter->doSetVar($attkey,
+                new PHPTAL_Expr_Append(new PHPTAL_Expr_String(" $qname=\""),new PHPTAL_Expr_Stringify($attkey),new PHPTAL_Expr_String('"')));
 
         $codewriter->doElse();
-        $codewriter->doSetVar($attkey, "''");
+        $codewriter->doSetVar($attkey, new PHPTAL_Expr_String(''));
         $codewriter->doEnd('if');
 
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
@@ -139,7 +141,7 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($this->_attkey);
     }
 
-    private function prepareBooleanAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $code)
+    private function prepareBooleanAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, PHPTAL_Expr $code)
     {
         $attkey = $this->getVarName($qname, $codewriter);
 
@@ -149,9 +151,9 @@ implements PHPTAL_Php_TalesChainReader
             $value  = "' $qname=\"$qname\"'";
         }
         $codewriter->doIf($code);
-        $codewriter->doSetVar($attkey, $value);
+        $codewriter->doSetVar($attkey, new PHPTAL_Expr_PHP($value));
         $codewriter->doElse();
-        $codewriter->doSetVar($attkey, '\'\'');
+        $codewriter->doSetVar($attkey, new PHPTAL_Expr_PHP('\'\''));
         $codewriter->doEnd('if');
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
@@ -184,30 +186,37 @@ implements PHPTAL_Php_TalesChainReader
     {
         $codewriter = $executor->getCodeWriter();
         $executor->doElse();
-        $attr_str = ($this->_default_escaped !== false)
-            ? ' '.$this->_attribute.'='.$codewriter->quoteAttributeValue($this->_default_escaped)  // default value
-            : '';                                 // do not print attribute
-        $codewriter->doSetVar($this->_attkey, $codewriter->str($attr_str));
+        if ($this->_default_escaped !== false) {
+            $attr_code = new PHPTAL_Expr_Append(
+                new PHPTAL_Expr_String(' '.$this->_attribute.'='),
+                $codewriter->quoteAttributeValue(new PHPTAL_Expr_String($this->_default_escaped)));
+        } else {
+            $attr_code = new PHPTAL_Expr_String(''); // do not print attribute
+        }
+        $codewriter->doSetVar($this->_attkey, new PHPTAL_Expr_PHP($attr_code));
         $executor->breakChain();
     }
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, PHPTAL_Expr $exp, $islast)
     {
         $codewriter = $executor->getCodeWriter();
 
         if (!$islast) {
-            $condition = "!phptal_isempty($this->_attkey = ($exp))";
+            $condition = new PHPTAL_Expr_PHP("!phptal_isempty(",$this->_attkey," = (",$exp,"))");
         } else {
-            $condition = "null !== ($this->_attkey = ($exp))";
+            $condition = new PHPTAL_Expr_PHP("null !== (",$this->_attkey," = (",$exp,"))");
         }
         $executor->doIf($condition);
 
         if ($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE)
-            $value = $codewriter->stringifyCode($this->_attkey);
+            $value = new PHPTAL_Expr_Stringify($this->_attkey);
         else
-            $value = $codewriter->escapeCode($this->_attkey);
+            $value = new PHPTAL_Expr_Escape($this->_attkey);
 
-        $codewriter->doSetVar($this->_attkey, $codewriter->str(" {$this->_attribute}=\"").".$value.'\"'");
+        assert('is_string($this->_attribute)');
+
+        $codewriter->doSetVar($this->_attkey,
+            new PHPTAL_Expr_Append(new PHPTAL_Expr_String(" ".$this->_attribute."=\""),$value,new PHPTAL_Expr_String("\"")));
     }
 }
 

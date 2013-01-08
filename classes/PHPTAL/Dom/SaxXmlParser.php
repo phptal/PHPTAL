@@ -443,7 +443,7 @@ class PHPTAL_Dom_SaxXmlParser
            so they have to be converted into special TALES expression
         */
         $types = ini_get('short_open_tag')?'php|=|':'php';
-        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self', 'convertPHPBlockToTALES'), $str);
+        $str = preg_replace_callback("/<\?($types)(.*?)\?>\n?/", array('self', 'convertPHPBlockToTALES'), $str);
 
         // corrects all non-entities and neutralizes potentially problematic CDATA end marker
         $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str), array('<'=>'&lt;', ']]>'=>']]&gt;'));

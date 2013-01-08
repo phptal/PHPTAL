@@ -49,7 +49,7 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
                 throw new PHPTAL_TemplateException("Empty translation key",
                             $this->phpelement->getSourceFile(), $this->phpelement->getSourceLine());
             }
-            $code = $codewriter->str($key);
+            $code = new PHPTAL_Expr_String($key);
         } else {
             $code = $codewriter->evaluateExpression($this->expression);
             if (is_array($code))
@@ -58,27 +58,28 @@ class PHPTAL_Php_Attribute_I18N_Translate extends PHPTAL_Php_Attribute_TAL_Conte
             $code = $codewriter->evaluateExpression($this->expression);
         }
 
-        $codewriter->pushCode('echo '.$codewriter->getTranslatorReference().'->translate('.$code.','.($escape ? 'true':'false').');');
+        $codewriter->pushCode(new PHPTAL_Expr_Echo(new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),'->translate(',$code,
+            ','.($escape ? 'true':'false').')')));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
     }
 
-    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, $exp, $islast)
+    public function talesChainPart(PHPTAL_Php_TalesChainExecutor $executor, PHPTAL_Expr $exp, $islast)
     {
         $codewriter = $executor->getCodeWriter();
 
         $escape = !($this->_echoType == PHPTAL_Php_Attribute::ECHO_STRUCTURE);
-        $exp = $codewriter->getTranslatorReference()."->translate($exp, " . ($escape ? 'true':'false') . ')';
+        $exp = new PHPTAL_Expr_PHP($codewriter->getTranslatorReference(),"->translate(",$exp,", " . ($escape ? 'true':'false') . ')');
         if (!$islast) {
             $var = $codewriter->createTempVariable();
-            $executor->doIf('!phptal_isempty('.$var.' = '.$exp.')');
-            $codewriter->pushCode("echo $var");
+            $executor->doIf(new PHPTAL_Expr_PHP('!phptal_isempty(',$var,' = ',$exp,')'));
+            $codewriter->pushCode(new PHPTAL_Expr_Echo($var));
             $codewriter->recycleTempVariable($var);
         } else {
             $executor->doElse();
-            $codewriter->pushCode("echo $exp");
+            $codewriter->pushCode(new PHPTAL_Expr_Echo($exp));
         }
     }
 

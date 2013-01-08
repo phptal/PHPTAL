@@ -74,7 +74,7 @@ abstract class PHPTAL_Php_Attribute
         return trim($expression);
     }
 
-    protected function doEchoAttribute(PHPTAL_Php_CodeWriter $codewriter, $code)
+    protected function doEchoAttribute(PHPTAL_Php_CodeWriter $codewriter, PHPTAL_Expr $code)
     {
         if ($this->_echoType === self::ECHO_TEXT)
             $codewriter->doEcho($code);

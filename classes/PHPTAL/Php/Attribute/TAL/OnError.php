@@ -36,35 +36,30 @@ class PHPTAL_Php_Attribute_TAL_OnError extends PHPTAL_Php_Attribute
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         $codewriter->doTry();
-        $codewriter->pushCode('ob_start()');
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('ob_start()'));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         $var = $codewriter->createTempVariable();
 
-        $codewriter->pushCode('ob_end_flush()');
-        $codewriter->doCatch('Exception '.$var);
-        $codewriter->pushCode('$tpl->addError('.$var.')');
-        $codewriter->pushCode('ob_end_clean()');
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('ob_end_flush()'));
+        $codewriter->doCatch('Exception',$var);
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('$tpl->addError(',$var,')'));
+        $codewriter->pushCode(new PHPTAL_Expr_PHP('ob_end_clean()'));
 
         $expression = $this->extractEchoType($this->expression);
 
         $code = $codewriter->evaluateExpression($expression);
-        switch ($code) {
-            case PHPTAL_Php_TalesInternal::NOTHING_KEYWORD:
-                break;
 
-            case PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD:
+        if ($code instanceof PHPTAL_Expr_Default) {
                 $codewriter->pushHTML('<pre class="phptalError">');
                 $codewriter->doEcho($var);
                 $codewriter->pushHTML('</pre>');
-                break;
-
-            default:
+        } else if (!$code instanceof PHPTAL_Expr_Nothing) {
                 $this->doEchoAttribute($codewriter, $code);
-                break;
         }
+
         $codewriter->doEnd('catch');
 
         $codewriter->recycleTempVariable($var);

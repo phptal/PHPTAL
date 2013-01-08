@@ -64,13 +64,13 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
         // local macro (no filename specified) and non dynamic macro name
         // can be called directly if it's a known function (just generated or seen in previous compilation)
         if (preg_match('/^[a-z0-9_]+$/i', $macroname) && $codewriter->functionExists($macroname)) {
-            $code = $codewriter->getFunctionPrefix() . $macroname . '($_thistpl, $tpl)';
+            $code = new PHPTAL_Expr_PHP($codewriter->getFunctionPrefix() . $macroname . '($_thistpl, $tpl)');
             $codewriter->pushCode($code);
         }
         // external macro or ${macroname}, use PHPTAL at runtime to resolve it
         else {
             $code = $codewriter->interpolateTalesVarsInString($this->expression);
-            $codewriter->pushCode('$tpl->_executeMacroOfTemplate('.$code.', $_thistpl)');
+            $codewriter->pushCode(new PHPTAL_Expr_PHP('$tpl->_executeMacroOfTemplate(',$code,', $_thistpl)'));
         }
 
         $this->popSlots($codewriter);
@@ -96,7 +96,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     private function pushSlots(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal', 'define-macro')) {
-            $codewriter->pushCode('$ctx->pushSlots()');
+            $codewriter->pushCode(new PHPTAL_Expr_PHP('$ctx->pushSlots()'));
         }
     }
 
@@ -107,7 +107,7 @@ class PHPTAL_Php_Attribute_METAL_UseMacro extends PHPTAL_Php_Attribute
     private function popSlots(PHPTAL_Php_CodeWriter $codewriter)
     {
         if (!$this->phpelement->hasAttributeNS('http://xml.zope.org/namespaces/metal', 'define-macro')) {
-            $codewriter->pushCode('$ctx->popSlots()');
+            $codewriter->pushCode(new PHPTAL_Expr_PHP('$ctx->popSlots()'));
         }
     }
 

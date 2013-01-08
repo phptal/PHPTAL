@@ -37,7 +37,7 @@ class PHPTAL_Php_TalesChainExecutor
         return $this->codewriter;
     }
 
-    public function doIf($condition)
+    public function doIf(PHPTAL_Expr $condition)
     {
         if ($this->_chainStarted == false) {
             $this->_chainStarted = true;
@@ -49,8 +49,8 @@ class PHPTAL_Php_TalesChainExecutor
 
     public function doElse()
     {
-        $this->codewriter->doElse();
-    }
+            $this->codewriter->doElse();
+        }
 
     public function breakChain()
     {
@@ -70,20 +70,19 @@ class PHPTAL_Php_TalesChainExecutor
 
         foreach ($this->_chain as $key => $exp) {
             $this->_state = 0;
-
-            if ($exp == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
+            if ($exp instanceof PHPTAL_Expr_Nothing) {
                 $this->_reader->talesChainNothingKeyword($this);
-            } elseif ($exp == PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD) {
+            } elseif ($exp instanceof PHPTAL_Expr_Default) {
                 $this->_reader->talesChainDefaultKeyword($this);
             } else {
                 $this->_reader->talesChainPart($this, $exp, $lastkey === $key);
             }
 
-            if ($this->_state == self::CHAIN_BREAK)
-                break;
-            if ($this->_state == self::CHAIN_CONT)
-                continue;
-        }
+                if ($this->_state == self::CHAIN_BREAK)
+                    break;
+                if ($this->_state == self::CHAIN_CONT)
+                    continue;
+            }
 
         $this->codewriter->doEnd('if');
         $this->codewriter->noThrow(false);

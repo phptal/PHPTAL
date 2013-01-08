@@ -135,7 +135,7 @@ class PHPTAL_Dom_Attr
     /**
      * set PHP code as value of this attribute. Code is expected to echo the value.
      */
-    private function setPHPCode($code)
+    private function setPHPCode(PHPTAL_Expr $code)
     {
         $this->value_escaped = '<?php '.$code." ?>\n";
     }
@@ -151,27 +151,27 @@ class PHPTAL_Dom_Attr
     /**
      * generate value of this attribute from variable
      */
-    function overwriteValueWithVariable($phpVariable)
+    function overwriteValueWithVariable(PHPTAL_Expr_Var $phpVariable)
     {
         $this->replacedState = self::VALUE_REPLACED;
         $this->phpVariable = $phpVariable;
-        $this->setPHPCode('echo '.$phpVariable);
+        $this->setPHPCode(new PHPTAL_Expr_Echo($phpVariable));
     }
 
     /**
      * generate complete syntax of this attribute using variable
      */
-    function overwriteFullWithVariable($phpVariable)
+    function overwriteFullWithVariable(PHPTAL_Expr_Var $phpVariable)
     {
         $this->replacedState = self::FULLY_REPLACED;
         $this->phpVariable = $phpVariable;
-        $this->setPHPCode('echo '.$phpVariable);
+        $this->setPHPCode(new PHPTAL_Expr_Echo($phpVariable));
     }
 
     /**
      * use any PHP code to generate this attribute's value
      */
-    function overwriteValueWithCode($code)
+    function overwriteValueWithCode(PHPTAL_Expr $code)
     {
         $this->replacedState = self::VALUE_REPLACED;
         $this->phpVariable = null;

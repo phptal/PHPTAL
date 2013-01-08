@@ -29,22 +29,21 @@ class PHPTAL_Php_Attribute_I18N_Domain extends PHPTAL_Php_Attribute
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
         // ensure a domain stack exists or create it
-        $codewriter->doIf('!isset($_i18n_domains)');
-        $codewriter->pushCode('$_i18n_domains = array()');
+        $codewriter->doIf(new PHPTAL_Expr_PHP('!isset($_i18n_domains)'));
+        $codewriter->doSetVar('$_i18n_domains',new PHPTAL_Expr_PHP('array()'));
         $codewriter->doEnd('if');
 
         $expression = $codewriter->interpolateTalesVarsInString($this->expression);
 
         // push current domain and use new domain
-        $code = '$_i18n_domains[] = '.$codewriter->getTranslatorReference().'->useDomain('.$expression.')';
-        $codewriter->pushCode($code);
+        $codewriter->doSetVar('$_i18n_domains[]',new PHPTAL_Expr_PHP($codewriter->getTranslatorReference().'->useDomain(',$expression,')'));
     }
 
     public function after(PHPTAL_Php_CodeWriter $codewriter)
     {
         // restore domain
         $code = $codewriter->getTranslatorReference().'->useDomain(array_pop($_i18n_domains))';
-        $codewriter->pushCode($code);
+        $codewriter->pushCode(new PHPTAL_Expr_PHP($code));
     }
 }
 
