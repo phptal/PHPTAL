@@ -23,8 +23,8 @@ class ClosureTalesValueTest extends PHPTAL_TestCase
 <tal:each repeat="value array"><tal:block content="repeat/value/key"/>:<tal:block content="value"/></tal:each>
 <tal:block content="use"/>
 <tal:block define="varname inputvar" tal:content="varname"/>
-<br tal:omit-tag="omitme"/>
-<br tal:omit-tag="keepme"/>
+<br class="omitme" tal:omit-tag="omitme"/>
+<br class="keepme" tal:omit-tag="keepme"/>
 <br tal:replace="structure replacetag"/>
 <br tal:replace="keeptag"/>
 <span tal:attributes="class classlist; data-empty nonvalue|string:; data-nothing nonextant|"/>
@@ -38,7 +38,7 @@ a:1b:2c:3
 use
 output
 
-<br>
+<br class="keepme"/>
 <hr>
 <br>
 <span class="one two three" data-empty=""></span>

@@ -57,7 +57,7 @@ class PHPTAL_Php_Attribute_TAL_OmitTag extends PHPTAL_Php_Attribute
 
             // print tag header/foot only if condition is false
             $cond = $codewriter->evaluateExpression($this->expression);
-            $this->phpelement->headPrintCondition = '('.$this->varname.' = !('.$cond.'))';
+            $this->phpelement->headPrintCondition = '('.$this->varname.' = !('.$cond.' && (!' . $cond . ' instanceof Closure || call_user_func(' . $cond . '))))';
             $this->phpelement->footPrintCondition = $this->varname;
         }
     }
