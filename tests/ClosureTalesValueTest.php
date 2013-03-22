@@ -49,7 +49,7 @@ HTML;
 
         $tpl->foon = function () { return 'barn'; };
         $false = function () { return false; };
-        $true = function () { return $true; };
+        $true = function () { return true; };
         $tpl->false = $false;
         $tpl->true = $true;
         $tpl->array = function () { return array('a' => 1, 'b' => 2, 'c' => 3); };
@@ -60,6 +60,7 @@ HTML;
         $tpl->keepme = $false;
         $tpl->replacetag = function () { return "<hr>"; };
         $tpl->keeptag = function () { return ''; };
+        $tpl->classlist = function () { return 'one two three'; };
         $tpl->nonvalue = function () { return; };
         $tpl->errorhandler = function () {
             return 'there was an error (but not really)';

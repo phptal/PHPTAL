@@ -539,5 +539,10 @@ function phptal_tostring($var)
             return $xml;
         }
     }
+    if (is_callable($var, false, $callable_name)) {
+        if ($callable_name === 'Closure::__invoke') {
+            return $var();
+        }
+    }
     return (string)$var;
 }
