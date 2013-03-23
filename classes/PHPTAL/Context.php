@@ -499,10 +499,8 @@ function phptal_isempty($var)
  */
 function phptal_true($var)
 {
-    if (is_callable($var, false, $callable_name)) {
-        if ($callable_name === 'Closure::__invoke') {
-            return $var();
-        }
+    if (is_a($var, 'Closure')) {
+        return $var();
     }
     return $var && (!$var instanceof Countable || count($var));
 }
@@ -544,10 +542,8 @@ function phptal_tostring($var)
             return $xml;
         }
     }
-    if (is_callable($var, false, $callable_name)) {
-        if ($callable_name === 'Closure::__invoke') {
-            return $var();
-        }
+    if (is_a($var, 'Closure')) {
+        return $var();
     }
     return (string)$var;
 }
