@@ -43,7 +43,7 @@ output
 
 <br class="keepme"/>
 <hr>
-<br>
+
 <span class="one two three" data-empty=""></span>
 there was an error (but not really)
 HTML;
