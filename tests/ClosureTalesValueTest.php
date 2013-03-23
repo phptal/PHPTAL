@@ -91,5 +91,64 @@ PHP
 
         $this->assertEquals($expected, $tpl->execute());
     }
+
+    function testClosureDeep()
+    {
+        if (strpos(phpversion(), '5.2') === 0) {
+            $this->markTestSkipped();
+        }
+        $obj = new stdClass;
+        eval("\$obj->foon = function () { return 'hello'; };");
+
+        $objobj = new stdClass;
+        $objobj->obj = $obj;
+
+        $arr = array('one' => array('two' => array('three' => $obj)));
+
+        $source = <<<HTML
+<tal:block content="obj/foon"/>
+<tal:block content="objobj/obj/foon"/>
+<tal:block content="arr/one/two/three/foon"/>
+HTML;
+        $expected = <<<HTML
+hello
+hello
+hello
+HTML;
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource($source);
+
+        $tpl->obj = $obj;
+        $tpl->objobj = $objobj;
+        $tpl->arr = $arr;
+
+        $this->assertEquals($expected, $tpl->execute());
+    }
+
+    function testNestedClosure() {
+        if (strpos(phpversion(), '5.2') === 0) {
+            $this->markTestSkipped();
+        }
+
+        eval("
+            \$closure = function () {
+                return function () {
+                    return 'hello';
+                };
+            };
+        ");
+
+        $source = <<<HTML
+<tal:block content="closure"/>
+HTML;
+        $expected = <<<HTML
+hello
+HTML;
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource($source);
+
+        $tpl->closure = $closure;
+        $this->assertEquals($expected, $tpl->execute());
+    }
 }
 ?>
