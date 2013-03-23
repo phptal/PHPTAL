@@ -16,6 +16,9 @@ class ClosureTalesValueTest extends PHPTAL_TestCase
 {
     function testClosureVariable()
     {
+        if (strpos(phpversion(), '5.2') === 0) {
+            $this->markTestSkipped();
+        }
         $source = <<<HTML
 <tal:block content="foon"/>
 <tal:if condition="false">do not show</tal:if>
@@ -47,25 +50,29 @@ HTML;
         $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
 
-        $tpl->foon = function () { return 'barn'; };
-        $false = function () { return false; };
-        $true = function () { return true; };
-        $tpl->false = $false;
-        $tpl->true = $true;
-        $tpl->array = function () { return array('a' => 1, 'b' => 2, 'c' => 3); };
-        $use = "use";
-        $tpl->use = function () use ($use) { return $use; };
-        $tpl->inputvar = function () { return "output"; };
-        $tpl->omitme = $true;
-        $tpl->keepme = $false;
-        $tpl->replacetag = function () { return "<hr>"; };
-        $tpl->keeptag = function () { return ''; };
-        $tpl->classlist = function () { return 'one two three'; };
-        $tpl->nonvalue = function () { return; };
-        $tpl->errorhandler = function () {
-            return 'there was an error (but not really)';
-        };
-
+        //eval is required for PHP 5.2 compatibility
+        //anonymous functions/closures will cause a syntax error
+        eval(<<<PHP
+            \$tpl->foon = function () { return 'barn'; };
+            \$false = function () { return false; };
+            \$true = function () { return true; };
+            \$tpl->false = \$false;
+            \$tpl->true = \$true;
+            \$tpl->array = function () { return array('a' => 1, 'b' => 2, 'c' => 3); };
+            \$use = "use";
+            \$tpl->use = function () use (\$use) { return \$use; };
+            \$tpl->inputvar = function () { return "output"; };
+            \$tpl->omitme = \$true;
+            \$tpl->keepme = \$false;
+            \$tpl->replacetag = function () { return "<hr>"; };
+            \$tpl->keeptag = function () { return ''; };
+            \$tpl->classlist = function () { return 'one two three'; };
+            \$tpl->nonvalue = function () { return; };
+            \$tpl->errorhandler = function () {
+                return 'there was an error (but not really)';
+            };
+PHP
+        );
         $this->assertEquals($expected, $tpl->execute());
     }
 }
