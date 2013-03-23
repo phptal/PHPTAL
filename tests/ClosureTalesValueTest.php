@@ -74,6 +74,22 @@ HTML;
 PHP
         );
         $this->assertEquals($expected, $tpl->execute());
+
+        $tpl->foon = 'barn';
+        $tpl->false = false;
+        $tpl->true = true;
+        $tpl->array = array('a' => 1, 'b' => 2, 'c' => 3);
+        $tpl->use = "use";
+        $tpl->inputvar = "output";
+        $tpl->omitme = true;
+        $tpl->keepme = false;
+        $tpl->replacetag = "<hr>";
+        $tpl->keeptag = '';
+        $tpl->classlist = 'one two three';
+        $tpl->nonvalue = null;
+        $tpl->errorhandler = 'there was an error (but not really)';
+
+        $this->assertEquals($expected, $tpl->execute());
     }
 }
 ?>
