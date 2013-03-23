@@ -499,8 +499,8 @@ function phptal_isempty($var)
  */
 function phptal_true($var)
 {
-    if (is_a($var, 'Closure')) {
-        return $var();
+    while (is_a($var, 'Closure')) {
+        $var = $var();
     }
     return $var && (!$var instanceof Countable || count($var));
 }
@@ -542,8 +542,8 @@ function phptal_tostring($var)
             return $xml;
         }
     }
-    if (is_a($var, 'Closure')) {
-        return $var();
+    while (is_a($var, 'Closure')) {
+        $var = $var();
     }
     return (string)$var;
 }
