@@ -140,14 +140,45 @@ HTML;
 
         $source = <<<HTML
 <tal:block content="closure"/>
+<br tal:omit-tag="closure"/>
+HTML;
+        $expected = <<<HTML
+hello
+
+HTML;
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource($source);
+
+        $tpl->closure = $closure;
+        $this->assertEquals($expected, $tpl->execute());
+    }
+
+    function testClosureFromMethod() {
+        if (strpos(phpversion(), '5.2') === 0) {
+            $this->markTestSkipped();
+        }
+        eval(<<<PHP
+            class TestClosureFromMethod {
+                function closeur() {
+                    return function () { return new TestClosureFromMethod; };
+                    //return new TestClosureFromMethod;
+                }
+                function afterCloseur() {
+                    return 'hello';
+                }
+            }
+PHP
+        );
+        $source = <<<HTML
+<tal:block content="obj/closeur/afterCloseur"/>
 HTML;
         $expected = <<<HTML
 hello
 HTML;
         $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
+        $tpl->obj = new TestClosureFromMethod;
 
-        $tpl->closure = $closure;
         $this->assertEquals($expected, $tpl->execute());
     }
 }

@@ -366,6 +366,11 @@ class PHPTAL_Context
 
             // object handling
             if (is_object($base)) {
+                // unravel nested closures returned from method calls and handle the result normally
+                while (is_a($base, 'Closure')) {
+                    $base = $base();
+                }
+
                 // look for method. Both method_exists and is_callable are required because of __call() and protected methods
                 if (method_exists($base, $current) && is_callable(array($base, $current))) {
                     $base = $base->$current();
