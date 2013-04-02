@@ -367,7 +367,7 @@ class PHPTAL_Context
             // object handling
             if (is_object($base)) {
                 // unravel nested closures returned from method calls and handle the result normally
-                if (strpos(phpversion(), 5.2) !== 0) {
+                if (strpos(phpversion(), '5.2') !== 0) {
                     while (is_a($base, 'Closure')) {
                         $base = $base();
                     }
