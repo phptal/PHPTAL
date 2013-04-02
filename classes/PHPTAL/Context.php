@@ -367,8 +367,10 @@ class PHPTAL_Context
             // object handling
             if (is_object($base)) {
                 // unravel nested closures returned from method calls and handle the result normally
-                while (is_a($base, 'Closure')) {
-                    $base = $base();
+                if (strpos(phpversion(), 5.2) !== 0) {
+                    while (is_a($base, 'Closure')) {
+                        $base = $base();
+                    }
                 }
 
                 // look for method. Both method_exists and is_callable are required because of __call() and protected methods
@@ -504,8 +506,10 @@ function phptal_isempty($var)
  */
 function phptal_true($var)
 {
-    while (is_a($var, 'Closure')) {
-        $var = $var();
+    if (strpos(phpversion(), '5.2') !== 0) {
+        while (is_a($var, 'Closure')) {
+            $var = $var();
+        }
     }
     return $var && (!$var instanceof Countable || count($var));
 }
@@ -547,8 +551,10 @@ function phptal_tostring($var)
             return $xml;
         }
     }
-    while (is_a($var, 'Closure')) {
-        $var = $var();
+    if (strpos(phpversion(), '5.2') !== 0) {
+        while (is_a($var, 'Closure')) {
+            $var = $var();
+        }
     }
     return (string)$var;
 }
