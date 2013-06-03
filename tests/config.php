@@ -123,7 +123,7 @@ function normalize_html($src) {
 function normalize_phpsource($code, $ignore_newlines = false) {
 
     // ignore debug
-    $code = preg_replace('!<\?php /\* tag ".*?" from line \d+ \*/ ?; \?>!','', $code);
+    $code = preg_replace('!<\?php\s+/\* tag ".*?" from line \d+ \*/ ?; \?>!','', $code);
     $code = preg_replace('!/\* tag ".*?" from line \d+ \*/ ?;!','', $code);
 
     $code = str_replace('<?php use pear2\HTML\Template\PHPTAL as P; ?>', '', $code);
