@@ -474,14 +474,14 @@ class PHPTAL_Php_CodeWriter
 
     private function indentSpaces()
     {
-        return str_repeat("\t", $this->_indent);
+        return str_repeat("\t", $this->_indentation);
     }
 
     private function pushCodeWriterContext()
     {
         $this->_contexts[] =  clone $this;
         $this->_result = "";
-        $this->_indent = 0;
+        $this->_indentation = 0;
         $this->_codeBuffer = array();
         $this->_htmlBuffer = array();
         $this->_segments = array();
@@ -491,7 +491,7 @@ class PHPTAL_Php_CodeWriter
     {
         $oldContext = array_pop($this->_contexts);
         $this->_result = $oldContext->_result;
-        $this->_indent = $oldContext->_indent;
+        $this->_indentation = $oldContext->_indentation;
         $this->_codeBuffer = $oldContext->_codeBuffer;
         $this->_htmlBuffer = $oldContext->_htmlBuffer;
         $this->_segments = $oldContext->_segments;
@@ -499,7 +499,7 @@ class PHPTAL_Php_CodeWriter
 
     private $_state;
     private $_result = "";
-    private $_indent = 0;
+    private $_indentation = 0;
     private $_codeBuffer = array();
     private $_htmlBuffer = array();
     private $_segments = array();
