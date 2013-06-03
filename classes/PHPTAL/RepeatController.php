@@ -73,6 +73,8 @@ class PHPTAL_RepeatController implements Iterator
             $this->iterator = $source;
         } elseif ($source instanceof Traversable) {
             $this->iterator = new IteratorIterator($source);
+        } elseif ($source instanceof Closure) {
+            $this->iterator = new ArrayIterator( (array) $source() );
         } elseif ($source instanceof stdClass) {
             $this->iterator = new ArrayIterator( (array) $source );
         } else {
