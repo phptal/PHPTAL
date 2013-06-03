@@ -366,6 +366,8 @@ class PHPTAL_Context
 
             // object handling
             if (is_object($base)) {
+                $base = phptal_unravel_closure($base);
+
                 // look for method. Both method_exists and is_callable are required because of __call() and protected methods
                 if (method_exists($base, $current) && is_callable(array($base, $current))) {
                     $base = $base->$current();
@@ -499,6 +501,7 @@ function phptal_isempty($var)
  */
 function phptal_true($var)
 {
+    $var = phptal_unravel_closure($var);
     return $var && (!$var instanceof Countable || count($var));
 }
 
@@ -539,5 +542,22 @@ function phptal_tostring($var)
             return $xml;
         }
     }
-    return (string)$var;
+    return (string)phptal_unravel_closure($var);
+}
+
+/**
+ * unravel the provided expression if it is a closure
+ *
+ * This will call the base expression and its result
+ * as long as it is a Closure.  Once the base (non-Closure)
+ * value is found it is returned.
+ *
+ * This function has no effect on non-Closure expressions
+ */
+function phptal_unravel_closure($var)
+{
+    while ($var instanceof Closure) {
+        $var = $var();
+    }
+    return $var;
 }
