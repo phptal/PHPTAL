@@ -29,6 +29,23 @@ class TalesRegistryTest extends PHPTAL_TestCase
     }
 
     /**
+     * @expectedException PHPTAL_UnknownModifierException
+     */
+    function testUnregisterFunction()
+    {
+        PHPTAL_TalesRegistry::getInstance()->unregisterPrefix('php');
+        $this->newPHPTAL()->setSource('<p tal:content="php:1"/>')->execute();
+    }
+
+    /**
+     * @expectedException PHPTAL_ConfigurationException
+     */
+    function testCantUnregisterNonRegistered()
+    {
+        PHPTAL_TalesRegistry::getInstance()->unregisterPrefix('doesnotexist');
+    }
+
+    /**
      * @expectedException PHPTAL_ConfigurationException
      */
     function testCantRegisterNonExistant()

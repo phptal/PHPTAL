@@ -54,6 +54,22 @@ class PHPTAL_TalesRegistry
     }
 
     /**
+     * Unregisters a expression modifier
+     *
+     * @param string $prefix
+     *
+     * @throws PHPTAL_ConfigurationException
+     */
+    public function unregisterPrefix($prefix)
+    {
+        if (!$this->isRegistered($prefix)) {
+            throw new PHPTAL_ConfigurationException("Expression modifier '$prefix' is not registered");
+        }
+
+        unset($this->_callbacks[$prefix]);
+    }
+
+    /**
      *
      * Expects an either a function name or an array of class and method as
      * callback.
@@ -136,7 +152,7 @@ class PHPTAL_TalesRegistry
             return $func;
         }
 
-        return NULL;
+        return null;
     }
 
     /**
@@ -158,7 +174,7 @@ class PHPTAL_TalesRegistry
             return $this->_callbacks[$prefix]['callback'];
         }
 
-        return NULL;
+        return null;
     }
 
     /**
