@@ -29,6 +29,20 @@ class TalesRegistryTest extends PHPTAL_TestCase
     }
 
     /**
+     * Define constants after requires/includes
+     * @param Text_Template $template
+     * @return void
+     */
+    public function prepareTemplate( Text_Template $template ) {
+        $template->setVar( array(
+            'constants'    => '',
+            'zz_constants' => PHPUnit_Util_GlobalState::getConstantsAsString()
+        ));
+        parent::prepareTemplate( $template );
+    }
+
+    /**
+     * @runInSeparateProcess
      * @expectedException PHPTAL_UnknownModifierException
      */
     function testUnregisterFunction()
