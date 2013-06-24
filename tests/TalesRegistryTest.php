@@ -33,8 +33,10 @@ class TalesRegistryTest extends PHPTAL_TestCase
      */
     function testUnregisterFunction()
     {
-        PHPTAL_TalesRegistry::getInstance()->unregisterPrefix('php');
-        $this->newPHPTAL()->setSource('<p tal:content="php:1"/>')->execute();
+        $test_prefix = 'testprefix';
+        PHPTAL_TalesRegistry::getInstance()->registerPrefix($test_prefix, 'registry_test_callback3');
+        PHPTAL_TalesRegistry::getInstance()->unregisterPrefix($test_prefix);
+        $this->newPHPTAL()->setSource('<p tal:content="'.$test_prefix.':"/>')->execute();
     }
 
     /**
@@ -89,4 +91,9 @@ function registry_test_callback($arg, $nothrow)
 function registry_test_callback2($arg, $nothrow)
 {
     return '"ok2" . ' . phptal_tales($arg);
+}
+
+function registry_test_callback3($arg, $nothrow)
+{
+    return '"ok3" . ' . phptal_tales($arg);
 }
