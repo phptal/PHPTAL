@@ -25,7 +25,7 @@ class TalDefineTest extends PHPTAL_TestCase
 {
     function testExpressionParser()
     {
-        $att = new PHPTAL_Php_Attribute_Tal_Define(new DummyDefinePhpNode(), 'a b');
+        $att = new PHPTAL_Php_Attribute_TAL_Define(new DummyDefinePhpNode(), 'a b');
 
         list($defineScope, $defineVar, $expression) = $att->parseExpression('local a_234z b');
         $this->assertEquals('local', $defineScope);
