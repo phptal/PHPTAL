@@ -123,7 +123,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
     function testEmptyAll()
     {
         $emptyElements = array(
-            'area','base','basefont','br','col','colgroup', /* only if the span attribute is present */
+            'area','base','basefont','br','col',
             'command','embed','frame','hr','img','input','isindex','keygen','link',
             'meta','param','wbr','source','track',
         );

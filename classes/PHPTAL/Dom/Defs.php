@@ -193,7 +193,6 @@ class PHPTAL_Dom_Defs
         'basefont',
         'br',
         'col',
-        'colgroup', /* only if the span attribute is present */
         'command',
         'embed',
         'frame',

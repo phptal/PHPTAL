@@ -69,7 +69,7 @@ class XHTMLModeTest extends PHPTAL_TestCase
     function testEmptyAll()
     {
         $emptyElements = array(
-            'area','base','basefont','br','col','colgroup', /* only if the span attribute is present */
+            'area','base','basefont','br','col',
             'command','embed','frame','hr','img','input','isindex','keygen','link',
             'meta','param','wbr','source','track',
         );
@@ -81,6 +81,17 @@ class XHTMLModeTest extends PHPTAL_TestCase
             $this->assertEquals('<'.$name.'/>', $res);
         }
     }
+
+   function testColgroup()
+   {
+        $code = '<colgroup>
+<col class="col1" />
+<col class="col2" />
+<col class="col3" />
+</colgroup>';
+
+        $this->assertHTMLEquals($this->newPHPTAL()->setSource($code)->execute($code), $code);
+   }
 
     function testBoolean()
     {
