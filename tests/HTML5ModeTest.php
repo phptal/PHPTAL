@@ -191,7 +191,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
 
    private function decodeNumericEntities($str)
    {
-       return normalize_html(preg_replace('/&#x?[a-f0-9]+;/ie','htmlspecialchars(html_entity_decode("\\0"))', $str));
+       return normalize_html(@preg_replace('/&#x?[a-f0-9]+;/ie','htmlspecialchars(html_entity_decode("\\0"))', $str));
    }
 
    function testAttributeQuotes()
