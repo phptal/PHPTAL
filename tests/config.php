@@ -100,6 +100,11 @@ abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expect, $test);
     }
+
+    protected function assertHTMLEquals($expect, $test)
+    {
+        $this->assertEquals(normalize_html($expect), normalize_html($test));
+    }
 }
 
 if (function_exists('date_default_timezone_set')) {

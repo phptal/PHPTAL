@@ -26,7 +26,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
             }
         ]]></script>');
 
-        $this->assertEquals(normalize_html('<!DOCTYPE html><script> if (2 < 5) { alert("<\/foo>"); } </script>'), normalize_html($tpl->execute()));
+        $this->assertHTMLEquals('<!DOCTYPE html><script> if (2 < 5) { alert("<\/foo>"); } </script>', $tpl->execute());
     }
 
     function testCDATAContent()
@@ -34,7 +34,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('<!DOCTYPE html><p><![CDATA[<hello>]]></p>');
-        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
+        $this->assertHTMLEquals('<!DOCTYPE html><p>&lt;hello&gt;</p>', $tpl->execute());
     }
 
     function testRemovesXHTMLNS()
@@ -44,7 +44,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
             <x:head  xmlns:x="http://www.w3.org/1999/xhtml"/></html>
             ');
 
-        $this->assertEquals(normalize_html('<html><head></head></html>'), normalize_html($tpl->execute()));
+        $this->assertHTMLEquals('<html><head></head></html>', $tpl->execute());
 
     }
 
@@ -53,7 +53,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><p><![CDATA[<hello>]]></p>');
-        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
+        $this->assertHTMLEquals('<!DOCTYPE html><p>&lt;hello&gt;</p>', $tpl->execute());
     }
 
     function testProlog()
@@ -61,7 +61,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setOutputMode(PHPTAL::HTML5);
         $tpl->setSource('<?xml version="1.0"?><!DOCTYPE html><p><![CDATA[<hello>]]></p>');
-        $this->assertEquals(normalize_html('<!DOCTYPE html><p>&lt;hello&gt;</p>'), normalize_html($tpl->execute()));
+        $this->assertHTMLEquals('<!DOCTYPE html><p>&lt;hello&gt;</p>', $tpl->execute());
     }
 
     function testAttr()
@@ -96,8 +96,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         </body>
         </html>');
         $res = $tpl->execute();
-        $res = normalize_html($res);
-        $exp = normalize_html('<!DOCTYPE html><html>
+        $this->assertHTMLEquals('<!DOCTYPE html><html>
                 <head>
                     <title></title>
                     <base href="http://example.com/">
@@ -117,8 +116,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
                         <textarea></textarea>
                     </form>
                 </body>
-                </html>');
-        $this->assertEquals($exp, $res);
+                </html>', $res);
     }
 
 
@@ -159,8 +157,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
         </body>
         </html>');
         $res = $tpl->execute();
-        $res = normalize_html($res);
-        $exp = normalize_html('<html>
+        $this->assertHTMLEquals('<html>
                 <body>
                     <input type=checkbox checked>
                     <input type=text readonly>
@@ -174,8 +171,7 @@ class HTML5ModeTest extends PHPTAL_TestCase
                     <script defer></script>
                     <script defer></script>
                 </body>
-                </html>');
-        $this->assertEquals($exp, $res);
+                </html>', $res);
    }
 
    function testMixedModes()
