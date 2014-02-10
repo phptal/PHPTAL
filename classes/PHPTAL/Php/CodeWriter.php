@@ -34,7 +34,11 @@ class PHPTAL_Php_CodeWriter
      * keeps track of seen functions for function_exists
      */
     private $known_functions = array();
-
+    
+    /**
+     * Keep track of the current indentation
+     */
+    private $_indentation=0;
 
     public function __construct(PHPTAL_Php_State $state)
     {
