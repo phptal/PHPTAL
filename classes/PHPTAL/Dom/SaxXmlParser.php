@@ -442,7 +442,7 @@ class PHPTAL_Dom_SaxXmlParser
         /* <?php ?> blocks can't reliably work in attributes (due to escaping impossible in XML)
            so they have to be converted into special TALES expression
         */
-        $types = ini_get('short_open_tag')?'php|=|':'php';
+        $types = version_compare(PHP_VERSION, '5.4.0') < 0 ? (ini_get('short_open_tag') ? 'php|=|' : 'php') : 'php|=';
         $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self', 'convertPHPBlockToTALES'), $str);
 
         // corrects all non-entities and neutralizes potentially problematic CDATA end marker
