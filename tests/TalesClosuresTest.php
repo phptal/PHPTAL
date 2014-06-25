@@ -19,8 +19,6 @@ class TalesClosuresTest extends PHPTAL_TestCase
 {
     function testClosure()
     {
-        $this->markTestIncomplete();
-
         if (version_compare("5.3", PHP_VERSION, ">")) $this->markTestSkipped();
 
         $tpl = $this->newPHPTAL();
@@ -37,10 +35,6 @@ class TalesClosuresTest extends PHPTAL_TestCase
 
     function testInvoke()
     {
-        $this->markTestIncomplete();
-
-        if (version_compare("5.3", PHP_VERSION, ">")) $this->markTestSkipped();
-
         $tpl = $this->newPHPTAL();
         $tpl->invoke = new TestInvocable;
 
@@ -51,10 +45,6 @@ class TalesClosuresTest extends PHPTAL_TestCase
 
     function testInvokeProperty()
     {
-        $this->markTestIncomplete();
-
-        if (version_compare("5.3", PHP_VERSION, ">")) $this->markTestSkipped();
-
         $tpl = $this->newPHPTAL();
         $tpl->invoke = new TestInvocable;
 

@@ -359,14 +359,15 @@ class PHPTAL_Context
 
         $chunks  = explode('/', $path);
         $current = null;
-
+        $prev    = null;
         for ($i = 0; $i < count($chunks); $i++) {
-            $prev    = $current;
-            $current = $chunks[$i];
+            if ($current != $chunks[$i]) { // if not $i-- before continue;
+                $prev    = $current;
+                $current = $chunks[$i];
+            }
 
             // object handling
             if (is_object($base)) {
-                $base = phptal_unravel_closure($base);
 
                 // look for method. Both method_exists and is_callable are required because of __call() and protected methods
                 if (method_exists($base, $current) && is_callable(array($base, $current))) {
@@ -414,6 +415,12 @@ class PHPTAL_Context
                         continue;
                     }
                     catch(BadMethodCallException $e) {}
+                }
+
+                if (is_callable($base)) {
+                    $base = phptal_unravel_closure($base);
+                    $i--;
+                    continue;
                 }
 
                 if ($nothrow) {
@@ -556,8 +563,8 @@ function phptal_tostring($var)
  */
 function phptal_unravel_closure($var)
 {
-    while ($var instanceof Closure) {
-        $var = $var();
+    while (!is_string($var) && is_callable($var)) {
+        $var = call_user_func($var);
     }
     return $var;
 }
