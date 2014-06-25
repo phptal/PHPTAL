@@ -3,3 +3,4 @@ build
 /composer.lock
 /doc/temp/
 /docs/
+/tools/phpunit
