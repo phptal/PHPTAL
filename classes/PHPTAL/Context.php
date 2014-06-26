@@ -563,7 +563,7 @@ function phptal_tostring($var)
  */
 function phptal_unravel_closure($var)
 {
-    while (!is_string($var) && is_callable($var)) {
+    while (is_object($var) && is_callable($var)) {
         $var = call_user_func($var);
     }
     return $var;
