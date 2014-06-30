@@ -103,6 +103,7 @@ class CodeCacheTest extends PHPTAL_TestCase
         $time1 = filemtime('input/code-cache-01.html');
         touch('input/code-cache-01.html', time());
         clearstatcache();
+        sleep(1);
         $time2 = filemtime('input/code-cache-01.html');
         $this->assertNotEquals($time1, $time2, "touch() must work");
 
