@@ -264,6 +264,8 @@ EOT;
 
     public function testPHPBlockShort()
     {
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) $this->markTestSkipped('PHP >= 5.4');
+
         ini_set('short_open_tag', 1);
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
@@ -275,6 +277,8 @@ EOT;
 
     public function testPHPBlockNoShort()
     {
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) $this->markTestSkipped('PHP >= 5.4');
+
         ini_set('short_open_tag', 0);
         if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
@@ -282,14 +286,23 @@ EOT;
         $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
         try
         {
-            if (version_compare(PHP_VERSION, '5.4.0') < 0) {
-                // unlike attributes, this isn't going to be escaped, because it gets parsed as a real processing instruction
-                $this->assertEquals('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>', $tpl->execute());
-            }
-            else {
-                // PHP 5.4: short tag <?= is always enabled.
-                $this->assertEquals('<p>test<? print("<x>"); ?>test&amp;test</p>', $tpl->execute());
-            }
+            // unlike attributes, this isn't going to be escaped, because it gets parsed as a real processing instruction
+            $this->assertEquals('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>', $tpl->execute());
+        }
+        catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
+        ini_restore('short_open_tag');
+    }
+
+    public function testPHPBlock54()
+    {
+        if (version_compare(PHP_VERSION, '5.4.0') < 0) $this->markTestSkipped('PHP < 5.4');
+
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
+        try
+        {
+            // PHP 5.4: short tag <?= is always enabled.
+            $this->assertEquals('<p>test<? print("<x>"); ?>test&amp;test</p>', $tpl->execute());
         }
         catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
         ini_restore('short_open_tag');

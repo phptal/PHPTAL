@@ -130,10 +130,12 @@ EOT;
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p test=\'te&amp;st<?php echo "<x>"; ?>test<?php print("&amp;") ?>test\'/>');
         $this->assertEquals('<p test="te&amp;st<x>test&amp;test"></p>', $tpl->execute());
-}
+    }
 
     public function testPHPBlockShort()
     {
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) $this->markTestSkipped('PHP >= 5.4');
+
         ini_set('short_open_tag', 1);
         if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
@@ -145,6 +147,8 @@ EOT;
 
     public function testPHPBlockNoShort()
     {
+        if (version_compare(PHP_VERSION, '5.4.0') >= 0) $this->markTestSkipped('PHP >= 5.4');
+
         ini_set('short_open_tag', 0);
         if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
@@ -157,5 +161,17 @@ EOT;
         catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
         ini_restore('short_open_tag');
     }
-}
 
+    public function testPHPBlock54()
+    {
+        if (version_compare(PHP_VERSION, '5.4.0') < 0) $this->markTestSkipped('PHP < 5.4');
+
+        $tpl = $this->newPHPTAL();
+        $tpl->setSource('<p test=\'te&amp;st noshort<? print("<x>"); ?>test<?= "&amp;" ?>test\'/>');
+        try
+        {
+            $this->assertEquals(normalize_html('<p test="te&amp;st noshort&lt;? print(&quot;&lt;x&gt;&quot;); ?&gt;test&amp;test"></p>'), normalize_html($tpl->execute()));
+        }
+        catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
+    }
+}
