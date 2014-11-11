@@ -286,4 +286,43 @@ class PhptalTest extends PHPTAL_TestCase
 
         $this->assertContains('DOCTYPE',$res);
     }
+
+    public function testGetSubpathPrefixReturnsDefault() {
+	$tpl = $this->newPHPTAL();
+
+	$this->assertEquals('phptal_', $tpl->getSubpathPrefix());
+    }
+
+    public function testGetSubpathPrefixReturnsNewValue() {
+	$tpl = $this->newPHPTAL();
+
+	$new_prefix = 'this-is-my-prefix';
+	$tpl->setSubpathPrefix($new_prefix);
+
+	$this->assertEquals($new_prefix, $tpl->getSubpathPrefix());
+    }
+
+    public function testGetSubpathAmountReturnsDefault() {
+	$tpl = $this->newPHPTAL();
+
+	$this->assertEquals(0, $tpl->getSubpathAmount());
+    }
+
+    public function testGetSubpathAmountReturnsNewValue() {
+	$tpl = $this->newPHPTAL();
+
+	$new_limit = 11;
+	$tpl->setSubpathAmount($new_limit);
+
+	$this->assertEquals($new_limit, $tpl->getSubpathAmount());
+    }
+
+    public function testSetSubpathAmountRespectsLimit() {
+	$tpl = $this->newPHPTAL();
+
+	$new_limit = 42;
+	$tpl->setSubpathAmount($new_limit);
+
+	$this->assertEquals(PHPTAL::SUBPATH_LIMIT, $tpl->getSubpathAmount());
+    }
 }

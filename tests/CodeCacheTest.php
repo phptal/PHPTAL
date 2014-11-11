@@ -44,15 +44,30 @@ class CodeCacheTest extends PHPTAL_TestCase
         $this->assertTrue(is_writable($tmpdirpath));
 
         $this->phptal->setPhpCodeDestination($tmpdirpath);
+        $this->phptal->setSubpathAmount(3);
         $this->codeDestination = $this->phptal->getPhpCodeDestination();
     }
 
     private function clearCache()
     {
         $this->assertContains(DIRECTORY_SEPARATOR.'temp_output'.DIRECTORY_SEPARATOR, $this->codeDestination);
-        foreach (glob($this->codeDestination.'tpl_*') as $tpl) {
-            $this->assertTrue(unlink($tpl), "Delete $tpl");
-        }
+        $this->clearCacheDirectories($this->codeDestination);
+    }
+
+    /**
+     * Recursively clear directories
+     *
+     * @param string $path
+     */
+    private function clearCacheDirectories($path) {
+        foreach (glob($path.'*', GLOB_MARK) as $handle) {
+	    if (is_dir($handle)) {
+	        $this->clearCacheDirectories($handle);
+	        $this->assertTrue(rmdir($handle), 'Delete directory '.$handle);
+	        continue;
+	    }
+	    $this->assertTrue(unlink($handle), 'Delete '.$handle);
+    	}
     }
 
     function setUp()
@@ -137,7 +152,10 @@ class CodeCacheTest extends PHPTAL_TestCase
 
         $this->assertFalse($this->phptal->testHasParsed, "Reparse!?");
 
-        $files = glob($this->codeDestination.'*');
+        $subpath_prefix = $this->phptal->getSubpathPrefix();
+        $subpaths = str_repeat($subpath_prefix.'*/', $this->phptal->getSubpathAmount());
+
+        $files = glob($this->codeDestination.'/'.$subpaths.'/*');
         $this->assertEquals(2, count($files)); // one for template, one for cache
         foreach ($files as $file) {
             $this->assertFileExists($file);

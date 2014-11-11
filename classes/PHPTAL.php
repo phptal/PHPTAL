@@ -55,6 +55,13 @@ class PHPTAL
     const HTML5 = 55;
 
     /**
+     * Maximum 32 subpaths (md5 hash) allowed
+     *
+     * @var int
+     */
+    const SUBPATH_LIMIT = 32;
+
+    /**
      * @see getPreFilters()
      */
     protected $prefilters = array();
@@ -167,6 +174,20 @@ class PHPTAL
      * speeds up calls to external templates
      */
     private $externalMacroTemplatesCache = array();
+
+    /**
+     * amount of subpaths to be created during generation
+     *
+     * @var int
+     */
+    private $subpathAmount = 0;
+
+    /**
+     * Default prefix for subpaths
+     *
+     * @var string
+     */
+    private $subpathPrefix = 'phptal_';
 
     //}}}
 
@@ -617,6 +638,41 @@ class PHPTAL
     }
 
     /**
+     * Sets the amount of allowed subpaths
+     *
+     * @param int $subpathAmount
+     */
+    public function setSubpathAmount($subpathAmount) {
+	$this->subpathAmount = (int) $subpathAmount;
+	if ($this->subpathAmount > self::SUBPATH_LIMIT) {
+	    $this->subpathAmount = self::SUBPATH_LIMIT;
+	}
+    }
+
+    /**
+     * @return int
+     */
+    public function getSubpathAmount() {
+	return $this->subpathAmount;
+    }
+
+    /**
+     * Sets the subpath prefix
+     *
+     * @param string $subpathPrefix
+     */
+    public function setSubpathPrefix($subpathPrefix) {
+	$this->subpathPrefix = (string) $subpathPrefix;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSubpathPrefix() {
+	return $this->subpathPrefix;
+    }
+
+    /**
      * Set a context variable.
      * Use it by setting properties on PHPTAL object.
      *
@@ -791,7 +847,31 @@ class PHPTAL
     private function setCodeFile()
     {
         $this->findTemplate();
-        $this->_codeFile = $this->getPhpCodeDestination() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
+        $this->_codeFile = $this->getPhpCodeDestination() . $this->getSubPath() . $this->getFunctionName() . '.' . $this->getPhpCodeExtension();
+    }
+
+    /**
+     * Generate a subpath structure
+     *
+     * @return string
+     */
+    private function getSubPath()
+    {
+        $subpathAmount = $this->getSubpathAmount();
+        if ($subpathAmount === 0) {
+            return '';
+        }
+        $real_path_hash = md5($this->getFunctionName());
+        $subpathPrefix = $this->getSubpathPrefix();
+        $path = '';
+
+        for ($i=0; $i<$subpathAmount; $i++) {
+            $path .= $subpathPrefix . substr($real_path_hash, $i, 1) . DIRECTORY_SEPARATOR;
+        }
+        if (!file_exists($this->getPhpCodeDestination() . $path)) {
+            mkdir($this->getPhpCodeDestination() . $path, 0744, true);
+        }
+        return $path;
     }
 
     protected function resetPrepared()
@@ -912,8 +992,10 @@ class PHPTAL
         $upperLimit = $this->getPhpCodeDestination() . $this->getFunctionNamePrefix($cacheFilesExpire) . '_';
         $lowerLimit = $this->getPhpCodeDestination() . $this->getFunctionNamePrefix(0);
 
+        $subpath = str_repeat('*/', $this->getSubpathAmount());
+
         // second * gets phptal:cache
-        $cacheFiles = glob($this->getPhpCodeDestination() . 'tpl_????????_*.' . $this->getPhpCodeExtension() . '*');
+        $cacheFiles = glob($this->getPhpCodeDestination() . $subpath . 'tpl_????????_*.' . $this->getPhpCodeExtension() . '*');
 
         if ($cacheFiles) {
             foreach ($cacheFiles as $index => $file) {
