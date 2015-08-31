@@ -4,5 +4,3 @@ build
 /doc/temp/
 /docs/
 /tools/phpunit
-*.swo
-*.swp
