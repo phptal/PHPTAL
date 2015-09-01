@@ -4,3 +4,7 @@ build
 /doc/temp/
 /docs/
 /tools/phpunit
+/tools/jsonlint
+/tools/phpdoc
+/tools/phpdoc.php
+/tools/validate-json

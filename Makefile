@@ -1,16 +1,12 @@
 .PHONY: all
 
-all::
-	phing
+all::test docs doc
 
 test::
-	phing test
-
-tar::
-	phing tar
+	tools/phpunit
 
 docs::
-	phing doc
+	tools/phpdoc -d classes -t docs -p
 
 doc::
 	$(MAKE) $(MFLAGS) -C doc
