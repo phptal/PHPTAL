@@ -3,7 +3,7 @@
 
 [![Monthly Downloads](https://poser.pugx.org/phptal/phptal/d/monthly)](https://packagist.org/packages/phptal/phptal)
 [![License](https://poser.pugx.org/phptal/phptal/license)](LICENSE)
-[![Build Status](https://secure.travis-ci.org/pornel/PHPTAL.png?branch=master)](http://travis-ci.org/pornel/PHPTAL)
+[![Build Status](https://travis-ci.org/phptal/PHPTAL.svg?branch=master)](https://travis-ci.org/phptal/PHPTAL)
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/phptal/PHPTAL/badges/quality-score.png)](https://scrutinizer-ci.com/g/phptal/PHPTAL/)
 
 Requirements
