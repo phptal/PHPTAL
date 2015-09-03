@@ -19,12 +19,8 @@ Composer install (recommended)
 You can install this package by using [Composer](http://getcomposer.org).
 Link to Packagist: https://packagist.org/packages/phptal/phptal
 
-```
-{
-    "require": {
-        "phptal/phptal": "~1.3"
-    }
-}
+```sh
+composer require phptal/phptal
 ```
 
 Manual install
