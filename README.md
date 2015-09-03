@@ -1,64 +1,51 @@
 
 # PHPTAL - Template Attribute Language for PHP
 
-Master: [![Build Status](https://secure.travis-ci.org/pornel/PHPTAL.png?branch=master)](http://travis-ci.org/pornel/PHPTAL)
+[![Monthly Downloads](https://poser.pugx.org/phptal/phptal/d/monthly)](https://packagist.org/packages/phptal/phptal)
+[![License](https://poser.pugx.org/phptal/phptal/license)](LICENSE)
+[![Build Status](https://travis-ci.org/phptal/PHPTAL.svg?branch=master)](https://travis-ci.org/phptal/PHPTAL)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/phptal/PHPTAL/badges/quality-score.png)](https://scrutinizer-ci.com/g/phptal/PHPTAL/)
 
-Usage requirements
-==================
+Requirements
+============
 
 To use PHPTAL in your projects, you will only require PHP 5.1.2 or later.
 
-If you want to use the builtin internationalisation system (I18N) the gettext extension must be compiled into PHP (`--with-gettext`).
+If you want to use the builtin internationalisation system (I18N), the php-gettext extension must be installed or compiled into PHP (`--with-gettext`).
 
+Composer install (recommended)
+==============================
 
-Non-PEAR install
-================
+You can install this package by using [Composer](http://getcomposer.org).
+Link to Packagist: https://packagist.org/packages/phptal/phptal
 
-To run you only need PHPTAL.php and files in PHPTAL directory. Other files are for unit tests and PEAR installer.
+```sh
+composer require phptal/phptal
+```
 
-Get the latest PHPTAL package from http://phptal.org.
+Manual install
+==============
+
+Get the latest PHPTAL tarball from https://github.com/phptal/PHPTAL/releases
 
     tar zxvf PHPTAL-X.X.X.tar.gz
     mv PHPTAL-X.X.X/PHPTAL* /path/to/your/php/include/path/
 
+Changelog
+=========
 
-PEAR Install
-============
-
-Get the latest PHPTAL package from http://phptal.org.
-
-Then run:
-
-    pear install PHPTAL-X.X.X.tar.gz
-
-
+[Please see the projects releases page](https://github.com/phptal/PHPTAL/releases)
 
 Getting the latest development version
 ======================================
 
-You can checkout the latest development version using:
+You can find the latest development version on github:
 
-    svn co https://svn.motion-twin.com/phptal/trunk phptal
+	https://github.com/phptal/PHPTAL
 
+Addition development requirements (optional)
+============================================
 
-
-PHPTAL development requirements
-===============================
-
-If you want to hack PHPTAL (don't forget to send me patches), you will require:
-
-  - The PHPTAL development package
-  - PEAR (to easily install other tools)
-    http://pear.php.net
-
-  - Phing to run maintainance tasks
-
-        pear channel-discover pear.phing.info
-        pear install phing/phing
-
-  - PHPUnit 3.4 to run tests
-
-        pear channel-discover pear.phpunit.de
-		pear channel-discover pear.symfony-project.com
-		pear channel-discover components.ez.no
-        pear install phpunit/PHPUnit
+If you would like to generate the offical html/text handbook by calling
+`make doc`, you will need to install the `xmlto` package. Please use
+your operating systems package manager to install it.
