@@ -11,4 +11,6 @@ matrix:
   allow_failures:
     - php: 5.2
 
-script: phpunit -c phpunit.xml
+script: 
+    - phpunit -c phpunit.xml
+    - tools/phptal_lint.php
