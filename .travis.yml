@@ -13,4 +13,4 @@ matrix:
 
 script: 
     - phpunit -c phpunit.xml
-    - tools/phptal_lint.php -e html tests/input/
+    - tools/phptal_lint.php -e html tests/input/phptal*.html
