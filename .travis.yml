@@ -11,4 +11,13 @@ matrix:
   allow_failures:
     - php: 5.2
 
-script: phpunit -c phpunit.xml
+before_script:
+  # Make sure the locales used in the tests are installed
+  - sudo locale-gen en_GB
+  - sudo locale-gen en_GB.utf8
+  - sudo locale-gen fr_FR
+  - sudo locale-gen fr_FR@euro
+  - sudo locale-gen fr_FR.utf8
+
+script:
+  - phpunit -c phpunit.xml
