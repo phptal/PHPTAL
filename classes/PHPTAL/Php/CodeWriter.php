@@ -36,6 +36,11 @@ class PHPTAL_Php_CodeWriter
     private $known_functions = array();
 
 
+    /**
+     * keeps track of the indentation of the code
+     */
+    private $_indentation = 0;
+
     public function __construct(PHPTAL_Php_State $state)
     {
         $this->_state = $state;
