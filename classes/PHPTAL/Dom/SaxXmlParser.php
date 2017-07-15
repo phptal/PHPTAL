@@ -424,7 +424,8 @@ class PHPTAL_Dom_SaxXmlParser
      */
     private static function convertBytesToEntities(array $m)
     {
-        $m = $m[1]; $out = '';
+        $m = $m[1];
+        $out = "";
         for($i=0; $i < strlen($m); $i++)
         {
             $out .= '&#X'.strtoupper(dechex(ord($m[$i]))).';';
