@@ -74,7 +74,7 @@ class PHPTAL_Php_Transformer
                     {
                         $result .= $prefix;
                         $state = self::ST_NONE;
-                        continue;
+                        break;
                     }
                     /* NO BREAK - ST_WHITE is almost the same as ST_NONE */
 
