@@ -836,6 +836,15 @@ class PHPTAL
                 try {
                     eval("?>\n".$result);
                 }
+                catch(ParseError $parseError) {
+                    ob_end_clean();
+                    throw new PHPTAL_TemplateException(
+                        'Parse error: ' . $parseError->getMessage(),
+                        $this->getCodePath(),
+                        $parseError->getLine(),
+                        $parseError
+                    );
+                }
                 catch(Exception $e) {
                     ob_end_clean();
                     throw $e;
