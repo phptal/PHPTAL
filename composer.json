@@ -30,6 +30,9 @@
             "PHPTAL": "classes/"
         }
     },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8.36"
+    },
     "config": {
         "bin-dir": "tools"
     }

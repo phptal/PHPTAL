@@ -21,6 +21,7 @@ matrix:
 
 before_script:
   # Make sure the locales used in the tests are installed
+  - composer install
   - sudo locale-gen en_GB
   - sudo locale-gen en_GB.utf8
   - sudo locale-gen fr_FR
@@ -28,4 +29,4 @@ before_script:
   - sudo locale-gen fr_FR.utf8
 
 script:
-  - phpunit -c phpunit.xml
+  - vendor/phpunit/phpunit/phpunit
