@@ -202,7 +202,7 @@ class TalDefineTest extends PHPTAL_TestCase
     {
         $tal = $this->newPHPTAL();
         $tal->setSource('<div class="blank_bg" tal:define="book relative/book" tal:condition="php: count(book)>0"></div>');
-        $tal->relative = array('book'=>1);
+        $tal->relative = array('book'=>array('foo'));
 
         $this->assertEquals($tal->execute(), '<div class="blank_bg"></div>');
     }

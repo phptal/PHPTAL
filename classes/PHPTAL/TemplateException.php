@@ -26,9 +26,15 @@ class PHPTAL_TemplateException extends PHPTAL_Exception
     public $srcLine;
     private $is_src_accurate;
 
-    public function __construct($msg, $srcFile='', $srcLine=0)
+    /**
+     * @param string    $msg
+     * @param string    $srcFile
+     * @param int       $srcLine
+     * @param Throwable $previous
+     */
+    public function __construct($msg, $srcFile='', $srcLine=0, $previous = null)
     {
-        parent::__construct($msg);
+        parent::__construct($msg, 0, $previous);
 
         if ($srcFile && $srcLine) {
             $this->srcFile = $srcFile;

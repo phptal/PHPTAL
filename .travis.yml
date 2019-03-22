@@ -1,21 +1,20 @@
 language: php
 
 php:
-  - 5.2
-  - 5.4
-  - 5.5
+  - 7.1
+  - 7.2
+  - 7.3
+  - 7.4snapshot
+  - nightly
 
 matrix:
-  include:
-    - php: 5.3
-      dist: precise
-    - php: 5.3.3
-      dist: precise
   allow_failures:
-    - php: 5.2
+    - php: 7.4snapshot
+    - php: nightly
 
 before_script:
   # Make sure the locales used in the tests are installed
+  - composer install
   - sudo locale-gen en_GB
   - sudo locale-gen en_GB.utf8
   - sudo locale-gen fr_FR
@@ -23,4 +22,4 @@ before_script:
   - sudo locale-gen fr_FR.utf8
 
 script:
-  - phpunit -c phpunit.xml
+  - vendor/phpunit/phpunit/phpunit
