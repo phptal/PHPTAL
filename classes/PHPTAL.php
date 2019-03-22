@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-define('PHPTAL_VERSION', '1_3_0');
+define('PHPTAL_VERSION', '1_3_1');
 
 PHPTAL::autoloadRegister();
 
@@ -835,6 +835,15 @@ class PHPTAL
                 ob_start();
                 try {
                     eval("?>\n".$result);
+                }
+                catch(ParseError $parseError) {
+                    ob_end_clean();
+                    throw new PHPTAL_TemplateException(
+                        'Parse error: ' . $parseError->getMessage(),
+                        $this->getCodePath(),
+                        $parseError->getLine(),
+                        $parseError
+                    );
                 }
                 catch(Exception $e) {
                     ob_end_clean();
