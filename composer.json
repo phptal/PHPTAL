@@ -26,16 +26,13 @@
     },
     "require-dev": {
         "php": ">=5.3.3",
-        "phpunit/phpunit": "~4.8",
+        "phpunit/phpunit": "^4.8.36",
         "phpdocumentor/phpdocumentor": "~2.8"
     },
     "autoload": {
         "psr-0": {
             "PHPTAL": "classes/"
         }
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^4.8.36"
     },
     "config": {
         "bin-dir": "tools"
