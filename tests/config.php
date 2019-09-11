@@ -13,6 +13,8 @@
  * @link     http://phptal.org/
  */
 
+use PHPUnit\Framework\TestCase;
+
 error_reporting( E_ALL | E_STRICT );
 assert_options(ASSERT_ACTIVE, 1);
 
@@ -35,7 +37,7 @@ if (!class_exists('PHPTAL')) {
     }
 }
 
-abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
+abstract class PHPTAL_TestCase extends TestCase
 {
     private $cwd_backup, $buffer_level;
 
