@@ -5,11 +5,7 @@ php:
   - 7.2
   - 7.3
   - 7.4
-  - nightly
-
-matrix:
-  allow_failures:
-    - php: nightly
+  - 8.0
 
 before_script:
   # Make sure the locales used in the tests are installed
@@ -21,5 +17,5 @@ before_script:
   - sudo locale-gen fr_FR.utf8
 
 script:
-  - vendor/phpunit/phpunit/phpunit
+  - tools/phpunit
   - tools/phptal_lint.php -e html tests/input/phptal*.html

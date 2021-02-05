@@ -35,7 +35,7 @@ if (!class_exists('PHPTAL')) {
     }
 }
 
-abstract class PHPTAL_TestCase extends PHPUnit_Framework_TestCase
+abstract class PHPTAL_TestCase extends \PHPUnit\Framework\TestCase
 {
     private $cwd_backup, $buffer_level;
 

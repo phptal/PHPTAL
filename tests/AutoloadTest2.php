@@ -12,7 +12,7 @@
  * @link     http://phptal.org/
  */
 
-class AutoloadTest2 extends PHPUnit_Framework_TestCase
+class AutoloadTest2 extends \PHPUnit\Framework\TestCase
 {
     protected $backupGlobals = false;
 
