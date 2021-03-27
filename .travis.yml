@@ -4,17 +4,12 @@ php:
   - 7.1
   - 7.2
   - 7.3
-  - 7.4snapshot
-  - nightly
-
-matrix:
-  allow_failures:
-    - php: 7.4snapshot
-    - php: nightly
+  - 7.4
+  - 8.0
 
 before_script:
   # Make sure the locales used in the tests are installed
-  - composer install
+  - composer update --ignore-platform-req=php
   - sudo locale-gen en_GB
   - sudo locale-gen en_GB.utf8
   - sudo locale-gen fr_FR
@@ -22,5 +17,5 @@ before_script:
   - sudo locale-gen fr_FR.utf8
 
 script:
-  - vendor/phpunit/phpunit/phpunit
+  - tools/phpunit
   - tools/phptal_lint.php -e html tests/input/phptal*.html

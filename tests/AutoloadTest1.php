@@ -20,7 +20,7 @@ if (!function_exists('__autoload')) {
     }
 }
 
-class AutoloadTest1 extends PHPUnit_Framework_TestCase
+class AutoloadTest1 extends \PHPUnit\Framework\TestCase
 {
     protected $backupGlobals = false;
 

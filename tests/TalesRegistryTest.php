@@ -42,12 +42,11 @@ class TalesRegistryTest extends PHPTAL_TestCase
     }
 
     /**
-     * @runInSeparateProcess
      * @expectedException PHPTAL_UnknownModifierException
      */
     function testUnregisterFunction()
     {
-        $test_prefix = 'testprefix';
+        $test_prefix = uniqid('testprefix_');
         PHPTAL_TalesRegistry::getInstance()->registerPrefix($test_prefix, 'registry_test_callback3');
         PHPTAL_TalesRegistry::getInstance()->unregisterPrefix($test_prefix);
         $this->newPHPTAL()->setSource('<p tal:content="'.$test_prefix.':"/>')->execute();
