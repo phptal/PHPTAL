@@ -32,9 +32,6 @@
             "PHPTAL": "classes/"
         }
     },
-    "config": {
-        "bin-dir": "tools"
-    },
     "bin": [
         "tools/phptal_lint.php"
     ]
