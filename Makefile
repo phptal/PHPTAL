@@ -3,7 +3,7 @@
 all::test docs doc
 
 test::
-	tools/phpunit
+	vendor/bin/phpunit
 
 doc::
 	$(MAKE) $(MFLAGS) -C doc
