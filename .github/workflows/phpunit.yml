@@ -58,11 +58,11 @@ jobs:
 
       - name: "Generate Locales"
         run: |
-          locale-gen en_GB
-          locale-gen en_GB.utf8
-          locale-gen fr_FR
-          locale-gen fr_FR@euro
-          locale-gen fr_FR.utf8
+          sudo locale-gen en_GB
+          sudo locale-gen en_GB.utf8
+          sudo locale-gen fr_FR
+          sudo locale-gen fr_FR@euro
+          sudo locale-gen fr_FR.utf8
 
       - name: "Tests"
         run: "vendor/bin/phpunit"
