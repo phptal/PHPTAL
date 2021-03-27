@@ -18,12 +18,11 @@ require_once 'I18NDummyTranslator.php';
 
 class I18NTranslateTest extends PHPTAL_TestCase
 {
-    /**
-     * @expectedException PHPTAL_ConfigurationException
-     */
     function testFailsWhenTranslatorNotSet()
     {
         $tpl = $this->newPHPTAL('input/i18n-translate-01.html');
+
+        $this->expectException(PHPTAL_ConfigurationException::class);
         $tpl->execute();
     }
 
@@ -158,20 +157,20 @@ class I18NTranslateTest extends PHPTAL_TestCase
         $this->assertEquals('<div>&lt;foo&gt; translated</div>', $tpl->execute());
     }
 
-    /**
-     * @expectedException PHPTAL_TemplateException
-     */
     function testRejectsEmptyKey()
     {
-        $this->newPHPTAL()->setTranslator( $t = new DummyTranslator() )->setSource('<div i18n:translate=""></div>')->execute();
+        $tpl = $this->newPHPTAL()->setTranslator( $t = new DummyTranslator() )->setSource('<div i18n:translate=""></div>');
+
+        $this->expectException(PHPTAL_TemplateException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_TemplateException
-     */
     function testRejectsEmptyKeyMarkup()
     {
-        $this->newPHPTAL()->setTranslator( $t = new DummyTranslator() )->setSource('<div i18n:translate=""> <span tal:content="string:test"> </span> </div>')->execute();
+        $tpl = $this->newPHPTAL()->setTranslator( $t = new DummyTranslator() )->setSource('<div i18n:translate=""> <span tal:content="string:test"> </span> </div>');
+
+        $this->expectException(PHPTAL_TemplateException::class);
+        $tpl->execute();
     }
 
 

@@ -76,20 +76,15 @@ class NamespacesTest extends PHPTAL_TestCase
     }
 
     // different kind of namespace
-
-    /**
-     * @expectedException PHPTAL_ConfigurationException
-     */
     function testPHPTALNamespaceClassRejectsEmptyNS()
     {
+        $this->expectException(PHPTAL_ConfigurationException::class);
         new Test_PHPTAL_Namespace('test', '');
     }
 
-    /**
-     * @expectedException PHPTAL_ConfigurationException
-     */
     function testPHPTALNamespaceClassRejectsEmptyPrefix()
     {
+        $this->expectException(PHPTAL_ConfigurationException::class);
         new Test_PHPTAL_Namespace('', 'urn:test');
     }
 }

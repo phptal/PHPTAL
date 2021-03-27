@@ -287,7 +287,7 @@ class TalRepeatTest extends PHPTAL_TestCase
 
         $res = $tpl->execute();
         $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]11[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $res,$tpl->getCodePath());
-        $this->assertRegExp("/rewind.*rewind/s",$i->log);
+        $this->assertMatchesRegularExpression("/rewind.*rewind/s",$i->log);
         $this->assertEquals("1[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]11[0]00[1]00[2]00[3]00[4]00[5]00[6]00[7]00[8]00[9]1", $tpl->execute());
     }
 

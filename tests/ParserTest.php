@@ -51,8 +51,8 @@ class ParserTest extends PHPTAL_TestCase
         }
         catch (Exception $e)
         {
-            $this->assertContains( 'href', $e->getMessage() );
-            $this->assertContains( 'quote', $e->getMessage() );
+            $this->assertStringContainsString( 'href', $e->getMessage() );
+            $this->assertStringContainsString( 'quote', $e->getMessage() );
         }
     }
 

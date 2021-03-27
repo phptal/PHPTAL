@@ -117,12 +117,12 @@ class TalesTest extends PHPTAL_TestCase
 
     function testTaleNeverReturnsArray()
     {
-        $this->assertInternalType('string', phptal_tale('foo | bar | baz | nothing'));
+        $this->assertIsString(phptal_tale('foo | bar | baz | nothing'));
     }
 
     function testTalesReturnsArray()
     {
-        $this->assertInternalType('array', phptal_tales('foo | bar | baz | nothing'));
+        $this->assertIsArray(phptal_tales('foo | bar | baz | nothing'));
     }
 
     function testInterpolate1()
@@ -184,21 +184,17 @@ class TalesTest extends PHPTAL_TestCase
         $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testForbidsStatementsInCustomModifiers()
     {
-        $tpl = $this->newPHPTAL();
+        $tpl = $this->newPHPTAL()->setSource('<x tal:content="testmodifier:foo"/>');
 
-        $tpl->setSource('<x tal:content="testmodifier:foo"/>')->execute();
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testThrowsInvalidPath()
     {
+        $this->expectException(PHPTAL_ParserException::class);
         phptal_tales("I am not valid expression");
     }
 

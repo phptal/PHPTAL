@@ -68,13 +68,13 @@ class DoctypeTest extends PHPTAL_TestCase
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><whatever/>');
 
-        $this->assertContains("DOCTYPE html PUBLIC", $tpl->execute());
-        $this->assertContains("DOCTYPE html PUBLIC", $tpl->execute());
+        $this->assertStringContainsString("DOCTYPE html PUBLIC", $tpl->execute());
+        $this->assertStringContainsString("DOCTYPE html PUBLIC", $tpl->execute());
 
         $tpl->setSource('<whatever/>');
 
-        $this->assertNotContains("DOCTYPE html PUBLIC", $tpl->execute());
-        $this->assertNotContains("DOCTYPE html PUBLIC", $tpl->execute());
+        $this->assertStringNotContainsString("DOCTYPE html PUBLIC", $tpl->execute());
+        $this->assertStringNotContainsString("DOCTYPE html PUBLIC", $tpl->execute());
     }
 
     /**

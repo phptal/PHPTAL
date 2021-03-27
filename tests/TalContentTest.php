@@ -131,49 +131,45 @@ EOT;
         $this->assertEquals($res, $exp);
     }
 
-      /**
-       * @expectedException PHPTAL_VariableNotFoundException
-       */
       function testErrorsThrow()
       {
           $tpl = $this->newPHPTAL();
           $tpl->setSource('<p tal:content="erroridontexist"/>');
+
+          $this->expectException(PHPTAL_VariableNotFoundException::class);
           $tpl->execute();
       }
 
-      /**
-       * @expectedException PHPTAL_VariableNotFoundException
-       */
       function testErrorsThrow2()
       {
           $this->markTestSkipped("tal:define and tal:attributes rely on chains not throwing");//FIXME
 
           $tpl = $this->newPHPTAL();
           $tpl->setSource('<p tal:content="erroridontexist2 | erroridontexist2"/>');
+
+          $this->expectException(PHPTAL_VariableNotFoundException::class);
           $tpl->execute();
       }
 
-      /**
-       * @expectedException PHPTAL_VariableNotFoundException
-       */
       function testErrorsThrow3()
       {
           $this->markTestSkipped("tal:define and tal:attributes rely on chains not throwing");//FIXME
 
           $tpl = $this->newPHPTAL();
           $tpl->setSource('<p tal:replace="erroridontexist3 | erroridontexist3"/>');
+
+          $this->expectException(PHPTAL_VariableNotFoundException::class);
           $tpl->execute();
       }
 
-      /**
-       * @expectedException PHPTAL_VariableNotFoundException
-       */
       function testErrorsThrow4()
       {
           $this->markTestSkipped("tal:define and tal:attributes rely on chains not throwing");//FIXME
 
           $tpl = $this->newPHPTAL();
           $tpl->setSource('<p tal:condition="erroridontexist4 | erroridontexist4"/>');
+
+          $this->expectException(PHPTAL_VariableNotFoundException::class);
           $tpl->execute();
       }
 

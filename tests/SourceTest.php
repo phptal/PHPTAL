@@ -90,7 +90,7 @@ class SourceTest extends PHPTAL_TestCase
         $tpl->setTemplate("xyz");
 
         $res = $tpl->execute();
-        $this->assertContains('<p class="custom">xyz ', $res);
+        $this->assertStringContainsString('<p class="custom">xyz ', $res);
 
         // template should be cached
         $this->assertEquals($res, $tpl->execute());
@@ -105,7 +105,7 @@ class SourceTest extends PHPTAL_TestCase
         $tpl->setTemplate("nocache");
 
         $res = $tpl->execute();
-        $this->assertContains('<p class="custom">nocache ', $res);
+        $this->assertStringContainsString('<p class="custom">nocache ', $res);
 
         // template should not be cached
         $this->assertEquals($res, $tpl->execute());
@@ -113,12 +113,12 @@ class SourceTest extends PHPTAL_TestCase
         $this->assertNotEquals($res, $tpl->execute());
     }
 
-    /**
-     * @expectedException PHPTAL_IOException
-     */
     function testFailsIfNotFound()
     {
-        $tpl = $this->newPHPTAL()->addSourceResolver(new CantFindAThing())->setTemplate("something")->execute();
+        $tpl = $this->newPHPTAL()->addSourceResolver(new CantFindAThing())->setTemplate("something");
+
+        $this->expectException(PHPTAL_IOException::class);
+        $tpl->execute();
     }
 
     function testFallsBack()

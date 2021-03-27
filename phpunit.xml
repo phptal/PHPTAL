@@ -1,20 +1,8 @@
-<!--
-
-This is PHPUnit configuration file. Install PHPUnit:
-
-http://www.phpunit.de/manual/3.5/en/installation.html
-
-and run "phpunit" command in this directory. It will run all tests,
-ensuring that your copy of PHPTAL works correctly.
-
---><phpunit
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="./tests/config.php"
-    backupGlobals="false"
-    backupStaticAttributes="false"
-    colors="false"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true">
+>
     <php>
         <ini name="display_errors" value="1"/>
         <ini name="zend.exception_ignore_args" value="0"/>

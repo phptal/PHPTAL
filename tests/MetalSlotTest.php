@@ -215,8 +215,8 @@ class MetalSlotTest extends PHPTAL_TestCase
 
         $tpl_php_source = file_get_contents($tpl->getCodePath());
 
-        $this->assertNotContains("fillSlot(", $tpl_php_source);
-        $this->assertContains("fillSlotCallback(", $tpl_php_source);
+        $this->assertStringNotContainsString("fillSlot(", $tpl_php_source);
+        $this->assertStringContainsString("fillSlotCallback(", $tpl_php_source);
     }
 
     function testUsesBufferForSmallSlots()
@@ -234,8 +234,8 @@ class MetalSlotTest extends PHPTAL_TestCase
 
         $tpl_php_source = file_get_contents($tpl->getCodePath());
 
-        $this->assertNotContains("fillSlotCallback(", $tpl_php_source);
-        $this->assertContains("fillSlot(", $tpl_php_source);
+        $this->assertStringNotContainsString("fillSlotCallback(", $tpl_php_source);
+        $this->assertStringContainsString("fillSlot(", $tpl_php_source);
     }
 
     function testSlotBug()

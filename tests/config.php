@@ -39,7 +39,7 @@ abstract class PHPTAL_TestCase extends \PHPUnit\Framework\TestCase
 {
     private $cwd_backup, $buffer_level;
 
-    function setUp()
+    function setUp(): void
     {
         $this->assertTrue(defined('PHPTAL_VERSION'));
         $this->assertTrue(PHPTAL_VERSION >= '1_2_2');
@@ -55,7 +55,7 @@ abstract class PHPTAL_TestCase extends \PHPUnit\Framework\TestCase
         parent::setUp();
     }
 
-    function tearDown()
+    function tearDown(): void
     {
         parent::tearDown();
 

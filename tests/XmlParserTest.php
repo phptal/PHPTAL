@@ -76,25 +76,20 @@ class XmlParserTest extends PHPTAL_TestCase
         $this->assertEquals(7, $builder->datas);
     }
 
-
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     public function testRejectsInvalidAttributes1()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseString($builder = new MyDocumentBuilder(), '<foo bar="bar"baz="baz"/>')->getResult();
-        $this->fail($builder->result);
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $parser->parseString($builder = new MyDocumentBuilder(), '<foo bar="bar"baz="baz"/>');
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     public function testRejectsInvalidAttributes2()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
-        $parser->parseString($builder = new MyDocumentBuilder(), '<foo bar;="bar"/>')->getResult();
-        $this->fail($builder->result);
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $parser->parseString($builder = new MyDocumentBuilder(), '<foo bar;="bar"/>');
     }
 
     public function testSkipsBom()
@@ -142,15 +137,13 @@ class XmlParserTest extends PHPTAL_TestCase
         { /* ok - rejecting is one way to do it */ }
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     public function testSelfClosingSyntaxError()
     {
         $parser = new PHPTAL_Dom_SaxXmlParser('UTF-8');
         $src = '<a / >';
 
-        $parser->parseString($builder = new MyDocumentBuilder(), $src)->getResult();
+        $this->expectException(PHPTAL_ParserException::class);
+        $parser->parseString($builder = new MyDocumentBuilder(), $src);
     }
 
     public function testFixOrRejectEntities()
@@ -247,9 +240,9 @@ xxxx/>
         }
         catch(PHPTAL_ParserException $e)
         {
-            $this->assertContains('ishallnotbeclosed', $e->getMessage());
-            $this->assertNotContains('imrootelement', $e->getMessage());
-            $this->assertNotContains("documentElement", $e->getMessage());
+            $this->assertStringContainsString('ishallnotbeclosed', $e->getMessage());
+            $this->assertStringNotContainsString('imrootelement', $e->getMessage());
+            $this->assertStringNotContainsString("documentElement", $e->getMessage());
         }
     }
 
@@ -263,8 +256,8 @@ xxxx/>
         }
         catch(PHPTAL_ParserException $e)
         {
-            $this->assertNotContains("documentElement", $e->getMessage());
-            $this->assertRegExp("/element_e.*element_d.*element_c.*element_b.*element_a/", $e->getMessage());
+            $this->assertStringNotContainsString("documentElement", $e->getMessage());
+            $this->assertMatchesRegularExpression("/element_e.*element_d.*element_c.*element_b.*element_a/", $e->getMessage());
         }
     }
 

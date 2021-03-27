@@ -84,36 +84,30 @@ class MetalMacroTest extends PHPTAL_TestCase
         $this->assertEquals($exp, $res);
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testBadMacroNameException()
     {
         $tpl = $this->newPHPTAL('input/metal-macro.08.html');
-        $res = $tpl->execute();
-        $this->fail('Bad macro name exception not thrown');
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_MacroMissingException
-     */
     function testExternalMacroMissingException()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block metal:use-macro="input/metal-macro.07.html/this-macro-doesnt-exist"/>');
-        $res = $tpl->execute();
-        $this->fail('Bad macro name exception not thrown');
+
+        $this->expectException(PHPTAL_MacroMissingException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_MacroMissingException
-     */
     function testMacroMissingException()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<tal:block metal:use-macro="this-macro-doesnt-exist"/>');
-        $res = $tpl->execute();
-        $this->fail('Bad macro name exception not thrown');
+
+        $this->expectException(PHPTAL_MacroMissingException::class);
+        $tpl->execute();
     }
 
     function testMixedCallerDefiner()
@@ -126,9 +120,6 @@ class MetalMacroTest extends PHPTAL_TestCase
         $this->assertEquals('Call OK OK', trim(preg_replace('/\s+/', ' ', $res)));
     }
 
-    /**
-     * @expectedException PHPTAL_Exception
-     */
     function testMacroRedefinitionIsGraceful()
     {
         $tpl = $this->newPHPTAL();
@@ -137,9 +128,9 @@ class MetalMacroTest extends PHPTAL_TestCase
           <metal:block define-macro=" foo " />
               <a metal:define-macro="foo">bar</a>
          </p>');
-        $tpl->execute();
 
-        $this->fail("Allowed duplicate macro");
+        $this->expectException(PHPTAL_Exception::class);
+        $tpl->execute();
     }
 
     function testSameMacroCanBeDefinedInDifferentTemplates()
@@ -153,14 +144,12 @@ class MetalMacroTest extends PHPTAL_TestCase
         $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testExternalTemplateThrowsError()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<phptal:block metal:use-macro="input/metal-macro.10.html/throwerr"/>');
 
+        $this->expectException(PHPTAL_ParserException::class);
         $tpl->execute();
     }
 

@@ -5,9 +5,6 @@ all::test docs doc
 test::
 	tools/phpunit
 
-docs::
-	tools/phpdoc -d classes -t docs -p
-
 doc::
 	$(MAKE) $(MFLAGS) -C doc
 
