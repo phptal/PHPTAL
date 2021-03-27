@@ -43,28 +43,24 @@ class CommentTest extends PHPTAL_TestCase
         $this->assertEquals($source, $res);
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testNestedComments()
     {
         $source = '<html><!--<!--<!--></html>';
         $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
-        $res = $tpl->execute();
-        $this->fail("Ill-formed comment accepted");
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testDashedComment()
     {
         $source = '<html><!--- XML hates you ---></html>';
         $tpl = $this->newPHPTAL();
         $tpl->setSource($source);
-        $res = $tpl->execute();
-        $this->fail("Ill-formed comment accepted");
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
 

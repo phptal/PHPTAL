@@ -19,7 +19,7 @@ class TemplateRepositoryTest extends PHPTAL_TestCase
     function testLooksInRepo()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setTemplateRepository(dirname(__FILE__).'/input');
+        $tpl->setTemplateRepository(__DIR__.'/input');
         $tpl->setTemplate('phptal.01.html');
         $tpl->execute();
     }
@@ -27,23 +27,22 @@ class TemplateRepositoryTest extends PHPTAL_TestCase
     function testSkipsNotFound()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setTemplateRepository(dirname(__FILE__).'/invalid');
-        $tpl->setTemplateRepository(dirname(__FILE__).'/input');
-        $tpl->setTemplateRepository(dirname(__FILE__).'/bogus');
+        $tpl->setTemplateRepository(__DIR__.'/invalid');
+        $tpl->setTemplateRepository(__DIR__.'/input');
+        $tpl->setTemplateRepository(__DIR__.'/bogus');
         $tpl->setTemplate('phptal.02.html');
         $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_IOException
-     */
     function testFailsIfNoneMatch()
     {
         $tpl = $this->newPHPTAL();
-        $tpl->setTemplateRepository(dirname(__FILE__).'/invalid');
-        $tpl->setTemplateRepository(dirname(__FILE__).'/error');
-        $tpl->setTemplateRepository(dirname(__FILE__).'/bogus');
+        $tpl->setTemplateRepository(__DIR__.'/invalid');
+        $tpl->setTemplateRepository(__DIR__.'/error');
+        $tpl->setTemplateRepository(__DIR__.'/bogus');
         $tpl->setTemplate('phptal.01.html');
+
+        $this->expectException(PHPTAL_IOException::class);
         $tpl->execute();
     }
 
@@ -55,13 +54,13 @@ class TemplateRepositoryTest extends PHPTAL_TestCase
         $tpl->setTemplateRepository('testbaz/');
 
         $repos = $tpl->getTemplateRepositories();
-        $this->assertInternalType('array', $repos);
-        $this->assertEquals(3, count($repos));
+        $this->assertIsArray($repos);
+        $this->assertCount(3, $repos);
 
         foreach($repos as $repo)
         {
-            $this->assertInternalType('string', $repo);
-            $this->assertContains('test', $repo);
+            $this->assertIsString($repo);
+            $this->assertStringContainsString('test', $repo);
         }
     }
 

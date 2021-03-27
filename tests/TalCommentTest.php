@@ -22,7 +22,7 @@ class DummyPhpNode extends PHPTAL_Dom_Element {
 
 class TalCommentTest extends PHPTAL_TestCase
 {
-    function setUp()
+    function setUp(): void
     {
         parent::setUp();
         $state = new PHPTAL_Php_State($this->newPHPTAL());

@@ -41,39 +41,38 @@ class TalesRegistryTest extends PHPTAL_TestCase
         parent::prepareTemplate( $template );
     }
 
-    /**
-     * @expectedException PHPTAL_UnknownModifierException
-     */
     function testUnregisterFunction()
     {
         $test_prefix = uniqid('testprefix_');
         PHPTAL_TalesRegistry::getInstance()->registerPrefix($test_prefix, 'registry_test_callback3');
         PHPTAL_TalesRegistry::getInstance()->unregisterPrefix($test_prefix);
-        $this->newPHPTAL()->setSource('<p tal:content="'.$test_prefix.':"/>')->execute();
+        $tpl = $this->newPHPTAL()->setSource('<p tal:content="'.$test_prefix.':"/>');
+
+        $this->expectException(PHPTAL_UnknownModifierException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ConfigurationException
-     */
     function testCantUnregisterNonRegistered()
     {
-        PHPTAL_TalesRegistry::getInstance()->unregisterPrefix('doesnotexist');
+        $registry = PHPTAL_TalesRegistry::getInstance();
+
+        $this->expectException(PHPTAL_ConfigurationException::class);
+        $registry->unregisterPrefix('doesnotexist');
     }
 
-    /**
-     * @expectedException PHPTAL_ConfigurationException
-     */
     function testCantRegisterNonExistant()
     {
-        PHPTAL_TalesRegistry::getInstance()->registerPrefix('registry_test_2', 'doesnotexist');
+        $registry = PHPTAL_TalesRegistry::getInstance();
+
+        $this->expectException(PHPTAL_ConfigurationException::class);
+        $registry->registerPrefix('registry_test_2', 'doesnotexist');
     }
 
-    /**
-     * @expectedException PHPTAL_ConfigurationException
-     */
     function testCantRegisterTwice()
     {
         PHPTAL_TalesRegistry::getInstance()->registerPrefix('registry_test_3', 'registry_test_callback');
+
+        $this->expectException(PHPTAL_ConfigurationException::class);
         PHPTAL_TalesRegistry::getInstance()->registerPrefix('registry_test_3', 'registry_test_callback');
     }
 

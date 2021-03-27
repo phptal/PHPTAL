@@ -92,8 +92,8 @@ class ReadableErrorTest extends PHPTAL_TestCase
         }
         catch (PHPTAL_TemplateException $e) {
             $msg = $e->getMessage();
-            $this->assertInternalType('string',$e->srcFile, $msg);
-            $this->assertContains($expected_file ? $expected_file : $file, $e->srcFile, $msg);
+            $this->assertIsString($e->srcFile, $msg);
+            $this->assertStringContainsString($expected_file ? $expected_file : $file, $e->srcFile, $msg);
             $this->assertEquals($line, $e->srcLine, "Wrong line number: ". $msg . "\n". $tpl->getCodePath());
         }
     }

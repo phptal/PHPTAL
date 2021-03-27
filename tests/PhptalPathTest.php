@@ -74,7 +74,7 @@ class PhptalPathTest extends PHPTAL_TestCase
         try {
             $output = $tpl->execute();
         } catch (PHPTAL_VariableNotFoundException $E) {
-            $this->assertRegExp("/Array 'details' doesn/", $E->getMessage());
+            $this->assertMatchesRegularExpression("/Array 'details' doesn/", $E->getMessage());
             return;
         }
 

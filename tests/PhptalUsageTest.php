@@ -25,8 +25,8 @@ class PhptalUsageTest extends PHPTAL_TestCase
         $t->setTemplate('input/multiuse.02.html');
         $b = $t->execute();
         $this->assertTrue($a != $b, "$a == $b");
-        $this->assertContains('hello', $a);
-        $this->assertContains('hello', $b);
+        $this->assertStringContainsString('hello', $a);
+        $this->assertStringContainsString('hello', $b);
     }
 
     function testSetSourceReset()

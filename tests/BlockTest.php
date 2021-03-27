@@ -40,15 +40,14 @@ class BlockTest extends PHPTAL_TestCase
         $this->assertEquals('<foo:block xmlns:foo="http://phptal.example.com">foo</foo:block>', $res);
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testInvalidNamespaceBlock()
     {
         $t = $this->newPHPTAL();
 
         $t->setSource('<foo:block>foo</foo:block>');
-        $res = $t->execute();
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $t->execute();
     }
 }
 

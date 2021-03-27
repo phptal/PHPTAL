@@ -309,13 +309,12 @@ class TalDefineTest extends PHPTAL_TestCase
         $this->assertEquals('label var', $tpl->execute());
     }
 
-    /**
-     * @expectedException PHPTAL_TemplateException
-     */
     function testRejectsInvalidExpression()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<x tal:define="global foo | default"/>');
+
+        $this->expectException(PHPTAL_TemplateException::class);
         $tpl->execute();
     }
 

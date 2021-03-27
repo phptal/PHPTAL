@@ -308,34 +308,31 @@ EOT;
         ini_restore('short_open_tag');
     }
 
-    /**
-     * @expectedException PHPTAL_VariableNotFoundException
-     */
     function testErrorsThrow()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${error}</p>');
+
+        $this->expectException(PHPTAL_VariableNotFoundException::class);
         $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_VariableNotFoundException
-     */
     function testErrorsThrow2()
     {
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>${error | error}</p>');
+
+        $this->expectException(PHPTAL_VariableNotFoundException::class);
         $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_VariableNotFoundException
-     */
     function testErrorsThrow3()
     {
         $tpl = $this->newPHPTAL();
         $tpl->foo = array();
         $tpl->setSource('<p>${foo/error | foo/error}</p>');
+
+        $this->expectException(PHPTAL_VariableNotFoundException::class);
         $tpl->execute();
     }
 

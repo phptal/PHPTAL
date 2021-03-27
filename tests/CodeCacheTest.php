@@ -49,20 +49,20 @@ class CodeCacheTest extends PHPTAL_TestCase
 
     private function clearCache()
     {
-        $this->assertContains(DIRECTORY_SEPARATOR.'temp_output'.DIRECTORY_SEPARATOR, $this->codeDestination);
+        $this->assertStringContainsString(DIRECTORY_SEPARATOR.'temp_output'.DIRECTORY_SEPARATOR, $this->codeDestination);
         foreach (glob($this->codeDestination.'tpl_*') as $tpl) {
             $this->assertTrue(unlink($tpl), "Delete $tpl");
         }
     }
 
-    function setUp()
+    function setUp(): void
     {
         parent::setUp();
         $this->resetPHPTAL();
         $this->clearCache();
     }
 
-    function tearDown()
+    function tearDown(): void
     {
         $this->clearCache();
         parent::tearDown();
@@ -151,7 +151,7 @@ class CodeCacheTest extends PHPTAL_TestCase
 
         // can't check for reparse, because PHPTAL uses function_exists() as a shortcut!
         foreach ($files as $file) {
-            $this->assertFileNotExists($file);
+            $this->assertFileDoesNotExist($file);
         }
     }
 

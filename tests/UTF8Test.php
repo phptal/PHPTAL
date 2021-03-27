@@ -33,7 +33,7 @@ class UTF8Test extends PHPTAL_TestCase
 
     function testFile()
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             rawurldecode("%D0%97%D0%B0%D1%80%D0%B5%D0%B3%D0%B8%D1%81%D1%82%D1%80%D0%B8%D1%80%D1%83%D0%B9%D1%82%D0%B5%D1%81%D1%8C"),
             $this->newPHPTAL('input/utf8.xml')->execute()
         );
@@ -101,12 +101,9 @@ class UTF8Test extends PHPTAL_TestCase
     }
 
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testUnexpectedContinuationBytes()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>                                                                            |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>                                                                            |
         Each unexpected continuation byte should be separately signalled as a         |
         malformed sequence of its own.                                                |
                                                                                       |
@@ -118,69 +115,69 @@ class UTF8Test extends PHPTAL_TestCase
         3.1.5  4 continuation bytes: "%80%BF%80%BF"                                           |
         3.1.6  5 continuation bytes: "%80%BF%80%BF%80"                                          |
         3.1.7  6 continuation bytes: "%80%BF%80%BF%80%BF"                                         |
-        3.1.8  7 continuation bytes: "%80%BF%80%BF%80%BF%80"                                        |</p>'))->execute();
+        3.1.8  7 continuation bytes: "%80%BF%80%BF%80%BF%80"                                        |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testContinuations2()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>
             3.1.9  Sequence of all 64 possible continuation bytes %280x80-0xbf%29:            |
                                                                                            |
                 "%80%81%82%83%84%85%86%87%88%89%8A%8B%8C%8D%8E%8F                                                          |
                  %90%91%92%93%94%95%96%97%98%99%9A%9B%9C%9D%9E%9F                                                          |
                  %A0%A1%A2%A3%A4%A5%A6%A7%A8%A9%AA%AB%AC%AD%AE%AF                                                          |
-                 %B0%B1%B2%B3%B4%B5%B6%B7%B8%B9%BA%BB%BC%BD%BE%BF"                                                         |</p>'))->execute();
+                 %B0%B1%B2%B3%B4%B5%B6%B7%B8%B9%BA%BB%BC%BD%BE%BF"                                                         |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testSequences2()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>3.2  Lonely start characters                                                  |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>3.2  Lonely start characters                                                  |
                                                                                        |
          3.2.1  All 32 first bytes of 2-byte sequences %280xc0-0xdf%29%2C                    |
                 each followed by a space character:                                    |
                                                                                        |
             "%C0 %C1 %C2 %C3 %C4 %C5 %C6 %C7 %C8 %C9 %CA %CB %CC %CD %CE %CF                                           |
-             %D0 %D1 %D2 %D3 %D4 %D5 %D6 %D7 %D8 %D9 %DA %DB %DC %DD %DE %DF "                                         |</p>'))->execute();
+             %D0 %D1 %D2 %D3 %D4 %D5 %D6 %D7 %D8 %D9 %DA %DB %DC %DD %DE %DF "                                         |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function test3ByteSquences()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>                                                                           |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>                                                                           |
         3.2.2  All 16 first bytes of 3-byte sequences %280xe0-0xef%29%2C                    |
                each followed by a space character:                                    |
                                                                                       |
-           "%E0 %E1 %E2 %E3 %E4 %E5 %E6 %E7 %E8 %E9 %EA %EB %EC %ED %EE %EF "                                         |</p>'))->execute();
+           "%E0 %E1 %E2 %E3 %E4 %E5 %E6 %E7 %E8 %E9 %EA %EB %EC %ED %EE %EF "                                         |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function test4ByteSequences()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>
                                                                                       |
         3.2.3  All 8 first bytes of 4-byte sequences %280xf0-0xf7%29%2C                     |
                each followed by a space character:                                    |
                                                                                       |
            "%F0 %F1 %F2 %F3 %F4 %F5 %F6 %F7 "                                                         |
-                                                                                      |</p>'))->execute();
+                                                                                      |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function test5ByteSequences()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>
 
         3.2.4  All 4 first bytes of 5-byte sequences %280xf8-0xfb%29%2C                     |
                each followed by a space character:                                    |
@@ -190,15 +187,15 @@ class UTF8Test extends PHPTAL_TestCase
         3.2.5  All 2 first bytes of 6-byte sequences %280xfc-0xfd%29%2C                     |
                each followed by a space character:                                    |
                                                                                       |
-           "%FC %FD "                                                                     |</p>'))->execute();
+           "%FC %FD "                                                                     |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testIncompleteSequence()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>                                                                              |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>                                                                              |
         3.3  Sequences with last continuation byte missing                            |
                                                                                       |
         All bytes of an incomplete sequence should be signalled as a single           |
@@ -207,44 +204,44 @@ class UTF8Test extends PHPTAL_TestCase
                                                                                       |
         3.3.1  2-byte sequence with last byte missing %28U%2B0000%29:     "%C0"               |
         3.3.2  3-byte sequence with last byte missing %28U%2B0000%29:     "%E0%80"               |
-        3.3.3  4-byte sequence with last byte missing %28U%2B0000%29:     "%F0%80%80"               |</p>'))->execute();
+        3.3.3  4-byte sequence with last byte missing %28U%2B0000%29:     "%F0%80%80"               |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testLastByteMissing1()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>
                                                                                       |
 
 
         3.3.4  5-byte sequence with last byte missing %28U%2B0000%29:     "%F8%80%80%80"               |
         3.3.5  6-byte sequence with last byte missing %28U%2B0000%29:     "%FC%80%80%80%80"               |
         3.3.6  2-byte sequence with last byte missing %28U-000007FF%29: "%DF"               |
-        3.3.7  3-byte sequence with last byte missing %28U-0000FFFF%29: "%EF%BF"               |</p>'))->execute();
+        3.3.7  3-byte sequence with last byte missing %28U-0000FFFF%29: "%EF%BF"               |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testLastByteMissing2()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>
                                                                                       |
 
         3.3.8  4-byte sequence with last byte missing %28U-001FFFFF%29: "%F7%BF%BF"               |
         3.3.9  5-byte sequence with last byte missing %28U-03FFFFFF%29: "%FB%BF%BF%BF"               |
         3.3.10 6-byte sequence with last byte missing %28U-7FFFFFFF%29: "%FD%BF%BF%BF%BF"               |
-                                                                                      |</p>'))->execute();
+                                                                                      |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testConcatenation()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>                                |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>                                |
 
         3.4  Concatenation of incomplete sequences                                    |
                                                                                       |
@@ -252,15 +249,15 @@ class UTF8Test extends PHPTAL_TestCase
         sequences being signalled:                                                    |
                                                                                       |
            "%C0%E0%80%F0%80%80%F8%80%80%80%FC%80%80%80%80%DF%EF%BF%F7%BF%BF%FB%BF%BF%BF%FD%BF%BF%BF%BF"                                                               |
-                                                                                      |</p>'))->execute();
+                                                                                      |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testImpossibleBytes()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p><!--                                                       |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p><!--                                                       |
 
         3.5  Impossible bytes                                                         |
                                                                                       |
@@ -268,108 +265,111 @@ class UTF8Test extends PHPTAL_TestCase
                                                                                       |
         3.5.1  fe %3D "%FE"                                                               |
         3.5.2  ff %3D "%FF"                                                               |
-        3.5.3  fe fe ff ff %3D "%FE%FE%FF%FF"                                                   |--></p>'))->execute();
+        3.5.3  fe fe ff ff %3D "%FE%FE%FF%FF"                                                   |--></p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testOverlong()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>    <![CDATA[                                                                        |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>    <![CDATA[                                                                        |
         4.1.1 U%2B002F %3D c0 af             %3D "%C0%AF"                                        |
         4.1.2 U%2B002F %3D e0 80 af          %3D "%E0%80%AF"                                        |
-        4.1.3 U%2B002F %3D f0 80 80 af       %3D "%F0%80%80%AF"                                        |]]></p>'))->execute();
+        4.1.3 U%2B002F %3D f0 80 80 af       %3D "%F0%80%80%AF"                                        |]]></p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testOverlong1()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>
 
         4.1.4 U%2B002F %3D f8 80 80 80 af    %3D "%F8%80%80%80%AF"                                        |
-        4.1.5 U%2B002F %3D fc 80 80 80 80 af %3D "%FC%80%80%80%80%AF"                                        |</p>'))->execute();
+        4.1.5 U%2B002F %3D fc 80 80 80 80 af %3D "%FC%80%80%80%80%AF"                                        |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testOverlong2()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>
 
 
         4.2.1  U-0000007F %3D c1 bf             %3D "%C1%BF"                                   |
-        4.2.2  U-000007FF %3D e0 9f bf          %3D "%E0%9F%BF"                                   |</p>'))->execute();
+        4.2.2  U-000007FF %3D e0 9f bf          %3D "%E0%9F%BF"                                   |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testOverlong3()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p><![CDATA[
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p><![CDATA[
         4.2.3  U-0000FFFF %3D f0 8f bf bf       %3D "%F0%8F%BF%BF"                                   |
         4.2.4  U-001FFFFF %3D f8 87 bf bf bf    %3D "%F8%87%BF%BF%BF"                                   |
-        4.2.5  U-03FFFFFF %3D fc 83 bf bf bf bf %3D "%FC%83%BF%BF%BF%BF"                                   |]]></p>'))->execute();
+        4.2.5  U-03FFFFFF %3D fc 83 bf bf bf bf %3D "%FC%83%BF%BF%BF%BF"                                   |]]></p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testNUL()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>4.3.1  U%2B0000 %3D c0 80             %3D "%C0%80"                                       |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>4.3.1  U%2B0000 %3D c0 80             %3D "%C0%80"                                       |
          4.3.2  U%2B0000 %3D e0 80 80          %3D "%E0%80%80"                                       |
-         4.3.3  U%2B0000 %3D f0 80 80 80       %3D "%F0%80%80%80"                                       |</p>'))->execute();
+         4.3.3  U%2B0000 %3D f0 80 80 80       %3D "%F0%80%80%80"                                       |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testNUL2()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p title="4.3.4  U%2B0000 %3D f8 80 80 80 80    %3D "%F8%80%80%80%80"                                       |
-         4.3.5  U%2B0000 %3D fc 80 80 80 80 80 %3D %FC%80%80%80%80%80   "/>'))->execute();
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p title="4.3.4  U%2B0000 %3D f8 80 80 80 80    %3D "%F8%80%80%80%80"                                       |
+         4.3.5  U%2B0000 %3D fc 80 80 80 80 80 %3D %FC%80%80%80%80%80   "/>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testUTF16()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>5.1.1  U%2BD800 %3D ed a0 80 %3D "%ED%A0%80"                                                |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>5.1.1  U%2BD800 %3D ed a0 80 %3D "%ED%A0%80"                                                |
         5.1.2  U%2BDB7F %3D ed ad bf %3D "%ED%AD%BF"                                                |
         5.1.3  U%2BDB80 %3D ed ae 80 %3D "%ED%AE%80"                                                |
         5.1.4  U%2BDBFF %3D ed af bf %3D "%ED%AF%BF"                                                |
         5.1.5  U%2BDC00 %3D ed b0 80 %3D "%ED%B0%80"                                                |
         5.1.6  U%2BDF80 %3D ed be 80 %3D "%ED%BE%80"                                                |
-        5.1.7  U%2BDFFF %3D ed bf bf %3D "%ED%BF%BF"                                                |</p>'))->execute();
+        5.1.7  U%2BDFFF %3D ed bf bf %3D "%ED%BF%BF"                                                |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testUTF16Paired()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>5.2.1  U%2BD800 U%2BDC00 %3D ed a0 80 ed b0 80 %3D "%ED%A0%80%ED%B0%80"                               |
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>5.2.1  U%2BD800 U%2BDC00 %3D ed a0 80 ed b0 80 %3D "%ED%A0%80%ED%B0%80"                               |
         5.2.2  U%2BD800 U%2BDFFF %3D ed a0 80 ed bf bf %3D "%ED%A0%80%ED%BF%BF"                               |
         5.2.3  U%2BDB7F U%2BDC00 %3D ed ad bf ed b0 80 %3D "%ED%AD%BF%ED%B0%80"                               |
         5.2.4  U%2BDB7F U%2BDFFF %3D ed ad bf ed bf bf %3D "%ED%AD%BF%ED%BF%BF"                               |
         5.2.5  U%2BDB80 U%2BDC00 %3D ed ae 80 ed b0 80 %3D "%ED%AE%80%ED%B0%80"                               |
         5.2.6  U%2BDB80 U%2BDFFF %3D ed ae 80 ed bf bf %3D "%ED%AE%80%ED%BF%BF"                               |
         5.2.7  U%2BDBFF U%2BDC00 %3D ed af bf ed b0 80 %3D "%ED%AF%BF%ED%B0%80"                               |
-        5.2.8  U%2BDBFF U%2BDFFF %3D ed af bf ed bf bf %3D "%ED%AF%BF%ED%BF%BF"                               |</p>'))->execute();
+        5.2.8  U%2BDBFF U%2BDFFF %3D ed af bf ed bf bf %3D "%ED%AF%BF%ED%BF%BF"                               |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 
-    /**
-     * @expectedException PHPTAL_ParserException
-     */
     function testIllegalCodePositions()
     {
-        $this->newPHPTAL()->setSource(rawurldecode('<p>5.3.1  U%2BFFFE %3D ef bf be %3D "%EF%BF%BE"                                                |
-         5.3.2  U%2BFFFF %3D ef bf bf %3D "%EF%BF%BF"                                                |</p>'))->execute();
+        $tpl = $this->newPHPTAL()->setSource(rawurldecode('<p>5.3.1  U%2BFFFE %3D ef bf be %3D "%EF%BF%BE"                                                |
+         5.3.2  U%2BFFFF %3D ef bf bf %3D "%EF%BF%BF"                                                |</p>'));
+
+        $this->expectException(PHPTAL_ParserException::class);
+        $tpl->execute();
     }
 }
