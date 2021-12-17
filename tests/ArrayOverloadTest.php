@@ -20,21 +20,25 @@ class MyArray implements ArrayAccess
         $this->_values[] =  $value;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetGet($index)
     {
         return $this->_values[$index];
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetSet($index, $value)
     {
         $this->_values[$index] = $value;
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetExists($of)
     {
         return isset($this->_values[$of]);
     }
 
+    #[\ReturnTypeWillChange]
     public function offsetUnset($of)
     {
         unset($this->_values[$of]);

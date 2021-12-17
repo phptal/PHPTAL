@@ -981,7 +981,7 @@ class PHPTAL
        if (!$this->_functionName) {
 
             // just to make tempalte name recognizable
-            $basename = preg_replace('/\.[a-z]{3,5}$/', '', basename($this->_source->getRealPath()));
+            $basename = preg_replace('/\.[a-z]{3,5}$/', '', basename($this->_source->getRealPath() ?? ''));
             $basename = substr(trim(preg_replace('/[^a-zA-Z0-9]+/', '_', $basename), "_"), 0, 20);
 
             $hash = md5(PHPTAL_VERSION . PHP_VERSION

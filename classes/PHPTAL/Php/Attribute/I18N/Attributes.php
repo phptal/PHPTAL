@@ -68,7 +68,7 @@ class PHPTAL_Php_Attribute_I18N_Attributes extends PHPTAL_Php_Attribute
             list($qname, $key) = $this->parseSetExpression($exp);
 
             // if the translation key is specified and not empty (but may be '0')
-            if (strlen($key)) {
+            if ($key !== null && strlen($key) > 0) {
                 // we use it and replace the tag attribute with the result of the translation
                 $code = $this->_getTranslationCode($codewriter, $key);
             } else {

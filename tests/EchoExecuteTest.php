@@ -20,7 +20,7 @@ class EchoExecuteTest extends PHPTAL_TestCase
     {
         try {
             ob_start();
-            $this->assertEquals(0, strlen($tpl->echoExecute()));
+            $this->assertEquals(0, strlen($tpl->echoExecute() ?? ''));
             $res = ob_get_clean();
         }
         catch(Exception $e) {

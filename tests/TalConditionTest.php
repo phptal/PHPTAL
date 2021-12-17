@@ -191,6 +191,7 @@ class CountableImpl implements Countable {
         /**
          * @see Countable
          */
+        #[\ReturnTypeWillChange]
         public function count() {
                 return $this->cnt;
         }

@@ -370,7 +370,7 @@ class PHPTAL_Dom_SaxXmlParser
             // $match expression below somehow triggers quite deep recurrency and stack overflow in preg
             // to avoid this, check string bit by bit, omitting ASCII fragments.
             if (strlen($str) > 200) {
-                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,null,PREG_SPLIT_NO_EMPTY);
+                $chunks = preg_split('/(?>[\x09\x0A\x0D\x20-\x7F]+)/',$str,0,PREG_SPLIT_NO_EMPTY);
                 foreach ($chunks as $chunk) {
                     if (strlen($chunk) < 200) {
                         $this->checkEncoding($chunk);
@@ -392,7 +392,7 @@ class PHPTAL_Dom_SaxXmlParser
                . '|\xF4[\x80-\x8F][\x80-\xBF]{2}';    // plane 16
 
             if (!preg_match('/^(?:(?>'.$match.'))+$/s',$str)) {
-                $res = preg_split('/((?>'.$match.')+)/s',$str,null,PREG_SPLIT_DELIM_CAPTURE);
+                $res = preg_split('/((?>'.$match.')+)/s',$str,0,PREG_SPLIT_DELIM_CAPTURE);
                 for($i=0; $i < count($res); $i+=2)
                 {
                     $res[$i] = self::convertBytesToEntities(array(1=>$res[$i]));
