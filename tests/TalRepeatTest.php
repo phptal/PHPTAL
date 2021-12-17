@@ -337,26 +337,31 @@ class LogIteratorCalls implements Iterator
         if ($arr instanceof Iterator) $this->i = $arr; else $this->i = new ArrayIterator($arr);
     }
 
+    #[\ReturnTypeWillChange]
     function current()
     {
         $this->log .= "current\n";
         return $this->i->current();
     }
+    #[\ReturnTypeWillChange]
     function next()
     {
         $this->log .= "next\n";
         return $this->i->next();
     }
+    #[\ReturnTypeWillChange]
     function key()
     {
         $this->log .= "key\n";
         return $this->i->key();
     }
+    #[\ReturnTypeWillChange]
     function rewind()
     {
         $this->log .= "rewind\n";
         return $this->i->rewind();
     }
+    #[\ReturnTypeWillChange]
     function valid()
     {
         $this->log .= "valid\n";
@@ -376,23 +381,28 @@ class MyIterable implements Iterator
         $this->_size= $size;
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind(){
         $this->_index = 0;
     }
 
+    #[\ReturnTypeWillChange]
     public function current(){
         return $this->_index;
     }
 
+    #[\ReturnTypeWillChange]
     public function key(){
         return $this->_index;
     }
 
+    #[\ReturnTypeWillChange]
     public function next(){
         $this->_index++;
         return $this->_index;
     }
 
+    #[\ReturnTypeWillChange]
     public function valid(){
         return $this->_index < $this->_size;
     }
@@ -412,6 +422,7 @@ class SizeCalledException extends Exception {}
 
 class MyIterableThrowsOnSize extends MyIterable implements Countable
 {
+    #[\ReturnTypeWillChange]
     public function count()
     {
         throw new SizeCalledException("count() called");

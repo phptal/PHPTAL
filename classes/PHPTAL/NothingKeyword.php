@@ -26,11 +26,13 @@ class PHPTAL_NothingKeyword implements PHPTAL_Keywords
         return 'null';
     }
 
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return 0;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return null;

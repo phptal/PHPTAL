@@ -87,6 +87,7 @@ class PHPTAL_RepeatController implements Iterator
      *
      * @return Mixed    The current element value
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->current;
@@ -97,6 +98,7 @@ class PHPTAL_RepeatController implements Iterator
      *
      * @return String/Int   The current element key
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->key;
@@ -107,6 +109,7 @@ class PHPTAL_RepeatController implements Iterator
      *
      * @return bool     True if the iteration is not finished yet
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         $valid = $this->valid || $this->validOnNext;
@@ -142,6 +145,7 @@ class PHPTAL_RepeatController implements Iterator
      * Restarts the iteration process going back to the first element
      *
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         $this->index = 0;
@@ -168,6 +172,7 @@ class PHPTAL_RepeatController implements Iterator
      * Fetches the next element in the iteration and advances the pointer
      *
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->index++;

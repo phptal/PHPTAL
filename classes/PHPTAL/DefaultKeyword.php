@@ -26,11 +26,13 @@ class PHPTAL_DefaultKeyword implements Countable
         return "''";
     }
 
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return 1;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return new stdClass;
