@@ -85,7 +85,7 @@ abstract class PHPTAL_Php_Attribute
     /**
      * @return non-empty-array<array-key, null|string>
      */
-    protected function parseSetExpression(string $exp): array
+    protected function parseSetExpression(string $exp)
     {
         $exp = trim($exp);
         // (dest) (value)
