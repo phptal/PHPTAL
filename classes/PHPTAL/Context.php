@@ -18,6 +18,7 @@
  * Holds template variables and carries state/scope across macro executions.
  *
  */
+#[AllowDynamicProperties]
 class PHPTAL_Context
 {
     public $repeat;

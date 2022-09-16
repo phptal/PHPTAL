@@ -46,6 +46,8 @@ implements PHPTAL_Php_TalesChainReader
      * value for default keyword
      */
     private $_default_escaped;
+    private string $_attribute = '';
+    private string $_attkey = '';
 
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -59,7 +61,7 @@ implements PHPTAL_Php_TalesChainReader
         }
     }
 
-    private function prepareAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $expression)
+    private function prepareAttribute(PHPTAL_Php_CodeWriter $codewriter, string $qname, $expression)
     {
         $tales_code = $this->extractEchoType($expression);
         $code = $codewriter->evaluateExpression($tales_code);
@@ -127,7 +129,7 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
 
-    private function prepareChainedAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $chain)
+    private function prepareChainedAttribute(PHPTAL_Php_CodeWriter $codewriter, string $qname, $chain)
     {
         $this->_default_escaped = false;
         $this->_attribute = $qname;
@@ -139,7 +141,7 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($this->_attkey);
     }
 
-    private function prepareBooleanAttribute(PHPTAL_Php_CodeWriter $codewriter, $qname, $code)
+    private function prepareBooleanAttribute(PHPTAL_Php_CodeWriter $codewriter, string $qname, $code)
     {
         $attkey = $this->getVarName($qname, $codewriter);
 
@@ -156,7 +158,7 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
 
-    private function getVarName($qname, PHPTAL_Php_CodeWriter $codewriter)
+    private function getVarName($qname, PHPTAL_Php_CodeWriter $codewriter): string
     {
         $var = $codewriter->createTempVariable();
         $this->vars_to_recycle[] = $var;

@@ -24,6 +24,7 @@ class PHPTAL_Dom_PHPTALDocumentBuilder extends PHPTAL_Dom_DocumentBuilder
 {
     private $_xmlns;   /* PHPTAL_Dom_XmlnsState */
     private $encoding;
+    private ?PHPTAL_Dom_Element $documentElement = null;
 
     public function __construct()
     {

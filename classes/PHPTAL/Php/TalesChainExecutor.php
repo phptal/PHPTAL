@@ -23,12 +23,15 @@ class PHPTAL_Php_TalesChainExecutor
     const CHAIN_BREAK = 1;
     const CHAIN_CONT  = 2;
 
-    public function __construct(PHPTAL_Php_CodeWriter $codewriter, array $chain, PHPTAL_Php_TalesChainReader $reader)
+    private int $state = 0;
+    private bool $chainStarted = false;
+
+    public function __construct(
+        private PHPTAL_Php_CodeWriter       $codewriter,
+        private array                       $chain,
+        private PHPTAL_Php_TalesChainReader $reader
+    )
     {
-        $this->_chain = $chain;
-        $this->_chainStarted = false;
-        $this->codewriter = $codewriter;
-        $this->_reader = $reader;
         $this->_executeChain();
     }
 
@@ -37,10 +40,10 @@ class PHPTAL_Php_TalesChainExecutor
         return $this->codewriter;
     }
 
-    public function doIf($condition)
+    public function doIf(string $condition)
     {
-        if ($this->_chainStarted == false) {
-            $this->_chainStarted = true;
+        if ($this->chainStarted == false) {
+            $this->chainStarted = true;
             $this->codewriter->doIf($condition);
         } else {
             $this->codewriter->doElseIf($condition);
@@ -54,43 +57,38 @@ class PHPTAL_Php_TalesChainExecutor
 
     public function breakChain()
     {
-        $this->_state = self::CHAIN_BREAK;
+        $this->state = self::CHAIN_BREAK;
     }
 
     public function continueChain()
     {
-        $this->_state = self::CHAIN_CONT;
+        $this->state = self::CHAIN_CONT;
     }
 
     private function _executeChain()
     {
         $this->codewriter->noThrow(true);
 
-        end($this->_chain); $lastkey = key($this->_chain);
+        end($this->chain); $lastkey = key($this->chain);
 
-        foreach ($this->_chain as $key => $exp) {
-            $this->_state = 0;
+        foreach ($this->chain as $key => $exp) {
+            $this->state = 0;
 
             if ($exp == PHPTAL_Php_TalesInternal::NOTHING_KEYWORD) {
-                $this->_reader->talesChainNothingKeyword($this);
+                $this->reader->talesChainNothingKeyword($this);
             } elseif ($exp == PHPTAL_Php_TalesInternal::DEFAULT_KEYWORD) {
-                $this->_reader->talesChainDefaultKeyword($this);
+                $this->reader->talesChainDefaultKeyword($this);
             } else {
-                $this->_reader->talesChainPart($this, $exp, $lastkey === $key);
+                $this->reader->talesChainPart($this, $exp, $lastkey === $key);
             }
 
-            if ($this->_state == self::CHAIN_BREAK)
+            if ($this->state == self::CHAIN_BREAK)
                 break;
-            if ($this->_state == self::CHAIN_CONT)
+            if ($this->state == self::CHAIN_CONT)
                 continue;
         }
 
         $this->codewriter->doEnd('if');
         $this->codewriter->noThrow(false);
     }
-
-    private $_state = 0;
-    private $_chain;
-    private $_chainStarted = false;
-    private $codewriter = null;
 }

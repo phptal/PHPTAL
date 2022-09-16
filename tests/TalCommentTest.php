@@ -28,7 +28,6 @@ class TalCommentTest extends PHPTAL_TestCase
         $state = new PHPTAL_Php_State($this->newPHPTAL());
         $this->_gen = new PHPTAL_Php_CodeWriter($state);
         $this->_tag = new DummyPhpNode();
-        $this->_tag->codewriter = $this->_gen;
     }
 
     private function newComment($expr)

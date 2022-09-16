@@ -297,6 +297,9 @@ EOT;
     {
         if (version_compare(PHP_VERSION, '5.4.0') < 0) $this->markTestSkipped('PHP < 5.4');
 
+        ini_set('short_open_tag', 0);
+        if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
+
         $tpl = $this->newPHPTAL();
         $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
         try
