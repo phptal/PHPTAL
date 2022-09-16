@@ -46,8 +46,8 @@ implements PHPTAL_Php_TalesChainReader
      * value for default keyword
      */
     private $_default_escaped;
-    private string $_attribute;
-    private string $_attkey;
+    private string $_attribute = '';
+    private string $_attkey = '';
 
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
