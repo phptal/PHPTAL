@@ -36,7 +36,6 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
     public $childNodes = array();
     public $parentNode;
 
-    private PHPTAL_Dom_XmlnsState $xmlns;
     private array $talHandlers;
 
     /**
@@ -45,12 +44,15 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
      * @param array  $attribute_nodes array of PHPTAL_Dom_Attr elements
      * @param PHPTAL_Dom_XmlnsState $xmlns object that represents namespaces/prefixes known in element's context
      */
-    public function __construct($qname, $namespace_uri, array $attribute_nodes, PHPTAL_Dom_XmlnsState $xmlns)
+    public function __construct(
+        $qname,
+        $namespace_uri,
+        array $attribute_nodes,
+        private PHPTAL_Dom_XmlnsState $xmlns)
     {
         $this->qualifiedName = $qname;
         $this->attribute_nodes = $attribute_nodes;
         $this->namespace_uri = $namespace_uri;
-        $this->xmlns = $xmlns;
 
         // implements inheritance of element's namespace to tal attributes (<metal: use-macro>)
         foreach ($attribute_nodes as $index => $attr) {

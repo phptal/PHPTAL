@@ -14,17 +14,17 @@
 
 class PHPTAL_Tokenizer
 {
-    private $regex;
-    private $names;
-    private $offset;
-    private $str;
+    private string $regex;
+    private array $names;
+    private int $offset;
+    private string $str;
 
-    private $current_token;
-    private $current_value;
+    private ?string $current_token = null;
+    private ?string $current_value = null;
 
     private int $end;
 
-    function __construct($str, array $tokens)
+    function __construct(string $str, array $tokens)
     {
         $this->offset = 0;
         $this->str = $str;

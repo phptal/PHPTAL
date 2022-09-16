@@ -33,12 +33,10 @@ class MyCustomSourceResolver implements PHPTAL_SourceResolver
 
 class MyCustomSource implements PHPTAL_Source
 {
-    private $path;
-
-    function __construct($path)
-    {
-        $this->path = $path;
-    }
+    function __construct(
+        private string $path
+    )
+    {}
 
     function getRealPath()
     {

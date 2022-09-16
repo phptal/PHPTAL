@@ -23,11 +23,7 @@ class PHPTAL_StringSource implements PHPTAL_Source
     private string $_data;
     private string $_realpath;
 
-    /**
-     * @param string $data
-     * @param null|string $realpath
-     */
-    public function __construct($data, $realpath = null)
+    public function __construct(string $data, ?string $realpath = null)
     {
         $this->_data = $data;
         $this->_realpath = $realpath ? $realpath : self::NO_PATH_PREFIX.md5($data).'>';
