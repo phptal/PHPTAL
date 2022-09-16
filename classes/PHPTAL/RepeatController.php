@@ -49,6 +49,7 @@ class PHPTAL_RepeatController implements Iterator
      * computed lazily
      */
     private $length = null;
+    private PHPTAL_RepeatControllerGroups $groups;
 
     /**
      * Construct a new RepeatController.

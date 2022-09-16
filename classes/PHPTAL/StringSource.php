@@ -20,7 +20,13 @@
 class PHPTAL_StringSource implements PHPTAL_Source
 {
     const NO_PATH_PREFIX = '<string ';
+    private string $_data;
+    private string $_realpath;
 
+    /**
+     * @param string $data
+     * @param null|string $realpath
+     */
     public function __construct($data, $realpath = null)
     {
         $this->_data = $data;

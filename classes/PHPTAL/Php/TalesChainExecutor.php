@@ -23,6 +23,12 @@ class PHPTAL_Php_TalesChainExecutor
     const CHAIN_BREAK = 1;
     const CHAIN_CONT  = 2;
 
+    private $_state = 0;
+    private $_chain;
+    private $_chainStarted = false;
+    private $codewriter = null;
+    private PHPTAL_Php_TalesChainReader $_reader;
+
     public function __construct(PHPTAL_Php_CodeWriter $codewriter, array $chain, PHPTAL_Php_TalesChainReader $reader)
     {
         $this->_chain = $chain;
@@ -88,9 +94,4 @@ class PHPTAL_Php_TalesChainExecutor
         $this->codewriter->doEnd('if');
         $this->codewriter->noThrow(false);
     }
-
-    private $_state = 0;
-    private $_chain;
-    private $_chainStarted = false;
-    private $codewriter = null;
 }

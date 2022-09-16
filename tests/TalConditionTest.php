@@ -183,8 +183,9 @@ class TalConditionTest extends PHPTAL_TestCase
 
 
 class CountableImpl implements Countable {
+    private int $cnt;
 
-        function __construct($cnt=0)
+    function __construct(int $cnt=0)
         {
             $this->cnt = $cnt;
         }

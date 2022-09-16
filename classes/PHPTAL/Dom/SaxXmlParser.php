@@ -406,7 +406,9 @@ class PHPTAL_Dom_SaxXmlParser
             $forbid = '/((?>[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F]+))/s';
 
             if (preg_match($forbid, $str)) {
-                $str = preg_replace_callback($forbid, array('self', 'convertBytesToEntities'), $str);
+                $str = preg_replace_callback($forbid, static function (array $m): string {
+                    return self::convertBytesToEntities($m);
+                }, $str);
                 $this->raiseError("Invalid ISO-8859-1 characters: ".$str);
             }
         }
@@ -419,10 +421,8 @@ class PHPTAL_Dom_SaxXmlParser
      * Changes all bytes to hexadecimal XML entities
      *
      * @param array $m first array element is used for input
-     *
-     * @return string
      */
-    private static function convertBytesToEntities(array $m)
+    private static function convertBytesToEntities(array $m): string
     {
         $m = $m[1];
         $out = "";
@@ -444,19 +444,16 @@ class PHPTAL_Dom_SaxXmlParser
            so they have to be converted into special TALES expression
         */
         $types = version_compare(PHP_VERSION, '5.4.0') < 0 ? (ini_get('short_open_tag') ? 'php|=|' : 'php') : 'php|=';
-        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", array('self', 'convertPHPBlockToTALES'), $str);
+        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", static function ($m) {
+            list(, $type, $code) = $m;
+            if ($type === '=') $code = 'echo '.$code;
+            return '${structure phptal-internal-php-block:'.rawurlencode($code).'}';
+        }, $str);
 
         // corrects all non-entities and neutralizes potentially problematic CDATA end marker
         $str = strtr(preg_replace('/&(?!(?:#x?[a-f0-9]+|[a-z][a-z0-9]*);)/i', '&amp;', $str), array('<'=>'&lt;', ']]>'=>']]&gt;'));
 
         return $str;
-    }
-
-    private static function convertPHPBlockToTALES($m)
-    {
-        list(, $type, $code) = $m;
-        if ($type === '=') $code = 'echo '.$code;
-        return '${structure phptal-internal-php-block:'.rawurlencode($code).'}';
     }
 
     public function getSourceFile()

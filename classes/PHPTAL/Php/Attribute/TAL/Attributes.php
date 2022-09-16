@@ -46,6 +46,8 @@ implements PHPTAL_Php_TalesChainReader
      * value for default keyword
      */
     private $_default_escaped;
+    private $_attribute;
+    private string $_attkey;
 
     public function before(PHPTAL_Php_CodeWriter $codewriter)
     {
@@ -156,7 +158,7 @@ implements PHPTAL_Php_TalesChainReader
         $this->phpelement->getOrCreateAttributeNode($qname)->overwriteFullWithVariable($attkey);
     }
 
-    private function getVarName($qname, PHPTAL_Php_CodeWriter $codewriter)
+    private function getVarName($qname, PHPTAL_Php_CodeWriter $codewriter): string
     {
         $var = $codewriter->createTempVariable();
         $this->vars_to_recycle[] = $var;

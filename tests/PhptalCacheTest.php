@@ -15,6 +15,8 @@
 
 class PhptalCacheTest extends PHPTAL_TestCase
 {
+    private string $PhptalCacheTest_random;
+
     function setUp(): void
     {
         parent::setUp();
