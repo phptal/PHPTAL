@@ -2,4 +2,5 @@ build
 /vendor/
 /doc/temp/
 /docs/
+/.phpunit.cache
 .phpunit.result.cache
