@@ -14,7 +14,6 @@
  */
 
 error_reporting( E_ALL | E_STRICT );
-assert_options(ASSERT_ACTIVE, 1);
 
 // This is needed to run tests ran individually without run-tests.php script
 if (!class_exists('PHPTAL')) {
