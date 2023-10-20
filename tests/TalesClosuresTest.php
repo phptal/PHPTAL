@@ -19,8 +19,6 @@ class TalesClosuresTest extends PHPTAL_TestCase
 {
     function testClosure()
     {
-        if (version_compare("5.3", PHP_VERSION, ">")) $this->markTestSkipped();
-
         $tpl = $this->newPHPTAL();
 
         /* 5.2 can't parse it */

@@ -262,41 +262,8 @@ EOT;
         $this->assertEquals('<p>test<x>test&amp;test</p>', $tpl->execute());
     }
 
-    public function testPHPBlockShort()
-    {
-        if (version_compare(PHP_VERSION, '5.4.0') >= 0) $this->markTestSkipped('PHP >= 5.4');
-
-        ini_set('short_open_tag', 1);
-        if (!ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
-
-        $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
-        $this->assertEquals('<p>test<x>test&amp;test</p>', $tpl->execute());
-        ini_restore('short_open_tag');
-    }
-
-    public function testPHPBlockNoShort()
-    {
-        if (version_compare(PHP_VERSION, '5.4.0') >= 0) $this->markTestSkipped('PHP >= 5.4');
-
-        ini_set('short_open_tag', 0);
-        if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
-
-        $tpl = $this->newPHPTAL();
-        $tpl->setSource('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>');
-        try
-        {
-            // unlike attributes, this isn't going to be escaped, because it gets parsed as a real processing instruction
-            $this->assertEquals('<p>test<? print("<x>"); ?>test<?= "&amp;" ?>test</p>', $tpl->execute());
-        }
-        catch(PHPTAL_ParserException $e) {/* xml ill-formedness error is ok too */}
-        ini_restore('short_open_tag');
-    }
-
     public function testPHPBlock54()
     {
-        if (version_compare(PHP_VERSION, '5.4.0') < 0) $this->markTestSkipped('PHP < 5.4');
-
         ini_set('short_open_tag', 0);
         if (ini_get('short_open_tag')) $this->markTestSkipped("PHP is buggy");
 
