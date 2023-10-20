@@ -1191,7 +1191,7 @@ class PHPTAL
      */
     final public static function autoload($class)
     {
-        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
+        if (__NAMESPACE__) {
             $class = str_replace(__NAMESPACE__, 'PHPTAL', $class);
             $class = strtr($class, '\\', '_');
         }
@@ -1222,11 +1222,7 @@ class PHPTAL
 
         // Prepending PHPTAL's autoloader helps if there are other autoloaders
         // that throw/die when file is not found. Only >5.3 though.
-        if (version_compare(PHP_VERSION, '5.3', '>=')) {
-            @spl_autoload_register(array(__CLASS__,'autoload'), false, true);
-        } else {
-            spl_autoload_register(array(__CLASS__,'autoload'));
-        }
+        @spl_autoload_register(array(__CLASS__,'autoload'), true, true);
 
         if ($uses_autoload) {
             spl_autoload_register('__autoload');

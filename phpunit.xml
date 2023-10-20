@@ -1,17 +1,22 @@
+<?xml version="1.0"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="./tests/config.php"
-    convertDeprecationsToExceptions="true"
     colors="true"
+    cacheDirectory=".phpunit.cache"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
 >
-    <php>
-        <ini name="display_errors" value="1"/>
-        <ini name="zend.exception_ignore_args" value="0"/>
-    </php>
-    <testsuites>
-        <testsuite name="PHPTALtests">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
+  <php>
+    <ini name="display_errors" value="1"/>
+    <ini name="zend.exception_ignore_args" value="0"/>
+  </php>
+  <testsuites>
+    <testsuite name="PHPTALtests">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>

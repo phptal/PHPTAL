@@ -443,8 +443,7 @@ class PHPTAL_Dom_SaxXmlParser
         /* <?php ?> blocks can't reliably work in attributes (due to escaping impossible in XML)
            so they have to be converted into special TALES expression
         */
-        $types = version_compare(PHP_VERSION, '5.4.0') < 0 ? (ini_get('short_open_tag') ? 'php|=|' : 'php') : 'php|=';
-        $str = preg_replace_callback("/<\?($types)(.*?)\?>/", static function ($m) {
+        $str = preg_replace_callback('/<\?(php|=)(.*?)\?>/', static function ($m) {
             list(, $type, $code) = $m;
             if ($type === '=') $code = 'echo '.$code;
             return '${structure phptal-internal-php-block:'.rawurlencode($code).'}';

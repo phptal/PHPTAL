@@ -14,7 +14,11 @@
  */
 
 error_reporting( E_ALL | E_STRICT );
-assert_options(ASSERT_ACTIVE, 1);
+
+set_error_handler(static function (int $errno, string $errstr, string $errfile, int $errline): void {
+    throw new ErrorException($errstr, $errno, $errno, $errfile, $errline);
+});
+
 
 // This is needed to run tests ran individually without run-tests.php script
 if (!class_exists('PHPTAL')) {

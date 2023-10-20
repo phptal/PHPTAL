@@ -61,7 +61,7 @@ class PHPTAL_Php_CodeWriter
     public function getResult()
     {
         $this->flush();
-        if (version_compare(PHP_VERSION, '5.3', '>=') && __NAMESPACE__) {
+        if (__NAMESPACE__) {
             return '<?php use '.'PHPTALNAMESPACE as P; ?>'.trim($this->_result);
         } else {
             return trim($this->_result);

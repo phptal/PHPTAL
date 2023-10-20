@@ -1,6 +1,5 @@
 {
     "name": "phptal/phptal",
-    "homepage": "http://phptal.org/",
     "description": "PHPTAL is a templating engine for PHP5 that implements Zope Page Templates syntax",
     "license": "LGPL-2.1+",
     "type": "library",
@@ -21,11 +20,12 @@
             "homepage": "http://pornel.net/"
         }
     ],
+    "homepage": "https://phptal.org/",
     "require": {
-        "php": "~8.0.0 || ~8.1.0 || ~8.2.0"
+        "php": "~8.1.0 || ~8.2.0 || ~8.3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.24"
+        "phpunit/phpunit": "^10.4.1"
     },
     "autoload": {
         "psr-0": {
