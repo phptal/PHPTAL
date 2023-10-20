@@ -5,6 +5,10 @@
     bootstrap="./tests/config.php"
     colors="true"
     cacheDirectory=".phpunit.cache"
+    displayDetailsOnTestsThatTriggerDeprecations="true"
+    displayDetailsOnTestsThatTriggerNotices="true"
+    displayDetailsOnTestsThatTriggerWarnings="true"
+    displayDetailsOnTestsThatTriggerErrors="true"
 >
   <php>
     <ini name="display_errors" value="1"/>
