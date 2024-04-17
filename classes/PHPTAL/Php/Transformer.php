@@ -406,6 +406,7 @@ class PHPTAL_Php_Transformer
     private static $TranslationTable = array(
         'not' => '!',
         'ne'  => '!=',
+        'nee' => '!==',
         'and' => '&&',
         'or'  => '||',
         'lt'  => '<',
@@ -413,6 +414,6 @@ class PHPTAL_Php_Transformer
         'ge'  => '>=',
         'le'  => '<=',
         'eq'  => '==',
+        'eqq' => '===',
     );
 }
-
