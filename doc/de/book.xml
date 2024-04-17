@@ -1453,7 +1453,13 @@ this page has been readed ${page/countRead} times"/>
             <code>==</code> : <code>EQ</code> (gleich)
           </para></listitem>
           <listitem><para>
+          <code>===</code> : <code>EQQ</code> (exakt gleich)
+          </para></listitem>
+          <listitem><para>
             <code>!=</code> : <code>NE</code> (ungleich)
+          </para></listitem>
+          <listitem><para>
+          <code>!==</code> : <code>NEE</code> (exakt ungleich)
           </para></listitem>
           <listitem><para>
             <code>&amp;&amp;</code> : <code>AND</code>

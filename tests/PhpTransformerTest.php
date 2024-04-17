@@ -123,6 +123,8 @@ class PhpTransformerTest extends PHPTAL_TestCase
     {
         $this->assertEquals('true != false', PHPTAL_Php_Transformer::transform('true ne false'));
         $this->assertEquals('$test == null', PHPTAL_Php_Transformer::transform('test eq null'));
+        $this->assertEquals('true !== false', PHPTAL_Php_Transformer::transform('true nee false'));
+        $this->assertEquals('$test === null', PHPTAL_Php_Transformer::transform('test eqq null'));
     }
 
     function testTernaryOperator()
@@ -188,4 +190,3 @@ class PhpTransformerTest extends PHPTAL_TestCase
         $tpl->execute();
     }
 }
-
