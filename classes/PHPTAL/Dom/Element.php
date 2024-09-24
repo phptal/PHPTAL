@@ -353,7 +353,7 @@ class PHPTAL_Dom_Element extends PHPTAL_Dom_Node
         }
     }
 
-    public function generateContent(PHPTAL_Php_CodeWriter $codewriter = null, $realContent=false)
+    public function generateContent(?PHPTAL_Php_CodeWriter $codewriter = null, $realContent=false)
     {
         if (!$this->isEmptyNode($codewriter->getOutputMode())) {
             if ($realContent || !count($this->contentAttributes)) {
