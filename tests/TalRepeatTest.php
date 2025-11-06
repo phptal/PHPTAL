@@ -1,4 +1,7 @@
 <?php
+
+use PHPUnit\Framework\Attributes\RequiresPhp;
+
 /**
  * PHPTAL templating engine
  *
@@ -71,6 +74,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $this->assertEquals('<div></div>', $tpl->execute());
     }
 
+    #[RequiresPhp('<8.5')]
     function testArrayObjectAggregated()
     {
         $tpl = $this->newPHPTAL();

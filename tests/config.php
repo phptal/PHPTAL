@@ -13,7 +13,7 @@
  * @link     http://phptal.org/
  */
 
-error_reporting( E_ALL | E_STRICT );
+error_reporting( E_ALL );
 
 set_error_handler(static function (int $errno, string $errstr, string $errfile, int $errline): void {
     throw new ErrorException($errstr, $errno, $errno, $errfile, $errline);
