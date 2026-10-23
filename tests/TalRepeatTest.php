@@ -74,7 +74,7 @@ class TalRepeatTest extends PHPTAL_TestCase
         $this->assertEquals('<div></div>', $tpl->execute());
     }
 
-    #[RequiresPhp('<8.5')]
+    #[RequiresPhp('<8.5.0')]
     function testArrayObjectAggregated()
     {
         $tpl = $this->newPHPTAL();
